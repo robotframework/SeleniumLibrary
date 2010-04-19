@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<title>Original</title>
+		<script type="text/javascript">
+		function add_content(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		</script>
+	</head>
+	<body>
+		<script type="text/javascript">
+		function TYPICAL_SCENARIO(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		</script>
+
+		<SCRIPT type="text/javascript">
+		function UPPERCASE_CHARACTERS(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		</SCRIPT>
+
+		<script 
+		 type="text/javascript">
+		function SCRIPT_TAG_ON_TWO_LINES(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		</script>
+
+		<script 
+		 type="text/javascript" 
+		    	language="JavaScript">
+		function SCRIPT_TAG_ON_TWO_LINES_WITH_MULTIPLE_ATTRIBS(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		</script>
+
+		<script type="text/javascript">
+		function END_TAG_ON_MANY_LINES(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		</  
+		 script   >
+
+		<script type="text/javascript">
+		<!--
+		function ALREADY_HAVING_COMMENT_MARKERS(target_container, content) {
+			var s = "<html><tags/><should be ignored inside script blocks>";
+		}
+		-->
+		</script>
+
+		<p>Page rendered correctly</p>
+	</body>
+</html>

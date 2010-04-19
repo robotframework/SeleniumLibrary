@@ -1,0 +1,79 @@
+<html>
+	<head>
+		<title>(root)/forms/prefilled_email_form.html</title>
+	</head>
+	<body>
+		<form name="email_form" action="submit.html" method="POST">
+			<input type="hidden" name="hidden_field" value="hidden_field_value" />
+			<table border="0">
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" name="name" value="Prefilled Name"/></td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td><input type="text" name="email" value="Prefilled Email"/></td>
+				</tr>
+				<tr>
+					<td>Comment:</td>
+					<td><textarea name="comment" rows="3" cols="40">Prefilled text area</textarea></td>
+				</tr>
+				<tr>
+					<td>Opt-in settings:</td>
+					<td>
+						<input type="checkbox" name="can_send_email" checked /> Can send email?<br/>
+						<input type="checkbox" name="can_send_sms" /> Can send SMS?
+					</td>
+				</tr>
+				<tr>
+					<td>Which sex are you:</td>
+					<td>
+						<input type="radio" name="sex" value="female" checked /> Female<br/>
+						<input type="radio" name="sex" value="male" /> Male
+					</td>
+				</tr>
+				<tr>
+					<td>Where did you hear of us:</td>
+					<td>
+						<input type="radio" name="referrer" value="internet" /> From the Internet<br/>
+						<input type="radio" name="referrer" value="watercooler" /> At the water cooler<br/>
+						<input type="radio" name="referrer" value="mother" /> From your mother
+					</td>
+				</tr>
+				<tr>
+					<td>Select the preferred media for contacting you:</td>
+					<td>
+						<select name="preferred_channel">
+							<option value="email">Email</option>
+							<option value="phone" selected>Telephone</option>
+							<option value="directmail">Direct mail</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Select the media we can use for contacting you if the preferred media is unavailable:</td>
+					<td>
+						<select name="possible_channels" multiple="true">
+							<option value="email" selected>Email</option>
+							<option value="phone" selected>Telephone</option>
+							<option value="directmail">Direct mail</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+                    <td>Select your interests:</td>
+                    <td>
+                        <select name="interests" multiple="true">
+                            <option value="males">Males</option>
+                            <option value="females">Females</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </td>
+                </tr>
+				<tr>
+					<td colspan="2"><input type="submit" name="submit" value="submit"/></td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,27 @@
+* Settings *
+Resource  ../resource.txt
+Test Setup  Go To  ${ROOT}index.html
+
+* Test Cases *
+Call Selenium functions with no arguments
+  ${title}=  Call Selenium API  get_title
+  Should Be Equal  ${title}  (root)/index.html
+
+Call Selenium functions with arguments
+  Call Selenium API  open  ${ROOT}links.html
+  Location Should Be  ${ROOT}links.html
+  ${ordered}=  Call Selenium API  is_ordered  link=Relative  link=Relative to sub-directory
+  Should Be True  ${ordered}
+
+Call selenium function with camelCase name
+  ${title}=  Call Selenium API  getTitle
+  Should Be Equal  ${title}  OK,(root)/index.html
+
+Call selenium function with camelCase name with arguments
+  ${ret}=  Call Selenium API  isTextPresent  needle
+  Should Be Equal  ${ret}  OK,true
+
+Call non-existing Selenium function
+  [Documentation]  FAIL  ERROR: Unknown command: 'non-existing'
+  Call Selenium API  non-existing
+

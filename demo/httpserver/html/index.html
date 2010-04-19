@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Login Page</title>
+  <link href="demo.css" media="all" rel="stylesheet" type="text/css" />
+  <script type="text/javascript">
+    function check_login() { 
+        form = document.login_form
+        if (login(form.username_field.value, form.password_field.value)) {
+            return true
+        }
+        else {
+            window.location="error.html"
+            return false
+        }
+    }
+  </script>
+  <script type="text/javascript" src="login.js">
+  </script>
+</head>
+<body>
+  <div id='container'>
+    <h1>Login Page</h1>
+      <p>Please input your user name and password and click the login button.</p>
+      <form name='login_form' action="welcome.html" method="post" onsubmit="return check_login()">
+        <table>
+          <tr>
+            <td>User Name:</td>
+            <td><input name="username_field" size="30" type="text" /></td>
+          </tr>
+          <tr>
+            <td>Password:</td>
+            <td><input name="password_field" size="30" type="password" /></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td><input name="login_button" type="submit" value="LOGIN" /></td>
+          </tr>
+        </table>
+      </form>
+  </div>
+</body>
+</html>

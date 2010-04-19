@@ -1,0 +1,21 @@
+/* Simple styles for demo 
+ *
+ * Setting text-align is a workaround for IE. See for example
+ *  http://bluerobot.com/web/css/center1.html
+ */
+
+body {
+    font-family: sans-serif;
+    color: black;
+    background: #DDDDDD;
+    text-align: center;
+}
+#container {
+    width: 30em;
+    height: 15em;
+    margin: 5em auto;
+    background: white;
+    border: 1px solid gray;
+    padding: 10px 30px;
+    text-align: left;
+}

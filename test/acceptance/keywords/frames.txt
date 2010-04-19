@@ -1,0 +1,20 @@
+*Setting*
+Resource  ../resource.txt
+Test Setup  Go To  ${ROOT}frames/frameset.html
+Test Teardown  UnSelect Frame
+Default Tags  frame
+
+*Test Cases*
+Frame Should Contain
+  Frame Should contain  right  You're looking at right.
+  Frame Should Contain  left  Links
+
+Select And Unselect Frame
+  [Documentation]  LOG 2 Selecting frame 'left'.
+  Cannot Be Executed in IE
+  Select Frame  left
+  Click Link  foo
+  UnSelect Frame
+  Select Frame  right
+  Current Frame Contains  You're looking at foo.
+

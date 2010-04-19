@@ -1,0 +1,39 @@
+*** Settings ***
+
+Documentation  A resource file containing the demo app specific keywords and variables that create our own domain specific language. Also SeleniumLibrary itself is imported here so that tests only need to import this resource file.
+
+Library        SeleniumLibrary
+
+
+*** Variables ***
+
+${BROWSER}       firefox
+${HOST}          localhost:7272
+${LOGIN URL}     http://${HOST}/index.html
+${WELCOME URL}   http://${HOST}/welcome.html
+${VALID USER}    demo
+${VALID PASSWD}  mode
+
+
+*** Keywords ***
+
+Open Login Page
+    Open Browser  ${LOGIN URL}  ${BROWSER}
+    Title Should Be  Login Page
+
+Go To Login Page
+    Go To  ${LOGIN URL}
+    Title Should Be  Login Page
+
+Input Username  [Arguments]  ${username}
+    Input Text  username_field  ${username}
+
+Input Password  [Arguments]  ${password}
+    Input Text  password_field  ${password}
+
+Submit Credentials
+    Click Button  login_button
+
+Welcome Page Should Be Open
+    Location Should Be  ${WELCOME URL}
+    Title Should Be  Welcome Page

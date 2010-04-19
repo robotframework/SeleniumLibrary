@@ -1,0 +1,44 @@
+<html>
+  <!-- This page is done by using the plugin and modifying the example at 
+  http://abeautifulsite.net/2008/09/jquery-context-menu-plugin/
+  -->
+  <head>
+    <style type="text/css">
+      #myDiv {
+        width: 150px;
+        border: solid 1px #2AA7DE;
+        background: #6CC8EF;
+        text-align: center;
+        padding: 4em .5em;
+        margin: 1em;
+        float: left;
+      }
+    </style>
+    <script src="jquery.js" type="text/javascript"></script> 
+    <script src="jquery.contextMenu.js" type="text/javascript"></script> 
+    <link href="jquery.contextMenu.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript"> 
+            
+            $(document).ready( function() {
+                
+                // Show menu when #myDiv is clicked
+                $("#myDiv").contextMenu({
+                    menu: 'myMenu'
+                },
+                    function(action, el, pos) {
+                    alert(
+                        'Action: ' + action + '\n\n' +
+                        'Element ID: ' + $(el).attr('id')
+                        );
+                });
+       });
+
+    </script>
+  </head>
+  <body>
+    <div id="myDiv">Right click for context menu</div>
+    <ul id="myMenu" class="contextMenu"> 
+      <li class="alert"><a href="#alert">Alert</a></li> 
+    </ul> 
+  </body>
+</html>

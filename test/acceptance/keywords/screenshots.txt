@@ -1,0 +1,32 @@
+* Settings *
+Resource     ../resource.txt
+Suite Setup  Go To  ${ROOT}links.html
+
+* Test Cases *
+
+Capture screenshot to default location 
+  [Documentation]  LOG 1  </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
+  [Setup]  Remove Files  ${OUTPUTDIR}/selenium-screenshot-*.png
+  Capture Screenshot
+  File Should Exist  ${OUTPUTDIR}/selenium-screenshot-1.png
+  Click Link  Relative
+  Capture Screenshot
+  File Should Exist  ${OUTPUTDIR}/selenium-screenshot-2.png
+
+Capture screenshot to custom file
+  [Setup]  Remove Files  ${OUTPUTDIR}/custom-screenshot.png
+  Capture Screenshot  custom-screenshot.png
+  File Should Exist  ${OUTPUTDIR}/custom-screenshot.png
+
+Capture screenshot to custom directory
+  [Setup]  Remove Files  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
+  Capture Screenshot  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
+  File Should Exist  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
+
+Capture Page Screenshot
+  [Documentation]  The keyword uses the same underlying mechanism for
+  ...  resolving path as Capture Screenshot does. Thus one test is enough.
+  [Setup]  Remove Files  ${OUTPUTDIR}/page-screenshot.png
+  Cannot Be Executed in IE
+  Capture Page Screenshot  page-screenshot.png
+  File Should Exist   ${OUTPUTDIR}/page-screenshot.png

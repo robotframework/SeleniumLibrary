@@ -1,0 +1,65 @@
+<html>
+<body>
+
+<form action="/Webscript/baselib/tools/LoggingConsole.web" target="_self" method="post" id="baselib___tools___LoggingConsole_form_1_8">
+<input type="hidden" name="_uniqueFormID" value="baselib___tools___LoggingConsole_form_1_8"/><input type="hidden" name="_callingPagePath" value="baselib___tools___LoggingConsole"/><input type="hidden" name="_mainCompName" value="baselib/scriptbrowser/ScriptBrowser"/>
+        <H4>Tracing Options</H4>
+            <table border=0 width="100%">
+                <tbody align="left">      
+                    <tr>
+                        <td><input type="checkbox" name="baselib/tools/LoggingConsoleisConsoleOutputEnabled" onClick="this.form.submit()" checked="checked" /></td>
+                        <td>Write trace information to System Console</td>
+                       
+                            <td align="right">Lowest level: &nbsp;
+                            <select name="baselib/tools/LoggingConsoleconsoleOutputLevel" onChange="this.form.submit()">
+<option value="0">CRITICAL</option>
+<option value="1" selected="selected">MAJOR</option>
+<option value="2">MINOR</option>
+<option value="3">WARNING</option>
+<option value="4">INFO</option>
+<option value="5">DEBUG</option>
+<option value="6">FINE</option>
+<option value="7">FINER</option>
+<option value="8">FINEST</option>
+</select></td>
+                       
+                       
+                    </tr>   
+                    <tr>
+                        <td><input type="checkbox" name="baselib/tools/LoggingConsoleisFileOutputEnabled" onClick="this.form.submit()" checked="checked" /></td>
+                        <td>Write trace information to temporary file</td>
+                       
+                            <td align="right">Lowest level: nbsp;
+                            <select name="baselib/tools/LoggingConsolefileOutputLevel" onChange="this.form.submit()">
+<option value="0">CRITICAL</option>
+<option value="1">MAJOR</option>
+<option value="2">MINOR</option>
+<option value="3">WARNING</option>
+<option value="4">INFO</option>
+<option value="5" selected="selected">DEBUG</option>
+<option value="6">FINE</option>
+<option value="7">FINER</option>
+<option value="8">FINEST</option>
+</select></td>
+                    </tr>
+                    <tr>
+                            <td>nbsp;</td>
+                            <td colspan="2">Write to temporary file:
+                            <input type="text" name="baselib/tools/LoggingConsoletempFile" maxLength="40" size="40" value="/tmp/wslogger.xml"></td>
+                       
+                       
+                    </tr>   
+                    <tr>
+                        <td><input type="checkbox" name="baselib/tools/LoggingConsoleisShowSelectedClasses" onClick="this.form.submit()" checked="checked" /></td>
+                        <td>Show trace for <i>selected</i> classes only</td>
+                        <td>nbsp;</td>
+                    </tr>
+                  </tbody>
+              </table>
+        <p />   
+   
+<input type="image" src="/Webscript/_webscript/images/clearpix.gif" tabindex="32766">
+</form>
+
+</body>
+</html>

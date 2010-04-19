@@ -1,0 +1,13 @@
+<html>
+	<head>
+		<title>(root)/javascript/dynamiclinks.html</title>
+		<script type="text/javascript" src="functions.js" />
+	</head>
+	<body>
+		<div id="links" style="border: 1pt solid red; margin: 5px; padding: 5px;">
+			<a href="#" onclick="document.getElementById('target').appendChild(createLink('../target/first.html', 'First'));">Add First</a><br/>
+			<a href="#" onclick="document.getElementById('target').appendChild(createLink('../target/second.html', 'Second'));">Add Second</a><br/>
+		</div>
+		<div id="target" style="border: 1pt solid blue; margin: 5px; padding: 5px;"></div>
+	</body>
+</html>

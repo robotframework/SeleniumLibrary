@@ -1,0 +1,13 @@
+*Setting*  *Value*  *Value*  *Value*  *Value*  *Value*  *Value*  *Value*
+Resource  resource.txt
+
+
+*Test Cases*
+There Should Be A Good Error Message If Browser Is Not Opened
+  [Documentation]  FAIL No browser is open
+  Title Should Be  foo
+
+Close Browser Does Nothing When No Browser Is Opened
+  Close Browser
+
+

@@ -1,0 +1,12 @@
+<html>
+	<head>
+		<title>(root)/forms/named_submit_buttons.html</title>
+	</head>
+	<body>
+		<form name="form_name" action="submit.html" method="POST">
+			<input type="text" name="textfield" value=""/>
+			<input type="submit" name="ok_button" value="Ok"/>
+			<input type="submit" name="cancel_button" value="Cancel" onclick="document.forms[0].textfield.value='Cancel';return false;"/>
+		</form>
+	</body>
+</html>

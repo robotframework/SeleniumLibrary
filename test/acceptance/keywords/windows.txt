@@ -1,0 +1,44 @@
+*Setting*
+Resource  ../resource.txt
+Test Setup  Go To  ${ROOT}javascript/popupwindow.html
+Default Tags  javascript
+
+*Test Cases*
+Popup Windows Created With Javascript
+  Open Popup Window, Select It And Verify  myName
+  Do Action In Popup Window And Verify
+  Select Main Window And Verify
+
+Get Window Titles
+  ${exp_titles}=  Create List  Click link to show a popup window  Original
+  Click Link  my popup  don't wait
+  ${titles}=  Get Window Titles
+  Should Be Equal  ${titles}  ${exp_titles}
+
+Get Window Names
+  ${exp_names}=  Create List  selenium_main_app_window  myName
+  Click Link  my popup  don't wait
+  ${names}=  Get Window Names
+  Should Be Equal  ${names}  ${exp_names}
+
+Get Window Identifiers
+  ${exp_ids}=  Create List  undefined  undefined
+  Click Link  my popup  don't wait
+  ${ids}=  Get Window Identifiers
+  Should Be Equal  ${ids}  ${exp_ids}
+
+*Keywords*
+Open Popup Window, Select It And Verify
+  [Arguments]  ${window_id}
+  Click Link  my popup  don't wait
+  Select Window  ${window_id}
+  Title should Be  Original
+
+Select Main Window And Verify
+  Close Window
+  Select Window
+  Title Should Be  Click link to show a popup window
+
+Do Action In Popup Window And Verify
+  Click Link  change title  and don't wait
+  Title Should Be  Changed

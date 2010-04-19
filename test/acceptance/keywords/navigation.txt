@@ -1,0 +1,87 @@
+*Setting*
+Resource  ../resource.txt
+Test Setup  Go To  ${ROOT}links.html
+Default Tags  navigation
+
+*Test Cases*
+Go To
+  Location Should Be  ${ROOT}links.html
+  Title Should Be  (root)/links.html
+
+Go Back
+  Click Link  Relative
+  Title Should Be  (root)/index.html
+  Go Back
+  Title Should Be  (root)/links.html
+
+Click Link
+  [Documentation]  LOG 1 Clicking link 'Relative'.
+  Click Link  Relative
+  Location Should Be  ${ROOT}index.html
+  Title Should Be  (root)/index.html
+
+Click Link With Whitespace
+  Click Link  Link with whitespace
+  Location Should Be  ${ROOT}target/second.html
+
+Click Link With Embedded Whitespace
+  Click Link  Link with whitespace within
+  Location Should Be  ${ROOT}target/third.html
+
+Click Link With Bolded Link Text
+  Click Link  Link with bolded text
+  Location Should Be  ${ROOT}target/first.html
+
+Click Link By Id
+  Click Link  some_id
+  Location Should Be  ${ROOT}broken.html
+
+Click Link By Href
+  Click Link  sub/index.html
+  Location Should Be  ${ROOT}sub/index.html
+
+Click Link With Double Quote
+  Click Link  Link with double " quote
+  Location Should Be  ${ROOT}index.html
+
+Click Link With Special Characters
+  Click Link  Link with < & > \\
+  Location Should Be  ${ROOT}index.html
+
+Click Link With Asterisk
+  [Documentation]  FAIL ERROR: Element link=Link with asterisk * not matching not found
+  Click Link  Link with as*
+  Location Should Be  ${ROOT}index.html
+  Go To  ${ROOT}links.html
+  Click Link  Link with asterisk * not matching
+
+Click Image
+  [Documentation]  LOG 1 Clicking image 'image.jpg'.
+  Click Image  image.jpg
+  Location Should Be  ${ROOT}index.html
+
+Click Image By Alt
+  Click Image  tooltip
+  Location Should Be  ${ROOT}index.html
+  Go To  ${ROOT}links.html
+  Click Image  Image
+  Location Should Be  ${ROOT}target/first.html
+
+Click Image By Id
+  Click Image  image_id
+  Location Should Be  ${ROOT}index.html
+
+Click Image By XPath
+  Click Image  xpath=//div[@id='second_div']//img
+  Location Should Be  ${ROOT}target/second.html
+
+Click Element
+  [Documentation]  LOG 2 Clicking element 'xpath=//a[text()='Link']'.
+  Go To  ${ROOT}links.html
+  Click Element  xpath=//a[text()='Link']
+  Location Should Be  ${ROOT}target/first.html
+
+Click Link With Text And Image
+  Click Link  Text and image
+  Location Should Be  ${ROOT}index.html
+

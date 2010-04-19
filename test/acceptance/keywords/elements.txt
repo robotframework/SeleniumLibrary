@@ -1,0 +1,30 @@
+* Settings *
+Resource  ../resource.txt
+Suite Setup  Go To  ${ROOT}links.html
+
+* Test Cases *
+
+Get Element Attribute
+  ${id}=  Get Element Attribute  link=Link with id@id
+  Should Be Equal  ${id}  some_id
+  ${class}=  Get Element Attribute  second_div@class
+  Should Be Equal  ${class}  Second Class
+
+Get Matching XPath Count
+  ${count}=  Get Matching XPath Count  //a
+  Should Be Equal  ${count}  17
+  ${count}=  Get Matching XPath Count  //div[@id="first_div"]/a
+  Should Be Equal  ${count}  2
+
+Get Horizontal Position
+  [Documentation]  FAIL  Could not determine position for 'non-existent'
+  ${pos}=  Get Horizontal Position  link=Link
+  Should Be True  ${pos} > ${0}
+  Get Horizontal Position  non-existent
+
+Get Vertical Position
+  [Documentation]  FAIL  Could not determine position for 'non-existent'
+  ${pos}=  Get Vertical Position  link=Link
+  Should Be True  ${pos} > ${0}
+  Get Horizontal Position  non-existent
+

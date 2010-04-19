@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>Original</title>
+		<script type="text/javascript">
+		function add_content(target_container, content) {
+			p = document.createElement('p');
+			p.appendChild(document.createTextNode(content));
+			container = document.getElementById(target_container);
+			container.appendChild(p);
+		}
+		</script>
+	</head>
+	<body>
+		<a href="javascript:return false;" onclick="document.title='Changed'; return false;">change title</a><br/>
+		<a href="javascript:return false;" onclick="add_content('target', 'added content'); return false;">add content</a><br/>
+		<p>
+		<input type="radio" name="group" value="title" 
+		 onclick="document.title='Changed by Button';" />Change Title<br/>
+        <input type="radio" name="group" value="content" 
+         onclick="add_content('button_target', 'added by button');"/>Add Content<br/>
+        </p>
+        <div id="target">
+		</div>
+		<div id="button_target">
+        </div>
+        <form name=myform>
+            <input type=button value="Change the title" 
+            onClick="if(confirm('Really change the title?'))
+            document.title='Changed after confirmation';" >
+        </form>
+
+	</body>
+</html>
+

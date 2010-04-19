@@ -1,0 +1,25 @@
+*Setting*
+Resource  ../resource.txt
+Suite Setup  Delete Cookies and Reload
+
+
+*Test Casse*
+Get Cookies
+  ${cookies} =  Get Cookies
+  Should Be Equal  ${cookies}  test=seleniumlibrary; another=value
+
+Get Cookie Value
+  ${value} =  Get Cookie Value  another
+  Should Be Equal  ${value}  value
+
+Delete Cookie
+  Delete Cookie  test
+  ${cookies} =  Get Cookies
+  Should Be Equal  ${cookies}  another=value
+
+
+*Keywords*
+Delete Cookies And Reload  Delete All Cookies
+  Go To  ${ROOT}index.html
+
+

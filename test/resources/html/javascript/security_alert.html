@@ -1,0 +1,29 @@
+<html>
+<body>
+	<script src="http://www.somewhere.com/this/is/illegal.js"></script>
+	
+	<script type="text/javascript">
+		window.print();
+	</script>
+	
+    <script Language="vbscript">
+    Dim WSHShell
+    Dim myHeader
+    Dim myFooter
+    Set WSHShell = CreateObject("WScript.Shell")
+    myHeader = WSHShell.RegRead("HKCU\Software\Microsoft\Internet Explorer\PageSetup\header")
+    myFooter = WSHShell.RegRead("HKCU\Software\Microsoft\Internet Explorer\PageSetup\footer")
+
+    WSHShell.RegWrite "HKCU\Software\Microsoft\Internet Explorer\PageSetup\header", ""
+    WSHShell.RegWrite "HKCU\Software\Microsoft\Internet Explorer\PageSetup\footer", ""
+
+    Sub ResetHeader()
+        Dim WSHShell
+        Set WSHShell = CreateObject("WScript.Shell")
+        WSHShell.RegWrite "HKCU\Software\Microsoft\Internet Explorer\PageSetup\header", myHeader
+        WSHShell.RegWrite "HKCU\Software\Microsoft\Internet Explorer\PageSetup\footer", myFooter
+    End Sub
+    </script>
+
+</body>
+</html>

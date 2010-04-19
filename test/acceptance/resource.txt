@@ -1,0 +1,31 @@
+*Setting*
+Library  SeleniumLibrary  \  \  4455
+Library  Collections
+Library  OperatingSystem
+
+
+*Variable*
+${SERVER}  localhost:7272
+${BROWSER}  *firefox
+${ROOT}  http://${SERVER}/html/
+
+
+*Keyword*
+Open Browser To Start Page
+  [Documentation]  This keyword also tests 'Set Selenium Speed' and 'Set Selenium Timeout' against all reason.
+  Open Browser  ${ROOT}  ${BROWSER}
+  ${old timeout} =  Set Selenium Speed  ${SPEED}
+  Should Be Equal  ${old timeout}  0 seconds
+  ${old timeout} =  Set Selenium Timeout  1 second
+  Should Be Equal  ${old timeout}  5 seconds
+
+Cannot Be Executed In IE
+  Run Keyword If   "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']
+  ...  Fail And Set Non-Critical  This test does not work in Internet Explorer
+
+Fail And Set Non-Critical
+  [Arguments]  ${msg}
+  Remove Tags  regression
+  Fail  ${msg}
+
+

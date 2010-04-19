@@ -1,0 +1,27 @@
+<html>
+<body>
+
+<form name="form">
+<input type="text" name="textfield" id="textfield" value="no handler was triggered" />
+</form>
+
+<a href="javascript:void(0);" 
+   onclick="document.forms[0].textfield.value='onclick';return false;" 
+   onmousedown="document.forms[0].textfield.value='onmousedown';return false;">
+  <img src="foo.jpg" id="image" />
+</a>
+
+<a href="javascript:void(0);" 
+   onmousedown="document.forms[0].textfield.value='onmousedown';return false;">
+  <img src="foo.jpg" id="image_mousedown" />
+</a>
+
+<a href="javascript:void(0);" 
+   onclick="document.forms[0].textfield.value='onclick';return false;" 
+   onmousedown="document.forms[0].textfield.value='onmousedown';return false;">both</a>
+
+<a href="javascript:void(0);" 
+   onmousedown="document.forms[0].textfield.value='onmousedown';return false;">onmousedown</a>
+
+</body>
+</html>
