@@ -35,7 +35,6 @@ ROBOT_ARGS = [
 '--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
 '--outputdir', '%(outdir)s',
 '--variable', 'browser:%(browser)s',
-'--output', '%(browser)s-output.xml',
 '--escape', 'space:SP',
 '--report', 'none',
 '--log', 'none',
@@ -44,8 +43,6 @@ ROBOT_ARGS = [
 ]
 REBOT_ARGS = [
 '--outputdir', '%(outdir)s',
-'--report', '%(browser)s-report.html',
-'--log',  '%(browser)s-log.html',
 '--name', '%(browser)sSPAcceptanceSPTests',
 '--escape', 'space:SP',
 '--critical', 'regression',
@@ -61,7 +58,7 @@ def acceptance_tests(interpreter, browser, args):
     runner = "%s%s" % ('jython' == interpreter and 'j' or 'p', suffix)
     execute_tests(runner)
     stop_http_server()
-    process_output()
+    return process_output()
 
 def start_http_server():
     server_output = TemporaryFile()
@@ -88,6 +85,7 @@ def process_output():
         print 'All critical tests passed'
     else:
         print '%d critical test%s failed' % (rc, 's' if rc != 1 else '')
+    return rc
 
 
 if __name__ ==  '__main__':
@@ -110,4 +108,4 @@ if __name__ ==  '__main__':
                 sys.exit(1)
             print 'All unit tests passed'
     if browser != 'unit':
-        acceptance_tests(interpreter, browser, args)
+        sys.exit(acceptance_tests(interpreter, browser, args))
