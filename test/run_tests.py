@@ -76,10 +76,10 @@ def stop_http_server():
 def process_output():
     print
     call(['python', os.path.join(RESOURCEDIR, 'statuschecker.py'),
-         os.path.join(RESULTDIR, '%s-output.xml' % ARG_VALUES['browser'])])
+         os.path.join(RESULTDIR, 'output.xml')])
     rebot = utils.is_windows and 'rebot.bat' or 'rebot'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + \
-                [os.path.join(ARG_VALUES['outdir'], '%s-output.xml' % ARG_VALUES['browser'] ) ]
+                [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
     rc = call(rebot_cmd, env=os.environ)
     if rc == 0:
         print 'All critical tests passed'
