@@ -282,7 +282,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         return BROWSER_ALIASES.get(browser.lower().replace(' ', ''), browser)
 
     def _connect_to_selenium_server(self):
-        timeout = time.time() + 10
+        timeout = time.time() + 20
         while time.time() < timeout:
             try:
                 self._selenium.start()
@@ -644,20 +644,20 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         if not os.path.isfile(file_path):
             self._info("The path '%s' does not exists in local file system." % file_path)
         self._selenium.type(identifier, file_path)
-    
+
     def attach_file(self, locator, file_locator):
         """Sets a file input (upload) field identified by `locator` to the file
         given as `file_locator`.
-        
+
         This method works when attaching files on browsers running on remote
         machines. The file to be attached must be placed on a web server
         accessible by the machine running the browser at the root of the server
         - any subdirectories will not work. `file_locator` is the URL to the
         file. Selenium RC will take care of downloading the file to the test
         machine and then attaching the file.
-        
+
         Supported browsers: Firefox
-        
+
         For files on the same machine use `Choose File` keyword.
         """
         self._selenium.attach_file(locator, file_locator)
