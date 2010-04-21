@@ -43,6 +43,7 @@ BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
                    'internetexplorer': '*iexplore'}
+SELENIUM_CONNECTION_TIMEOUT = 40
 
 
 def start_selenium_server(logfile, jarpath=None, *params):
@@ -282,7 +283,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         return BROWSER_ALIASES.get(browser.lower().replace(' ', ''), browser)
 
     def _connect_to_selenium_server(self):
-        timeout = time.time() + 20
+        timeout = time.time() + SELENIUM_CONNECTION_TIMEOUT
         while time.time() < timeout:
             try:
                 self._selenium.start()
@@ -291,8 +292,9 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
             else:
                 return
         self._selenium = _NoBrowser()
-        raise RuntimeError("Could not connect to Selenium Server in 10 seconds. "
-                           "Please make sure Selenium Server is running.")
+        raise RuntimeError("Could not connect to Selenium Server in %d seconds. "
+                           "Please make sure Selenium Server is running."
+                           % SELENIUM_CONNECTION_TIMEOUT)
 
     def close_browser(self):
         """Closes the current browser."""
