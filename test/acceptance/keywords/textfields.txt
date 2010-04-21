@@ -33,6 +33,8 @@ Press Key
 
 Press Key Native
   [Setup]  Go To  ${ROOT}forms/login.html
+  [Documentation]  Due to the fact that test are run with xvfb in CI, this test does not work there.
+  [Tags]  ci-incompatible
   Input Text  username_field  James Bond
   Focus  login_button
   Press Key Native  10  and wait
