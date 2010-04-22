@@ -267,6 +267,11 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         be used to specify the browser directly. In this case, the path needs to
         point to an executable, not a script, otherwise the library may not be
         able to shut down the browser properly.
+        
+        Note, that you will encounter strange behaviour, if you open multiple 
+        Internet Explorer browser instances. That's also why `Switch Browser` only
+        works with one IE browser at most. 
+        http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser = self._get_browser(browser)
