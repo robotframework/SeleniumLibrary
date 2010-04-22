@@ -7,7 +7,7 @@ Introduction
 This directory contains everything needed to run SeleniumLibrary 
 tests with Robot Framework. This includes:
 
-- Unit tests under `utest` directory.
+- Unit tests under `unit` directory.
 - Acceptance tests written with Robot Framework under `acceptance` 
   directory
 - A very simple httpserver.py which is used to serve the html for tests in
@@ -39,9 +39,9 @@ only unit tests, a special value `unit` may be used as a browser.
 
 Examples::
   # Run all test with Python and Firefox
-  atest/run_tests.py python ff
+  test/run_tests.py python ff
   # Run only test suite `javascript` with Jython and Internet Explorer
-  atest/run_tests.py jython ie -s javascrip
+  test/run_tests.py jython ie -s javascrip
 
 
 Failing Tests
@@ -55,5 +55,5 @@ with expected error message. After that, report and log files are
 generated and these files show the correct status of the test run.
 
 
-TODO: docuement syntax of documentation for statuschecker
+TODO: document syntax of documentation for statuschecker
 
