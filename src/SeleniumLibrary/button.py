@@ -66,7 +66,7 @@ class Button(object):
         See `introduction` for details about `wait` argument.
         """
         self._info("Selecting '%s' from radio button '%s'." % (value, group_name))
-        xpath = "xpath=//input[@type='radio' and @name='%s'and (@value='%s' or @id='%s')]" \
+        xpath = "xpath=//input[@type='radio' and @name='%s' and (@value='%s' or @id='%s')]" \
                  % (group_name, value, value)
         if not self._selenium.is_checked(xpath):
             self._selenium.click(xpath)
