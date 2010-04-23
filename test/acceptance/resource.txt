@@ -16,12 +16,13 @@ Open Browser To Start Page
   Open Browser  ${ROOT}  ${BROWSER}
   ${old timeout} =  Set Selenium Speed  ${SPEED}
   Should Be Equal  ${old timeout}  0 seconds
-  ${old timeout} =  Set Selenium Timeout  1 second
+  ${old timeout} =  Set Selenium Timeout  2 seconds
   Should Be Equal  ${old timeout}  5 seconds
 
 Cannot Be Executed In IE
-  Run Keyword If   "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']
-  ...  Fail And Set Non-Critical  This test does not work in Internet Explorer
+  ${runsInIE}=  Set Variable If  "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']  ${TRUE}
+  Run Keyword If   ${runsInIE}  Set Tags  ie-incompatible
+  Run Keyword If   ${runsInIE}  Fail And Set Non-Critical  This test does not work in Internet Explorer
 
 Fail And Set Non-Critical
   [Arguments]  ${msg}
