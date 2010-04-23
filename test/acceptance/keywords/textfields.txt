@@ -36,6 +36,8 @@ Press Key Native
   [Documentation]  Due to the fact that test are run with xvfb in CI, this test does not work there.
   [Tags]  ci-incompatible
   Input Text  username_field  James Bond
+  # Window needs focus, so that keypress is recognized in correct Window
+  Execute Javascript  window.focus()
   Focus  login_button
   Press Key Native  10  and wait
   Location Should Be  ${root}forms/submit.html
