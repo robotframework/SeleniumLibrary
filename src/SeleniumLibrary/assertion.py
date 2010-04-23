@@ -103,7 +103,7 @@ class Assertion(object):
         if not excepted in actual:
             if not message:
                 message = "Element '%s' should have contained text '%s' but "\
-                          "it's text is '%s'." % (locator, excepted, actual)
+                          "its text was '%s'." % (locator, excepted, actual)
             raise AssertionError(message)
 
     def page_should_contain_checkbox(self, locator, message=''):
