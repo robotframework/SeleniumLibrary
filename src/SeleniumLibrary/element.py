@@ -53,7 +53,7 @@ class Element(object):
         try:
             pos = getter(self._parse_locator(locator))
         except Exception, err:
-            if 'not found' not in unicode(err):
+            if 'not found' not in self._get_error_message(err):
                 raise
         if not pos:
             raise AssertionError("Could not determine position for '%s'" % locator)

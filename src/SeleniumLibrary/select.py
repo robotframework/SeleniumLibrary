@@ -29,7 +29,7 @@ class Select(object):
             selected_values = self._selenium.get_selected_values(xpath)
             selected_labels = self._selenium.get_selected_labels(xpath)
         except Exception, err:
-            if not values and 'No option selected' in unicode(err):
+            if not values and 'No option selected' in self._get_error_message(err):
                 return
             raise # Means that something unexpecet happened in Selenium.
         else:
@@ -74,7 +74,7 @@ class Select(object):
             self._selenium.get_attribute(locator+'@multiple')
             return True
         except Exception, err:
-            if 'attribute: %s@multiple' % locator in unicode(err):
+            if 'attribute: %s@multiple' % locator in self._get_error_message(err):
                 return False
             else:
                 raise
@@ -129,7 +129,7 @@ class Select(object):
         try:
             self._selenium.add_selection(locator, item)
         except Exception, err:
-            if "Not a multi-select" in unicode(err):
+            if "Not a multi-select" in self._get_error_message(err):
                 raise RuntimeError("Keyword 'Select all from list' works only "
                                    "for multiselect lists.")
             raise

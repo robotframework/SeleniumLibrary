@@ -40,7 +40,7 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'link'), dont_wait)
         except Exception, err:
-            if 'not found' not in unicode(err):
+            if 'not found' not in self._get_error_message(err):
                 raise
             self._click("link=%s" % locator, dont_wait)
 
@@ -55,7 +55,7 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'input'), dont_wait)
         except Exception, err:
-            if 'ERROR: Element xpath=//' not in unicode(err):
+            if 'ERROR: Element xpath=//' not in self._get_error_message(err):
                 raise
             self._click(self._parse_locator(locator, 'button'), dont_wait)    
     
@@ -70,7 +70,7 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'image'), dont_wait)
         except Exception, err:
-            if not 'ERROR Element xpath=//' not in unicode(err):
+            if not 'ERROR Element xpath=//' not in self._get_error_message(err):
                 raise
             self._click(self._parse_locator(locator, 'input'), dont_wait)
 

@@ -50,7 +50,7 @@ class JavaScript(object):
         try:
             return self._selenium.get_alert()
         except Exception, err:
-            if 'alerts' in unicode(err):
+            if 'alerts' in self._get_error_message(err):
                 raise AssertionError('There were no alerts')
             raise err
 

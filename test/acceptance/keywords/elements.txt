@@ -12,7 +12,7 @@ Get Element Attribute
 
 Get Matching XPath Count
   ${count}=  Get Matching XPath Count  //a
-  Should Be Equal  ${count}  17
+  Should Be Equal  ${count}  18
   ${count}=  Get Matching XPath Count  //div[@id="first_div"]/a
   Should Be Equal  ${count}  2
 

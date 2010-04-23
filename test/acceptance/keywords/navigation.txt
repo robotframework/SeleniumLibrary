@@ -54,6 +54,10 @@ Click Link With Asterisk
   Location Should Be  ${ROOT}index.html
   Go To  ${ROOT}links.html
   Click Link  Link with asterisk * not matching
+  
+Click Link With Unicode
+  Click Link  Link with Unicode Ã¤Ã¶Ã¼Ã„Ã–ÃœÃŸ
+  Location Should Be  ${ROOT}index.html
 
 Click Image
   [Documentation]  LOG 1 Clicking image 'image.jpg'.

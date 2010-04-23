@@ -718,6 +718,10 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
                     % (locator, parsed_locator))
         return parsed_locator
 
+    def _get_error_message(self, exception):
+        # Cannot use unicode(exception) because it fails on Python 2.5 and earlier if the message contains Unicode chars
+        # See for details: http://bugs.jython.org/issue1585
+        return unicode(exception.args and exception.args[0] or '')
 
 class _NoBrowser(object):
     set_timeout = lambda self, timeout: None
