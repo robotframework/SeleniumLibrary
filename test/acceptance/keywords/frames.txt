@@ -5,15 +5,14 @@ Test Teardown  UnSelect Frame
 Default Tags  frame
 
 *Test Cases*
-Frame Should Contain
-  Frame Should contain  right  You're looking at right.
-  Frame Should Contain  left  Links
+#Frame Should Contain
+#  Frame Should contain  right  You're looking at right.
+#  Frame Should Contain  left  Links
 
 Select And Unselect Frame
-  [Documentation]  LOG 2 Selecting frame 'left'.
-  Cannot Be Executed in IE
+  [Documentation]  LOG 1 Selecting frame 'left'.
   Select Frame  left
-  Click Link  foo
+  Click Link  foo  don't wait
   UnSelect Frame
   Select Frame  right
   Current Frame Contains  You're looking at foo.
