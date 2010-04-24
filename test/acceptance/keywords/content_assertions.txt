@@ -45,7 +45,7 @@ Page Should Contain With Frames
   Page Should Contain  You're looking at right.
 
 Element Should Contain
-  [Documentation]  FAIL Element 'some_id' should have contained text 'non existing text' but it's text is
+  [Documentation]  FAIL Element 'some_id' should have contained text 'non existing text' but its text was
   ...  'This text is inside an identified element'.
   Element Should Contain  some_id  This text is inside an identified element
   Element Should Contain  some_id  non existing text
