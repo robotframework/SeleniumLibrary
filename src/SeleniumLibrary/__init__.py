@@ -426,9 +426,14 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         self._info("Opening url '%s'" % url)
         self._selenium.open(url)
 
-    def go_back(self):
-        """Simulates the user clicking the "back" button on their browser."""
+    def go_back(self, dont_wait=''):
+        """Simulates the user clicking the "back" button on their browser.
+        
+        See `introduction` for details about locating elements and about meaning
+        of `dont_wait` argument."""
         self._selenium.go_back()
+        if not dont_wait:
+            self._wait_for_page_to_load()
 
     def maximize_browser_window(self):
         """Maximizes current browser window."""
