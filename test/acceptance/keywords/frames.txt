@@ -5,9 +5,9 @@ Test Teardown  UnSelect Frame
 Default Tags  frame
 
 *Test Cases*
-#Frame Should Contain
-#  Frame Should contain  right  You're looking at right.
-#  Frame Should Contain  left  Links
+Frame Should Contain
+  Frame Should contain  right  You're looking at right.
+  Frame Should Contain  left  Links
 
 Select And Unselect Frame
   [Documentation]  LOG 1 Selecting frame 'left'.
