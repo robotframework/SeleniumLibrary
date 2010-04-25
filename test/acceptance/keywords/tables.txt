@@ -1,0 +1,23 @@
+* Settings *
+Resource  ../resource.txt
+Suite Setup  Go To  ${ROOT}tables/tables.html
+
+* Test Cases *
+
+Should Find Table Content By ID
+	Table Should Contain  simpleTable  simpleTable_A1
+	Table Should Contain  simpleTable  simpleTable_C3
+	
+Should Give Error Message When Content Not Found In Table
+	[Documentation]  FAIL ERROR: Table identified by 'simpleTable' should have contained text 'XXX'.
+	Table Should Contain  simpleTable  XXX
+
+#Should Find Table Content By Name
+#	Table Should Contain  simpleTableName  simpleTableName_B2
+	
+#Table Should Contain         some text
+#Table Header Should Contain  some text
+#Table Row Should Contain     2  some text
+#Table Column Should Contain  4  some text
+#Table Cell Should Contain    2  4  some text
+	

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Tables</title>
+</head>
+<body>
+<h2>Simple Table</h2>
+<table id="simpleTable" border="1">
+  <tr>
+    <td>simpleTable_A1</td>
+    <td>simpleTable_B1</td>
+    <td>simpleTable_C1</td>
+  </tr>
+  <tr>
+    <td>simpleTable_A2</td>
+    <td>simpleTable_B2</td>
+    <td>simpleTable_C2</td>
+  </tr>
+  <tr>
+    <td>simpleTable_A3</td>
+    <td>simpleTable_B3</td>
+    <td>simpleTable_C3</td>
+  </tr>
+</table>
+<h2>Simple Table by Name</h2>
+<table name="simpleTableName" border="1">
+  <tr>
+    <td>simpleTableName_A1</td>
+    <td>simpleTableName_B1</td>
+    <td>simpleTableName_C1</td>
+  </tr>
+  <tr>
+    <td>simpleTableName_A2</td>
+    <td>simpleTableName_B2</td>
+    <td>simpleTableName_C2</td>
+  </tr>
+  <tr>
+    <td>simpleTableName_A3</td>
+    <td>simpleTableName_B3</td>
+    <td>simpleTableName_C3</td>
+  </tr>
+</table>
+
+<h2>Simple Table With Nested Table</h2>
+<table id="simpleWithNested" border="1">
+  <tr>
+    <td>A1</td>
+    <td>B1</td>
+    <td>C1</td>
+  </tr>
+  <tr>
+    <td>A2</td>
+    <td><table id="nestedTable" border="1">
+  <tr>
+    <td>A1</td>
+    <td>B1</td>
+    <td>C1</td>
+  </tr>
+  <tr>
+    <td>A2</td>
+    <td>B2</td>
+    <td>C2</td>
+  </tr>
+  <tr>
+    <td>A3</td>
+    <td>B3</td>
+    <td>C3</td>
+  </tr>
+</table></td>
+    <td>C2</td>
+  </tr>
+  <tr>
+    <td>A3</td>
+    <td>B3</td>
+    <td>C3</td>
+  </tr>
+</table>
+
+<h2>Simple Table With Header</h2>
+<table id="tableWithSingleHeader" border="1">
+  <tr>
+    <th>A1</th>
+    <th>B1</th>
+    <th>C1</th>
+  </tr>
+  <tr>
+    <td>A2</td>
+    <td>B2</td>
+    <td>C2</td>
+  </tr>
+  <tr>
+    <td>A3</td>
+    <td>B3</td>
+    <td>C3</td>
+  </tr>
+</table>
+
+<h2>Simple Table With Two Header Rows</h2>
+<table id="tableWithTwoHeaders" border="1">
+  <tr>
+    <th>A1</th>
+    <th>B1</th>
+    <th>C1</th>
+  </tr>
+  <tr>
+    <th>A2</th>
+    <th>B2</th>
+    <th>C2</th>
+  </tr>
+  <tr>
+    <td>A3</td>
+    <td>B3</td>
+    <td>C3</td>
+  </tr>
+  <tr>
+    <td>A4</td>
+    <td>B4</td>
+    <td>C4</td>
+  </tr>
+</table>
+
+<h2>Table with thead, tfoot and tbody sections</h2>
+<table border="1" rules="groups">
+  <thead>
+    <tr>
+      <th>AH</th>
+      <th>BH</th>
+      <th>CH</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td>AF</td>
+      <td>BF</td>
+      <td>CF</td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <tr>
+      <td>A1</td>
+      <td>B1</td>
+      <td>C1</td>
+    </tr>
+    <tr>
+      <td>A2</td>
+      <td>B2</td>
+      <td>C2</td>
+    </tr>
+    <tr>
+      <td>A3</td>
+      <td>B3</td>
+      <td>C3</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Table With Merged Cells In a Row</h2>
+<table id="mergedRows" border="1">
+  <tr>
+    <td rowspan="2">A1</td>
+    <td>B1</td>
+    <td>C1</td>
+    <td rowspan="4">D1</td>
+  </tr>
+  <tr>
+    <td rowspan="2">B2</td>
+    <td>C2</td>
+  </tr>
+  <tr>
+  	<td>A3</td>
+    <td>C3</td>
+  </tr>
+</table>
+
+<h2>Table With Merged Cells In a Column</h2>
+<table id="mergedCols" border="1">
+  <tr>
+    <td colspan="2">A1</td>
+    <td>C1</td>
+  </tr>
+  <tr>
+    <td>A2</td>
+    <td colspan="2">B2</td>
+  </tr>
+  <tr>
+    <td>A3</td>
+    <td>B3</td>
+    <td>C3</td>
+  </tr>
+  <tr>
+    <td colspan="4">D1</td>
+  </tr>
+</table>
+
+<h2>Table With Formatting and Unicode</h2>
+<table id="formattedTable" border="1">
+  <tr>
+    <td><strong>A1</strong></td>
+    <td><b>B1</b></td>
+    <td><i>C1</i></td>
+  </tr>
+  <tr>
+    <td><h2>A2</h2></td>
+    <td><a href="../index.html">B2</a></td>
+    <td>ÄÖÜäöüß</td>
+  </tr>
+</table>
+
+</body>
+</html>
