@@ -585,7 +585,14 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
 
         Sometimes this keyword doesn't trigger the correct JavaScript event
         on the clicked element. In those cases `Press Key Native` can be
-        used as a workaround.
+        used as a workaround. 
+        
+        The selenium command key_press [1] that is used internally exposes some
+        erratic behaviour [2], especially when used with the Internet Explorer. If
+        don't get the expected results, try `Press Key Native` instead.
+        
+        [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press
+        [2] http://jira.openqa.org/browse/SRC-385
         """
         self._selenium.key_press(locator, key)
         if wait:
@@ -609,8 +616,12 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         | Press Key Native | 10           | # Enter key  |
 
         Notice that this keyword is very fragile and, for example, using the
-        keyboard or mouse while tests are running often causes problems.
-        The more robust `Press Key` keyword should be used whenever possible.
+        keyboard or mouse while tests are running often causes problems. It can
+        be beneficial to bring the window to the front again with executing JavaScript:
+        
+        | Execute Javascript | window.focus() |          |
+        | Focus              | login_button   |          |
+        | Press Key Native   | 10             | and wait |
         """
         self._selenium.key_press_native(keycode)
         if wait:
