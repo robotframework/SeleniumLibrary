@@ -1,5 +1,4 @@
 *** Settings ***
-
 Documentation   A test suite containing tests related to invalid login. These tests are data-driven by they nature, they only use a single keyword that is used with different argument to cover different scenarios.
 
 Suite Setup     Open Login Page
