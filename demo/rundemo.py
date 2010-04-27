@@ -31,7 +31,12 @@ import sys
 from tempfile import TemporaryFile
 from subprocess import Popen, call, STDOUT
 
-import SeleniumLibrary
+try:
+    import SeleniumLibrary
+except ImportError:
+    print 'Importing SeleniumLibrary module failed.'
+    print 'Please make sure you have SeleniumLibrary installed.'
+    sys.exit(1)
 
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
