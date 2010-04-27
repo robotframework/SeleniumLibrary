@@ -65,11 +65,10 @@ def start_selenium_server(logfile, jarpath=None, *params):
     if not subprocess:
         raise RuntimeError('This function requires `subprocess` module which '
                            'is available on Python/Jython 2.5 or newer')
-    params = list(params)
     if not jarpath:
         jarpath = os.path.join(os.path.dirname(__file__), 'lib',
                                'selenium-server.jar')
-    subprocess.Popen(['java', '-jar', jarpath] + params,
+    subprocess.Popen(['java', '-jar', jarpath] + list(params),
                      stdout=logfile, stderr=subprocess.STDOUT)
 
 
