@@ -17,7 +17,23 @@ class Table(object):
     def table_should_contain(self, table_locator, expected_content):
         """doc.
         """
-        locator = "css=table[id=\"%s\"]:contains(\"%s\")" % (table_locator, expected_content)
-        message = "ERROR: Table identified by '%s' should have contained text '%s'." % (table_locator, "XXX")
+        locator = "css=table#%s:contains(\"%s\")" % (table_locator, expected_content)
+        message = "ERROR: Table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
+        self._page_should_contain_element(locator, 'element', message)
+        return
+
+    def table_header_should_contain(self, table_locator, expected_content):
+        """doc.
+        """
+        locator = "css=table#%s th:contains(\"%s\")" % (table_locator, expected_content)
+        message = "ERROR: Header in table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
+        self._page_should_contain_element(locator, 'element', message)
+        return
+
+    def table_footer_should_contain(self, table_locator, expected_content):
+        """doc.
+        """
+        locator = "css=table#%s tfoot td:contains(\"%s\")" % (table_locator, expected_content)
+        message = "ERROR: Footer in table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
         self._page_should_contain_element(locator, 'element', message)
         return

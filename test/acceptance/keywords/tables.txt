@@ -5,7 +5,7 @@ Suite Setup  Go To  ${ROOT}tables/tables.html
 
 * Test Cases *
 
-Should Find Table Content By ID
+Should Find Text In Table Content
 	Table Should Contain  simpleTable            simpleTable_A1
 	Table Should Contain  simpleTable            simpleTable_C3
 	Table Should Contain  simpleWithNested       simpleWithNested_A1
@@ -26,13 +26,36 @@ Should Find Table Content By ID
 	Table Should Contain  formattedTable         formattedTable_A2
 	Table Should Contain  formattedTable         formattedTable_B2
 	Table Should Contain  formattedTable         formattedTable_ÄÖÜäöüß
+	Table Should Contain  formattedTable         äöü€&äöü€&
 	
 Should Give Error Message When Content Not Found In Table
 	[Documentation]  FAIL ERROR: Table identified by 'simpleTable' should have contained text 'XXX'.
 	Table Should Contain  simpleTable  XXX
 
-#Table Header Should Contain  id        some text
-#Table Footer Should Contain  id        some text
+Should Find Text In Header
+	Table Header Should Contain  tableWithSingleHeader  tableWithSingleHeader_A1
+	Table Header Should Contain  tableWithSingleHeader  tableWithSingleHeader_B1
+	Table Header Should Contain  tableWithTwoHeaders    tableWithTwoHeaders_A1
+	Table Header Should Contain  tableWithTwoHeaders    tableWithTwoHeaders_C2
+	Table Header Should Contain  withHeadAndFoot        withHeadAndFoot_AH1
+	Table Header Should Contain  withHeadAndFoot        withHeadAndFoot_CH1
+	Table Header Should Contain  withHeadAndFoot        withHeadAndFoot_AH2
+	Table Header Should Contain  withHeadAndFoot        withHeadAndFoot_BH2
+
+Should Give Error Message When Content Not Found In Table Header
+	[Documentation]  FAIL ERROR: Header in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
+	Table Header Should Contain  withHeadAndFoot  withHeadAndFoot_B2
+
+Should Find Text In Footer
+	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_AF1
+	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_CF1
+	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_AF2
+	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_CF2
+	
+Should Give Error Message When Content Not Found In Table Footer
+	[Documentation]  FAIL ERROR: Footer in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
+	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_B2
+
 #Table Row Should Contain     id  2     some text
 #Table Column Should Contain  id  4     some text
 #Table Cell Should Contain    id  2  4  some text
