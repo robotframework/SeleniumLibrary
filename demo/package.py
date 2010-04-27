@@ -9,7 +9,7 @@ FILES = {'': ['rundemo.py', 'README.txt'],
          'login_tests': ['valid_login.txt', 'invalid_login.txt',
                          'resource.txt'],
          'demoapp': ['server.py', 'index.html', 'welcome.html', 'error.html',
-                     'login.js', 'demo.css']}
+                     'demo.css']}
 
 name = 'robotframework-seleniumlibrary-demo'
 root = os.path.dirname(__file__)

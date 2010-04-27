@@ -3,9 +3,9 @@
   <title>Login Page</title>
   <link href="demo.css" media="all" rel="stylesheet" type="text/css" />
   <script type="text/javascript">
-    function check_login() { 
-        form = document.login_form
-        if (login(form.username_field.value, form.password_field.value)) {
+    function login() { 
+        if (document.login_form.username_field.value == 'demo' &&
+            document.login_form.password_field.value == 'mode') {
             return true
         }
         else {
@@ -14,14 +14,12 @@
         }
     }
   </script>
-  <script type="text/javascript" src="login.js">
-  </script>
 </head>
 <body>
   <div id='container'>
     <h1>Login Page</h1>
       <p>Please input your user name and password and click the login button.</p>
-      <form name='login_form' action="welcome.html" method="post" onsubmit="return check_login()">
+      <form name='login_form' action="welcome.html" method="post" onsubmit="return login()">
         <table>
           <tr>
             <td>User Name:</td>
