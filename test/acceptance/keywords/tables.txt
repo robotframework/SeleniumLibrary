@@ -80,7 +80,53 @@ Should Find Text In Specific Row
 Should Give Error Message When Content Not Found In Table Row
 	[Documentation]  FAIL ERROR: Row #2 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
 	Table Row Should Contain  simpleTable  2  simpleTable_B3
+
+Should Give Error Message When Row Number Out Of Bounds
+	[Documentation]  FAIL ERROR: Row #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+	Table Row Should Contain  simpleTable  20  simpleTable_B3
+
+Should Find Text In Specific Column
+	Table Column Should Contain  simpleTable            2  simpleTable_B2
+	Table Column Should Contain  simpleWithNested       2  nestedTable_A1
+	Table Column Should Contain  nestedTable            3  nestedTable_C1
+	Table Column Should Contain  tableWithSingleHeader  1  tableWithSingleHeader_A1
+	Table Column Should Contain  tableWithSingleHeader  1  tableWithSingleHeader_A3
+	Table Column Should Contain  tableWithTwoHeaders    2  tableWithTwoHeaders_B2
 	
-#Table Column Should Contain  id  4     some text
-#Table Cell Should Contain    id  2  4  some text
+Should Give Error Message When Content Not Found In Table Row
+	[Documentation]  FAIL ERROR: Column #2 in table identified by 'simpleTable' should have contained text 'simpleTable_C3'.
+	Table Column Should Contain  simpleTable  2  simpleTable_C3
+
+Should Give Error Message When Row Number Out Of Bounds
+	[Documentation]  FAIL ERROR: Column #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+	Table Column Should Contain  simpleTable  20  simpleTable_B3
+
+Should Retrieve Text From Cell
+    Table Cell Should Be Equal  simpleTable            1  1  simpleTable_A1
+    Table Cell Should Be Equal  tableWithSingleHeader  1  1  tableWithSingleHeader_A1
+    Table Cell Should Be Equal  tableWithSingleHeader  3  3  tableWithSingleHeader_C3
+    Table Cell Should Be Equal  withHeadAndFoot        1  2  withHeadAndFoot_BH1
+    Table Cell Should Be Equal  withHeadAndFoot        4  3  withHeadAndFoot_C2
+    Table Cell Should Be Equal  withHeadAndFoot        6  1  withHeadAndFoot_AF1
+    Table Cell Should Be Equal  mergedRows             2  1  mergedRows_B2
+    Table Cell Should Be Equal  mergedCols             1  2  mergedCols_C1
+    Table Cell Should Be Equal  formattedTable         1  1  formattedTable_A1
+    Table Cell Should Be Equal  formattedTable         1  4  formattedTable_D1
+    Table Cell Should Be Equal  formattedTable         2  2  formattedTable_B2
+    Table Cell Should Be Equal  formattedTable         2  3  formattedTable_ÄÖÜäöüß
+    Table Cell Should Be Equal  formattedTable         2  4  äöü€&äöü€&
+
+Should Give Error Message When Content Not Found In Table Cell
+    [Documentation]  FAIL ERROR: Cell in table 'simpleTable' in row #1 and column #2 should have contained text 'simpleTable_B3'.
+    Table Cell Should Contain  simpleTable  1  2  simpleTable_B3
+
+Should Give Error Message When Index Out Of Bounds
+    [Documentation]  FAIL ERROR: Cell in table 'simpleTable' in row #10 and column #20 should have contained text 'simpleTable_B3'.
+    Table Cell Should Contain  simpleTable  10  20  simpleTable_B3
+
 	
+*** Keywords ***
+
+Table Cell Should Be Equal  [Arguments]  ${tableId}  ${row}  ${col}  ${content}
+	${cell}=  Get Table Cell  ${tableId}  ${row}  ${col}
+	Should Be Equal  ${cell}  ${content}
