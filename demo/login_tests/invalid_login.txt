@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation   A test suite containing tests related to invalid login. These tests are data-driven by they nature, they only use a single keyword that is used with different argument to cover different scenarios.
+Documentation   A test suite containing tests related to invalid login. These tests are data-driven by they nature. They use a single keyword called with different arguments to cover different scenarios.
 
 Suite Setup     Open Login Page
 Test Teardown   Go To Login Page
