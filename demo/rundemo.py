@@ -1,76 +1,86 @@
 #! /usr/bin/env python
 
-'''Selenium Library Demo Runner
+"""Runner Script for Robot Framework SeleniumLibrary Demo
 
-Usage: rundemo.py [options] datasource
+Tests are run by giving a path to the tests to be executed as an argument to
+this script. Possible Robot Framework options are given before the path.
 
-This script starts necessary helper programs (a simple HTTP server and Selenium
-server) and executes the given test case file/directory. After test cases have
-finished executing, the helper programs are shut down. 
+Examples:
+  rundemo.py login_tests                        # Run all tests in a directory
+  rundemo.py login_tests/valid_login.text       # Run tests in a specific file
+  rundemo.py --variable BROWSER:IE login_tests  # Override variable
+  rundemo.py -v BROWSER:IE -v DELAY:0.5 login_tests
 
-Options are passed to Robot Framework as they are given, for a complete list
-of options, run 'pybot --help'.
+By default tests are executed with Firefox browser, but this can be changed
+by overriding the `BROWSER` variable as illustrated above. Similarly it is
+possible to slow down the test execution by overriding the `DELAY` variable
+with a non-zero value.
 
-By default, tests are executed with Firefox browser, this can be changed by
-using command line option '--variable', eg. '--variable BROWSER:ie'. Selenium
-Library documentation lists the accepted values of browser.
+When tests are run, the demo application and Selenium Server are started and
+stopped automatically. It is possible to start and stop them also separately
+by using `demoapp` and `selenium` options. This allows running tests with the
+normal `pybot` start-up script, as well as investigating the demo application.
 
-The speed of the test execution can be slowed by defining a non-zero value for
-variable delay, eg. '--variable DELAY:2'
-
-For debugging purposes, the output of Selenium server is written in 
-'selenium_log.txt' under the 'reports' directory.
-
-Requires that Robot Framework, Selenium Library, Python 2.4 or newer and 
-Java 1.5 or newer are installed.
-'''
+Running the demo requires that Robot Framework, SeleniumLibrary, Python, and
+Java to be installed. For more comprehensive instructions, see the demo wiki
+page at `http://code.google.com/p/robotframework-seleniumlibrary/wiki/Demo`.
+"""
 
 import os
 import sys
-import time
-import tempfile
+from tempfile import TemporaryFile
 from subprocess import Popen, call, STDOUT
 
-import SeleniumLibrary
-from SeleniumLibrary import selenium
+try:
+    import SeleniumLibrary
+except ImportError:
+    print 'Importing SeleniumLibrary module failed.'
+    print 'Please make sure you have SeleniumLibrary installed.'
+    sys.exit(1)
 
-INSTPATH = os.path.split(os.path.abspath(SeleniumLibrary.__file__))[0]
-TMPFILE = tempfile.TemporaryFile()
-if not os.path.exists('reports'):
-    os.mkdir('reports')
-SELENIUM_LOG_FILE = open(os.path.join('reports', 'selenium_log.txt'), 'w')
-DEFAULT_ARGS = [ 
-'--outputdir', 'reports', 
-'--log', 'demo_log.html',
-'--report', 'demo_report.html', 
-'--output', 'demo_output.xml',
-'--reporttitle', 'Selenium_Demo_Tests_Report',
-'--logtitle', 'Selenium_Demo_Tests_Log']
 
-def start_apps():
-    jarpath = os.path.join(INSTPATH, 'lib', 'selenium-server.jar')
-    Popen(['java', '-jar', jarpath], stdout=SELENIUM_LOG_FILE, stderr=STDOUT)
-    Popen(['python', 'httpserver/httpserver.py', 'start'], 
-            stdout=TMPFILE, stderr=TMPFILE) 
-    time.sleep(1)
+ROOT = os.path.dirname(os.path.abspath(__file__))
+DEMOAPP = os.path.join(ROOT, 'demoapp', 'server.py')
 
-def run_demo(cmdline_args):
-    shell = (os.sep == '\\')
-    call(['pybot'] + DEFAULT_ARGS + cmdline_args, shell=shell)
-    print 'Selenium log:', os.path.abspath(SELENIUM_LOG_FILE.name)
 
-def stop_apps():
-    Popen(['python', 'httpserver/httpserver.py', 'stop'], stdout=TMPFILE, 
-            stderr=STDOUT) 
-    selenium('localhost', 4444, '', '').do_command('shutDownSeleniumServer', [])
+def run_tests(args):
+    start_selenium_server()
+    start_demo_application()
+    call(['pybot'] + args, shell=(os.sep == '\\'))
+    stop_demo_application()
+    stop_selenium_server()
+
+def start_demo_application():
+    Popen(['python', DEMOAPP, 'start'], stdout=TemporaryFile(), stderr=STDOUT)
+
+def stop_demo_application():
+    call(['python', DEMOAPP, 'stop'], stdout=TemporaryFile(), stderr=STDOUT)
+
+def start_selenium_server():
+    logfile = open(os.path.join(ROOT, 'selenium_log.txt'), 'w')
+    SeleniumLibrary.start_selenium_server(logfile)
+
+def stop_selenium_server():
+    SeleniumLibrary.shut_down_selenium_server()
+
+def print_help():
+    print __doc__
+
+def print_usage():
+    print 'Usage: rundemo.py [options] datasource'
+    print '   or: rundemo.py demoapp start|stop'
+    print '   or: rundemo.py selenium start|stop'
+    print '   or: rundemo.py help'
+
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2 or '--help' in sys.argv[1]:
-        print __doc__
-        sys.exit(1)
-    start_apps()
-    run_demo(sys.argv[1:])
-    stop_apps()
-    SELENIUM_LOG_FILE.close()
-    TMPFILE.close()
-
+    action = {'demoapp-start': start_demo_application,
+              'demoapp-stop': stop_demo_application,
+              'selenium-start': start_selenium_server,
+              'selenium-stop': stop_selenium_server,
+              'help': print_help,
+              '': print_usage}.get('-'.join(sys.argv[1:]))
+    if action:
+        action()
+    else:
+        run_tests(sys.argv[1:])

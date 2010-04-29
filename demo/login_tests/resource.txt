@@ -8,6 +8,7 @@ Library        SeleniumLibrary
 *** Variables ***
 
 ${BROWSER}       firefox
+${DELAY}         0
 ${HOST}          localhost:7272
 ${LOGIN URL}     http://${HOST}/index.html
 ${WELCOME URL}   http://${HOST}/welcome.html
@@ -19,6 +20,8 @@ ${VALID PASSWD}  mode
 
 Open Login Page
     Open Browser  ${LOGIN URL}  ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed  ${DELAY}
     Title Should Be  Login Page
 
 Go To Login Page
