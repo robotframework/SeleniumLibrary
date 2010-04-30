@@ -127,6 +127,15 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     | Page Should Contain Link | Link id * | # Passes if the page contain any link starting with 'Link id' |
     | Select Checkbox | xpath=//table[0]/input[@name='my_checkbox'] | # Using XPath |
     | Click Image     | dom=document.images[56] | # Using a DOM expression |
+    
+    All table related keywords (`Table Should Contain`, etc.) allow to identity a table either by 
+    the id of the table element, or by a css locator. Both of the following examples work. It's not
+    possible to use an xpath or dom expression, since the table keywords use a css locator internally.
+    
+    Table Examples:
+    | Table Should Contain | tableID | $ 43,00 |
+    | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
+
 
     *Handling page load events*
 
