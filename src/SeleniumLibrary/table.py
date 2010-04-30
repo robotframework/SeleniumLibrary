@@ -23,64 +23,56 @@ class Table(object):
     def table_should_contain(self, table_locator, expected_content):
         """doc.
         """
-        locator = self._get_locator(table_locator) + ":contains(\"%s\")" % (expected_content)
-        message = "ERROR: Table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
+        locator = self._get_locator(table_locator) + ":contains('%s')" % (expected_content)
+        message = "Table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
         self._page_should_contain_element(locator, 'element', message)
-        return
 
     def table_header_should_contain(self, table_locator, expected_content):
         """doc.
         """
-        locator = self._get_locator(table_locator) + " th:contains(\"%s\")" % (expected_content)
-        message = "ERROR: Header in table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
+        locator = self._get_locator(table_locator) + " th:contains('%s')" % (expected_content)
+        message = "Header in table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
         self._page_should_contain_element(locator, 'element', message)
-        return
 
     def table_footer_should_contain(self, table_locator, expected_content):
         """doc.
         """
-        locator = self._get_locator(table_locator) + " tfoot td:contains(\"%s\")" % (expected_content)
-        message = "ERROR: Footer in table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
+        locator = self._get_locator(table_locator) + " tfoot td:contains('%s')" % (expected_content)
+        message = "Footer in table identified by '%s' should have contained text '%s'." % (table_locator, expected_content)
         self._page_should_contain_element(locator, 'element', message)
-        return
 
     def table_row_should_contain(self, table_locator, row, expected_content):
         """doc.
         """
-        locator = self._get_locator(table_locator) + " tr:nth-child(%s):contains(\"%s\")" % (row, expected_content)
-        message = "ERROR: Row #%s in table identified by '%s' should have contained text '%s'." % (row, table_locator, expected_content)
+        locator = self._get_locator(table_locator) + " tr:nth-child(%s):contains('%s')" % (row, expected_content)
+        message = "Row #%s in table identified by '%s' should have contained text '%s'." % (row, table_locator, expected_content)
         self._page_should_contain_element(locator, 'element', message)
-        return
 
     def table_column_should_contain(self, table_locator, row, expected_content):
         """doc.
         """
-        locator = self._get_locator(table_locator) + " tr td:nth-child(%s):contains(\"%s\")" % (row, expected_content)
-        message = "ERROR: Column #%s in table identified by '%s' should have contained text '%s'." % (row, table_locator, expected_content)
+        locator = self._get_locator(table_locator) + " tr td:nth-child(%s):contains('%s')" % (row, expected_content)
+        message = "Column #%s in table identified by '%s' should have contained text '%s'." % (row, table_locator, expected_content)
         try: 
             self._page_should_contain_element(locator, 'element', message)
         except AssertionError, err:
             if 'should have contained text' not in self._get_error_message(err):
                 raise
-            locator = self._get_locator(table_locator) + " tr th:nth-child(%s):contains(\"%s\")" % (row, expected_content)
+            locator = self._get_locator(table_locator) + " tr th:nth-child(%s):contains('%s')" % (row, expected_content)
             self._page_should_contain_element(locator, 'element', message)
-        return    
     
     def get_table_cell(self, table_locator, row, column):
         """doc.
         """
-        row=int(row)-1;
-        column=int(column)-1;
-        return self._selenium.get_table("%s.%d.%d" % (self._get_locator(table_locator), row, column));
+        return self._selenium.get_table("%s.%d.%d" % (self._get_locator(table_locator), int(row) - 1, int(column) - 1))
         
     def table_cell_should_contain(self, table_locator, row, column, expected_content):
-        message = "ERROR: Cell in table '%s' in row #%s and column #%s should have contained text '%s'." % (table_locator, row, column, expected_content)
+        message = "Cell in table '%s' in row #%s and column #%s should have contained text '%s'." % (table_locator, row, column, expected_content)
         try:
-            content = self.get_table_cell(table_locator, row, column);
+            content = self.get_table_cell(table_locator, row, column)
         except Exception, err:
             self._info(self._get_error_message(err))
             raise AssertionError(message)
         self._info("Cell contains %s." % (content))
         if not expected_content in content:
-            self._info("Expected content not found.")
             raise AssertionError(message)

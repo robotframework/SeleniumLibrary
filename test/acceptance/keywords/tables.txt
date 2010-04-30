@@ -29,7 +29,7 @@ Should Find Text In Table Content
 	Table Should Contain  formattedTable         äöü€&äöü€&
 	
 Should Give Error Message When Content Not Found In Table
-	[Documentation]  FAIL ERROR: Table identified by 'simpleTable' should have contained text 'XXX'.
+	[Documentation]  FAIL Table identified by 'simpleTable' should have contained text 'XXX'.
 	Table Should Contain  simpleTable  XXX
 
 Should Find Text In Header
@@ -43,7 +43,7 @@ Should Find Text In Header
 	Table Header Should Contain  withHeadAndFoot        withHeadAndFoot_BH2
 
 Should Give Error Message When Content Not Found In Table Header
-	[Documentation]  FAIL ERROR: Header in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
+	[Documentation]  FAIL Header in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
 	Table Header Should Contain  withHeadAndFoot  withHeadAndFoot_B2
 
 Should Find Text In Footer
@@ -53,7 +53,7 @@ Should Find Text In Footer
 	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_CF2
 	
 Should Give Error Message When Content Not Found In Table Footer
-	[Documentation]  FAIL ERROR: Footer in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
+	[Documentation]  FAIL Footer in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
 	Table Footer Should Contain  withHeadAndFoot  withHeadAndFoot_B2
 
 Should Find Text In Specific Row
@@ -78,11 +78,11 @@ Should Find Text In Specific Row
 	Table Row Should Contain  formattedTable         2  äöü€&äöü€&
 	
 Should Give Error Message When Content Not Found In Table Row
-	[Documentation]  FAIL ERROR: Row #2 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+	[Documentation]  FAIL Row #2 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
 	Table Row Should Contain  simpleTable  2  simpleTable_B3
 
 Should Give Error Message When Row Number Out Of Bounds
-	[Documentation]  FAIL ERROR: Row #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+	[Documentation]  FAIL Row #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
 	Table Row Should Contain  simpleTable  20  simpleTable_B3
 
 Should Find Text In Specific Column
@@ -94,11 +94,11 @@ Should Find Text In Specific Column
 	Table Column Should Contain  tableWithTwoHeaders    2  tableWithTwoHeaders_B2
 	
 Should Give Error Message When Content Not Found In Table Row
-	[Documentation]  FAIL ERROR: Column #2 in table identified by 'simpleTable' should have contained text 'simpleTable_C3'.
+	[Documentation]  FAIL Column #2 in table identified by 'simpleTable' should have contained text 'simpleTable_C3'.
 	Table Column Should Contain  simpleTable  2  simpleTable_C3
 
 Should Give Error Message When Row Number Out Of Bounds
-	[Documentation]  FAIL ERROR: Column #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+	[Documentation]  FAIL Column #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
 	Table Column Should Contain  simpleTable  20  simpleTable_B3
 
 Should Retrieve Text From Cell
@@ -117,11 +117,11 @@ Should Retrieve Text From Cell
     Table Cell Should Be Equal  formattedTable         2  4  äöü€&äöü€&
 
 Should Give Error Message When Content Not Found In Table Cell
-    [Documentation]  FAIL ERROR: Cell in table 'simpleTable' in row #1 and column #2 should have contained text 'simpleTable_B3'.
+    [Documentation]  FAIL Cell in table 'simpleTable' in row #1 and column #2 should have contained text 'simpleTable_B3'.
     Table Cell Should Contain  simpleTable  1  2  simpleTable_B3
 
 Should Give Error Message When Index Out Of Bounds
-    [Documentation]  FAIL ERROR: Cell in table 'simpleTable' in row #10 and column #20 should have contained text 'simpleTable_B3'.
+    [Documentation]  FAIL Cell in table 'simpleTable' in row #10 and column #20 should have contained text 'simpleTable_B3'.
     Table Cell Should Contain  simpleTable  10  20  simpleTable_B3
 
 Should Identify Table By CSS
