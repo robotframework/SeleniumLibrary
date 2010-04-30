@@ -1,88 +1,96 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>SeleniumLibrary - Documentation</title>
+<title>SeleniumLibrary</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style>
-  body {
-    background: white;
-    color: black;
-  }
+<style media="all" type="text/css">
+body {
+  background: white;
+  color: black;
+  font-size: small;
+  font-family: sans-serif;
+  padding: 0.1em 0.5em;
+}
+a.name, span.name {  
+  font-style: italic;
+}
+a, a:link, a:visited {
+  color: #c30;
+}
+a:hover, a:active {
+  text-decoration: underline;
+  color: black;
+}
+div.shortcuts {
+  margin: 1em 0em;
+  font-size: 0.9em;
+}
+div.shortcuts a {
+  text-decoration: none;
+  color: black;
+}
+div.shortcuts a:hover {
+  text-decoration: underline;
+}
+table.keywords {
+  border: 2px solid black;
+  border-collapse: collapse;
+  empty-cells: show;
+  margin: 0.3em 0em;
+  width: 100%;
+}
+table.keywords th, table.keywords td {
+  border: 2px solid black;
+  padding: 0.2em;
+  vertical-align: top;
+}
+table.keywords th {
+  background: #bbb;
+  color: black;
+}
+table.keywords td.kw {
+  width: 150px;
+  font-weight: bold;
+}
+table.keywords td.arg {
+  width: 300px;
+  font-style: italic;
+}
+table.doc {
+  border: 1px solid black;
+  background: transparent;
+  border-collapse: collapse;
+  empty-cells: show;
+  font-size: 0.85em;
+}
+table.doc td {
+  border: 1px solid black;
+  padding: 0.1em 0.3em;
+  height: 1.2em;
 
-  /* Generic Table Styles */
-  table {
-    background: white;
-    border: 1px solid black;
-    border-collapse: collapse;
-    empty-cells: show;
-    margin: 0.3em 0em;
-  }
-  th, td {
-    border: 1px solid black;
-    padding: 0.2em;
-  }
-  th {
-    background: #C6C6C6;
-  }
-  td {
-    vertical-align: top;
-  }    
-
-  /* Columns */
-  td.kw {
-    font-weight: bold;
-  }
-  td.arg {
-    width: 300px;
-    font-style: italic;
-  }
-  td.doc {
-  }
-
-  /* Tables in documentation */
-  table.doc {
-    border: 1px solid gray;
-    background: transparent;
-    border-collapse: collapse;
-    empty-cells: show;
-    font-size: 0.85em;
-    font-family: arial,helvetica,sans-serif;
-  }
-  table.doc td {
-    border: 1px solid gray;
-    padding: 0.1em 0.3em;
-    height: 1.2em;
-  }
-
-  /* Paragraphs */
-  .libdoc, .links {
-    width: 800px;
-  }
-
-  /* Misc */
-  a.name, span.name {  
-    font-style: italic;
-    background: #f4f4f4;
-    text-decoration: none;
-  }
-  a:link, a:visited {
-    color: blue;
-  }
-  a:hover, a:active {
-    text-decoration: underline;
-    color: purple;
-  }
-  .footer {
-    font-size: 0.9em;
-  }
+}
+#footer {
+  font-size: 0.9em;
+}
+</style>
+<style media="print" type="text/css">
+body {
+  margin: 0px 1px;
+  padding: 0px;
+  font-size: 10px;
+}
+a {
+  text-decoration: none;
+}
 </style>
 </head>
 <body>
-<h1>SeleniumLibrary - Documentation</h1>
-<p><b>Version:</b> 2.3-SNAPSHOT</p>
+<h1>SeleniumLibrary</h1>
+<b>Version:</b> 2.3-SNAPSHOT<br>
+<b>Scope:</b> global</p>
 
 <h2 id="introduction">Introduction</h2>
-<p class='libdoc'>SeleniumLibrary is a web testing library for Robot Test Automation Framework.<br />
+<p>SeleniumLibrary is a web testing library for Robot Test Automation Framework.<br />
 <br />
 It uses the Selenium Remote Control tool internally to control a web browser. See <a href="http://selenium-rc.openqa.org/">http://selenium-rc.openqa.org/</a> for more information on Selenium tool.<br />
 <br />
@@ -166,7 +174,7 @@ There are also some keywords that may cause a page to load but by default we exp
 Usually, https works out of the box. However, there may be trouble with self-signed certificates. We have a Wiki page describing how to test against these, using Firefox: <a href="http://code.google.com/p/robotframework-seleniumlibrary/wiki/HandlingSelfSignedCertificates">http://code.google.com/p/robotframework-seleniumlibrary/wiki/HandlingSelfSignedCertificates</a></p>
 
 <h2 id="importing">Importing</h2>
-<table class="keywords">
+<table border="1" class="keywords">
 <tr>
   <th class="arg">Arguments</th>
   <th class="doc">Documentation</th>
@@ -205,112 +213,228 @@ Examples:<br />
 </table>
 
 <h2>Shortcuts</h2>
-<div class='links'>
-<a href="#Add Location Strategy" title="Adds a custom location strategy.">Add&nbsp;Location&nbsp;Strategy</a>&nbsp;
-<a href="#Alert Should Be Present" title="Verifies an alert is present and dismisses it.">Alert&nbsp;Should&nbsp;Be&nbsp;Present</a>&nbsp;
-<a href="#Call Selenium Api" title="Calls a method in the Selenium remote control API directly.">Call&nbsp;Selenium&nbsp;Api</a>&nbsp;
-<a href="#Capture Page Screenshot" title="Takes a screenshot of the current page and embeds it into the log.">Capture&nbsp;Page&nbsp;Screenshot</a>&nbsp;
-<a href="#Capture Screenshot" title="Takes a screenshot of the entire screen and embeds it into the log.">Capture&nbsp;Screenshot</a>&nbsp;
-<a href="#Checkbox Should Be Selected" title="Verifies checkbox identified by `locator` is selected/checked.">Checkbox&nbsp;Should&nbsp;Be&nbsp;Selected</a>&nbsp;
-<a href="#Checkbox Should Not Be Selected" title="Verifies checkbox identified by `locator` is not selected/checked.">Checkbox&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>&nbsp;
-<a href="#Choose Cancel On Next Confirmation" title="Cancel will be selected the next time `Confirm Action` is used.">Choose&nbsp;Cancel&nbsp;On&nbsp;Next&nbsp;Confirmation</a>&nbsp;
-<a href="#Choose File" title="Inputs the `file_path` into file input field found by `identifier`">Choose&nbsp;File</a>&nbsp;
-<a href="#Click Button" title="Clicks a button identified by `locator`.">Click&nbsp;Button</a>&nbsp;
-<a href="#Click Element" title="Click element identified by `locator`.">Click&nbsp;Element</a>&nbsp;
-<a href="#Click Image" title="Clicks an image found by `locator`.">Click&nbsp;Image</a>&nbsp;
-<a href="#Click Link" title="Clicks a link identified by locator.">Click&nbsp;Link</a>&nbsp;
-<a href="#Close All Browsers" title="Closes all open browsers and empties the connection cache.">Close&nbsp;All&nbsp;Browsers</a>&nbsp;
-<a href="#Close Browser" title="Closes the current browser.">Close&nbsp;Browser</a>&nbsp;
-<a href="#Close Window" title="Closes currently opened pop-up window.">Close&nbsp;Window</a>&nbsp;
-<a href="#Confirm Action" title="Dismisses currently shown confirmation dialog.">Confirm&nbsp;Action</a>&nbsp;
-<a href="#Current Frame Contains" title="Verifies that current page contains `text`.">Current&nbsp;Frame&nbsp;Contains</a>&nbsp;
-<a href="#Current Frame Should Contain" title="Verifies that current page contains `text`.">Current&nbsp;Frame&nbsp;Should&nbsp;Contain</a>&nbsp;
-<a href="#Delete All Cookies" title="Deletes all cookies by calling `Delete Cookie` repeatedly.">Delete&nbsp;All&nbsp;Cookies</a>&nbsp;
-<a href="#Delete Cookie" title="Deletes cookie matching `name` and `options`.">Delete&nbsp;Cookie</a>&nbsp;
-<a href="#Drag And Drop" title="Drags element identified with `locator` by `movement`">Drag&nbsp;And&nbsp;Drop</a>&nbsp;
-<a href="#Element Should Contain" title="Verifies element identified by `locator` contains text `expected`.">Element&nbsp;Should&nbsp;Contain</a>&nbsp;
-<a href="#Execute Javascript" title="Executes the given JavaScript code.">Execute&nbsp;Javascript</a>&nbsp;
-<a href="#Focus" title="Sets focus to element identified by `locator`.">Focus</a>&nbsp;
-<a href="#Frame Should Contain" title="Verifies frame identified by `locator` contains `text`.">Frame&nbsp;Should&nbsp;Contain</a>&nbsp;
-<a href="#Frame Should Contain Text" title="Verifies frame identified by `locator` contains `text`.">Frame&nbsp;Should&nbsp;Contain&nbsp;Text</a>&nbsp;
-<a href="#Get Alert Message" title="Returns the text of current JavaScript alert.">Get&nbsp;Alert&nbsp;Message</a>&nbsp;
-<a href="#Get All Links" title="Returns a list containing ids of all links found in current page.">Get&nbsp;All&nbsp;Links</a>&nbsp;
-<a href="#Get Cookie Value" title="Returns value of cookie found with `name`.">Get&nbsp;Cookie&nbsp;Value</a>&nbsp;
-<a href="#Get Cookies" title="Returns all cookies of the current page.">Get&nbsp;Cookies</a>&nbsp;
-<a href="#Get Element Attribute" title="Return value of element attribute.">Get&nbsp;Element&nbsp;Attribute</a>&nbsp;
-<a href="#Get Horizontal Position" title="Returns horizontal position of element identified by `locator`.">Get&nbsp;Horizontal&nbsp;Position</a>&nbsp;
-<a href="#Get Location" title="Returns the current location.">Get&nbsp;Location</a>&nbsp;
-<a href="#Get Matching Xpath Count" title="Returns number of elements matching `xpath`">Get&nbsp;Matching&nbsp;Xpath&nbsp;Count</a>&nbsp;
-<a href="#Get Source" title="Returns the entire html source of the current page or frame.">Get&nbsp;Source</a>&nbsp;
-<a href="#Get Text" title="Returns the text of element identified by `locator`.">Get&nbsp;Text</a>&nbsp;
-<a href="#Get Title" title="Returns title of current page.">Get&nbsp;Title</a>&nbsp;
-<a href="#Get Value" title="Returns the value attribute of element identified by `locator`.">Get&nbsp;Value</a>&nbsp;
-<a href="#Get Vertical Position" title="Returns vertical position of element identified by `locator`.">Get&nbsp;Vertical&nbsp;Position</a>&nbsp;
-<a href="#Get Window Identifiers" title="Returns values of id attributes of all windows known to the browser.">Get&nbsp;Window&nbsp;Identifiers</a>&nbsp;
-<a href="#Get Window Names" title="Returns names of all windows known to the browser.">Get&nbsp;Window&nbsp;Names</a>&nbsp;
-<a href="#Get Window Titles" title="Returns titles of all windows known to the browser.">Get&nbsp;Window&nbsp;Titles</a>&nbsp;
-<a href="#Go Back" title="Simulates the user clicking the &quot;back&quot; button on their browser.">Go&nbsp;Back</a>&nbsp;
-<a href="#Go To" title="Navigates the active browser instance to the provided URL.">Go&nbsp;To</a>&nbsp;
-<a href="#Input Password" title="Types the given password into text field identified by `locator`.">Input&nbsp;Password</a>&nbsp;
-<a href="#Input Text" title="Types the given `text` into text field identified by `locator`.">Input&nbsp;Text</a>&nbsp;
-<a href="#List Selection Should Be" title="Verifies the selection of list identified by `locator` is exactly `*values`.">List&nbsp;Selection&nbsp;Should&nbsp;Be</a>&nbsp;
-<a href="#List Should Have No Selections" title="Verifies list identified by `locator` has no selections.">List&nbsp;Should&nbsp;Have&nbsp;No&nbsp;Selections</a>&nbsp;
-<a href="#Location Should Be" title="Verifies that current URL is exactly `url`.">Location&nbsp;Should&nbsp;Be</a>&nbsp;
-<a href="#Location Should Contain" title="Verifies that current URL contains `expected`.">Location&nbsp;Should&nbsp;Contain</a>&nbsp;
-<a href="#Log Source" title="Logs and returns the entire html source of the current page or frame.">Log&nbsp;Source</a>&nbsp;
-<a href="#Maximize Browser Window" title="Maximizes current browser window.">Maximize&nbsp;Browser&nbsp;Window</a>&nbsp;
-<a href="#Mouse Down On Image" title="Simulates a mouse down event on an image.">Mouse&nbsp;Down&nbsp;On&nbsp;Image</a>&nbsp;
-<a href="#Mouse Down On Link" title="Simulates a mouse down event on a link.">Mouse&nbsp;Down&nbsp;On&nbsp;Link</a>&nbsp;
-<a href="#Open Browser" title="Opens a new browser instance to given url.">Open&nbsp;Browser</a>&nbsp;
-<a href="#Open Context Menu" title="Opens context menu on element identified by `locator`.">Open&nbsp;Context&nbsp;Menu</a>&nbsp;
-<a href="#Page Should Contain" title="Verifies that current page contains `text`.">Page&nbsp;Should&nbsp;Contain</a>&nbsp;
-<a href="#Page Should Contain Button" title="Verifies button identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Button</a>&nbsp;
-<a href="#Page Should Contain Checkbox" title="Verifies checkbox identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Checkbox</a>&nbsp;
-<a href="#Page Should Contain Element" title="Verifies element identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Element</a>&nbsp;
-<a href="#Page Should Contain Image" title="Verifies image identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Image</a>&nbsp;
-<a href="#Page Should Contain Link" title="Verifies link identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Link</a>&nbsp;
-<a href="#Page Should Contain List" title="Verifies list identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;List</a>&nbsp;
-<a href="#Page Should Contain Radio Button" title="Verifies radio button identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Radio&nbsp;Button</a>&nbsp;
-<a href="#Page Should Contain Textfield" title="Verifies text field identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Textfield</a>&nbsp;
-<a href="#Page Should Not Contain" title="Verifies the current page does not contain `text`.">Page&nbsp;Should&nbsp;Not&nbsp;Contain</a>&nbsp;
-<a href="#Page Should Not Contain Button" title="Verifies button identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Button</a>&nbsp;
-<a href="#Page Should Not Contain Checkbox" title="Verifies checkbox identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Checkbox</a>&nbsp;
-<a href="#Page Should Not Contain Element" title="Verifies element identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Element</a>&nbsp;
-<a href="#Page Should Not Contain Image" title="Verifies image identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Image</a>&nbsp;
-<a href="#Page Should Not Contain Link" title="Verifies link identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Link</a>&nbsp;
-<a href="#Page Should Not Contain List" title="Verifies list identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;List</a>&nbsp;
-<a href="#Page Should Not Contain Radio Button" title="Verifies radio button identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Radio&nbsp;Button</a>&nbsp;
-<a href="#Page Should Not Contain Textfield" title="Verifies text field identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Textfield</a>&nbsp;
-<a href="#Press Key" title="Simulates user pressing key on element identified by `locator`.">Press&nbsp;Key</a>&nbsp;
-<a href="#Press Key Native" title="Simulates user pressing key by sending an operating system keystroke.">Press&nbsp;Key&nbsp;Native</a>&nbsp;
-<a href="#Radio Button Should Be Set To" title="Verifies radio button group identified by `group_name` has its selection set to `value`.">Radio&nbsp;Button&nbsp;Should&nbsp;Be&nbsp;Set&nbsp;To</a>&nbsp;
-<a href="#Radio Button Should Not Be Selected" title="Verifies radio button group identified by `group_name` has no selection.">Radio&nbsp;Button&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>&nbsp;
-<a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>&nbsp;
-<a href="#Select Checkbox" title="Selects checkbox identified by `locator`.">Select&nbsp;Checkbox</a>&nbsp;
-<a href="#Select Frame" title="Sets frame identified by `locator` as current frame.">Select&nbsp;Frame</a>&nbsp;
-<a href="#Select From List" title="Selects `*values` from list identified by `locator`">Select&nbsp;From&nbsp;List</a>&nbsp;
-<a href="#Select Radio Button" title="Sets selection of radio button group identified by `group_name` to `value`.">Select&nbsp;Radio&nbsp;Button</a>&nbsp;
-<a href="#Select Window" title="Selects the window found with `windowID` as the context of actions.">Select&nbsp;Window</a>&nbsp;
-<a href="#Set Selenium Speed" title="Sets the delay that is waited after each Selenium command.">Set&nbsp;Selenium&nbsp;Speed</a>&nbsp;
-<a href="#Set Selenium Timeout" title="Sets the timeout used by various keywords.">Set&nbsp;Selenium&nbsp;Timeout</a>&nbsp;
-<a href="#Simulate" title="Simulates `event` on component identified by `locator`.">Simulate</a>&nbsp;
-<a href="#Start Selenium Server" title="Starts the Selenium Server provided with SeleniumLibrary.">Start&nbsp;Selenium&nbsp;Server</a>&nbsp;
-<a href="#Stop Selenium Server" title="Stops the selenium server (and closes all browsers).">Stop&nbsp;Selenium&nbsp;Server</a>&nbsp;
-<a href="#Submit Form" title="Submits a form identified by `locator`.">Submit&nbsp;Form</a>&nbsp;
-<a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>&nbsp;
-<a href="#Text Field Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Text&nbsp;Field&nbsp;Should&nbsp;Contain</a>&nbsp;
-<a href="#Textfield Value Should Be" title="Verifies the value in text field identified by `locator` is exactly `expected`.">Textfield&nbsp;Value&nbsp;Should&nbsp;Be</a>&nbsp;
-<a href="#Title Should Be" title="Verifies that current page title equals `title`.">Title&nbsp;Should&nbsp;Be</a>&nbsp;
-<a href="#Unselect Checkbox" title="Removes selection of checkbox identified by `locator`.">Unselect&nbsp;Checkbox</a>&nbsp;
-<a href="#Unselect Frame" title="Sets the top frame as the current frame.">Unselect&nbsp;Frame</a>&nbsp;
-<a href="#Unselect From List" title="Unselects given values from list identified by locator.">Unselect&nbsp;From&nbsp;List</a>&nbsp;
-<a href="#Wait For Condition" title="Waits either for given condition to be true or until timeout expires.">Wait&nbsp;For&nbsp;Condition</a>&nbsp;
-<a href="#Wait Until Page Contains" title="Waits until `text` appears on current page or `timeout` expires.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains</a>&nbsp;
-<a href="#Wait Until Page Contains Element" title="Waits until element specified with `locator` appears on current page or `timeout` expires.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains&nbsp;Element</a>&nbsp;
+<div class='shortcuts'>
+<a href="#Add Location Strategy" title="Adds a custom location strategy.">Add&nbsp;Location&nbsp;Strategy</a>
+&nbsp;&middot;&nbsp;
+<a href="#Alert Should Be Present" title="Verifies an alert is present and dismisses it.">Alert&nbsp;Should&nbsp;Be&nbsp;Present</a>
+&nbsp;&middot;&nbsp;
+<a href="#Attach File" title="Sets a file input (upload) field identified by `locator` to the file">Attach&nbsp;File</a>
+&nbsp;&middot;&nbsp;
+<a href="#Call Selenium Api" title="Calls a method in the Selenium remote control API directly.">Call&nbsp;Selenium&nbsp;Api</a>
+&nbsp;&middot;&nbsp;
+<a href="#Capture Page Screenshot" title="Takes a screenshot of the current page and embeds it into the log.">Capture&nbsp;Page&nbsp;Screenshot</a>
+&nbsp;&middot;&nbsp;
+<a href="#Capture Screenshot" title="Takes a screenshot of the entire screen and embeds it into the log.">Capture&nbsp;Screenshot</a>
+&nbsp;&middot;&nbsp;
+<a href="#Checkbox Should Be Selected" title="Verifies checkbox identified by `locator` is selected/checked.">Checkbox&nbsp;Should&nbsp;Be&nbsp;Selected</a>
+&nbsp;&middot;&nbsp;
+<a href="#Checkbox Should Not Be Selected" title="Verifies checkbox identified by `locator` is not selected/checked.">Checkbox&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>
+&nbsp;&middot;&nbsp;
+<a href="#Choose Cancel On Next Confirmation" title="Cancel will be selected the next time `Confirm Action` is used.">Choose&nbsp;Cancel&nbsp;On&nbsp;Next&nbsp;Confirmation</a>
+&nbsp;&middot;&nbsp;
+<a href="#Choose File" title="Inputs the `file_path` into file input field found by `identifier`">Choose&nbsp;File</a>
+&nbsp;&middot;&nbsp;
+<a href="#Click Button" title="Clicks a button identified by `locator`.">Click&nbsp;Button</a>
+&nbsp;&middot;&nbsp;
+<a href="#Click Element" title="Click element identified by `locator`.">Click&nbsp;Element</a>
+&nbsp;&middot;&nbsp;
+<a href="#Click Image" title="Clicks an image found by `locator`.">Click&nbsp;Image</a>
+&nbsp;&middot;&nbsp;
+<a href="#Click Link" title="Clicks a link identified by locator.">Click&nbsp;Link</a>
+&nbsp;&middot;&nbsp;
+<a href="#Close All Browsers" title="Closes all open browsers and empties the connection cache.">Close&nbsp;All&nbsp;Browsers</a>
+&nbsp;&middot;&nbsp;
+<a href="#Close Browser" title="Closes the current browser.">Close&nbsp;Browser</a>
+&nbsp;&middot;&nbsp;
+<a href="#Close Window" title="Closes currently opened pop-up window.">Close&nbsp;Window</a>
+&nbsp;&middot;&nbsp;
+<a href="#Confirm Action" title="Dismisses currently shown confirmation dialog.">Confirm&nbsp;Action</a>
+&nbsp;&middot;&nbsp;
+<a href="#Current Frame Contains" title="Verifies that current page contains `text`.">Current&nbsp;Frame&nbsp;Contains</a>
+&nbsp;&middot;&nbsp;
+<a href="#Current Frame Should Contain" title="Verifies that current page contains `text`.">Current&nbsp;Frame&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Delete All Cookies" title="Deletes all cookies by calling `Delete Cookie` repeatedly.">Delete&nbsp;All&nbsp;Cookies</a>
+&nbsp;&middot;&nbsp;
+<a href="#Delete Cookie" title="Deletes cookie matching `name` and `options`.">Delete&nbsp;Cookie</a>
+&nbsp;&middot;&nbsp;
+<a href="#Drag And Drop" title="Drags element identified with `locator` by `movement`">Drag&nbsp;And&nbsp;Drop</a>
+&nbsp;&middot;&nbsp;
+<a href="#Element Should Contain" title="Verifies element identified by `locator` contains text `expected`.">Element&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Execute Javascript" title="Executes the given JavaScript code.">Execute&nbsp;Javascript</a>
+&nbsp;&middot;&nbsp;
+<a href="#Focus" title="Sets focus to element identified by `locator`.">Focus</a>
+&nbsp;&middot;&nbsp;
+<a href="#Frame Should Contain" title="Verifies frame identified by `locator` contains `text`.">Frame&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Frame Should Contain Text" title="Verifies frame identified by `locator` contains `text`.">Frame&nbsp;Should&nbsp;Contain&nbsp;Text</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Alert Message" title="Returns the text of current JavaScript alert.">Get&nbsp;Alert&nbsp;Message</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get All Links" title="Returns a list containing ids of all links found in current page.">Get&nbsp;All&nbsp;Links</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Cookie Value" title="Returns value of cookie found with `name`.">Get&nbsp;Cookie&nbsp;Value</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Cookies" title="Returns all cookies of the current page.">Get&nbsp;Cookies</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Element Attribute" title="Return value of element attribute.">Get&nbsp;Element&nbsp;Attribute</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Horizontal Position" title="Returns horizontal position of element identified by `locator`.">Get&nbsp;Horizontal&nbsp;Position</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Location" title="Returns the current location.">Get&nbsp;Location</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Matching Xpath Count" title="Returns number of elements matching `xpath`">Get&nbsp;Matching&nbsp;Xpath&nbsp;Count</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Source" title="Returns the entire html source of the current page or frame.">Get&nbsp;Source</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Table Cell" title="doc.">Get&nbsp;Table&nbsp;Cell</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Text" title="Returns the text of element identified by `locator`.">Get&nbsp;Text</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Title" title="Returns title of current page.">Get&nbsp;Title</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Value" title="Returns the value attribute of element identified by `locator`.">Get&nbsp;Value</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Vertical Position" title="Returns vertical position of element identified by `locator`.">Get&nbsp;Vertical&nbsp;Position</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Window Identifiers" title="Returns values of id attributes of all windows known to the browser.">Get&nbsp;Window&nbsp;Identifiers</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Window Names" title="Returns names of all windows known to the browser.">Get&nbsp;Window&nbsp;Names</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Window Titles" title="Returns titles of all windows known to the browser.">Get&nbsp;Window&nbsp;Titles</a>
+&nbsp;&middot;&nbsp;
+<a href="#Go Back" title="Simulates the user clicking the &quot;back&quot; button on their browser.">Go&nbsp;Back</a>
+&nbsp;&middot;&nbsp;
+<a href="#Go To" title="Navigates the active browser instance to the provided URL.">Go&nbsp;To</a>
+&nbsp;&middot;&nbsp;
+<a href="#Input Password" title="Types the given password into text field identified by `locator`.">Input&nbsp;Password</a>
+&nbsp;&middot;&nbsp;
+<a href="#Input Text" title="Types the given `text` into text field identified by `locator`.">Input&nbsp;Text</a>
+&nbsp;&middot;&nbsp;
+<a href="#List Selection Should Be" title="Verifies the selection of list identified by `locator` is exactly `*values`.">List&nbsp;Selection&nbsp;Should&nbsp;Be</a>
+&nbsp;&middot;&nbsp;
+<a href="#List Should Have No Selections" title="Verifies list identified by `locator` has no selections.">List&nbsp;Should&nbsp;Have&nbsp;No&nbsp;Selections</a>
+&nbsp;&middot;&nbsp;
+<a href="#Location Should Be" title="Verifies that current URL is exactly `url`.">Location&nbsp;Should&nbsp;Be</a>
+&nbsp;&middot;&nbsp;
+<a href="#Location Should Contain" title="Verifies that current URL contains `expected`.">Location&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Log Source" title="Logs and returns the entire html source of the current page or frame.">Log&nbsp;Source</a>
+&nbsp;&middot;&nbsp;
+<a href="#Maximize Browser Window" title="Maximizes current browser window.">Maximize&nbsp;Browser&nbsp;Window</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Down On Image" title="Simulates a mouse down event on an image.">Mouse&nbsp;Down&nbsp;On&nbsp;Image</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Down On Link" title="Simulates a mouse down event on a link.">Mouse&nbsp;Down&nbsp;On&nbsp;Link</a>
+&nbsp;&middot;&nbsp;
+<a href="#Open Browser" title="Opens a new browser instance to given url.">Open&nbsp;Browser</a>
+&nbsp;&middot;&nbsp;
+<a href="#Open Context Menu" title="Opens context menu on element identified by `locator`.">Open&nbsp;Context&nbsp;Menu</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain" title="Verifies that current page contains `text`.">Page&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Button" title="Verifies button identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Button</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Checkbox" title="Verifies checkbox identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Checkbox</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Element" title="Verifies element identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Element</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Image" title="Verifies image identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Image</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Link" title="Verifies link identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Link</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain List" title="Verifies list identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;List</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Radio Button" title="Verifies radio button identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Radio&nbsp;Button</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Contain Textfield" title="Verifies text field identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Textfield</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain" title="Verifies the current page does not contain `text`.">Page&nbsp;Should&nbsp;Not&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Button" title="Verifies button identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Button</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Checkbox" title="Verifies checkbox identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Checkbox</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Element" title="Verifies element identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Element</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Image" title="Verifies image identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Image</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Link" title="Verifies link identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Link</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain List" title="Verifies list identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;List</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Radio Button" title="Verifies radio button identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Radio&nbsp;Button</a>
+&nbsp;&middot;&nbsp;
+<a href="#Page Should Not Contain Textfield" title="Verifies text field identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Textfield</a>
+&nbsp;&middot;&nbsp;
+<a href="#Press Key" title="Simulates user pressing key on element identified by `locator`.">Press&nbsp;Key</a>
+&nbsp;&middot;&nbsp;
+<a href="#Press Key Native" title="Simulates user pressing key by sending an operating system keystroke.">Press&nbsp;Key&nbsp;Native</a>
+&nbsp;&middot;&nbsp;
+<a href="#Radio Button Should Be Set To" title="Verifies radio button group identified by `group_name` has its selection set to `value`.">Radio&nbsp;Button&nbsp;Should&nbsp;Be&nbsp;Set&nbsp;To</a>
+&nbsp;&middot;&nbsp;
+<a href="#Radio Button Should Not Be Selected" title="Verifies radio button group identified by `group_name` has no selection.">Radio&nbsp;Button&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select Checkbox" title="Selects checkbox identified by `locator`.">Select&nbsp;Checkbox</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select Frame" title="Sets frame identified by `locator` as current frame.">Select&nbsp;Frame</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select From List" title="Selects `*values` from list identified by `locator`">Select&nbsp;From&nbsp;List</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select Radio Button" title="Sets selection of radio button group identified by `group_name` to `value`.">Select&nbsp;Radio&nbsp;Button</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select Window" title="Selects the window found with `windowID` as the context of actions.">Select&nbsp;Window</a>
+&nbsp;&middot;&nbsp;
+<a href="#Set Selenium Speed" title="Sets the delay that is waited after each Selenium command.">Set&nbsp;Selenium&nbsp;Speed</a>
+&nbsp;&middot;&nbsp;
+<a href="#Set Selenium Timeout" title="Sets the timeout used by various keywords.">Set&nbsp;Selenium&nbsp;Timeout</a>
+&nbsp;&middot;&nbsp;
+<a href="#Simulate" title="Simulates `event` on component identified by `locator`.">Simulate</a>
+&nbsp;&middot;&nbsp;
+<a href="#Start Selenium Server" title="Starts the Selenium Server provided with SeleniumLibrary.">Start&nbsp;Selenium&nbsp;Server</a>
+&nbsp;&middot;&nbsp;
+<a href="#Stop Selenium Server" title="Stops the selenium server (and closes all browsers).">Stop&nbsp;Selenium&nbsp;Server</a>
+&nbsp;&middot;&nbsp;
+<a href="#Submit Form" title="Submits a form identified by `locator`.">Submit&nbsp;Form</a>
+&nbsp;&middot;&nbsp;
+<a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
+&nbsp;&middot;&nbsp;
+<a href="#Table Cell Should Contain" title="">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Table Column Should Contain" title="doc.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Table Footer Should Contain" title="doc.">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Table Header Should Contain" title="doc.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Table Row Should Contain" title="doc.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Table Should Contain" title="doc.">Table&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Text Field Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Text&nbsp;Field&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Textfield Value Should Be" title="Verifies the value in text field identified by `locator` is exactly `expected`.">Textfield&nbsp;Value&nbsp;Should&nbsp;Be</a>
+&nbsp;&middot;&nbsp;
+<a href="#Title Should Be" title="Verifies that current page title equals `title`.">Title&nbsp;Should&nbsp;Be</a>
+&nbsp;&middot;&nbsp;
+<a href="#Unselect Checkbox" title="Removes selection of checkbox identified by `locator`.">Unselect&nbsp;Checkbox</a>
+&nbsp;&middot;&nbsp;
+<a href="#Unselect Frame" title="Sets the top frame as the current frame.">Unselect&nbsp;Frame</a>
+&nbsp;&middot;&nbsp;
+<a href="#Unselect From List" title="Unselects given values from list identified by locator.">Unselect&nbsp;From&nbsp;List</a>
+&nbsp;&middot;&nbsp;
+<a href="#Wait For Condition" title="Waits either for given condition to be true or until timeout expires.">Wait&nbsp;For&nbsp;Condition</a>
+&nbsp;&middot;&nbsp;
+<a href="#Wait Until Page Contains" title="Waits until `text` appears on current page or `timeout` expires.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains</a>
+&nbsp;&middot;&nbsp;
+<a href="#Wait Until Page Contains Element" title="Waits until element specified with `locator` appears on current page or `timeout` expires.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains&nbsp;Element</a>
 </div>
 
 <h2>Keywords</h2>
-<table class="keywords">
+<table border="1" class="keywords">
 <tr>
   <th class="kw">Keyword</th>
   <th class="arg">Arguments</th>
@@ -357,6 +481,18 @@ Examples:<br />
 If <span class="name">text</span> is a non-empty string, then it is also verified that the message of the alert equals to <span class="name">text</span>.<br />
 <br />
 Will fail if no alert is present. Note that when running tests with selenium, the alerts will not be visible in the browser. Nevertheless, following keywords will fail unless the alert is dismissed by this keyword or by <a href="#Get Alert Message" class="name">Get Alert Message</a>.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Attach File"></a>Attach File</td>
+  <td class="arg">locator, file_locator</td>
+  <td class="doc">Sets a file input (upload) field identified by <span class="name">locator</span> to the file given as <span class="name">file_locator</span>.<br />
+<br />
+This method works when attaching files on browsers running on remote machines. The file to be attached must be placed on a web server accessible by the machine running the browser at the root of the server<br />
+- any subdirectories will not work. <span class="name">file_locator</span> is the URL to the file. Selenium RC will take care of downloading the file to the test machine and then attaching the file.<br />
+<br />
+Supported browsers: Firefox<br />
+<br />
+For files on the same machine use <a href="#Choose File" class="name">Choose File</a> keyword.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Call Selenium Api"></a>Call Selenium Api</td>
@@ -678,6 +814,11 @@ See also <a href="#Get Vertical Position" class="name">Get Vertical Position</a>
   <td class="doc">Returns the entire html source of the current page or frame.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Get Table Cell"></a>Get Table Cell</td>
+  <td class="arg">table_name, row, column</td>
+  <td class="doc">doc.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Get Text"></a>Get Text</td>
   <td class="arg">locator</td>
   <td class="doc">Returns the text of element identified by <span class="name">locator</span>.<br />
@@ -722,8 +863,10 @@ See also <a href="#Get Horizontal Position" class="name">Get Horizontal Position
 </tr>
 <tr>
   <td class="kw"><a name="Go Back"></a>Go Back</td>
-  <td class="arg"></td>
-  <td class="doc">Simulates the user clicking the "back" button on their browser.</td>
+  <td class="arg">dont_wait=</td>
+  <td class="doc">Simulates the user clicking the "back" button on their browser.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> for details about locating elements and about meaning of <span class="name">dont_wait</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Go To"></a>Go To</td>
@@ -846,7 +989,9 @@ Possible values for <span class="name">browser</span> are all the values support
 </tr>
 </table>
 <br />
-Additionally, a string like <span class="name">*custom /path/to/browser-executable</span> can be used to specify the browser directly. In this case, the path needs to point to an executable, not a script, otherwise the library may not be able to shut down the browser properly.</td>
+Additionally, a string like <span class="name">*custom /path/to/browser-executable</span> can be used to specify the browser directly. In this case, the path needs to point to an executable, not a script, otherwise the library may not be able to shut down the browser properly.<br />
+<br />
+Note, that you will encounter strange behaviour, if you open multiple Internet Explorer browser instances. That's also why <a href="#Switch Browser" class="name">Switch Browser</a> only works with one IE browser at most. <a href="http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine">http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine</a></td>
 </tr>
 <tr>
   <td class="kw"><a name="Open Context Menu"></a>Open Context Menu</td>
@@ -1034,7 +1179,12 @@ Examples:<br />
 </tr>
 </table>
 <br />
-Sometimes this keyword doesn't trigger the correct JavaScript event on the clicked element. In those cases <a href="#Press Key Native" class="name">Press Key Native</a> can be used as a workaround.</td>
+Sometimes this keyword doesn't trigger the correct JavaScript event on the clicked element. In those cases <a href="#Press Key Native" class="name">Press Key Native</a> can be used as a workaround.<br />
+<br />
+The selenium command key_press [1] that is used internally exposes some erratic behaviour [2], especially when used with the Internet Explorer. If don't get the expected results, try <a href="#Press Key Native" class="name">Press Key Native</a> instead.<br />
+<br />
+[1] <a href="http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press">http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press</a><br />
+[2] <a href="http://jira.openqa.org/browse/SRC-385">http://jira.openqa.org/browse/SRC-385</a></td>
 </tr>
 <tr>
   <td class="kw"><a name="Press Key Native"></a>Press Key Native</td>
@@ -1066,7 +1216,26 @@ Examples:<br />
 </tr>
 </table>
 <br />
-Notice that this keyword is very fragile and, for example, using the keyboard or mouse while tests are running often causes problems. The more robust <a href="#Press Key" class="name">Press Key</a> keyword should be used whenever possible.</td>
+Notice that this keyword is very fragile and, for example, using the keyboard or mouse while tests are running often causes problems. It can be beneficial to bring the window to the front again with executing JavaScript:<br />
+<br />
+<table border="1" class="doc">
+<tr>
+<td>Execute Javascript</td>
+<td>window.focus()</td>
+<td></td>
+</tr>
+<tr>
+<td>Focus</td>
+<td>login_button</td>
+<td></td>
+</tr>
+<tr>
+<td>Press Key Native</td>
+<td>10</td>
+<td>and wait</td>
+</tr>
+</table>
+</td>
 </tr>
 <tr>
   <td class="kw"><a name="Radio Button Should Be Set To"></a>Radio Button Should Be Set To</td>
@@ -1321,6 +1490,36 @@ Above example expects that there was no other open browsers when opening the fir
 </td>
 </tr>
 <tr>
+  <td class="kw"><a name="Table Cell Should Contain"></a>Table Cell Should Contain</td>
+  <td class="arg">table_locator, row, column, expected_content</td>
+  <td class="doc"></td>
+</tr>
+<tr>
+  <td class="kw"><a name="Table Column Should Contain"></a>Table Column Should Contain</td>
+  <td class="arg">table_locator, row, expected_content</td>
+  <td class="doc">doc.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Table Footer Should Contain"></a>Table Footer Should Contain</td>
+  <td class="arg">table_locator, expected_content</td>
+  <td class="doc">doc.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Table Header Should Contain"></a>Table Header Should Contain</td>
+  <td class="arg">table_locator, expected_content</td>
+  <td class="doc">doc.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Table Row Should Contain"></a>Table Row Should Contain</td>
+  <td class="arg">table_locator, row, expected_content</td>
+  <td class="doc">doc.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Table Should Contain"></a>Table Should Contain</td>
+  <td class="arg">table_locator, expected_content</td>
+  <td class="doc">doc.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Text Field Should Contain"></a>Text Field Should Contain</td>
   <td class="arg">locator, expected, message=</td>
   <td class="doc">Verifies text field identified by <span class="name">locator</span> contains text <span class="name">expected</span>.<br />
@@ -1402,10 +1601,10 @@ This keyword was added in SeleniumLibrary 2.2.3.<br />
 Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds</span> can be used to get this kind of functionality for any Selenium keyword.</td>
 </tr>
 </table>
-<p class="footer">
-Altogether 101 keywords.<br />
+<p id="footer">
+Altogether 109 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-03-11 20:20:38.
+on 2010-04-30 13:20:43.
 </p>
 </body>
 </html>
