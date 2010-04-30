@@ -763,7 +763,7 @@ class selenium:
         
         'url' is the URL to open; may be relative or absolute
         """
-        self.do_command("open", [url,])
+        self.do_command("open", [url,"true"])
 
 
     def open_window(self,url,windowID):
