@@ -763,6 +763,8 @@ class selenium:
         
         'url' is the URL to open; may be relative or absolute
         """
+        # Fix for Firefox 3.6
+        # http://code.google.com/p/selenium/issues/detail?id=408
         self.do_command("open", [url,"true"])
 
 

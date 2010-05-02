@@ -27,6 +27,13 @@ class TestGetBrowser(unittest.TestCase):
                                'SeleniumLibrary', 'selenium.py')
         self.assertTrue('conn.close()' in open(rc_path).read())
 
+    def test_patched_open_browser(self):
+        rc_path = os.path.join(os.path.dirname(__file__), '..', '..', 'src',
+                               'SeleniumLibrary', 'selenium.py')
+        self.assertTrue('self.do_command("open", [url,"true"])' in open(rc_path).read(),
+                        "Patch for Firefox 3.6 compatibility required. See issue 114: "+
+                        "http://code.google.com/p/robotframework-seleniumlibrary/issues/detail?id=114")
+
 
 if __name__ == "__main__":
     unittest.main()
