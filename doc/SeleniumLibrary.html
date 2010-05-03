@@ -234,8 +234,6 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Alert Should Be Present" title="Verifies an alert is present and dismisses it.">Alert&nbsp;Should&nbsp;Be&nbsp;Present</a>
 &nbsp;&middot;&nbsp;
-<a href="#Attach File" title="Sets a file input (upload) field identified by `locator` to the file">Attach&nbsp;File</a>
-&nbsp;&middot;&nbsp;
 <a href="#Call Selenium Api" title="Calls a method in the Selenium remote control API directly.">Call&nbsp;Selenium&nbsp;Api</a>
 &nbsp;&middot;&nbsp;
 <a href="#Capture Page Screenshot" title="Takes a screenshot of the current page and embeds it into the log.">Capture&nbsp;Page&nbsp;Screenshot</a>
@@ -249,6 +247,8 @@ Examples:<br />
 <a href="#Choose Cancel On Next Confirmation" title="Cancel will be selected the next time `Confirm Action` is used.">Choose&nbsp;Cancel&nbsp;On&nbsp;Next&nbsp;Confirmation</a>
 &nbsp;&middot;&nbsp;
 <a href="#Choose File" title="Inputs the `file_path` into file input field found by `identifier`">Choose&nbsp;File</a>
+&nbsp;&middot;&nbsp;
+<a href="#Choose Remote File" title="Provides a method to to use file upload when selenium is running on">Choose&nbsp;Remote&nbsp;File</a>
 &nbsp;&middot;&nbsp;
 <a href="#Click Button" title="Clicks a button identified by `locator`.">Click&nbsp;Button</a>
 &nbsp;&middot;&nbsp;
@@ -304,7 +304,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Get Source" title="Returns the entire html source of the current page or frame.">Get&nbsp;Source</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Table Cell" title="Reads the content from a table cell. Row and Column number are starting from 1.">Get&nbsp;Table&nbsp;Cell</a>
+<a href="#Get Table Cell" title="Returns the content from a table cell.">Get&nbsp;Table&nbsp;Cell</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Text" title="Returns the text of element identified by `locator`.">Get&nbsp;Text</a>
 &nbsp;&middot;&nbsp;
@@ -418,17 +418,17 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Cell Should Contain" title="Asserts that a certain cell in a table contains the `expected content'. Row and Column number are starting from 1.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains the `expected content`.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Column Should Contain" title="Asserts that a specific column contains the `expected_content`. The first leftmost column is column number 1.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Column Should Contain" title="Verifies that a specific column contains the `expected_content`.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Footer Should Contain" title="Asserts that the table footer, i.e. any td-element inside a &lt;tfoor&gt;...&lt;tfoot&gt; element,">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Footer Should Contain" title="Verifies that the table footer contains the `expected_content`.">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Header Should Contain" title="Asserts that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the `expected_content`.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Header Should Contain" title="Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the `expected_content`.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Row Should Contain" title="Asserts that a specific table row contains the `expected_content`. The uppermost row is row number 1.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Row Should Contain" title="Verifies that a specific table row contains the `expected_content`.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Should Contain" title="Asserts that the `expected content` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Should Contain" title="Verifies that the `expected content` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Text Field Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Text&nbsp;Field&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
@@ -497,18 +497,6 @@ Examples:<br />
 If <span class="name">text</span> is a non-empty string, then it is also verified that the message of the alert equals to <span class="name">text</span>.<br />
 <br />
 Will fail if no alert is present. Note that when running tests with selenium, the alerts will not be visible in the browser. Nevertheless, following keywords will fail unless the alert is dismissed by this keyword or by <a href="#Get Alert Message" class="name">Get Alert Message</a>.</td>
-</tr>
-<tr>
-  <td class="kw"><a name="Attach File"></a>Attach File</td>
-  <td class="arg">locator, file_locator</td>
-  <td class="doc">Sets a file input (upload) field identified by <span class="name">locator</span> to the file given as <span class="name">file_locator</span>.<br />
-<br />
-This method works when attaching files on browsers running on remote machines. The file to be attached must be placed on a web server accessible by the machine running the browser at the root of the server<br />
-- any subdirectories will not work. <span class="name">file_locator</span> is the URL to the file. Selenium RC will take care of downloading the file to the test machine and then attaching the file.<br />
-<br />
-Supported browsers: Firefox<br />
-<br />
-For files on the same machine use <a href="#Choose File" class="name">Choose File</a> keyword.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Call Selenium Api"></a>Call Selenium Api</td>
@@ -596,6 +584,28 @@ Key attributes for checkboxes are <span class="name">id</span> and <span class="
   <td class="doc">Inputs the <span class="name">file_path</span> into file input field found by <span class="name">identifier</span><br />
 <br />
 From version 2.2.2 onwards, existence of <span class="name">file_path</span> is not checked. <span class="name">OperatingSystem.File Should Exist</span> can be used for that if needed.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Choose Remote File"></a>Choose Remote File</td>
+  <td class="arg">identifier, file_url</td>
+  <td class="doc">Provides a method to to use file upload when selenium is running on a remote host.<br />
+<br />
+When uploading a file, it has to be available on the same host where selenium server is running. In a case when selenium server is running on a remote host, the file must be somehow placed on that host. Selenium provides a method to solve this problem by allowing the file to be placed on a remote web server. It will download the file saving it temporarily and use the copy in a file selector.<br />
+<br />
+This keyword accepts <span class="name">file_url</span> to reference the file to be selected in file selector identified by <span class="name">identifier</span>. The file must first be uploaded to a web server.<br />
+<br />
+The limitations of this method are that it only works on Firefox and the file must be placed at the root level of a web server.<br />
+<br />
+Example:<br />
+<table border="1" class="doc">
+<tr>
+<td>Choose Remote File</td>
+<td><a href="http://uploadhost.com/trades.csv">http://uploadhost.com/trades.csv</a></td>
+<td>css=input#upload</td>
+</tr>
+</table>
+<br />
+File 'trades.csv' will be selected in the input form 'css=input#upload' Notice that the file is placed on the root of the server.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Click Button"></a>Click Button</td>
@@ -832,9 +842,9 @@ See also <a href="#Get Vertical Position" class="name">Get Vertical Position</a>
 <tr>
   <td class="kw"><a name="Get Table Cell"></a>Get Table Cell</td>
   <td class="arg">table_locator, row, column</td>
-  <td class="doc">Reads the content from a table cell. Row and Column number are starting from 1.<br />
+  <td class="doc">Returns the content from a table cell.<br />
 <br />
-To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+Row and Column number start from 1. Header and footer rows are included in the count. This means that also cell content from header or footer rows can be obtained with this keyword. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Text"></a>Get Text</td>
@@ -1510,16 +1520,18 @@ Above example expects that there was no other open browsers when opening the fir
 <tr>
   <td class="kw"><a name="Table Cell Should Contain"></a>Table Cell Should Contain</td>
   <td class="arg">table_locator, row, column, expected_content</td>
-  <td class="doc">Asserts that a certain cell in a table contains the `expected content'. Row and Column number are starting from 1.<br />
+  <td class="doc">Verifies that a certain cell in a table contains the <span class="name">expected content</span>.<br />
+<br />
+Row and Column number start from 1. This keyword passes if the specified cell contains the given content. If you want to test that the cell content matches exactly, or that it e.g. starts with some text, use <a href="#Get Table Cell" class="name">Get Table Cell</a> keyword in combination with built-in keywords such as <span class="name">Should Be Equal</span> or <span class="name">Should Start With</span>.<br />
 <br />
 To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Column Should Contain"></a>Table Column Should Contain</td>
   <td class="arg">table_locator, col, expected_content</td>
-  <td class="doc">Asserts that a specific column contains the <span class="name">expected_content</span>. The first leftmost column is column number 1.<br />
+  <td class="doc">Verifies that a specific column contains the <span class="name">expected_content</span>.<br />
 <br />
-If the table contains cells that span multiple columns, those merged cells count as a single column. For example both tests below work, if in one row columns A and B are merged with colspan="2", and the logical third column contains "C".<br />
+The first leftmost column is column number 1. If the table contains cells that span multiple columns, those merged cells count as a single column. For example both tests below work, if in one row columns A and B are merged with colspan="2", and the logical third column contains "C".<br />
 <br />
 Example:<br />
 <table border="1" class="doc">
@@ -1542,30 +1554,30 @@ To understand how tables are identified, please take a look at the <a href="#int
 <tr>
   <td class="kw"><a name="Table Footer Should Contain"></a>Table Footer Should Contain</td>
   <td class="arg">table_locator, expected_content</td>
-  <td class="doc">Asserts that the table footer, i.e. any td-element inside a &lt;tfoor&gt;...&lt;tfoot&gt; element, contains the <span class="name">expected_content</span>.<br />
+  <td class="doc">Verifies that the table footer contains the <span class="name">expected_content</span>.<br />
 <br />
-To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Header Should Contain"></a>Table Header Should Contain</td>
   <td class="arg">table_locator, expected_content</td>
-  <td class="doc">Asserts that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the <span class="name">expected_content</span>.<br />
+  <td class="doc">Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the <span class="name">expected_content</span>.<br />
 <br />
 To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Row Should Contain"></a>Table Row Should Contain</td>
   <td class="arg">table_locator, row, expected_content</td>
-  <td class="doc">Asserts that a specific table row contains the <span class="name">expected_content</span>. The uppermost row is row number 1. For tables that are structured with thead, tbody and tfoot, only the tbody section is searched. Please use <a href="#Table Header Should Contain" class="name">Table Header Should Contain</a> or <a href="#Table Footer Should Contain" class="name">Table Footer Should Contain</a> for tests agains the header or footer content.<br />
+  <td class="doc">Verifies that a specific table row contains the <span class="name">expected_content</span>.<br />
 <br />
-If the table contains cells that span multiple rows, a match only occurs for the uppermost row of those merged cells.<br />
+The uppermost row is row number 1. For tables that are structured with thead, tbody and tfoot, only the tbody section is searched. Please use <a href="#Table Header Should Contain" class="name">Table Header Should Contain</a> or <a href="#Table Footer Should Contain" class="name">Table Footer Should Contain</a> for tests against the header or footer content.<br />
 <br />
-To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+If the table contains cells that span multiple rows, a match only occurs for the uppermost row of those merged cells. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Should Contain"></a>Table Should Contain</td>
   <td class="arg">table_locator, expected_content</td>
-  <td class="doc">Asserts that the <span class="name">expected content</span> can be found somewhere in the table.<br />
+  <td class="doc">Verifies that the <span class="name">expected content</span> can be found somewhere in the table.<br />
 <br />
 To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
@@ -1654,7 +1666,7 @@ Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds<
 <p id="footer">
 Altogether 109 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-04-30 14:54:29.
+on 2010-05-03 23:42:58.
 </p>
 </body>
 </html>
