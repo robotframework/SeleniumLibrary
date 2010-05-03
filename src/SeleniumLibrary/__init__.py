@@ -677,22 +677,31 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
             self._info("The path '%s' does not exists in local file system." % file_path)
         self._selenium.type(identifier, file_path)
 
-    def attach_file(self, locator, file_locator):
-        """Sets a file input (upload) field identified by `locator` to the file
-        given as `file_locator`.
-
-        This method works when attaching files on browsers running on remote
-        machines. The file to be attached must be placed on a web server
-        accessible by the machine running the browser at the root of the server
-        - any subdirectories will not work. `file_locator` is the URL to the
-        file. Selenium RC will take care of downloading the file to the test
-        machine and then attaching the file.
-
-        Supported browsers: Firefox
-
-        For files on the same machine use `Choose File` keyword.
+    def choose_remote_file(self, identifier, file_url):
+        """Provides a method to to use file upload when selenium is running on 
+        a remote host.
+        
+        When uploading a file, it has to be available on the same host where
+        selenium server is running. In a case when selenium server is running on 
+        a remote host, the file must be somehow placed on that host. Selenium
+        provides a method to solve this problem by allowing the file to be 
+        placed on a remote web server. It will download the file saving it 
+        temporarily and use the copy in a file selector.
+        
+        This keyword accepts `file_url` to reference the file to be selected
+        in file selector identified by `identifier`. The file must first be 
+        uploaded to a web server.
+        
+        The limitations of this method are that it only works on Firefox and
+        the file must be placed at the root level of a web server.
+        
+        Example:
+        | Choose Remote File | http://uploadhost.com/trades.csv | css=input#upload |
+        
+        File 'trades.csv' will be selected in the input form 'css=input#upload'
+        Notice that the file is placed on the root of the server.
         """
-        self._selenium.attach_file(locator, file_locator)
+        self._selenium.attach_file(identifier, file_url)
 
     def add_location_strategy(self, strategy_name, function_definition):
         """Adds a custom location strategy.
