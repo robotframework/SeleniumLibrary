@@ -683,6 +683,10 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         Example:
         | Choose File | my_upload_field | /home/user/files/trades.csv |
         | Choose File | my_upload_field | http://uploadhost.com/trades.csv |
+
+        The support for remote files was added in SeleniumLibrary 2.3.2.
+        It uses Selenium's `attach_file` method which is explained at
+        http://saucelabs.com/blog/index.php/2009/11/selenium-tip-of-the-week-upload-files-on-browsers-running-over-remote-machines/
         """
         if file_path.startswith(('http://', 'https://')):
             self._selenium.attach_file(identifier, file_path)
