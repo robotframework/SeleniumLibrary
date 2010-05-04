@@ -290,7 +290,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         self._selenium.set_timeout(self._timeout)
         self._selenium.open(url)
         self._debug('Opened browser with Selenium session id %s' %
-                        self._selenium.sessionId)
+                    self._selenium.sessionId)
         return self._cache.register(self._selenium, alias)
 
     def _get_browser(self, browser):
@@ -668,41 +668,28 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         self._selenium.delete_all_visible_cookies()
 
     def choose_file(self, identifier, file_path):
-        """Inputs the `file_path` into file input field found by `identifier`
-        
-        This keyword is most often used to select files on a upload form.
-        When uploading a file, it has to be available on the same host where
-        selenium server is running. In a case when selenium server is running on 
-        a remote host, the file must be somehow placed on that host. Selenium
-        provides a method to solve this problem by allowing the file to be 
-        placed on a remote web server. It will download the file saving it 
-        temporarily and use the copy in a file selector.
-        
-        If selenium is running on a local host (Started with `Start Selenium Server`)
-        then use local file path in `file_path`.
-        From version 2.2.2 onwards, existence of `file_path` is not checked.
-        `OperatingSystem.File Should Exist` can be used for that if needed.
-        
-        If selenium is running on a remote host then the file must first be 
-        placed on a web server. Use the URL to the file as `file_path`.
-        The limitations of this method are that it only works on Firefox and
-        the file must be placed at the root level of a web server.
-        
+        """Inputs the `file_path` into file input field found by `identifier`.
+
+        This keyword is most often used to input files into upload forms.
+        In normal usage the file specified with `file_path` must be available
+        on the samme host where the Selenium Server is running.
+
+        An alternative usage is specifying the `file_path` with an URL
+        (starting with `http://` or `https://`) in which case the file
+        will be downloaded automatically. The limitations of this
+        method are that it only works on Firefox and the file must be
+        placed at the root level of a web server.
+
         Example:
-        | Choose File | /home/user/files/trades.csv | css=input#upload |
-        
-        This will select local trades.csv file.
-        
-        | Choose File | http://uploadhost.com/trades.csv | css=input#upload |
-        
-        This will select file placed on a web server under above URL.
-        Note that the file is on the root level of the server.
+        | Choose File | my_upload_field | /home/user/files/trades.csv |
+        | Choose File | my_upload_field | http://uploadhost.com/trades.csv |
         """
-        if file_path.startswith('http://') or file_path.startswith('https://'):
+        if file_path.startswith(('http://', 'https://')):
             self._selenium.attach_file(identifier, file_path)
         else:
             if not os.path.isfile(file_path):
-                self._info("The path '%s' does not exists in local file system." % file_path)
+                self._info("File '%s' does not exists on the local file system"
+                           % file_path)
             self._selenium.type(identifier, file_path)
 
     def add_location_strategy(self, strategy_name, function_definition):
