@@ -669,18 +669,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
 
     def choose_file(self, identifier, file_path):
         """Inputs the `file_path` into file input field found by `identifier`
-
-        From version 2.2.2 onwards, existence of `file_path` is not checked.
-        `OperatingSystem.File Should Exist` can be used for that if needed.
-        """
-        if not os.path.isfile(file_path):
-            self._info("The path '%s' does not exists in local file system." % file_path)
-        self._selenium.type(identifier, file_path)
-
-    def choose_remote_file(self, identifier, file_url):
-        """Provides a method to to use file upload when selenium is running on 
-        a remote host.
         
+        This keyword is most often used to select files on a upload form.
         When uploading a file, it has to be available on the same host where
         selenium server is running. In a case when selenium server is running on 
         a remote host, the file must be somehow placed on that host. Selenium
@@ -688,20 +678,32 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         placed on a remote web server. It will download the file saving it 
         temporarily and use the copy in a file selector.
         
-        This keyword accepts `file_url` to reference the file to be selected
-        in file selector identified by `identifier`. The file must first be 
-        uploaded to a web server.
+        If selenium is running on a local host (Started with `Start Selenium Server`)
+        then use local file path in `file_path`.
+        From version 2.2.2 onwards, existence of `file_path` is not checked.
+        `OperatingSystem.File Should Exist` can be used for that if needed.
         
+        If selenium is running on a remote host then the file must first be 
+        placed on a web server. Use the URL to the file as `file_path`.
         The limitations of this method are that it only works on Firefox and
         the file must be placed at the root level of a web server.
         
         Example:
-        | Choose Remote File | http://uploadhost.com/trades.csv | css=input#upload |
+        | Choose File | /home/user/files/trades.csv | css=input#upload |
         
-        File 'trades.csv' will be selected in the input form 'css=input#upload'
-        Notice that the file is placed on the root of the server.
+        This will select local trades.csv file.
+        
+        | Choose File | http://uploadhost.com/trades.csv | css=input#upload |
+        
+        This will select file placed on a web server under above URL.
+        Note that the file is on the root level of the server.
         """
-        self._selenium.attach_file(identifier, file_url)
+        if file_path.startswith('http://') or file_path.startswith('https://'):
+            self._selenium.attach_file(identifier, file_path)
+        else:
+            if not os.path.isfile(file_path):
+                self._info("The path '%s' does not exists in local file system." % file_path)
+            self._selenium.type(identifier, file_path)
 
     def add_location_strategy(self, strategy_name, function_definition):
         """Adds a custom location strategy.
