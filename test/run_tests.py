@@ -38,6 +38,7 @@ ROBOT_ARGS = [
 '--escape', 'space:SP',
 '--report', 'none',
 '--log', 'none',
+#'--suite', '...',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]
@@ -46,6 +47,7 @@ REBOT_ARGS = [
 '--name', '%(browser)sSPAcceptanceSPTests',
 '--escape', 'space:SP',
 '--critical', 'regression',
+'--noncritical', 'inprogress',
 ]
 ARG_VALUES = {'outdir': RESULTDIR, 'pythonpath': SRCDIR}
 
