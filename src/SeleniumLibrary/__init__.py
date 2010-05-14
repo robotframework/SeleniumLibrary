@@ -415,7 +415,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         The keyword first tries to find a method in Selenium's Python API
         provided by the `selenium.py` file. If no matching method is found, the
         keyword calls the Selenium Server's Remote Controller API directly via
-        the `do_command` method in the Python API. In both cases the keyword
+        the `do_command` method in the Python API [1]. In both cases the keyword
         returns the return value of the call directly without any modifications
         or verifications.
 
@@ -423,6 +423,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         | ${ret} = | Call Selenium API | is_element_present | # Python API |
         | Call Selenium API | double_click | element_id | # Python API |
         | Call Selenium API | doubleClick  | element_id | # RC API |
+        
+        [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/
         """
         try:
             method = getattr(self._selenium, method_name)
