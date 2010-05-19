@@ -56,7 +56,7 @@ Click Link With Asterisk
   Click Link  Link with asterisk * not matching
   
 Click Link With Unicode
-  Click Link  Link with Unicode Ã¤Ã¶Ã¼Ã„Ã–ÃœÃŸ
+  Click Link  Link with Unicode äöüÄÖÜß
   Location Should Be  ${ROOT}index.html
 
 Click Image
