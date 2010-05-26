@@ -39,7 +39,7 @@ from xpath import LocatorParser
 from screenshot import Screenshot
 from table import Table
 
-__version__ = '2.3-SNAPSHOT'
+__version__ = '2.3.2'
 BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
