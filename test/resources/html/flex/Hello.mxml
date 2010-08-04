@@ -15,14 +15,11 @@ private function init():void {
 <![CDATA[
 import mx.controls.Alert;
 
-[Bindable]
-public var helloName:String="World";
-
 protected function sayHello(event:MouseEvent):void {
-    Alert.show("Hello, " + helloName + "!");
+    Alert.show("Hello, " + hello_name.text + "!");
 }
 ]]>
 </mx:Script>
-<mx:TextInput id="hello_name" text="{helloName}"/>
+<mx:TextInput id="hello_name" text="World"/>
 <mx:Button id="hello_button" label="Say Hello" click="sayHello(event)"/>
 </mx:Application>
