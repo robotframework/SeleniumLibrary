@@ -1,3 +1,6 @@
+Clone necessary dependencies:
+git clone http://github.com/admc/flex-pilot.git
+
 Compile:
 ~/Devel/flex/my$
 ../sdk3/bin/mxmlc -source-path=. -source-path+=../flex-pilot/src/ Hello.mxml
