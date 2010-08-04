@@ -38,6 +38,7 @@ from element import Element
 from xpath import LocatorParser
 from screenshot import Screenshot
 from table import Table
+from flex import Flex
 
 __version__ = '2.4'
 BROWSER_ALIASES = {'ff': '*firefox',
@@ -86,7 +87,7 @@ def shut_down_selenium_server(host='localhost', port=4444):
 
 
 class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
-                      Screenshot, Table):
+                      Screenshot, Table, Flex):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
     It uses the Selenium Remote Control tool internally to control a web browser.
@@ -197,6 +198,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
+        self._flex_apps = utils.ConnectionCache()
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.

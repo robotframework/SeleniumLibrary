@@ -1,13 +1,14 @@
 ***Settings***
 Library  SeleniumLibrary
 
+***Variables***
+${browser}  firefox
+
 ***Test Cases***
 Click
-  Open Browser  http://localhost:8000/Hello.html  
-  Maximize Browser Window
-  Page Should Contain Element  hello_app
-  Wait For Flex Ready  hello_app
-  Flex Click  hello_app  hello_button
-  Sleep       3
-  Flex Click  hello_app  OK
-  Flex Type   hello_app  hello_name  RF <3 FP
+  Open Browser  http://localhost:8000/Hello.html  ${browser}
+  Select Flex Application  hello_app
+  Flex Click  hello_button
+  Sleep       1
+  Flex Click  OK
+  Flex Type   hello_name  RF <3 FP
