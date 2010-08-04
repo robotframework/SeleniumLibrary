@@ -62,6 +62,7 @@ Selenium.prototype.callMovie = function(movie, func, params) {
       bridge = selenium.browserbot.getCurrentWindow().document.createElement( 'input');
       bridge.setAttribute( 'id', 'ws-sel-bridge');
       bridge.setAttribute( 'value', 'test');
+      bridge.setAttribute('style', 'display: none')
       selenium.browserbot.getCurrentWindow().document.body.appendChild(bridge);
     }
     bridge.setAttribute( 'value', 'test');
