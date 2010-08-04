@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                applicationComplete="init();">
+<mx:Script>
+<![CDATA[
+import org.flex_pilot.FPBootstrap;
+
+private function init():void {
+    FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
+    FPBootstrap.init(stage);
+}
+]]>
+</mx:Script>
+<mx:Script>
+<![CDATA[
+import mx.controls.Alert;
+
+[Bindable]
+public var helloName:String="World";
+
+protected function sayHello(event:MouseEvent):void {
+    Alert.show("Hello, " + helloName + "!");
+}
+]]>
+</mx:Script>
+<mx:TextInput id="hello_name" text="{helloName}"/>
+<mx:Button id="hello_button" label="Say Hello" click="sayHello(event)"/>
+</mx:Application>
