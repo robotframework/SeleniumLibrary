@@ -3,8 +3,14 @@
 <title>Hello</title>
 </head>
 <body>
-<object type="application/x-shockwave-flash"
-	data="Hello.swf" id="hello_app"
-	width="400" height="400" />
+<object
+classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" 
+width="400" height="300" id="hello_app" >
+<param name="movie" value="Hello.swf">
+<embed src="Hello.swf" quality="high" width="400"
+height="300" name="movie"
+type="application/x-shockwave-flash" > 
+</object>
+
 </body>
 </html>
