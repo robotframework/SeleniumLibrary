@@ -1,5 +1,7 @@
 ***Settings***
 Library  SeleniumLibrary
+Suite Setup  Start Selenium Server
+Suite Teardown  Stop Selenium Server
 
 ***Variables***
 ${browser}  firefox
