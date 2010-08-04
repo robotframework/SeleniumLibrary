@@ -127,11 +127,11 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     | Page Should Contain Link | Link id * | # Passes if the page contain any link starting with 'Link id' |
     | Select Checkbox | xpath=//table[0]/input[@name='my_checkbox'] | # Using XPath |
     | Click Image     | dom=document.images[56] | # Using a DOM expression |
-    
-    All table related keywords (`Table Should Contain`, etc.) allow to identity a table either by 
+
+    All table related keywords (`Table Should Contain`, etc.) allow to identity a table either by
     the id of the table element, or by a css locator. Both of the following examples work. It's not
     possible to use an xpath or dom expression, since the table keywords use a css locator internally.
-    
+
     Table Examples:
     | Table Should Contain | tableID | $ 43,00 |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
@@ -276,10 +276,10 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         be used to specify the browser directly. In this case, the path needs to
         point to an executable, not a script, otherwise the library may not be
         able to shut down the browser properly.
-        
-        Note, that you will encounter strange behaviour, if you open multiple 
+
+        Note, that you will encounter strange behaviour, if you open multiple
         Internet Explorer browser instances. That's also why `Switch Browser` only
-        works with one IE browser at most. 
+        works with one IE browser at most.
         http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -423,7 +423,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         | ${ret} = | Call Selenium API | is_element_present | # Python API |
         | Call Selenium API | double_click | element_id | # Python API |
         | Call Selenium API | doubleClick  | element_id | # RC API |
-        
+
         [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/
         """
         try:
@@ -439,7 +439,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
 
     def go_back(self, dont_wait=''):
         """Simulates the user clicking the "back" button on their browser.
-        
+
         See `introduction` for details about locating elements and about meaning
         of `dont_wait` argument."""
         self._selenium.go_back()
@@ -596,12 +596,12 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
 
         Sometimes this keyword doesn't trigger the correct JavaScript event
         on the clicked element. In those cases `Press Key Native` can be
-        used as a workaround. 
-        
+        used as a workaround.
+
         The selenium command key_press [1] that is used internally exposes some
         erratic behaviour [2], especially when used with the Internet Explorer. If
         don't get the expected results, try `Press Key Native` instead.
-        
+
         [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press
         [2] http://jira.openqa.org/browse/SRC-385
         """
@@ -629,7 +629,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         Notice that this keyword is very fragile and, for example, using the
         keyboard or mouse while tests are running often causes problems. It can
         be beneficial to bring the window to the front again with executing JavaScript:
-        
+
         | Execute Javascript | window.focus() |          |
         | Focus              | login_button   |          |
         | Press Key Native   | 10             | and wait |
