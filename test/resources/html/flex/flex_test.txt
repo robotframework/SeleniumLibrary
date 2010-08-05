@@ -1,0 +1,18 @@
+***Settings***
+Library         SeleniumLibrary
+Suite Setup     Start Selenium Server
+Suite Teardown  Stop Selenium Server
+
+***Variables***
+${BROWSER}  firefox
+
+***Test Cases***
+Click
+  Open Browser  http://localhost:8000/Hello.html  ${BROWSER}
+  Maximize Browser Window
+  Select Flex Application  hello_app
+  Flex Click  hello_button
+  Sleep       1 second
+  Flex Click  OK
+  Flex Type   hello_name  RF <3 FP
+  Sleep       1 second

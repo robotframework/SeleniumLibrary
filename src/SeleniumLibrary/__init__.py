@@ -38,6 +38,7 @@ from element import Element
 from xpath import LocatorParser
 from screenshot import Screenshot
 from table import Table
+from flex import Flex
 
 __version__ = '2.4'
 BROWSER_ALIASES = {'ff': '*firefox',
@@ -62,13 +63,18 @@ def start_selenium_server(logfile, jarpath=None, *params):
     Note that this function requires `subprocess` module which is available
     on Python/Jython 2.5 or newer.
     """
+    params = list(params)
     if not subprocess:
         raise RuntimeError('This function requires `subprocess` module which '
                            'is available on Python/Jython 2.5 or newer')
     if not jarpath:
         jarpath = os.path.join(os.path.dirname(__file__), 'lib',
                                'selenium-server.jar')
-    subprocess.Popen(['java', '-jar', jarpath] + list(params),
+    extpath = os.path.join(os.path.dirname(jarpath), 'user-extensions.js')
+    #TODO: document automatic addition of user extensions.
+    if os.path.isfile(extpath) and '-userExtensions' not in params:
+        params.extend(['-userExtensions', extpath])
+    subprocess.Popen(['java', '-jar', jarpath] + params,
                      stdout=logfile, stderr=subprocess.STDOUT)
 
 
@@ -86,7 +92,7 @@ def shut_down_selenium_server(host='localhost', port=4444):
 
 
 class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
-                      Screenshot, Table):
+                      Screenshot, Table, Flex):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
     It uses the Selenium Remote Control tool internally to control a web browser.
@@ -197,6 +203,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
+        self._flex_apps = utils.ConnectionCache()
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
