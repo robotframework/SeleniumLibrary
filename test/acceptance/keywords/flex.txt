@@ -1,7 +1,10 @@
 *Settings*
 Suite Setup  Open Flex Application
-Test Setup  Select Flex Application  test_app
+Test Setup  Select Flex Application  ${APP ID}
 Resource  ../resource.txt
+
+*Variables*
+${APP ID}  test_app_object  # use test_app_embed with firefox
 
 *Test cases*
 Using Flex commands without selecting application
