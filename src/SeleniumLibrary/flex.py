@@ -16,8 +16,8 @@ class Flex(object):
         self._flex_command('flexType', 'name=%s,text=%s' % (locator, value))
 
     def text_in_flex_should_be(self, locator, expected):
-        self._flex_command('flexAssertText', 'name=%s,validator=%s' %
-                           (locator, expected.replace(',', '\\,')))
+        self._flex_command('flexAssertText',
+                           'name=%s,validator=%s' % (locator, expected))
 
     def _flex_command(self, command, options):
         # TODO: Howto handle commas in option values??
