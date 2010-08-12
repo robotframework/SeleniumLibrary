@@ -1,6 +1,8 @@
+syntax:glob
+.project
+.pydevproject
 test/results
+demo/reports
 
-syntax: regexp
-^dist$
-syntax: regexp
-^build$
+dist
+build
