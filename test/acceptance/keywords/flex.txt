@@ -1,0 +1,32 @@
+*Settings*
+Suite Setup  Open Flex Application
+Test Setup  Select Flex Application  test_app
+Resource  ../resource.txt
+
+*Test cases*
+Using Flex commands without selecting application
+  [Setup]
+  [Documentation]  FAIL  No Flex application selected.
+  Click Flex Element  button
+
+Text in flex should be
+  [Documentation]  FAIL ERROR: Expected "Hullo, Flax!", got "Hello, Flex!"
+  Text In Flex Should Be  input_field  testing
+  Text In Flex Should Be  hello_label  Hello, Flex!
+  Text In Flex Should Be  hello_label  Hullo
+
+Input text  
+  Input Text Into Flex   input_field  RF <3 FP
+  Text In Flex Should Be  input_field  RF &lt;3 FP
+
+Click Element
+  Input Text Into Flex  input_field  uppercase?
+  Click Flex Element  upper_button
+  Click Flex Element  OK
+  Text In Flex Should Be  input_field  UPPERCASE?
+  
+    
+*Keywords*
+Open Flex Application
+    Go To  ${ROOT}flex/flex.html
+
