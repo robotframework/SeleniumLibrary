@@ -56,7 +56,7 @@ def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     # TODO: running unit tests this way fails on my Windows, why?
     start_http_server()
-    suffix = utils.is_windows and 'ybot.bat' or 'ybot'
+    suffix = os.sep == '\\' and 'ybot.bat' or 'ybot'
     runner = "%s%s" % ('jython' == interpreter and 'j' or 'p', suffix)
     execute_tests(runner)
     stop_http_server()
@@ -79,7 +79,7 @@ def process_output():
     print
     call(['python', os.path.join(RESOURCEDIR, 'statuschecker.py'),
          os.path.join(RESULTDIR, 'output.xml')])
-    rebot = utils.is_windows and 'rebot.bat' or 'rebot'
+    rebot = os.sep == '\\' and 'rebot.bat' or 'rebot'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
     rc = call(rebot_cmd, env=os.environ)
