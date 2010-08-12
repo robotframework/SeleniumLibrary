@@ -21,6 +21,7 @@ protected function upperCase(event:MouseEvent):void {
 }
 ]]>
 </mx:Script>
+<mx:Label name="hello_label" text="Hello, Flex!"/>
 <mx:TextInput id="input_field" text="testing"/>
 <mx:Button id="upper_button" label="Upper" click="upperCase(event)"/>
 </mx:Application>
