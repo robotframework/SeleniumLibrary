@@ -61,29 +61,29 @@ Selenium.prototype.callMovie = function(movie, func, params) {
     if (!bridge) {
       bridge = selenium.browserbot.getCurrentWindow().document.createElement( 'input');
       bridge.setAttribute( 'id', 'ws-sel-bridge');
-      bridge.setAttribute( 'value', 'test');
-      bridge.setAttribute('style', 'display: none')
+      bridge.setAttribute( 'value', 'undefined');
+      bridge.setAttribute('style', 'display: none');
       selenium.browserbot.getCurrentWindow().document.body.appendChild(bridge);
     }
-    bridge.setAttribute( 'value', 'test');
 
     var id = null;
     if (movie.id) {
       id = movie.id;
-      bridge.setAttribute( 'onClick','window.document.getElementById("ws-sel-bridge").value = window.document.getElementById("' + id + '")["' + func + '"](\''+params+'\');');
+      bridge.setAttribute( 'onClick','window.document.getElementById("ws-sel-bridge").value = window.document.getElementById("' + id + '")["' + func + '"](\''+params+'\').message;');
     }
     else if (movie.name) {
       id = movie.name;
-      bridge.setAttribute( 'onClick','window.document.getElementById("ws-sel-bridge").value = window.document.getElementsByName("' + id + '")[0]["' + func + '"](\''+params+'\');');
+      bridge.setAttribute( 'onClick','window.document.getElementById("ws-sel-bridge").value = window.document.getElementsByName("' + id + '")[0]["' + func + '"](\''+params+'\').message;');
     }
 
     var e = selenium.browserbot.getCurrentWindow().document.createEvent( 'HTMLEvents');
     e.initEvent( 'click', false, false);
     bridge.dispatchEvent(e);
 
-    if (bridge.value.indexOf('object') != -1) {
+    if (bridge.value != "undefined") {
       var res = {};
-      res.message = func + ' with params ' + params + ' failed.';
+      res.message = bridge.value;
+      bridge.value = "undefined"
       return res;
     }
     return true;
