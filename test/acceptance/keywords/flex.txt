@@ -13,10 +13,17 @@ Using Flex commands without selecting application
   Click Flex Element  button
 
 Text in flex should be
-  [Documentation]  FAIL ERROR: Expected "Hullo, Flax!", got "Hello, Flex!"
   Text In Flex Should Be  input_field  testing
-  Text In Flex Should Be  hello_label  Hello, Flex!
-  Text In Flex Should Be  hello_label  Hullo
+  Text In Flex Should Be  hello_label  Hello Flex!
+  Text In Flex Should Be  upper_button  Upper
+
+Text in flex should be fails
+  [Documentation]  FAIL ERROR: Expected "Hi Silverlight!", got "Hello Flex!"
+  Text In Flex Should Be  hello_label  Hi Silverlight!
+
+Text in flex should when element doesn't exist
+  [Documentation]  FAIL ERROR: The chain 'name:non_existing' was not found.
+  Text In Flex Should Be  non_existing  Whatever
 
 Input text  
   Input Text Into Flex   input_field  RF <3 FP
