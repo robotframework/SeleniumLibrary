@@ -19,10 +19,7 @@ import sys
 from subprocess import Popen, call
 from tempfile import TemporaryFile
 
-from robot import utils
-
 from run_unit_tests import run_unit_tests
-
 
 ROOT = os.path.dirname(__file__)
 TESTDATADIR = os.path.join(ROOT, 'acceptance')
