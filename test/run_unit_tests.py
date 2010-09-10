@@ -28,5 +28,5 @@ def load_module(name):
 
 
 if __name__ == '__main__':
-    sys.exit(run_tests())
+    sys.exit(run_unit_tests())
 
