@@ -150,10 +150,11 @@ Table Examples:<br />
 <br />
 <b>Handling page load events</b><br />
 <br />
-Some keywords that may cause a page to load take an additional argument <span class="name">dont_wait</span> that is used to determine whether a new page is expected to load or not. By default, a page load is expected to happen whenever a link or image is clicked, or a form submitted. If a page load does not happen (if the link only executes some JavaScript, for example), a non-empty value must be given to <span class="name">dont_wait</span> argument.<br />
+Some keywords that may cause a page to load take an additional argument <span class="name">dont_wait</span> that is used to determine whether a new page is expected to load or not. By default, a page load is expected to happen whenever a link or image is clicked, or a form submitted. If a page load does not happen (if the link only executes some JavaScript, for example), a non-empty value must be given for the <span class="name">dont_wait</span> argument.<br />
 <br />
-There are also some keywords that may cause a page to load but by default we expect them not to. In these case, the keywords have an optional <span class="name">wait</span> argument, and providing a non-empty value for it will cause the keyword to Examples:<br />
+There are also some keywords that may cause a page to load but by default we expect them not to. For those cases, the keywords have an optional <span class="name">wait</span> argument, and providing a non-empty value for it will cause the keyword to wait.<br />
 <br />
+Examples:<br />
 <table border="1" class="doc">
 <tr>
 <td>Click Link</td>
