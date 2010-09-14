@@ -144,11 +144,13 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     load or not. By default, a page load is expected to happen whenever a link
     or image is clicked, or a form submitted. If a page load does not happen
     (if the link only executes some JavaScript, for example), a non-empty value
-    must be given to `dont_wait` argument.
+    must be given for the `dont_wait` argument.
 
     There are also some keywords that may cause a page to load but by default
-    we expect them not to. In these case, the keywords have an optional `wait`
+    we expect them not to. For these cases, the keywords have an optional `wait`
     argument, and providing a non-empty value for it will cause the keyword to
+    wait.
+    
     Examples:
 
     | Click Link | link text    |            |          | # A page is expected to load. |
