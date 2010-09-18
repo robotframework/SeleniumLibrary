@@ -51,7 +51,6 @@ ARG_VALUES = {'outdir': RESULTDIR, 'pythonpath': SRCDIR}
 
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
-    # TODO: running unit tests this way fails on my Windows, why?
     start_http_server()
     suffix = os.sep == '\\' and 'ybot.bat' or 'ybot'
     runner = "%s%s" % ('jython' == interpreter and 'j' or 'p', suffix)
