@@ -269,6 +269,25 @@ class Assertion(object):
         """
         self._page_should_not_contain_element(locator, 'button', message)
         self._page_should_not_contain_element(locator, 'input', message)
+        
+    def xpath_should_match_x_times(self, xpath, expected_xpath_count, message=''):
+        """Verifies that the page contains the given number of elements located by the given `xpath`.
+        
+        `message` can be used to override the default error message.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
+        
+        Use `Get Matching Xpath Count` if you just want to get the count.
+        """
+        actual_xpath_count = self._selenium.get_xpath_count(xpath)
+        expected_xpath_count = str(expected_xpath_count)
+        if actual_xpath_count != expected_xpath_count:
+            if not message:
+                message = "Xpath %s should have matched %s times but matched %s times"\
+                            %(xpath, expected_xpath_count, actual_xpath_count)
+            self.log_source()
+            raise AssertionError(message)
+        self._info("Current page contains %s elements matching '%s'." % (actual_xpath_count, xpath))
 
     def _page_should_contain_element(self, locator, element_name, message):
         if not self._selenium.is_element_present(self._parse_locator(

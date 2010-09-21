@@ -185,3 +185,9 @@ Get All Links
   Length Should Be  ${links}  18
   List Should Contain Value  ${links}  bold_id
 
+Xpath Should Match X Times 
+  [Documentation]  FAIL Xpath //input[@type="text"] should have matched 2 times but matched 1 times
+  [Setup]  Go To  ${ROOT}forms/login.html
+  Xpath Should Match X Times  //input[@type="text"]  1
+  Xpath Should Match X Times  //input[@type="text"]  ${1}
+  Xpath Should Match X Times  //input[@type="text"]  2
