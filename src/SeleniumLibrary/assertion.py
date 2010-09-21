@@ -106,6 +106,26 @@ class Assertion(object):
                           "its text was '%s'." % (locator, excepted, actual)
             raise AssertionError(message)
 
+    def element_text_should_be(self, locator, excepted, message=''):
+        """Verifies element identified by `locator` exactly contains text `expected`.
+        
+        In contrast to `Element Should Contain`, this keyword does not try 
+        a substring match but an exact match on the element identified by `locator`.
+
+        `message` can be used to override the default error message.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        """
+        self._info("Verifying element '%s' exactly contains text '%s'."
+                    % (locator, excepted))
+        actual = self._selenium.get_text(self._parse_locator(locator))
+        if excepted != actual:
+            if not message:
+                message = "The text of element '%s' should have been '%s' but "\
+                          "in fact it was '%s'." % (locator, excepted, actual)
+            raise AssertionError(message)
+
     def page_should_contain_checkbox(self, locator, message=''):
         """Verifies checkbox identified by `locator` is found from current page.
 
