@@ -89,7 +89,7 @@ class Assertion(object):
 
     frame_should_contain_text = frame_should_contain
 
-    def element_should_contain(self, locator, excepted, message=''):
+    def element_should_contain(self, locator, expected, message=''):
         """Verifies element identified by `locator` contains text `expected`.
 
         `message` can be used to override the default error message.
@@ -98,15 +98,15 @@ class Assertion(object):
         `introduction` for details about locating elements.
         """
         self._info("Verifying element '%s' contains text '%s'."
-                    % (locator, excepted))
+                    % (locator, expected))
         actual = self._selenium.get_text(self._parse_locator(locator))
-        if not excepted in actual:
+        if not expected in actual:
             if not message:
                 message = "Element '%s' should have contained text '%s' but "\
-                          "its text was '%s'." % (locator, excepted, actual)
+                          "its text was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
-    def element_text_should_be(self, locator, excepted, message=''):
+    def element_text_should_be(self, locator, expected, message=''):
         """Verifies element identified by `locator` exactly contains text `expected`.
         
         In contrast to `Element Should Contain`, this keyword does not try 
@@ -118,12 +118,12 @@ class Assertion(object):
         `introduction` for details about locating elements.
         """
         self._info("Verifying element '%s' exactly contains text '%s'."
-                    % (locator, excepted))
+                    % (locator, expected))
         actual = self._selenium.get_text(self._parse_locator(locator))
-        if excepted != actual:
+        if expected != actual:
             if not message:
                 message = "The text of element '%s' should have been '%s' but "\
-                          "in fact it was '%s'." % (locator, excepted, actual)
+                          "in fact it was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
     def page_should_contain_checkbox(self, locator, message=''):
