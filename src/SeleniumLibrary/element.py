@@ -23,7 +23,11 @@ class Element(object):
         return self._selenium.get_attribute(attribute_locator)
 
     def get_matching_xpath_count(self, xpath):
-        """Returns number of elements matching `xpath`"""
+        """Returns number of elements matching `xpath`
+        
+        If you wish to assert that the number of matching elements
+        has a certain value, use `Xpath Should Match X Times`.
+        """
         return self._selenium.get_xpath_count(xpath)
 
     def get_horizontal_position(self, locator):
