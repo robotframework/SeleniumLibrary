@@ -91,6 +91,9 @@ class Assertion(object):
 
     def element_should_contain(self, locator, expected, message=''):
         """Verifies element identified by `locator` contains text `expected`.
+        
+        If you wish to assert an exact (not a substring) match on the text 
+        of the element, use `Element Text Should Be`.
 
         `message` can be used to override the default error message.
 
@@ -116,6 +119,8 @@ class Assertion(object):
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Verifying element '%s' exactly contains text '%s'."
                     % (locator, expected))
@@ -295,9 +300,9 @@ class Assertion(object):
         
         `message` can be used to override the default error message.
         
-        This keyword was added in SeleniumLibrary 2.4.1.
-        
         Use `Get Matching Xpath Count` if you just want to get the count.
+
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         actual_xpath_count = self._selenium.get_xpath_count(xpath)
         expected_xpath_count = str(expected_xpath_count)
