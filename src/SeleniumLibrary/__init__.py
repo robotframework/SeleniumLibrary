@@ -33,6 +33,7 @@ from assertion import Assertion
 from button import Button
 from click import Click
 from javascript import JavaScript
+from mouse import Mouse
 from select import Select
 from element import Element
 from xpath import LocatorParser
@@ -85,8 +86,8 @@ def shut_down_selenium_server(host='localhost', port=4444):
         pass
 
 
-class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
-                      Screenshot, Table):
+class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
+                      Element, Screenshot, Table):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
     It uses the Selenium Remote Control tool internally to control a web browser.
