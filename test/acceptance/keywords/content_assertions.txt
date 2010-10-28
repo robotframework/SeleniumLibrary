@@ -56,6 +56,18 @@ Element Text Should Be
   Element Text Should Be  some_id  This text is inside an identified element
   Element Text Should Be  some_id  inside
 
+Element Should Be Visible
+  [Documentation]  FAIL The element 'i_am_hidden' should be visible, but it is not.
+  [Setup]  Go To  ${ROOT}visibility.html
+  Element Should Be Visible  i_am_visible
+  Element Should Be Visible  i_am_hidden
+  
+Element Should Not Be Visible
+  [Documentation]  FAIL The element 'i_am_visible' should not be visible, but it is.
+  [Setup]  Go To  ${ROOT}visibility.html
+  Element Should Not Be Visible  i_am_hidden
+  Element Should Not Be Visible  i_am_visible
+
 Page Should Contain Checkbox
   [Documentation]  FAIL Page should have contained checkbox 'non-existing' but did not LOG
   ...  1:2 Current page contains checkbox 'can_send_email'.

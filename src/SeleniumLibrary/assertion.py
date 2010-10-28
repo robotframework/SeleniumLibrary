@@ -131,6 +131,49 @@ class Assertion(object):
                           "in fact it was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
+    def element_should_be_visible(self, locator, message=''):
+        """Verifies that the element identified by `locator` is visible.
+        
+        Herein, visible means that the element is logically visible, not optically
+        visible in the current browser viewport. For example, an element that carries
+        display:none is not logically visible, so using this keyword on that element
+        would fail.
+
+        `message` can be used to override the default error message.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
+        """
+        self._info("Verifying element '%s' is visible." % locator)
+        visible = self._selenium.is_visible(locator)
+        if not visible:
+            if not message:
+                message = "The element '%s' should be visible, but it "\
+                          "is not." % locator
+            raise AssertionError(message)
+
+    def element_should_not_be_visible(self, locator, message=''):
+        """Verifies that the element identified by `locator` is NOT visible.
+        
+        This is the opposite of `Element Should Be Visible`.
+
+        `message` can be used to override the default error message.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
+        """
+        self._info("Verifying element '%s' is not visible." % locator)
+        visible = self._selenium.is_visible(locator)
+        if visible:
+            if not message:
+                message = "The element '%s' should not be visible, "\
+                          "but it is." % locator
+            raise AssertionError(message)
+
     def page_should_contain_checkbox(self, locator, message=''):
         """Verifies checkbox identified by `locator` is found from current page.
 
