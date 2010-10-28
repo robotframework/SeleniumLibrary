@@ -86,7 +86,7 @@ a {
 </head>
 <body>
 <h1>SeleniumLibrary</h1>
-<b>Version:</b> 2.4<br>
+<b>Version:</b> 2.4.1-under-development<br>
 <b>Scope:</b> global<br>
 <b>Named arguments: </b>
 supported
@@ -278,7 +278,11 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Drag And Drop" title="Drags element identified with `locator` by `movement`">Drag&nbsp;And&nbsp;Drop</a>
 &nbsp;&middot;&nbsp;
+<a href="#Element Should Be Visible" title="Verifies that the element identified by `locator` is visible.">Element&nbsp;Should&nbsp;Be&nbsp;Visible</a>
+&nbsp;&middot;&nbsp;
 <a href="#Element Should Contain" title="Verifies element identified by `locator` contains text `expected`.">Element&nbsp;Should&nbsp;Contain</a>
+&nbsp;&middot;&nbsp;
+<a href="#Element Should Not Be Visible" title="Verifies that the element identified by `locator` is NOT visible.">Element&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Visible</a>
 &nbsp;&middot;&nbsp;
 <a href="#Element Text Should Be" title="Verifies element identified by `locator` exactly contains text `expected`.">Element&nbsp;Text&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
@@ -344,9 +348,19 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Maximize Browser Window" title="Maximizes current browser window.">Maximize&nbsp;Browser&nbsp;Window</a>
 &nbsp;&middot;&nbsp;
+<a href="#Mouse Down" title="Simulates a user pressing the left mouse button (without releasing it yet) on">Mouse&nbsp;Down</a>
+&nbsp;&middot;&nbsp;
 <a href="#Mouse Down On Image" title="Simulates a mouse down event on an image.">Mouse&nbsp;Down&nbsp;On&nbsp;Image</a>
 &nbsp;&middot;&nbsp;
 <a href="#Mouse Down On Link" title="Simulates a mouse down event on a link.">Mouse&nbsp;Down&nbsp;On&nbsp;Link</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Move" title="Simulates a user pressing the mouse button (without releasing it yet) on">Mouse&nbsp;Move</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Out" title="Simulates a user moving the mouse pointer away from the specified element.">Mouse&nbsp;Out</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Over" title="Simulates a user hovering a mouse over the specified element.">Mouse&nbsp;Over</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Up" title="Simulates the event that occurs when the user releases the mouse button (i.e., stops">Mouse&nbsp;Up</a>
 &nbsp;&middot;&nbsp;
 <a href="#Open Browser" title="Opens a new browser instance to given url.">Open&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
@@ -737,6 +751,19 @@ If the cookie is not found, nothing happens.<br />
 `movement is a string in format "+70 -300" interpreted as pixels in relation to elements current position.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Element Should Be Visible"></a>Element Should Be Visible</td>
+  <td class="arg">locator, message=</td>
+  <td class="doc">Verifies that the element identified by <span class="name">locator</span> is visible.<br />
+<br />
+Herein, visible means that the element is logically visible, not optically visible in the current browser viewport. For example, an element that carries display:none is not logically visible, so using this keyword on that element would fail.<br />
+<br />
+<span class="name">message</span> can be used to override the default error message.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.4.1.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Element Should Contain"></a>Element Should Contain</td>
   <td class="arg">locator, expected, message=</td>
   <td class="doc">Verifies element identified by <span class="name">locator</span> contains text <span class="name">expected</span>.<br />
@@ -746,6 +773,19 @@ If you wish to assert an exact (not a substring) match on the text of the elemen
 <span class="name">message</span> can be used to override the default error message.<br />
 <br />
 Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Element Should Not Be Visible"></a>Element Should Not Be Visible</td>
+  <td class="arg">locator, message=</td>
+  <td class="doc">Verifies that the element identified by <span class="name">locator</span> is NOT visible.<br />
+<br />
+This is the opposite of <a href="#Element Should Be Visible" class="name">Element Should Be Visible</a>.<br />
+<br />
+<span class="name">message</span> can be used to override the default error message.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.4.1.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Element Text Should Be"></a>Element Text Should Be</td>
@@ -973,6 +1013,13 @@ Key attributes for list are <span class="name">id</span> and <span class="name">
   <td class="doc">Maximizes current browser window.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Mouse Down"></a>Mouse Down</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates a user pressing the left mouse button (without releasing it yet) on the specified element.<br />
+<br />
+<span class="name">locator</span> is an element locator. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Mouse Down On Image"></a>Mouse Down On Image</td>
   <td class="arg">locator</td>
   <td class="doc">Simulates a mouse down event on an image.<br />
@@ -985,6 +1032,34 @@ Key attributes for images are <span class="name">id</span>, <span class="name">s
   <td class="doc">Simulates a mouse down event on a link.<br />
 <br />
 Key attributes for links are <span class="name">id</span>, <span class="name">name</span>, <span class="name">href</span> and link text. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Mouse Move"></a>Mouse Move</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates a user pressing the mouse button (without releasing it yet) on the specified element.<br />
+<br />
+<span class="name">locator</span> is an element locator. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Mouse Out"></a>Mouse Out</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates a user moving the mouse pointer away from the specified element.<br />
+<br />
+<span class="name">locator</span> is an element locator. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Mouse Over"></a>Mouse Over</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates a user hovering a mouse over the specified element.<br />
+<br />
+<span class="name">locator</span> is an element locator. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Mouse Up"></a>Mouse Up</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates the event that occurs when the user releases the mouse button (i.e., stops holding the button down) on the specified element.<br />
+<br />
+<span class="name">locator</span> is an element locator. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Open Browser"></a>Open Browser</td>
@@ -1696,9 +1771,9 @@ This keyword was added in SeleniumLibrary 2.4.1.</td>
 </tr>
 </table>
 <p id="footer">
-Altogether 110 keywords.<br />
+Altogether 117 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-09-23 20:21:58.
+on 2010-10-29 00:10:49.
 </p>
 </body>
 </html>
