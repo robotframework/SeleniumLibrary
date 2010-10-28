@@ -19,6 +19,7 @@ class Mouse(object):
         Simulates a user hovering a mouse over the specified element.
         
         `locator` is an element locator.
+        See `introduction` for details about locating elements.
         """
         self._info("Simulating Mouse Over on element '%s'" % locator)
         self._selenium.mouse_over(locator);
@@ -28,6 +29,7 @@ class Mouse(object):
         Simulates a user moving the mouse pointer away from the specified element.
         
         `locator` is an element locator.
+        See `introduction` for details about locating elements.
         """
         self._info("Simulating Mouse Out on element '%s'" % locator)
         self._selenium.mouse_out(locator)
@@ -38,6 +40,7 @@ class Mouse(object):
         the specified element.
         
         `locator` is an element locator.
+        See `introduction` for details about locating elements.
         """
         self._info("Simulating Mouse Down on element '%s'" % locator)
         self._selenium.mouse_down(locator)
@@ -48,6 +51,7 @@ class Mouse(object):
         holding the button down) on the specified element.
         
         `locator` is an element locator.
+        See `introduction` for details about locating elements.
         """
         self._info("Simulating Mouse Up on element '%s'" % locator)
         self._selenium.mouse_up(locator)
@@ -58,6 +62,7 @@ class Mouse(object):
         the specified element.
         
         `locator` is an element locator.
+        See `introduction` for details about locating elements.
         """
         self._info("Simulating Mouse Move on element '%s'" % locator)
         self._selenium.mouse_move(locator)
