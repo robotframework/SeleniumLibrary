@@ -19,6 +19,8 @@ class Mouse(object):
         
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Simulating Mouse Over on element '%s'" % locator)
         self._selenium.mouse_over(locator);
@@ -29,6 +31,8 @@ class Mouse(object):
         
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Simulating Mouse Out on element '%s'" % locator)
         self._selenium.mouse_out(locator)
@@ -39,6 +43,8 @@ class Mouse(object):
         
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Simulating Mouse Down on element '%s'" % locator)
         self._selenium.mouse_down(locator)
@@ -49,6 +55,8 @@ class Mouse(object):
         
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Simulating Mouse Up on element '%s'" % locator)
         self._selenium.mouse_up(locator)
@@ -59,6 +67,8 @@ class Mouse(object):
         
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Simulating Mouse Move on element '%s'" % locator)
         self._selenium.mouse_move(locator)
