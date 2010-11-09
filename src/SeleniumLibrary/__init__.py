@@ -25,7 +25,6 @@ except ImportError:
 from robot.errors import DataError
 from robot.output import LEVELS
 from robot.variables import GLOBAL_VARIABLES
-from robot.running import NAMESPACES
 from robot import utils
 
 from selenium import selenium
@@ -151,7 +150,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
     we expect them not to. For these cases, the keywords have an optional `wait`
     argument, and providing a non-empty value for it will cause the keyword to
     wait.
-    
+
     Examples:
 
     | Click Link | link text    |            |          | # A page is expected to load. |
