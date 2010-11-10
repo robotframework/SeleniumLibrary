@@ -43,23 +43,36 @@ class Assertion(object):
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional `level` argument.
-        This argument was added in SeleniumLibrary 2.3.1.
+        Giving `NONE` as level disables logging.
+
+        The `level`argument was added in SeleniumLibrary 2.3.1 and the special
+        `NONE` argument value in SeleniumLibrary 2.4.1.
         """
-        if not (self._selenium.is_text_present(text) or
-                    self._search_text_in_frames(text)):
+        if not self._page_contains(text):
             self.log_source(level)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self._info("Current page contains text '%s'." % text)
 
-    def page_should_not_contain(self, text):
-        """Verifies the current page does not contain `text`."""
-        if self._selenium.is_text_present(text):
-            self.log_source()
+    def page_should_not_contain(self, text, level='INFO'):
+        """Verifies the current page does not contain `text`.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `level` argument.
+        Giving `NONE` as level disables logging.
+
+        The `level`argument was added in SeleniumLibrary 2.4.1.
+        """
+        if self._page_contains(text):
+            self.log_source(level)
             raise AssertionError("Page should not have contained text '%s'" % text)
         self._info("Current page does not contain text '%s'." % text)
 
     current_frame_should_contain = current_frame_contains = page_should_contain
+
+    def _page_contains(self, text):
+        return self._selenium.is_text_present(text) or \
+            self._search_text_in_frames(text)
 
     def _search_text_in_frames(self, text):
         js = "window.document.getElementsByTagName('frame').length"

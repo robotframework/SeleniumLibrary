@@ -559,10 +559,13 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
     def log_source(self, level='INFO'):
         """Logs and returns the entire html source of the current page or frame.
 
-        `level` defines the log level. Valid log levels are 'WARN', 'INFO' (the default), 'DEBUG'
-        and 'TRACE'. In case `level` is invalid, 'INFO' will be used."""
+        The `level` argument defines the used log level. Valid log levels are
+        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
+
+        `NONE` argument value was added in SeleniumLibrary 2.4.1.
+        """
         level = level.upper()
-        if not level in LEVELS:
+        if level not in LEVELS:
             level = 'INFO'
         source = self.get_source()
         self._log(source, level)
@@ -725,7 +728,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         self._selenium.add_location_strategy(strategy_name, function_definition)
 
     def _log(self, message, level='INFO'):
-        print '*%s* %s' % (level, message)
+        if level != 'NONE':
+            print '*%s* %s' % (level, message)
 
     def _info(self, message):
         self._log(message)
