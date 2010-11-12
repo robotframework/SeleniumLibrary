@@ -222,15 +222,23 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
 
-        `params` can contain additional command line parameters given
-        to the started Selenium Server. Starting from 2.3 version the
-        server will use the port given in `importing`
-        automatically. In older versions the port must be given in
-        `params`.
+        `params` can contain additional command line parameters given to the
+        started Selenium Server. Starting from 2.3 version the server will use
+        the port given in `importing` automatically. In older versions the port
+        must be given in `params`.
+
+        When this keyword is used, a prepared Firefox profile will be also
+        supplied to Selenium Server (via -firefoxProfileTemplate argument).
+        This profile contains automation friendly Firefox settings. This behavior
+        can be overridden by supplying the `-firefoxProfileTemplate` argument
+        in `*params`. If the value given for template is `DEFAULT`, the user's
+        own Firefox profile is used. The prepared Firefox profile was added in
+        SeleniumLibrary 2.5
 
         Examples:
         | Start Selenium Server |
         | Start Selenium Server | -firefoxProfileTemplate | C:\\\\the\\\\path |
+        | Start Selenium Server | -firefoxProfileTemplate | DEFAULT | # Use user's own Firefox profile.
         | Start Selenium Server | -avoidProxy | -ensureCleanSession |
 
         All Selenium Server output is written into `selenium_server_log.txt`
