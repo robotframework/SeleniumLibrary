@@ -40,7 +40,7 @@ Page Should Contain With Disabling Source Logging
   [Documentation]  FAIL Page should have contained text 'non existing text' but did not
   ...  LOG 2:2 NONE
   Set Log Level  INFO
-  Page Should Contain  non existing text  level=NONE
+  Page Should Contain  non existing text  loglevel=NONE
   [Teardown]  Set Log Level  DEBUG
 
 Page Should Contain With Frames
@@ -63,7 +63,7 @@ Page Should Not Contain With Disabling Source Logging
   [Documentation]  FAIL Page should not have contained text 'needle'
   ...  LOG 2:2 NONE
   Set Log Level  INFO
-  Page Should Not Contain  needle  level=NONE
+  Page Should Not Contain  needle  loglevel=NONE
   [Teardown]  Set Log Level  DEBUG
 
 Page Should Contain Element
