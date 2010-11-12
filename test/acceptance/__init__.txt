@@ -2,7 +2,7 @@
 Resource  resource.txt
 # Start Selenium Server does not work with Jython 2.2, server has to started
 # beforehand manually
-Suite Setup  Run Keyword and Ignore Error  Start Selenium Server  -firefoxProfileTemplate  ${FF PROFILE DIR}
+Suite Setup  Run Keyword and Ignore Error  Start Selenium Server
 Suite Teardown  Stop Selenium Server
 Force Tags  Regression
 
