@@ -63,6 +63,33 @@ class Button(object):
     def select_radio_button(self, group_name, value, wait=''):
         """Sets selection of radio button group identified by `group_name` to `value`.
         
+        The radio button to be selected is located by two arguments:
+        
+        - `group_name` is used as the name of the radio input
+        - `value` is used for the value attribute or for the id attribute
+        
+        The XPath used to locate the correct radio button then looks like this:
+        
+        //input[@type='radio' and @name='group_name' and (@value='value' or @id='value')]
+        
+        So, if you have:
+        
+        <input type="radio" name="size" value="XL">XL</input>
+        
+        you can select this radio button like this:
+        
+        Example
+        | Select Radio Button | size | XL | # xpath: //input[@type='radio' and @name='size' and (@value='XL' or @id='XL')] |
+        
+        And if you have:
+        
+        <input type="radio" name="size" value="XL" id="sizeXL">XL</input>
+        
+        you can select this radio button like this:
+        
+        Example
+        | Select Radio Button | size | sizeXL | # xpath: //input[@type='radio' and @name='size' and (@value='sizeXL' or @id='sizeXL')] |
+        
         See `introduction` for details about `wait` argument.
         """
         self._info("Selecting '%s' from radio button '%s'." % (value, group_name))
