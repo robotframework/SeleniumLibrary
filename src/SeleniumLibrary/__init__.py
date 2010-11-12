@@ -237,9 +237,9 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         SeleniumLibrary 2.5
 
         Examples:
-        | Start Selenium Server |
+        | Start Selenium Server | # Uses the Firefox profile supplied with the library |
         | Start Selenium Server | -firefoxProfileTemplate | C:\\\\the\\\\path |
-        | Start Selenium Server | -firefoxProfileTemplate | DEFAULT | # Use user's own Firefox profile.
+        | Start Selenium Server | -firefoxProfileTemplate | DEFAULT | # Uses Firefox default profile. |
         | Start Selenium Server | -avoidProxy | -ensureCleanSession |
 
         All Selenium Server output is written into `selenium_server_log.txt`
