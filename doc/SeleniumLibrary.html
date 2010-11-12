@@ -312,7 +312,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Get Source" title="Returns the entire html source of the current page or frame.">Get&nbsp;Source</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Table Cell" title="Returns the content from a table cell. ">Get&nbsp;Table&nbsp;Cell</a>
+<a href="#Get Table Cell" title="Returns the content from a table cell.">Get&nbsp;Table&nbsp;Cell</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Text" title="Returns the text of element identified by `locator`.">Get&nbsp;Text</a>
 &nbsp;&middot;&nbsp;
@@ -436,17 +436,17 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains the `expected content`. ">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains the `expected content`.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Column Should Contain" title="Verifies that a specific column contains the `expected_content`. ">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Column Should Contain" title="Verifies that a specific column contains the `expected_content`.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Table Footer Should Contain" title="Verifies that the table footer contains the `expected_content`.">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Table Header Should Contain" title="Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the `expected_content`.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Row Should Contain" title="Verifies that a specific table row contains the `expected_content`. ">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Row Should Contain" title="Verifies that a specific table row contains the `expected_content`.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Should Contain" title="Verifies that the `expected content` can be found somewhere in the table. ">Table&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Should Contain" title="Verifies that the `expected content` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Text Field Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Text&nbsp;Field&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
@@ -1114,11 +1114,7 @@ The <span class="name">loglevel</span> argument was added in SeleniumLibrary 2.3
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies button identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for buttons are <span class="name">id</span>, <span class="name">name</span> and <span class="name">value</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1127,11 +1123,7 @@ Key attributes for buttons are <span class="name">id</span>, <span class="name">
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies checkbox identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for checkboxes are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1144,7 +1136,7 @@ Key attributes for checkboxes are <span class="name">id</span> and <span class="
 <br />
 If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
 <br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+The <span class="name">loglevel</span> argument was added in SeleniumLibrary 2.5.<br />
 <br />
 Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1153,11 +1145,7 @@ Key attributes for arbitrary elements are <span class="name">id</span> and <span
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies image identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for images are <span class="name">id</span>, <span class="name">src</span> and <span class="name">alt</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1166,11 +1154,7 @@ Key attributes for images are <span class="name">id</span>, <span class="name">s
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies link identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for links are <span class="name">id</span>, <span class="name">name</span>, <span class="name">href</span> and link text. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1179,11 +1163,7 @@ Key attributes for links are <span class="name">id</span>, <span class="name">na
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies list identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1192,11 +1172,7 @@ Key attributes for lists are <span class="name">id</span> and <span class="name"
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies radio button identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for radio buttons are <span class="name">id</span>, <span class="name">name</span> and <span class="name">value</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1205,11 +1181,7 @@ Key attributes for radio buttons are <span class="name">id</span>, <span class="
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies text field identified by <span class="name">locator</span> is found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for text fields are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1227,11 +1199,7 @@ The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies button identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for buttons are <span class="name">id</span>, <span class="name">name</span> and <span class="name">value</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1240,11 +1208,7 @@ Key attributes for buttons are <span class="name">id</span>, <span class="name">
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies checkbox identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for checkboxes are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1262,11 +1226,7 @@ Key attributes for arbitrary elements are <span class="name">id</span> and <span
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies image identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for images are <span class="name">id</span>, <span class="name">src</span> and <span class="name">alt</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1275,11 +1235,7 @@ Key attributes for images are <span class="name">id</span>, <span class="name">s
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies link identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for links are <span class="name">id</span>, <span class="name">name</span>, <span class="name">href</span> and link text. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1288,11 +1244,7 @@ Key attributes for links are <span class="name">id</span>, <span class="name">na
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies list identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1301,11 +1253,7 @@ Key attributes for lists are <span class="name">id</span> and <span class="name"
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies radio button identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for radio buttons are <span class="name">id</span>, <span class="name">name</span> and <span class="name">value</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1314,11 +1262,7 @@ Key attributes for radio buttons are <span class="name">id</span>, <span class="
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies text field identified by <span class="name">locator</span> is not found from current page.<br />
 <br />
-<span class="name">message</span> can be used to override default error message.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
-<br />
-The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for text fields are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1574,41 +1518,43 @@ This keyword was added in SeleniumLibrary 2.5.</td>
   <td class="arg">*params</td>
   <td class="doc">Starts the Selenium Server provided with SeleniumLibrary.<br />
 <br />
-<span class="name">params</span> can contain additional command line parameters given to the started Selenium Server. Starting from 2.3 version the server will use the port given in <a href="#importing" class="name">importing</a> automatically. In older versions the port must be given in <span class="name">params</span>.<br />
+<span class="name">params</span> can contain additional command line options given to the Selenium Server. This keyword uses some command line options automatically:<br />
 <br />
-When this keyword is used, a prepared Firefox profile will be also supplied to Selenium Server (via -firefoxProfileTemplate argument). This profile contains automation friendly Firefox settings. This behavior can be overridden by supplying the <span class="name">-firefoxProfileTemplate</span> argument in <span class="name">*params</span>. If the value given for template is <span class="name">DEFAULT</span>, the user's own Firefox profile is used. The prepared Firefox profile was added in SeleniumLibrary 2.5<br />
+1) The port given in <a href="#importing" class="name">importing</a> is added to <span class="name">params</span> automatically using the <span class="name">-port</span> option.<br />
+<br />
+2) A custom Firefox profile that is included with the library and contains automation friendly settings is enabled via the <span class="name">-firefoxProfileTemplate</span> option. You can override this profile with your own custom profile by using the same argument in <span class="name">params</span> yourself. To use the default profile on your machine, use this argument with <span class="name">DEFAULT</span> value. Using a custom Firefox profile automatically is a new feature in SeleniumLibrary 2.5. For more information see <a href="http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile">http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile</a><br />
 <br />
 Examples:<br />
 <table border="1" class="doc">
 <tr>
 <td>Start Selenium Server</td>
-<td># Uses the Firefox profile supplied with the library</td>
 <td></td>
 <td></td>
+<td># Default settings. Uses the Firefox profile supplied with the library.</td>
 </tr>
 <tr>
 <td>Start Selenium Server</td>
 <td>-firefoxProfileTemplate</td>
 <td>C:\\the\\path</td>
-<td></td>
+<td># Uses custom Firefox profile.</td>
 </tr>
 <tr>
 <td>Start Selenium Server</td>
 <td>-firefoxProfileTemplate</td>
 <td>DEFAULT</td>
-<td># Uses Firefox default profile.</td>
+<td># Uses default Firefox profile on your machine.</td>
 </tr>
 <tr>
 <td>Start Selenium Server</td>
 <td>-avoidProxy</td>
 <td>-ensureCleanSession</td>
-<td></td>
+<td># Uses various Selenium Server settings.</td>
 </tr>
 </table>
 <br />
 All Selenium Server output is written into <span class="name">selenium_server_log.txt</span> file in the same directory as the Robot Framework log file.<br />
 <br />
-If the test execution round starts and stops Selenium Server multiple times, it is best to open the server to different port each time. From 2.3 onwards, this is easiest done by importing the library with different parameters each time.<br />
+If the test execution round starts and stops Selenium Server multiple times, it is best to open the server to different port each time.<br />
 <br />
 <b>NOTE:</b> This keyword requires <span class="name">subprocess</span> module which is available on Python/Jython 2.5 or newer.</td>
 </tr>
@@ -1745,21 +1691,27 @@ Example:<br />
 </tr>
 </table>
 <br />
-To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
+<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Footer Should Contain"></a>Table Footer Should Contain</td>
   <td class="arg">table_locator, expected_content, loglevel=INFO</td>
   <td class="doc">Verifies that the table footer contains the <span class="name">expected_content</span>.<br />
 <br />
-With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
+<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Header Should Contain"></a>Table Header Should Contain</td>
   <td class="arg">table_locator, expected_content, loglevel=INFO</td>
   <td class="doc">Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the <span class="name">expected_content</span>.<br />
 <br />
-To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
+<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Row Should Contain"></a>Table Row Should Contain</td>
@@ -1768,14 +1720,18 @@ To understand how tables are identified, please take a look at the <a href="#int
 <br />
 The uppermost row is row number 1. For tables that are structured with thead, tbody and tfoot, only the tbody section is searched. Please use <a href="#Table Header Should Contain" class="name">Table Header Should Contain</a> or <a href="#Table Footer Should Contain" class="name">Table Footer Should Contain</a> for tests against the header or footer content.<br />
 <br />
-If the table contains cells that span multiple rows, a match only occurs for the uppermost row of those merged cells. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+If the table contains cells that span multiple rows, a match only occurs for the uppermost row of those merged cells. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
+<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Should Contain"></a>Table Should Contain</td>
   <td class="arg">table_locator, expected_content, loglevel=INFO</td>
   <td class="doc">Verifies that the <span class="name">expected content</span> can be found somewhere in the table.<br />
 <br />
-To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
+<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Text Field Should Contain"></a>Text Field Should Contain</td>
@@ -1874,11 +1830,7 @@ Many of the keywords that cause a page load take an optional argument <span clas
   <td class="arg">xpath, expected_xpath_count, message=, loglevel=INFO</td>
   <td class="doc">Verifies that the page contains the given number of elements located by the given <span class="name">xpath</span>.<br />
 <br />
-<span class="name">message</span> can be used to override the default error message.<br />
-<br />
-Use <a href="#Get Matching Xpath Count" class="name">Get Matching Xpath Count</a> if you just want to get the count.<br />
-<br />
-If this keyword fails, it automatically logs the page source using the log level specified with the optional <span class="name">loglevel</span> argument. Giving <span class="name">NONE</span> as level disables logging.<br />
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
@@ -1886,7 +1838,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 <p id="footer">
 Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-11-12 15:50:25.
+on 2010-11-12 17:48:05.
 </p>
 </body>
 </html>
