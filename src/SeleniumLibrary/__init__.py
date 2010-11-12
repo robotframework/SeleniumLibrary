@@ -61,7 +61,10 @@ def start_selenium_server(logfile, jarpath=None, *params):
     None. If None, the jar file distributed with the library will be used.
 
     It is possible to give a list of additional command line options to
-    Selenium Server in `*params`.
+    Selenium Server in `*params`. A custom automation friendly Firefox
+    profile is enabled by default using the `-firefoxProfileTemplate` option.
+    For more information see the documentation of the start_selenium_server
+    method of the Selenium class.
 
     Note that this function requires `subprocess` module which is available
     on Python/Jython 2.5 or newer.
@@ -221,32 +224,34 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
 
-        `params` can contain additional command line parameters given to the
-        started Selenium Server. Starting from 2.3 version the server will use
-        the port given in `importing` automatically. In older versions the port
-        must be given in `params`.
+        `params` can contain additional command line options given to the
+        Selenium Server. This keyword uses some command line options
+        automatically:
 
-        When this keyword is used, a prepared Firefox profile will be also
-        supplied to Selenium Server (via -firefoxProfileTemplate argument).
-        This profile contains automation friendly Firefox settings. This behavior
-        can be overridden by supplying the `-firefoxProfileTemplate` argument
-        in `*params`. If the value given for template is `DEFAULT`, the user's
-        own Firefox profile is used. The prepared Firefox profile was added in
-        SeleniumLibrary 2.5
+        1) The port given in `importing` is added to `params` automatically
+        using the `-port` option.
+
+        2) A custom Firefox profile that is included with the library
+        and contains automation friendly settings is enabled via the
+        `-firefoxProfileTemplate` option. You can override this
+        profile with your own custom profile by using the same argument
+        in `params` yourself. To use the default profile on your machine,
+        use this argument with `DEFAULT` value. Using a custom Firefox
+        profile automatically is a new feature in SeleniumLibrary 2.5.
+        For more information see
+        http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile
 
         Examples:
-        | Start Selenium Server | # Uses the Firefox profile supplied with the library |
-        | Start Selenium Server | -firefoxProfileTemplate | C:\\\\the\\\\path |
-        | Start Selenium Server | -firefoxProfileTemplate | DEFAULT | # Uses Firefox default profile. |
-        | Start Selenium Server | -avoidProxy | -ensureCleanSession |
+        | Start Selenium Server | | | # Default settings. Uses the Firefox profile supplied with the library. |
+        | Start Selenium Server | -firefoxProfileTemplate | C:\\\\the\\\\path | # Uses custom Firefox profile. |
+        | Start Selenium Server | -firefoxProfileTemplate | DEFAULT | # Uses default Firefox profile on your machine. |
+        | Start Selenium Server | -avoidProxy | -ensureCleanSession | # Uses various Selenium Server settings. |
 
         All Selenium Server output is written into `selenium_server_log.txt`
         file in the same directory as the Robot Framework log file.
 
         If the test execution round starts and stops Selenium Server multiple
         times, it is best to open the server to different port each time.
-        From 2.3 onwards, this is easiest done by importing the library with
-        different parameters each time.
 
         *NOTE:* This keyword requires `subprocess` module which is available
         on Python/Jython 2.5 or newer.
