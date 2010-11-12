@@ -722,7 +722,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
 
         This keyword is most often used to input files into upload forms.
         In normal usage the file specified with `file_path` must be available
-        on the samme host where the Selenium Server is running.
+        on the same host where the Selenium Server is running.
 
         An alternative usage is specifying the `file_path` with an URL
         (starting with `http://` or `https://`) in which case the file
@@ -742,7 +742,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
             self._selenium.attach_file(identifier, file_path)
         else:
             if not os.path.isfile(file_path):
-                self._info("File '%s' does not exists on the local file system"
+                self._info("File '%s' does not exist on the local file system"
                            % file_path)
             self._selenium.type(identifier, file_path)
 
