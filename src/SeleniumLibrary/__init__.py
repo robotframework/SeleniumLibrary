@@ -15,15 +15,12 @@
 import os
 import time
 import socket
-
 try:
     import subprocess
 except ImportError:
-    # subprocess is not available in Jython 2.2 or older
-    subprocess = None
+    subprocess = None  # subprocess not available on Python/Jython < 2.5
 
 from robot.errors import DataError
-from robot.output import LEVELS
 from robot.variables import GLOBAL_VARIABLES
 from robot import utils
 
@@ -214,7 +211,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         self._selenium = _NoBrowser()
         self.set_selenium_timeout(timeout or 5.0)
         self._server_host = server_host or 'localhost'
-        self._server_port = server_port and int(server_port) or 4444
+        self._server_port = int(server_port or 4444)
         self._jar_path = jar_path
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
@@ -257,7 +254,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         logpath = os.path.join(self._get_log_dir(), 'selenium_server_log.txt')
         self._selenium_log = open(logpath, 'w')
         start_selenium_server(self._selenium_log, self._jar_path, *params)
-        self._html('Selenium server Log is written to <a href="file://%s">%s</a>.'
+        self._html('Selenium server log is written to <a href="file://%s">%s</a>.'
                    % (logpath.replace('\\', '/'), logpath))
 
     def _get_log_dir(self):
@@ -400,6 +397,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
             self._selenium = self._cache.switch(index_or_alias)
             self._debug('Switched to browser with Selenium session id %s'
                          % self._selenium.sessionId)
+        # TODO: Get rid of DataError!
         except DataError:
             raise DataError("No browser with index or alias '%s' found." % index_or_alias)
 
@@ -607,11 +605,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
 
         `NONE` argument value was added in SeleniumLibrary 2.5.
         """
-        level = level.upper()
-        if level not in LEVELS:
-            level = 'INFO'
         source = self.get_source()
-        self._log(source, level)
+        self._log(source, level.upper())
         return source
 
     def focus(self, locator):
@@ -797,7 +792,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         return parsed_locator
 
     def _get_error_message(self, exception):
-        # Cannot use unicode(exception) because it fails on Python 2.5 and earlier if the message contains Unicode chars
+        # Cannot use unicode(exception) because it fails on Python 2.5 and 
+        # earlier if the message contains non-ASCII chars.
         # See for details: http://bugs.jython.org/issue1585
         return unicode(exception.args and exception.args[0] or '')
 
