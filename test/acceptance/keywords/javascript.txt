@@ -59,14 +59,16 @@ Wait Until Page Contains Element
 
 Confirm Action
   Click Button  Change the title  and don't wait
-  Confirm Action
+  ${msg}=  Confirm Action
   Title Should Be  Changed after confirmation
+  Should Be Equal  ${msg}  Really change the title?
 
 Cancel Action
   Choose Cancel On Next Confirmation
   Click Button  Change the title  and don't wait
-  Confirm Action
+  ${msg}=  Confirm Action
   Title Should Be  Original
+  Should Be Equal  ${msg}  Really change the title?
 
 Javascript Can Be Called Directly
   Execute Javascript  window.add_content('button_target', 'Inserted directly')

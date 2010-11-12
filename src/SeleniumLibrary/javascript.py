@@ -16,6 +16,7 @@ import time
 
 from robot import utils
 
+
 class JavaScript(object):
 
     def execute_javascript(self, *code):
@@ -71,7 +72,7 @@ class JavaScript(object):
                                   % (text, alert_text))
 
     def confirm_action(self):
-        """Dismisses currently shown confirmation dialog.
+        """Dismisses currently shown confirmation dialog and returns it's message.
 
         By default, this keyword chooses 'Ok' option from the dialog. If
         'cancel' needs to be chosen, keyword `Choose Cancel On Next
@@ -81,13 +82,14 @@ class JavaScript(object):
         Examples:
 
         | Click Button | Send | # Shows a confirmation dialog |
-        | Choose Confirm |    | # Chooses Ok |
+        | ${message}= | Confirm Action | # Chooses Ok |
+        | Should Be Equal | ${message} | Are your sure? |
         |                |    |              |
         | Choose Cancel On Next Confirmation | | |
         | Click Button | Send | # Shows a confirmation dialog |
-        | Choose Confirm |    | # Chooses Cancel |
+        | Confirm Action |    | # Chooses Cancel |
         """
-        self._selenium.get_confirmation()
+        return self._selenium.get_confirmation()
 
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used.
@@ -193,4 +195,3 @@ class JavaScript(object):
             self._selenium.context_menu_at(locator, offset)
         else:
             self._selenium.context_menu(locator)
-
