@@ -38,33 +38,33 @@ class Assertion(object):
                                  "but it was '%s'." % (expected, actual))
         self._info("Current location contains '%s'." % expected)
 
-    def page_should_contain(self, text, level='INFO'):
+    def page_should_contain(self, text, loglevel='INFO'):
         """Verifies that current page contains `text`.
 
         If this keyword fails, it automatically logs the page source
-        using the log level specified with the optional `level` argument.
+        using the log level specified with the optional `loglevel` argument.
         Giving `NONE` as level disables logging.
 
-        The `level`argument was added in SeleniumLibrary 2.3.1 and the special
+        The `loglevel` argument was added in SeleniumLibrary 2.3.1 and the special
         `NONE` argument value in SeleniumLibrary 2.5.
         """
         if not self._page_contains(text):
-            self.log_source(level)
+            self.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self._info("Current page contains text '%s'." % text)
 
-    def page_should_not_contain(self, text, level='INFO'):
+    def page_should_not_contain(self, text, loglevel='INFO'):
         """Verifies the current page does not contain `text`.
 
         If this keyword fails, it automatically logs the page source
-        using the log level specified with the optional `level` argument.
+        using the log level specified with the optional `loglevel` argument.
         Giving `NONE` as level disables logging.
 
-        The `level`argument was added in SeleniumLibrary 2.5.
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
         """
         if self._page_contains(text):
-            self.log_source(level)
+            self.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s'" % text)
         self._info("Current page does not contain text '%s'." % text)
 
@@ -187,176 +187,276 @@ class Assertion(object):
                           "but it is." % locator
             raise AssertionError(message)
 
-    def page_should_contain_checkbox(self, locator, message=''):
-        """Verifies checkbox identified by `locator` is found from current page.
-
-        `message` can be used to override default error message.
-
-        Key attributes for checkboxes are `id` and `name`. See `introduction`
-        for details about locating elements.
-        """
-        self._page_should_contain_element(locator, 'checkbox', message)
-
-    def page_should_not_contain_checkbox(self, locator, message=''):
-        """Verifies checkbox identified by `locator` is not found from current page.
-
-        `message` can be used to override default error message.
-
-        Key attributes for checkboxes are `id` and `name`. See `introduction`
-        for details about locating elements.
-        """
-        self._page_should_not_contain_element(locator, 'checkbox', message)
-
-    def page_should_contain_radio_button(self, locator, message=''):
-        """Verifies radio button identified by `locator` is found from current page.
-
-        `message` can be used to override default error message.
-
-        Key attributes for radio buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
-        """
-        self._page_should_contain_element(locator, 'radio button', message)
-
-    def page_should_not_contain_radio_button(self, locator, message=''):
-        """Verifies radio button identified by `locator` is not found from current page.
-
-        `message` can be used to override default error message.
-
-        Key attributes for radio buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
-        """
-        self._page_should_not_contain_element(locator, 'radio button', message)
-
-    def page_should_contain_element(self, locator, message=''):
+    def page_should_contain_element(self, locator, message='', loglevel='INFO'):
         """Verifies element identified by `locator` is found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_contain_element(locator, 'element', message)
+        self._page_should_contain_element(locator, 'element', message, loglevel)
 
-    def page_should_not_contain_element(self, locator, message=''):
+    def page_should_not_contain_element(self, locator, message='', loglevel='INFO'):
         """Verifies element identified by `locator` is not found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'element', message)
+        self._page_should_not_contain_element(locator, 'element', message, loglevel)
 
-    def page_should_contain_image(self, locator, message=''):
+    def page_should_contain_checkbox(self, locator, message='', loglevel='INFO'):
+        """Verifies checkbox identified by `locator` is found from current page.
+
+        `message` can be used to override default error message.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
+        Key attributes for checkboxes are `id` and `name`. See `introduction`
+        for details about locating elements.
+        """
+        self._page_should_contain_element(locator, 'checkbox', message, loglevel)
+
+    def page_should_not_contain_checkbox(self, locator, message='', loglevel='INFO'):
+        """Verifies checkbox identified by `locator` is not found from current page.
+
+        `message` can be used to override default error message.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
+        Key attributes for checkboxes are `id` and `name`. See `introduction`
+        for details about locating elements.
+        """
+        self._page_should_not_contain_element(locator, 'checkbox', message, loglevel)
+
+    def page_should_contain_radio_button(self, locator, message='', loglevel='INFO'):
+        """Verifies radio button identified by `locator` is found from current page.
+
+        `message` can be used to override default error message.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
+        Key attributes for radio buttons are `id`, `name` and `value`. See
+        `introduction` for details about locating elements.
+        """
+        self._page_should_contain_element(locator, 'radio button', message, loglevel)
+
+    def page_should_not_contain_radio_button(self, locator, message='', loglevel='INFO'):
+        """Verifies radio button identified by `locator` is not found from current page.
+
+        `message` can be used to override default error message.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
+        Key attributes for radio buttons are `id`, `name` and `value`. See
+        `introduction` for details about locating elements.
+        """
+        self._page_should_not_contain_element(locator, 'radio button', message, loglevel)
+
+    def page_should_contain_image(self, locator, message='', loglevel='INFO'):
         """Verifies image identified by `locator` is found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_contain_element(locator, 'image', message)
+        self._page_should_contain_element(locator, 'image', message, loglevel)
 
-    def page_should_not_contain_image(self, locator, message=''):
+    def page_should_not_contain_image(self, locator, message='', loglevel='INFO'):
         """Verifies image identified by `locator` is not found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'image', message)
+        self._page_should_not_contain_element(locator, 'image', message, loglevel)
 
-    def page_should_contain_link(self, locator, message=''):
+    def page_should_contain_link(self, locator, message='', loglevel='INFO'):
         """Verifies link identified by `locator` is found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements.
         """
-        self._page_should_contain_element(locator, 'link', message)
+        self._page_should_contain_element(locator, 'link', message, loglevel)
 
-    def page_should_not_contain_link(self, locator, message=''):
+    def page_should_not_contain_link(self, locator, message='', loglevel='INFO'):
         """Verifies link identified by `locator` is not found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'link', message)
+        self._page_should_not_contain_element(locator, 'link', message, loglevel)
 
-    def page_should_contain_list(self, locator, message=''):
+    def page_should_contain_list(self, locator, message='', loglevel='INFO'):
         """Verifies list identified by `locator` is found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self._page_should_contain_element(locator, 'list', message)
+        self._page_should_contain_element(locator, 'list', message, loglevel)
 
-    def page_should_not_contain_list(self, locator, message=''):
+    def page_should_not_contain_list(self, locator, message='', loglevel='INFO'):
         """Verifies list identified by `locator` is not found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'list', message)
+        self._page_should_not_contain_element(locator, 'list', message, loglevel)
 
-    def page_should_contain_textfield(self, locator, message=''):
+    def page_should_contain_textfield(self, locator, message='', loglevel='INFO'):
         """Verifies text field identified by `locator` is found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self._page_should_contain_element(locator, 'text field', message)
+        self._page_should_contain_element(locator, 'text field', message, loglevel)
 
-    def page_should_not_contain_textfield(self, locator, message=''):
+    def page_should_not_contain_textfield(self, locator, message='', loglevel='INFO'):
         """Verifies text field identified by `locator` is not found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'text field', message)
+        self._page_should_not_contain_element(locator, 'text field', message, loglevel)
 
-    def page_should_contain_button(self, locator, message=''):
+    def page_should_contain_button(self, locator, message='', loglevel='INFO'):
         """Verifies button identified by `locator` is found from current page.
 
         `message` can be used to override default error message.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
 
         Key attributes for buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
         try:
-            self._page_should_contain_element(locator, 'input', message)
+            self._page_should_contain_element(locator, 'input', message, loglevel)
         except AssertionError:
-            self._page_should_contain_element(locator, 'button', message)
+            self._page_should_contain_element(locator, 'button', message, loglevel)
 
-    def page_should_not_contain_button(self, locator, message=''):
+    def page_should_not_contain_button(self, locator, message='', loglevel='INFO'):
         """Verifies button identified by `locator` is not found from current page.
 
         `message` can be used to override default error message.
 
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
+
+        The `loglevel`argument was added in SeleniumLibrary 2.5.
+
         Key attributes for buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'button', message)
-        self._page_should_not_contain_element(locator, 'input', message)
+        self._page_should_not_contain_element(locator, 'button', message, loglevel)
+        self._page_should_not_contain_element(locator, 'input', message, loglevel)
 
-    def xpath_should_match_x_times(self, xpath, expected_xpath_count, message=''):
+    def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
 
         `message` can be used to override the default error message.
 
         Use `Get Matching Xpath Count` if you just want to get the count.
+
+        If this keyword fails, it automatically logs the page source
+        using the log level specified with the optional `loglevel` argument.
+        Giving `NONE` as level disables logging.
 
         This keyword was added in SeleniumLibrary 2.5.
         """
@@ -366,27 +466,27 @@ class Assertion(object):
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
                             %(xpath, expected_xpath_count, actual_xpath_count)
-            self.log_source()
+            self.log_source(loglevel)
             raise AssertionError(message)
         self._info("Current page contains %s elements matching '%s'." % (actual_xpath_count, xpath))
 
-    def _page_should_contain_element(self, locator, element_name, message):
+    def _page_should_contain_element(self, locator, element_name, message, loglevel):
         if not self._selenium.is_element_present(self._parse_locator(
                                                  locator, element_name)):
             if not message:
                 message = "Page should have contained %s '%s' but did not"\
                            % (element_name, locator)
-            self.log_source()
+            self.log_source(loglevel)
             raise AssertionError(message)
         self._info("Current page contains %s '%s'." % (element_name, locator))
 
-    def _page_should_not_contain_element(self, locator, element_name, message):
+    def _page_should_not_contain_element(self, locator, element_name, message, loglevel):
         if self._selenium.is_element_present(self._parse_locator(
                                              locator, element_name)):
             if not message:
                 message = "Page should not have contained %s '%s'"\
                            % (element_name, locator)
-            self.log_source()
+            self.log_source(loglevel)
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
@@ -422,4 +522,3 @@ class Assertion(object):
                           "but was '%s'" % (locator, expected, actual)
             raise AssertionError(message)
         self._info("Content of text field '%s' is '%s'." % (locator, expected))
-

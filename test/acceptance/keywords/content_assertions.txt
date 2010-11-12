@@ -36,7 +36,7 @@ Page Should Contain With Custom Log Level
   ...  LOG 1:2 DEBUG REGEXP: <head>.*</body>
   Page Should Contain  non existing text  DEBUG
 
-Page Should Contain With Disabling Log Message
+Page Should Contain With Disabling Source Logging
   [Documentation]  FAIL Page should have contained text 'non existing text' but did not
   ...  LOG 2:2 NONE
   Set Log Level  INFO
@@ -59,16 +59,40 @@ Page Should Not Contain With Custom Log Level
   ...  LOG 1 DEBUG REGEXP: <head>.*</body>
   Page Should Not Contain  needle  DEBUG
 
-Page Should Not Contain With Disabling Log Message
+Page Should Not Contain With Disabling Source Logging
   [Documentation]  FAIL Page should not have contained text 'needle'
   ...  LOG 2:2 NONE
   Set Log Level  INFO
   Page Should Not Contain  needle  level=NONE
   [Teardown]  Set Log Level  DEBUG
 
+Page Should Contain Element
+  [Documentation]  FAIL Page should have contained element 'non-existent' but did not
+  Page Should Contain Element  some_id
+  Page Should Contain Element  non-existent
+
 Page Should Contain Element With Custom Message
   [Documentation]  FAIL Custom error message
   Page Should Contain Element  invalid  Custom error message
+
+Page Should Contain Element With Disabling Source Logging
+  [Documentation]  FAIL Page should have contained element 'non-existent' but did not
+  ...  LOG 2:2 NONE
+  Set Log Level  INFO
+  Page Should Contain Element  non-existent  loglevel=NONE
+  [Teardown]  Set Log Level  DEBUG
+
+Page Should Not Contain Element
+  [Documentation]  FAIL Page should not have contained element 'some_id'
+  Page Should Not Contain Element  non-existent
+  Page Should Not Contain Element  some_id
+
+Page Should Not Contain Element With Disabling Source Logging
+  [Documentation]  FAIL Page should not have contained element 'some_id'
+  ...  LOG 2:2 NONE
+  Set Log Level  INFO
+  Page Should Not Contain Element  some_id  loglevel=NONE
+  [Teardown]  Set Log Level  DEBUG
 
 Element Should Contain
   [Documentation]  FAIL Element 'some_id' should have contained text 'non existing text' but its text was
@@ -121,16 +145,6 @@ Page Should Not Contain Radio Button
   [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
   Page Should Not Contain Radio Button  non-existing
   Page Should Not Contain Radio Button  sex
-
-Page Should Contain Element
-  [Documentation]  FAIL Page should have contained element 'non-existent' but did not
-  Page Should Contain Element  some_id
-  Page Should Contain Element  non-existent
-
-Page Should Not Contain Element
-  [Documentation]  FAIL Page should not have contained element 'some_id'
-  Page Should Not Contain Element  non-existent
-  Page Should Not Contain Element  some_id
 
 Page Should Contain Image
   [Documentation]  FAIL Page should have contained image 'non-existent' but did not
