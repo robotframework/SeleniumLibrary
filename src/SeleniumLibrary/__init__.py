@@ -45,6 +45,11 @@ BROWSER_ALIASES = {'ff': '*firefox',
                    'ie': '*iexplore',
                    'internetexplorer': '*iexplore'}
 SELENIUM_CONNECTION_TIMEOUT = 40
+_SELLIB_DIR = os.path.dirname(os.path.abspath(__file__))
+SELENIUM_SERVER_PATH = os.path.join(_SELLIB_DIR, 'lib', 'selenium-server.jar')
+FIREFOX_PROFILE_DIR = os.path.join(_SELLIB_DIR, 'firefoxprofile')
+FIREFOX_DEFAULT_PROFILE = 'DEFAULT'
+FIREFOX_TEMPLATE_ARG = '-firefoxProfileTemplate'
 
 
 def start_selenium_server(logfile, jarpath=None, *params):
@@ -65,11 +70,25 @@ def start_selenium_server(logfile, jarpath=None, *params):
     if not subprocess:
         raise RuntimeError('This function requires `subprocess` module which '
                            'is available on Python/Jython 2.5 or newer')
+    cmd = _server_startup_command(jarpath, *params)
+    subprocess.Popen(cmd, stdout=logfile, stderr=subprocess.STDOUT)
+    print 'Selenium Server started with command "%s" ' % ' '.join(cmd)
+
+def _server_startup_command(jarpath, *params):
     if not jarpath:
-        jarpath = os.path.join(os.path.dirname(__file__), 'lib',
-                               'selenium-server.jar')
-    subprocess.Popen(['java', '-jar', jarpath] + list(params),
-                     stdout=logfile, stderr=subprocess.STDOUT)
+        jarpath = SELENIUM_SERVER_PATH
+    return ['java', '-jar', jarpath] + _command_line_args_for_server(*params)
+
+def _command_line_args_for_server(*params):
+    params = list(params)
+    if not FIREFOX_TEMPLATE_ARG in params:
+        params.extend([FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
+    else:
+        index = params.index(FIREFOX_TEMPLATE_ARG)
+        value = params[index+1]
+        if value.upper() == FIREFOX_DEFAULT_PROFILE:
+            params = params[:index] + params[index+2:]
+    return params
 
 
 def shut_down_selenium_server(host='localhost', port=4444):
@@ -229,9 +248,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         logpath = os.path.join(self._get_log_dir(), 'selenium_server_log.txt')
         self._selenium_log = open(logpath, 'w')
         start_selenium_server(self._selenium_log, self._jar_path, *params)
-        self._html('Selenium Server started to port %s. '
-                   'Log is written to <a href="file://%s">%s</a>.'
-                   % (self._server_port, logpath.replace('\\', '/'), logpath))
+        self._html('Selenium server Log is written to <a href="file://%s">%s</a>.'
+                   % (logpath.replace('\\', '/'), logpath))
 
     def _get_log_dir(self):
         logfile = GLOBAL_VARIABLES['${LOG FILE}']
