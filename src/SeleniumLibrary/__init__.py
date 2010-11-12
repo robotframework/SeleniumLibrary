@@ -98,7 +98,7 @@ def shut_down_selenium_server(host='localhost', port=4444):
     Does not fail even if the Selenium Server is not running.
     """
     try:
-        selenium(host, port, '', '').do_command('shutDownSeleniumServer', [])
+        selenium(host, port, '', '').shut_down_selenium_server()
     except socket.error:
         pass
 
@@ -266,7 +266,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
 
     def stop_selenium_server(self):
         """Stops the selenium server (and closes all browsers)."""
-        shut_down_selenium_server(self._server_host, self._server_port)
+        self._selenium.shut_down_selenium_server()
         self._selenium = _NoBrowser()
         if self._selenium_log:
             self._selenium_log.close()
