@@ -46,7 +46,7 @@ class Assertion(object):
         Giving `NONE` as level disables logging.
 
         The `level`argument was added in SeleniumLibrary 2.3.1 and the special
-        `NONE` argument value in SeleniumLibrary 2.4.1.
+        `NONE` argument value in SeleniumLibrary 2.5.
         """
         if not self._page_contains(text):
             self.log_source(level)
@@ -61,7 +61,7 @@ class Assertion(object):
         using the log level specified with the optional `level` argument.
         Giving `NONE` as level disables logging.
 
-        The `level`argument was added in SeleniumLibrary 2.4.1.
+        The `level`argument was added in SeleniumLibrary 2.5.
         """
         if self._page_contains(text):
             self.log_source(level)
@@ -133,7 +133,7 @@ class Assertion(object):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
 
-        This keyword was added in SeleniumLibrary 2.4.1.
+        This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Verifying element '%s' exactly contains text '%s'."
                     % (locator, expected))
@@ -157,7 +157,7 @@ class Assertion(object):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
 
-        This keyword was added in SeleniumLibrary 2.4.1.
+        This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Verifying element '%s' is visible." % locator)
         visible = self._selenium.is_visible(locator)
@@ -177,7 +177,7 @@ class Assertion(object):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
 
-        This keyword was added in SeleniumLibrary 2.4.1.
+        This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Verifying element '%s' is not visible." % locator)
         visible = self._selenium.is_visible(locator)
@@ -358,7 +358,7 @@ class Assertion(object):
 
         Use `Get Matching Xpath Count` if you just want to get the count.
 
-        This keyword was added in SeleniumLibrary 2.4.1.
+        This keyword was added in SeleniumLibrary 2.5.
         """
         actual_xpath_count = self._selenium.get_xpath_count(xpath)
         expected_xpath_count = str(expected_xpath_count)

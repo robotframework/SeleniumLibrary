@@ -39,7 +39,7 @@ from xpath import LocatorParser
 from screenshot import Screenshot
 from table import Table
 
-__version__ = '2.4.1-under-development'
+__version__ = '2.5-under-development'
 BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
@@ -588,7 +588,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         The `level` argument defines the used log level. Valid log levels are
         `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
 
-        `NONE` argument value was added in SeleniumLibrary 2.4.1.
+        `NONE` argument value was added in SeleniumLibrary 2.5.
         """
         level = level.upper()
         if level not in LEVELS:
