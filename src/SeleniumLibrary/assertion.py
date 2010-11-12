@@ -104,8 +104,8 @@ class Assertion(object):
 
     def element_should_contain(self, locator, expected, message=''):
         """Verifies element identified by `locator` contains text `expected`.
-        
-        If you wish to assert an exact (not a substring) match on the text 
+
+        If you wish to assert an exact (not a substring) match on the text
         of the element, use `Element Text Should Be`.
 
         `message` can be used to override the default error message.
@@ -124,15 +124,15 @@ class Assertion(object):
 
     def element_text_should_be(self, locator, expected, message=''):
         """Verifies element identified by `locator` exactly contains text `expected`.
-        
-        In contrast to `Element Should Contain`, this keyword does not try 
+
+        In contrast to `Element Should Contain`, this keyword does not try
         a substring match but an exact match on the element identified by `locator`.
 
         `message` can be used to override the default error message.
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
         This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Verifying element '%s' exactly contains text '%s'."
@@ -146,7 +146,7 @@ class Assertion(object):
 
     def element_should_be_visible(self, locator, message=''):
         """Verifies that the element identified by `locator` is visible.
-        
+
         Herein, visible means that the element is logically visible, not optically
         visible in the current browser viewport. For example, an element that carries
         display:none is not logically visible, so using this keyword on that element
@@ -156,7 +156,7 @@ class Assertion(object):
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
         This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Verifying element '%s' is visible." % locator)
@@ -169,14 +169,14 @@ class Assertion(object):
 
     def element_should_not_be_visible(self, locator, message=''):
         """Verifies that the element identified by `locator` is NOT visible.
-        
+
         This is the opposite of `Element Should Be Visible`.
 
         `message` can be used to override the default error message.
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
         This keyword was added in SeleniumLibrary 2.4.1.
         """
         self._info("Verifying element '%s' is not visible." % locator)
@@ -350,12 +350,12 @@ class Assertion(object):
         """
         self._page_should_not_contain_element(locator, 'button', message)
         self._page_should_not_contain_element(locator, 'input', message)
-        
+
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message=''):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
-        
+
         `message` can be used to override the default error message.
-        
+
         Use `Get Matching Xpath Count` if you just want to get the count.
 
         This keyword was added in SeleniumLibrary 2.4.1.
