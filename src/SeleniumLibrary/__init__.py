@@ -461,6 +461,22 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
             method = lambda *args: self._selenium.do_command(method_name, args)
         return method(*args)
 
+    def wait_until_page_loaded(self, timeout=None):
+        """Waits for a page load to happen.
+
+        This keyword can be used after performing an action that causes a page
+        load to ensure that following keywords see the page fully loaded.
+
+        `timeout` is the time to wait for the page load to happen, after which
+        this keyword fails. If `timeout` is not provided, the value given in
+        `importing` or using keyword `Set Timeout` is used.
+
+        Many of the keywords that cause a page load take an optional argument
+        `dont_wait` that can be also used to wait/not wait page load. See
+        `introduction` for more details.
+        """
+        self._selenium.wait_for_page_to_load(timeout or self._timeout)
+
     def go_to(self, url):
         """Navigates the active browser instance to the provided URL."""
         self._info("Opening url '%s'" % url)
@@ -784,6 +800,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         # Cannot use unicode(exception) because it fails on Python 2.5 and earlier if the message contains Unicode chars
         # See for details: http://bugs.jython.org/issue1585
         return unicode(exception.args and exception.args[0] or '')
+
 
 class _NoBrowser(object):
     set_timeout = lambda self, timeout: None

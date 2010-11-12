@@ -89,3 +89,7 @@ Click Link With Text And Image
   Click Link  Text and image
   Location Should Be  ${ROOT}index.html
 
+Wait Until Page Loaded
+  Click Link  Relative  and don't wait
+  Wait Until Page Loaded
+  Location Should Be  ${ROOT}index.html
