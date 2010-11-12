@@ -38,8 +38,9 @@ from element import Element
 from xpath import LocatorParser
 from screenshot import Screenshot
 from table import Table
+from version import VERSION
 
-__version__ = '2.5-under-development'
+__version__ = VERSION
 BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
