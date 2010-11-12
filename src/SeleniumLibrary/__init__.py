@@ -38,6 +38,7 @@ from table import Table
 from version import VERSION
 
 __version__ = VERSION
+# TODO: Need more aliases? Safari, Opera, Chrome?
 BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
