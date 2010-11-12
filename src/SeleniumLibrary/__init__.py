@@ -271,7 +271,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
 
     def stop_selenium_server(self):
         """Stops the selenium server (and closes all browsers)."""
-        self._selenium.shut_down_selenium_server()
+        shut_down_selenium_server(self._server_host, self._server_port)
         self._selenium = _NoBrowser()
         if self._selenium_log:
             self._selenium_log.close()
