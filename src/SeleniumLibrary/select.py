@@ -50,6 +50,10 @@ class Select(object):
 
         Key attributes for list are `id` and `name`. See `introduction` for
         details about locating elements.
+
+        This keyword does not support waiting for possible page load
+        automatically. If that is needed, keyword `Wait Until Page Loaded`
+        can be used after this keyword.
         """
         selection = values and "values '%s'" % ', '.join(values) or 'all values'
         self._info("Selecting %s from list '%s'." % (selection, locator))
@@ -93,6 +97,10 @@ class Select(object):
 
         Key attributes for list are `id` and `name`. See `introduction` for
         details about locating elements.
+
+        This keyword does not support waiting for possible page load
+        automatically. If that is needed, keyword `Wait Until Page Loaded`
+        can be used after this keyword.
         """
         selection = values and "values '%s'" % ', '.join(values) or 'all values'
         self._info("Unselecting %s from list '%s'." % (selection, locator))
