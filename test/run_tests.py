@@ -88,10 +88,11 @@ def process_output():
 
 if __name__ ==  '__main__':
     if not len(sys.argv) > 2:
-        print 'usage: python run_acceptance_tests python|jython browser [options]'
-        print 'where `browser` is any browser or alias accepted by SeleniumLibrary.'
+        print 'Usage:  python run_tests.py python|jython browser [options]'
+        print
+        print 'See README.txt for details.'
         sys.exit(1)
-    interpreter = sys.argv[1] == 'jython' and 'jython' or 'python'
+    interpreter = ('jython' in sys.argv[1]) and 'jython' or 'python'
     browser = sys.argv[2].lower()
     args = sys.argv[3:]
     if not args:
