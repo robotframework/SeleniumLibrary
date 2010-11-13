@@ -495,7 +495,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         of `dont_wait` argument."""
         self._selenium.go_back()
         if not dont_wait:
-            self._wait_for_page_to_load()
+            self.wait_until_page_loaded()
 
     def maximize_browser_window(self):
         """Maximizes current browser window."""
@@ -658,7 +658,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         """
         self._selenium.key_press(locator, key)
         if wait:
-            self._wait_for_page_to_load()
+            self.wait_until_page_loaded()
 
     def press_key_native(self, keycode, wait=''):
         """Simulates user pressing key by sending an operating system keystroke.
@@ -687,7 +687,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         """
         self._selenium.key_press_native(keycode)
         if wait:
-            self._wait_for_page_to_load()
+            self.wait_until_page_loaded()
 
     def get_cookies(self):
         """Returns all cookies of the current page."""
@@ -789,9 +789,6 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
     def _html(self, message):
         self._log(message, 'HTML')
 
-    def _wait_for_page_to_load(self, timeout=None):
-        self._selenium.wait_for_page_to_load(timeout or self._timeout)
-
     def _parse_locator(self, locator, tag=None):
         parsed_locator = self._locator_parser.locator_for(locator, tag)
         self._debug("Parsed locator '%s' to search expression '%s'"
@@ -799,7 +796,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         return parsed_locator
 
     def _get_error_message(self, exception):
-        # Cannot use unicode(exception) because it fails on Python 2.5 and 
+        # Cannot use unicode(exception) because it fails on Python 2.5 and
         # earlier if the message contains non-ASCII chars.
         # See for details: http://bugs.jython.org/issue1585
         return unicode(exception.args and exception.args[0] or '')

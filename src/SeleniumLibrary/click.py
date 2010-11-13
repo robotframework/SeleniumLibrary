@@ -17,7 +17,7 @@ class Click(object):
     def _click(self, locator, dont_wait=''):
         self._selenium.click(locator)
         if not dont_wait:
-            self._wait_for_page_to_load()
+            self.wait_until_page_loaded()
     
     def click_element(self, locator, dont_wait=''):
         """Click element identified by `locator`.
@@ -94,5 +94,5 @@ class Click(object):
             locator = self._parse_locator(locator)
         self._selenium.submit(locator)
         if not dont_wait:
-            self._wait_for_page_to_load()
+            self.wait_until_page_loaded()
 

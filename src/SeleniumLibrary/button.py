@@ -98,7 +98,7 @@ class Button(object):
         if not self._selenium.is_checked(xpath):
             self._selenium.click(xpath)
             if wait:
-                self._wait_for_page_to_load()
+                self.wait_until_page_loaded()
      
     def radio_button_should_be_set_to(self, group_name, value):
         """Verifies radio button group identified by `group_name` has its selection set to `value`."""

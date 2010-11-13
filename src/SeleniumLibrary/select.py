@@ -129,7 +129,7 @@ class Select(object):
             if item not in selected_items:
                 self._add_to_selection(locator, item)
                 if wait:
-                    self._wait_for_page_to_load()
+                    self.wait_until_page_loaded()
 
     def _add_to_selection(self, locator, item):
         try:
