@@ -1387,12 +1387,55 @@ Key attributes for frames are <span class="name">id</span> and <span class="name
 <br />
 If more than one value is given for a single-selection list, the last value will be selected. If the target list is a multi-selection list, and <span class="name">*values</span> is an empty list, all values of the list will be selected.<br />
 <br />
-Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword does not support waiting for possible page load automatically. If that is needed, keyword <a href="#Wait Until Page Loaded" class="name">Wait Until Page Loaded</a> can be used after this keyword.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select Radio Button"></a>Select Radio Button</td>
   <td class="arg">group_name, value, wait=</td>
   <td class="doc">Sets selection of radio button group identified by <span class="name">group_name</span> to <span class="name">value</span>.<br />
+<br />
+The radio button to be selected is located by two arguments:<br />
+<br />
+- <span class="name">group_name</span> is used as the name of the radio input<br />
+- <span class="name">value</span> is used for the value attribute or for the id attribute<br />
+<br />
+The XPath used to locate the correct radio button then looks like this:<br />
+<br />
+//input[@type='radio' and @name='group_name' and (@value='value' or @id='value')]<br />
+<br />
+So, if you have:<br />
+<br />
+&lt;input type="radio" name="size" value="XL"&gt;XL&lt;/input&gt;<br />
+<br />
+you can select this radio button like this:<br />
+<br />
+Example<br />
+<table border="1" class="doc">
+<tr>
+<td>Select Radio Button</td>
+<td>size</td>
+<td>XL</td>
+<td># xpath: //input[@type='radio' and @name='size' and (@value='XL' or @id='XL')]</td>
+</tr>
+</table>
+<br />
+And if you have:<br />
+<br />
+&lt;input type="radio" name="size" value="XL" id="sizeXL"&gt;XL&lt;/input&gt;<br />
+<br />
+you can select this radio button like this:<br />
+<br />
+Example<br />
+<table border="1" class="doc">
+<tr>
+<td>Select Radio Button</td>
+<td>size</td>
+<td>sizeXL</td>
+<td># xpath: //input[@type='radio' and @name='size' and (@value='sizeXL' or @id='sizeXL')]</td>
+</tr>
+</table>
 <br />
 See <a href="#introduction" class="name">introduction</a> for details about <span class="name">wait</span> argument.</td>
 </tr>
@@ -1700,7 +1743,7 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
   <td class="arg">table_locator, expected_content, loglevel=INFO</td>
   <td class="doc">Verifies that the table footer contains the <span class="name">expected_content</span>.<br />
 <br />
-With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
+With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element. &nbsp;To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
 <br />
 See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
@@ -1775,7 +1818,9 @@ Does nothing if the checkbox is not checked. Key attributes for checkboxes are <
 <br />
 As a special case, giving empty list as <span class="name">*selection</span> will remove all selections.<br />
 <br />
-Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword does not support waiting for possible page load automatically. If that is needed, keyword <a href="#Wait Until Page Loaded" class="name">Wait Until Page Loaded</a> can be used after this keyword.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Wait For Condition"></a>Wait For Condition</td>
@@ -1823,7 +1868,9 @@ This keyword can be used after performing an action that causes a page load to e
 <br />
 <span class="name">timeout</span> is the time to wait for the page load to happen, after which this keyword fails. If <span class="name">timeout</span> is not provided, the value given in <a href="#importing" class="name">importing</a> or using keyword <span class="name">Set Timeout</span> is used.<br />
 <br />
-Many of the keywords that cause a page load take an optional argument <span class="name">dont_wait</span> that can be also used to wait/not wait page load. See <a href="#introduction" class="name">introduction</a> for more details.</td>
+Many of the keywords that cause a page load take an optional argument <span class="name">dont_wait</span> that can be also used to wait/not wait page load. See <a href="#introduction" class="name">introduction</a> for more details.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Xpath Should Match X Times"></a>Xpath Should Match X Times</td>
@@ -1838,7 +1885,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 <p id="footer">
 Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-11-12 17:48:05.
+on 2010-11-13 13:20:10.
 </p>
 </body>
 </html>
