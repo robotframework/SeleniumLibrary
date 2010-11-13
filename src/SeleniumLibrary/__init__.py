@@ -788,8 +788,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         self._log(message, 'HTML')
 
     def _wait_for_page_to_load(self, timeout=None):
-        timeout = timeout is None and self._timeout or timeout
-        self._selenium.wait_for_page_to_load(timeout)
+        self._selenium.wait_for_page_to_load(timeout or self._timeout)
 
     def _parse_locator(self, locator, tag=None):
         parsed_locator = self._locator_parser.locator_for(locator, tag)
@@ -802,6 +801,9 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         # earlier if the message contains non-ASCII chars.
         # See for details: http://bugs.jython.org/issue1585
         return unicode(exception.args and exception.args[0] or '')
+
+    def _error_contains(self, exception, message):
+        return message in self._get_error_message(exception)
 
 
 class _NoBrowser(object):

@@ -51,9 +51,9 @@ class JavaScript(object):
         try:
             return self._selenium.get_alert()
         except Exception, err:
-            if 'alerts' in self._get_error_message(err):
-                raise AssertionError('There were no alerts')
-            raise err
+            if self._error_contains(err, 'alerts'):
+                raise RuntimeError('There were no alerts')
+            raise
 
     def alert_should_be_present(self, text=''):
         """Verifies an alert is present and dismisses it.
@@ -67,7 +67,7 @@ class JavaScript(object):
         keyword or by `Get Alert Message`.
         """
         alert_text = self.get_alert_message()
-        if text and not alert_text == text:
+        if text and alert_text != text:
             raise AssertionError("Alert text should have been '%s' but was '%s'"
                                   % (text, alert_text))
 

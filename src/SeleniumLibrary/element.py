@@ -53,13 +53,14 @@ class Element(object):
                                   locator)
 
     def _get_position(self, getter, locator):
-        pos = None
+        not_found = "Could not determine position for '%s'" % locator
         try:
             pos = getter(self._parse_locator(locator))
         except Exception, err:
-            if 'not found' not in self._get_error_message(err):
+            if not self._error_contains(err, 'not found'):
                 raise
+            raise RuntimeError(not_found)
         if not pos:
-            raise AssertionError("Could not determine position for '%s'" % locator)
+            raise RuntimeError(not_found)
         return int(pos)
 
