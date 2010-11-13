@@ -478,6 +478,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         Many of the keywords that cause a page load take an optional argument
         `dont_wait` that can be also used to wait/not wait page load. See
         `introduction` for more details.
+
+        This keyword was added in SeleniumLibrary 2.5.
         """
         self._selenium.wait_for_page_to_load(timeout or self._timeout)
 
