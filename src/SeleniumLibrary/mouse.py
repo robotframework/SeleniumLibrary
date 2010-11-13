@@ -60,15 +60,3 @@ class Mouse(object):
         """
         self._info("Simulating Mouse Up on element '%s'" % locator)
         self._selenium.mouse_up(locator)
-
-    def simulate_mouse_move(self, locator):
-        """Simulates a user pressing the mouse button (without releasing it yet) on
-        the element specified by `locator`.
-        
-        Key attributes for arbitrary elements are `id` and `name`. See
-        `introduction` for details about locating elements.
-        
-        This keyword was added in SeleniumLibrary 2.5.
-        """
-        self._info("Simulating Mouse Move on element '%s'" % locator)
-        self._selenium.mouse_move(locator)

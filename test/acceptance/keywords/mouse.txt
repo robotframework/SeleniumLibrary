@@ -36,8 +36,3 @@ Simulate Mouse Up
   Textfield Value Should Be  secondary_element  ${EMPTY}
   
   Simulate Mouse Up  not_there
-
-Simulate Mouse Move
-  [Documentation]  FAIL ERROR: Element not_there not found
-  Simulate Mouse Move  test_element
-  Simulate Mouse Move  not_there
