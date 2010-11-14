@@ -14,24 +14,25 @@
 
 import inspect
 
+from decorator import decorator
+
 
 class autoscreenshot(type):
 
     def __new__(cls, clsname, bases, dct):
         for name, method in dct.items():
             if _is_keyword(name, method):
-                dct[name] = _wrap_with_auto_screenshot(method)
+                dct[name] = decorator(_auto_screenshot_wrapper, method)
         return type.__new__(cls, clsname, bases, dct)
 
 
 def _is_keyword(name, method):
-        return (not name.startswith('_')) and inspect.isroutine(method)
+    return (not name.startswith('_')) and inspect.isroutine(method)
 
-def _wrap_with_auto_screenshot(method):
-    def auto_screenshot_wrapper(self, *args):
-        try:
-            return method(self, *args)
-        except Exception:
-            self.capture_screenshot()
-            raise
-    return auto_screenshot_wrapper
+def _auto_screenshot_wrapper(method, *args, **kwargs):
+    try:
+        return method(*args, **kwargs)
+    except Exception:
+        args[0].capture_screenshot()
+        raise
+
