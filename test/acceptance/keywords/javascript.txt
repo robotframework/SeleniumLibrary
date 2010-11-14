@@ -71,10 +71,15 @@ Cancel Action
   Should Be Equal  ${msg}  Really change the title?
 
 Execute Javascript
+  [Documentation]  LOG 1 Executing JavaScript:\n
+  ...  window.add_content('button_target', 'Inserted directly')
   Execute Javascript  window.add_content('button_target', 'Inserted directly')
   Page Should Contain  Inserted directly
 
 Execute Javascript from File
+  [Documentation]  LOG 1:1 REGEXP: Reading JavaScript from file .*
+  ...  LOG 1:2 Executing JavaScript:\n
+  ...  window.add_content('button_target', 'Inserted via file')
   Execute Javascript  ${CURDIR}/executed_by_execute_javascript.js
   Page Should Contain  Inserted via file
 

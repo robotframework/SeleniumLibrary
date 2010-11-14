@@ -44,13 +44,15 @@ class JavaScript(object):
         | Execute JavaScript | ${CURDIR}/js_to_execute.txt |
         """
         js = self._get_javascript_to_execute(''.join(code))
-        self._info("Executing JavaScript:\n\n%s" % js)
+        self._info("Executing JavaScript:\n%s" % js)
         return self._selenium.get_eval(js)
 
     def _get_javascript_to_execute(self, code):
         codepath = code.replace('/', os.sep)
         if not (os.path.isabs(codepath) and os.path.isfile(codepath)):
             return code
+        self._html('Reading JavaScript from file <a href="file://%s">%s</a>.'
+                   % (codepath.replace(os.sep, '/'), codepath))
         codefile = open(codepath)
         try:
             return codefile.read().strip()
