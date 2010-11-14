@@ -1,10 +1,10 @@
-*Setting*
+*** Setting ***
 Resource  ../resource.txt
 Test Setup  Go To  ${ROOT}javascript/dynamic_content.html
 Default Tags  javascript
 
 
-*Test Cases*
+*** Test Cases ***
 Clicking Elements Should Activate Javascript
   Title Should Be  Original
   Click Element  link=change title  And Don't Wait
@@ -70,12 +70,14 @@ Cancel Action
   Title Should Be  Original
   Should Be Equal  ${msg}  Really change the title?
 
-Javascript Can Be Called Directly
+Execute Javascript
   Execute Javascript  window.add_content('button_target', 'Inserted directly')
   Page Should Contain  Inserted directly
+
+Execute Javascript from File
+  Execute Javascript  ${CURDIR}/executed_by_execute_javascript.js
+  Page Should Contain  Inserted via file
 
 Open Context Menu
   Go To  ${ROOT}/javascript/context_menu.html
   Open Context Menu  myDiv
-
-

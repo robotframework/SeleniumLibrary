@@ -13,6 +13,7 @@
 #  limitations under the License.
 
 import time
+import os.path
 
 from robot import utils
 
@@ -22,23 +23,39 @@ class JavaScript(object):
     def execute_javascript(self, *code):
         """Executes the given JavaScript code.
 
-        `*code` may contain multiple statements and the return value of last
+        `code` may contain multiple statements and the return value of last
         statement is returned by this keyword.
 
-        `*code` may be divided in multiple cells in the test data. In that
-        case, the parts are catenated as is with no white space added.
+        `code` may be divided into multiple cells in the test data. In that
+        case, the parts are catenated together without adding spaces.
+
+        If `code` is an absolute path to an existing file, the JavaScript
+        to execute will be read from that file. Forward slashes work as
+        a path separator on all operating systems. The functionality to
+        read the code from a file was added in SeleniumLibrary 2.5.
 
         Note that, by default, the code will be executed in the context of the
-        Selenium object itself, so 'this' will refer to the Selenium object.
-        Use 'window' to refer to the window of your application, e.g.
-        window.document.getElementById('foo')
+        Selenium object itself, so `this` will refer to the Selenium object.
+        Use `window` to refer to the window of your application, e.g.
+        `window.document.getElementById('foo')`.
 
         Example:
         | Execute JavaScript | window.my_js_function('arg1', 'arg2') |
+        | Execute JavaScript | ${CURDIR}/js_to_execute.txt |
         """
-        js = ''.join([part.strip() for part in code])
-        self._info("Executing JavaScript:\n '%s'" % js)
+        js = self._get_javascript_to_execute(''.join(code))
+        self._info("Executing JavaScript:\n\n%s" % js)
         return self._selenium.get_eval(js)
+
+    def _get_javascript_to_execute(self, code):
+        codepath = code.replace('/', os.sep)
+        if not (os.path.isabs(codepath) and os.path.isfile(codepath)):
+            return code
+        codefile = open(codepath)
+        try:
+            return codefile.read().strip()
+        finally:
+            codefile.close()
 
     def get_alert_message(self):
         """Returns the text of current JavaScript alert.
