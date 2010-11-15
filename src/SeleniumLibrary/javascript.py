@@ -41,7 +41,7 @@ class JavaScript(object):
 
         Example:
         | Execute JavaScript | window.my_js_function('arg1', 'arg2') |
-        | Execute JavaScript | ${CURDIR}/js_to_execute.txt |
+        | Execute JavaScript | ${CURDIR}/js_to_execute.js |
         """
         js = self._get_javascript_to_execute(''.join(code))
         self._info("Executing JavaScript:\n%s" % js)
