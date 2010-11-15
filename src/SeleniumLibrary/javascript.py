@@ -127,22 +127,6 @@ class JavaScript(RunOnFailure):
         """
         self._selenium.fire_event(self._parse_locator(locator), event)
 
-    def mouse_down_on_image(self, locator):
-        """Simulates a mouse down event on an image.
-
-        Key attributes for images are `id`, `src` and `alt`. See
-        `introduction` for details about locating elements.
-        """
-        self._selenium.mouse_down(self._parse_locator(locator, 'image'))
-
-    def mouse_down_on_link(self, locator):
-        """Simulates a mouse down event on a link.
-
-        Key attributes for links are `id`, `name`, `href` and link text. See
-        `introduction` for details about locating elements.
-        """
-        self._selenium.mouse_down(self._parse_locator(locator, 'link'))
-
     def wait_for_condition(self, condition, timeout='5 seconds', error=None):
         """Waits either for given condition to be true or until timeout expires.
 

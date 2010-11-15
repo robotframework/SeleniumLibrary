@@ -5,34 +5,30 @@ Default Tags  mouse
 
 
 *Test Cases*
-Simulate Mouse Over
+Mouse Over
   [Documentation]  FAIL ERROR: Element not_there not found
-  Simulate Mouse Over  test_element
+  Mouse Over  test_element
   Textfield Value Should Be  test_element  mouseover test_element
   Textfield Value Should Be  secondary_element  ${EMPTY}
-  
-  Simulate Mouse Over  not_there
+  Mouse Over  not_there
 
-Simulate Mouse Out
+Mouse Out
   [Documentation]  FAIL ERROR: Element not_there not found
-  Simulate Mouse Out  test_element
+  Mouse Out  test_element
   Textfield Value Should Be  test_element  mouseout test_element
   Textfield Value Should Be  secondary_element  ${EMPTY}
+  Mouse Out  not_there
   
-  Simulate Mouse Out  not_there
-  
-Simulate Mouse Down
+Mouse Down
   [Documentation]  FAIL ERROR: Element not_there not found
-  Simulate Mouse Down  test_element
+  Mouse Down  test_element
   Textfield Value Should Be  test_element  mousedown test_element
   Textfield Value Should Be  secondary_element  ${EMPTY}
+  Mouse Down  not_there
   
-  Simulate Mouse Down  not_there
-  
-Simulate Mouse Up
+Mouse Up
   [Documentation]  FAIL ERROR: Element not_there not found
-  Simulate Mouse Up  test_element
+  Mouse Up  test_element
   Textfield Value Should Be  test_element  mouseup test_element
   Textfield Value Should Be  secondary_element  ${EMPTY}
-  
-  Simulate Mouse Up  not_there
+  Mouse Up  not_there

@@ -17,49 +17,67 @@ from runonfailure import RunOnFailure
 
 class Mouse(RunOnFailure):
 
-    def simulate_mouse_over(self, locator):
-        """Simulates a user hovering a mouse over the element specified by `locator`.
-        
+    def mouse_over(self, locator):
+        """Simulates hovering mouse over the element specified by `locator`.
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
         This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Simulating Mouse Over on element '%s'" % locator)
         self._selenium.mouse_over(locator);
 
-    def simulate_mouse_out(self, locator):
-        """Simulates a user moving the mouse pointer away from the 
-        element specified by `locator`.
-        
+    def mouse_out(self, locator):
+        """Simulates moving mouse away from the element specified by `locator`.
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
         This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Simulating Mouse Out on element '%s'" % locator)
         self._selenium.mouse_out(locator)
-    
-    def simulate_mouse_down(self, locator):
-        """Simulates a user pressing the left mouse button (without releasing it yet) on
-        the element specified by `locator`.
-        
+
+    def mouse_down(self, locator):
+        """Simulates pressing the left mouse button on the element specified by `locator`.
+
+        The element is pressed without releasing the mouse button.
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
+        See also the more specific keywords `Mouse Down On Image` and
+        `Mouse Down On Link`.
+
         This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Simulating Mouse Down on element '%s'" % locator)
         self._selenium.mouse_down(locator)
-    
-    def simulate_mouse_up(self, locator):
-        """Simulates the event that occurs when the user releases the mouse button (i.e., stops
-        holding the button down) on the element specified by `locator`.
-        
+
+    def mouse_up(self, locator):
+        """Simulates releasing the left mouse button on the element specified by `locator`.
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
-        
+
         This keyword was added in SeleniumLibrary 2.5.
         """
         self._info("Simulating Mouse Up on element '%s'" % locator)
         self._selenium.mouse_up(locator)
+
+    def mouse_down_on_image(self, locator):
+        """Simulates a mouse down event on an image.
+
+        Key attributes for images are `id`, `src` and `alt`. See
+        `introduction` for details about locating elements.
+        """
+        self._selenium.mouse_down(self._parse_locator(locator, 'image'))
+
+    def mouse_down_on_link(self, locator):
+        """Simulates a mouse down event on a link.
+
+        Key attributes for links are `id`, `name`, `href` and link text. See
+        `introduction` for details about locating elements.
+        """
+        self._selenium.mouse_down(self._parse_locator(locator, 'link'))
