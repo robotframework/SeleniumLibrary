@@ -17,11 +17,20 @@ from runonfailure import RunOnFailure
 
 class Select(RunOnFailure):
 
+    def get_list_items(self, locator):
+        """Returns the values in the list identified by `locator`.
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
+        details about locating elements.
+        """
+        return self._selenium.get_select_options(locator)
+
     def list_selection_should_be(self, locator, *values):
         """Verifies the selection of list identified by `locator` is exactly `*values`.
 
         If you want to test that no option is selected, simply give no `values`.
-        Key attributes for list are `id` and `name`. See `introduction` for
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
         opts = values and 'options [ %s ]' % ' | '.join(values) or 'no options'
@@ -51,7 +60,7 @@ class Select(RunOnFailure):
         value will be selected. If the target list is a multi-selection list,
         and `*values` is an empty list, all values of the list will be selected.
 
-        Key attributes for list are `id` and `name`. See `introduction` for
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
 
         This keyword does not support waiting for possible page load
@@ -98,7 +107,7 @@ class Select(RunOnFailure):
         As a special case, giving empty list as `*selection` will remove all
         selections.
 
-        Key attributes for list are `id` and `name`. See `introduction` for
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
 
         This keyword does not support waiting for possible page load
@@ -120,7 +129,7 @@ class Select(RunOnFailure):
     def select_all_from_list(self, locator, wait=''):
         """Selects all values from multi-select list identified by `id`.
 
-        Key attributes for list are `id` and `name`. See `introduction` for
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements and about `wait` argument.
         """
         self._info("Selecting all values from list '%s'." % locator)
@@ -146,7 +155,7 @@ class Select(RunOnFailure):
     def list_should_have_no_selections(self, locator):
         """Verifies list identified by `locator` has no selections.
 
-        Key attributes for list are `id` and `name`. See `introduction` for
+        Key attributes for lists are `id` and `name`. See `introduction` for
         more details on key attributes and locating elements.
         """
         self._info("Verifying list '%s' has no selection." % locator)

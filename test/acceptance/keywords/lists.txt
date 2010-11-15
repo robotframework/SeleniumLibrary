@@ -5,6 +5,16 @@ Default Tags  list
 
 
 *Test Cases*
+Get List Items From Single-Select List
+  ${items}=  Get List Items  preferred_channel
+  ${expected}=  Create List  Email  Telephone  Direct mail
+  Should Be Equal  ${items}  ${expected}
+
+Get List Items From Multi-Select List
+  ${items}=  Get List Items  interests
+  ${expected}=  Create List  Males  Females  Others
+  Should Be Equal  ${items}  ${expected}
+
 List Selection Should Be
   [Documentation]  FAIL List 'possible_channels' should have had selection
   ...  [ email | Telephone | Direct mail ] but it was [ Email | Telephone ]
