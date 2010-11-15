@@ -35,12 +35,38 @@ def _is_keyword(name, method):
 def _run_on_failure_wrapper(method, *args, **kwargs):
     try:
         return method(*args, **kwargs)
-    except Exception:
+    except Exception, err:
         self = args[0]
-        self._run_on_failure()
+        if not hasattr(err, 'ran_on_failure'):
+            self._run_on_failure()
+            err.ran_on_failure = True
         raise
 
 
 class RunOnFailure(object):
     if decorator:
         __metaclass__ = runonfailuretype
+
+    _run_on_failure = _no_run_on_failure = lambda self: None
+
+    def run_on_failure(self, keyword_name):
+        old = self._get_run_on_failure_name()
+        self._set_run_on_failure(keyword_name)
+        self._log_run_on_failure()
+        return old
+
+    def _set_run_on_failure(self, keyword_name):
+        name = keyword_name.replace(' ', '_').lower()
+        self._run_on_failure = getattr(self, name, self._no_run_on_failure)
+
+    def _get_run_on_failure_name(self):
+        if not self._run_on_failure_is_set():
+            return 'No keyword'
+        return self._run_on_failure.__name__.replace('_', ' ').title()
+
+    def _run_on_failure_is_set(self):
+        return self._run_on_failure != self._no_run_on_failure
+
+    def _log_run_on_failure(self):
+        self._info('%s will be run on failure.' % self._get_run_on_failure_name())
+
