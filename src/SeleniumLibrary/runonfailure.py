@@ -37,9 +37,9 @@ def _run_on_failure_wrapper(method, *args, **kwargs):
         return method(*args, **kwargs)
     except Exception, err:
         self = args[0]
-        if self._selenium and not hasattr(err, 'ran_on_failure'):
+        if self._selenium and not hasattr(err, '_selib_ran_on_failure'):
             self._run_on_failure()
-            err.ran_on_failure = True
+            err._selib_ran_on_failure = True
         raise
 
 
@@ -47,7 +47,7 @@ class RunOnFailure(object):
     if decorator:
         __metaclass__ = runonfailuretype
 
-    _run_on_failure = _no_run_on_failure = lambda self: None
+    _run_on_failure = _do_nothing_on_failure = lambda self: None
 
     def run_on_failure(self, keyword_name):
         """Sets the keyword to be run when a SeleniumLibrary keyword fails.
@@ -72,7 +72,7 @@ class RunOnFailure(object):
 
     def _set_run_on_failure(self, keyword_name):
         name = keyword_name.replace(' ', '_').lower()
-        self._run_on_failure = getattr(self, name, self._no_run_on_failure)
+        self._run_on_failure = getattr(self, name, self._do_nothing_on_failure)
 
     def _get_run_on_failure_name(self):
         if not self._run_on_failure_is_set():
@@ -80,8 +80,9 @@ class RunOnFailure(object):
         return self._run_on_failure.__name__.replace('_', ' ').title()
 
     def _run_on_failure_is_set(self):
-        return self._run_on_failure != self._no_run_on_failure
+        return self._run_on_failure != self._do_nothing_on_failure
 
     def _log_run_on_failure(self):
-        self._info('%s will be run on failure.' % self._get_run_on_failure_name())
+        self._info('%s will be run on failure.'
+                   % self._get_run_on_failure_name())
 
