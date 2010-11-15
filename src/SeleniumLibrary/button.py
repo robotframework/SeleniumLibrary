@@ -16,11 +16,11 @@ from runonfailure import RunOnFailure
 
 
 class Button(RunOnFailure):
-    
+
     def select_checkbox(self, locator):
-        """Selects checkbox identified by `locator`. 
-        
-        Does nothing if checkbox is already selected. Key attributes for 
+        """Selects checkbox identified by `locator`.
+
+        Does nothing if checkbox is already selected. Key attributes for
         checkboxes are `id` and `name`. See `introduction` for details about
         locating elements.
         """
@@ -28,11 +28,11 @@ class Button(RunOnFailure):
         locator = self._parse_locator(locator)
         if not self._selenium.is_checked(locator):
             self._selenium.check(locator)
-            
+
     def unselect_checkbox(self, locator):
-        """Removes selection of checkbox identified by `locator`. 
-         
-        Does nothing if the checkbox is not checked. Key attributes for 
+        """Removes selection of checkbox identified by `locator`.
+
+        Does nothing if the checkbox is not checked. Key attributes for
         checkboxes are `id` and `name`. See `introduction` for details about
         locating elements.
         """
@@ -40,21 +40,21 @@ class Button(RunOnFailure):
         locator = self._parse_locator(locator)
         if self._selenium.is_checked(locator):
             self._selenium.uncheck(locator)
-             
+
     def checkbox_should_be_selected(self, locator):
         """Verifies checkbox identified by `locator` is selected/checked.
-        
+
         Key attributes for checkboxes are `id` and `name`. See `introduction`
         for details about locating elements.
         """
         self._info("Verifying checkbox '%s' is selected." % locator)
         if not self._selenium.is_checked(self._parse_locator(locator)):
-            raise AssertionError("Checkbox '%s' should have been selected but "
-                                 "was not" % locator)
-        
+            raise AssertionError("Checkbox '%s' should have been selected "
+                                 "but was not" % locator)
+
     def checkbox_should_not_be_selected(self, locator):
         """Verifies checkbox identified by `locator` is not selected/checked.
-        
+
         Key attributes for checkboxes are `id` and `name`. See `introduction`
         for details about locating elements.
         """
@@ -62,37 +62,21 @@ class Button(RunOnFailure):
         if self._selenium.is_checked(self._parse_locator(locator)):
             raise AssertionError("Checkbox '%s' should not have been selected"
                                   % locator)
-        
+
     def select_radio_button(self, group_name, value, wait=''):
         """Sets selection of radio button group identified by `group_name` to `value`.
-        
+
         The radio button to be selected is located by two arguments:
-        
         - `group_name` is used as the name of the radio input
         - `value` is used for the value attribute or for the id attribute
-        
+
         The XPath used to locate the correct radio button then looks like this:
-        
         //input[@type='radio' and @name='group_name' and (@value='value' or @id='value')]
-        
-        So, if you have:
-        
-        <input type="radio" name="size" value="XL">XL</input>
-        
-        you can select this radio button like this:
-        
-        Example
-        | Select Radio Button | size | XL | # xpath: //input[@type='radio' and @name='size' and (@value='XL' or @id='XL')] |
-        
-        And if you have:
-        
-        <input type="radio" name="size" value="XL" id="sizeXL">XL</input>
-        
-        you can select this radio button like this:
-        
-        Example
-        | Select Radio Button | size | sizeXL | # xpath: //input[@type='radio' and @name='size' and (@value='sizeXL' or @id='sizeXL')] |
-        
+
+        Examples:
+        | Select Radio Button | size | XL | # Matches HTML like <input type="radio" name="size" value="XL">XL</input>
+        | Select Radio Button | size | sizeXL | # Matches HTML like <input type="radio" name="size" value="XL" id="sizeXL">XL</input>
+
         See `introduction` for details about `wait` argument.
         """
         self._info("Selecting '%s' from radio button '%s'." % (value, group_name))
@@ -102,7 +86,7 @@ class Button(RunOnFailure):
             self._selenium.click(xpath)
             if wait:
                 self.wait_until_page_loaded()
-     
+
     def radio_button_should_be_set_to(self, group_name, value):
         """Verifies radio button group identified by `group_name` has its selection set to `value`."""
         self._info("Verifying radio button '%s' has selection '%s'." \
@@ -112,24 +96,24 @@ class Button(RunOnFailure):
         if not self._selenium.is_checked(xpath):
             actual_value = self._get_value_of_selected_radio_button(group_name)
             raise AssertionError("Selection of radio button '%s' should have "
-                                 "been '%s' but was '%s'"  
+                                 "been '%s' but was '%s'"
                                   % (group_name, value, actual_value))
-        
+
     def radio_button_should_not_be_selected(self, group_name):
         """Verifies radio button group identified by `group_name` has no selection."""
         self._info("Verifying radio button '%s' has no selection." % group_name)
         value = self._get_value_of_selected_radio_button(group_name)
         if value:
             raise AssertionError("Radio button group '%s' should not have had "
-                                 "selection, but '%s' was selected" 
+                                 "selection, but '%s' was selected"
                                   % (group_name, value))
 
     def _get_number_of_radio_buttons_in_group(self, group_name):
         js = "window.document.getElementsByName('%s').length" % group_name
         return int(self._selenium.get_eval(js))
-    
+
     def _get_value_of_selected_radio_button(self, group_name):
-        num = self._get_number_of_radio_buttons_in_group(group_name)    
+        num = self._get_number_of_radio_buttons_in_group(group_name)
         for i in range(num):
             xpath = "xpath=//input[@name='%s'][%d]" % (group_name, i+1)
             if self._selenium.is_checked(xpath):
