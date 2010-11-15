@@ -50,20 +50,29 @@ class RunOnFailure(object):
     _run_on_failure = _do_nothing_on_failure = lambda self: None
 
     def run_on_failure(self, keyword_name):
-        """Sets the keyword to be run when a SeleniumLibrary keyword fails.
+        """Sets the keyword to execute when a SeleniumLibrary keyword fails.
 
-        `keyword_name` is the name of the keyword to be executed and it must be
-        a SeleniumLibrary keyword. The name is case and underscore insensitive.
+        `keyword_name` is the name of a SeleniumLibrary keyword that
+        will be executed if another SeleniumLibrary keyword fails.
+        The name is case but not space sensitive.  If the name does
+        not match any keyword, this functionality is disabled and
+        nothing extra will be done in case of a failure.
 
-        If `keyword_name` is not a valid keyword name, nothing will be executed
-        in case of failure.
+        The initial keyword to use is set in `importing`, and the
+        keyword that is used by default is `Capture
+        Screenshot`. Taking a screenshot when something failed is a
+        very useful feature, but notice that it can slow down the
+        execution.
 
-        Returns the previous keyword name.
+        This keyword returns the name of the previously registered
+        failure keyword. It can be used to restore the original
+        value later.
 
         Examples:
-        | Run On Failure  | Log Source |# Run `Log Source` in case of failure.
-        | Run On Failure  | capture_screenshot |# The name is case and underscore insensitive; this runs `Capture Screenshot`.
-        | Run On Failure  | Nothing    |# Do nothing in case of failure. Can be also used to override the default keyword set in `library importing`.
+        | Run On Failure  | Log Source | # Run `Log Source` on failure. |
+        | Run On Failure  | Nothing    | # Disables run-on-failure functionality. |
+
+        The whole run-on-failure functionality is new in SeleniumLibrary 2.5.
         """
         old = self._get_run_on_failure_name()
         self._set_run_on_failure(keyword_name)

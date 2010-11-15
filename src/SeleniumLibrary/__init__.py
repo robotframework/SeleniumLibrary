@@ -209,13 +209,21 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         used by the library. If set, a custom, modified version can be started
         instead of the default one distributed with the library.
 
-        `run_on_failure` specifies the name of the keyword to be run when another
-        SeleniumLibrary keyword fails. See `Run on Failure` for more details.
+        `run_on_failure` specifies the name of a SeleniumLibrary keyword to
+        execute when another SeleniumLibrary keyword fails. By default
+        `Capture Screenshot` will be used to take a screenshot of the situation.
+        Using any value that is not a keyword name will disable this feature
+        altogether. See `Run On Failure` keyword for more information about
+        this functionality that was added in SeleniumLibrary 2.5.
+
+        Because there are many optional arguments, it is often a good idea to
+        use the handy named-arguments syntax supported by Robot Framework 2.5
+        and later. This is demonstrated by the last example below.
 
         Examples:
         | Library | SeleniumLibrary | 15 | | | # Sets default timeout |
         | Library | SeleniumLibrary | | | 4455 | # Use default timeout and host but specify different port. |
-        | Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure.
+        | Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure. |
         """
         self._cache = utils.ConnectionCache()
         self._selenium = _NoBrowser()
@@ -284,7 +292,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
             self._selenium_log.close()
 
     def open_browser(self, url, browser='firefox', alias=None):
-        """Opens a new browser instance to given url.
+        """Opens a new browser instance to given URL.
 
         Possible already opened connections are cached.
 
@@ -314,9 +322,10 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         point to an executable, not a script, otherwise the library may not be
         able to shut down the browser properly.
 
-        Note, that you will encounter strange behaviour, if you open multiple
-        Internet Explorer browser instances. That's also why `Switch Browser` only
-        works with one IE browser at most.
+        Note, that you will encounter strange behavior, if you open
+        multiple Internet Explorer browser instances. That is also why
+        `Switch Browser` only works with one IE browser at most.
+        For more information see:
         http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -650,13 +659,13 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         | Press Key | text_field   | q |
         | Press Key | login_button | \\13 | # ASCII code for enter key |
 
-        Sometimes this keyword doesn't trigger the correct JavaScript event
+        Sometimes this keyword does not trigger the correct JavaScript event
         on the clicked element. In those cases `Press Key Native` can be
         used as a workaround.
 
-        The selenium command key_press [1] that is used internally exposes some
-        erratic behaviour [2], especially when used with the Internet Explorer. If
-        don't get the expected results, try `Press Key Native` instead.
+        The selenium command `key_press` [1] that this keyword used exposes some
+        erratic behavior [2], especially when used with the Internet Explorer.
+        If you do not get the expected results, try `Press Key Native` instead.
 
         [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press
         [2] http://jira.openqa.org/browse/SRC-385
@@ -711,9 +720,9 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         If the cookie is not found, nothing happens.
 
         `options` is the options for the cookie as a string. Currently
-        supported options include 'path', 'domain' and 'recurse.' Format for
-        `options` is "path=/path/, domain=.foo.com, recurse=true". The order of
-        options is irrelevant. Note that specifying a domain that isn't a
+        supported options include `path`, `domain` and `recurse.` Format for
+        `options` is `path=/path/, domain=.foo.com, recurse=true`. The order of
+        options is irrelevant. Note that specifying a domain that is not a
         subset of the current domain will usually fail. Setting `recurse=true`
         will cause this keyword to search all sub-domains of current domain
         with all paths that are subset of current path. This can take a long
