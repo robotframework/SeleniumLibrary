@@ -96,15 +96,11 @@ if __name__ ==  '__main__':
     browser = sys.argv[2].lower()
     args = sys.argv[3:]
     if not args:
-        if interpreter == 'jython':
-            print 'This script does not run unit tests with Jython'
-            print 'They can be excecuted with jython test/run_unit_tests.py'
-        else:
-            print 'Running unit tests'
-            failures = run_unit_tests()
-            if failures != 0:
-                print '\n%d unit tests failed - not running acceptance tests!' % failures
-                sys.exit(1)
-            print 'All unit tests passed'
+        print 'Running unit tests'
+        failures = run_unit_tests()
+        if failures != 0:
+            print '\n%d unit tests failed - not running acceptance tests!' % failures
+            sys.exit(1)
+        print 'All unit tests passed'
     if browser != 'unit':
         sys.exit(acceptance_tests(interpreter, browser, args))
