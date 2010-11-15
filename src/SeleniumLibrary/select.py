@@ -22,6 +22,8 @@ class Select(RunOnFailure):
 
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
+
+        This keyword was added in SeleniumLibrary 2.5.
         """
         return self._selenium.get_select_options(locator)
 
