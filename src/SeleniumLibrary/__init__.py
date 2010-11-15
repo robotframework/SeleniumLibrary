@@ -209,9 +209,13 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         used by the library. If set, a custom, modified version can be started
         instead of the default one distributed with the library.
 
+        `run_on_failure` specifies the name of the keyword to be run when another
+        SeleniumLibrary keyword fails. See `Run on Failure` for more details.
+
         Examples:
         | Library | SeleniumLibrary | 15 | | | # Sets default timeout |
         | Library | SeleniumLibrary | | | 4455 | # Use default timeout and host but specify different port. |
+        | Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure.
         """
         self._cache = utils.ConnectionCache()
         self._selenium = _NoBrowser()

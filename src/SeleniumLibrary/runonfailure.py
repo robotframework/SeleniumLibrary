@@ -50,6 +50,21 @@ class RunOnFailure(object):
     _run_on_failure = _no_run_on_failure = lambda self: None
 
     def run_on_failure(self, keyword_name):
+        """Sets the keyword to be run when a SeleniumLibrary keyword fails.
+
+        `keyword_name` is the name of the keyword to be executed and it must be
+        a SeleniumLibrary keyword. The name is case and underscore insensitive.
+
+        If `keyword_name` is not a valid keyword name, nothing will be executed
+        in case of failure.
+
+        Returns the previous keyword name.
+
+        Examples:
+        | Run On Failure  | Log Source |# Run `Log Source` in case of failure.
+        | Run On Failure  | capture_screenshot |# The name is case and underscore insensitive; this runs `Capture Screenshot`.
+        | Run On Failure  | Nothing    |# Do nothing in case of failure. Can be also used to override the default keyword set in `library importing`.
+        """
         old = self._get_run_on_failure_name()
         self._set_run_on_failure(keyword_name)
         self._log_run_on_failure()
