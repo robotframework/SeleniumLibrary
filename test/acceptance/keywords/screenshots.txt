@@ -5,13 +5,15 @@ Suite Setup  Go To  ${ROOT}links.html
 * Test Cases *
 
 Capture screenshot to default location 
-  [Documentation]  LOG 1  </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
+  [Documentation]  LOG 1  REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
   [Setup]  Remove Files  ${OUTPUTDIR}/selenium-screenshot-*.png
   Capture Screenshot
-  File Should Exist  ${OUTPUTDIR}/selenium-screenshot-1.png
+  ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-?.png
+  Should Be Equal As Integers  ${count}  1
   Click Link  Relative
   Capture Screenshot
-  File Should Exist  ${OUTPUTDIR}/selenium-screenshot-2.png
+  ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-?.png
+  Should Be Equal As Integers  ${count}  2
 
 Capture screenshot to custom file
   [Setup]  Remove Files  ${OUTPUTDIR}/custom-screenshot.png
