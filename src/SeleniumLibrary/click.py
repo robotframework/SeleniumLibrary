@@ -70,13 +70,9 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'image'), dont_wait)
         except Exception, err:
-            # TODO: The old code had "double not" like below. Probably bug but
-            # removing the other changed the functionality. And why would we
-            # want to try clicking `input` element in the first place???
-            #
-            # if not 'ERROR Element xpath=//' not in self._get_error_message(err):
             if not self._error_contains(err, 'ERROR: Element xpath=//'):
                 raise
+            # A form may have an image as it's submit trigger.
             self._click(self._parse_locator(locator, 'input'), dont_wait)
 
     def submit_form(self, locator='', dont_wait=''):
@@ -95,4 +91,3 @@ class Click(object):
         self._selenium.submit(locator)
         if not dont_wait:
             self.wait_until_page_loaded()
-
