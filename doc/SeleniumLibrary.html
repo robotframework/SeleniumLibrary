@@ -209,7 +209,9 @@ Usually, https works out of the box. However, there may be trouble with self-sig
 <br />
 <span class="name">jar_path</span> is the absolute path to the selenium-server.jar file to be used by the library. If set, a custom, modified version can be started instead of the default one distributed with the library.<br />
 <br />
-<span class="name">run_on_failure</span> specifies the name of the keyword to be run when another SeleniumLibrary keyword fails. See <a href="#Run On Failure" class="name">Run on Failure</a> for more details.<br />
+<span class="name">run_on_failure</span> specifies the name of a SeleniumLibrary keyword to execute when another SeleniumLibrary keyword fails. By default <a href="#Capture Screenshot" class="name">Capture Screenshot</a> will be used to take a screenshot of the situation. Using any value that is not a keyword name will disable this feature altogether. See <a href="#Run On Failure" class="name">Run On Failure</a> keyword for more information about this functionality that was added in SeleniumLibrary 2.5.<br />
+<br />
+Because there are many optional arguments, it is often a good idea to use the handy named-arguments syntax supported by Robot Framework 2.5 and later. This is demonstrated by the last example below.<br />
 <br />
 Examples:<br />
 <table border="1" class="doc">
@@ -229,8 +231,16 @@ Examples:<br />
 <td>4455</td>
 <td># Use default timeout and host but specify different port.</td>
 </tr>
+<tr>
+<td>Library</td>
+<td>SeleniumLibrary</td>
+<td>run_on_failure=Nothing</td>
+<td># Do nothing on failure.</td>
+<td></td>
+<td></td>
+</tr>
 </table>
-| Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure.</td>
+</td>
 </tr>
 </table>
 
@@ -308,6 +318,8 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Get Horizontal Position" title="Returns horizontal position of element identified by `locator`.">Get&nbsp;Horizontal&nbsp;Position</a>
 &nbsp;&middot;&nbsp;
+<a href="#Get List Items" title="Returns the values in the list identified by `locator`.">Get&nbsp;List&nbsp;Items</a>
+&nbsp;&middot;&nbsp;
 <a href="#Get Location" title="Returns the current location.">Get&nbsp;Location</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Matching Xpath Count" title="Returns number of elements matching `xpath`">Get&nbsp;Matching&nbsp;Xpath&nbsp;Count</a>
@@ -350,11 +362,19 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Maximize Browser Window" title="Maximizes current browser window.">Maximize&nbsp;Browser&nbsp;Window</a>
 &nbsp;&middot;&nbsp;
+<a href="#Mouse Down" title="Simulates pressing the left mouse button on the element specified by `locator`.">Mouse&nbsp;Down</a>
+&nbsp;&middot;&nbsp;
 <a href="#Mouse Down On Image" title="Simulates a mouse down event on an image.">Mouse&nbsp;Down&nbsp;On&nbsp;Image</a>
 &nbsp;&middot;&nbsp;
 <a href="#Mouse Down On Link" title="Simulates a mouse down event on a link.">Mouse&nbsp;Down&nbsp;On&nbsp;Link</a>
 &nbsp;&middot;&nbsp;
-<a href="#Open Browser" title="Opens a new browser instance to given url.">Open&nbsp;Browser</a>
+<a href="#Mouse Out" title="Simulates moving mouse away from the element specified by `locator`.">Mouse&nbsp;Out</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Over" title="Simulates hovering mouse over the element specified by `locator`.">Mouse&nbsp;Over</a>
+&nbsp;&middot;&nbsp;
+<a href="#Mouse Up" title="Simulates releasing the left mouse button on the element specified by `locator`.">Mouse&nbsp;Up</a>
+&nbsp;&middot;&nbsp;
+<a href="#Open Browser" title="Opens a new browser instance to given URL.">Open&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
 <a href="#Open Context Menu" title="Opens context menu on element identified by `locator`.">Open&nbsp;Context&nbsp;Menu</a>
 &nbsp;&middot;&nbsp;
@@ -402,7 +422,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Radio Button Should Not Be Selected" title="Verifies radio button group identified by `group_name` has no selection.">Radio&nbsp;Button&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>
 &nbsp;&middot;&nbsp;
-<a href="#Run On Failure" title="Sets the keyword to be run when a SeleniumLibrary keyword fails.">Run&nbsp;On&nbsp;Failure</a>
+<a href="#Run On Failure" title="Sets the keyword to execute when a SeleniumLibrary keyword fails.">Run&nbsp;On&nbsp;Failure</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
@@ -421,14 +441,6 @@ Examples:<br />
 <a href="#Set Selenium Timeout" title="Sets the timeout used by various keywords.">Set&nbsp;Selenium&nbsp;Timeout</a>
 &nbsp;&middot;&nbsp;
 <a href="#Simulate" title="Simulates `event` on component identified by `locator`.">Simulate</a>
-&nbsp;&middot;&nbsp;
-<a href="#Simulate Mouse Down" title="Simulates a user pressing the left mouse button (without releasing it yet) on">Simulate&nbsp;Mouse&nbsp;Down</a>
-&nbsp;&middot;&nbsp;
-<a href="#Simulate Mouse Out" title="Simulates a user moving the mouse pointer away from the ">Simulate&nbsp;Mouse&nbsp;Out</a>
-&nbsp;&middot;&nbsp;
-<a href="#Simulate Mouse Over" title="Simulates a user hovering a mouse over the element specified by `locator`.">Simulate&nbsp;Mouse&nbsp;Over</a>
-&nbsp;&middot;&nbsp;
-<a href="#Simulate Mouse Up" title="Simulates the event that occurs when the user releases the mouse button (i.e., stops">Simulate&nbsp;Mouse&nbsp;Up</a>
 &nbsp;&middot;&nbsp;
 <a href="#Start Selenium Server" title="Starts the Selenium Server provided with SeleniumLibrary.">Start&nbsp;Selenium&nbsp;Server</a>
 &nbsp;&middot;&nbsp;
@@ -754,7 +766,7 @@ The <span class="name">loglevel</span> argument was added in SeleniumLibrary 2.3
 <br />
 If the cookie is not found, nothing happens.<br />
 <br />
-<span class="name">options</span> is the options for the cookie as a string. Currently supported options include 'path', 'domain' and 'recurse.' Format for <span class="name">options</span> is "path=/path/, domain=.foo.com, recurse=true". The order of options is irrelevant. Note that specifying a domain that isn't a subset of the current domain will usually fail. Setting <span class="name">recurse=true</span> will cause this keyword to search all sub-domains of current domain with all paths that are subset of current path. This can take a long time.</td>
+<span class="name">options</span> is the options for the cookie as a string. Currently supported options include <span class="name">path</span>, <span class="name">domain</span> and <span class="name">recurse.</span> Format for <span class="name">options</span> is <span class="name">path=/path/, domain=.foo.com, recurse=true</span>. The order of options is irrelevant. Note that specifying a domain that is not a subset of the current domain will usually fail. Setting <span class="name">recurse=true</span> will cause this keyword to search all sub-domains of current domain with all paths that are subset of current path. This can take a long time.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Drag And Drop"></a>Drag And Drop</td>
@@ -907,6 +919,15 @@ The position is returned in pixels off the left side of the page, as an integer.
 See also <a href="#Get Vertical Position" class="name">Get Vertical Position</a>.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Get List Items"></a>Get List Items</td>
+  <td class="arg">locator</td>
+  <td class="doc">Returns the values in the list identified by <span class="name">locator</span>.<br />
+<br />
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.5.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Get Location"></a>Get Location</td>
   <td class="arg"></td>
   <td class="doc">Returns the current location.</td>
@@ -1004,14 +1025,16 @@ See <a href="#introduction" class="name">introduction</a> for details about loca
   <td class="arg">locator, *values</td>
   <td class="doc">Verifies the selection of list identified by <span class="name">locator</span> is exactly <span class="name">*values</span>.<br />
 <br />
-If you want to test that no option is selected, simply give no <span class="name">values</span>. Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+If you want to test that no option is selected, simply give no <span class="name">values</span>.<br />
+<br />
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="List Should Have No Selections"></a>List Should Have No Selections</td>
   <td class="arg">locator</td>
   <td class="doc">Verifies list identified by <span class="name">locator</span> has no selections.<br />
 <br />
-Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for more details on key attributes and locating elements.</td>
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for more details on key attributes and locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Location Should Be"></a>Location Should Be</td>
@@ -1038,6 +1061,19 @@ The <span class="name">level</span> argument defines the used log level. Valid l
   <td class="doc">Maximizes current browser window.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Mouse Down"></a>Mouse Down</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates pressing the left mouse button on the element specified by <span class="name">locator</span>.<br />
+<br />
+The element is pressed without releasing the mouse button.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+See also the more specific keywords <a href="#Mouse Down On Image" class="name">Mouse Down On Image</a> and <a href="#Mouse Down On Link" class="name">Mouse Down On Link</a>.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.5.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Mouse Down On Image"></a>Mouse Down On Image</td>
   <td class="arg">locator</td>
   <td class="doc">Simulates a mouse down event on an image.<br />
@@ -1052,9 +1088,36 @@ Key attributes for images are <span class="name">id</span>, <span class="name">s
 Key attributes for links are <span class="name">id</span>, <span class="name">name</span>, <span class="name">href</span> and link text. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Mouse Out"></a>Mouse Out</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates moving mouse away from the element specified by <span class="name">locator</span>.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.5.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Mouse Over"></a>Mouse Over</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates hovering mouse over the element specified by <span class="name">locator</span>.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.5.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Mouse Up"></a>Mouse Up</td>
+  <td class="arg">locator</td>
+  <td class="doc">Simulates releasing the left mouse button on the element specified by <span class="name">locator</span>.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.5.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Open Browser"></a>Open Browser</td>
   <td class="arg">url, browser=firefox, alias=None</td>
-  <td class="doc">Opens a new browser instance to given url.<br />
+  <td class="doc">Opens a new browser instance to given URL.<br />
 <br />
 Possible already opened connections are cached.<br />
 <br />
@@ -1097,7 +1160,7 @@ Possible values for <span class="name">browser</span> are all the values support
 <br />
 Additionally, a string like <span class="name">*custom /path/to/browser-executable</span> can be used to specify the browser directly. In this case, the path needs to point to an executable, not a script, otherwise the library may not be able to shut down the browser properly.<br />
 <br />
-Note, that you will encounter strange behaviour, if you open multiple Internet Explorer browser instances. That's also why <a href="#Switch Browser" class="name">Switch Browser</a> only works with one IE browser at most. <a href="http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine">http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine</a></td>
+Note, that you will encounter strange behavior, if you open multiple Internet Explorer browser instances. That is also why <a href="#Switch Browser" class="name">Switch Browser</a> only works with one IE browser at most. For more information see: <a href="http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine">http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine</a></td>
 </tr>
 <tr>
   <td class="kw"><a name="Open Context Menu"></a>Open Context Menu</td>
@@ -1295,9 +1358,9 @@ Examples:<br />
 </tr>
 </table>
 <br />
-Sometimes this keyword doesn't trigger the correct JavaScript event on the clicked element. In those cases <a href="#Press Key Native" class="name">Press Key Native</a> can be used as a workaround.<br />
+Sometimes this keyword does not trigger the correct JavaScript event on the clicked element. In those cases <a href="#Press Key Native" class="name">Press Key Native</a> can be used as a workaround.<br />
 <br />
-The selenium command key_press [1] that is used internally exposes some erratic behaviour [2], especially when used with the Internet Explorer. If don't get the expected results, try <a href="#Press Key Native" class="name">Press Key Native</a> instead.<br />
+The selenium command <span class="name">key_press</span> [1] that this keyword used exposes some erratic behavior [2], especially when used with the Internet Explorer. If you do not get the expected results, try <a href="#Press Key Native" class="name">Press Key Native</a> instead.<br />
 <br />
 [1] <a href="http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press">http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press</a><br />
 [2] <a href="http://jira.openqa.org/browse/SRC-385">http://jira.openqa.org/browse/SRC-385</a></td>
@@ -1366,25 +1429,36 @@ Notice that this keyword is very fragile and, for example, using the keyboard or
 <tr>
   <td class="kw"><a name="Run On Failure"></a>Run On Failure</td>
   <td class="arg">keyword_name</td>
-  <td class="doc">Sets the keyword to be run when a SeleniumLibrary keyword fails.<br />
+  <td class="doc">Sets the keyword to execute when a SeleniumLibrary keyword fails.<br />
 <br />
-<span class="name">keyword_name</span> is the name of the keyword to be executed and it must be a SeleniumLibrary keyword. The name is case and underscore insensitive.<br />
+<span class="name">keyword_name</span> is the name of a SeleniumLibrary keyword that will be executed if another SeleniumLibrary keyword fails. The name is case but not space sensitive. &nbsp;If the name does not match any keyword, this functionality is disabled and nothing extra will be done in case of a failure.<br />
 <br />
-If <span class="name">keyword_name</span> is not a valid keyword name, nothing will be executed in case of failure.<br />
+The initial keyword to use is set in <a href="#importing" class="name">importing</a>, and the keyword that is used by default is <a href="#Capture Screenshot" class="name">Capture Screenshot</a>. Taking a screenshot when something failed is a very useful feature, but notice that it can slow down the execution.<br />
 <br />
-Returns the previous keyword name.<br />
+This keyword returns the name of the previously registered failure keyword. It can be used to restore the original value later.<br />
 <br />
 Examples:<br />
-| Run On Failure &nbsp;| Log Source |# Run <a href="#Log Source" class="name">Log Source</a> in case of failure.<br />
-| Run On Failure &nbsp;| capture_screenshot |# The name is case and underscore insensitive; this runs <a href="#Capture Screenshot" class="name">Capture Screenshot</a>.<br />
-| Run On Failure &nbsp;| Nothing &nbsp; &nbsp;|# Do nothing in case of failure. Can be also used to override the default keyword set in <a href="#importing" class="name">library importing</a>.</td>
+<table border="1" class="doc">
+<tr>
+<td>Run On Failure</td>
+<td>Log Source</td>
+<td># Run <a href="#Log Source" class="name">Log Source</a> on failure.</td>
+</tr>
+<tr>
+<td>Run On Failure</td>
+<td>Nothing</td>
+<td># Disables run-on-failure functionality.</td>
+</tr>
+</table>
+<br />
+The whole run-on-failure functionality is new in SeleniumLibrary 2.5.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select All From List"></a>Select All From List</td>
   <td class="arg">locator, wait=</td>
   <td class="doc">Selects all values from multi-select list identified by <span class="name">id</span>.<br />
 <br />
-Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements and about <span class="name">wait</span> argument.</td>
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements and about <span class="name">wait</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select Checkbox"></a>Select Checkbox</td>
@@ -1407,7 +1481,7 @@ Key attributes for frames are <span class="name">id</span> and <span class="name
 <br />
 If more than one value is given for a single-selection list, the last value will be selected. If the target list is a multi-selection list, and <span class="name">*values</span> is an empty list, all values of the list will be selected.<br />
 <br />
-Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
 <br />
 This keyword does not support waiting for possible page load automatically. If that is needed, keyword <a href="#Wait Until Page Loaded" class="name">Wait Until Page Loaded</a> can be used after this keyword.</td>
 </tr>
@@ -1499,42 +1573,6 @@ The keywords that expect a page load to happen will fail if the page does not lo
 This keyword is useful if component has OnEvent handler that needs to be explicitly invoked.<br />
 <br />
 See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
-</tr>
-<tr>
-  <td class="kw"><a name="Simulate Mouse Down"></a>Simulate Mouse Down</td>
-  <td class="arg">locator</td>
-  <td class="doc">Simulates a user pressing the left mouse button (without releasing it yet) on the element specified by <span class="name">locator</span>.<br />
-<br />
-Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
-<br />
-This keyword was added in SeleniumLibrary 2.5.</td>
-</tr>
-<tr>
-  <td class="kw"><a name="Simulate Mouse Out"></a>Simulate Mouse Out</td>
-  <td class="arg">locator</td>
-  <td class="doc">Simulates a user moving the mouse pointer away from the element specified by <span class="name">locator</span>.<br />
-<br />
-Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
-<br />
-This keyword was added in SeleniumLibrary 2.5.</td>
-</tr>
-<tr>
-  <td class="kw"><a name="Simulate Mouse Over"></a>Simulate Mouse Over</td>
-  <td class="arg">locator</td>
-  <td class="doc">Simulates a user hovering a mouse over the element specified by <span class="name">locator</span>.<br />
-<br />
-Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
-<br />
-This keyword was added in SeleniumLibrary 2.5.</td>
-</tr>
-<tr>
-  <td class="kw"><a name="Simulate Mouse Up"></a>Simulate Mouse Up</td>
-  <td class="arg">locator</td>
-  <td class="doc">Simulates the event that occurs when the user releases the mouse button (i.e., stops holding the button down) on the element specified by <span class="name">locator</span>.<br />
-<br />
-Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
-<br />
-This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Start Selenium Server"></a>Start Selenium Server</td>
@@ -1798,7 +1836,7 @@ Does nothing if the checkbox is not checked. Key attributes for checkboxes are <
 <br />
 As a special case, giving empty list as <span class="name">*selection</span> will remove all selections.<br />
 <br />
-Key attributes for list are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
 <br />
 This keyword does not support waiting for possible page load automatically. If that is needed, keyword <a href="#Wait Until Page Loaded" class="name">Wait Until Page Loaded</a> can be used after this keyword.</td>
 </tr>
@@ -1863,9 +1901,9 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 </table>
 <p id="footer">
-Altogether 118 keywords.<br />
+Altogether 119 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-11-15 16:21:16.
+on 2010-11-16 01:16:26.
 </p>
 </body>
 </html>
