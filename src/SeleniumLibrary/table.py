@@ -109,10 +109,7 @@ class Table(object):
         try:
             self._page_should_contain_element(locator, 'element', message,
                                               loglevel)
-        except AssertionError, err:
-            # TODO: Can the message ever contain this particular text??
-            if 'should have contained text' not in self._get_error_message(err):
-                raise
+        except AssertionError:
             locator = "%s tr th:nth-child(%s):contains('%s')" \
                 % (self._get_table_locator(table_locator), col, expected_content)
             self._page_should_contain_element(locator, 'element', message,
