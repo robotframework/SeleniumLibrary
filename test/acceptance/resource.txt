@@ -28,3 +28,9 @@ Fail And Set Non-Critical
   [Arguments]  ${msg}
   Remove Tags  regression
   Fail  ${msg}
+
+Go to Front Page
+    Go To  ${ROOT}
+
+Set ${level} Loglevel
+    Set Log Level  ${level}
