@@ -31,7 +31,7 @@ def main():
           url          = 'http://code.google.com/p/robotframework-seleniumlibrary',
           package_dir  = { '' : 'src'},
           packages     = ['SeleniumLibrary'],
-          package_data = { 'SeleniumLibrary': ['lib/*.jar']} 
+          package_data = { 'SeleniumLibrary': ['lib/*.jar', 'firefoxprofile/*.*']}
           )
 
 

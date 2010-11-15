@@ -3,6 +3,7 @@ include *.txt
 include selenium.bmp
 
 include src/SeleniumLibrary/lib/*.jar
+include src/SeleniumLibrary/firefoxprofile/*.*
 
 recursive-include doc *.txt *.html
 recursive-include demo *.txt *.py *.sh *.bat *.html *.css *.js
