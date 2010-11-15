@@ -403,9 +403,9 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
             self._selenium = self._cache.switch(index_or_alias)
             self._debug('Switched to browser with Selenium session id %s'
                          % self._selenium.sessionId)
-        # TODO: Get rid of DataError!
         except DataError:
-            raise DataError("No browser with index or alias '%s' found." % index_or_alias)
+            raise RuntimeError("No browser with index or alias '%s' found."
+                               % index_or_alias)
 
     def set_selenium_timeout(self, seconds):
         """Sets the timeout used by various keywords.
