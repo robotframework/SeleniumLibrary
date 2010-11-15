@@ -38,11 +38,13 @@ from table import Table
 from version import VERSION
 
 __version__ = VERSION
-# TODO: Need more aliases? Safari, Opera, Chrome?
 BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
-                   'internetexplorer': '*iexplore'}
+                   'internetexplorer': '*iexplore',
+                   'googlechrome': '*googlechrome',
+                   'opera': '*opera',
+                   'safari': '*safari'}
 SELENIUM_CONNECTION_TIMEOUT = 40
 _SELLIB_DIR = os.path.dirname(os.path.abspath(__file__))
 SELENIUM_SERVER_PATH = os.path.join(_SELLIB_DIR, 'lib', 'selenium-server.jar')
@@ -292,17 +294,15 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
 
         Possible values for `browser` are all the values supported by Selenium
         and some aliases that are defined for convenience. The table below
-        lists all the supported browsers.
+        lists the aliases for most common supported browsers.
 
-        | *firefox         | FireFox   |
         | firefox          | FireFox   |
         | ff               | FireFox   |
-        | *iexplore        | Internet Explorer |
         | ie               | Internet Explorer |
         | internetexplorer | Internet Explorer |
-        | *safari          | Safari |
-        | *googlechrome    | Google Chrome |
-        | *opera           | Opera |
+        | safari           | Safari |
+        | googlechrome     | Google Chrome |
+        | opera            | Opera |
 
         Additionally, a string like `*custom /path/to/browser-executable` can
         be used to specify the browser directly. In this case, the path needs to
