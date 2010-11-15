@@ -200,7 +200,7 @@ Usually, https works out of the box. However, there may be trouble with self-sig
   <th class="doc">Documentation</th>
 </tr>
 <tr>
-  <td class="arg">timeout=5.0, server_host=localhost, server_port=4444, jar_path=None</td>
+  <td class="arg">timeout=5.0, server_host=localhost, server_port=4444, jar_path=None, run_on_failure=Capture Screenshot</td>
   <td class="doc">SeleniumLibrary can be imported with optional arguments.<br />
 <br />
 <span class="name">timeout</span> is the default timeout used to wait for page load actions. It can be later set with <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a><br />
@@ -208,6 +208,8 @@ Usually, https works out of the box. However, there may be trouble with self-sig
 <span class="name">host</span> and <span class="name">port</span> are used to connect to Selenium Server. Browsers opened with this SeleniumLibrary instance will be attached to that server. Note that the Selenium Server must be running before <a href="#Open Browser" class="name">Open Browser</a> keyword can be used. Selenium Server can be started with keyword <a href="#Start Selenium Server" class="name">Start Selenium Server</a>.<br />
 <br />
 <span class="name">jar_path</span> is the absolute path to the selenium-server.jar file to be used by the library. If set, a custom, modified version can be started instead of the default one distributed with the library.<br />
+<br />
+<span class="name">run_on_failure</span> specifies the name of the keyword to be run when another SeleniumLibrary keyword fails. See <a href="#Run On Failure" class="name">Run on Failure</a> for more details.<br />
 <br />
 Examples:<br />
 <table border="1" class="doc">
@@ -228,7 +230,7 @@ Examples:<br />
 <td># Use default timeout and host but specify different port.</td>
 </tr>
 </table>
-</td>
+| Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure.</td>
 </tr>
 </table>
 
@@ -399,6 +401,8 @@ Examples:<br />
 <a href="#Radio Button Should Be Set To" title="Verifies radio button group identified by `group_name` has its selection set to `value`.">Radio&nbsp;Button&nbsp;Should&nbsp;Be&nbsp;Set&nbsp;To</a>
 &nbsp;&middot;&nbsp;
 <a href="#Radio Button Should Not Be Selected" title="Verifies radio button group identified by `group_name` has no selection.">Radio&nbsp;Button&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>
+&nbsp;&middot;&nbsp;
+<a href="#Run On Failure" title="Sets the keyword to be run when a SeleniumLibrary keyword fails.">Run&nbsp;On&nbsp;Failure</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
@@ -830,7 +834,7 @@ Example:<br />
 </tr>
 <tr>
 <td>Execute JavaScript</td>
-<td>${CURDIR}/js_to_execute.txt</td>
+<td>${CURDIR}/js_to_execute.js</td>
 </tr>
 </table>
 </td>
@@ -844,15 +848,19 @@ This is useful for instance to direct native keystrokes to particular element us
 </tr>
 <tr>
   <td class="kw"><a name="Frame Should Contain"></a>Frame Should Contain</td>
-  <td class="arg">locator, text</td>
+  <td class="arg">locator, text, loglevel=INFO</td>
   <td class="doc">Verifies frame identified by <span class="name">locator</span> contains <span class="name">text</span>.<br />
+<br />
+See <a href="#Page Should Contain" class="name">Page Should Contain </a> for explanation about <span class="name">loglevel</span> argument, that was added in SeleniumLibrary 2.5.<br />
 <br />
 Key attributes for frames are <span class="name">id</span> and <span class="name">name.</span> See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Frame Should Contain Text"></a>Frame Should Contain Text</td>
-  <td class="arg">locator, text</td>
+  <td class="arg">locator, text, loglevel=INFO</td>
   <td class="doc">Verifies frame identified by <span class="name">locator</span> contains <span class="name">text</span>.<br />
+<br />
+See <a href="#Page Should Contain" class="name">Page Should Contain </a> for explanation about <span class="name">loglevel</span> argument, that was added in SeleniumLibrary 2.5.<br />
 <br />
 Key attributes for frames are <span class="name">id</span> and <span class="name">name.</span> See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1054,13 +1062,9 @@ Returns the index of this browser instance which can be used later to switch bac
 <br />
 Optional alias is a alias for the browser instance and it can be used for switching between browsers similarly as the index. See <a href="#Switch Browser" class="name">Switch Browser</a> for more details about that.<br />
 <br />
-Possible values for <span class="name">browser</span> are all the values supported by Selenium and some aliases that are defined for convenience. The table below lists all the supported browsers.<br />
+Possible values for <span class="name">browser</span> are all the values supported by Selenium and some aliases that are defined for convenience. The table below lists the aliases for most common supported browsers.<br />
 <br />
 <table border="1" class="doc">
-<tr>
-<td>*firefox</td>
-<td>FireFox</td>
-</tr>
 <tr>
 <td>firefox</td>
 <td>FireFox</td>
@@ -1068,10 +1072,6 @@ Possible values for <span class="name">browser</span> are all the values support
 <tr>
 <td>ff</td>
 <td>FireFox</td>
-</tr>
-<tr>
-<td>*iexplore</td>
-<td>Internet Explorer</td>
 </tr>
 <tr>
 <td>ie</td>
@@ -1082,15 +1082,15 @@ Possible values for <span class="name">browser</span> are all the values support
 <td>Internet Explorer</td>
 </tr>
 <tr>
-<td>*safari</td>
+<td>safari</td>
 <td>Safari</td>
 </tr>
 <tr>
-<td>*googlechrome</td>
+<td>googlechrome</td>
 <td>Google Chrome</td>
 </tr>
 <tr>
-<td>*opera</td>
+<td>opera</td>
 <td>Opera</td>
 </tr>
 </table>
@@ -1362,6 +1362,22 @@ Notice that this keyword is very fragile and, for example, using the keyboard or
   <td class="kw"><a name="Radio Button Should Not Be Selected"></a>Radio Button Should Not Be Selected</td>
   <td class="arg">group_name</td>
   <td class="doc">Verifies radio button group identified by <span class="name">group_name</span> has no selection.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Run On Failure"></a>Run On Failure</td>
+  <td class="arg">keyword_name</td>
+  <td class="doc">Sets the keyword to be run when a SeleniumLibrary keyword fails.<br />
+<br />
+<span class="name">keyword_name</span> is the name of the keyword to be executed and it must be a SeleniumLibrary keyword. The name is case and underscore insensitive.<br />
+<br />
+If <span class="name">keyword_name</span> is not a valid keyword name, nothing will be executed in case of failure.<br />
+<br />
+Returns the previous keyword name.<br />
+<br />
+Examples:<br />
+| Run On Failure &nbsp;| Log Source |# Run <a href="#Log Source" class="name">Log Source</a> in case of failure.<br />
+| Run On Failure &nbsp;| capture_screenshot |# The name is case and underscore insensitive; this runs <a href="#Capture Screenshot" class="name">Capture Screenshot</a>.<br />
+| Run On Failure &nbsp;| Nothing &nbsp; &nbsp;|# Do nothing in case of failure. Can be also used to override the default keyword set in <a href="#importing" class="name">library importing</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select All From List"></a>Select All From List</td>
@@ -1878,9 +1894,9 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 </table>
 <p id="footer">
-Altogether 117 keywords.<br />
+Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-11-14 12:58:15.
+on 2010-11-15 15:01:33.
 </p>
 </body>
 </html>
