@@ -36,10 +36,9 @@ class Select(RunOnFailure):
         opts = values and 'options [ %s ]' % ' | '.join(values) or 'no options'
         self._info("Verifying list '%s' has %s selected." % (locator, opts))
         self.page_should_contain_list(locator)
-        xpath = self._parse_locator(locator, 'select')
         try:
-            selected_values = self._selenium.get_selected_values(xpath)
-            selected_labels = self._selenium.get_selected_labels(xpath)
+            selected_values = self._selenium.get_selected_values(locator)
+            selected_labels = self._selenium.get_selected_labels(locator)
         except Exception, err:
             if not values and self._error_contains(err, 'No option selected'):
                 return
@@ -69,7 +68,6 @@ class Select(RunOnFailure):
         """
         selection = values and "values '%s'" % ', '.join(values) or 'all values'
         self._info("Selecting %s from list '%s'." % (selection, locator))
-        locator = self._parse_locator(locator, 'select')
         values = list(values)
         if len(values) == 0:
             values = self._selenium.get_select_options(locator)
@@ -116,7 +114,6 @@ class Select(RunOnFailure):
         """
         selection = values and "values '%s'" % ', '.join(values) or 'all values'
         self._info("Unselecting %s from list '%s'." % (selection, locator))
-        locator = self._parse_locator(locator, 'select')
         if not self._is_multiselect_list(locator):
             raise RuntimeError("Keyword 'Unselect from list' works only for "
                                "multiselect lists")
@@ -133,7 +130,6 @@ class Select(RunOnFailure):
         details about locating elements and about `wait` argument.
         """
         self._info("Selecting all values from list '%s'." % locator)
-        locator = self._parse_locator(locator, 'select')
         selected_items = []
         if self._selenium.is_something_selected(locator):
             selected_items = self._selenium.get_selected_labels(locator)
@@ -159,9 +155,8 @@ class Select(RunOnFailure):
         more details on key attributes and locating elements.
         """
         self._info("Verifying list '%s' has no selection." % locator)
-        _locator = self._parse_locator(locator, 'select')
-        if self._selenium.is_something_selected(_locator):
-            selection = ' | '.join(self._selenium.get_selected_labels(_locator))
+        if self._selenium.is_something_selected(locator):
+            selection = ' | '.join(self._selenium.get_selected_labels(locator))
             raise AssertionError("List '%s' should have had no selection "
                                  "(selection was [ %s ])" % (locator, selection))
 
