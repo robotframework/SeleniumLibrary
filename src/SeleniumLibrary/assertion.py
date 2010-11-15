@@ -90,8 +90,11 @@ class Assertion(RunOnFailure):
             self.unselect_frame()
         return False
 
-    def frame_should_contain(self, locator, text):
+    def frame_should_contain(self, locator, text, loglevel='INFO'):
         """Verifies frame identified by `locator` contains `text`.
+
+        See `Page Should Contain ` for explanation about `loglevel` argument,
+        that was added in SeleniumLibrary 2.5.
 
         Key attributes for frames are `id` and `name.` See `introduction` for
         details about locating elements.
@@ -99,7 +102,7 @@ class Assertion(RunOnFailure):
         self._selenium.select_frame(self._parse_locator(locator))
         self._info("Searching for text from frame '%s'." % locator)
         try:
-            self.page_should_contain(text)
+            self.page_should_contain(text, loglevel)
         finally:
             self.unselect_frame()
 
