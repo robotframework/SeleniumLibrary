@@ -37,7 +37,7 @@ def _run_on_failure_wrapper(method, *args, **kwargs):
         return method(*args, **kwargs)
     except Exception, err:
         self = args[0]
-        if not hasattr(err, 'ran_on_failure'):
+        if self._selenium and not hasattr(err, 'ran_on_failure'):
             self._run_on_failure()
             err.ran_on_failure = True
         raise
