@@ -1,5 +1,5 @@
 *Setting*
-Library  SeleniumLibrary  \  \  4455
+Library  SeleniumLibrary  \  \  4455  \  NONE
 Library  Collections
 Library  OperatingSystem
 
@@ -28,5 +28,3 @@ Fail And Set Non-Critical
   [Arguments]  ${msg}
   Remove Tags  regression
   Fail  ${msg}
-
-

@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Element(object):
+from runonfailure import RunOnFailure
+
+
+class Element(RunOnFailure):
 
     def get_element_attribute(self, attribute_locator):
         """Return value of element attribute.

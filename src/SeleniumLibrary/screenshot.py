@@ -12,14 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-
 import os
 import base64
 
 from robot import utils
 
 
-class Screenshot:
+class Screenshot(object):
 
     def capture_screenshot(self, filename=None):
         """Takes a screenshot of the entire screen and embeds it into the log.

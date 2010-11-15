@@ -17,8 +17,10 @@ import os.path
 
 from robot import utils
 
+from runonfailure import RunOnFailure
 
-class JavaScript(object):
+
+class JavaScript(RunOnFailure):
 
     def execute_javascript(self, *code):
         """Executes the given JavaScript code.

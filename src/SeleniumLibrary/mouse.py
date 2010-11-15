@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Mouse(object):
+from runonfailure import RunOnFailure
+
+
+class Mouse(RunOnFailure):
 
     def simulate_mouse_over(self, locator):
         """Simulates a user hovering a mouse over the element specified by `locator`.

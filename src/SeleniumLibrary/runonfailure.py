@@ -14,25 +14,33 @@
 
 import inspect
 
-from decorator import decorator
+try:
+    from decorator import decorator
+except SyntaxError: # decorator module requires Python/Jython 2.4+
+    decorator = None
 
 
-class autoscreenshot(type):
+class runonfailuretype(type):
 
     def __new__(cls, clsname, bases, dct):
         for name, method in dct.items():
             if _is_keyword(name, method):
-                dct[name] = decorator(_auto_screenshot_wrapper, method)
+                dct[name] = decorator(_run_on_failure_wrapper, method)
         return type.__new__(cls, clsname, bases, dct)
 
 
 def _is_keyword(name, method):
     return (not name.startswith('_')) and inspect.isroutine(method)
 
-def _auto_screenshot_wrapper(method, *args, **kwargs):
+def _run_on_failure_wrapper(method, *args, **kwargs):
     try:
         return method(*args, **kwargs)
     except Exception:
-        args[0].capture_screenshot()
+        self = args[0]
+        self._run_on_failure()
         raise
 
+
+class RunOnFailure(object):
+    if decorator:
+        __metaclass__ = runonfailuretype

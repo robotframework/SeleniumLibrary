@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Select(object):
+from runonfailure import RunOnFailure
+
+
+class Select(RunOnFailure):
 
     def list_selection_should_be(self, locator, *values):
         """Verifies the selection of list identified by `locator` is exactly `*values`.

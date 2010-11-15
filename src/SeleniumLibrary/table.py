@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Table(object):
+from runonfailure import RunOnFailure
+
+
+class Table(RunOnFailure):
 
     def table_should_contain(self, table_locator, expected_content, loglevel='INFO'):
         """Verifies that the `expected content` can be found somewhere in the table.

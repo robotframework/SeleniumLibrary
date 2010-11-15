@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Assertion(object):
+from runonfailure import RunOnFailure
+
+
+class Assertion(RunOnFailure):
 
     def title_should_be(self, title):
         """Verifies that current page title equals `title`."""

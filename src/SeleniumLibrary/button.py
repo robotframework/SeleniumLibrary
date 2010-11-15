@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Button(object):
+from runonfailure import RunOnFailure
+
+
+class Button(RunOnFailure):
     
     def select_checkbox(self, locator):
         """Selects checkbox identified by `locator`. 

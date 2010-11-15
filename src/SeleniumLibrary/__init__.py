@@ -193,7 +193,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
     ROBOT_LIBRARY_VERSION = __version__
 
     def __init__(self, timeout=5.0, server_host='localhost', server_port=4444,
-                 jar_path=None):
+                 jar_path=None, run_on_failure='Capture Screenshot'):
         """SeleniumLibrary can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for page load actions.
@@ -219,9 +219,13 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
         self._server_host = server_host or 'localhost'
         self._server_port = int(server_port or 4444)
         self._jar_path = jar_path
+        self._run_on_failure = self._resolve_run_on_failure(run_on_failure)
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
+
+    def _resolve_run_on_failure(self, value):
+        return getattr(self, value.replace(' ', '_').lower(), lambda: None)
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.

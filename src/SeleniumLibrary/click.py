@@ -12,7 +12,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Click(object):
+from runonfailure import RunOnFailure
+
+
+class Click(RunOnFailure):
 
     def _click(self, locator, dont_wait=''):
         self._selenium.click(locator)
