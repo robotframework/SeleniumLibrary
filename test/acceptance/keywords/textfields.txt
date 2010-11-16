@@ -24,7 +24,7 @@ Input Password
   Verify Location Is "forms/submit.html"
 
 Press Key
-  [Setup]  Go To  ${ROOT}forms/login.html
+  [Setup]  Go To Page "forms/login.html"
   Cannot Be Executed in IE
   Input Text  username_field  James Bond
   Press Key  password_field  f
@@ -32,7 +32,7 @@ Press Key
   Verify Location Is "forms/submit.html"
 
 Press Key Native
-  [Setup]  Go To  ${ROOT}forms/login.html
+  [Setup]  Go To Page "forms/login.html"
   [Documentation]  Due to the fact that test are run with xvfb in CI, this test does not work there.
   [Tags]  ci-incompatible
   Input Text  username_field  James Bond

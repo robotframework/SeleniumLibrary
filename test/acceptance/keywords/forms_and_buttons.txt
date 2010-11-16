@@ -15,7 +15,7 @@ Submit Form
     Verify Location Is "${FORM SUBMITTED}"
 
 Submit Form Without Args
-    [Setup]   Go To   ${ROOT}forms/form_without_name.html
+    [Setup]   Go To Page "forms/form_without_name.html"
     Submit Form
     Verify Location Is "target/first.html"
 
@@ -48,7 +48,7 @@ Choose File
     [Teardown]  Remove File   ${CURDIR}${/}temp.txt
 
 Click Image With Submit Type Images
-    [Setup]   Go To   ${ROOT}forms/form_with_image_submit.html
+    [Setup]   Go To Page "forms/form_with_image_submit.html"
     Click Image   robot.bmp
     Verify Location Is "${FORM SUBMITTED}"
 

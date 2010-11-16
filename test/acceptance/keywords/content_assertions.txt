@@ -1,18 +1,18 @@
 *Setting*
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}
+Test Setup  Go To Front Page
 Default Tags  assertions
 
 
 *Test Cases*
 Location Should Be
-  [Documentation]  FAIL Location should have been 'non existing' but was '${ROOT}'
-  ...  LOG 1 Current location is '${ROOT}'.
-  Location Should Be  ${ROOT}
+  [Documentation]  FAIL Location should have been 'non existing' but was '${FRONT PAGE}'
+  ...  LOG 1 Current location is '${FRONT PAGE}'.
+  Location Should Be  ${FRONT PAGE}
   Location Should Be  non existing
 
 Location Should Contain
-  [Documentation]  FAIL Location should have contained 'not a location' but it was '${ROOT}'.
+  [Documentation]  FAIL Location should have contained 'not a location' but it was '${FRONT PAGE}'.
   ...  LOG 1 Current location contains 'html'.
   Location Should Contain  html
   Location Should Contain  not a location
@@ -44,7 +44,7 @@ Page Should Contain With Disabling Source Logging
   [Teardown]  Set Log Level  DEBUG
 
 Page Should Contain With Frames
-  [Setup]  Go To  ${ROOT}frames/frameset.html
+  [Setup]  Go To Page "frames/frameset.html"
   Page Should Contain  You're looking at right.
 
 Page Should Not Contain
@@ -108,20 +108,20 @@ Element Text Should Be
 
 Element Should Be Visible
   [Documentation]  FAIL The element 'i_am_hidden' should be visible, but it is not.
-  [Setup]  Go To  ${ROOT}visibility.html
+  [Setup]  Go To Page "visibility.html"
   Element Should Be Visible  i_am_visible
   Element Should Be Visible  i_am_hidden
-  
+
 Element Should Not Be Visible
   [Documentation]  FAIL The element 'i_am_visible' should not be visible, but it is.
-  [Setup]  Go To  ${ROOT}visibility.html
+  [Setup]  Go To Page "visibility.html"
   Element Should Not Be Visible  i_am_hidden
   Element Should Not Be Visible  i_am_visible
 
 Page Should Contain Checkbox
   [Documentation]  FAIL Page should have contained checkbox 'non-existing' but did not LOG
   ...  1:2 Current page contains checkbox 'can_send_email'.
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Contain Checkbox  can_send_email
   Page Should Contain Checkbox  xpath=//input[@type='checkbox' and @name='can_send_sms']
   Page Should Contain Checkbox  non-existing
@@ -129,77 +129,77 @@ Page Should Contain Checkbox
 Page Should Not Contain Checkbox
   [Documentation]  FAIL Page should not have contained checkbox 'can_send_email'
   ...  LOG 1:2 Current page does not contain checkbox 'non-existing'.
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Not Contain Checkbox  non-existing
   Page Should Not Contain Checkbox  can_send_email
 
 Page Should Contain Radio Button
   [Documentation]  FAIL Page should have contained radio button 'non-existing' but did not
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Contain Radio Button  sex
   Page Should Contain Radio Button  xpath=//input[@type="radio" and @value="male"]
   Page Should Contain Radio Button  non-existing
 
 Page Should Not Contain Radio Button
   [Documentation]  FAIL Page should not have contained radio button 'sex'
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Not Contain Radio Button  non-existing
   Page Should Not Contain Radio Button  sex
 
 Page Should Contain Image
   [Documentation]  FAIL Page should have contained image 'non-existent' but did not
-  [Setup]  Go To  ${ROOT}links.html
+  [Setup]  Go To Page "links.html"
   Page Should contain Image  image.jpg
   Page Should contain Image  non-existent
 
 Page Should Not Contain Image
   [Documentation]  FAIL Page should not have contained image 'image.jpg'
-  [Setup]  Go To  ${ROOT}links.html
+  [Setup]  Go To Page "links.html"
   Page Should not contain Image  non-existent
   Page Should not contain Image  image.jpg
 
 Page Should Contain Link
   [Documentation]  FAIL Page should have contained link 'non-existent' but did not
-  [Setup]  Go To  ${ROOT}links.html
+  [Setup]  Go To Page "links.html"
   Page Should contain link  Relative
   Page Should contain link  sub/index.html
   Page Should contain link  non-existent
 
 Page Should Not Contain Link
   [Documentation]  FAIL Page should not have contained link 'Relative'
-  [Setup]  Go To  ${ROOT}links.html
+  [Setup]  Go To Page "links.html"
   Page Should not contain link  non-existent
   Page Should not contain link  Relative
 
 Page Should Contain List
   [Documentation]  FAIL Page should have contained list 'non-existing' but did not
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page should Contain List  possible_channels
   Page Should Contain List  non-existing
 
 Page Should Not Contain List
   [Documentation]  FAIL Page should not have contained list 'possible_channels'
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Not Contain List  non-existing
   Page Should Not Contain List  possible_channels
 
 Page Should Contain TextField
   [Documentation]  FAIL Page should have contained text field 'non-existing' but did not
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Contain Text Field  name
   Page Should Contain Text Field  xpath=//input[@type='text' and @name='email']
   Page Should Contain Text Field  non-existing
 
 Page Should Not Contain Text Field
   [Documentation]  FAIL Page should not have contained text field 'name'
-  [Setup]  Go To  ${ROOT}forms/prefilled_email_form.html
+  [Setup]  Go To Page "forms/prefilled_email_form.html"
   Page Should Not Contain Text Field  non-existing
   Page Should Not Contain Text Field  name
 
 TextField Should Contain
   [Documentation]  FAIL Text field 'name' should have contained text 'non-existing' but it contained 'my name'
   ...  LOG 1:2 Text field 'name' contains text ''.
-  [Setup]  Go To  ${ROOT}forms/email_form.html
+  [Setup]  Go To Page "forms/email_form.html"
   TextField Should contain  name  \
   Input Text  name  my name
   TextField Should contain  name  my name
@@ -208,7 +208,7 @@ TextField Should Contain
 TextField Value Should Be
   [Documentation]  FAIL Value of text field 'name' should have been 'non-existing' but was 'my name'
   ...  LOG 1:2 Content of text field 'name' is ''.
-  [Setup]  Go To  ${ROOT}forms/email_form.html
+  [Setup]  Go To Page "forms/email_form.html"
   textfield Value Should Be  name  \
   Input Text  name  my name
   textfield Value Should Be  name  my name
@@ -216,7 +216,7 @@ TextField Value Should Be
 
 Page Should Contain Button
   [Documentation]  FAIL Page should have contained button 'non-existing' but did not
-  [Setup]  Go To  ${ROOT}forms/buttons.html
+  [Setup]  Go To Page "forms/buttons.html"
   Page Should Contain Button  button
   Page Should Contain Button  xpath=//button[@type="submit"]
   Page Should Contain Button  Ulos
@@ -227,25 +227,25 @@ Page Should Contain Button
 
 Page Should Not Contain Button In Button Tag
   [Documentation]  FAIL Page should not have contained button 'button'
-  [Setup]  Go To  ${ROOT}forms/buttons.html
+  [Setup]  Go To Page "forms/buttons.html"
   Page Should Not Contain Button  invalid
   Page Should Not Contain Button  button
 
 Page Should Not Contain Button In Input Tag
   [Documentation]  FAIL Page should not have contained input 'Act!'
-  [Setup]  Go To  ${ROOT}forms/buttons.html
+  [Setup]  Go To Page "forms/buttons.html"
   Page Should Not Contain Button  invalid
   Page Should Not Contain Button  Act!
 
 Get All Links
-  [Setup]  Go To  ${ROOT}links.html
+  [Setup]  Go To Page "links.html"
   ${links}=  Get All Links
   Length Should Be  ${links}  18
   List Should Contain Value  ${links}  bold_id
 
-Xpath Should Match X Times 
+Xpath Should Match X Times
   [Documentation]  FAIL Xpath //input[@type="text"] should have matched 2 times but matched 1 times
-  [Setup]  Go To  ${ROOT}forms/login.html
+  [Setup]  Go To Page "forms/login.html"
   Xpath Should Match X Times  //input[@type="text"]  1
   Xpath Should Match X Times  //input[@type="text"]  ${1}
   Xpath Should Match X Times  //input[@type="text"]  2

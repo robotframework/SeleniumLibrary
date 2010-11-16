@@ -41,6 +41,6 @@ Run Only Once per Failure
     ...  LOG 2:2 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
     ...  LOG 2:3 FAIL Page should have contained text 'Not found' but did not
     ...  LOG 2:4 NONE
-    [Setup]  Go To  ${ROOT}frames/frameset.html
+    [Setup]  Go To Page "frames/frameset.html"
     Register Keyword to Run on Failure  Capture Screenshot
     Frame Should Contain  right  Not found  loglevel=NONE
