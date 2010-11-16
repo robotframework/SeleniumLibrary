@@ -16,7 +16,7 @@ Open Browser To Start Page
   Open Browser  ${ROOT}  ${BROWSER}
   ${old timeout} =  Set Selenium Speed  ${SPEED}
   Should Be Equal  ${old timeout}  0 seconds
-  ${old timeout} =  Set Selenium Timeout  2 seconds
+  ${old timeout} =  Set Selenium Timeout  10 seconds
   Should Be Equal  ${old timeout}  5 seconds
 
 Cannot Be Executed In IE
