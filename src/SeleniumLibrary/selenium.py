@@ -16,11 +16,8 @@ limitations under the License.
 """
 __docformat__ = "restructuredtext en"
 
-# This file has been automatically generated via XSL
-
 import httplib
 import urllib
-import re
 
 class selenium:
     """
@@ -185,8 +182,11 @@ class selenium:
     def setExtensionJs(self, extensionJs):
         self.extensionJs = extensionJs
         
-    def start(self):
-        result = self.get_string("getNewBrowserSession", [self.browserStartCommand, self.browserURL, self.extensionJs])
+    def start(self, browserConfigurationOptions=None):
+        start_args = [self.browserStartCommand, self.browserURL, self.extensionJs]
+        if browserConfigurationOptions:
+          start_args.append(browserConfigurationOptions)
+        result = self.get_string("getNewBrowserSession", start_args)
         try:
             self.sessionId = result
         except ValueError:
@@ -198,29 +198,31 @@ class selenium:
 
     def do_command(self, verb, args):
         conn = httplib.HTTPConnection(self.host, self.port)
-        body = u'cmd=' + urllib.quote_plus(unicode(verb).encode('utf-8'))
-        for i in range(len(args)):
-            body += '&' + unicode(i+1) + '=' + urllib.quote_plus(unicode(args[i]).encode('utf-8'))
-        if (None != self.sessionId):
-            body += "&sessionId=" + unicode(self.sessionId)
-        headers = {"Content-Type": "application/x-www-form-urlencoded; charset=utf-8"}
         try:
+            body = u'cmd=' + urllib.quote_plus(unicode(verb).encode('utf-8'))
+            for i in range(len(args)):
+                body += '&' + unicode(i+1) + '=' + \
+                        urllib.quote_plus(unicode(args[i]).encode('utf-8'))
+            if (None != self.sessionId):
+                body += "&sessionId=" + unicode(self.sessionId)
+            headers = {
+                "Content-Type":
+                "application/x-www-form-urlencoded; charset=utf-8"
+            }
             conn.request("POST", "/selenium-server/driver/", body, headers)
+
             response = conn.getresponse()
-            #print response.status, response.reason
             data = unicode(response.read(), "UTF-8")
-            result = response.reason
-            #print "Selenium Result: " + repr(data) + "\n\n"
+            if (not data.startswith('OK')):
+                raise Exception, data
+            return data
         finally:
             conn.close()
-        if (not data.startswith('OK')):
-            raise Exception, data
-        return data
-    
+
     def get_string(self, verb, args):
         result = self.do_command(verb, args)
         return result[3:]
-    
+
     def get_string_array(self, verb, args):
         csv = self.get_string(verb, args)
         token = ""
@@ -243,11 +245,11 @@ class selenium:
         return tokens
 
     def get_number(self, verb, args):
-        # Is there something I need to do here?
+        # FIXME: Talk to the group about this, it should return a number
         return self.get_string(verb, args)
-    
+
     def get_number_array(self, verb, args):
-        # Is there something I need to do here?
+        # FIXME: Talk to the group about this, it should return a number
         return self.get_string_array(verb, args)
 
     def get_boolean(self, verb, args):
@@ -257,10 +259,10 @@ class selenium:
         if ("false" == boolstr):
             return False
         raise ValueError, "result is neither 'true' nor 'false': " + boolstr
-    
+
     def get_boolean_array(self, verb, args):
         boolarr = self.get_string_array(verb, args)
-        for i in range(len(boolarr)):
+        for i, boolstr in enumerate(boolarr):
             if ("true" == boolstr):
                 boolarr[i] = True
                 continue
@@ -271,9 +273,6 @@ class selenium:
         return boolarr
     
     
-
-### From here on, everything's auto-generated from XML
-
 
     def click(self,locator):
         """
@@ -635,6 +634,13 @@ class selenium:
         """
         return self.get_string("getSpeed", [])
 
+    def get_log(self):
+        """
+        Get RC logs associated with current session.
+        
+        """
+        return self.get_string("getLog", [])
+
 
     def check(self,locator):
         """
@@ -747,8 +753,7 @@ class selenium:
         """
         self.do_command("submit", [formLocator,])
 
-
-    def open(self,url):
+    def open(self,url,ignoreResponseCode=False):
         """
         Opens an URL in the test frame. This accepts both relative and absolute
         URLs.
@@ -762,10 +767,9 @@ class selenium:
         new browser session on that domain.
         
         'url' is the URL to open; may be relative or absolute
+        'ignoreResponseCode' if set to true: doesnt send ajax HEAD/GET request; if set to false: sends ajax HEAD/GET request to the url and reports error code if any as response to open.
         """
-        # Fix for Firefox 3.6
-        # http://code.google.com/p/selenium/issues/detail?id=408
-        self.do_command("open", [url,"true"])
+        self.do_command("open", [url,ignoreResponseCode])
 
 
     def open_window(self,url,windowID):
@@ -2072,4 +2076,3 @@ class selenium:
         'keycode' is an integer keycode number corresponding to a java.awt.event.KeyEvent; note that Java keycodes are NOT the same thing as JavaScript keycodes!
         """
         self.do_command("keyPressNative", [keycode,])
-
