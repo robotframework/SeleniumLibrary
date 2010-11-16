@@ -16,6 +16,7 @@ from runonfailure import RunOnFailure
 
 
 class Mouse(RunOnFailure):
+    """Conditions keywords for simulating mouse events."""
 
     def mouse_over(self, locator):
         """Simulates hovering mouse over the element specified by `locator`.

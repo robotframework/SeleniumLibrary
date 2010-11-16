@@ -12,10 +12,53 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from robot import utils
+
 from runonfailure import RunOnFailure
 
 
-class Assertion(RunOnFailure):
+class Page(RunOnFailure):
+    """Contains keywords that operate on the whole page or frame."""
+
+    def select_frame(self, locator):
+        """Sets frame identified by `locator` as current frame.
+
+        Key attributes for frames are `id` and `name.` See `introduction` for
+        details about locating elements.
+        """
+        self._info("Selecting frame '%s'." % locator)
+        self._selenium.select_frame(self._parse_locator(locator))
+
+    def unselect_frame(self):
+        """Sets the top frame as the current frame."""
+        self._selenium.select_frame('relative=top')
+
+    def get_all_links(self):
+        """Returns a list containing ids of all links found in current page.
+
+        If a link has no id, an empty string will be in the list instead.
+        """
+        return self._selenium.get_all_links()
+
+    def get_source(self):
+        """Returns the entire html source of the current page or frame."""
+        return self._selenium.get_html_source()
+
+    def log_source(self, level='INFO'):
+        """Logs and returns the entire html source of the current page or frame.
+
+        The `level` argument defines the used log level. Valid log levels are
+        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
+
+        `NONE` argument value was added in SeleniumLibrary 2.5.
+        """
+        source = self.get_source()
+        self._log(source, level.upper())
+        return source
+
+    def get_title(self):
+        """Returns title of current page."""
+        return self._selenium.get_title()
 
     def title_should_be(self, title):
         """Verifies that current page title equals `title`."""
@@ -40,6 +83,39 @@ class Assertion(RunOnFailure):
             raise AssertionError("Location should have contained '%s' "
                                  "but it was '%s'." % (expected, actual))
         self._info("Current location contains '%s'." % expected)
+
+    def wait_until_page_contains(self, text, timeout, error=None):
+        """Waits until `text` appears on current page or `timeout` expires.
+
+        `timeout` must given using Robot Framework time syntax, see
+        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+
+        `error` can be used to override the default error message.
+
+        Robot Framework built-in keyword `Wait Until Keyword Succeeds` can be used
+        to get this kind of functionality for any Selenium keyword.
+        """
+        if not error:
+            error = "Text '%s' did not appear in '%s'" % (text, timeout)
+        self._wait_until(lambda: self._selenium.is_text_present(text),
+                         utils.timestr_to_secs(timeout), error)
+
+    def wait_until_page_contains_element(self, locator, timeout, error=None):
+        """Waits until element specified with `locator` appears on current page or `timeout` expires.
+
+        `timeout` must given using Robot Framework time syntax, see
+        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+
+        `error` can be used to override the default error message.
+
+        Robot Framework built-in keyword `Wait Until Keyword Succeeds` can be used
+        to get this kind of functionality for any Selenium keyword.
+        """
+        if not error:
+            error = "Element '%s' did not appear in '%s'" % (locator, timeout)
+        locator = self._parse_locator(locator)
+        self._wait_until(lambda: self._selenium.is_element_present(locator),
+                         utils.timestr_to_secs(timeout), error)
 
     def page_should_contain(self, text, loglevel='INFO'):
         """Verifies that current page contains `text`.
@@ -107,91 +183,6 @@ class Assertion(RunOnFailure):
             self.unselect_frame()
 
     frame_should_contain_text = frame_should_contain
-
-    def element_should_contain(self, locator, expected, message=''):
-        """Verifies element identified by `locator` contains text `expected`.
-
-        If you wish to assert an exact (not a substring) match on the text
-        of the element, use `Element Text Should Be`.
-
-        `message` can be used to override the default error message.
-
-        Key attributes for arbitrary elements are `id` and `name`. See
-        `introduction` for details about locating elements.
-        """
-        self._info("Verifying element '%s' contains text '%s'."
-                    % (locator, expected))
-        actual = self._selenium.get_text(self._parse_locator(locator))
-        if not expected in actual:
-            if not message:
-                message = "Element '%s' should have contained text '%s' but "\
-                          "its text was '%s'." % (locator, expected, actual)
-            raise AssertionError(message)
-
-    def element_text_should_be(self, locator, expected, message=''):
-        """Verifies element identified by `locator` exactly contains text `expected`.
-
-        In contrast to `Element Should Contain`, this keyword does not try
-        a substring match but an exact match on the element identified by `locator`.
-
-        `message` can be used to override the default error message.
-
-        Key attributes for arbitrary elements are `id` and `name`. See
-        `introduction` for details about locating elements.
-
-        This keyword was added in SeleniumLibrary 2.5.
-        """
-        self._info("Verifying element '%s' exactly contains text '%s'."
-                    % (locator, expected))
-        actual = self._selenium.get_text(self._parse_locator(locator))
-        if expected != actual:
-            if not message:
-                message = "The text of element '%s' should have been '%s' but "\
-                          "in fact it was '%s'." % (locator, expected, actual)
-            raise AssertionError(message)
-
-    def element_should_be_visible(self, locator, message=''):
-        """Verifies that the element identified by `locator` is visible.
-
-        Herein, visible means that the element is logically visible, not optically
-        visible in the current browser viewport. For example, an element that carries
-        display:none is not logically visible, so using this keyword on that element
-        would fail.
-
-        `message` can be used to override the default error message.
-
-        Key attributes for arbitrary elements are `id` and `name`. See
-        `introduction` for details about locating elements.
-
-        This keyword was added in SeleniumLibrary 2.5.
-        """
-        self._info("Verifying element '%s' is visible." % locator)
-        visible = self._selenium.is_visible(locator)
-        if not visible:
-            if not message:
-                message = "The element '%s' should be visible, but it "\
-                          "is not." % locator
-            raise AssertionError(message)
-
-    def element_should_not_be_visible(self, locator, message=''):
-        """Verifies that the element identified by `locator` is NOT visible.
-
-        This is the opposite of `Element Should Be Visible`.
-
-        `message` can be used to override the default error message.
-
-        Key attributes for arbitrary elements are `id` and `name`. See
-        `introduction` for details about locating elements.
-
-        This keyword was added in SeleniumLibrary 2.5.
-        """
-        self._info("Verifying element '%s' is not visible." % locator)
-        visible = self._selenium.is_visible(locator)
-        if visible:
-            if not message:
-                message = "The element '%s' should not be visible, "\
-                          "but it is." % locator
-            raise AssertionError(message)
 
     def page_should_contain_element(self, locator, message='', loglevel='INFO'):
         """Verifies element identified by `locator` is found from current page.
@@ -355,6 +346,8 @@ class Assertion(RunOnFailure):
     def page_should_contain_button(self, locator, message='', loglevel='INFO'):
         """Verifies button identified by `locator` is found from current page.
 
+        This keyword searches for buttons created with either `input` or `button` tag.
+
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
 
@@ -369,6 +362,8 @@ class Assertion(RunOnFailure):
     def page_should_not_contain_button(self, locator, message='', loglevel='INFO'):
         """Verifies button identified by `locator` is not found from current page.
 
+        This keyword searches for buttons created with either `input` or `button` tag.
+
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
 
@@ -377,6 +372,14 @@ class Assertion(RunOnFailure):
         """
         self._page_should_not_contain_element(locator, 'button', message, loglevel)
         self._page_should_not_contain_element(locator, 'input', message, loglevel)
+
+    def get_matching_xpath_count(self, xpath):
+        """Returns number of elements matching `xpath`
+
+        If you wish to assert the number of matching elements, use
+        `Xpath Should Match X Times`.
+        """
+        return self._selenium.get_xpath_count(xpath)
 
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
@@ -394,7 +397,8 @@ class Assertion(RunOnFailure):
                             %(xpath, expected_xpath_count, actual_xpath_count)
             self.log_source(loglevel)
             raise AssertionError(message)
-        self._info("Current page contains %s elements matching '%s'." % (actual_xpath_count, xpath))
+        self._info("Current page contains %s elements matching '%s'."
+                   % (actual_xpath_count, xpath))
 
     def _page_should_contain_element(self, locator, element_name, message, loglevel):
         if not self._selenium.is_element_present(self._parse_locator(
@@ -416,35 +420,3 @@ class Assertion(RunOnFailure):
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
-
-    def text_field_should_contain(self, locator, expected, message=''):
-        """Verifies text field identified by `locator` contains text `expected`.
-
-        `message` can be used to override default error message.
-
-        Key attributes for text fields are `id` and `name`. See `introduction`
-        for details about locating elements.
-        """
-        actual = self.get_value(locator)
-        if not expected in actual:
-            if not message:
-                message = "Text field '%s' should have contained text '%s' "\
-                          "but it contained '%s'" % (locator, expected, actual)
-            raise AssertionError(message)
-        self._info("Text field '%s' contains text '%s'." % (locator, expected))
-
-    def textfield_value_should_be(self, locator, expected, message=''):
-        """Verifies the value in text field identified by `locator` is exactly `expected`.
-
-        `message` can be used to override default error message.
-
-        Key attributes for text fields are `id` and `name`. See `introduction`
-        for details about locating elements.
-        """
-        actual = self.get_value(locator)
-        if actual != expected:
-            if not message:
-                message = "Value of text field '%s' should have been '%s' "\
-                          "but was '%s'" % (locator, expected, actual)
-            raise AssertionError(message)
-        self._info("Content of text field '%s' is '%s'." % (locator, expected))

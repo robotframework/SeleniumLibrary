@@ -16,6 +16,7 @@ from runonfailure import RunOnFailure
 
 
 class Button(RunOnFailure):
+    """Contains keywords for operating on checkboxes and radio buttons."""
 
     def select_checkbox(self, locator):
         """Selects checkbox identified by `locator`.
