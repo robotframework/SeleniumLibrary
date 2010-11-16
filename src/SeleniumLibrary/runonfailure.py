@@ -70,7 +70,7 @@ class RunOnFailure(object):
 
         Examples:
         | Run On Failure  | Log Source | # Run `Log Source` on failure. |
-        | ${previous kw}= | Run On Failure  | Nothing    | # Disables run-on-failure functionality and store the previous kw name in a variable. |
+        | ${previous kw}= | Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
         | Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
 
         The whole run-on-failure functionality is new in SeleniumLibrary 2.5.
