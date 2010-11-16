@@ -52,29 +52,29 @@ class RunOnFailure(object):
 
     _run_on_failure = _do_nothing_on_failure = lambda self: None
 
-    def run_on_failure(self, keyword_name):
+    def register_keyword_to_run_on_failure(self, keyword_name):
         """Sets the keyword to execute when a SeleniumLibrary keyword fails.
 
         `keyword_name` is the name of a SeleniumLibrary keyword that
         will be executed if another SeleniumLibrary keyword fails.
-        The name is case but not space sensitive.  If the name does
+        It is not possible to use a keyword that requires arguments.
+        The name is case but not space sensitive. If the name does
         not match any keyword, this functionality is disabled and
         nothing extra will be done in case of a failure.
 
         The initial keyword to use is set in `importing`, and the
-        keyword that is used by default is `Capture
-        Screenshot`. Taking a screenshot when something failed is a
-        very useful feature, but notice that it can slow down the
-        execution.
+        keyword that is used by default is `Capture Screenshot`.
+        Taking a screenshot when something failed is a very useful
+        feature, but notice that it can slow down the execution.
 
         This keyword returns the name of the previously registered
         failure keyword. It can be used to restore the original
         value later.
 
         Examples:
-        | Run On Failure  | Log Source | # Run `Log Source` on failure. |
-        | ${previous kw}= | Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
-        | Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
+        | Register Keyword To Run On Failure  | Log Source | # Run `Log Source` on failure. |
+        | ${previous kw}= | Register Keyword To Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
+        | Register Keyword To Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
 
         The whole run-on-failure functionality is new in SeleniumLibrary 2.5.
         It only works when running tests on Python/Jython 2.4 or newer and
