@@ -64,6 +64,8 @@ def start_http_server():
           stdout=server_output, stderr=server_output)
 
 def execute_tests(runner):
+    if not os.path.exists(RESULTDIR):
+        os.mkdir(RESULTDIR)
     command = [runner] + [ arg % ARG_VALUES for arg in ROBOT_ARGS] + args +\
             [ TESTDATADIR ]
     syslog = os.path.join(RESULTDIR, 'syslog.txt')
