@@ -2,10 +2,11 @@
 Resource  ../resource.txt
 Suite Setup  Run Keywords  Go To Front Page  Set Info Loglevel
 Suite Teardown  Set Debug Loglevel
-Test Teardown  Run on Failure  Nothing
+Test Teardown  Register Keyword to Run on Failure  Nothing
 
 *** Variables ***
 ${FAILURE}  FAIL Page should not have contained text 'needle'
+
 
 *** Test Cases ***
 Capture Screenshot On Failure
@@ -15,7 +16,7 @@ Capture Screenshot On Failure
     ...  LOG 3:1 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
     ...  LOG 3:2 ${FAILURE}
     ...  LOG 3:3 NONE
-    Run on Failure  Capture Screenshot
+    Register Keyword to Run on Failure  Capture Screenshot
     Page Should Contain  needle
     Page Should Not Contain  needle  loglevel=None
 
@@ -24,15 +25,15 @@ Disable Run on Failure
     ...  LOG 1  No keyword will be run on failure.
     ...  LOG 2:1 ${FAILURE}
     ...  LOG 2:2 NONE
-    Run On Failure  Nothing
+    Register Keyword to Run On Failure  Nothing
     Page Should Not Contain  needle  loglevel=None
 
 Run on Failure Returns Previous Value
-    ${old}=  Run on Failure  log_source
+    ${old}=  Register Keyword to Run on Failure  log_source
     Should Be Equal  ${old}  No keyword
-    ${old}=  Run on Failure  Capture Screenshot
+    ${old}=  Register Keyword to Run on Failure  Capture Screenshot
     Should Be Equal  ${old}  Log Source
-    ${old}=  Run on Failure  ${old}
+    ${old}=  Register Keyword to Run on Failure  ${old}
     Should Be Equal  ${old}  Capture Screenshot
 
 Run Only Once per Failure
@@ -41,5 +42,5 @@ Run Only Once per Failure
     ...  LOG 2:3 FAIL Page should have contained text 'Not found' but did not
     ...  LOG 2:4 NONE
     [Setup]  Go To  ${ROOT}frames/frameset.html
-    Run on Failure  Capture Screenshot
+    Register Keyword to Run on Failure  Capture Screenshot
     Frame Should Contain  right  Not found  loglevel=NONE
