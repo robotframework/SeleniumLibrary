@@ -23,18 +23,21 @@ except ImportError:
 from robot.errors import DataError
 from robot.variables import GLOBAL_VARIABLES
 from robot import utils
-
 from selenium import selenium
-from assertion import Assertion
+
+from browser import Browser
 from button import Button
+from page import Page
 from click import Click
 from javascript import JavaScript
 from mouse import Mouse
 from select import Select
 from element import Element
-from xpath import LocatorParser
 from screenshot import Screenshot
+from textfield import TextField
 from table import Table
+
+from xpath import LocatorParser
 from version import VERSION
 
 __version__ = VERSION
@@ -108,8 +111,8 @@ def shut_down_selenium_server(host='localhost', port=4444):
         pass
 
 
-class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
-                      Element, Screenshot, Table):
+class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
+                      Element, Screenshot, Table, TextField):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
     It uses the Selenium Remote Control tool internally to control a web browser.
@@ -479,290 +482,6 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
             method = lambda *args: self._selenium.do_command(method_name, args)
         return method(*args)
 
-    def wait_until_page_loaded(self, timeout=None):
-        """Waits for a page load to happen.
-
-        This keyword can be used after performing an action that causes a page
-        load to ensure that following keywords see the page fully loaded.
-
-        `timeout` is the time to wait for the page load to happen, after which
-        this keyword fails. If `timeout` is not provided, the value given in
-        `importing` or using keyword `Set Timeout` is used.
-
-        Many of the keywords that cause a page load take an optional argument
-        `dont_wait` that can be also used to wait/not wait page load. See
-        `introduction` for more details.
-
-        This keyword was added in SeleniumLibrary 2.5.
-        """
-        self._selenium.wait_for_page_to_load(timeout or self._timeout)
-
-    def go_to(self, url):
-        """Navigates the active browser instance to the provided URL."""
-        self._info("Opening url '%s'" % url)
-        self._selenium.open(url)
-
-    def go_back(self, dont_wait=''):
-        """Simulates the user clicking the "back" button on their browser.
-
-        See `introduction` for details about locating elements and about meaning
-        of `dont_wait` argument."""
-        self._selenium.go_back()
-        if not dont_wait:
-            self.wait_until_page_loaded()
-
-    def maximize_browser_window(self):
-        """Maximizes current browser window."""
-        self._selenium.window_maximize()
-
-    def select_frame(self, locator):
-        """Sets frame identified by `locator` as current frame.
-
-        Key attributes for frames are `id` and `name.` See `introduction` for
-        details about locating elements.
-        """
-        self._info("Selecting frame '%s'." % locator)
-        self._selenium.select_frame(self._parse_locator(locator))
-
-    def unselect_frame(self):
-        """Sets the top frame as the current frame."""
-        self._selenium.select_frame('relative=top')
-
-    def get_window_names(self):
-        """Returns names of all windows known to the browser."""
-        return self._selenium.get_all_window_names()
-
-    def get_window_titles(self):
-        """Returns titles of all windows known to the browser."""
-        return self._selenium.get_all_window_titles()
-
-    def get_window_identifiers(self):
-        """Returns values of id attributes of all windows known to the browser."""
-        return self._selenium.get_all_window_ids()
-
-    def get_all_links(self):
-        """Returns a list containing ids of all links found in current page.
-
-        If a link has no id, an empty string will be in the list instead.
-        """
-        return self._selenium.get_all_links()
-
-    def select_window(self, windowID=None):
-        """Selects the window found with `windowID` as the context of actions.
-
-        If the window is found, all subsequent commands use that window, until
-        this keyword is used again. If the window is not found, this keyword fails.
-
-        `windowID` may be either the title of the window or the name of the window
-        in the JavaScript code that creates it. Name is second argument passed
-        to JavaScript function window.open(). In case of multiple windows with
-        same identifier are found, the first one is selected.
-
-        To select main window, the argument can be left empty, or name 'main'
-        can be used.
-
-        Example:
-        | Click Link | popup_link | don't wait | # opens new window |
-        | Select Window | popupName |
-        | Title Should Be | Popup Title |
-        | Select Window |  | | # Chooses the main window again |
-        """
-        if not windowID or windowID.lower() == 'main':
-            windowID = 'null'
-        self._selenium.select_window(windowID)
-
-    def close_window(self):
-        """Closes currently opened pop-up window."""
-        self._selenium.close()
-
-    def get_location(self):
-        """Returns the current location."""
-        return self._selenium.get_location()
-
-    def get_title(self):
-        """Returns title of current page."""
-        return self._selenium.get_title()
-
-    def input_text(self, locator, text):
-        """Types the given `text` into text field identified by `locator`.
-
-        See `introduction` for details about locating elements.
-        """
-        self._info("Typing text '%s' into text field '%s'" % (text, locator))
-        self._selenium.type(self._parse_locator(locator), text)
-
-    def input_password(self, locator, text):
-        """Types the given password into text field identified by `locator`.
-
-        Difference between this keyword and `Input Text` is that this keyword
-        does not log the given password. See `introduction` for details about
-        locating elements.
-        """
-        self._info("Typing password into text field '%s'" % locator)
-        self._selenium.type(self._parse_locator(locator), text)
-
-    def get_value(self, locator):
-        """Returns the value attribute of element identified by `locator`.
-
-        See `introduction` for details about locating elements.
-        """
-        return self._selenium.get_value(self._parse_locator(locator))
-
-    def get_text(self, locator):
-        """Returns the text of element identified by `locator`.
-
-        See `introduction` for details about locating elements.
-        """
-        return self._selenium.get_text(self._parse_locator(locator))
-
-    def get_source(self):
-        """Returns the entire html source of the current page or frame."""
-        return self._selenium.get_html_source()
-
-    def log_source(self, level='INFO'):
-        """Logs and returns the entire html source of the current page or frame.
-
-        The `level` argument defines the used log level. Valid log levels are
-        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
-
-        `NONE` argument value was added in SeleniumLibrary 2.5.
-        """
-        source = self.get_source()
-        self._log(source, level.upper())
-        return source
-
-    def focus(self, locator):
-        """Sets focus to element identified by `locator`.
-
-        This is useful for instance to direct native keystrokes to particular
-        element using `Press Key Native`.
-        """
-        self._selenium.focus(locator)
-
-    def drag_and_drop(self, locator, movement):
-        """Drags element identified with `locator` by `movement`
-
-        `movement is a string in format "+70 -300" interpreted as pixels in
-        relation to elements current position.
-        """
-        self._selenium.dragdrop(self._parse_locator(locator), movement)
-
-    def press_key(self, locator, key, wait=''):
-        """Simulates user pressing key on element identified by `locator`.
-
-        `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\'.
-
-        See `introduction` for details about `wait` argument.
-
-        Examples:
-        | Press Key | text_field   | q |
-        | Press Key | login_button | \\13 | # ASCII code for enter key |
-
-        Sometimes this keyword does not trigger the correct JavaScript event
-        on the clicked element. In those cases `Press Key Native` can be
-        used as a workaround.
-
-        The selenium command `key_press` [1] that this keyword used exposes some
-        erratic behavior [2], especially when used with the Internet Explorer.
-        If you do not get the expected results, try `Press Key Native` instead.
-
-        [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press
-        [2] http://jira.openqa.org/browse/SRC-385
-        """
-        self._selenium.key_press(locator, key)
-        if wait:
-            self.wait_until_page_loaded()
-
-    def press_key_native(self, keycode, wait=''):
-        """Simulates user pressing key by sending an operating system keystroke.
-
-        `keycode` corresponds to `java.awt.event.KeyEvent` constants, which can
-        be found from
-        http://java.sun.com/javase/6/docs/api/constant-values.html#java.awt.event.KeyEvent.CHAR_UNDEFINED
-
-        The key press does not target a particular element. An element can be
-        chosen by first using `Focus` keyword.
-
-        See `introduction` for details about `wait` argument.
-
-        Examples:
-        | Press Key Native | 517          | # Exclamation mark |
-        | Focus            | login_button |
-        | Press Key Native | 10           | # Enter key  |
-
-        Notice that this keyword is very fragile and, for example, using the
-        keyboard or mouse while tests are running often causes problems. It can
-        be beneficial to bring the window to the front again with executing JavaScript:
-
-        | Execute Javascript | window.focus() |          |
-        | Focus              | login_button   |          |
-        | Press Key Native   | 10             | and wait |
-        """
-        self._selenium.key_press_native(keycode)
-        if wait:
-            self.wait_until_page_loaded()
-
-    def get_cookies(self):
-        """Returns all cookies of the current page."""
-        return self._selenium.get_cookie()
-
-    def get_cookie_value(self, name):
-        """Returns value of cookie found with `name`.
-
-        If no cookie is found with `name`, this keyword fails.
-        """
-        return self._selenium.get_cookie_by_name(name)
-
-    def delete_cookie(self, name, options=''):
-        """Deletes cookie matching `name` and `options`.
-
-        If the cookie is not found, nothing happens.
-
-        `options` is the options for the cookie as a string. Currently
-        supported options include `path`, `domain` and `recurse.` Format for
-        `options` is `path=/path/, domain=.foo.com, recurse=true`. The order of
-        options is irrelevant. Note that specifying a domain that is not a
-        subset of the current domain will usually fail. Setting `recurse=true`
-        will cause this keyword to search all sub-domains of current domain
-        with all paths that are subset of current path. This can take a long
-        time.
-        """
-        self._selenium.delete_cookie(name, options)
-
-    def delete_all_cookies(self):
-        """Deletes all cookies by calling `Delete Cookie` repeatedly."""
-        self._selenium.delete_all_visible_cookies()
-
-    def choose_file(self, identifier, file_path):
-        """Inputs the `file_path` into file input field found by `identifier`.
-
-        This keyword is most often used to input files into upload forms.
-        In normal usage the file specified with `file_path` must be available
-        on the same host where the Selenium Server is running.
-
-        An alternative usage is specifying the `file_path` with an URL
-        (starting with `http://` or `https://`) in which case the file
-        will be downloaded automatically. The limitations of this
-        method are that it only works on Firefox and the file must be
-        placed at the root level of a web server.
-
-        Example:
-        | Choose File | my_upload_field | /home/user/files/trades.csv |
-        | Choose File | my_upload_field | http://uploadhost.com/trades.csv |
-
-        The support for remote files was added in SeleniumLibrary 2.3.2.
-        It uses Selenium's `attach_file` method which is explained at
-        http://saucelabs.com/blog/index.php/2009/11/selenium-tip-of-the-week-upload-files-on-browsers-running-over-remote-machines/
-        """
-        if file_path.startswith(('http://', 'https://')):
-            self._selenium.attach_file(identifier, file_path)
-        else:
-            if not os.path.isfile(file_path):
-                self._info("File '%s' does not exist on the local file system"
-                           % file_path)
-            self._selenium.type(identifier, file_path)
-
     def add_location_strategy(self, strategy_name, function_definition):
         """Adds a custom location strategy.
 
@@ -817,6 +536,13 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Mouse, Select,
 
     def _error_contains(self, exception, message):
         return message in self._get_error_message(exception)
+
+    def _wait_until(self, callable, timeout, error):
+        maxtime = time.time() + timeout
+        while not callable():
+            if time.time() > maxtime:
+                raise AssertionError(error)
+            time.sleep(0.2)
 
 
 class _NoBrowser(object):

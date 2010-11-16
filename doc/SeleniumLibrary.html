@@ -440,7 +440,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Set Selenium Timeout" title="Sets the timeout used by various keywords.">Set&nbsp;Selenium&nbsp;Timeout</a>
 &nbsp;&middot;&nbsp;
-<a href="#Simulate" title="Simulates `event` on component identified by `locator`.">Simulate</a>
+<a href="#Simulate" title="Simulates `event` on element identified by `locator`.">Simulate</a>
 &nbsp;&middot;&nbsp;
 <a href="#Start Selenium Server" title="Starts the Selenium Server provided with SeleniumLibrary.">Start&nbsp;Selenium&nbsp;Server</a>
 &nbsp;&middot;&nbsp;
@@ -462,7 +462,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Table Should Contain" title="Verifies that the `expected content` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Text Field Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Text&nbsp;Field&nbsp;Should&nbsp;Contain</a>
+<a href="#Textfield Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Textfield&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Textfield Value Should Be" title="Verifies the value in text field identified by `locator` is exactly `expected`.">Textfield&nbsp;Value&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
@@ -937,7 +937,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
   <td class="arg">xpath</td>
   <td class="doc">Returns number of elements matching <span class="name">xpath</span><br />
 <br />
-If you wish to assert that the number of matching elements has a certain value, use <a href="#Xpath Should Match X Times" class="name">Xpath Should Match X Times</a>.</td>
+If you wish to assert the number of matching elements, use <a href="#Xpath Should Match X Times" class="name">Xpath Should Match X Times</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Source"></a>Get Source</td>
@@ -1181,6 +1181,8 @@ The <span class="name">loglevel</span> argument was added in SeleniumLibrary 2.3
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies button identified by <span class="name">locator</span> is found from current page.<br />
 <br />
+This keyword searches for buttons created with either <span class="name">input</span> or <span class="name">button</span> tag.<br />
+<br />
 See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
 Key attributes for buttons are <span class="name">id</span>, <span class="name">name</span> and <span class="name">value</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
@@ -1265,6 +1267,8 @@ The <span class="name">loglevel</span>argument was added in SeleniumLibrary 2.5.
   <td class="kw"><a name="Page Should Not Contain Button"></a>Page Should Not Contain Button</td>
   <td class="arg">locator, message=, loglevel=INFO</td>
   <td class="doc">Verifies button identified by <span class="name">locator</span> is not found from current page.<br />
+<br />
+This keyword searches for buttons created with either <span class="name">input</span> or <span class="name">button</span> tag.<br />
 <br />
 See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.<br />
 <br />
@@ -1576,9 +1580,9 @@ The keywords that expect a page load to happen will fail if the page does not lo
 <tr>
   <td class="kw"><a name="Simulate"></a>Simulate</td>
   <td class="arg">locator, event</td>
-  <td class="doc">Simulates <span class="name">event</span> on component identified by <span class="name">locator</span>.<br />
+  <td class="doc">Simulates <span class="name">event</span> on element identified by <span class="name">locator</span>.<br />
 <br />
-This keyword is useful if component has OnEvent handler that needs to be explicitly invoked.<br />
+This keyword is useful if element has OnEvent handler that needs to be explicitly invoked.<br />
 <br />
 See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
@@ -1803,7 +1807,7 @@ To understand how tables are identified, please take a look at the <a href="#int
 See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
-  <td class="kw"><a name="Text Field Should Contain"></a>Text Field Should Contain</td>
+  <td class="kw"><a name="Textfield Should Contain"></a>Textfield Should Contain</td>
   <td class="arg">locator, expected, message=</td>
   <td class="doc">Verifies text field identified by <span class="name">locator</span> contains text <span class="name">expected</span>.<br />
 <br />
@@ -1857,7 +1861,7 @@ This keyword does not support waiting for possible page load automatically. If t
 <br />
 <span class="name">timeout</span> must given using Robot Framework time syntax, see <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
 <br />
-<span class="name">error</span> can be used to override the default error message. New in version 2.2.3.<br />
+<span class="name">error</span> can be used to override the default error message.<br />
 <br />
 See <a href="#Execute Javascript" class="name">Execute JavaScript</a> for information about accessing the actual contents of the window through JavaScript.</td>
 </tr>
@@ -1911,7 +1915,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 <p id="footer">
 Altogether 119 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-11-16 07:31:30.
+on 2010-11-16 12:11:15.
 </p>
 </body>
 </html>

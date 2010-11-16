@@ -66,7 +66,8 @@ def start_http_server():
 def execute_tests(runner):
     command = [runner] + [ arg % ARG_VALUES for arg in ROBOT_ARGS] + args +\
             [ TESTDATADIR ]
-    call(command, env=os.environ)
+    syslog = os.path.join(RESULTDIR, 'syslog.txt')
+    call(command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
     call(['python', HTPPSERVER, 'stop'])

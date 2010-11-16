@@ -117,16 +117,6 @@ class JavaScript(RunOnFailure):
         """
         self._selenium.choose_cancel_on_next_confirmation()
 
-    def simulate(self, locator, event):
-        """Simulates `event` on component identified by `locator`.
-
-        This keyword is useful if component has OnEvent handler that needs to be
-        explicitly invoked.
-
-        See `introduction` for details about locating elements.
-        """
-        self._selenium.fire_event(self._parse_locator(locator), event)
-
     def wait_for_condition(self, condition, timeout='5 seconds', error=None):
         """Waits either for given condition to be true or until timeout expires.
 
@@ -137,7 +127,6 @@ class JavaScript(RunOnFailure):
         http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
 
         `error` can be used to override the default error message.
-        New in version 2.2.3.
 
         See `Execute JavaScript` for information about accessing the
         actual contents of the window through JavaScript.
@@ -149,54 +138,3 @@ class JavaScript(RunOnFailure):
                    % (timeout, condition))
         self._wait_until(lambda: self._selenium.get_eval(condition) == 'true',
                          utils.timestr_to_secs(timeout), error)
-
-    def _wait_until(self, callable, timeout, error):
-        maxtime = time.time() + timeout
-        while not callable():
-            if time.time() > maxtime:
-                raise AssertionError(error)
-            time.sleep(0.2)
-
-    def wait_until_page_contains(self, text, timeout, error=None):
-        """Waits until `text` appears on current page or `timeout` expires.
-
-        `timeout` must given using Robot Framework time syntax, see
-        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
-
-        `error` can be used to override the default error message.
-        New in version 2.2.3.
-
-        Robot Framework built-in keyword `Wait Until Keyword Succeeds` can be used
-        to get this kind of functionality for any Selenium keyword.
-        """
-        if not error:
-            error = "Text '%s' did not appear in '%s'" % (text, timeout)
-        self._wait_until(lambda: self._selenium.is_text_present(text),
-                         utils.timestr_to_secs(timeout), error)
-
-    def wait_until_page_contains_element(self, locator, timeout, error=None):
-        """Waits until element specified with `locator` appears on current page or `timeout` expires.
-
-        `timeout` must given using Robot Framework time syntax, see
-        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
-
-        `error` can be used to override the default error message.
-
-        This keyword was added in SeleniumLibrary 2.2.3.
-
-        Robot Framework built-in keyword `Wait Until Keyword Succeeds` can be used
-        to get this kind of functionality for any Selenium keyword.
-        """
-        if not error:
-            error = "Element '%s' did not appear in '%s'" % (locator, timeout)
-        locator = self._parse_locator(locator)
-        self._wait_until(lambda: self._selenium.is_element_present(locator),
-                         utils.timestr_to_secs(timeout), error)
-
-    def open_context_menu(self, locator, offset=None):
-        """Opens context menu on element identified by `locator`."""
-        locator = self._parse_locator(locator)
-        if offset:
-            self._selenium.context_menu_at(locator, offset)
-        else:
-            self._selenium.context_menu(locator)

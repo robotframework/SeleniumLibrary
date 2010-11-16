@@ -3,7 +3,7 @@ Resource  ../resource.txt
 Suite Setup  Delete Cookies and Reload
 
 
-*Test Casse*
+*Test Cases*
 Get Cookies
   ${cookies} =  Get Cookies
   Should Be Equal  ${cookies}  test=seleniumlibrary; another=value

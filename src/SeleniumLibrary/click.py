@@ -16,15 +16,16 @@ from runonfailure import RunOnFailure
 
 
 class Click(RunOnFailure):
+    """Contains keywords for clicking different elements."""
 
     def _click(self, locator, dont_wait=''):
         self._selenium.click(locator)
         if not dont_wait:
             self.wait_until_page_loaded()
-    
+
     def click_element(self, locator, dont_wait=''):
         """Click element identified by `locator`.
-        
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -34,7 +35,7 @@ class Click(RunOnFailure):
 
     def click_link(self, locator, dont_wait=''):
         """Clicks a link identified by locator.
-        
+
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -49,7 +50,7 @@ class Click(RunOnFailure):
 
     def click_button(self, locator, dont_wait=''):
         """Clicks a button identified by `locator`.
-        
+
         Key attributes for buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -60,11 +61,11 @@ class Click(RunOnFailure):
         except Exception, err:
             if not self._error_contains(err, 'ERROR: Element xpath=//'):
                 raise
-            self._click(self._parse_locator(locator, 'button'), dont_wait)    
-    
+            self._click(self._parse_locator(locator, 'button'), dont_wait)
+
     def click_image(self, locator, dont_wait=''):
         """Clicks an image found by `locator`.
-        
+
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -80,7 +81,7 @@ class Click(RunOnFailure):
 
     def submit_form(self, locator='', dont_wait=''):
         """Submits a form identified by `locator`.
-        
+
         If `locator` is empty, first form in the page will be submitted.
         Key attributes for forms are `id` and `name`. See `introduction` for
         details about locating elements and about meaning of `dont_wait`
