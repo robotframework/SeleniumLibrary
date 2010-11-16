@@ -1,4 +1,4 @@
-*Setting*  *Value*  *Value*  *Value*  *Value*  *Value*  *Value*  *Value*
+*Setting*
 Resource  resource.txt
 
 

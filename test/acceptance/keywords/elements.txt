@@ -1,6 +1,6 @@
 * Settings *
 Resource  ../resource.txt
-Suite Setup  Go To  ${ROOT}links.html
+Suite Setup  Go To Page "links.html"
 
 * Test Cases *
 

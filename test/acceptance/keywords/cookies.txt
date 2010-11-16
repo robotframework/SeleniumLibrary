@@ -1,9 +1,10 @@
 *Setting*
 Resource  ../resource.txt
-Suite Setup  Delete Cookies and Reload
+Suite Setup  Run Keywords  Delete All Cookies  Go To Page "index.html"
 
 
 *Test Cases*
+
 Get Cookies
   ${cookies} =  Get Cookies
   Should Be Equal  ${cookies}  test=seleniumlibrary; another=value
@@ -16,10 +17,3 @@ Delete Cookie
   Delete Cookie  test
   ${cookies} =  Get Cookies
   Should Be Equal  ${cookies}  another=value
-
-
-*Keywords*
-Delete Cookies And Reload  Delete All Cookies
-  Go To  ${ROOT}index.html
-
-

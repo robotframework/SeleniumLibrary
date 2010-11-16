@@ -2,24 +2,24 @@
 Resource  resource.txt
 Suite Setup  Open Two Browsers And Register Indexes
 Suite Teardown  Close All Browsers
-Default Tags  multiple
 
 
 *Test Cases*
+
 Last Opened Browser Should Be Active
-  Location Should be  ${ROOT}links.html
+  Verify Location Is "links.html"
 
 It Should Be Possible To Switch Between Browsers Using Indexes
   Switch Browser  ${BROWSER1}
-  Location Should be  ${ROOT}
+  Verify Location Is ""
 
 It Should Be Give An Alias To New Browser Instance
   Open Browser  ${ROOT}forms/prefilled_email_form.html  ${BROWSER}  Third Browser
   Location Should Be  ${ROOT}forms/prefilled_email_form.html
   Switch Browser  ${BROWSER1}
-  Location Should be  ${ROOT}
+  Verify Location Is ""
   Switch Browser  Third Browser
-  Location Should Be  ${ROOT}forms/prefilled_email_form.html
+  Verify Location Is "forms/prefilled_email_form.html"
 
 It Should Be Possible Close A Browser
   Open Browser  ${ROOT}forms/prefilled_email_form.html  ${BROWSER}  Third

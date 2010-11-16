@@ -30,7 +30,13 @@ Fail And Set Non-Critical
   Fail  ${msg}
 
 Go to Front Page
-    Go To  ${ROOT}
+  Go To  ${ROOT}
+
+Go To Page "${relative url}"
+  Go To  ${ROOT}${relative url}
 
 Set ${level} Loglevel
-    Set Log Level  ${level}
+  Set Log Level  ${level}
+
+Verify Location Is "${relative url}"
+  Location Should Be  ${ROOT}${relative url}

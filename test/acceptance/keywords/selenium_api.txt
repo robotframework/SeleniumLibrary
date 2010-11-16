@@ -1,6 +1,6 @@
 * Settings *
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}index.html
+Test Setup  Go To Page "index.html"
 
 * Test Cases *
 Call Selenium functions with no arguments
@@ -9,7 +9,7 @@ Call Selenium functions with no arguments
 
 Call Selenium functions with arguments
   Call Selenium API  open  ${ROOT}links.html
-  Location Should Be  ${ROOT}links.html
+  Verify Location Is "links.html"
   ${ordered}=  Call Selenium API  is_ordered  link=Relative  link=Relative to sub-directory
   Should Be True  ${ordered}
 

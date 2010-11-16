@@ -1,24 +1,28 @@
 *** Settings ***
-Test Setup       Go To   ${ROOT}forms/named_submit_buttons.html
-Default Tags     submit
+Test Setup       Go To Page "forms/named_submit_buttons.html"
 Resource         ../resource.txt
 Library          OperatingSystem
+
+
+*** Variables ***
+${FORM SUBMITTED}  forms/submit.html
+
 
 *** Test Cases ***
 Submit Form
     [Documentation]   LOG 1 Submitting form 'form_name'.
     Submit Form   form_name
-    Location Should Be   ${ROOT}forms/submit.html
+    Verify Location Is "${FORM SUBMITTED}"
 
 Submit Form Without Args
     [Setup]   Go To   ${ROOT}forms/form_without_name.html
     Submit Form
-    Location Should Be   ${ROOT}target/first.html
+    Verify Location Is "target/first.html"
 
 Click Ok Button By Name
     [Documentation]   LOG 1 Clicking button 'ok_button'.
     Click Button   ok_button
-    Location Should Be   ${ROOT}forms/submit.html
+    Verify Location Is "${FORM SUBMITTED}"
 
 Click Cancel Button By Name
     Click Button   cancel_button   And Don't Wait
@@ -26,16 +30,16 @@ Click Cancel Button By Name
 
 Click Ok Button By Value
     Click Button   Ok
-    Location Should Be   ${ROOT}forms/submit.html
+    Verify Location Is "${FORM SUBMITTED}"
 
 Click Cancel Button By Value
     Click Button   cancel_button   And Don't Wait
     Value Should Be Cancel
 
 Form With Button (Not Input) Tag
-    [Setup]   Go To   ${ROOT}forms/buttons.html
+    [Setup]   Go To Page "forms/buttons.html"
     Click Button   button
-    Location Should Be   ${ROOT}forms/submit.html
+    Verify Location Is "${FORM SUBMITTED}"
 
 Choose File
     [Setup]   Navigate To File Upload Form And Create Temp File To Upload
@@ -46,16 +50,16 @@ Choose File
 Click Image With Submit Type Images
     [Setup]   Go To   ${ROOT}forms/form_with_image_submit.html
     Click Image   robot.bmp
-    Location Should Be   ${ROOT}forms/submit.html
+    Verify Location Is "${FORM SUBMITTED}"
 
 
 *** Keywords ***
 Value Should Be Cancel
     ${value} =   Get Value   textfield
-    Equals   ${value}   Cancel
+    Should Be Equal   ${value}   Cancel
 
 Navigate To File Upload Form And CreateTemp File To Upload
   Cannot Be Executed in IE
-  Go To   ${ROOT}forms/file_upload_form.html
+  Go To Page "forms/file_upload_form.html"
   Touch   ${CURDIR}/temp.txt
 

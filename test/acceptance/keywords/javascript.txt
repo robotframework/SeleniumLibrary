@@ -1,7 +1,6 @@
 *** Setting ***
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}javascript/dynamic_content.html
-Default Tags  javascript
+Test Setup  Go To Page "javascript/dynamic_content.html"
 
 
 *** Test Cases ***
@@ -12,7 +11,7 @@ Clicking Elements Should Activate Javascript
 
 Alert Should Be Present
   [Documentation]  FAIL Alert text should have been 'foo bar' but was 'ALERT!'
-  [Setup]  Go To  ${ROOT}javascript/alert.html
+  [Setup]  Go To Page "javascript/alert.html"
   Click Link  Click Me!  And Don't Wait
   Alert Should Be Present
   Click Link  Click Me Too!  And Don't Wait
@@ -22,40 +21,19 @@ Alert Should Be Present
 
 Get Alert Message
   [Documentation]  FAIL There were no alerts
-  [Setup]  Go To  ${ROOT}javascript/alert.html
+  [Setup]  Go To Page "javascript/alert.html"
   Click Link  Click Me!  And Don't Wait
   ${msg} =  Get Alert Message
   Should Be Equal  ${msg}  ALERT!
   ${msg} =  Get Alert Message
 
 Mouse Down On Link
-  [Setup]  Go To  ${ROOT}javascript/mouse_events.html
+  [Setup]  Go To Page "javascript/mouse_events.html"
   Mouse Down On Image  image_mousedown
   Text Field Should Contain  textfield  onmousedown
   Input text  textfield  \
   Mouse Down On Link  onmousedown
   Text Field Should Contain  textfield  onmousedown
-
-Wait For Condition
-  [Documentation]  FAIL Condition 'window.document.title == "Invalid"' did not become true in 0.1
-  ...  LOG 2 Waiting 5 seconds for condition 'window.document.title == "Changed"' to be true.
-  ...  LOG 3 Waiting 0.1 for condition 'window.document.title == "Invalid"' to be true.
-  [Setup]  Go To  ${ROOT}javascript/delayed_events.html
-  Title Should Be  Original
-  Wait For Condition  window.document.title == "Changed"
-  Wait For Condition  window.document.title == "Invalid"  ${0.1}
-
-Wait Until Page Contains
-  [Documentation]  FAIL Text 'invalid' did not appear in '0.1'
-  [Setup]  Go To  ${ROOT}/javascript/delayed_events.html
-  Wait Until Page Contains  New Content  2 s
-  Wait Until Page Contains  invalid  0.1
-
-Wait Until Page Contains Element
-  [Documentation]  FAIL Element 'non-existent' did not appear in '0.1 seconds'
-  [Setup]  Go To  ${ROOT}/javascript/delayed_events.html
-  Wait Until Page Contains Element  new div  2 seconds
-  Wait Until Page Contains Element  non-existent  0.1 seconds
 
 Confirm Action
   Click Button  Change the title  and don't wait
@@ -84,5 +62,5 @@ Execute Javascript from File
   Page Should Contain  Inserted via file
 
 Open Context Menu
-  Go To  ${ROOT}/javascript/context_menu.html
+  Go To Page "javascript/context_menu.html"
   Open Context Menu  myDiv

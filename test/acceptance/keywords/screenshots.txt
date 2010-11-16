@@ -1,10 +1,11 @@
 * Settings *
 Resource     ../resource.txt
-Suite Setup  Go To  ${ROOT}links.html
+Suite Setup  Go To Page "links.html"
+
 
 * Test Cases *
 
-Capture screenshot to default location 
+Capture screenshot to default location
   [Documentation]  LOG 1  REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
   [Setup]  Remove Files  ${OUTPUTDIR}/selenium-screenshot-*.png
   Capture Screenshot
