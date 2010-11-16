@@ -86,7 +86,7 @@ a {
 </head>
 <body>
 <h1>SeleniumLibrary</h1>
-<b>Version:</b> 2.5-SNAPSHOT<br>
+<b>Version:</b> 2.5<br>
 <b>Scope:</b> global<br>
 <b>Named arguments: </b>
 supported
@@ -209,7 +209,7 @@ Usually, https works out of the box. However, there may be trouble with self-sig
 <br />
 <span class="name">jar_path</span> is the absolute path to the selenium-server.jar file to be used by the library. If set, a custom, modified version can be started instead of the default one distributed with the library.<br />
 <br />
-<span class="name">run_on_failure</span> specifies the name of a SeleniumLibrary keyword to execute when another SeleniumLibrary keyword fails. By default <a href="#Capture Screenshot" class="name">Capture Screenshot</a> will be used to take a screenshot of the situation. Using any value that is not a keyword name will disable this feature altogether. See <a href="#Run On Failure" class="name">Run On Failure</a> keyword for more information about this functionality that was added in SeleniumLibrary 2.5.<br />
+<span class="name">run_on_failure</span> specifies the name of a SeleniumLibrary keyword to execute when another SeleniumLibrary keyword fails. By default <a href="#Capture Screenshot" class="name">Capture Screenshot</a> will be used to take a screenshot of the situation. Using any value that is not a keyword name will disable this feature altogether. See <a href="#Register Keyword To Run On Failure" class="name">Register Keyword To Run On Failure</a> keyword for more information about this functionality that was added in SeleniumLibrary 2.5.<br />
 <br />
 Because there are many optional arguments, it is often a good idea to use the handy named-arguments syntax supported by Robot Framework 2.5 and later. This is demonstrated by the last example below.<br />
 <br />
@@ -422,7 +422,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Radio Button Should Not Be Selected" title="Verifies radio button group identified by `group_name` has no selection.">Radio&nbsp;Button&nbsp;Should&nbsp;Not&nbsp;Be&nbsp;Selected</a>
 &nbsp;&middot;&nbsp;
-<a href="#Run On Failure" title="Sets the keyword to execute when a SeleniumLibrary keyword fails.">Run&nbsp;On&nbsp;Failure</a>
+<a href="#Register Keyword To Run On Failure" title="Sets the keyword to execute when a SeleniumLibrary keyword fails.">Register&nbsp;Keyword&nbsp;To&nbsp;Run&nbsp;On&nbsp;Failure</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
@@ -1431,11 +1431,11 @@ Notice that this keyword is very fragile and, for example, using the keyboard or
   <td class="doc">Verifies radio button group identified by <span class="name">group_name</span> has no selection.</td>
 </tr>
 <tr>
-  <td class="kw"><a name="Run On Failure"></a>Run On Failure</td>
+  <td class="kw"><a name="Register Keyword To Run On Failure"></a>Register Keyword To Run On Failure</td>
   <td class="arg">keyword_name</td>
   <td class="doc">Sets the keyword to execute when a SeleniumLibrary keyword fails.<br />
 <br />
-<span class="name">keyword_name</span> is the name of a SeleniumLibrary keyword that will be executed if another SeleniumLibrary keyword fails. The name is case but not space sensitive. &nbsp;If the name does not match any keyword, this functionality is disabled and nothing extra will be done in case of a failure.<br />
+<span class="name">keyword_name</span> is the name of a SeleniumLibrary keyword that will be executed if another SeleniumLibrary keyword fails. It is not possible to use a keyword that requires arguments. The name is case but not space sensitive. If the name does not match any keyword, this functionality is disabled and nothing extra will be done in case of a failure.<br />
 <br />
 The initial keyword to use is set in <a href="#importing" class="name">importing</a>, and the keyword that is used by default is <a href="#Capture Screenshot" class="name">Capture Screenshot</a>. Taking a screenshot when something failed is a very useful feature, but notice that it can slow down the execution.<br />
 <br />
@@ -1444,26 +1444,26 @@ This keyword returns the name of the previously registered failure keyword. It c
 Examples:<br />
 <table border="1" class="doc">
 <tr>
-<td>Run On Failure</td>
+<td>Register Keyword To Run On Failure</td>
 <td>Log Source</td>
 <td># Run <a href="#Log Source" class="name">Log Source</a> on failure.</td>
 <td></td>
 </tr>
 <tr>
 <td>${previous kw}=</td>
-<td>Run On Failure</td>
+<td>Register Keyword To Run On Failure</td>
 <td>Nothing</td>
-<td># Disables run-on-failure functionalityi and store the previous kw name in a variable.</td>
+<td># Disables run-on-failure functionality and stores the previous kw name in a variable.</td>
 </tr>
 <tr>
-<td>Run On Failure</td>
+<td>Register Keyword To Run On Failure</td>
 <td>${previous kw}</td>
 <td># Restore to the previous keyword.</td>
 <td></td>
 </tr>
 </table>
 <br />
-The whole run-on-failure functionality is new in SeleniumLibrary 2.5.</td>
+The whole run-on-failure functionality is new in SeleniumLibrary 2.5. It only works when running tests on Python/Jython 2.4 or newer and it does not work on IronPython at all.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select All From List"></a>Select All From List</td>
@@ -1872,7 +1872,7 @@ See <a href="#Execute Javascript" class="name">Execute JavaScript</a> for inform
 <br />
 <span class="name">timeout</span> must given using Robot Framework time syntax, see <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
 <br />
-<span class="name">error</span> can be used to override the default error message. New in version 2.2.3.<br />
+<span class="name">error</span> can be used to override the default error message.<br />
 <br />
 Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds</span> can be used to get this kind of functionality for any Selenium keyword.</td>
 </tr>
@@ -1884,8 +1884,6 @@ Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds<
 <span class="name">timeout</span> must given using Robot Framework time syntax, see <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
 <br />
 <span class="name">error</span> can be used to override the default error message.<br />
-<br />
-This keyword was added in SeleniumLibrary 2.2.3.<br />
 <br />
 Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds</span> can be used to get this kind of functionality for any Selenium keyword.</td>
 </tr>
@@ -1915,7 +1913,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 <p id="footer">
 Altogether 119 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-11-16 12:11:15.
+on 2010-11-16 15:15:33.
 </p>
 </body>
 </html>
