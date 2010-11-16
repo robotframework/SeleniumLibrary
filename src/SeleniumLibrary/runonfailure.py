@@ -13,11 +13,14 @@
 #  limitations under the License.
 
 import inspect
+import sys
 
 try:
     from decorator import decorator
 except SyntaxError: # decorator module requires Python/Jython 2.4+
     decorator = None
+if sys.platform == 'cli':
+    decorator = None # decorator module doesn't work with IronPython 2.6
 
 
 class runonfailuretype(type):
@@ -74,6 +77,8 @@ class RunOnFailure(object):
         | Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
 
         The whole run-on-failure functionality is new in SeleniumLibrary 2.5.
+        It only works when running tests on Python/Jython 2.4 or newer and
+        it does not work on IronPython at all.
         """
         old = self._get_run_on_failure_name()
         self._set_run_on_failure(keyword_name)
