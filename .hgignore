@@ -3,6 +3,7 @@ syntax:glob
 .pydevproject
 test/results
 demo/reports
+*.pyc
 
 dist
 build
