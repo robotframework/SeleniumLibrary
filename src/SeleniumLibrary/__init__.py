@@ -216,8 +216,9 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         execute when another SeleniumLibrary keyword fails. By default
         `Capture Screenshot` will be used to take a screenshot of the situation.
         Using any value that is not a keyword name will disable this feature
-        altogether. See `Run On Failure` keyword for more information about
-        this functionality that was added in SeleniumLibrary 2.5.
+        altogether. See `Register Keyword To Run On Failure` keyword for more
+        information about this functionality that was added in SeleniumLibrary
+        2.5.
 
         Because there are many optional arguments, it is often a good idea to
         use the handy named-arguments syntax supported by Robot Framework 2.5
