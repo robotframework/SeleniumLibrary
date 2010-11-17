@@ -7,4 +7,7 @@ include src/SeleniumLibrary/firefoxprofile/*.*
 
 recursive-include doc *.txt *.html
 recursive-include demo *.txt *.py *.sh *.bat *.html *.css *.js
+prune demo/reports
+prune demo/selenium_log.txt
+prune demo/output.xml
 
