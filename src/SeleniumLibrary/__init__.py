@@ -338,9 +338,9 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
                                   url)
         self._connect_to_selenium_server()
         self._selenium.set_timeout(self._timeout)
-        self._selenium.open(url)
-        self._debug('Opened browser with Selenium session id %s' %
-                    self._selenium.sessionId)
+        self._selenium.open(url, ignoreResponseCode=True)
+        self._debug('Opened browser with Selenium session id %s'
+                    % self._selenium.sessionId)
         return self._cache.register(self._selenium, alias)
 
     def _get_browser(self, browser):
