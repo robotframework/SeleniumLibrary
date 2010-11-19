@@ -84,19 +84,18 @@ def start_selenium_server(logfile, jarpath=None, *params):
 def _server_startup_command(jarpath, *params):
     if not jarpath:
         jarpath = SELENIUM_SERVER_PATH
-    return ['java', '-jar', jarpath] + _command_line_args_for_server(*params)
+    return ['java', '-jar', jarpath] + _server_startup_params(list(params))
 
-def _command_line_args_for_server(*params):
-    params = list(params)
-    if not FIREFOX_TEMPLATE_ARG in params:
-        params.extend([FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
-    else:
-        index = params.index(FIREFOX_TEMPLATE_ARG)
-        value = params[index+1]
-        if value.upper() == FIREFOX_DEFAULT_PROFILE:
-            params = params[:index] + params[index+2:]
+def _server_startup_params(params):
+    if FIREFOX_TEMPLATE_ARG not in params:
+        return params + [FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR]
+    index = params.index(FIREFOX_TEMPLATE_ARG)
+    try:
+        if params[index+1] == FIREFOX_DEFAULT_PROFILE:
+            params[index:index+2] = []
+    except IndexError:
+        pass
     return params
-
 
 def shut_down_selenium_server(host='localhost', port=4444):
     """Shuts down the Selenium Server.
@@ -162,7 +161,6 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     | Table Should Contain | tableID | $ 43,00 |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
 
-
     *Handling page load events*
 
     Some keywords that may cause a page to load take an additional argument
@@ -178,7 +176,6 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     wait.
 
     Examples:
-
     | Click Link | link text    |            |          | # A page is expected to load. |
     | Click Link | another link | don't wait |          | # A page is not expected to load. |
     | Select Radio Button | group1 | value1  |          | # A page is not expected to load. |
@@ -255,9 +252,9 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         `-firefoxProfileTemplate` option. You can override this
         profile with your own custom profile by using the same argument
         in `params` yourself. To use the default profile on your machine,
-        use this argument with `DEFAULT` value. Using a custom Firefox
-        profile automatically is a new feature in SeleniumLibrary 2.5.
-        For more information see
+        use this argument with `DEFAULT` value (case-sensitive). Using a
+        custom Firefox profile automatically is a new feature in
+        SeleniumLibrary 2.5. For more information see
         http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile
 
         Examples:
