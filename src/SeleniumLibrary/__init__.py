@@ -496,9 +496,8 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         For jQuery selector setup see:
         http://code.google.com/p/robotframework-seleniumlibrary/wiki/jQueryElementSelectors
 
-        Examples:
-        | ${func} = | return Selenium.prototype.locateElementByJQuerySelector(locator, inDocument, inWindow); |
-        | Add Location Strategy | jquery | ${func} |
+        Example:
+        | Add Location Strategy | jquery | return Selenium.prototype.locateElementByJQuerySelector(locator, inDocument, inWindow); |
         | Page Should Contain Element | jquery=div.#data-table |
         """
         self._locator_parser.add_strategy(strategy_name)
