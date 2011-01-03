@@ -4,7 +4,9 @@ Test Setup  Select Flex Application  ${APP ID}
 Resource  ../resource.txt
 
 *Variables*
-${APP ID}  test_app_object  # use test_app_embed with firefox
+# TODO: Cleanup
+${APP ID}  test_app_embed  # works at least with firefox and chrome
+${APP ID}  test_app_object  # with IE
 
 *Test cases*
 Using Flex commands without selecting application
@@ -38,5 +40,5 @@ Click Element
     
 *Keywords*
 Open Flex Application
-    Go To  ${ROOT}flex/flex.html
+    Go To  ${ROOT}/flex/flex.html
 
