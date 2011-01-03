@@ -88,22 +88,33 @@ def process_output():
         print '%d critical test%s failed' % (rc, 's' if rc != 1 else '')
     return rc
 
+def _exit(rc):
+    sys.exit(rc)
+
+def _help():
+    print 'Usage:  python run_tests.py python|jython browser [options]'
+    print
+    print 'See README.txt for details.'
+    return 255
+
+def _run_unit_tests():
+    print 'Running unit tests'
+    failures = run_unit_tests()
+    if failures != 0:
+        print '\n%d unit tests failed - not running acceptance tests!' % failures
+    else:
+        print 'All unit tests passed'
+    return failures
+
 
 if __name__ ==  '__main__':
     if not len(sys.argv) > 2:
-        print 'Usage:  python run_tests.py python|jython browser [options]'
-        print
-        print 'See README.txt for details.'
-        sys.exit(1)
+        _exit(_help())
+    unit_failures = _run_unit_tests()
+    if unit_failures:
+        _exit(unit_failures)
     interpreter = ('jython' in sys.argv[1]) and 'jython' or 'python'
     browser = sys.argv[2].lower()
     args = sys.argv[3:]
-    if not args:
-        print 'Running unit tests'
-        failures = run_unit_tests()
-        if failures != 0:
-            print '\n%d unit tests failed - not running acceptance tests!' % failures
-            sys.exit(1)
-        print 'All unit tests passed'
     if browser != 'unit':
-        sys.exit(acceptance_tests(interpreter, browser, args))
+        _exit(acceptance_tests(interpreter, browser, args))
