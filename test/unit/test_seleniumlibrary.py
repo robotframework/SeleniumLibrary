@@ -2,10 +2,9 @@ import unittest
 import os
 
 from SeleniumLibrary import (SeleniumLibrary, _server_startup_command,
-                             _command_line_args_for_server,
+                             _server_startup_params,
                              FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR,
                              FIREFOX_DEFAULT_PROFILE, SELENIUM_SERVER_PATH)
-
 
 
 class TestGetBrowser(unittest.TestCase):
@@ -44,18 +43,20 @@ class TestServerArguments(unittest.TestCase):
                           ['java', '-jar', '/some/jar.jar'])
 
     def test_selenium_lib_default_profile_is_used_when_no_profile_given(self):
-        self.assertEquals(_command_line_args_for_server(),
+        self.assertEquals(_server_startup_params([]),
                           [FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
 
     def test_given_profile_is_not_overridden(self):
-        self.assertEquals(_command_line_args_for_server(FIREFOX_TEMPLATE_ARG, 'foo'),
+        self.assertEquals(_server_startup_params([FIREFOX_TEMPLATE_ARG, 'foo']),
                           [FIREFOX_TEMPLATE_ARG, 'foo'])
 
     def test_real_default_profile_can_be_used(self):
-        self.assertEquals(_command_line_args_for_server(FIREFOX_TEMPLATE_ARG,FIREFOX_DEFAULT_PROFILE), [])
+        params = [FIREFOX_TEMPLATE_ARG,FIREFOX_DEFAULT_PROFILE]
+        self.assertEquals(_server_startup_params(params), [])
 
     def test_other_options_are_preserved(self):
-        self.assertEquals(_command_line_args_for_server('-someOpt', 'value', '-otherOpt'),
+        params = ['-someOpt', 'value', '-otherOpt']
+        self.assertEquals(_server_startup_params(params),
                           ['-someOpt', 'value', '-otherOpt', FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
 
 
