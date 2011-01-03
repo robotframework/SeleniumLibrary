@@ -21,7 +21,7 @@ class Browser(RunOnFailure):
     def go_to(self, url):
         """Navigates the active browser instance to the provided URL."""
         self._info("Opening url '%s'" % url)
-        self._selenium.open(url)
+        self._selenium.open(url, ignoreResponseCode=True)
 
     def wait_until_page_loaded(self, timeout=None):
         """Waits for a page load to happen.
