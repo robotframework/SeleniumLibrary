@@ -36,6 +36,7 @@ from element import Element
 from screenshot import Screenshot
 from textfield import TextField
 from table import Table
+from flex import Flex
 
 from xpath import LocatorParser
 from version import VERSION
@@ -84,7 +85,15 @@ def start_selenium_server(logfile, jarpath=None, *params):
 def _server_startup_command(jarpath, *params):
     if not jarpath:
         jarpath = SELENIUM_SERVER_PATH
-    return ['java', '-jar', jarpath] + _server_startup_params(list(params))
+    params = _add_default_user_extension(jarpath, list(params))
+    return ['java', '-jar', jarpath] + _server_startup_params(params)
+
+def _add_default_user_extension(jarpath, params):
+    extpath = os.path.join(os.path.dirname(jarpath), 'user-extensions.js')
+    #TODO: document automatic addition of user extensions.
+    if os.path.isfile(extpath) and '-userExtensions' not in params:
+        params.extend(['-userExtensions', extpath])
+    return params
 
 def _server_startup_params(params):
     if FIREFOX_TEMPLATE_ARG not in params:
@@ -111,7 +120,7 @@ def shut_down_selenium_server(host='localhost', port=4444):
 
 
 class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
-                      Element, Screenshot, Table, TextField):
+                      Element, Screenshot, Table, TextField, Flex):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
     It uses the Selenium Remote Control tool internally to control a web browser.
@@ -236,6 +245,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
+        self._flex_apps = utils.ConnectionCache()
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
