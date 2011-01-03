@@ -1,4 +1,5 @@
 *Settings*
+Force Tags  ci-incompatible
 Suite Setup  Open Flex Application
 Test Setup  Select Flex Application  ${APP ID}
 Resource  ../resource.txt
