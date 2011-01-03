@@ -1,4 +1,4 @@
-#  Copyright 2008-2009 Nokia Siemens Networks Oyj
+#  Copyright 2008-2010 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ class LocatorParser:
                         'normalize-space(descendant-or-self::text())'],
         'img':         ['@id', '@src', '@alt'] ,
         'input':       ['@id', '@name', '@value', '@src'] ,
-        'select':      ['@id', '@name'],
         'button':      ['@id', '@name', '@value'],
     }
     _synonyms = { 'link': 'a',

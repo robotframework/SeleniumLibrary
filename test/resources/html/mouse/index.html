@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>Mouse Keyword Testbed</title>
+	</head>
+	<body>
+		<input type="text" id="test_element" 
+			onmouseover="setText(this, 'mouseover')"
+			onmouseout="setText(this, 'mouseout')"
+			onmousedown="setText(this, 'mousedown')"
+			onmouseup="setText(this, 'mouseup')"
+		/><br />
+		<input type="text" id="secondary_element" />
+		<script type="text/javascript">
+		<!--
+			function setText(element, event) {
+				element.value = event + " " + element.id;
+			}
+		-->
+		</script>
+	</body>
+</html>

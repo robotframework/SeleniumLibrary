@@ -1,10 +1,10 @@
 *Setting*
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}forms/prefilled_email_form.html
-Default Tags  toggles
+Test Setup  Go To Page "forms/prefilled_email_form.html"
 
 
 *Test Cases*
+
 Checkbox Should Be Selected
   [Documentation]  FAIL Checkbox 'can_send_sms' should have been selected but was not
   ...  LOG 1 Verifying checkbox 'can_send_email' is selected.
@@ -51,7 +51,6 @@ Radio Button Should Not Be Selected
   Radio Button Should Not Be Selected  sex
 
 Clicking Radio Button Should Trigger Onclick Event
-  [Setup]  Go To  ${ROOT}/javascript/dynamic_content.html
+  [Setup]  Go To Page "javascript/dynamic_content.html"
   Select Radio Button  group  title
   Title Should Be  Changed by Button
-

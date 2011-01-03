@@ -1,5 +1,5 @@
 *Setting*
-Library  SeleniumLibrary  \  \  4455
+Library  SeleniumLibrary  \  \  4455  \  NONE
 Library  Collections
 Library  OperatingSystem
 
@@ -7,16 +7,17 @@ Library  OperatingSystem
 *Variable*
 ${SERVER}  localhost:7272
 ${BROWSER}  *firefox
-${ROOT}  http://${SERVER}/html/
+${ROOT}  http://${SERVER}/html
+${FRONT PAGE}  ${ROOT}/
 
 
 *Keyword*
 Open Browser To Start Page
   [Documentation]  This keyword also tests 'Set Selenium Speed' and 'Set Selenium Timeout' against all reason.
-  Open Browser  ${ROOT}  ${BROWSER}
+  Open Browser  ${FRONT PAGE}  ${BROWSER}
   ${old timeout} =  Set Selenium Speed  ${SPEED}
   Should Be Equal  ${old timeout}  0 seconds
-  ${old timeout} =  Set Selenium Timeout  2 seconds
+  ${old timeout} =  Set Selenium Timeout  10 seconds
   Should Be Equal  ${old timeout}  5 seconds
 
 Cannot Be Executed In IE
@@ -29,4 +30,14 @@ Fail And Set Non-Critical
   Remove Tags  regression
   Fail  ${msg}
 
+Go to Front Page
+  Go To  ${FRONT PAGE}
 
+Go To Page "${relative url}"
+  Go To  ${ROOT}/${relative url}
+
+Set ${level} Loglevel
+  Set Log Level  ${level}
+
+Verify Location Is "${relative url}"
+  Location Should Be  ${ROOT}/${relative url}

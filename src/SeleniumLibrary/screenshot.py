@@ -1,4 +1,4 @@
-#  Copyright 2008-2009 Nokia Siemens Networks Oyj
+#  Copyright 2008-2010 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -12,14 +12,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-
 import os
 import base64
 
 from robot import utils
 
 
-class Screenshot:
+class Screenshot(object):
 
     def capture_screenshot(self, filename=None):
         """Takes a screenshot of the entire screen and embeds it into the log.

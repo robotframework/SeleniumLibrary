@@ -1,4 +1,4 @@
-#  Copyright 2008-2009 Nokia Siemens Networks Oyj
+#  Copyright 2008-2010 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -15,37 +15,45 @@
 import os
 import time
 import socket
-
 try:
     import subprocess
 except ImportError:
-    # subprocess is not available in Jython 2.2 or older
-    subprocess = None
+    subprocess = None  # subprocess not available on Python/Jython < 2.5
 
 from robot.errors import DataError
-from robot.output import LEVELS
 from robot.variables import GLOBAL_VARIABLES
-from robot.running import NAMESPACES
 from robot import utils
-
 from selenium import selenium
-from assertion import Assertion
+
+from browser import Browser
 from button import Button
+from page import Page
 from click import Click
 from javascript import JavaScript
+from mouse import Mouse
 from select import Select
 from element import Element
-from xpath import LocatorParser
 from screenshot import Screenshot
+from textfield import TextField
 from table import Table
-from flex import Flex
 
-__version__ = '2.4'
+from xpath import LocatorParser
+from version import VERSION
+
+__version__ = VERSION
 BROWSER_ALIASES = {'ff': '*firefox',
                    'firefox': '*firefox',
                    'ie': '*iexplore',
-                   'internetexplorer': '*iexplore'}
+                   'internetexplorer': '*iexplore',
+                   'googlechrome': '*googlechrome',
+                   'opera': '*opera',
+                   'safari': '*safari'}
 SELENIUM_CONNECTION_TIMEOUT = 40
+_SELLIB_DIR = os.path.dirname(os.path.abspath(__file__))
+SELENIUM_SERVER_PATH = os.path.join(_SELLIB_DIR, 'lib', 'selenium-server.jar')
+FIREFOX_PROFILE_DIR = os.path.join(_SELLIB_DIR, 'firefoxprofile')
+FIREFOX_DEFAULT_PROFILE = 'DEFAULT'
+FIREFOX_TEMPLATE_ARG = '-firefoxProfileTemplate'
 
 
 def start_selenium_server(logfile, jarpath=None, *params):
@@ -58,25 +66,36 @@ def start_selenium_server(logfile, jarpath=None, *params):
     None. If None, the jar file distributed with the library will be used.
 
     It is possible to give a list of additional command line options to
-    Selenium Server in `*params`.
+    Selenium Server in `*params`. A custom automation friendly Firefox
+    profile is enabled by default using the `-firefoxProfileTemplate` option.
+    For more information see the documentation of the start_selenium_server
+    method of the Selenium class.
 
     Note that this function requires `subprocess` module which is available
     on Python/Jython 2.5 or newer.
     """
-    params = list(params)
     if not subprocess:
         raise RuntimeError('This function requires `subprocess` module which '
                            'is available on Python/Jython 2.5 or newer')
-    if not jarpath:
-        jarpath = os.path.join(os.path.dirname(__file__), 'lib',
-                               'selenium-server.jar')
-    extpath = os.path.join(os.path.dirname(jarpath), 'user-extensions.js')
-    #TODO: document automatic addition of user extensions.
-    if os.path.isfile(extpath) and '-userExtensions' not in params:
-        params.extend(['-userExtensions', extpath])
-    subprocess.Popen(['java', '-jar', jarpath] + params,
-                     stdout=logfile, stderr=subprocess.STDOUT)
+    cmd = _server_startup_command(jarpath, *params)
+    subprocess.Popen(cmd, stdout=logfile, stderr=subprocess.STDOUT)
+    print 'Selenium Server started with command "%s" ' % ' '.join(cmd)
 
+def _server_startup_command(jarpath, *params):
+    if not jarpath:
+        jarpath = SELENIUM_SERVER_PATH
+    return ['java', '-jar', jarpath] + _server_startup_params(list(params))
+
+def _server_startup_params(params):
+    if FIREFOX_TEMPLATE_ARG not in params:
+        return params + [FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR]
+    index = params.index(FIREFOX_TEMPLATE_ARG)
+    try:
+        if params[index+1] == FIREFOX_DEFAULT_PROFILE:
+            params[index:index+2] = []
+    except IndexError:
+        pass
+    return params
 
 def shut_down_selenium_server(host='localhost', port=4444):
     """Shuts down the Selenium Server.
@@ -86,13 +105,13 @@ def shut_down_selenium_server(host='localhost', port=4444):
     Does not fail even if the Selenium Server is not running.
     """
     try:
-        selenium(host, port, '', '').do_command('shutDownSeleniumServer', [])
+        selenium(host, port, '', '').shut_down_selenium_server()
     except socket.error:
         pass
 
 
-class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
-                      Screenshot, Table, Flex):
+class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
+                      Element, Screenshot, Table, TextField):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
     It uses the Selenium Remote Control tool internally to control a web browser.
@@ -142,7 +161,6 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     | Table Should Contain | tableID | $ 43,00 |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
 
-
     *Handling page load events*
 
     Some keywords that may cause a page to load take an additional argument
@@ -150,13 +168,14 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     load or not. By default, a page load is expected to happen whenever a link
     or image is clicked, or a form submitted. If a page load does not happen
     (if the link only executes some JavaScript, for example), a non-empty value
-    must be given to `dont_wait` argument.
+    must be given for the `dont_wait` argument.
 
     There are also some keywords that may cause a page to load but by default
-    we expect them not to. In these case, the keywords have an optional `wait`
+    we expect them not to. For these cases, the keywords have an optional `wait`
     argument, and providing a non-empty value for it will cause the keyword to
-    Examples:
+    wait.
 
+    Examples:
     | Click Link | link text    |            |          | # A page is expected to load. |
     | Click Link | another link | don't wait |          | # A page is not expected to load. |
     | Select Radio Button | group1 | value1  |          | # A page is not expected to load. |
@@ -174,7 +193,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     ROBOT_LIBRARY_VERSION = __version__
 
     def __init__(self, timeout=5.0, server_host='localhost', server_port=4444,
-                 jar_path=None):
+                 jar_path=None, run_on_failure='Capture Screenshot'):
         """SeleniumLibrary can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for page load actions.
@@ -190,42 +209,65 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         used by the library. If set, a custom, modified version can be started
         instead of the default one distributed with the library.
 
+        `run_on_failure` specifies the name of a SeleniumLibrary keyword to
+        execute when another SeleniumLibrary keyword fails. By default
+        `Capture Screenshot` will be used to take a screenshot of the situation.
+        Using any value that is not a keyword name will disable this feature
+        altogether. See `Register Keyword To Run On Failure` keyword for more
+        information about this functionality that was added in SeleniumLibrary
+        2.5.
+
+        Because there are many optional arguments, it is often a good idea to
+        use the handy named-arguments syntax supported by Robot Framework 2.5
+        and later. This is demonstrated by the last example below.
+
         Examples:
         | Library | SeleniumLibrary | 15 | | | # Sets default timeout |
         | Library | SeleniumLibrary | | | 4455 | # Use default timeout and host but specify different port. |
+        | Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure. |
         """
         self._cache = utils.ConnectionCache()
         self._selenium = _NoBrowser()
         self.set_selenium_timeout(timeout or 5.0)
         self._server_host = server_host or 'localhost'
-        self._server_port = server_port and int(server_port) or 4444
+        self._server_port = int(server_port or 4444)
         self._jar_path = jar_path
+        self._set_run_on_failure(run_on_failure)
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
-        self._flex_apps = utils.ConnectionCache()
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
 
-        `params` can contain additional command line parameters given
-        to the started Selenium Server. Starting from 2.3 version the
-        server will use the port given in `importing`
-        automatically. In older versions the port must be given in
-        `params`.
+        `params` can contain additional command line options given to the
+        Selenium Server. This keyword uses some command line options
+        automatically:
+
+        1) The port given in `importing` is added to `params` automatically
+        using the `-port` option.
+
+        2) A custom Firefox profile that is included with the library
+        and contains automation friendly settings is enabled via the
+        `-firefoxProfileTemplate` option. You can override this
+        profile with your own custom profile by using the same argument
+        in `params` yourself. To use the default profile on your machine,
+        use this argument with `DEFAULT` value (case-sensitive). Using a
+        custom Firefox profile automatically is a new feature in
+        SeleniumLibrary 2.5. For more information see
+        http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile
 
         Examples:
-        | Start Selenium Server |
-        | Start Selenium Server | -firefoxProfileTemplate | C:\\\\the\\\\path |
-        | Start Selenium Server | -avoidProxy | -ensureCleanSession |
+        | Start Selenium Server | | | # Default settings. Uses the Firefox profile supplied with the library. |
+        | Start Selenium Server | -firefoxProfileTemplate | C:\\\\the\\\\path | # Uses custom Firefox profile. |
+        | Start Selenium Server | -firefoxProfileTemplate | DEFAULT | # Uses default Firefox profile on your machine. |
+        | Start Selenium Server | -avoidProxy | -ensureCleanSession | # Uses various Selenium Server settings. |
 
         All Selenium Server output is written into `selenium_server_log.txt`
         file in the same directory as the Robot Framework log file.
 
         If the test execution round starts and stops Selenium Server multiple
         times, it is best to open the server to different port each time.
-        From 2.3 onwards, this is easiest done by importing the library with
-        different parameters each time.
 
         *NOTE:* This keyword requires `subprocess` module which is available
         on Python/Jython 2.5 or newer.
@@ -234,9 +276,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         logpath = os.path.join(self._get_log_dir(), 'selenium_server_log.txt')
         self._selenium_log = open(logpath, 'w')
         start_selenium_server(self._selenium_log, self._jar_path, *params)
-        self._html('Selenium Server started to port %s. '
-                   'Log is written to <a href="file://%s">%s</a>.'
-                   % (self._server_port, logpath.replace('\\', '/'), logpath))
+        self._html('Selenium server log is written to <a href="file://%s">%s</a>.'
+                   % (logpath.replace('\\', '/'), logpath))
 
     def _get_log_dir(self):
         logfile = GLOBAL_VARIABLES['${LOG FILE}']
@@ -252,7 +293,7 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
             self._selenium_log.close()
 
     def open_browser(self, url, browser='firefox', alias=None):
-        """Opens a new browser instance to given url.
+        """Opens a new browser instance to given URL.
 
         Possible already opened connections are cached.
 
@@ -267,26 +308,25 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
 
         Possible values for `browser` are all the values supported by Selenium
         and some aliases that are defined for convenience. The table below
-        lists all the supported browsers.
+        lists the aliases for most common supported browsers.
 
-        | *firefox         | FireFox   |
         | firefox          | FireFox   |
         | ff               | FireFox   |
-        | *iexplore        | Internet Explorer |
         | ie               | Internet Explorer |
         | internetexplorer | Internet Explorer |
-        | *safari          | Safari |
-        | *googlechrome    | Google Chrome |
-        | *opera           | Opera |
+        | safari           | Safari |
+        | googlechrome     | Google Chrome |
+        | opera            | Opera |
 
         Additionally, a string like `*custom /path/to/browser-executable` can
         be used to specify the browser directly. In this case, the path needs to
         point to an executable, not a script, otherwise the library may not be
         able to shut down the browser properly.
 
-        Note, that you will encounter strange behaviour, if you open multiple
-        Internet Explorer browser instances. That's also why `Switch Browser` only
-        works with one IE browser at most.
+        Note, that you will encounter strange behavior, if you open
+        multiple Internet Explorer browser instances. That is also why
+        `Switch Browser` only works with one IE browser at most.
+        For more information see:
         http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -295,9 +335,9 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
                                   url)
         self._connect_to_selenium_server()
         self._selenium.set_timeout(self._timeout)
-        self._selenium.open(url)
-        self._debug('Opened browser with Selenium session id %s' %
-                    self._selenium.sessionId)
+        self._selenium.open(url, ignoreResponseCode=True)
+        self._debug('Opened browser with Selenium session id %s'
+                    % self._selenium.sessionId)
         return self._cache.register(self._selenium, alias)
 
     def _get_browser(self, browser):
@@ -379,7 +419,8 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
             self._debug('Switched to browser with Selenium session id %s'
                          % self._selenium.sessionId)
         except DataError:
-            raise DataError("No browser with index or alias '%s' found." % index_or_alias)
+            raise RuntimeError("No browser with index or alias '%s' found."
+                               % index_or_alias)
 
     def set_selenium_timeout(self, seconds):
         """Sets the timeout used by various keywords.
@@ -439,272 +480,6 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
             method = lambda *args: self._selenium.do_command(method_name, args)
         return method(*args)
 
-    def go_to(self, url):
-        """Navigates the active browser instance to the provided URL."""
-        self._info("Opening url '%s'" % url)
-        self._selenium.open(url)
-
-    def go_back(self, dont_wait=''):
-        """Simulates the user clicking the "back" button on their browser.
-
-        See `introduction` for details about locating elements and about meaning
-        of `dont_wait` argument."""
-        self._selenium.go_back()
-        if not dont_wait:
-            self._wait_for_page_to_load()
-
-    def maximize_browser_window(self):
-        """Maximizes current browser window."""
-        self._selenium.window_maximize()
-
-    def select_frame(self, locator):
-        """Sets frame identified by `locator` as current frame.
-
-        Key attributes for frames are `id` and `name.` See `introduction` for
-        details about locating elements.
-        """
-        self._info("Selecting frame '%s'." % locator)
-        self._selenium.select_frame(self._parse_locator(locator))
-
-    def unselect_frame(self):
-        """Sets the top frame as the current frame."""
-        self._selenium.select_frame('relative=top')
-
-    def get_window_names(self):
-        """Returns names of all windows known to the browser."""
-        return self._selenium.get_all_window_names()
-
-    def get_window_titles(self):
-        """Returns titles of all windows known to the browser."""
-        return self._selenium.get_all_window_titles()
-
-    def get_window_identifiers(self):
-        """Returns values of id attributes of all windows known to the browser."""
-        return self._selenium.get_all_window_ids()
-
-    def get_all_links(self):
-        """Returns a list containing ids of all links found in current page.
-
-        If a link has no id, an empty string will be in the list instead.
-        """
-        return self._selenium.get_all_links()
-
-    def select_window(self, windowID=None):
-        """Selects the window found with `windowID` as the context of actions.
-
-        If the window is found, all subsequent commands use that window, until
-        this keyword is used again. If the window is not found, this keyword fails.
-
-        `windowID` may be either the title of the window or the name of the window
-        in the JavaScript code that creates it. Name is second argument passed
-        to JavaScript function window.open(). In case of multiple windows with
-        same identifier are found, the first one is selected.
-
-        To select main window, the argument can be left empty, or name 'main'
-        can be used.
-
-        Example:
-        | Click Link | popup_link | don't wait | # opens new window |
-        | Select Window | popupName |
-        | Title Should Be | Popup Title |
-        | Select Window |  | | # Chooses the main window again |
-        """
-        if not windowID or windowID.lower() == 'main':
-            windowID = 'null'
-        self._selenium.select_window(windowID)
-
-    def close_window(self):
-        """Closes currently opened pop-up window."""
-        self._selenium.close()
-
-    def get_location(self):
-        """Returns the current location."""
-        return self._selenium.get_location()
-
-    def get_title(self):
-        """Returns title of current page."""
-        return self._selenium.get_title()
-
-    def input_text(self, locator, text):
-        """Types the given `text` into text field identified by `locator`.
-
-        See `introduction` for details about locating elements.
-        """
-        self._info("Typing text '%s' into text field '%s'" % (text, locator))
-        self._selenium.type(self._parse_locator(locator), text)
-
-    def input_password(self, locator, text):
-        """Types the given password into text field identified by `locator`.
-
-        Difference between this keyword and `Input Text` is that this keyword
-        does not log the given password. See `introduction` for details about
-        locating elements.
-        """
-        self._info("Typing password into text field '%s'" % locator)
-        self._selenium.type(self._parse_locator(locator), text)
-
-    def get_value(self, locator):
-        """Returns the value attribute of element identified by `locator`.
-
-        See `introduction` for details about locating elements.
-        """
-        return self._selenium.get_value(self._parse_locator(locator))
-
-    def get_text(self, locator):
-        """Returns the text of element identified by `locator`.
-
-        See `introduction` for details about locating elements.
-        """
-        return self._selenium.get_text(self._parse_locator(locator))
-
-    def get_source(self):
-        """Returns the entire html source of the current page or frame."""
-        return self._selenium.get_html_source()
-
-    def log_source(self, level='INFO'):
-        """Logs and returns the entire html source of the current page or frame.
-
-        `level` defines the log level. Valid log levels are 'WARN', 'INFO' (the default), 'DEBUG'
-        and 'TRACE'. In case `level` is invalid, 'INFO' will be used."""
-        level = level.upper()
-        if not level in LEVELS:
-            level = 'INFO'
-        source = self.get_source()
-        self._log(source, level)
-        return source
-
-    def focus(self, locator):
-        """Sets focus to element identified by `locator`.
-
-        This is useful for instance to direct native keystrokes to particular
-        element using `Press Key Native`.
-        """
-        self._selenium.focus(locator)
-
-    def drag_and_drop(self, locator, movement):
-        """Drags element identified with `locator` by `movement`
-
-        `movement is a string in format "+70 -300" interpreted as pixels in
-        relation to elements current position.
-        """
-        self._selenium.dragdrop(self._parse_locator(locator), movement)
-
-    def press_key(self, locator, key, wait=''):
-        """Simulates user pressing key on element identified by `locator`.
-
-        `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\'.
-
-        See `introduction` for details about `wait` argument.
-
-        Examples:
-        | Press Key | text_field   | q |
-        | Press Key | login_button | \\13 | # ASCII code for enter key |
-
-        Sometimes this keyword doesn't trigger the correct JavaScript event
-        on the clicked element. In those cases `Press Key Native` can be
-        used as a workaround.
-
-        The selenium command key_press [1] that is used internally exposes some
-        erratic behaviour [2], especially when used with the Internet Explorer. If
-        don't get the expected results, try `Press Key Native` instead.
-
-        [1] http://release.seleniumhq.org/selenium-remote-control/1.0-beta-2/doc/python/selenium.selenium-class.html#key_press
-        [2] http://jira.openqa.org/browse/SRC-385
-        """
-        self._selenium.key_press(locator, key)
-        if wait:
-            self._wait_for_page_to_load()
-
-    def press_key_native(self, keycode, wait=''):
-        """Simulates user pressing key by sending an operating system keystroke.
-
-        `keycode` corresponds to `java.awt.event.KeyEvent` constants, which can
-        be found from
-        http://java.sun.com/javase/6/docs/api/constant-values.html#java.awt.event.KeyEvent.CHAR_UNDEFINED
-
-        The key press does not target a particular element. An element can be
-        chosen by first using `Focus` keyword.
-
-        See `introduction` for details about `wait` argument.
-
-        Examples:
-        | Press Key Native | 517          | # Exclamation mark |
-        | Focus            | login_button |
-        | Press Key Native | 10           | # Enter key  |
-
-        Notice that this keyword is very fragile and, for example, using the
-        keyboard or mouse while tests are running often causes problems. It can
-        be beneficial to bring the window to the front again with executing JavaScript:
-
-        | Execute Javascript | window.focus() |          |
-        | Focus              | login_button   |          |
-        | Press Key Native   | 10             | and wait |
-        """
-        self._selenium.key_press_native(keycode)
-        if wait:
-            self._wait_for_page_to_load()
-
-    def get_cookies(self):
-        """Returns all cookies of the current page."""
-        return self._selenium.get_cookie()
-
-    def get_cookie_value(self, name):
-        """Returns value of cookie found with `name`.
-
-        If no cookie is found with `name`, this keyword fails.
-        """
-        return self._selenium.get_cookie_by_name(name)
-
-    def delete_cookie(self, name, options=''):
-        """Deletes cookie matching `name` and `options`.
-
-        If the cookie is not found, nothing happens.
-
-        `options` is the options for the cookie as a string. Currently
-        supported options include 'path', 'domain' and 'recurse.' Format for
-        `options` is "path=/path/, domain=.foo.com, recurse=true". The order of
-        options is irrelevant. Note that specifying a domain that isn't a
-        subset of the current domain will usually fail. Setting `recurse=true`
-        will cause this keyword to search all sub-domains of current domain
-        with all paths that are subset of current path. This can take a long
-        time.
-        """
-        self._selenium.delete_cookie(name, options)
-
-    def delete_all_cookies(self):
-        """Deletes all cookies by calling `Delete Cookie` repeatedly."""
-        self._selenium.delete_all_visible_cookies()
-
-    def choose_file(self, identifier, file_path):
-        """Inputs the `file_path` into file input field found by `identifier`.
-
-        This keyword is most often used to input files into upload forms.
-        In normal usage the file specified with `file_path` must be available
-        on the samme host where the Selenium Server is running.
-
-        An alternative usage is specifying the `file_path` with an URL
-        (starting with `http://` or `https://`) in which case the file
-        will be downloaded automatically. The limitations of this
-        method are that it only works on Firefox and the file must be
-        placed at the root level of a web server.
-
-        Example:
-        | Choose File | my_upload_field | /home/user/files/trades.csv |
-        | Choose File | my_upload_field | http://uploadhost.com/trades.csv |
-
-        The support for remote files was added in SeleniumLibrary 2.3.2.
-        It uses Selenium's `attach_file` method which is explained at
-        http://saucelabs.com/blog/index.php/2009/11/selenium-tip-of-the-week-upload-files-on-browsers-running-over-remote-machines/
-        """
-        if file_path.startswith(('http://', 'https://')):
-            self._selenium.attach_file(identifier, file_path)
-        else:
-            if not os.path.isfile(file_path):
-                self._info("File '%s' does not exists on the local file system"
-                           % file_path)
-            self._selenium.type(identifier, file_path)
-
     def add_location_strategy(self, strategy_name, function_definition):
         """Adds a custom location strategy.
 
@@ -721,16 +496,16 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         For jQuery selector setup see:
         http://code.google.com/p/robotframework-seleniumlibrary/wiki/jQueryElementSelectors
 
-        Examples:
-        | ${func} = | return Selenium.prototype.locateElementByJQuerySelector(locator, inDocument, inWindow); |
-        | Add Location Strategy | jquery | ${func} |
+        Example:
+        | Add Location Strategy | jquery | return Selenium.prototype.locateElementByJQuerySelector(locator, inDocument, inWindow); |
         | Page Should Contain Element | jquery=div.#data-table |
         """
         self._locator_parser.add_strategy(strategy_name)
         self._selenium.add_location_strategy(strategy_name, function_definition)
 
     def _log(self, message, level='INFO'):
-        print '*%s* %s' % (level, message)
+        if level != 'NONE':
+            print '*%s* %s' % (level, message)
 
     def _info(self, message):
         self._log(message)
@@ -744,10 +519,6 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
     def _html(self, message):
         self._log(message, 'HTML')
 
-    def _wait_for_page_to_load(self, timeout=None):
-        timeout = timeout is None and self._timeout or timeout
-        self._selenium.wait_for_page_to_load(timeout)
-
     def _parse_locator(self, locator, tag=None):
         parsed_locator = self._locator_parser.locator_for(locator, tag)
         self._debug("Parsed locator '%s' to search expression '%s'"
@@ -755,9 +526,21 @@ class SeleniumLibrary(Assertion, Button, Click, JavaScript, Select, Element,
         return parsed_locator
 
     def _get_error_message(self, exception):
-        # Cannot use unicode(exception) because it fails on Python 2.5 and earlier if the message contains Unicode chars
+        # Cannot use unicode(exception) because it fails on Python 2.5 and
+        # earlier if the message contains non-ASCII chars.
         # See for details: http://bugs.jython.org/issue1585
         return unicode(exception.args and exception.args[0] or '')
+
+    def _error_contains(self, exception, message):
+        return message in self._get_error_message(exception)
+
+    def _wait_until(self, callable, timeout, error):
+        maxtime = time.time() + timeout
+        while not callable():
+            if time.time() > maxtime:
+                raise AssertionError(error)
+            time.sleep(0.2)
+
 
 class _NoBrowser(object):
     set_timeout = lambda self, timeout: None

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#  Copyright 2008-2009 Nokia Siemens Networks Oyj
+#  Copyright 2008-2010 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -14,28 +14,26 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-
 """Setup script for Robot's SeleniumLibrary distributions"""
 
 from distutils.core import setup
 
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+from os.path import abspath, dirname, join
+execfile(join(dirname(abspath(__file__)), 'src', 'SeleniumLibrary', 'version.py'))
 
-from SeleniumLibrary import __version__
 
 def main():
     setup(name         = 'robotframework-seleniumlibrary',
-          version      = __version__,
+          version      = VERSION,
           description  = 'Web testing library for Robot Framework',
           author       = 'Robot Framework Developers',
           author_email = 'robotframework-users@googlegroups.com',
           url          = 'http://code.google.com/p/robotframework-seleniumlibrary',
           package_dir  = { '' : 'src'},
           packages     = ['SeleniumLibrary'],
-          package_data = { 'SeleniumLibrary': ['lib/*.jar']} 
+          package_data = { 'SeleniumLibrary': ['lib/*.jar', 'firefoxprofile/*.*']}
           )
-        
+
 
 if __name__ == "__main__":
     main()

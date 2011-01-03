@@ -1,4 +1,4 @@
-#  Copyright 2008-2009 Nokia Siemens Networks Oyj
+#  Copyright 2008-2010 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -12,16 +12,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Click(object):
+from runonfailure import RunOnFailure
+
+
+class Click(RunOnFailure):
+    """Contains keywords for clicking different elements."""
 
     def _click(self, locator, dont_wait=''):
         self._selenium.click(locator)
         if not dont_wait:
-            self._wait_for_page_to_load()
-    
+            self.wait_until_page_loaded()
+
     def click_element(self, locator, dont_wait=''):
         """Click element identified by `locator`.
-        
+
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -31,7 +35,7 @@ class Click(object):
 
     def click_link(self, locator, dont_wait=''):
         """Clicks a link identified by locator.
-        
+
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -40,13 +44,13 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'link'), dont_wait)
         except Exception, err:
-            if 'not found' not in self._get_error_message(err):
+            if not self._error_contains(err, 'not found'):
                 raise
             self._click("link=%s" % locator, dont_wait)
 
     def click_button(self, locator, dont_wait=''):
         """Clicks a button identified by `locator`.
-        
+
         Key attributes for buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -55,13 +59,13 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'input'), dont_wait)
         except Exception, err:
-            if 'ERROR: Element xpath=//' not in self._get_error_message(err):
+            if not self._error_contains(err, 'ERROR: Element xpath=//'):
                 raise
-            self._click(self._parse_locator(locator, 'button'), dont_wait)    
-    
+            self._click(self._parse_locator(locator, 'button'), dont_wait)
+
     def click_image(self, locator, dont_wait=''):
         """Clicks an image found by `locator`.
-        
+
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
@@ -70,13 +74,14 @@ class Click(object):
         try:
             self._click(self._parse_locator(locator, 'image'), dont_wait)
         except Exception, err:
-            if not 'ERROR Element xpath=//' not in self._get_error_message(err):
+            if not self._error_contains(err, 'ERROR: Element xpath=//'):
                 raise
+            # A form may have an image as it's submit trigger.
             self._click(self._parse_locator(locator, 'input'), dont_wait)
 
     def submit_form(self, locator='', dont_wait=''):
         """Submits a form identified by `locator`.
-        
+
         If `locator` is empty, first form in the page will be submitted.
         Key attributes for forms are `id` and `name`. See `introduction` for
         details about locating elements and about meaning of `dont_wait`
@@ -89,5 +94,4 @@ class Click(object):
             locator = self._parse_locator(locator)
         self._selenium.submit(locator)
         if not dont_wait:
-            self._wait_for_page_to_load()
-
+            self.wait_until_page_loaded()

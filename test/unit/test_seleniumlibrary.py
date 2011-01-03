@@ -1,7 +1,10 @@
 import unittest
 import os
 
-from SeleniumLibrary import SeleniumLibrary
+from SeleniumLibrary import (SeleniumLibrary, _server_startup_command,
+                             _server_startup_params,
+                             FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR,
+                             FIREFOX_DEFAULT_PROFILE, SELENIUM_SERVER_PATH)
 
 
 class TestGetBrowser(unittest.TestCase):
@@ -27,12 +30,34 @@ class TestGetBrowser(unittest.TestCase):
                                'SeleniumLibrary', 'selenium.py')
         self.assertTrue('conn.close()' in open(rc_path).read())
 
-    def test_patched_open_browser(self):
-        rc_path = os.path.join(os.path.dirname(__file__), '..', '..', 'src',
-                               'SeleniumLibrary', 'selenium.py')
-        self.assertTrue('self.do_command("open", [url,"true"])' in open(rc_path).read(),
-                        "Patch for Firefox 3.6 compatibility required. See issue 114: "+
-                        "http://code.google.com/p/robotframework-seleniumlibrary/issues/detail?id=114")
+
+
+class TestServerArguments(unittest.TestCase):
+
+    def test_default_jar_path_is_correctly_determined(self):
+        self.assertEquals(_server_startup_command(None)[:3],
+                          ['java', '-jar', SELENIUM_SERVER_PATH])
+
+    def test_given_jar_path_is_used(self):
+        self.assertEquals(_server_startup_command('/some/jar.jar')[:3],
+                          ['java', '-jar', '/some/jar.jar'])
+
+    def test_selenium_lib_default_profile_is_used_when_no_profile_given(self):
+        self.assertEquals(_server_startup_params([]),
+                          [FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
+
+    def test_given_profile_is_not_overridden(self):
+        self.assertEquals(_server_startup_params([FIREFOX_TEMPLATE_ARG, 'foo']),
+                          [FIREFOX_TEMPLATE_ARG, 'foo'])
+
+    def test_real_default_profile_can_be_used(self):
+        params = [FIREFOX_TEMPLATE_ARG,FIREFOX_DEFAULT_PROFILE]
+        self.assertEquals(_server_startup_params(params), [])
+
+    def test_other_options_are_preserved(self):
+        params = ['-someOpt', 'value', '-otherOpt']
+        self.assertEquals(_server_startup_params(params),
+                          ['-someOpt', 'value', '-otherOpt', FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
 
 
 if __name__ == "__main__":

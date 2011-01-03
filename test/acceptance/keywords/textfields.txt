@@ -1,38 +1,38 @@
 *Setting*
 Variables  variables.py
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}forms/prefilled_email_form.html
-Default Tags  textfield
+Test Setup  Go To Page "forms/prefilled_email_form.html"
 
 
 *Test Cases*
+
 Get Value From Text Field
   ${text} =  Get Value  name
-  Equals  ${text}  Prefilled Name
+  Should Be Equal  ${text}  Prefilled Name
 
 Input Unicode In Text Field
   Input Text  name  ${unic_text}
   ${text} =  Get Value  name
-  Equals  ${text}  ${unic_text}
+  Should Be Equal  ${text}  ${unic_text}
 
 Input Password
   [Documentation]  LOG 2 Typing password into text field 'password_field'
-  [Setup]  Go To  ${ROOT}forms/login.html
+  [Setup]  Go To Page "forms/login.html"
   Input Text  username_field  username
   Input Password  password_field  password
   Submit Form
-  Location Should Be  ${root}forms/submit.html
+  Verify Location Is "forms/submit.html"
 
 Press Key
-  [Setup]  Go To  ${ROOT}forms/login.html
+  [Setup]  Go To Page "forms/login.html"
   Cannot Be Executed in IE
   Input Text  username_field  James Bond
   Press Key  password_field  f
   Press Key  login_button  \\13  and wait
-  Location Should Be  ${root}forms/submit.html
+  Verify Location Is "forms/submit.html"
 
 Press Key Native
-  [Setup]  Go To  ${ROOT}forms/login.html
+  [Setup]  Go To Page "forms/login.html"
   [Documentation]  Due to the fact that test are run with xvfb in CI, this test does not work there.
   [Tags]  ci-incompatible
   Input Text  username_field  James Bond
@@ -40,5 +40,5 @@ Press Key Native
   Execute Javascript  window.focus()
   Focus  login_button
   Press Key Native  10  and wait
-  Location Should Be  ${root}forms/submit.html
+  Verify Location Is "forms/submit.html"
 

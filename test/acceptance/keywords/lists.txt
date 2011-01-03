@@ -1,10 +1,20 @@
 *Setting*
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}forms/prefilled_email_form.html
-Default Tags  list
+Test Setup  Go To Page "forms/prefilled_email_form.html"
 
 
 *Test Cases*
+
+Get List Items From Single-Select List
+  ${items}=  Get List Items  preferred_channel
+  ${expected}=  Create List  Email  Telephone  Direct mail
+  Should Be Equal  ${items}  ${expected}
+
+Get List Items From Multi-Select List
+  ${items}=  Get List Items  interests
+  ${expected}=  Create List  Males  Females  Others
+  Should Be Equal  ${items}  ${expected}
+
 List Selection Should Be
   [Documentation]  FAIL List 'possible_channels' should have had selection
   ...  [ email | Telephone | Direct mail ] but it was [ Email | Telephone ]
@@ -72,6 +82,7 @@ List Should Have No Selections
 
 
 *Keywords*
+
 Unselect And Verify Selection
   [Arguments]  ${list_id}  ${unselection}  @{exp_selection}
   Unselect From List  ${list_id}  ${unselection}

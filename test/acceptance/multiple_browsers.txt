@@ -2,32 +2,32 @@
 Resource  resource.txt
 Suite Setup  Open Two Browsers And Register Indexes
 Suite Teardown  Close All Browsers
-Default Tags  multiple
 
 
 *Test Cases*
+
 Last Opened Browser Should Be Active
-  Location Should be  ${ROOT}links.html
+  Verify Location Is "links.html"
 
 It Should Be Possible To Switch Between Browsers Using Indexes
   Switch Browser  ${BROWSER1}
-  Location Should be  ${ROOT}
+  Verify Location Is ""
 
 It Should Be Give An Alias To New Browser Instance
-  Open Browser  ${ROOT}forms/prefilled_email_form.html  ${BROWSER}  Third Browser
-  Location Should Be  ${ROOT}forms/prefilled_email_form.html
+  Open Browser  ${ROOT}/forms/prefilled_email_form.html  ${BROWSER}  Third Browser
+  Verify Location Is "forms/prefilled_email_form.html"
   Switch Browser  ${BROWSER1}
-  Location Should be  ${ROOT}
+  Verify Location Is ""
   Switch Browser  Third Browser
-  Location Should Be  ${ROOT}forms/prefilled_email_form.html
+  Verify Location Is "forms/prefilled_email_form.html"
 
 It Should Be Possible Close A Browser
-  Open Browser  ${ROOT}forms/prefilled_email_form.html  ${BROWSER}  Third
+  Open Browser  ${ROOT}/forms/prefilled_email_form.html  ${BROWSER}  Third
   Switch Browser  ${BROWSER2}
   Close Browser
   Switch Browser  Third
   Close Browser
-  ${BROWSER2} =  Open Browser  ${ROOT}links.html  ${BROWSER}
+  ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}
 
 Correct Error Message Should Be Given When Trying To Switch To Non-Existing Browser
   [Documentation]  FAIL No browser with index or alias 'non-existing' found.
@@ -37,8 +37,8 @@ Correct Error Message Should Be Given When Trying To Switch To Non-Existing Brow
 *Keywords*
 Open Two Browsers And Register Indexes
   Cannot Be Executed in IE
-  ${BROWSER1} =  Open Browser  ${ROOT}  ${BROWSER}
-  ${BROWSER2} =  Open Browser  ${ROOT}links.html  ${BROWSER}
+  ${BROWSER1} =  Open Browser  ${FRONT PAGE}  ${BROWSER}
+  ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}
   Set Suite Variable  $BROWSER1
   Set Suite Variable  $BROWSER2
 

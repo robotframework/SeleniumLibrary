@@ -1,4 +1,4 @@
-#  Copyright 2008-2009 Nokia Siemens Networks Oyj
+#  Copyright 2008-2010 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -12,49 +12,64 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-class Select(object):
-        
+from runonfailure import RunOnFailure
+
+
+class Select(RunOnFailure):
+
+    def get_list_items(self, locator):
+        """Returns the values in the list identified by `locator`.
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
+        details about locating elements.
+
+        This keyword was added in SeleniumLibrary 2.5.
+        """
+        return self._selenium.get_select_options(locator)
+
     def list_selection_should_be(self, locator, *values):
         """Verifies the selection of list identified by `locator` is exactly `*values`.
-        
+
         If you want to test that no option is selected, simply give no `values`.
-        Key attributes for list are `id` and `name`. See `introduction` for
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
         opts = values and 'options [ %s ]' % ' | '.join(values) or 'no options'
         self._info("Verifying list '%s' has %s selected." % (locator, opts))
         self.page_should_contain_list(locator)
-        xpath = self._parse_locator(locator, 'select')
         try:
-            selected_values = self._selenium.get_selected_values(xpath)
-            selected_labels = self._selenium.get_selected_labels(xpath)
+            selected_values = self._selenium.get_selected_values(locator)
+            selected_labels = self._selenium.get_selected_labels(locator)
         except Exception, err:
-            if not values and 'No option selected' in self._get_error_message(err):
+            if not values and self._error_contains(err, 'No option selected'):
                 return
-            raise # Means that something unexpecet happened in Selenium.
-        else:
-            msg = "List '%s' should have had selection [ %s ] but it was [ %s ]" \
-                   % (locator, ' | '.join(values), ' | '.join(selected_labels))
-            for expvalue in values:
-                if expvalue not in selected_labels + selected_values:
-                    raise AssertionError(msg)          
-            for label, value in zip(selected_labels, selected_values):
-                if label not in values and value not in values:
-                    raise AssertionError(msg)
-   
+            raise
+        err = "List '%s' should have had selection [ %s ] but it was [ %s ]" \
+            % (locator, ' | '.join(values), ' | '.join(selected_labels))
+        for expvalue in values:
+            if expvalue not in selected_labels + selected_values:
+                raise AssertionError(err)
+        for label, value in zip(selected_labels, selected_values):
+            if label not in values and value not in values:
+                raise AssertionError(err)
+
     def select_from_list(self, locator, *values):
         """Selects `*values` from list identified by `locator`
-        
+
         If more than one value is given for a single-selection list, the last
         value will be selected. If the target list is a multi-selection list,
         and `*values` is an empty list, all values of the list will be selected.
-        
-        Key attributes for list are `id` and `name`. See `introduction` for
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
+
+        This keyword does not support waiting for possible page load
+        automatically. If that is needed, keyword `Wait Until Page Loaded`
+        can be used after this keyword.
         """
         selection = values and "values '%s'" % ', '.join(values) or 'all values'
         self._info("Selecting %s from list '%s'." % (selection, locator))
-        locator = self._parse_locator(locator, 'select')
         values = list(values)
         if len(values) == 0:
             values = self._selenium.get_select_options(locator)
@@ -74,10 +89,9 @@ class Select(object):
             self._selenium.get_attribute(locator+'@multiple')
             return True
         except Exception, err:
-            if 'attribute: %s@multiple' % locator in self._get_error_message(err):
+            if self._error_contains(err, 'attribute: %s@multiple' % locator):
                 return False
-            else:
-                raise
+            raise
 
     def _call_method_for_list_elements(self, method_name, locator, elements):
         method = getattr(self._selenium, method_name)
@@ -85,65 +99,66 @@ class Select(object):
             try:
                 method(locator, elem)
             except:
-                method(locator, 'value=%s'%elem)
-            
+                method(locator, 'value=%s' % elem)
+
     def unselect_from_list(self, locator, *values):
         """Unselects given values from list identified by locator.
-        
-        As a special case, giving empty list as `*selection` will remove all 
+
+        As a special case, giving empty list as `*selection` will remove all
         selections.
-        
-        Key attributes for list are `id` and `name`. See `introduction` for
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
+
+        This keyword does not support waiting for possible page load
+        automatically. If that is needed, keyword `Wait Until Page Loaded`
+        can be used after this keyword.
         """
         selection = values and "values '%s'" % ', '.join(values) or 'all values'
         self._info("Unselecting %s from list '%s'." % (selection, locator))
-        locator = self._parse_locator(locator, 'select')
         if not self._is_multiselect_list(locator):
             raise RuntimeError("Keyword 'Unselect from list' works only for "
                                "multiselect lists")
-        if len(values) == 0:
+        if not values:
             self._selenium.remove_all_selections(locator)
         else:
             self._call_method_for_list_elements('remove_selection', locator,
                                                 list(values))
-            
+
     def select_all_from_list(self, locator, wait=''):
         """Selects all values from multi-select list identified by `id`.
-        
-        Key attributes for list are `id` and `name`. See `introduction` for
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements and about `wait` argument.
         """
         self._info("Selecting all values from list '%s'." % locator)
-        locator = self._parse_locator(locator, 'select')
-        selected_items = [] 
+        selected_items = []
         if self._selenium.is_something_selected(locator):
             selected_items = self._selenium.get_selected_labels(locator)
         for item in self._selenium.get_select_options(locator):
-            if not item in selected_items:
+            if item not in selected_items:
                 self._add_to_selection(locator, item)
                 if wait:
-                    self._wait_for_page_to_load()
-                    
+                    self.wait_until_page_loaded()
+
     def _add_to_selection(self, locator, item):
         try:
             self._selenium.add_selection(locator, item)
         except Exception, err:
-            if "Not a multi-select" in self._get_error_message(err):
+            if self._error_contains(err, "Not a multi-select"):
                 raise RuntimeError("Keyword 'Select all from list' works only "
                                    "for multiselect lists.")
             raise
-            
+
     def list_should_have_no_selections(self, locator):
         """Verifies list identified by `locator` has no selections.
-        
-        Key attributes for list are `id` and `name`. See `introduction` for
+
+        Key attributes for lists are `id` and `name`. See `introduction` for
         more details on key attributes and locating elements.
         """
         self._info("Verifying list '%s' has no selection." % locator)
-        _locator = self._parse_locator(locator, 'select')
-        if self._selenium.is_something_selected(_locator):
-            selection = ' | '.join(self._selenium.get_selected_labels(_locator))
+        if self._selenium.is_something_selected(locator):
+            selection = ' | '.join(self._selenium.get_selected_labels(locator))
             raise AssertionError("List '%s' should have had no selection "
                                  "(selection was [ %s ])" % (locator, selection))
 

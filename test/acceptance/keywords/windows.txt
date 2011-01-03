@@ -1,7 +1,6 @@
 *Setting*
 Resource  ../resource.txt
-Test Setup  Go To  ${ROOT}javascript/popupwindow.html
-Default Tags  javascript
+Test Setup  Go To Page "javascript/popupwindow.html"
 
 *Test Cases*
 Popup Windows Created With Javascript

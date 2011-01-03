@@ -62,7 +62,7 @@ def start_server(port=DEFAULT_PORT):
     print "Demo application starting on port %s" % port
     root  = os.path.dirname(os.path.abspath(__file__))
     os.chdir(root) 
-    server = StoppableHttpServer(('', int(port)), StoppableHttpRequestHandler)
+    server = StoppableHttpServer(('localhost', int(port)), StoppableHttpRequestHandler)
     server.serve_forever()
 
     
