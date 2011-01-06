@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#  Copyright 2008-2010 Nokia Siemens Networks Oyj
+#  Copyright 2008-2011 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -61,11 +61,10 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 def start_server(port=DEFAULT_PORT):
     print "Demo application starting on port %s" % port
     root  = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(root) 
+    os.chdir(root)
     server = StoppableHttpServer(('localhost', int(port)), StoppableHttpRequestHandler)
     server.serve_forever()
 
-    
 def stop_server(port=DEFAULT_PORT):
     print "Demo application on port %s stopping" % port
     conn = httplib.HTTPConnection("localhost:%s" % port)
