@@ -240,7 +240,7 @@ Page Should Not Contain Button In Input Tag
 Get All Links
   [Setup]  Go To Page "links.html"
   ${links}=  Get All Links
-  Length Should Be  ${links}  18
+  Length Should Be  ${links}  19
   List Should Contain Value  ${links}  bold_id
 
 Xpath Should Match X Times
