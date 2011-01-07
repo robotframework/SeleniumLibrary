@@ -95,6 +95,12 @@ Click Link With Text And Image
   Click Link  Text and image
   Verify Location Is "index.html"
 
+Target Opens in New Window
+  Click Link  Target opens in new window  dont wait
+  Select Window  ${INDEX TITLE}
+  Verify Location Is "index.html"
+  [Teardown]  Run Keywords  Close Window  Select Window
+
 Wait Until Page Loaded
   Click Link  Relative  and don't wait
   Wait Until Page Loaded
