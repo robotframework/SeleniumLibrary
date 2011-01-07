@@ -9,16 +9,22 @@ ${SERVER}  localhost:7272
 ${BROWSER}  *firefox
 ${ROOT}  http://${SERVER}/html
 ${FRONT PAGE}  ${ROOT}/
+${SPEED}  0
 
 
 *Keyword*
 Open Browser To Start Page
   [Documentation]  This keyword also tests 'Set Selenium Speed' and 'Set Selenium Timeout' against all reason.
+  ${default speed}  ${default timeout} =
+  ...  Open Browser To Start Page Without Testing Default Options
+  Should Be Equal  ${default speed}  0 seconds
+  Should Be Equal  ${default timeout}  5 seconds
+
+Open Browser To Start Page Without Testing Default Options
   Open Browser  ${FRONT PAGE}  ${BROWSER}
-  ${old timeout} =  Set Selenium Speed  ${SPEED}
-  Should Be Equal  ${old timeout}  0 seconds
-  ${old timeout} =  Set Selenium Timeout  10 seconds
-  Should Be Equal  ${old timeout}  5 seconds
+  ${orig speed} =  Set Selenium Speed  ${SPEED}
+  ${orig timeout} =  Set Selenium Timeout  10 seconds
+  [Return]  ${orig speed}  ${orig timeout}
 
 Cannot Be Executed In IE
   ${runsInIE}=  Set Variable If  "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']  ${TRUE}
