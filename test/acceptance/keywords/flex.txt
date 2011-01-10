@@ -1,45 +1,39 @@
-*Settings*
-Force Tags  ci-incompatible
-Suite Setup  Open Flex Application
-Test Setup  Select Flex Application  ${APP ID}
-Resource  ../resource.txt
+*** Settings ***
+Suite Setup     Go To  ${ROOT}/flex/flex.html
+Test Setup      Select Simple Flex Application
+Force Tags      ci-incompatible
+Resource        ../resource.txt
 
-*Variables*
-# TODO: Cleanup
-${APP ID}  test_app_embed  # works at least with firefox and chrome
-${APP ID}  test_app_object  # with IE
-
-*Test cases*
+*** Test Cases ***
 Using Flex commands without selecting application
-  [Setup]
-  [Documentation]  FAIL  No Flex application selected.
-  Click Flex Element  button
+    [Documentation]  FAIL No Flex application selected.
+    [Setup]
+    Click Flex Element  button
 
-Text in flex should be
-  Text In Flex Should Be  input_field  testing
-  Text In Flex Should Be  hello_label  Hello Flex!
-  Text In Flex Should Be  upper_button  Upper
-
-Text in flex should be fails
-  [Documentation]  FAIL ERROR: Expected "Hi Silverlight!", got "Hello Flex!"
-  Text In Flex Should Be  hello_label  Hi Silverlight!
-
-Text in flex should when element doesn't exist
-  [Documentation]  FAIL ERROR: The chain 'name:non_existing' was not found.
-  Text In Flex Should Be  non_existing  Whatever
-
-Input text  
-  Input Text Into Flex   input_field  RF <3 FP
-  Text In Flex Should Be  input_field  RF &lt;3 FP
+Input text
+    Input Text Into Flex  inputField  RF <3 FP
+    Text In Flex Should Be  inputField  RF &lt;3 FP
 
 Click Element
-  Input Text Into Flex  input_field  uppercase?
-  Click Flex Element  upper_button
-  Click Flex Element  OK
-  Text In Flex Should Be  input_field  UPPERCASE?
-  
-    
-*Keywords*
-Open Flex Application
-    Go To  ${ROOT}/flex/flex.html
+    Input Text Into Flex  inputField  uppercase?
+    Click Flex Element  upperButton
+    Click Flex Element  OK
+    Text In Flex Should Be  inputField  UPPERCASE?
 
+Text in flex should be
+    Input Text Into Flex    inputField  testing
+    Text In Flex Should Be  inputField  testing
+    Text In Flex Should Be  helloLabel  Hello Flex!
+    Text In Flex Should Be  upperButton  Upper
+
+Text in flex should be fails
+    [Documentation]  FAIL ERROR: Expected "Hi Silverlight!", got "Hello Flex!"
+    Text In Flex Should Be  helloLabel  Hi Silverlight!
+
+Text in flex should be when element doesn't exist
+    [Documentation]  FAIL ERROR: The chain 'name:nonExisting' was not found.
+    Text In Flex Should Be  nonExisting  Whatever
+
+*** Keywords ***
+Select Simple Flex Application
+    Select Flex Application  testApp

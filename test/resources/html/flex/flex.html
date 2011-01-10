@@ -1,13 +1,29 @@
 <html>
-<head>
-<title>App for flex testing</title>
-</head>
+  <head>
+    <title>Simple application for flex testing</title>
+    <script type="text/javascript">
+      var testApp;
+      function init() {
+        var html = '';
+        var movieName = 'TestApp.swf';
+        if (navigator.appName == 'Microsoft Internet Explorer') {
+          html = '<object type="application/x-shockwave-flash" ' +
+                 'width="100%" height="100%" id="testApp">' +
+                 '<param name="movie" value="' + movieName + '">' +
+                 '</object>';
+        }
+        else {
+          html = '<embed id="testApp" height="100%" width="100%"' +
+                 'name="testApp" src="' + movieName + '"' +
+                 'type="application/x-shockwave-flash"/>';
+        }
+        document.getElementById('testAppContainer').innerHTML = html;
+        testApp = document.getElementById('testApp')
+      }
+      window.onload = init;
+    </script>
+  </head>
 <body>
-  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-	  width="400" height="300" id="test_app_object">
-    <param name="movie" value="TestApp.swf">
-    <embed src="TestApp.swf" quality="high" width="400" weight="300"
-	   name="test_app_embed" type="application/x-shockwave-flash">
-  </object>
+  <div id="testAppContainer" style="width: 400px; height: 300px;" />
 </body>
 </html>

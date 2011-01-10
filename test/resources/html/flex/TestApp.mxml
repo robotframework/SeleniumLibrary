@@ -16,12 +16,12 @@ private function init():void {
 import mx.controls.Alert;
 
 protected function upperCase(event:MouseEvent):void {
-    input_field.text = input_field.text.toUpperCase();
+    inputField.text = inputField.text.toUpperCase();
     Alert.show("Upper cased");
 }
 ]]>
 </mx:Script>
-<mx:Label name="hello_label" text="Hello Flex!"/>
-<mx:TextInput id="input_field" text="testing"/>
-<mx:Button id="upper_button" label="Upper" click="upperCase(event)"/>
+<mx:Label name="helloLabel" text="Hello Flex!"/>
+<mx:TextInput id="inputField" text="testing"/>
+<mx:Button id="upperButton" label="Upper" click="upperCase(event)"/>
 </mx:Application>
