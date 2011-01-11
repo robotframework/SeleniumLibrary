@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>Dynamic content generating application for flex testing</title>
+    <script type="text/javascript">
+      var testApp;
+      function init() {
+        var html = '';
+        var movieName = 'DynamicTestApp.swf';
+        if (navigator.appName == 'Microsoft Internet Explorer') {
+          html = '<object type="application/x-shockwave-flash" ' +
+                 'width="100%" height="100%" id="testApp">' +
+                 '<param name="movie" value="' + movieName + '">' +
+                 '</object>';
+        }
+        else {
+          html = '<embed id="testApp" height="100%" width="100%"' +
+                 'name="testApp" src="' + movieName + '"' +
+                 'type="application/x-shockwave-flash"/>';
+        }
+        document.getElementById('testAppContainer').innerHTML = html;
+        testApp = document.getElementById('testApp')
+      }
+      window.onload = init;
+    </script>
+  </head>
+  <body>
+    <div id="testAppContainer" style="width: 400px; height: 300px;" />
+  </body>
+</html>
+

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                applicationComplete="init();">
+<mx:Script>
+<![CDATA[
+import org.flex_pilot.FPBootstrap;
+
+private function init():void {
+    FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
+    FPBootstrap.init(stage);
+}
+]]>
+</mx:Script>
+<mx:Script>
+<![CDATA[
+import mx.controls.Button;
+
+protected function createContent(event:MouseEvent):void {
+    const b:Button = new Button();
+    b.id = "increaseCountButton";
+    b.label = "Increase count";
+    b.addEventListener(MouseEvent.CLICK,
+                       function(event:MouseEvent):void{clickCount++;});
+    container.addChild(b);
+}
+
+[Bindable]
+protected var clickCount:Number = 0;
+
+]]>
+</mx:Script>
+<mx:VBox id="container">
+  <mx:Label id="clickCountLabel" htmlText="Clicks: {clickCount}"/>
+  <mx:Button id="createContentButton" label="Create content"
+             click="createContent(event)"/>
+</mx:VBox>
+</mx:Application>
+
