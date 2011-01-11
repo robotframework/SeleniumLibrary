@@ -31,7 +31,7 @@ Text in flex should be fails
     Text In Flex Should Be  helloLabel  Hi Silverlight!
 
 Text in flex should be when element doesn't exist
-    [Documentation]  FAIL ERROR: The chain 'name:nonExisting' was not found.
+    [Documentation]  FAIL ERROR: The chain 'id:nonExisting' was not found.
     Text In Flex Should Be  nonExisting  Whatever
 
 *** Keywords ***
