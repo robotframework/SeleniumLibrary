@@ -1,8 +1,12 @@
 *** Settings ***
 Suite Setup     Go To  ${ROOT}/flex/flex.html
-Test Setup      Select Simple Flex Application
+Test Setup      Select Login Application
 Force Tags      ci-incompatible
 Resource        ../resource.txt
+
+*** Variables ***
+${some username}  James Bond
+${HELP TEXT}  Input your username and password to log in
 
 *** Test Cases ***
 Using Flex commands without selecting application
@@ -11,29 +15,25 @@ Using Flex commands without selecting application
     Click Flex Element  button
 
 Input text
-    Input Text Into Flex  inputField  RF <3 FP
-    Text In Flex Should Be  inputField  RF &lt;3 FP
+    Input Text Into Flex  username  ${some username}
+    Text In Flex Should Be  username  ${some username}
 
 Click Element
-    Input Text Into Flex  inputField  uppercase?
-    Click Flex Element  upperButton
-    Click Flex Element  OK
-    Text In Flex Should Be  inputField  UPPERCASE?
+    Text In Flex Should Be  helpLabel  \
+    Click Flex Element  helpButton
+    Text In Flex Should Be  helpLabel  ${HELP TEXT}
 
-Text in flex should be
-    Input Text Into Flex    inputField  testing
-    Text In Flex Should Be  inputField  testing
-    Text In Flex Should Be  helloLabel  Hello Flex!
-    Text In Flex Should Be  upperButton  Upper
+Text in flex should be with buttons
+    Text In Flex Should Be  helpButton  Help
 
 Text in flex should be fails
-    [Documentation]  FAIL ERROR: Expected "Hi Silverlight!", got "Hello Flex!"
-    Text In Flex Should Be  helloLabel  Hi Silverlight!
+    [Documentation]  FAIL ERROR: Expected "not there", got "Help"
+    Text In Flex Should Be  helpButton  not there
 
 Text in flex should be when element doesn't exist
     [Documentation]  FAIL ERROR: The chain 'id:nonExisting' was not found.
     Text In Flex Should Be  nonExisting  Whatever
 
 *** Keywords ***
-Select Simple Flex Application
-    Select Flex Application  testApp
+Select Login Application
+    Select Flex Application  loginApp

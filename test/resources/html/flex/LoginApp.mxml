@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                applicationComplete="init();">
+  <mx:Script>
+  <![CDATA[
+  import org.flex_pilot.FPBootstrap;
+
+  private function init():void {
+      FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
+      FPBootstrap.init(stage);
+  }
+  ]]>
+  </mx:Script>
+
+  <mx:Script> 
+    <![CDATA[
+        import flash.events.MouseEvent;
+        import mx.controls.Alert;
+
+        private function submitLogin(eventObj:MouseEvent):void {
+          var msg:String = "";
+          if (username.text == "demo" && password.text == "mode") {
+            msg = 'Correct';
+          }
+          else {
+            msg = "Incorrect";
+          }
+          Alert.show(msg);
+        }   
+        
+        private function showHelp(eventObj:MouseEvent):void {
+          helpLabel.text = "Input your username and password to log in";
+          }
+
+    ]]>
+  </mx:Script>
+
+  <mx:Form defaultButton="{loginButton}">
+      <mx:FormItem label="Username">
+          <mx:TextInput id="username" width="100"/>
+      </mx:FormItem>
+      <mx:FormItem label="Password">
+          <mx:TextInput id="password" width="100" 
+              displayAsPassword="true"/>
+      </mx:FormItem>
+      <mx:FormItem>
+          <mx:Button id="loginButton" label="Login" 
+              click="submitLogin(event);"/>
+      </mx:FormItem>
+  </mx:Form>
+  <mx:Button id="helpButton" label="Help" click="showHelp(event);"/>
+  <mx:Label id="helpLabel"/>
+
+</mx:Application>
