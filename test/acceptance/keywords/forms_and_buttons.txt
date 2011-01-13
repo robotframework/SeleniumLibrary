@@ -36,9 +36,19 @@ Click Cancel Button By Value
     Click Button   Cancel   And Don't Wait
     Value Should Be Cancel
 
-Form With Button (Not Input) Tag
+Click button created with <button> by id
     [Setup]   Go To Page "forms/buttons.html"
     Click Button   button
+    Verify Location Is "${FORM SUBMITTED}"
+
+Click button created with <button> by value attribute
+    [Setup]   Go To Page "forms/buttons.html"
+    Click Button   Get In
+    Verify Location Is "${FORM SUBMITTED}"
+
+Click button created with <button> by tag content
+    [Setup]   Go To Page "forms/buttons.html"
+    Click Button   Sisään
     Verify Location Is "${FORM SUBMITTED}"
 
 Choose File

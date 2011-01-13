@@ -218,6 +218,8 @@ Page Should Contain Button
   [Documentation]  FAIL Page should have contained button 'non-existing' but did not
   [Setup]  Go To Page "forms/buttons.html"
   Page Should Contain Button  button
+  Page Should Contain Button  Sisään
+  Page Should Contain Button  Get In
   Page Should Contain Button  xpath=//button[@type="submit"]
   Page Should Contain Button  Ulos
   Page Should Contain Button  xpath=//input[@type="submit"]
