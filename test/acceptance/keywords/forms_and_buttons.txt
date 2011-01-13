@@ -33,7 +33,7 @@ Click Ok Button By Value
     Verify Location Is "${FORM SUBMITTED}"
 
 Click Cancel Button By Value
-    Click Button   cancel_button   And Don't Wait
+    Click Button   Cancel   And Don't Wait
     Value Should Be Cancel
 
 Form With Button (Not Input) Tag
