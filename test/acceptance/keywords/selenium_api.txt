@@ -11,7 +11,7 @@ Call Selenium Python API with arguments
   Call Selenium API  open  ${ROOT}/links.html
   Verify Location Is "links.html"
   ${ordered}=  Call Selenium API  is_ordered  link=Relative  link=Relative to sub-directory
-  Should Be True  ${ordered}
+  Should Be Equal  ${ordered}  ${True}
 
 Call Selenium RC API
   ${title}=  Call Selenium API  getTitle
@@ -21,7 +21,15 @@ Call Selenium RC API with arguments
   ${ret}=  Call Selenium API  isTextPresent  needle
   Should Be Equal  ${ret}  OK,true
 
+Call Selenium API with non-ASCII characters
+  [Setup]  Go To Page "non_ascii.html"
+  :FOR  ${text}  IN  Ë  Ü  Ä  Ö
+  \  ${ret}=  Call Selenium API  is_text_present  ${text}
+  \  Should Be Equal  ${ret}  ${True}
+  \  ${ret}=  Call Selenium API  isElementPresent  id-${text}
+  \  Should Be Equal  ${ret}  OK,true
+
 Call non-existing Selenium function
-  [Documentation]  FAIL  ERROR: Unknown command: 'non-existing'
-  Call Selenium API  non-existing
+  [Documentation]  FAIL  ERROR: Unknown command: 'non_existing'
+  Call Selenium API  non_existing
 
