@@ -22,7 +22,8 @@ class LocatorParser:
                         'normalize-space(descendant-or-self::text())'],
         'img':         ['@id', '@src', '@alt'] ,
         'input':       ['@id', '@name', '@value', '@src'] ,
-        'button':      ['@id', '@name', '@value'],
+        'button':      ['@id', '@name', '@value',
+                        'normalize-space(descendant-or-self::text())'],
     }
     _synonyms = { 'link': 'a',
                   'image': 'img',
