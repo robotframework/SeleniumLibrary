@@ -26,6 +26,9 @@ class Flex(RunOnFailure):
         # It seems that selenium timeout is always used so this timeout has no effect.
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
+    def flex_component_should_exist(self, locator):
+        self._flex_command('flexAssertDisplayObject', 'id=%s' % locator)
+
     def click_flex_element(self, locator):
         try:
             self._flex_command('flexClick', 'id='+locator)

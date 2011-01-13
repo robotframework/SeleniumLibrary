@@ -1,0 +1,11 @@
+*** Settings ***
+Suite Setup     Go To  ${ROOT}/flex/flex.html
+Test Setup      Select Flex Application  loginApp
+Force Tags      ci-incompatible
+Resource        ../../resource.txt
+
+*** Test Cases ***
+By Id  [Documentation]  FAIL ERROR: The chain 'id:nonExisting' was not found.
+    Flex Component Should Exist  loginButton
+    Flex Component Should Exist  nonExisting
+
