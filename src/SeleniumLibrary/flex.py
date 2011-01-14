@@ -22,25 +22,36 @@ class Flex(RunOnFailure):
         self._wait_for_flex_ready(locator)
         return self._flex_apps.register(locator, alias)
 
+    def unselect_flex_applications(self):
+        self._flex_apps.empty_cache()
+
     def _wait_for_flex_ready(self, locator, timeout=5000):
         # It seems that selenium timeout is always used so this timeout has no effect.
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
     def flex_component_should_exist(self, locator):
-        self._flex_command('flexAssertDisplayObject', 'id=%s' % locator)
+        self._flex_command('flexAssertDisplayObject',
+                           self._flex_locator(locator))
 
     def click_flex_element(self, locator):
-        try:
-            self._flex_command('flexClick', 'id='+locator)
-        except Exception:
-            self._flex_command('flexClick', 'name='+locator)
+        self._flex_command('flexClick', self._flex_locator(locator))
 
     def input_text_into_flex(self, locator, value):
-        self._flex_command('flexType', 'id=%s,text=%s' % (locator, value))
+        locator = self._flex_locator(locator)
+        self._flex_command('flexType', '%s, text=%s' % (locator, value))
 
     def text_in_flex_should_be(self, locator, expected):
+        locator = self._flex_locator(locator)
         self._flex_command('flexAssertText',
-                           'id=%s,validator=%s' % (locator, expected))
+                           '%s,validator=%s' % (locator, expected))
+
+    def _flex_locator(self, locator):
+        locator = locator.strip()
+        if '=' in locator:
+          return locator
+        if '/' in locator:
+          return 'chain=%s' % locator
+        return 'id=%s' % locator
 
     def _flex_command(self, command, options):
         # TODO: Howto handle commas in option values??
