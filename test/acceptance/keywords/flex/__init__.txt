@@ -1,0 +1,3 @@
+*** Settings ***
+Force Tags  ci-incompatible
+

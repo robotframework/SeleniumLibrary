@@ -1,7 +1,6 @@
 *** Settings ***
 Suite Setup     Go To  ${ROOT}/flex/flex.html
 Test Setup      Select Login Application
-Force Tags      ci-incompatible
 Resource        ../../resource.txt
 
 *** Variables ***
