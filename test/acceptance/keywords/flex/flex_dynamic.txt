@@ -14,3 +14,4 @@ Access Dynamic Content
 Counter Value Should Be
     [Arguments]  ${expected}
     Flex Text Field Value Should Be  clickCountLabel  Clicks: ${expected}
+
