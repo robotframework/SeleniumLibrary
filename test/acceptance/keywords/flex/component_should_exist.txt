@@ -6,7 +6,7 @@ Resource        ../../resource.txt
 
 *** Test Cases ***
 By Id
-    Flex Component Should Exist  loginButto
+    Flex Component Should Exist  loginButton
 
 By Name
   Flex Component Should Exist  name=help
