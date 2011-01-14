@@ -1,7 +1,6 @@
 *** Settings ***
 Suite Setup     Go To  ${ROOT}/flex/flex.html
 Test Setup      Select Login Application
-Force Tags      ci-incompatible
 Resource        ../../resource.txt
 
 *** Variables ***
@@ -11,28 +10,28 @@ ${HELP TEXT}  Input your username and password to log in
 *** Test Cases ***
 Using Flex commands without selecting application
     [Documentation]  FAIL No Flex application selected.
-    [Setup]
+    [Setup]  Unselect Flex Applications
     Click Flex Element  button
 
 Input text
-    Input Text Into Flex  username  ${some username}
-    Text In Flex Should Be  username  ${some username}
+    Input Into Flex Text Field  username  ${some username}
+    Flex Text Field Value Should Be  username  ${some username}
 
 Click Element
-    Text In Flex Should Be  helpLabel  \
+    Flex Text Field Value Should Be  helpLabel  \
     Click Flex Element  helpButton
-    Text In Flex Should Be  helpLabel  ${HELP TEXT}
+    Flex Text Field Value Should Be  helpLabel  ${HELP TEXT}
 
 Text in flex should be with buttons
-    Text In Flex Should Be  helpButton  Help
+    Flex Text Field Value Should Be  helpButton  Help
 
 Text in flex should be fails
     [Documentation]  FAIL ERROR: Expected "not there", got "Help"
-    Text In Flex Should Be  helpButton  not there
+    Flex Text Field Value Should Be  helpButton  not there
 
 Text in flex should be when element doesn't exist
     [Documentation]  FAIL ERROR: The chain 'id:nonExisting' was not found.
-    Text In Flex Should Be  nonExisting  Whatever
+    Flex Text Field Value Should Be  nonExisting  Whatever
 
 *** Keywords ***
 Select Login Application

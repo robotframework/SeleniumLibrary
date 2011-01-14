@@ -35,7 +35,7 @@
     ]]>
   </mx:Script>
 
-  <mx:Form defaultButton="{loginButton}">
+  <mx:Form id="loginForm" defaultButton="{loginButton}">
       <mx:FormItem label="Username">
           <mx:TextInput id="username" width="100"/>
       </mx:FormItem>
@@ -48,7 +48,9 @@
               click="submitLogin(event);"/>
       </mx:FormItem>
   </mx:Form>
-  <mx:Button id="helpButton" label="Help" click="showHelp(event);"/>
-  <mx:Label id="helpLabel"/>
+  <mx:VBox id="helpContainer">
+    <mx:Button id="helpButton" name="help" label="Help" click="showHelp(event);"/>
+    <mx:Label id="helpLabel"/>
+  </mx:VBox>
 
 </mx:Application>

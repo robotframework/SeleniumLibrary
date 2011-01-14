@@ -358,7 +358,8 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         while time.time() < timeout:
             try:
                 self._selenium.start()
-            except socket.error:
+            # AssertionError occurs on Jython: http://bugs.jython.org/issue1697
+            except (socket.error, AssertionError):
                 time.sleep(2)
             else:
                 return
