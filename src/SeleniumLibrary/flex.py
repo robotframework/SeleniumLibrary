@@ -18,29 +18,64 @@ from runonfailure import RunOnFailure
 class Flex(RunOnFailure):
 
     def select_flex_application(self, locator, alias=None):
+        """Select flex application to work with.
+
+        All further Flex-keywords will operate on the selected application.
+
+        `locator` is the value `id` or `name` attribute of the movie in HTML.
+
+        Return index if this application that can be used with `Switch Flex
+        Application`
+        """
         self.page_should_contain_element(locator)
         self._wait_for_flex_ready(locator)
         return self._flex_apps.register(locator, alias)
 
-    def unselect_flex_applications(self):
-        self._flex_apps.empty_cache()
-
     def _wait_for_flex_ready(self, locator, timeout=5000):
-        # It seems that selenium timeout is always used so this timeout has no effect.
+        # It seems that selenium timeout is always used so this timeout has
+        # no effect, event though it's mandatory. Go figure.
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
+    def unselect_flex_applications(self):
+        """Unselects current Flex application and empties the register.
+
+        After this keyword, Flex application indices returned by `Select
+        Flex Application start at 1.
+        """
+        self._flex_apps.empty_cache()
+
     def flex_component_should_exist(self, locator):
+        """Verifies that Flex component identified by `locator` exists.
+
+        `locator` if interpreted with following rules:
+          * `someIdentifier` => matched against `id` attribute of the Flex
+             component
+          * `name='somename` => `somename` is matched against name attribute
+            of the Flex component
+          * `id:someId/name:someName`  => searches for component with name
+            `someName` which must be a child of component with id `someId`
+        """
         self._flex_command('flexAssertDisplayObject',
                            self._flex_locator(locator))
 
     def click_flex_element(self, locator):
+        """Clicks Flex element identified by `locator`.
+
+        TODO: backlink
+        """
         self._flex_command('flexClick', self._flex_locator(locator))
 
     def input_text_into_flex(self, locator, value):
+        """Input `value` in text field identified by `locator`.
+
+        TODO: backlink
+        """
         locator = self._flex_locator(locator)
         self._flex_command('flexType', '%s, text=%s' % (locator, value))
 
     def text_in_flex_should_be(self, locator, expected):
+        """Verifies that value of text field identified by `locator` is `expected` .
+        """
         locator = self._flex_locator(locator)
         self._flex_command('flexAssertText',
                            '%s,validator=%s' % (locator, expected))
