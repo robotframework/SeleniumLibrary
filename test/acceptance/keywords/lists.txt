@@ -1,96 +1,83 @@
-*Setting*
-Resource  ../resource.txt
-Test Setup  Go To Page "forms/prefilled_email_form.html"
+*** Settings ***
+Test Setup      Go To Page "forms/prefilled_email_form.html"
+Resource        ../resource.txt
 
-
-*Test Cases*
-
+*** Test Cases ***
 Get List Items From Single-Select List
-  ${items}=  Get List Items  preferred_channel
-  ${expected}=  Create List  Email  Telephone  Direct mail
-  Should Be Equal  ${items}  ${expected}
+    ${items}=  Get List Items  preferred_channel
+    ${expected}=  Create List  Email  Telephone  Direct mail
+    Should Be Equal  ${items}  ${expected}
 
 Get List Items From Multi-Select List
-  ${items}=  Get List Items  interests
-  ${expected}=  Create List  Males  Females  Others
-  Should Be Equal  ${items}  ${expected}
+    ${items}=  Get List Items  interests
+    ${expected}=  Create List  Males  Females  Others
+    Should Be Equal  ${items}  ${expected}
 
 List Selection Should Be
-  [Documentation]  FAIL List 'possible_channels' should have had selection
-  ...  [ email | Telephone | Direct mail ] but it was [ Email | Telephone ]
-  ...  LOG 1 Verifying list 'interests' has no options selected.
-  ...  LOG 4 Verifying list 'possible_channels' has options [ email | Telephone ] selected.
-  List Selection Should Be  interests
-  List Selection Should Be  preferred_channel  Telephone
-  List Selection Should Be  preferred_channel  phone
-  List Selection Should Be  possible_channels  email  Telephone
-  List Selection Should Be  possible_channels  email  Telephone  Direct mail
+    [Documentation]  LOG 1 Verifying list 'interests' has no options selected. LOG 4 Verifying list 'possible_channels' has options [ email | Telephone ] selected.
+    List Selection Should Be  interests
+    List Selection Should Be  preferred_channel  Telephone
+    List Selection Should Be  preferred_channel  phone
+    List Selection Should Be  possible_channels  email  Telephone
+    Run Keyword And Expect Error  List 'possible_channels' should have had selection [ email | Telephone | Direct mail ] but it was [ Email | Telephone ]  List Selection Should Be  possible_channels  email  Telephone  Direct mail
 
 List Selection Should Be When Extraneous Options Are Selected
-  [Documentation]  FAIL List 'possible_channels' should have had selection [ email ] but it was [ Email | Telephone ]
-  List Selection Should Be  possible_channels  email
+    Run Keyword And Expect Error  List 'possible_channels' should have had selection [ email ] but it was [ Email | Telephone ]  List Selection Should Be  possible_channels  email
 
 List Selection Should Be When List Does Not Exist
-  [Documentation]  FAIL Page should have contained list 'nonexisting' but did not
-  List Selection Should Be  nonexisting  whatever
+    Run Keyword And Expect Error  Page should have contained list 'nonexisting' but did not  List Selection Should Be  nonexisting  whatever
 
 UnSelect Single Value From List
-  [Documentation]  FAIL Keyword 'Unselect from list' works only for multiselect lists
-  ...  LOG 1.1 Unselecting values 'Email' from list 'possible_channels'.
-  Unselect and Verify Selection  possible_channels  Email  phone
-  Comment  unselecting already unselected option has no effect
-  Unselect and Verify Selection  possible_channels  Email  phone
-  Unselect And Verify Selection  possible_channels  Telephone
-  Unselect From List  preferred_channel
+    [Documentation]  LOG 1.1 Unselecting values 'Email' from list 'possible_channels'.
+    Unselect and Verify Selection  possible_channels  Email  phone
+    Comment  unselecting already unselected option has no effect
+    Unselect and Verify Selection  possible_channels  Email  phone
+    Unselect And Verify Selection  possible_channels  Telephone
+    Run Keyword And Expect Error  Keyword 'Unselect from list' works only for multiselect lists  Unselect From List  preferred_channel
 
 UnSelect All From List
-  [Documentation]  LOG 1 Unselecting all values from list 'possible_channels'.
-  Unselect From List  possible_channels
-  List Selection Should Be  possible_channels
+    [Documentation]  LOG 1 Unselecting all values from list 'possible_channels'.
+    Unselect From List  possible_channels
+    List Selection Should Be  possible_channels
 
 Select From Single Selection List
-  [Documentation]  LOG 1.1 Selecting values 'Email' from list 'preferred_channel'.
-  Select And verify selection  preferred_channel  Email  Email
-  Select And verify selection  preferred_channel  Email  Email
-  Select And verify selection  preferred_channel  directmail  Direct mail
-  Select From List  preferred_channel  email  Telephone
-  List Selection Should Be  preferred_channel  Telephone
-  Select From List  preferred_channel
-  List Selection Should Be  preferred_channel  Direct mail
+    [Documentation]  LOG 1.1 Selecting values 'Email' from list 'preferred_channel'.
+    Select And verify selection  preferred_channel  Email  Email
+    Select And verify selection  preferred_channel  Email  Email
+    Select And verify selection  preferred_channel  directmail  Direct mail
+    Select From List  preferred_channel  email  Telephone
+    List Selection Should Be  preferred_channel  Telephone
+    Select From List  preferred_channel
+    List Selection Should Be  preferred_channel  Direct mail
 
 Select From Multiselect List
-  [Documentation]  LOG 4 Selecting values 'Direct mail, phone' from list 'possible_channels'.
-  Select And verify selection  possible_channels  email  email  Telephone
-  Select And verify selection  possible_channels  Direct mail  Direct mail  email  Telephone
-  Unselect from List  possible_channels
-  Select From List  possible_channels  Direct mail  phone
-  List Selection Should Be  possible_channels  Telephone  directmail
+    [Documentation]  LOG 4 Selecting values 'Direct mail, phone' from list 'possible_channels'.
+    Select And verify selection  possible_channels  email  email  Telephone
+    Select And verify selection  possible_channels  Direct mail  Direct mail  email  Telephone
+    Unselect from List  possible_channels
+    Select From List  possible_channels  Direct mail  phone
+    List Selection Should Be  possible_channels  Telephone  directmail
 
 Select All From List
-  [Documentation]  FAIL Keyword 'Select all from list' works only for multiselect lists.
-  ...  LOG 1 Selecting all values from list 'interests'.
-  Select All From List  interests
-  List Selection Should Be  interests  Males  Females  Others
-  Select All From List  preferred_channel
+    [Documentation]  LOG 1 Selecting all values from list 'interests'.
+    Select All From List  interests
+    List Selection Should Be  interests  Males  Females  Others
+    Run Keyword And Expect Error  Keyword 'Select all from list' works only for multiselect lists.  Select All From List  preferred_channel
 
 List Should Have No Selections
-  [Documentation]  FAIL List 'interests' should have had no selection (selection was [ Males | Females | Others ])
-  ...  LOG 1 Verifying list 'interests' has no selection.
-  List Should Have No Selections  interests
-  Select All From List  interests
-  List Should Have No Selections  interests
+    [Documentation]  LOG 1 Verifying list 'interests' has no selection.
+    List Should Have No Selections  interests
+    Select All From List  interests
+    Run Keyword And Expect Error  List 'interests' should have had no selection (selection was [ Males | Females | Others ])  List Should Have No Selections  interests
 
-
-*Keywords*
-
+*** Keywords ***
 Unselect And Verify Selection
-  [Arguments]  ${list_id}  ${unselection}  @{exp_selection}
-  Unselect From List  ${list_id}  ${unselection}
-  List Selection Should Be  ${list_id}  @{exp_selection}
+    [Arguments]  ${list_id}  ${unselection}  @{exp_selection}
+    Unselect From List  ${list_id}  ${unselection}
+    List Selection Should Be  ${list_id}  @{exp_selection}
 
 Select And Verify Selection
-  [Arguments]  ${list_id}  ${selection}  @{exp_selection}
-  Select From list  ${list_id}  ${selection}
-  List Selection Should Be  ${list_id}  @{exp_selection}
-
+    [Arguments]  ${list_id}  ${selection}  @{exp_selection}
+    Select From list  ${list_id}  ${selection}
+    List Selection Should Be  ${list_id}  @{exp_selection}
 

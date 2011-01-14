@@ -1,107 +1,104 @@
-*Setting*
-Resource  ../resource.txt
-Test Setup  Go To Page "links.html"
-
+*** Settings ***
+Test Setup      Go To Page "links.html"
+Resource        ../resource.txt
 
 *** Variables ***
 ${LINKS TITLE}  (root)/links.html
 ${INDEX TITLE}  (root)/index.html
 
-
-*Test Cases*
-
+*** Test Cases ***
 Go To
-  Verify Location Is "links.html"
-  Title Should Be  ${LINKS TITLE}
+    Verify Location Is "links.html"
+    Title Should Be  ${LINKS TITLE}
 
 Go Back
-  Click Link  Relative
-  Title Should Be  ${INDEX TITLE}
-  Go Back
-  Title Should Be  ${LINKS TITLE}
+    Click Link  Relative
+    Title Should Be  ${INDEX TITLE}
+    Go Back
+    Title Should Be  ${LINKS TITLE}
 
 Click Link
-  [Documentation]  LOG 1 Clicking link 'Relative'.
-  Click Link  Relative
-  Verify Location Is "index.html"
-  Title Should Be  ${INDEX TITLE}
+    [Documentation]  LOG 1 Clicking link 'Relative'.
+    Click Link  Relative
+    Verify Location Is "index.html"
+    Title Should Be  ${INDEX TITLE}
 
 Click Link With Whitespace
-  Click Link  Link with whitespace
-  Verify Location Is "target/second.html"
+    Click Link  Link with whitespace
+    Verify Location Is "target/second.html"
 
 Click Link With Embedded Whitespace
-  Click Link  Link with whitespace within
-  Verify Location Is "target/third.html"
+    Click Link  Link with whitespace within
+    Verify Location Is "target/third.html"
 
 Click Link With Bolded Link Text
-  Click Link  Link with bolded text
-  Verify Location Is "target/first.html"
+    Click Link  Link with bolded text
+    Verify Location Is "target/first.html"
 
 Click Link By Id
-  Click Link  some_id
-  Verify Location Is "broken.html"
+    Click Link  some_id
+    Verify Location Is "broken.html"
 
 Click Link By Href
-  Click Link  sub/index.html
-  Verify Location Is "sub/index.html"
+    Click Link  sub/index.html
+    Verify Location Is "sub/index.html"
 
 Click Link With Double Quote
-  Click Link  Link with double " quote
-  Verify Location Is "index.html"
+    Click Link  Link with double " quote
+    Verify Location Is "index.html"
 
 Click Link With Special Characters
-  Click Link  Link with < & > \\
-  Verify Location Is "index.html"
+    Click Link  Link with < & > \\
+    Verify Location Is "index.html"
 
 Click Link With Asterisk
-  [Documentation]  FAIL ERROR: Element link=Link with asterisk * not matching not found
-  Click Link  Link with as*
-  Verify Location Is "index.html"
-  Go To Page "links.html"
-  Click Link  Link with asterisk * not matching
+    Click Link  Link with as*
+    Verify Location Is "index.html"
+    Go To Page "links.html"
+    Run Keyword And Expect Error  ERROR: Element link=Link with asterisk * not matching not found  Click Link  Link with asterisk * not matching
 
 Click Link With Unicode
-  Click Link  Link with Unicode äöüÄÖÜß
-  Verify Location Is "index.html"
+    Click Link  Link with Unicode äöüÄÖÜß
+    Verify Location Is "index.html"
 
 Click Image
-  [Documentation]  LOG 1 Clicking image 'image.jpg'.
-  Click Image  image.jpg
-  Verify Location Is "index.html"
+    [Documentation]  LOG 1 Clicking image 'image.jpg'.
+    Click Image  image.jpg
+    Verify Location Is "index.html"
 
 Click Image By Alt
-  Click Image  tooltip
-  Verify Location Is "index.html"
-  Go To Page "links.html"
-  Click Image  Image
-  Verify Location Is "target/first.html"
+    Click Image  tooltip
+    Verify Location Is "index.html"
+    Go To Page "links.html"
+    Click Image  Image
+    Verify Location Is "target/first.html"
 
 Click Image By Id
-  Click Image  image_id
-  Verify Location Is "index.html"
+    Click Image  image_id
+    Verify Location Is "index.html"
 
 Click Image By XPath
-  Click Image  xpath=//div[@id='second_div']//img
-  Verify Location Is "target/second.html"
+    Click Image  xpath=//div[@id='second_div']//img
+    Verify Location Is "target/second.html"
 
 Click Element
-  [Documentation]  LOG 2 Clicking element 'xpath=//a[text()='Link']'.
-  Go To Page "links.html"
-  Click Element  xpath=//a[text()='Link']
-  Verify Location Is "target/first.html"
+    [Documentation]  LOG 2 Clicking element 'xpath=//a[text()='Link']'.
+    Go To Page "links.html"
+    Click Element  xpath=//a[text()='Link']
+    Verify Location Is "target/first.html"
 
 Click Link With Text And Image
-  Click Link  Text and image
-  Verify Location Is "index.html"
+    Click Link  Text and image
+    Verify Location Is "index.html"
 
 Target Opens in New Window
-  Click Link  Target opens in new window  dont wait
-  Select Window  ${INDEX TITLE}
-  Verify Location Is "index.html"
-  [Teardown]  Run Keywords  Close Window  Select Window
+    Click Link  Target opens in new window  dont wait
+    Select Window  ${INDEX TITLE}
+    Verify Location Is "index.html"
+    [Teardown]  Run Keywords  Close Window  Select Window
 
 Wait Until Page Loaded
-  Click Link  Relative  and don't wait
-  Wait Until Page Loaded
-  Verify Location Is "index.html"
+    Click Link  Relative  and don't wait
+    Wait Until Page Loaded
+    Verify Location Is "index.html"
+

@@ -1,35 +1,34 @@
 *** Settings ***
-Resource  ../resource.txt
-Test Setup  Go To Page "index.html"
+Test Setup      Go To Page "index.html"
+Resource        ../resource.txt
 
 *** Test Cases ***
 Call Selenium Python API
-  ${title}=  Call Selenium API  get_title
-  Should Be Equal  ${title}  (root)/index.html
+    ${title}=  Call Selenium API  get_title
+    Should Be Equal  ${title}  (root)/index.html
 
 Call Selenium Python API with arguments
-  Call Selenium API  open  ${ROOT}/links.html
-  Verify Location Is "links.html"
-  ${ordered}=  Call Selenium API  is_ordered  link=Relative  link=Relative to sub-directory
-  Should Be Equal  ${ordered}  ${True}
+    Call Selenium API  open  ${ROOT}/links.html
+    Verify Location Is "links.html"
+    ${ordered}=  Call Selenium API  is_ordered  link=Relative  link=Relative to sub-directory
+    Should Be Equal  ${ordered}  ${True}
 
 Call Selenium RC API
-  ${title}=  Call Selenium API  getTitle
-  Should Be Equal  ${title}  OK,(root)/index.html
+    ${title}=  Call Selenium API  getTitle
+    Should Be Equal  ${title}  OK,(root)/index.html
 
 Call Selenium RC API with arguments
-  ${ret}=  Call Selenium API  isTextPresent  needle
-  Should Be Equal  ${ret}  OK,true
+    ${ret}=  Call Selenium API  isTextPresent  needle
+    Should Be Equal  ${ret}  OK,true
 
 Call Selenium API with non-ASCII characters
-  [Setup]  Go To Page "non_ascii.html"
-  :FOR  ${text}  IN  Ë  Ü  Ä  Ö
-  \  ${ret}=  Call Selenium API  is_text_present  ${text}
-  \  Should Be Equal  ${ret}  ${True}
-  \  ${ret}=  Call Selenium API  isElementPresent  id-${text}
-  \  Should Be Equal  ${ret}  OK,true
+    [Setup]  Go To Page "non_ascii.html"
+    : FOR  ${text}  IN  Ë  Ü  Ä  Ö
+    \  ${ret}=  Call Selenium API  is_text_present  ${text}
+    \  Should Be Equal  ${ret}  ${True}
+    \  ${ret}=  Call Selenium API  isElementPresent  id-${text}
+    \  Should Be Equal  ${ret}  OK,true
 
 Call non-existing Selenium function
-  [Documentation]  FAIL  ERROR: Unknown command: 'non_existing'
-  Call Selenium API  non_existing
+    Run Keyword And Expect Error  ERROR: Unknown command: 'non_existing'  Call Selenium API  non_existing
 

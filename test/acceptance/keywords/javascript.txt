@@ -1,66 +1,61 @@
-*** Setting ***
-Resource  ../resource.txt
-Test Setup  Go To Page "javascript/dynamic_content.html"
-
+*** Settings ***
+Test Setup      Go To Page "javascript/dynamic_content.html"
+Resource        ../resource.txt
 
 *** Test Cases ***
 Clicking Elements Should Activate Javascript
-  Title Should Be  Original
-  Click Element  link=change title  And Don't Wait
-  Title Should Be  Changed
+    Title Should Be  Original
+    Click Element  link=change title  And Don't Wait
+    Title Should Be  Changed
 
 Alert Should Be Present
-  [Documentation]  FAIL Alert text should have been 'foo bar' but was 'ALERT!'
-  [Setup]  Go To Page "javascript/alert.html"
-  Click Link  Click Me!  And Don't Wait
-  Alert Should Be Present
-  Click Link  Click Me Too!  And Don't Wait
-  Alert Should Be Present  MULTILINE ALERT!
-  Click Link  Click Me!  And Don't Wait
-  Alert Should Be Present  foo bar
+    [Setup]  Go To Page "javascript/alert.html"
+    Click Link  Click Me!  And Don't Wait
+    Alert Should Be Present
+    Click Link  Click Me Too!  And Don't Wait
+    Alert Should Be Present  MULTILINE ALERT!
+    Click Link  Click Me!  And Don't Wait
+    Run Keyword And Expect Error  Alert text should have been 'foo bar' but was 'ALERT!'  Alert Should Be Present  foo bar
 
 Get Alert Message
-  [Documentation]  FAIL There were no alerts
-  [Setup]  Go To Page "javascript/alert.html"
-  Click Link  Click Me!  And Don't Wait
-  ${msg} =  Get Alert Message
-  Should Be Equal  ${msg}  ALERT!
-  ${msg} =  Get Alert Message
+    [Setup]  Go To Page "javascript/alert.html"
+    Click Link  Click Me!  And Don't Wait
+    ${msg} =  Get Alert Message
+    Should Be Equal  ${msg}  ALERT!
+    Run Keyword And Expect Error  There were no alerts  Get Alert Message
 
 Mouse Down On Link
-  [Setup]  Go To Page "javascript/mouse_events.html"
-  Mouse Down On Image  image_mousedown
-  Text Field Should Contain  textfield  onmousedown
-  Input text  textfield  \
-  Mouse Down On Link  onmousedown
-  Text Field Should Contain  textfield  onmousedown
+    [Setup]  Go To Page "javascript/mouse_events.html"
+    Mouse Down On Image  image_mousedown
+    Text Field Should Contain  textfield  onmousedown
+    Input text  textfield  ${EMPTY}
+    Mouse Down On Link  onmousedown
+    Text Field Should Contain  textfield  onmousedown
 
 Confirm Action
-  Click Button  Change the title  and don't wait
-  ${msg}=  Confirm Action
-  Title Should Be  Changed after confirmation
-  Should Be Equal  ${msg}  Really change the title?
+    Click Button  Change the title  and don't wait
+    ${msg}=  Confirm Action
+    Title Should Be  Changed after confirmation
+    Should Be Equal  ${msg}  Really change the title?
 
 Cancel Action
-  Choose Cancel On Next Confirmation
-  Click Button  Change the title  and don't wait
-  ${msg}=  Confirm Action
-  Title Should Be  Original
-  Should Be Equal  ${msg}  Really change the title?
+    Choose Cancel On Next Confirmation
+    Click Button  Change the title  and don't wait
+    ${msg}=  Confirm Action
+    Title Should Be  Original
+    Should Be Equal  ${msg}  Really change the title?
 
 Execute Javascript
-  [Documentation]  LOG 1 Executing JavaScript:\n
-  ...  window.add_content('button_target', 'Inserted directly')
-  Execute Javascript  window.add_content('button_target', 'Inserted directly')
-  Page Should Contain  Inserted directly
+    [Documentation]  LOG 1 Executing JavaScript:\n window.add_content('button_target', 'Inserted directly')
+    Execute Javascript  window.add_content('button_target', 'Inserted directly')
+    Page Should Contain  Inserted directly
 
 Execute Javascript from File
-  [Documentation]  LOG 1:1 REGEXP: Reading JavaScript from file .*
-  ...  LOG 1:2 Executing JavaScript:\n
-  ...  window.add_content('button_target', 'Inserted via file')
-  Execute Javascript  ${CURDIR}/executed_by_execute_javascript.js
-  Page Should Contain  Inserted via file
+    [Documentation]  LOG 1:1 REGEXP: Reading JavaScript from file .* LOG 1:2 Executing JavaScript:\n window.add_content('button_target', 'Inserted via file')
+    Execute Javascript  ${CURDIR}/executed_by_execute_javascript.js
+    Page Should Contain  Inserted via file
 
 Open Context Menu
-  Go To Page "javascript/context_menu.html"
-  Open Context Menu  myDiv
+    Go To Page "javascript/context_menu.html"
+    Open Context Menu  myDiv
+

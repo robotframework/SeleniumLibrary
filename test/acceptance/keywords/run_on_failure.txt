@@ -1,32 +1,24 @@
 *** Settings ***
-Resource  ../resource.txt
-Suite Setup  Run Keywords  Go To Front Page  Set Info Loglevel
+Suite Setup     Run Keywords  Go To Front Page  Set Info Loglevel
 Suite Teardown  Set Debug Loglevel
-Test Teardown  Register Keyword to Run on Failure  Nothing
+Test Teardown   Register Keyword to Run on Failure  Nothing
+Resource        ../resource.txt
 
 *** Variables ***
-${FAILURE}  FAIL Page should not have contained text 'needle'
-
+${FAILURE MESSAGE}  Page should not have contained text 'needle'
+${FAILURE}  REGEXP: F+AIL ${FAILURE MESSAGE}  # This needs to be reqexp to prevent it to expect test to fail
 
 *** Test Cases ***
 Capture Screenshot On Failure
-    [Documentation]  ${FAILURE}
-    ...  LOG 1 Capture Screenshot will be run on failure.
-    ...  LOG 2:2 NONE
-    ...  LOG 3:1 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
-    ...  LOG 3:2 ${FAILURE}
-    ...  LOG 3:3 NONE
+    [Documentation]  LOG 1 Capture Screenshot will be run on failure. LOG 2:2 NONE LOG 3.1:1 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a> LOG 3.1:3 NONE
     Register Keyword to Run on Failure  Capture Screenshot
     Page Should Contain  needle
-    Page Should Not Contain  needle  loglevel=None
+    Run Keyword And Expect Error  ${FAILURE MESSAGE}  Page Should Not Contain  needle  loglevel=None
 
 Disable Run on Failure
-    [Documentation]  ${FAILURE}
-    ...  LOG 1  No keyword will be run on failure.
-    ...  LOG 2:1 ${FAILURE}
-    ...  LOG 2:2 NONE
+    [Documentation]  LOG 1 No keyword will be run on failure. LOG 2.1:2 NONE
     Register Keyword to Run On Failure  Nothing
-    Page Should Not Contain  needle  loglevel=None
+    Run Keyword And Expect Error  ${FAILURE MESSAGE}  Page Should Not Contain  needle  loglevel=None
 
 Run on Failure Returns Previous Value
     ${old}=  Register Keyword to Run on Failure  log_source
@@ -37,10 +29,8 @@ Run on Failure Returns Previous Value
     Should Be Equal  ${old}  Capture Screenshot
 
 Run Only Once per Failure
-    [Documentation]  FAIL Page should have contained text 'Not found' but did not
-    ...  LOG 2:2 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
-    ...  LOG 2:3 FAIL Page should have contained text 'Not found' but did not
-    ...  LOG 2:4 NONE
+    [Documentation]  LOG 2.1:2 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a> LOG 2.1:4 NONE
     [Setup]  Go To Page "frames/frameset.html"
     Register Keyword to Run on Failure  Capture Screenshot
-    Frame Should Contain  right  Not found  loglevel=NONE
+    Run Keyword And Expect Error  Page should have contained text 'Not found' but did not  Frame Should Contain  right  Not found  loglevel=NONE
+
