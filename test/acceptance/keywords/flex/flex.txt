@@ -11,7 +11,7 @@ ${HELP TEXT}  Input your username and password to log in
 *** Test Cases ***
 Using Flex commands without selecting application
     [Documentation]  FAIL No Flex application selected.
-    [Setup]
+    [Setup]  Unselect Flex Applications
     Click Flex Element  button
 
 Input text
