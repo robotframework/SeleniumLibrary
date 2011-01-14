@@ -5,7 +5,35 @@ Force Tags      ci-incompatible
 Resource        ../../resource.txt
 
 *** Test Cases ***
-By Id  [Documentation]  FAIL ERROR: The chain 'id:nonExisting' was not found.
-    Flex Component Should Exist  loginButton
-    Flex Component Should Exist  nonExisting
+By Id
+    Flex Component Should Exist  loginButto
+
+By Name
+  Flex Component Should Exist  name=help
+
+By Attribute
+  Flex Component Should Exist  label=Help
+
+By Chain
+  Flex Component Should Exist  id:helpContainer/label:Help
+
+Fails By Id
+    Component Lookup Fails  nonExisting  id:nonExisting
+
+Fails By Name
+    Component Lookup Fails  name=not-a-name  name:not-a-name
+
+Fails By Attribute
+    Component Lookup Fails  undefinedattr=value  null:undefined
+
+Fails By Chain
+    ${chain}  Set Variable  id:helpContainer/name:nonExisting
+    Component Lookup Fails  chain=${chain}  ${chain}
+
+*** Keywords ***
+
+Component Lookup Fails
+    [Arguments]  ${locator}  ${chain}
+    ${error}=  Set Variable  ERROR: The chain '${chain}' was not found.
+    Run Keyword And Expect Error  ${error}  Flex Component Should Exist  ${locator}
 
