@@ -44,7 +44,7 @@ class Flex(RunOnFailure):
         """
         self._flex_apps.empty_cache()
 
-    def flex_component_should_exist(self, locator):
+    def flex_element_should_exist(self, locator):
         """Verifies that Flex component identified by `locator` exists.
 
         `locator` if interpreted with following rules:
@@ -65,7 +65,7 @@ class Flex(RunOnFailure):
         """
         self._flex_command('flexClick', self._flex_locator(locator))
 
-    def input_text_into_flex(self, locator, value):
+    def input_into_flex_textfield(self, locator, value):
         """Input `value` in text field identified by `locator`.
 
         TODO: backlink
@@ -73,7 +73,7 @@ class Flex(RunOnFailure):
         locator = self._flex_locator(locator)
         self._flex_command('flexType', '%s, text=%s' % (locator, value))
 
-    def text_in_flex_should_be(self, locator, expected):
+    def flex_textfield_value_should_be(self, locator, expected):
         """Verifies that value of text field identified by `locator` is `expected` .
         """
         locator = self._flex_locator(locator)

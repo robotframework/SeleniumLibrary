@@ -13,5 +13,4 @@ Access Dynamic Content
 *** Keywords ***
 Counter Value Should Be
     [Arguments]  ${expected}
-    Text In Flex Should Be  clickCountLabel  Clicks: ${expected}
-
+    Flex Text Field Value Should Be  clickCountLabel  Clicks: ${expected}
