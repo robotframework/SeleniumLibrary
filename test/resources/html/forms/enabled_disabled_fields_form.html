@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>(root)/forms/enabled_disabled_fields_form.html</title>
+	</head>
+	<body>
+		<form action="submit.html" method="POST">
+			<table border="0">
+				<tr>
+					<td>Enabled input:</td>
+					<td><input type="text" name="enabled_input" value=""/></td>
+				</tr>
+				<tr>
+					<td>Disabled input:</td>
+					<td><input type="text" name="disabled_input" value="" disabled="disabled"/></td>
+				</tr>
+				<tr>
+					<td>Enabled textarea:</td>
+					<td><textarea name="enabled_textarea" rows="3" cols="40"></textarea></td>
+				</tr>
+				<tr>
+					<td>Disabled textarea:</td>
+					<td><textarea name="disabled_textarea" rows="3" cols="40" disabled="disabled"></textarea></td>
+				</tr>
+				<tr>
+					<td colspan="2"><input type="submit" name="enabled_button" value="enabled"/></td>
+				</tr>
+				<tr>
+					<td colspan="2"><input type="submit" name="disabled_button" value="disabled" disabled="disabled"/></td>
+				</tr>
+			</table>
+		</form>
+    
+	</body>
+</html>

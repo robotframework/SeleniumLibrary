@@ -1,0 +1,27 @@
+*** Settings ***
+Test Setup      Go To Page "forms/enabled_disabled_fields_form.html"
+Resource        ../resource.txt
+
+*** Test Cases ***
+Input field Should Be Enabled
+    Test Should Be Enabled And Disabled  enabled_input  disabled_input
+
+Textarea Should Be Enabled
+    Test Should Be Enabled And Disabled  enabled_textarea  disabled_textarea
+
+Button Should Be Enabled
+    Test Should Be Enabled And Disabled  enabled_button  disabled_button
+
+Not Input Element
+    [Setup]  Go To Page "tables/links.html"
+    Run Keyword And Expect Error  ERROR: Element link is not an input.  Element Should Be Editable  link
+    Run Keyword And Expect Error  ERROR: Element link is not an input.  Element Should Not Be Editable  link
+
+*** Keywords ***
+Test Should Be Enabled And Disabled
+    [Arguments]  ${enabled_id}  ${disabled_id}
+    Element Should Be Editable  ${enabled_id}
+    Run Keyword And Expect Error  Element '${disabled_id}' is not editable.  Element Should Be Editable  ${disabled_id}
+    Element Should Not Be Editable  ${disabled_id}
+    Run Keyword And Expect Error  Element '${enabled_id}' is editable.  Element Should Not Be Editable  ${enabled_id}
+

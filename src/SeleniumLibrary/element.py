@@ -248,3 +248,18 @@ class Element(RunOnFailure):
             self._selenium.context_menu_at(locator, offset)
         else:
             self._selenium.context_menu(locator)
+
+    def element_should_be_editable(self, locator):
+        """Verifies that element identified with `locator` is editable.
+        
+        Fails if the element isn't an input element."""
+        if not self._selenium.is_editable(locator):
+            raise AssertionError("Element '%s' is not editable." % (locator))
+
+    def element_should_not_be_editable(self, locator):
+        """Verifies that element identified with `locator` is not editable.
+        
+        Fails if the element isn't an input element."""
+        if self._selenium.is_editable(locator):
+            raise AssertionError("Element '%s' is editable." % (locator))
+
