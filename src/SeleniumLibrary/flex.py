@@ -36,14 +36,6 @@ class Flex(RunOnFailure):
         # no effect, event though it's mandatory. Go figure.
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
-    def unselect_flex_applications(self):
-        """Unselects current Flex application and empties the register.
-
-        After this keyword, Flex application indices returned by `Select
-        Flex Application start at 1.
-        """
-        self._flex_apps.empty_cache()
-
     def flex_element_should_exist(self, locator):
         """Verifies that Flex component identified by `locator` exists.
 
