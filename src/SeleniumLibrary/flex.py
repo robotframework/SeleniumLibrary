@@ -39,6 +39,14 @@ class Flex(RunOnFailure):
         # no effect, event though it's mandatory. Go figure.
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
+    def switch_flex_application(self, index_or_alias):
+        """Switches between active flex applications  using index or alias.
+
+        `index_or_alias` is got from `Select Flex Application` and alias can
+        be given to it.
+        """
+        self._flex_apps.switch(index_or_alias)
+
     def flex_element_should_exist(self, locator):
         """Verifies that Flex component can be found by `locator`.
 
