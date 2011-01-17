@@ -2,7 +2,6 @@
   <head>
     <title>Login application for flex testing</title>
     <script type="text/javascript">
-      var testApp;
       function init() {
         var html = '';
         var movieName = 'LoginApp.swf';
@@ -11,14 +10,12 @@
                  'width="100%" height="100%" id="loginApp">' +
                  '<param name="movie" value="' + movieName + '">' +
                  '</object>';
-        }
-        else {
+        } else {
           html = '<embed id="loginApp" height="100%" width="100%"' +
                  'src="' + movieName + '"' +
                  'type="application/x-shockwave-flash"/>';
         }
         document.getElementById('appContainer').innerHTML = html;
-        testApp = document.getElementById('testApp')
       }
       window.onload = init;
     </script>
