@@ -37,36 +37,32 @@ class Flex(RunOnFailure):
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
     def flex_element_should_exist(self, locator):
-        """Verifies that Flex component identified by `locator` exists.
+        """Verifies that Flex component can be found by `locator`.
 
-        `locator` if interpreted with following rules:
-          * `someIdentifier` => matched against `id` attribute of the Flex
-             component
-          * `name='somename` => `somename` is matched against name attribute
-            of the Flex component
-          * `id:someId/name:someName`  => searches for component with name
-            `someName` which must be a child of component with id `someId`
+        See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexAssertDisplayObject',
                            self._flex_locator(locator))
 
     def click_flex_element(self, locator):
-        """Clicks Flex element identified by `locator`.
+        """Click the Flex element found by `locator`.
 
-        TODO: backlink
+        See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexClick', self._flex_locator(locator))
 
     def input_into_flex_textfield(self, locator, value):
-        """Input `value` in text field identified by `locator`.
+        """Input `value` in the text field found by `locator`.
 
-        TODO: backlink
+        See `introduction` about rules for locating Flex elements.
         """
         locator = self._flex_locator(locator)
         self._flex_command('flexType', '%s, text=%s' % (locator, value))
 
     def flex_textfield_value_should_be(self, locator, expected):
-        """Verifies that value of text field identified by `locator` is `expected` .
+        """Verifies the value of the text field found by `locator` is `expected`.
+
+        See `introduction` about rules for locating Flex elements.
         """
         locator = self._flex_locator(locator)
         self._flex_command('flexAssertText',
