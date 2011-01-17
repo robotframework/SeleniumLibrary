@@ -142,11 +142,12 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
 
     *Locating elements*
 
-    To do operations on elements, elements have to be identified. The most
-    common way of doing this is by searching the values of key attributes of
-    an element type. All keywords that operate on elements document the key
-    attributes for that element type. If the given `locator` argument matches
-    the value of any key attribute, the element is found.
+    All keywords in SeleniumLibrary that need to find an element on the page
+    take an argument, `locator`. This chapter explains how this `locator` is
+    used to find components on the page. In the most common case, `locator` is
+    matched against the values of key attributes of the particular element type.
+    For example, `id` and `name` are key attributes to all elements, and locating
+    components is easy using just the `id` as a `locator`.
 
     Asterisk character may be used as a wildcard in locators, but it only works
     as the last character of the expression. In the middle of the locator it
@@ -157,7 +158,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     'xpath=' or 'dom='.
 
     Examples:
-    | Click Link      | my link | # Matches if either link text or value of attribute 'id', 'name' or 'href' equals 'my link' |
+    | Click Link      | my link | # Matches if either link text or 'id', 'name' or 'href' of a link equals 'my link' |
     | Page Should Contain Link | Link id * | # Passes if the page contain any link starting with 'Link id' |
     | Select Checkbox | xpath=//table[0]/input[@name='my_checkbox'] | # Using XPath |
     | Click Image     | dom=document.images[56] | # Using a DOM expression |
@@ -169,6 +170,25 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     Table Examples:
     | Table Should Contain | tableID | $ 43,00 |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
+
+    *Locating Flex components*
+
+    Starting from SeleniumLibary 2.6, it is also possible to use SeleniumLibary
+    to test Flex applications inside an embedded Flash player. The rules for
+    locating Flex component vary slightly from those used with normal HTML
+    components.
+
+    The main difference is that there are no specific keywords for element types.
+    `Click Flex Element` is used to click any Flex element. Thus there are also
+    no specific key attributes for some Flex element type. Following table
+    describes ways to locate Flex elements:
+
+    | Click Flex Element | foo | # Search by id |
+    | Click Flex Element | name=myName | # Search by name |
+    | Click Flex Element | label=Hello! | # Search by label text |
+    | Click Flex Element | htmlText=some text | # Search by rendered HTML text |
+    | Click Flex Element | chain=id:someId/name:someName | # Search for component with name matching `someName` and whose parent component's id is `someId` |
+
 
     *Handling page load events*
 

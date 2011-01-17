@@ -8,10 +8,6 @@ ${some username}  James Bond
 ${HELP TEXT}  Input your username and password to log in
 
 *** Test Cases ***
-Using Flex commands without selecting application
-    [Setup]  Unselect Flex Applications
-    Run Keyword And Expect Error  No Flex application selected.  Click Flex Element  button
-
 Input text
     Input Into Flex Text Field  username  ${some username}
     Flex Text Field Value Should Be  username  ${some username}
@@ -33,4 +29,3 @@ Text in flex should be when element doesn't exist
 *** Keywords ***
 Select Login Application
     Select Flex Application  loginApp
-

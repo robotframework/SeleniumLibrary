@@ -16,6 +16,9 @@ from runonfailure import RunOnFailure
 
 
 class Flex(RunOnFailure):
+    # from org/flex_pilot/FPLocator.as
+    flex_pilot_locator_prefixes = ['automationName', 'name=', 'chain=',
+                                   'label', 'htmlText']
 
     def select_flex_application(self, locator, alias=None):
         """Select flex application to work with.
@@ -36,45 +39,41 @@ class Flex(RunOnFailure):
         # no effect, event though it's mandatory. Go figure.
         self._selenium.do_command("waitForFlexReady", [locator, timeout])
 
-    def unselect_flex_applications(self):
-        """Unselects current Flex application and empties the register.
+    def switch_flex_application(self, index_or_alias):
+        """Switches between active flex applications  using index or alias.
 
-        After this keyword, Flex application indices returned by `Select
-        Flex Application start at 1.
+        `index_or_alias` is got from `Select Flex Application` and alias can
+        be given to it.
         """
-        self._flex_apps.empty_cache()
+        self._flex_apps.switch(index_or_alias)
 
     def flex_element_should_exist(self, locator):
-        """Verifies that Flex component identified by `locator` exists.
+        """Verifies that Flex component can be found by `locator`.
 
-        `locator` if interpreted with following rules:
-          * `someIdentifier` => matched against `id` attribute of the Flex
-             component
-          * `name='somename` => `somename` is matched against name attribute
-            of the Flex component
-          * `id:someId/name:someName`  => searches for component with name
-            `someName` which must be a child of component with id `someId`
+        See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexAssertDisplayObject',
                            self._flex_locator(locator))
 
     def click_flex_element(self, locator):
-        """Clicks Flex element identified by `locator`.
+        """Click the Flex element found by `locator`.
 
-        TODO: backlink
+        See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexClick', self._flex_locator(locator))
 
     def input_into_flex_textfield(self, locator, value):
-        """Input `value` in text field identified by `locator`.
+        """Input `value` in the text field found by `locator`.
 
-        TODO: backlink
+        See `introduction` about rules for locating Flex elements.
         """
         locator = self._flex_locator(locator)
         self._flex_command('flexType', '%s, text=%s' % (locator, value))
 
     def flex_textfield_value_should_be(self, locator, expected):
-        """Verifies that value of text field identified by `locator` is `expected` .
+        """Verifies the value of the text field found by `locator` is `expected`.
+
+        See `introduction` about rules for locating Flex elements.
         """
         locator = self._flex_locator(locator)
         self._flex_command('flexAssertText',
@@ -82,10 +81,9 @@ class Flex(RunOnFailure):
 
     def _flex_locator(self, locator):
         locator = locator.strip()
-        if '=' in locator:
-          return locator
-        if '/' in locator:
-          return 'chain=%s' % locator
+        for pr in self.flex_pilot_locator_prefixes:
+          if locator.startswith(pr):
+            return locator
         return 'id=%s' % locator
 
     def _flex_command(self, command, options):
