@@ -25,9 +25,9 @@ class LocatorParser:
         'button':      ['@id', '@name', '@value',
                         'normalize-space(descendant-or-self::text())'],
     }
-    _synonyms = { 'link': 'a',
-                  'image': 'img',
-                  'radio button': 'input'}
+    _synonyms = {'link': 'a',
+                 'image': 'img',
+                 'radio button': 'input'}
 
     def __init__(self, library):
         self._library = library
@@ -42,7 +42,7 @@ class LocatorParser:
             return locator
         locator = utils.html_attr_escape(locator)
         tagname = self._synonyms.get(tagname, tagname)
-        if not tagname in self._tag_attributes:
+        if tagname not in self._tag_attributes:
             return locator
         xpath_attributes = ['%s="%s"' % (attr, locator) for attr in
                             self._tag_attributes[tagname]]
