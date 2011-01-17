@@ -185,6 +185,8 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
 
     | Click Flex Element | foo | # Search by id |
     | Click Flex Element | name=myName | # Search by name |
+    | Click Flex Element | label=Hello! | # Search by label text |
+    | Click Flex Element | htmlText=some text | # Search by rendered HTML text |
     | Click Flex Element | chain=id:someId/name:someName | # Search for component with name matching `someName` and whose parent component's id is `someId` |
 
 
