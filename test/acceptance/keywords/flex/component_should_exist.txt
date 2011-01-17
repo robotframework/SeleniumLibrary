@@ -14,16 +14,13 @@ By Attribute
   Flex Element Should Exist  label=Help
 
 By Chain
-  Flex Element Should Exist  id:helpContainer/label:Help
+  Flex Element Should Exist  chain=id:helpContainer/label:Help
 
 Fails By Id
     Element Lookup Fails  nonExisting  id:nonExisting
 
 Fails By Name
     Element Lookup Fails  name=not-a-name  name:not-a-name
-
-Fails By Attribute
-    Element Lookup Fails  undefinedattr=value  null:undefined
 
 Fails By Chain
     ${chain}  Set Variable  id:helpContainer/name:nonExisting

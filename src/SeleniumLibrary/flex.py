@@ -16,6 +16,9 @@ from runonfailure import RunOnFailure
 
 
 class Flex(RunOnFailure):
+    # from org/flex_pilot/FPLocator.as
+    flex_pilot_locator_prefixes = ['automationName', 'name=', 'chain=',
+                                   'label', 'htmlText']
 
     def select_flex_application(self, locator, alias=None):
         """Select flex application to work with.
@@ -70,10 +73,9 @@ class Flex(RunOnFailure):
 
     def _flex_locator(self, locator):
         locator = locator.strip()
-        if '=' in locator:
-          return locator
-        if '/' in locator:
-          return 'chain=%s' % locator
+        for pr in self.flex_pilot_locator_prefixes:
+          if locator.startswith(pr):
+            return locator
         return 'id=%s' % locator
 
     def _flex_command(self, command, options):
