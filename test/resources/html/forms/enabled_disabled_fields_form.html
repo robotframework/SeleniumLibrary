@@ -10,25 +10,70 @@
 					<td><input type="text" name="enabled_input" value=""/></td>
 				</tr>
 				<tr>
+					<td>Readonly input:</td>
+					<td><input type="text" name="readonly_input" value="" readonly="true"/></td>
+				</tr>
+				<tr>
 					<td>Disabled input:</td>
 					<td><input type="text" name="disabled_input" value="" disabled="disabled"/></td>
 				</tr>
 				<tr>
-					<td>Enabled textarea:</td>
-					<td><textarea name="enabled_textarea" rows="3" cols="40"></textarea></td>
+					<td>Enabled password:</td>
+					<td><input type="password" name="enabled_password" value=""/></td>
 				</tr>
 				<tr>
-					<td>Disabled textarea:</td>
-					<td><textarea name="disabled_textarea" rows="3" cols="40" disabled="disabled"></textarea></td>
+					<td>Readonly password:</td>
+					<td><input type="password" name="readonly_password" value="" readonly="true"/></td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" name="enabled_button" value="enabled"/></td>
+					<td>Disabled password:</td>
+					<td><input type="password" name="disabled_password" value="" disabled="disabled"/></td>
 				</tr>
 				<tr>
-					<td colspan="2"><input type="submit" name="disabled_button" value="disabled" disabled="disabled"/></td>
+					<td colspan="2"><input type="submit" name="enabled_input_button" value="enabled"/></td>
+				</tr>
+				<tr>
+					<td colspan="2"><input type="submit" name="disabled_input_button" value="disabled" disabled="disabled"/></td>
 				</tr>
 			</table>
 		</form>
-    
+		<table border="0">
+			<tr>
+				<td>Enabled textarea:</td>
+				<td><textarea name="enabled_textarea" rows="2" cols="20"></textarea></td>
+			</tr>
+			<tr>
+				<td>Readonly textarea:</td>
+				<td><textarea name="readonly_textarea" rows="2" cols="20" readonly="true"></textarea></td>
+			</tr>
+			<tr>
+				<td>Disabled textarea:</td>
+				<td><textarea name="disabled_textarea" rows="2" cols="20" disabled="disabled"></textarea></td>
+			</tr>
+			<tr>
+				<td>Enabled button:</td>
+				<td><button name="enabled_button">enabled</button></td>
+			</tr>
+			<tr>
+				<td>Disabled button:</td>
+				<td><button name="disabled_button" disabled="disabled">disabled</button></td>
+			</tr>
+			<tr>
+				<td>disabled</td>
+				<td><button name="disabled_only" disabled>Disabled</button></td>
+			</tr>
+			<tr>
+				<td>disabled=</td>
+				<td><button name="disabled_with_equals_sign" disabled="">Disabled</button></td>
+			</tr>
+			<tr>
+				<td>disabled=""</td>
+				<td><button name="disabled_empty" disabled="">Disabled</button></td>
+			</tr>
+			<tr>
+			<td>disabled="kekkonen"</td>
+				<td><button name="disabled_invalid_value" disabled="kekkonen">Disabled</button></td>
+			</tr>
+		</table>
 	</body>
 </html>

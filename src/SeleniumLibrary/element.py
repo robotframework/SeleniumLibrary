@@ -249,17 +249,24 @@ class Element(RunOnFailure):
         else:
             self._selenium.context_menu(locator)
 
-    def element_should_be_editable(self, locator):
-        """Verifies that element identified with `locator` is editable.
-        
-        Fails if the element isn't an input element."""
+    def element_should_be_enabled(self, locator):
+        """Verifies that element identified with `locator` is enabled.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+
+        This keyword was added in SeleniumLibrary 2.6.
+        """
         if not self._selenium.is_editable(locator):
-            raise AssertionError("Element '%s' is not editable." % (locator))
+            raise AssertionError("Element '%s' is disabled." % (locator))
 
-    def element_should_not_be_editable(self, locator):
-        """Verifies that element identified with `locator` is not editable.
-        
-        Fails if the element isn't an input element."""
+    def element_should_be_disabled(self, locator):
+        """Verifies that element identified with `locator` is disabled.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+
+        This keyword was added in SeleniumLibrary 2.6.
+        """
         if self._selenium.is_editable(locator):
-            raise AssertionError("Element '%s' is editable." % (locator))
-
+            raise AssertionError("Element '%s' is enabled." % (locator))
