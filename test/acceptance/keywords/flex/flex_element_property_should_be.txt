@@ -1,0 +1,25 @@
+*** Settings ***
+Suite Setup     Select Language Application
+Resource        flex_resource.txt
+
+*** Test Cases ***
+Static Property
+    [Setup]  Select Language Application
+    Flex Element Property Should Be  translationLabel  text  translation:
+
+Automatic Property
+    Select Language and Verify Property  Klingon  Klingon
+    Select Language and Verify Property  Finnish  Finnish
+
+Wrong Property Value
+    Run Keyword And Expect Error  ERROR: Expected "English", got "Klingon"  Select Language and Verify Property  Klingon  English
+
+Non Existing Property
+    Run Keyword And Expect Error  ERROR: "nonexisting" attribute does not exist on this object.  Flex Element Property Should Be  languageComboBox  nonexisting  foo
+
+*** Keywords ***
+Select Language and Verify Property
+    [Arguments]  ${lang}  ${expected}
+    Select Language  ${lang}
+    Flex Element Property Should Be  languageComboBox  selectedLabel  ${expected}
+

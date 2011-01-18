@@ -1,0 +1,40 @@
+*** Settings ***
+Suite Setup     Select Language Application
+Test Setup      Select Default Language
+Test Template   Select Language and Verify Greeting
+Resource        flex_resource.txt
+
+*** Variables ***
+${GREETING IN ENGLISH}  Hello
+${GREETING IN KLINGON}  nuqneH
+${GREETING IN KLINGON}  Päivää
+${ENGLISH INDEX}  0
+${KLINGON INDEX}  1
+
+*** Test Cases ***
+Select by index
+    index=${KLINGON INDEX}  ${GREETING IN KLINGON}
+    index=${ENGLISH INDEX}  ${GREETING IN ENGLISH}
+
+Select by label
+    Klingon  ${GREETING IN KLINGON}
+    text=English  ${GREETING IN ENGLISH}
+    label=Klingon  ${GREETING IN KLINGON}
+
+Select by data
+    data=${GREETING IN KLINGON}  ${GREETING IN KLINGON}
+    value=${GREETING IN ENGLISH}  ${GREETING IN ENGLISH}
+
+*** Keywords ***
+Select Default Language
+    Select Language and Verify Greeting  English  ${GREETING IN ENGLISH}
+
+Select Language and Verify Greeting
+    [Arguments]  ${lang}  ${expected greeting}
+    Select Language  ${lang}
+    Greeting Should Be  ${expected greeting}
+
+Greeting Should Be
+    [Arguments]  ${expected}
+    Flex Element Text Should Be  greetingLabel  ${expected}
+
