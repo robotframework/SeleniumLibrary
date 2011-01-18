@@ -104,7 +104,7 @@ Prior to running test cases using SeleniumLibrary, the Selenium Server must be s
 <br />
 <b>Locating elements</b><br />
 <br />
-To do operations on elements, elements have to be identified. The most common way of doing this is by searching the values of key attributes of an element type. All keywords that operate on elements document the key attributes for that element type. If the given <span class="name">locator</span> argument matches the value of any key attribute, the element is found.<br />
+All keywords in SeleniumLibrary that need to find an element on the page take an argument, <span class="name">locator</span>. This chapter explains how this <span class="name">locator</span> is used to find components on the page. In the most common case, <span class="name">locator</span> is matched against the values of key attributes of the particular element type. For example, <span class="name">id</span> and <span class="name">name</span> are key attributes to all elements, and locating components is easy using just the <span class="name">id</span> as a <span class="name">locator</span>.<br />
 <br />
 Asterisk character may be used as a wildcard in locators, but it only works as the last character of the expression. In the middle of the locator it is interpreted as literal '*'.<br />
 <br />
@@ -115,7 +115,7 @@ Examples:<br />
 <tr>
 <td>Click Link</td>
 <td>my link</td>
-<td># Matches if either link text or value of attribute 'id', 'name' or 'href' equals 'my link'</td>
+<td># Matches if either link text or 'id', 'name' or 'href' of a link equals 'my link'</td>
 </tr>
 <tr>
 <td>Page Should Contain Link</td>
@@ -147,6 +147,40 @@ Table Examples:<br />
 <td>Table Should Contain</td>
 <td>css=h2.someClass ~ table:last-child()</td>
 <td>text</td>
+</tr>
+</table>
+<br />
+<b>Locating Flex components</b><br />
+<br />
+Starting from SeleniumLibary 2.6, it is also possible to use SeleniumLibary to test Flex applications inside an embedded Flash player. The rules for locating Flex component vary slightly from those used with normal HTML components.<br />
+<br />
+The main difference is that there are no specific keywords for element types. <a href="#Click Flex Element" class="name">Click Flex Element</a> is used to click any Flex element. Thus there are also no specific key attributes for some Flex element type. Following table describes ways to locate Flex elements:<br />
+<br />
+<table border="1" class="doc">
+<tr>
+<td>Click Flex Element</td>
+<td>foo</td>
+<td># Search by id</td>
+</tr>
+<tr>
+<td>Click Flex Element</td>
+<td>name=myName</td>
+<td># Search by name</td>
+</tr>
+<tr>
+<td>Click Flex Element</td>
+<td>label=Hello!</td>
+<td># Search by label text</td>
+</tr>
+<tr>
+<td>Click Flex Element</td>
+<td>htmlText=some text</td>
+<td># Search by rendered HTML text</td>
+</tr>
+<tr>
+<td>Click Flex Element</td>
+<td>chain=id:someId/name:someName</td>
+<td># Search for component with name matching <span class="name">someName</span> and whose parent component's id is <span class="name">someId</span></td>
 </tr>
 </table>
 <br />
@@ -267,6 +301,8 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Click Element" title="Click element identified by `locator`.">Click&nbsp;Element</a>
 &nbsp;&middot;&nbsp;
+<a href="#Click Flex Element" title="Click the Flex element found by `locator`.">Click&nbsp;Flex&nbsp;Element</a>
+&nbsp;&middot;&nbsp;
 <a href="#Click Image" title="Clicks an image found by `locator`.">Click&nbsp;Image</a>
 &nbsp;&middot;&nbsp;
 <a href="#Click Link" title="Clicks a link identified by locator.">Click&nbsp;Link</a>
@@ -289,6 +325,10 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Drag And Drop" title="Drags element identified with `locator` by `movement`">Drag&nbsp;And&nbsp;Drop</a>
 &nbsp;&middot;&nbsp;
+<a href="#Element Should Be Disabled" title="Verifies that element identified with `locator` is disabled.">Element&nbsp;Should&nbsp;Be&nbsp;Disabled</a>
+&nbsp;&middot;&nbsp;
+<a href="#Element Should Be Enabled" title="Verifies that element identified with `locator` is enabled.">Element&nbsp;Should&nbsp;Be&nbsp;Enabled</a>
+&nbsp;&middot;&nbsp;
 <a href="#Element Should Be Visible" title="Verifies that the element identified by `locator` is visible.">Element&nbsp;Should&nbsp;Be&nbsp;Visible</a>
 &nbsp;&middot;&nbsp;
 <a href="#Element Should Contain" title="Verifies element identified by `locator` contains text `expected`.">Element&nbsp;Should&nbsp;Contain</a>
@@ -298,6 +338,12 @@ Examples:<br />
 <a href="#Element Text Should Be" title="Verifies element identified by `locator` exactly contains text `expected`.">Element&nbsp;Text&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
 <a href="#Execute Javascript" title="Executes the given JavaScript code.">Execute&nbsp;Javascript</a>
+&nbsp;&middot;&nbsp;
+<a href="#Flex Element Property Should Be" title="Verifies property value of an element found by `locator`.">Flex&nbsp;Element&nbsp;Property&nbsp;Should&nbsp;Be</a>
+&nbsp;&middot;&nbsp;
+<a href="#Flex Element Should Exist" title="Verifies that Flex component can be found by `locator`.">Flex&nbsp;Element&nbsp;Should&nbsp;Exist</a>
+&nbsp;&middot;&nbsp;
+<a href="#Flex Element Text Should Be" title="Verifies the value of the text field found by `locator` is `expected`.">Flex&nbsp;Element&nbsp;Text&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
 <a href="#Focus" title="Sets focus to element identified by `locator`.">Focus</a>
 &nbsp;&middot;&nbsp;
@@ -348,6 +394,8 @@ Examples:<br />
 <a href="#Input Password" title="Types the given password into text field identified by `locator`.">Input&nbsp;Password</a>
 &nbsp;&middot;&nbsp;
 <a href="#Input Text" title="Types the given `text` into text field identified by `locator`.">Input&nbsp;Text</a>
+&nbsp;&middot;&nbsp;
+<a href="#Input Text Into Flex Element" title="Input `value` in the text field found by `locator`.">Input&nbsp;Text&nbsp;Into&nbsp;Flex&nbsp;Element</a>
 &nbsp;&middot;&nbsp;
 <a href="#List Selection Should Be" title="Verifies the selection of list identified by `locator` is exactly `*values`.">List&nbsp;Selection&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
@@ -427,7 +475,11 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Select Checkbox" title="Selects checkbox identified by `locator`.">Select&nbsp;Checkbox</a>
 &nbsp;&middot;&nbsp;
+<a href="#Select Flex Application" title="Select flex application to work with.">Select&nbsp;Flex&nbsp;Application</a>
+&nbsp;&middot;&nbsp;
 <a href="#Select Frame" title="Sets frame identified by `locator` as current frame.">Select&nbsp;Frame</a>
+&nbsp;&middot;&nbsp;
+<a href="#Select From Flex Element" title="Select `value` from Flex element found by `locator`.">Select&nbsp;From&nbsp;Flex&nbsp;Element</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select From List" title="Selects `*values` from list identified by `locator`">Select&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
@@ -448,6 +500,8 @@ Examples:<br />
 <a href="#Submit Form" title="Submits a form identified by `locator`.">Submit&nbsp;Form</a>
 &nbsp;&middot;&nbsp;
 <a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
+&nbsp;&middot;&nbsp;
+<a href="#Switch Flex Application" title="Switches between active flex applications  using index or alias.">Switch&nbsp;Flex&nbsp;Application</a>
 &nbsp;&middot;&nbsp;
 <a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains the `expected content`.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
@@ -650,6 +704,13 @@ Key attributes for buttons are <span class="name">id</span>, <span class="name">
 Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements and about meaning of <span class="name">dont_wait</span> argument.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Click Flex Element"></a>Click Flex Element</td>
+  <td class="arg">locator</td>
+  <td class="doc">Click the Flex element found by <span class="name">locator</span>.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> about rules for locating Flex elements.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Click Image"></a>Click Image</td>
   <td class="arg">locator, dont_wait=</td>
   <td class="doc">Clicks an image found by <span class="name">locator</span>.<br />
@@ -770,6 +831,24 @@ If the cookie is not found, nothing happens.<br />
 `movement is a string in format "+70 -300" interpreted as pixels in relation to elements current position.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Element Should Be Disabled"></a>Element Should Be Disabled</td>
+  <td class="arg">locator</td>
+  <td class="doc">Verifies that element identified with <span class="name">locator</span> is disabled.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.6.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Element Should Be Enabled"></a>Element Should Be Enabled</td>
+  <td class="arg">locator</td>
+  <td class="doc">Verifies that element identified with <span class="name">locator</span> is enabled.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.<br />
+<br />
+This keyword was added in SeleniumLibrary 2.6.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Element Should Be Visible"></a>Element Should Be Visible</td>
   <td class="arg">locator, message=</td>
   <td class="doc">Verifies that the element identified by <span class="name">locator</span> is visible.<br />
@@ -844,6 +923,29 @@ Example:<br />
 </tr>
 </table>
 </td>
+</tr>
+<tr>
+  <td class="kw"><a name="Flex Element Property Should Be"></a>Flex Element Property Should Be</td>
+  <td class="arg">locator, name, expected</td>
+  <td class="doc">Verifies property value of an element found by <span class="name">locator</span>.<br />
+<br />
+<span class="name">name</span> is the name of the property and <span class="name">expected</span> is the expected value.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> about rules for locating Flex elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Flex Element Should Exist"></a>Flex Element Should Exist</td>
+  <td class="arg">locator</td>
+  <td class="doc">Verifies that Flex component can be found by <span class="name">locator</span>.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> about rules for locating Flex elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Flex Element Text Should Be"></a>Flex Element Text Should Be</td>
+  <td class="arg">locator, expected</td>
+  <td class="doc">Verifies the value of the text field found by <span class="name">locator</span> is <span class="name">expected</span>.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> about rules for locating Flex elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Focus"></a>Focus</td>
@@ -1013,6 +1115,13 @@ Difference between this keyword and <a href="#Input Text" class="name">Input Tex
   <td class="doc">Types the given <span class="name">text</span> into text field identified by <span class="name">locator</span>.<br />
 <br />
 See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Input Text Into Flex Element"></a>Input Text Into Flex Element</td>
+  <td class="arg">locator, text</td>
+  <td class="doc">Input <span class="name">value</span> in the text field found by <span class="name">locator</span>.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> about rules for locating Flex elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="List Selection Should Be"></a>List Selection Should Be</td>
@@ -1474,11 +1583,52 @@ Key attributes for lists are <span class="name">id</span> and <span class="name"
 Does nothing if checkbox is already selected. Key attributes for checkboxes are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Select Flex Application"></a>Select Flex Application</td>
+  <td class="arg">locator, alias=None</td>
+  <td class="doc">Select flex application to work with.<br />
+<br />
+All further Flex-keywords will operate on the selected application.<br />
+<br />
+<span class="name">locator</span> is the value <span class="name">id</span> or <span class="name">name</span> attribute of the movie in HTML.<br />
+<br />
+Return index if this application that can be used with <a href="#Switch Flex Application" class="name">Switch Flex Application</a></td>
+</tr>
+<tr>
   <td class="kw"><a name="Select Frame"></a>Select Frame</td>
   <td class="arg">locator</td>
   <td class="doc">Sets frame identified by <span class="name">locator</span> as current frame.<br />
 <br />
 Key attributes for frames are <span class="name">id</span> and <span class="name">name.</span> See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Select From Flex Element"></a>Select From Flex Element</td>
+  <td class="arg">locator, value</td>
+  <td class="doc">Select <span class="name">value</span> from Flex element found by <span class="name">locator</span>.<br />
+<br />
+<span class="name">value</span> may be either an index, visible text, or associated data of the item to be selected.<br />
+<br />
+Examples:<br />
+<table border="1" class="doc">
+<tr>
+<td>Select From Flex Element</td>
+<td>Text</td>
+<td># Select by visible text</td>
+</tr>
+<tr>
+<td>Select From Flex Element</td>
+<td>index=1</td>
+<td># Select by index</td>
+</tr>
+<tr>
+<td>Select From Flex Element</td>
+<td>data=someData</td>
+<td># Select by associated data</td>
+</tr>
+</table>
+<br />
+<b>NOTE</b> This keyword generates mx.events.ListEvent.CHANGE event, which means that event handlers associated with opening or closing a drop down menu will not be executed.<br />
+<br />
+See <a href="#introduction" class="name">introduction</a> about rules for locating Flex elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select From List"></a>Select From List</td>
@@ -1727,6 +1877,13 @@ Above example expects that there was no other open browsers when opening the fir
 </td>
 </tr>
 <tr>
+  <td class="kw"><a name="Switch Flex Application"></a>Switch Flex Application</td>
+  <td class="arg">index_or_alias</td>
+  <td class="doc">Switches between active flex applications &nbsp;using index or alias.<br />
+<br />
+<span class="name">index_or_alias</span> is got from <a href="#Select Flex Application" class="name">Select Flex Application</a> and alias can be given to it.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Table Cell Should Contain"></a>Table Cell Should Contain</td>
   <td class="arg">table_locator, row, column, expected_content</td>
   <td class="doc">Verifies that a certain cell in a table contains the <span class="name">expected content</span>.<br />
@@ -1905,9 +2062,9 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 </table>
 <p id="footer">
-Altogether 119 keywords.<br />
+Altogether 129 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2010-12-30 00:36:44.
+on 2011-01-18 15:23:57.
 </p>
 </body>
 </html>
