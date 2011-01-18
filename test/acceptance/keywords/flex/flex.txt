@@ -9,23 +9,24 @@ ${HELP TEXT}  Input your username and password to log in
 
 *** Test Cases ***
 Input text
-    Input Into Flex Text Field  username  ${some username}
-    Flex Text Field Value Should Be  username  ${some username}
+    Input Text Into Flex Element  username  ${some username}
+    Flex Element Text Should Be  username  ${some username}
 
 Click Element
-    Flex Text Field Value Should Be  helpLabel  ${EMPTY}
+    Flex Element Text Should Be  helpLabel  ${EMPTY}
     Click Flex Element  helpButton
-    Flex Text Field Value Should Be  helpLabel  ${HELP TEXT}
+    Flex Element Text Should Be  helpLabel  ${HELP TEXT}
 
 Text in flex should be with buttons
-    Flex Text Field Value Should Be  helpButton  Help
+    Flex Element Text Should Be  helpButton  Help
 
 Text in flex should be fails
-    Run Keyword And Expect Error  ERROR: Expected "not there", got "Help"  Flex Text Field Value Should Be  helpButton  not there
+    Run Keyword And Expect Error  ERROR: Expected "not there", got "Help"  Flex Element Text Should Be  helpButton  not there
 
 Text in flex should be when element doesn't exist
-    Run Keyword And Expect Error  ERROR: The chain 'id:nonExisting' was not found.  Flex Text Field Value Should Be  nonExisting  Whatever
+    Run Keyword And Expect Error  ERROR: The chain 'id:nonExisting' was not found.  Flex Element Text Should Be  nonExisting  Whatever
 
 *** Keywords ***
 Select Login Application
     Select Flex Application  loginApp
+

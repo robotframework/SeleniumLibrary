@@ -1,0 +1,12 @@
+*** Settings ***
+Resource        ../../resource.txt
+
+*** Keywords ***
+Select Language Application
+    Go To  ${ROOT}/flex/components.html
+    Select Flex Application  testApp
+
+Select Language
+    [Arguments]  ${lang}
+    Select From Flex Element  languageComboBox  ${lang}
+
