@@ -62,15 +62,7 @@ class Flex(RunOnFailure):
         """
         self._flex_command('flexClick', self._flex_locator(locator))
 
-    def input_into_flex_textfield(self, locator, value):
-        """Input `value` in the text field found by `locator`.
-
-        See `introduction` about rules for locating Flex elements.
-        """
-        locator = self._flex_locator(locator)
-        self._flex_command('flexType', '%s, text=%s' % (locator, value))
-
-    def flex_textfield_value_should_be(self, locator, expected):
+    def flex_element_text_should_be(self, locator, expected):
         """Verifies the value of the text field found by `locator` is `expected`.
 
         See `introduction` about rules for locating Flex elements.
@@ -78,6 +70,32 @@ class Flex(RunOnFailure):
         locator = self._flex_locator(locator)
         self._flex_command('flexAssertText',
                            '%s,validator=%s' % (locator, expected))
+
+    def flex_element_property_should_be(self, locator, name, expected):
+        validator = '%s|%s' % (name, expected)
+        locator = self._flex_locator(locator)
+        self._flex_command('flexAssertProperty', '%s,validator=%s'
+                           % (locator, validator))
+
+    def input_text_into_flex_element(self, locator, text):
+        """Input `value` in the text field found by `locator`.
+
+        See `introduction` about rules for locating Flex elements.
+        """
+        locator = self._flex_locator(locator)
+        self._flex_command('flexType', '%s, text=%s' % (locator, text))
+
+    def select_from_flex_element(self, locator, value):
+        # TODO: Document that select only fires ListEvent.CHANGE
+        self._flex_command('flexSelect',
+                           '%s, %s' %  (self._flex_locator(locator),
+                                        self._choice_locator(value)))
+
+    def _choice_locator(self, given_locator):
+        for pr in ['index=', 'label=', 'text=', 'data=', 'value=']:
+            if given_locator.startswith(pr):
+                return given_locator
+        return 'label=' + given_locator
 
     def _flex_locator(self, locator):
         locator = locator.strip()
@@ -91,5 +109,7 @@ class Flex(RunOnFailure):
         app = self._flex_apps.current
         if not app:
             raise RuntimeError('No Flex application selected.')
+        self._debug("Executing command '%s' for application '%s' with options '%s'"
+                    % (command, app, options))
         self._selenium.do_command(command, [app, options])
 
