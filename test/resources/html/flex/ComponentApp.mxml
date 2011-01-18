@@ -28,15 +28,15 @@
   ]]>
   </mx:Script>
   <mx:HBox>
-    <mx:Label text="opened with: " />
+    <mx:Label text="opened with:" />
     <mx:Label id="openedWithLabel" text="" />
   </mx:HBox>
   <mx:HBox>
-    <mx:Label text="changed to: " />
+    <mx:Label text="changed to:" />
     <mx:Label id="changedToLabel" text="" />
   </mx:HBox>
   <mx:HBox>
-    <mx:Label text="closed with: " />
+    <mx:Label text="closed with:" />
    <mx:Label id="closedWithLabel" text="" />
   </mx:HBox>
   <mx:ComboBox id="languageComboBox" change="comboBoxChange(event)"
@@ -44,11 +44,11 @@
       <mx:ArrayCollection id="languages">
          <mx:Object label="English" data="Hello"/>
          <mx:Object label="Klingon" data="nuqneH"/>
-         <mx:Object label="Finnnish" data="Päivää"/>
+         <mx:Object label="Finnish" data="Päivää"/>
       </mx:ArrayCollection>
   </mx:ComboBox>
   <mx:HBox>
-    <mx:Label text="translation: " />
+    <mx:Label id="translationLabel" text="translation:" />
    <mx:Label id="greetingLabel" text="Hello" />
   </mx:HBox>
 
