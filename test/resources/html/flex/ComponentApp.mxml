@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                applicationComplete="init();">
+  <mx:Script>
+  <![CDATA[
+  import org.flex_pilot.FPBootstrap;
+
+  private function init():void {
+      FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
+      FPBootstrap.init(stage);
+  }
+  ]]>
+  </mx:Script>
+  <mx:Script>
+  <![CDATA[
+    private function comboBoxOpen(event:Event):void {
+      openedWithLabel.text = event.currentTarget.selectedItem.data;
+      changedToLabel.text = "";
+      closedWithLabel.text = "";
+    }
+    private function comboBoxChange(event:Event):void {
+      changedToLabel.text = event.currentTarget.selectedItem.data;
+      greetingLabel.text = event.currentTarget.selectedItem.data;
+    }
+    private function comboBoxClose(event:Event):void {
+      closedWithLabel.text = event.currentTarget.selectedItem.data;
+    }
+  ]]>
+  </mx:Script>
+  <mx:HBox>
+    <mx:Label text="opened with: " />
+    <mx:Label id="openedWithLabel" text="" />
+  </mx:HBox>
+  <mx:HBox>
+    <mx:Label text="changed to: " />
+    <mx:Label id="changedToLabel" text="" />
+  </mx:HBox>
+  <mx:HBox>
+    <mx:Label text="closed with: " />
+   <mx:Label id="closedWithLabel" text="" />
+  </mx:HBox>
+  <mx:ComboBox id="languageComboBox" change="comboBoxChange(event)"
+      open="comboBoxOpen(event)" close="comboBoxClose(event)"> 
+      <mx:ArrayCollection id="languages">
+         <mx:Object label="English" data="Hello"/>
+         <mx:Object label="Klingon" data="nuqneH"/>
+         <mx:Object label="Finnnish" data="Päivää"/>
+      </mx:ArrayCollection>
+  </mx:ComboBox>
+  <mx:HBox>
+    <mx:Label text="translation: " />
+   <mx:Label id="greetingLabel" text="Hello" />
+  </mx:HBox>
+
+</mx:Application>
