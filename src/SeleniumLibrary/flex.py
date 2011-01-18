@@ -72,6 +72,13 @@ class Flex(RunOnFailure):
                            '%s,validator=%s' % (locator, expected))
 
     def flex_element_property_should_be(self, locator, name, expected):
+        """Verifies property value of an element found by `locator`.
+
+        `name` is the name of the property and `expected` is the expected
+        value.
+
+        See `introduction` about rules for locating Flex elements.
+        """
         validator = '%s|%s' % (name, expected)
         locator = self._flex_locator(locator)
         self._flex_command('flexAssertProperty', '%s,validator=%s'
@@ -86,7 +93,22 @@ class Flex(RunOnFailure):
         self._flex_command('flexType', '%s, text=%s' % (locator, text))
 
     def select_from_flex_element(self, locator, value):
-        # TODO: Document that select only fires ListEvent.CHANGE
+        """Select `value` from Flex element found by `locator`.
+
+        `value` may be either an index, visible text, or associated data of
+        the item to be selected.
+
+        Examples:
+        | Select From Flex Element | Text | # Select by visible text |
+        | Select From Flex Element | index=1 | # Select by index |
+        | Select From Flex Element | data=someData | # Select by associated data |
+
+        *NOTE* This keyword generates mx.events.ListEvent.CHANGE event, which
+        means that event handlers associated with opening or closing a drop down
+        menu will not be executed.
+
+        See `introduction` about rules for locating Flex elements.
+        """
         self._flex_command('flexSelect',
                            '%s, %s' %  (self._flex_locator(locator),
                                         self._choice_locator(value)))
