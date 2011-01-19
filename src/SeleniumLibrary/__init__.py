@@ -189,7 +189,6 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     | Click Flex Element | htmlText=some text | # Search by rendered HTML text |
     | Click Flex Element | chain=id:someId/name:someName | # Search for component with name matching `someName` and whose parent component's id is `someId` |
 
-
     *Handling page load events*
 
     Some keywords that may cause a page to load take an additional argument
@@ -197,18 +196,35 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     load or not. By default, a page load is expected to happen whenever a link
     or image is clicked, or a form submitted. If a page load does not happen
     (if the link only executes some JavaScript, for example), a non-empty value
-    must be given for the `dont_wait` argument.
+    must be given for the `dont_wait` argument. How much to wait is determined
+    by a timeout discussed in the next section.
 
     There are also some keywords that may cause a page to load but by default
     we expect them not to. For these cases, the keywords have an optional `wait`
     argument, and providing a non-empty value for it will cause the keyword to
-    wait.
+    wait. An other possibility is using `Wait Until Page Loaded` keyword
+    which also accepts a custom timeout.
 
     Examples:
     | Click Link | link text    |            |          | # A page is expected to load. |
     | Click Link | another link | don't wait |          | # A page is not expected to load. |
     | Select Radio Button | group1 | value1  |          | # A page is not expected to load. |
     | Select Radio Button | group2 | value2  | and wait | # A page is expected to load. |
+
+    *Timeouts*
+
+    How much to wait when a new page is loaded is specified by a timeout
+    that can be given in `importing` (default is 5 seconds) or dynamically
+    with `Set Selenium Timeout` keyword.
+
+    There are also several `Wait ...` keywords that take timeout as an
+    argument. Starting from SeleniumLibrary 2.6 all these timeouts are
+    optional and the same timeout used with page loads is used as a default.
+
+    All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
+    or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
+    For more information about the time syntax see:
+    http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
 
     *Testing sites using https*
 
@@ -364,7 +380,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         self._selenium = selenium(self._server_host, self._server_port, browser,
                                   url)
         self._connect_to_selenium_server()
-        self._selenium.set_timeout(self._timeout)
+        self._selenium.set_timeout(self._timeout * 1000)
         self._selenium.open(url, ignoreResponseCode=True)
         self._debug('Opened browser with Selenium session id %s'
                     % self._selenium.sessionId)
@@ -456,16 +472,26 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     def set_selenium_timeout(self, seconds):
         """Sets the timeout used by various keywords.
 
-        The keywords that expect a page load to happen will fail if the page
-        does not load within the time specified with `seconds`.  `seconds` may
-        be given in Robot Framework time format and the default value is 5
-        seconds. Returns the previous timeout value.
+        Keywords that expect a page load to happen will fail if the page
+        is not loaded within the timeout specified with `seconds`.
+        Starting from SeleniumLibrary 2.6, this timeout is also the default
+        timeout with various `Wait ...` keywords. See `introduction` for
+        more information about timeouts and handling page loads.
+
+        The previous timeout value is returned by this keyword and can
+        be used to set the old value back later. The default timeout
+        is 5 seconds, but it can be altered in `importing`.
+
+        Example:
+        | ${orig timeout} = | Set Selenium Timeout | 15 seconds |
+        | Open page that loads slowly |
+        | Set Selenium Timeout | ${orig timeout} |
         """
-        timeout = utils.timestr_to_secs(seconds) * 1000
+        timeout = utils.timestr_to_secs(seconds)
         old = getattr(self, '_timeout', timeout)
         self._timeout = timeout
-        self._selenium.set_timeout(self._timeout)
-        return utils.secs_to_timestr(old/1000)
+        self._selenium.set_timeout(timeout * 1000)
+        return utils.secs_to_timestr(old)
 
     def set_selenium_speed(self, seconds):
         """Sets the delay that is waited after each Selenium command.
@@ -565,12 +591,19 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     def _error_contains(self, exception, message):
         return message in self._get_error_message(exception)
 
-    def _wait_until(self, callable, timeout, error):
+    def _wait_until(self, callable, error, timeout=None):
+        timeout = self._get_timeout(timeout)
+        error = error % {'timeout': utils.secs_to_timestr(timeout)}
         maxtime = time.time() + timeout
         while not callable():
             if time.time() > maxtime:
                 raise AssertionError(error)
             time.sleep(0.2)
+
+    def _get_timeout(self, timeout=None):
+        if timeout:
+            return utils.timestr_to_secs(timeout)
+        return self._timeout
 
 
 class _NoBrowser(object):

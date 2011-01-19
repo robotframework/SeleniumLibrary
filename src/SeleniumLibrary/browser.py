@@ -39,7 +39,8 @@ class Browser(RunOnFailure):
 
         This keyword was added in SeleniumLibrary 2.5.
         """
-        self._selenium.wait_for_page_to_load(timeout or self._timeout)
+        timeout = self._get_timeout(timeout)
+        self._selenium.wait_for_page_to_load(timeout * 1000)
 
     def go_back(self, dont_wait=''):
         """Simulates the user clicking the "back" button on their browser.

@@ -102,3 +102,7 @@ Wait Until Page Loaded
     Wait Until Page Loaded
     Verify Location Is "index.html"
 
+Wait Until Page Loaded With Given Timeout
+    Click Link  Relative  and don't wait
+    Wait Until Page Loaded  10 seconds
+    Verify Location Is "index.html"

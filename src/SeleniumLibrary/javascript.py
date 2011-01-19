@@ -113,28 +113,28 @@ class JavaScript(RunOnFailure):
         return self._selenium.get_confirmation()
 
     def choose_cancel_on_next_confirmation(self):
-        """Cancel will be selected the next time `Confirm Action` is used.
-        """
+        """Cancel will be selected the next time `Confirm Action` is used."""
         self._selenium.choose_cancel_on_next_confirmation()
 
-    def wait_for_condition(self, condition, timeout='5 seconds', error=None):
-        """Waits either for given condition to be true or until timeout expires.
+    def wait_for_condition(self, condition, timeout=None, error=None):
+        """Waits until the given `condition` is true or `timeout` expires.
 
-        `condition` can be arbitrary JavaScript expression. It can be multiple
-        lines, but only the statement in the last line is used for evaluation.
-
-        `timeout` must given using Robot Framework time syntax, see
-        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+        The `condition` can be arbitrary JavaScript expression. It can
+        be multiple lines, but only the statement in the last line is
+        used for evaluation. See `Execute JavaScript` for information
+        about accessing the actual contents of the window through
+        JavaScript.
 
         `error` can be used to override the default error message.
 
-        See `Execute JavaScript` for information about accessing the
-        actual contents of the window through JavaScript.
+        See `introduction` for more information about `timeout` and its
+        default value.
+
+        See also `Wait Until Page Contains Element`, `Wait For Condition` and
+        BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Condition '%s' did not become true in %s" \
-                    % (condition, timeout)
-        self._info("Waiting %s for condition '%s' to be true."
-                   % (timeout, condition))
+            error = "Condition '%s' did not become true in %%(timeout)s" \
+                % condition
         self._wait_until(lambda: self._selenium.get_eval(condition) == 'true',
-                         utils.timestr_to_secs(timeout), error)
+                         error, timeout)

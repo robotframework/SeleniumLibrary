@@ -84,38 +84,40 @@ class Page(RunOnFailure):
                                  "but it was '%s'." % (expected, actual))
         self._info("Current location contains '%s'." % expected)
 
-    def wait_until_page_contains(self, text, timeout, error=None):
-        """Waits until `text` appears on current page or `timeout` expires.
+    def wait_until_page_contains(self, text, timeout=None, error=None):
+        """Waits until `text` appears on current page.
 
-        `timeout` must given using Robot Framework time syntax, see
-        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+        Fails if `timeout` expires before the text appears. See
+        `introduction` for more information about `timeout` and its
+        default value.
 
         `error` can be used to override the default error message.
 
-        Robot Framework built-in keyword `Wait Until Keyword Succeeds` can be used
-        to get this kind of functionality for any Selenium keyword.
+        See also `Wait Until Page Contains Element`, `Wait For Condition` and
+        BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Text '%s' did not appear in '%s'" % (text, timeout)
+            error = "Text '%s' did not appear in %%(timeout)s" % text
         self._wait_until(lambda: self._selenium.is_text_present(text),
-                         utils.timestr_to_secs(timeout), error)
+                         error, timeout)
 
-    def wait_until_page_contains_element(self, locator, timeout, error=None):
-        """Waits until element specified with `locator` appears on current page or `timeout` expires.
+    def wait_until_page_contains_element(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` appears on current page.
 
-        `timeout` must given using Robot Framework time syntax, see
-        http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+        Fails if `timeout` expires before the element appears. See
+        `introduction` for more information about `timeout` and its
+        default value.
 
         `error` can be used to override the default error message.
 
-        Robot Framework built-in keyword `Wait Until Keyword Succeeds` can be used
-        to get this kind of functionality for any Selenium keyword.
+        See also `Wait Until Page Contains Element`, `Wait For Condition` and
+        BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Element '%s' did not appear in '%s'" % (locator, timeout)
+            error = "Element '%s' did not appear in %%(timeout)s" % locator
         locator = self._parse_locator(locator)
         self._wait_until(lambda: self._selenium.is_element_present(locator),
-                         utils.timestr_to_secs(timeout), error)
+                         error, timeout)
 
     def page_should_contain(self, text, loglevel='INFO'):
         """Verifies that current page contains `text`.
