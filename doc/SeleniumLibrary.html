@@ -186,9 +186,9 @@ The main difference is that there are no specific keywords for element types. <a
 <br />
 <b>Handling page load events</b><br />
 <br />
-Some keywords that may cause a page to load take an additional argument <span class="name">dont_wait</span> that is used to determine whether a new page is expected to load or not. By default, a page load is expected to happen whenever a link or image is clicked, or a form submitted. If a page load does not happen (if the link only executes some JavaScript, for example), a non-empty value must be given for the <span class="name">dont_wait</span> argument.<br />
+Some keywords that may cause a page to load take an additional argument <span class="name">dont_wait</span> that is used to determine whether a new page is expected to load or not. By default, a page load is expected to happen whenever a link or image is clicked, or a form submitted. If a page load does not happen (if the link only executes some JavaScript, for example), a non-empty value must be given for the <span class="name">dont_wait</span> argument. How much to wait is determined by a timeout discussed in the next section.<br />
 <br />
-There are also some keywords that may cause a page to load but by default we expect them not to. For these cases, the keywords have an optional <span class="name">wait</span> argument, and providing a non-empty value for it will cause the keyword to wait.<br />
+There are also some keywords that may cause a page to load but by default we expect them not to. For these cases, the keywords have an optional <span class="name">wait</span> argument, and providing a non-empty value for it will cause the keyword to wait. An other possibility is using <a href="#Wait Until Page Loaded" class="name">Wait Until Page Loaded</a> keyword which also accepts a custom timeout.<br />
 <br />
 Examples:<br />
 <table border="1" class="doc">
@@ -221,6 +221,14 @@ Examples:<br />
 <td># A page is expected to load.</td>
 </tr>
 </table>
+<br />
+<b>Timeouts</b><br />
+<br />
+How much to wait when a new page is loaded is specified by a timeout that can be given in <a href="#importing" class="name">importing</a> (default is 5 seconds) or dynamically with <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a> keyword.<br />
+<br />
+There are also several <span class="name">Wait ...</span> keywords that take timeout as an argument. Starting from SeleniumLibrary 2.6 all these timeouts are optional and the same timeout used with page loads is used as a default.<br />
+<br />
+All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42) or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s'). For more information about the time syntax see: <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
 <br />
 <b>Testing sites using https</b><br />
 <br />
@@ -527,11 +535,11 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Unselect From List" title="Unselects given values from list identified by locator.">Unselect&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
-<a href="#Wait For Condition" title="Waits either for given condition to be true or until timeout expires.">Wait&nbsp;For&nbsp;Condition</a>
+<a href="#Wait For Condition" title="Waits until the given `condition` is true or `timeout` expires.">Wait&nbsp;For&nbsp;Condition</a>
 &nbsp;&middot;&nbsp;
-<a href="#Wait Until Page Contains" title="Waits until `text` appears on current page or `timeout` expires.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains</a>
+<a href="#Wait Until Page Contains" title="Waits until `text` appears on current page.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains</a>
 &nbsp;&middot;&nbsp;
-<a href="#Wait Until Page Contains Element" title="Waits until element specified with `locator` appears on current page or `timeout` expires.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains&nbsp;Element</a>
+<a href="#Wait Until Page Contains Element" title="Waits until element specified with `locator` appears on current page.">Wait&nbsp;Until&nbsp;Page&nbsp;Contains&nbsp;Element</a>
 &nbsp;&middot;&nbsp;
 <a href="#Wait Until Page Loaded" title="Waits for a page load to happen.">Wait&nbsp;Until&nbsp;Page&nbsp;Loaded</a>
 &nbsp;&middot;&nbsp;
@@ -661,8 +669,7 @@ Key attributes for checkboxes are <span class="name">id</span> and <span class="
 <tr>
   <td class="kw"><a name="Choose Cancel On Next Confirmation"></a>Choose Cancel On Next Confirmation</td>
   <td class="arg"></td>
-  <td class="doc">Cancel will be selected the next time <a href="#Confirm Action" class="name">Confirm Action</a> is used.<br />
-</td>
+  <td class="doc">Cancel will be selected the next time <a href="#Confirm Action" class="name">Confirm Action</a> is used.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Choose File"></a>Choose File</td>
@@ -1719,7 +1726,29 @@ Example:<br />
   <td class="arg">seconds</td>
   <td class="doc">Sets the timeout used by various keywords.<br />
 <br />
-The keywords that expect a page load to happen will fail if the page does not load within the time specified with <span class="name">seconds</span>. &nbsp;<span class="name">seconds</span> may be given in Robot Framework time format and the default value is 5 seconds. Returns the previous timeout value.</td>
+Keywords that expect a page load to happen will fail if the page is not loaded within the timeout specified with <span class="name">seconds</span>. Starting from SeleniumLibrary 2.6, this timeout is also the default timeout with various <span class="name">Wait ...</span> keywords. See <a href="#introduction" class="name">introduction</a> for more information about timeouts and handling page loads.<br />
+<br />
+The previous timeout value is returned by this keyword and can be used to set the old value back later. The default timeout is 5 seconds, but it can be altered in <a href="#importing" class="name">importing</a>.<br />
+<br />
+Example:<br />
+<table border="1" class="doc">
+<tr>
+<td>${orig timeout} =</td>
+<td>Set Selenium Timeout</td>
+<td>15 seconds</td>
+</tr>
+<tr>
+<td>Open page that loads slowly</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Set Selenium Timeout</td>
+<td>${orig timeout}</td>
+<td></td>
+</tr>
+</table>
+</td>
 </tr>
 <tr>
   <td class="kw"><a name="Simulate"></a>Simulate</td>
@@ -2005,38 +2034,38 @@ This keyword does not support waiting for possible page load automatically. If t
 </tr>
 <tr>
   <td class="kw"><a name="Wait For Condition"></a>Wait For Condition</td>
-  <td class="arg">condition, timeout=5 seconds, error=None</td>
-  <td class="doc">Waits either for given condition to be true or until timeout expires.<br />
+  <td class="arg">condition, timeout=None, error=None</td>
+  <td class="doc">Waits until the given <span class="name">condition</span> is true or <span class="name">timeout</span> expires.<br />
 <br />
-<span class="name">condition</span> can be arbitrary JavaScript expression. It can be multiple lines, but only the statement in the last line is used for evaluation.<br />
-<br />
-<span class="name">timeout</span> must given using Robot Framework time syntax, see <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
+The <span class="name">condition</span> can be arbitrary JavaScript expression. It can be multiple lines, but only the statement in the last line is used for evaluation. See <a href="#Execute Javascript" class="name">Execute JavaScript</a> for information about accessing the actual contents of the window through JavaScript.<br />
 <br />
 <span class="name">error</span> can be used to override the default error message.<br />
 <br />
-See <a href="#Execute Javascript" class="name">Execute JavaScript</a> for information about accessing the actual contents of the window through JavaScript.</td>
+See <a href="#introduction" class="name">introduction</a> for more information about <span class="name">timeout</span> and its default value.<br />
+<br />
+See also <a href="#Wait Until Page Contains" class="name">Wait Until Page Contains</a>, <a href="#Wait Until Page Contains Element" class="name">Wait Until Page Contains Element</a> and BuiltIn keyword <span class="name">Wait Until Keyword Succeeds</span>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Wait Until Page Contains"></a>Wait Until Page Contains</td>
-  <td class="arg">text, timeout, error=None</td>
-  <td class="doc">Waits until <span class="name">text</span> appears on current page or <span class="name">timeout</span> expires.<br />
+  <td class="arg">text, timeout=None, error=None</td>
+  <td class="doc">Waits until <span class="name">text</span> appears on current page.<br />
 <br />
-<span class="name">timeout</span> must given using Robot Framework time syntax, see <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
+Fails if <span class="name">timeout</span> expires before the text appears. See <a href="#introduction" class="name">introduction</a> for more information about <span class="name">timeout</span> and its default value.<br />
 <br />
 <span class="name">error</span> can be used to override the default error message.<br />
 <br />
-Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds</span> can be used to get this kind of functionality for any Selenium keyword.</td>
+See also <a href="#Wait Until Page Contains Element" class="name">Wait Until Page Contains Element</a>, <a href="#Wait For Condition" class="name">Wait For Condition</a> and BuiltIn keyword <span class="name">Wait Until Keyword Succeeds</span>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Wait Until Page Contains Element"></a>Wait Until Page Contains Element</td>
-  <td class="arg">locator, timeout, error=None</td>
-  <td class="doc">Waits until element specified with <span class="name">locator</span> appears on current page or <span class="name">timeout</span> expires.<br />
+  <td class="arg">locator, timeout=None, error=None</td>
+  <td class="doc">Waits until element specified with <span class="name">locator</span> appears on current page.<br />
 <br />
-<span class="name">timeout</span> must given using Robot Framework time syntax, see <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.<br />
+Fails if <span class="name">timeout</span> expires before the element appears. See <a href="#introduction" class="name">introduction</a> for more information about <span class="name">timeout</span> and its default value.<br />
 <br />
 <span class="name">error</span> can be used to override the default error message.<br />
 <br />
-Robot Framework built-in keyword <span class="name">Wait Until Keyword Succeeds</span> can be used to get this kind of functionality for any Selenium keyword.</td>
+See also <a href="#Wait Until Page Contains" class="name">Wait Until Page Contains</a>, <a href="#Wait For Condition" class="name">Wait For Condition</a> and BuiltIn keyword <span class="name">Wait Until Keyword Succeeds</span>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Wait Until Page Loaded"></a>Wait Until Page Loaded</td>
@@ -2064,7 +2093,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 <p id="footer">
 Altogether 129 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-01-18 15:23:57.
+on 2011-01-19 14:00:29.
 </p>
 </body>
 </html>
