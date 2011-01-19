@@ -130,8 +130,8 @@ class JavaScript(RunOnFailure):
         See `introduction` for more information about `timeout` and its
         default value.
 
-        See also `Wait Until Page Contains Element`, `Wait For Condition` and
-        BuiltIn keyword `Wait Until Keyword Succeeds`.
+        See also `Wait Until Page Contains`, `Wait Until Page Contains
+        Element` and BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
             error = "Condition '%s' did not become true in %%(timeout)s" \

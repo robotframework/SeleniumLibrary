@@ -110,7 +110,7 @@ class Page(RunOnFailure):
 
         `error` can be used to override the default error message.
 
-        See also `Wait Until Page Contains Element`, `Wait For Condition` and
+        See also `Wait Until Page Contains`, `Wait For Condition` and
         BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
