@@ -18,12 +18,12 @@ from robot import utils
 class LocatorParser:
     _strategies = ['dom=', 'xpath=' , 'css=']
     _tag_attributes = {
-        'a':           ['@id', '@name', '@href',
-                        'normalize-space(descendant-or-self::text())'],
-        'img':         ['@id', '@src', '@alt'] ,
-        'input':       ['@id', '@name', '@value', '@src'] ,
-        'button':      ['@id', '@name', '@value',
-                        'normalize-space(descendant-or-self::text())'],
+        'a':       ['@id', '@name', '@href',
+                    'normalize-space(descendant-or-self::text())'],
+        'img':     ['@id', '@src', '@alt'],
+        'input':   ['@id', '@name', '@value', '@src'],
+        'button':  ['@id', '@name', '@value',
+                    'normalize-space(descendant-or-self::text())'],
     }
     _synonyms = {'link': 'a',
                  'image': 'img',
@@ -48,7 +48,7 @@ class LocatorParser:
                             self._tag_attributes[tagname]]
         xpath_attributes.extend(self._get_attrs_requiring_full_url(
                 self._tag_attributes[tagname], locator))
-        return  "xpath=//%s[%s]" % (tagname, ' or '.join(xpath_attributes))
+        return "xpath=//%s[%s]" % (tagname, ' or '.join(xpath_attributes))
 
     def _is_predefined_strategy(self, locator):
         if '=' not in locator:
