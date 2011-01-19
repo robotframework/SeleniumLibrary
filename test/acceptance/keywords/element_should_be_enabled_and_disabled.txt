@@ -33,9 +33,8 @@ Disabled with different syntaxes
     Should Be Disabled Not Enabled  disabled_invalid_value
 
 Not Input nor Editable Element
-    [Setup]  Go To Page "tables/links.html"
-    Run Keyword And Expect Error  ERROR: Element link is not an input.  Element Should Be Enabled  link
-    Run Keyword And Expect Error  ERROR: Element link is not an input.  Element Should Be Disabled  link
+    Run Keyword And Expect Error  ERROR: Element table1 is not an input.  Element Should Be Enabled  table1
+    Run Keyword And Expect Error  ERROR: Element table1 is not an input.  Element Should Be Disabled  table1
 
 *** Keywords ***
 Should Be Enabled Not Disabled
