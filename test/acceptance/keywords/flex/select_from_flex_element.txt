@@ -1,5 +1,5 @@
 *** Settings ***
-Suite Setup     Select Language Application
+Suite Setup     Select Components Application
 Test Setup      Select Default Language
 Test Template   Select Language and Verify Greeting
 Resource        flex_resource.txt

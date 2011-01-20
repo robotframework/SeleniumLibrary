@@ -2,11 +2,15 @@
 Resource        ../../resource.txt
 
 *** Keywords ***
-Select Language Application
+Select Components Application
     Go To  ${ROOT}/flex/components.html
     Select Flex Application  testApp
 
 Select Language
     [Arguments]  ${lang}
     Select From Flex Element  languageComboBox  ${lang}
+
+Select Dynamic Application
+    Go To  ${ROOT}/flex/dynamicflex.html
+    Select Flex Application  testApp
 

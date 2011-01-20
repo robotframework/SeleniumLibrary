@@ -1,7 +1,6 @@
 *** Settings ***
-Suite Setup     Go To  ${ROOT}/flex/dynamicflex.html
-Test Setup      Select Flex Application  testApp
-Resource        ../../resource.txt
+Test Setup      Select Dynamic Application
+Resource        flex_resource.txt
 
 *** Test Cases ***
 Access Dynamic Content

@@ -1,10 +1,10 @@
 *** Settings ***
-Suite Setup     Select Language Application
+Suite Setup     Select Components Application
 Resource        flex_resource.txt
 
 *** Test Cases ***
 Static Property
-    [Setup]  Select Language Application
+    [Setup]  Select Components Application
     Flex Element Property Should Be  translationLabel  text  translation:
 
 Automatic Property

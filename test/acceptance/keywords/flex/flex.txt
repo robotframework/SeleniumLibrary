@@ -24,7 +24,7 @@ Text in flex should be fails
     Run Keyword And Expect Error  ERROR: Expected "not there", got "Help"  Flex Element Text Should Be  helpButton  not there
 
 Text in flex should be when element doesn't exist
-    Run Keyword And Expect Error  ERROR: The chain 'id:nonExisting' was not found.  Flex Element Text Should Be  nonExisting  Whatever
+    Run Keyword And Expect Error  Element 'nonExisting' does not exist  Flex Element Text Should Be  nonExisting  Whatever
 
 *** Keywords ***
 Select Login Application

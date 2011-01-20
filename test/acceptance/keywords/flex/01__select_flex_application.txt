@@ -4,7 +4,7 @@ Resource        ../../resource.txt
 
 *** Test Cases ***
 Using Flex commands without selecting application
-    Run Keyword And Expect Error  No Flex application selected.  Click Flex Element  button
+    Run Keyword And Expect Error  NoFlexApplicationSelected  Click Flex Element  button
 
 Selecting application returns an increasing index
     ${id}=  Select Flex Application  loginApp  first_app

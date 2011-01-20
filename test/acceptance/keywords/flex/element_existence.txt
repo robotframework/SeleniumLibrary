@@ -1,0 +1,42 @@
+*** Settings ***
+Suite Setup     Go To  ${ROOT}/flex/flex.html
+Test Setup      Select Flex Application  loginApp
+Resource        ../../resource.txt
+
+*** Test Cases ***
+Should Exist By Id
+    Flex Element Should Exist  loginButton
+
+Should Exist By Name
+    Flex Element Should Exist  name=help
+
+Should Exist By Attribute
+    Flex Element Should Exist  label=Help
+
+Should Exist By Chain
+    Flex Element Should Exist  chain=id:helpContainer/label:Help
+
+Should Exist Fails By Id
+    Element Lookup Fails  nonExisting
+
+Should Exist Fails By Name
+    Element Lookup Fails  name=not-a-name
+
+Should Exist Fails By Chain
+    ${chain}=  Set Variable  id:helpContainer/name:nonExisting
+    Element Lookup Fails  chain=${chain}
+
+Should Not Exist
+    Flex Element Should Not Exist  nonExisting
+    Flex Element Should Not Exist  label=notHere
+
+Should Not Exist Fails
+    Run Keyword And Expect Error  Element 'loginButton' exists  Flex Element Should Not Exist  loginButton
+    Run Keyword And Expect Error  Element 'label=Help' exists  Flex Element Should Not Exist  label=Help
+
+*** Keywords ***
+Element Lookup Fails
+    [Arguments]  ${locator}
+    ${error}=  Set Variable  Element '${locator}' does not exist
+    Run Keyword And Expect Error  ${error}  Flex Element Should Exist  ${locator}
+
