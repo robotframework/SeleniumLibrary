@@ -17,7 +17,7 @@ Should Exist By Chain
     Flex Element Should Exist  chain=id:helpContainer/label:Help
 
 Should Exist Fails By Id
-    Element Lookup Fails  nonExisting
+    Element Lookup Fails  nonExisting  id=
 
 Should Exist Fails By Name
     Element Lookup Fails  name=not-a-name
@@ -36,7 +36,7 @@ Should Not Exist Fails
 
 *** Keywords ***
 Element Lookup Fails
-    [Arguments]  ${locator}
-    ${error}=  Set Variable  Element '${locator}' does not exist
+    [Arguments]  ${locator}  ${prefix}=
+    ${error}=  Set Variable  Element '${prefix}${locator}' does not exist
     Run Keyword And Expect Error  ${error}  Flex Element Should Exist  ${locator}
 
