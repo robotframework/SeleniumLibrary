@@ -37,6 +37,11 @@ class Flex(RunOnFailure):
         return self._flex_apps.register(locator, alias)
 
     def wait_for_flex_element(self, locator, timeout=None):
+        """Wait until an element is found by `locator` or `timeout` expires.
+
+        See `introduction` for more information about `timeout` and its
+        default value.
+        """
         error = "Element '%s' did not appear in %%(timeout)s" % locator
         self._wait_for_flex_element(self._flex_locator(locator),
                                     timeout, error)
