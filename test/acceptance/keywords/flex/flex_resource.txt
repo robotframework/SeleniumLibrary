@@ -14,3 +14,7 @@ Select Dynamic Application
     Go To  ${ROOT}/flex/dynamicflex.html
     Select Flex Application  testApp
 
+Select Login Application
+    Go To    ${ROOT}/flex/flex.html
+    Select Flex Application  loginApp
+
