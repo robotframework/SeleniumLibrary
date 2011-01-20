@@ -1,0 +1,17 @@
+*** Settings ***
+Suite Setup     Select Dynamic Application
+Resource        flex_resource.txt
+
+*** Test Cases ***
+Wait For Existing Element
+    Wait For Flex Element  createDelayedContentButton
+
+Wait for Appearing Element
+    Click Flex Element  createDelayedContentButton
+    Flex Element Should Not Exist  decreaseCountButton
+    Wait For Flex Element  decreaseCountButton
+    Flex Element Should Exist  decreaseCountButton
+
+Wait for Non-existing Element
+    Run Keyword And Expect Error  Element 'nonExisting' did not appear in 1 second  Wait For Flex Element  nonExisting  1 second
+
