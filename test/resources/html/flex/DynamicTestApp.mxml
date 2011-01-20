@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
                 applicationComplete="init();">
-<mx:Script>
-<![CDATA[
-import org.flex_pilot.FPBootstrap;
+  <mx:Script>
+    <![CDATA[
+      import org.flex_pilot.FPBootstrap;
 
-private function init():void {
-    FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
-    FPBootstrap.init(stage);
-}
-]]>
-</mx:Script>
-<mx:Script>
-<![CDATA[
-import mx.controls.Button;
+      private function init():void {
+          FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
+          FPBootstrap.init(stage);
+      }
+    ]]>
+  </mx:Script>
+  <mx:Script>
+    <![CDATA[
+      import mx.controls.Button;
 
-protected function createContent(event:MouseEvent):void {
-    const b:Button = new Button();
-    b.id = "increaseCountButton";
-    b.label = "Increase count";
-    b.addEventListener(MouseEvent.CLICK,
-                       function(event:MouseEvent):void{clickCount++;});
-    container.addChild(b);
-}
+      [Bindable]
+      protected var clickCount:Number = 0;
 
-[Bindable]
-protected var clickCount:Number = 0;
+      protected function createIncreaseButton(event:MouseEvent):void {
+          const b:Button = new Button();
+          b.id = "increaseCountButton";
+          b.label = "Increase count";
+          b.addEventListener(MouseEvent.CLICK,
+                             function(event:MouseEvent):void{clickCount++;});
+          container.addChild(b);
+      }
 
-]]>
-</mx:Script>
-<mx:VBox id="container">
-  <mx:Label id="clickCountLabel" htmlText="Clicks: {clickCount}"/>
-  <mx:Button id="createContentButton" label="Create content"
-             click="createContent(event)"/>
-</mx:VBox>
+      protected function waitAndCreateDecreaseButton(event:MouseEvent):void {
+          setTimeout(createDecreaseButton, 1000);
+      }
+
+      protected function createDecreaseButton():void {
+          const b:Button = new Button();
+          b.id = "decreaseCountButton";
+          b.label = "Decrease count";
+          b.addEventListener(MouseEvent.CLICK,
+                             function(event:MouseEvent):void{clickCount--;});
+          container.addChild(b);
+      }
+    ]]>
+  </mx:Script>
+  <mx:VBox id="container">
+    <mx:Label id="clickCountLabel" htmlText="Clicks: {clickCount}"/>
+    <mx:Button id="createContentButton" label="Create increase button"
+               click="createIncreaseButton(event)"/>
+    <mx:Button id="createDelayedContentButton" label="Create decrease button"
+               click="waitAndCreateDecreaseButton(event)"/>
+  </mx:VBox>
 </mx:Application>
 
