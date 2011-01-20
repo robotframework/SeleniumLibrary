@@ -38,7 +38,7 @@ class Flex(RunOnFailure):
 
     def wait_for_flex_element(self, locator, timeout=None):
         error = "Element '%s' did not appear in %%(timeout)s" % locator
-        self._wait_for_flex_element(self._create_flex_pilot_locator(locator),
+        self._wait_for_flex_element(self._flex_locator(locator),
                                     timeout, error)
 
     def _wait_for_flex_element(self, locator, timeout, error):
@@ -47,7 +47,7 @@ class Flex(RunOnFailure):
 
     def _element_exists(self, locator):
         try:
-            self._flex_command('flexAssertDisplayObject', locator)
+            self._do_flex_command('flexAssertDisplayObject', locator)
         except NoFlexApplicationSelected:
             raise
         except Exception:
@@ -68,8 +68,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        self._flex_command('flexAssertDisplayObject',
-                           self._flex_locator(locator))
+        self._flex_command('flexAssertDisplayObject', locator)
 
     def flex_element_should_not_exist(self, locator):
         """Verifies that Flex component cannot be found by `locator`.
@@ -88,16 +87,14 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        self._flex_command('flexClick', self._flex_locator(locator))
+        self._flex_command('flexClick', locator)
 
     def flex_element_text_should_be(self, locator, expected):
         """Verifies the value of the text field found by `locator` is `expected`.
 
         See `introduction` about rules for locating Flex elements.
         """
-        locator = self._flex_locator(locator)
-        self._flex_command('flexAssertText',
-                           '%s,validator=%s' % (locator, expected))
+        self._flex_command('flexAssertText', locator, 'validator='+expected)
 
     def flex_element_property_should_be(self, locator, name, expected):
         """Verifies property value of an element found by `locator`.
@@ -107,18 +104,15 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        validator = '%s|%s' % (name, expected)
-        locator = self._flex_locator(locator)
-        self._flex_command('flexAssertProperty', '%s,validator=%s'
-                           % (locator, validator))
+        self._flex_command('flexAssertProperty', locator,
+                           'validator=%s|%s' % (name, expected))
 
     def input_text_into_flex_element(self, locator, text):
         """Input `value` in the text field found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
-        locator = self._flex_locator(locator)
-        self._flex_command('flexType', '%s, text=%s' % (locator, text))
+        self._flex_command('flexType', locator, 'text='+text)
 
     def select_from_flex_element(self, locator, value):
         """Select `value` from Flex element found by `locator`.
@@ -137,23 +131,20 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        self._flex_command('flexSelect',
-                           '%s, %s' %  (self._flex_locator(locator),
-                                        self._choice_locator(value)))
+        self._flex_command('flexSelect', locator, self._choice_locator(value))
 
-    def _choice_locator(self, given_locator):
+    def _choice_locator(self, locator):
         for prefix in ['index=', 'label=', 'text=', 'data=', 'value=']:
-            if given_locator.startswith(prefix):
-                return given_locator
-        return 'label=' + given_locator
+            if locator.startswith(prefix):
+                return locator
+        return 'label='+locator
+
+    def _flex_command(self, command, locator, option=None):
+        locator = self._flex_locator(locator)
+        self._verify_flex_element_exists(locator)
+        self._do_flex_command(command, locator, option)
 
     def _flex_locator(self, locator):
-        error = "Element '%s' does not exist" % locator
-        locator = self._create_flex_pilot_locator(locator)
-        self._wait_for_flex_element(locator, '0.5s', error)
-        return locator
-
-    def _create_flex_pilot_locator(self, locator):
         locator = locator.strip()
         # prefixes gotten from org/flex_pilot/FPLocator.as
         for prefix in ['id=', 'automationName=', 'name=', 'chain=', 'label=',
@@ -162,12 +153,15 @@ class Flex(RunOnFailure):
                 return locator
         return 'id=%s' % locator
 
-    def _flex_command(self, command, options):
-        # TODO: Howto handle commas in option values??
-        app = self._flex_apps.current
-        if not app:
+    def _verify_flex_element_exists(self, locator):
+        if not self._flex_apps.current:
             raise NoFlexApplicationSelected
-        self._debug("Executing command '%s' for application '%s' with options '%s'"
-                    % (command, app, options))
-        self._selenium.do_command(command, [app, options])
+        error = "Element '%s' does not exist" % locator
+        self._wait_for_flex_element(locator, '0.5s', error)
 
+    def _do_flex_command(self, command, *options):
+        app = self._flex_apps.current
+        opts = ', '.join([o for o in options if o is not None])
+        self._debug("Executing command '%s' for application '%s' with options '%s'"
+                    % (command, app, opts))
+        self._selenium.do_command(command, [app, opts])
