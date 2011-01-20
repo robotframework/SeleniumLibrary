@@ -25,6 +25,12 @@
     private function comboBoxClose(event:Event):void {
       closedWithLabel.text = event.currentTarget.selectedItem.data;
     }
+    private function singleClickEvent(event:Event):void {
+      singleClickLabel.text = "Clicked!";
+    }
+    private function doubleClickEvent(event:Event):void {
+      doubleClickLabel.text = "Double clicked!";
+    }
   ]]>
   </mx:Script>
   <mx:HBox>
@@ -50,6 +56,16 @@
   <mx:HBox>
     <mx:Label id="translationLabel" text="translation:" />
    <mx:Label id="greetingLabel" text="Hello" />
+  </mx:HBox>
+  <mx:HBox>
+    <mx:Button id="singleClickButton" label="Click Me!"
+       click="singleClickEvent(event)" />
+    <mx:Label id="singleClickLabel" />
+  </mx:HBox>
+  <mx:HBox>
+    <mx:Button id="doubleClickButton" label="DoubleClick Me!"
+      doubleClickEnabled="true" doubleClick="doubleClickEvent(event)" />
+    <mx:Label id="doubleClickLabel" />
   </mx:HBox>
 
 </mx:Application>
