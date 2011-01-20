@@ -1,14 +1,16 @@
 *** Settings ***
 Suite Setup     Go To  ${ROOT}/flex/flex.html
-Test Setup      Select Login Application
+Test Setup      Select Components Application
 Resource        flex_resource.txt
-
-*** Variables ***
-${HELP TEXT}  Input your username and password to log in
 
 *** Test Cases ***
 Click Flex Element
-    Flex Element Text Should Be  helpLabel  ${EMPTY}
-    Click Flex Element  helpButton
-    Flex Element Text Should Be  helpLabel  ${HELP TEXT}
+    Flex Element Text Should Be  singleClickLabel  ${EMPTY}
+    Click Flex Element  singleClickButton
+    Flex Element Text Should Be  singleClickLabel  Clicked!
+
+Double Click Flex Element
+    Flex Element Text Should Be  doubleClickLabel  ${EMPTY}
+    Double Click Flex Element  doubleClickButton
+    Flex Element Text Should Be  doubleClickLabel  Double clicked!
 

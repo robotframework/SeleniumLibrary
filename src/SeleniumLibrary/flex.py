@@ -94,6 +94,13 @@ class Flex(RunOnFailure):
         """
         self._flex_command('flexClick', locator)
 
+    def double_click_flex_element(self, locator):
+        """Double click the Flex element found by `locator`.
+
+        See `introduction` about rules for locating Flex elements.
+        """
+        self._flex_command('flexDoubleClick', locator)
+
     def flex_element_text_should_be(self, locator, expected):
         """Verifies the value of the text field found by `locator` is `expected`.
 
