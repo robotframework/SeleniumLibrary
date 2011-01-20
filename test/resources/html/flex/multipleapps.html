@@ -9,10 +9,10 @@
         var html = '';
         if (navigator.appName == 'Microsoft Internet Explorer') {
           var objTag = '<object type="application/x-shockwave-flash" ' +
-                        'width="300px" height="300px"';
-          var paramTag = '<param name="movie" value="' + '">';
-          html =  objTag + 'id="loginApp">' + paramTag + 'LoginApp.swf' + '</object>' +
-                  objTag + 'id="dynamicApp">' + paramTag + 'DynamicTestApp.swf' + '</object>'
+                        'width="300px" height="300px" ';
+          var paramTag = '<param name="movie" value="';
+          html =  objTag + 'id="loginApp">' + paramTag + 'LoginApp.swf' + '"></object>' +
+                  objTag + 'id="dynamicApp">' + paramTag + 'DynamicTestApp.swf' + '"></object>'
         } else {
           var embedTagEnd = 'height="300px" width="300px"' +
                             'type="application/x-shockwave-flash" src=';
