@@ -15,10 +15,11 @@
 from runonfailure import RunOnFailure
 
 
+class NoFlexApplicationSelected(Exception):
+    pass
+
+
 class Flex(RunOnFailure):
-    # from org/flex_pilot/FPLocator.as
-    flex_pilot_locator_prefixes = ['automationName', 'name=', 'chain=',
-                                   'label', 'htmlText']
 
     def select_flex_application(self, locator, alias=None):
         """Select flex application to work with.
@@ -31,13 +32,28 @@ class Flex(RunOnFailure):
         Application`
         """
         self.page_should_contain_element(locator)
-        self._wait_for_flex_ready(locator)
+        # It seems that selenium timeout is used instead of given timeout.
+        self._selenium.do_command("waitForFlexReady", [locator, 'timeout'])
         return self._flex_apps.register(locator, alias)
 
-    def _wait_for_flex_ready(self, locator, timeout=5000):
-        # It seems that selenium timeout is always used so this timeout has
-        # no effect, event though it's mandatory. Go figure.
-        self._selenium.do_command("waitForFlexReady", [locator, timeout])
+    def wait_for_flex_element(self, locator, timeout=None):
+        error = "Element '%s' did not appear in %%(timeout)s" % locator
+        self._wait_for_flex_element(self._create_flex_pilot_locator(locator),
+                                    timeout, error)
+
+    def _wait_for_flex_element(self, locator, timeout, error):
+        self._wait_until(lambda: self._element_exists(locator),
+                         error, timeout)
+
+    def _element_exists(self, locator):
+        try:
+            self._flex_command('flexAssertDisplayObject', locator)
+        except NoFlexApplicationSelected:
+            raise
+        except Exception:
+            return False
+        else:
+            return True
 
     def switch_flex_application(self, index_or_alias):
         """Switches between active flex applications  using index or alias.
@@ -54,6 +70,18 @@ class Flex(RunOnFailure):
         """
         self._flex_command('flexAssertDisplayObject',
                            self._flex_locator(locator))
+
+    def flex_element_should_not_exist(self, locator):
+        """Verifies that Flex component cannot be found by `locator`.
+
+        See `introduction` about rules for locating Flex elements.
+        """
+        try:
+            self.flex_element_should_exist(locator)
+        except Exception:
+            pass
+        else:
+            raise AssertionError("Element '%s' exists" % locator)
 
     def click_flex_element(self, locator):
         """Click the Flex element found by `locator`.
@@ -114,23 +142,31 @@ class Flex(RunOnFailure):
                                         self._choice_locator(value)))
 
     def _choice_locator(self, given_locator):
-        for pr in ['index=', 'label=', 'text=', 'data=', 'value=']:
-            if given_locator.startswith(pr):
+        for prefix in ['index=', 'label=', 'text=', 'data=', 'value=']:
+            if given_locator.startswith(prefix):
                 return given_locator
         return 'label=' + given_locator
 
     def _flex_locator(self, locator):
+        error = "Element '%s' does not exist" % locator
+        locator = self._create_flex_pilot_locator(locator)
+        self._wait_for_flex_element(locator, '0.5s', error)
+        return locator
+
+    def _create_flex_pilot_locator(self, locator):
         locator = locator.strip()
-        for pr in self.flex_pilot_locator_prefixes:
-          if locator.startswith(pr):
-            return locator
+        # prefixes gotten from org/flex_pilot/FPLocator.as
+        for prefix in ['id=', 'automationName=', 'name=', 'chain=', 'label=',
+                       'htmlText=']:
+            if locator.startswith(prefix):
+                return locator
         return 'id=%s' % locator
 
     def _flex_command(self, command, options):
         # TODO: Howto handle commas in option values??
         app = self._flex_apps.current
         if not app:
-            raise RuntimeError('No Flex application selected.')
+            raise NoFlexApplicationSelected
         self._debug("Executing command '%s' for application '%s' with options '%s'"
                     % (command, app, options))
         self._selenium.do_command(command, [app, options])
