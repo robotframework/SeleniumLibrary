@@ -1,5 +1,5 @@
 *** Settings ***
-Test Setup      Select Dynamic Application
+Suite Setup     Select Dynamic Application
 Resource        flex_resource.txt
 
 *** Test Cases ***

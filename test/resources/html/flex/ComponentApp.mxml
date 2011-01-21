@@ -33,6 +33,9 @@
     }
   ]]>
   </mx:Script>
+  <mx:HBox id="staticContainer">
+    <mx:Label id="staticLabel" name="stLabel" text="Some static text" />
+  </mx:HBox>
   <mx:HBox>
     <mx:Label text="opened with:" />
     <mx:Label id="openedWithLabel" text="" />

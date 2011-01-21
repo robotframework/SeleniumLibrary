@@ -1,20 +1,19 @@
 *** Settings ***
-Suite Setup     Go To  ${ROOT}/flex/flex.html
-Test Setup      Select Flex Application  loginApp
-Resource        ../../resource.txt
+Suite Setup     Select Component Application
+Resource        flex_resource.txt
 
 *** Test Cases ***
 Should Exist By Id
-    Flex Element Should Exist  loginButton
+    Flex Element Should Exist  staticLabel
 
 Should Exist By Name
-    Flex Element Should Exist  name=help
+    Flex Element Should Exist  name=stLabel
 
 Should Exist By Attribute
-    Flex Element Should Exist  label=Help
+    Flex Element Should Exist  htmlText=Some static text
 
 Should Exist By Chain
-    Flex Element Should Exist  chain=id:helpContainer/label:Help
+    Flex Element Should Exist  chain=id:staticContainer/name:stLabel
 
 Should Exist Fails By Id
     Element Lookup Fails  nonExisting  id=
@@ -31,8 +30,8 @@ Should Not Exist
     Flex Element Should Not Exist  label=notHere
 
 Should Not Exist Fails
-    Run Keyword And Expect Error  Element 'loginButton' exists  Flex Element Should Not Exist  loginButton
-    Run Keyword And Expect Error  Element 'label=Help' exists  Flex Element Should Not Exist  label=Help
+    Run Keyword And Expect Error  Element 'staticLabel' exists  Flex Element Should Not Exist  staticLabel
+    Run Keyword And Expect Error  Element 'name=stLabel' exists  Flex Element Should Not Exist  name=stLabel
 
 *** Keywords ***
 Element Lookup Fails

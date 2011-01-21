@@ -1,6 +1,5 @@
 *** Settings ***
-Suite Setup     Go To  ${ROOT}/flex/flex.html
-Test Setup      Select Component Application
+Suite Setup     Select Component Application
 Resource        flex_resource.txt
 
 *** Test Cases ***
