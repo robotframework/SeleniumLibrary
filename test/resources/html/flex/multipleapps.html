@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Login application for flex testing</title>
+    <title>Testing multiple Flex applications on the same page</title>
     <style>
       #loginApp, #dynamicApp {border: 2px inset black; margin: 5px;}
     </style>
@@ -11,13 +11,13 @@
           var objTag = '<object type="application/x-shockwave-flash" ' +
                         'width="300px" height="300px" ';
           var paramTag = '<param name="movie" value="';
-          html =  objTag + 'id="loginApp">' + paramTag + 'LoginApp.swf' + '"></object>' +
-                  objTag + 'id="dynamicApp">' + paramTag + 'DynamicTestApp.swf' + '"></object>'
+          html =  objTag + 'id="componentApp">' + paramTag + 'ComponentApp.swf' + '"></object>' +
+                  objTag + 'id="dynamicApp">' + paramTag + 'DynamicApp.swf' + '"></object>'
         } else {
           var embedTagEnd = 'height="300px" width="300px"' +
                             'type="application/x-shockwave-flash" src=';
-          html =  '<embed id="loginApp"' + embedTagEnd + '"LoginApp.swf" ' + '/>' +
-                  '<embed id="dynamicApp"' + embedTagEnd + '"DynamicTestApp.swf" ' + '/>';
+          html =  '<embed id="componentApp"' + embedTagEnd + '"ComponentApp.swf" ' + '/>' +
+                  '<embed id="dynamicApp"' + embedTagEnd + '"DynamicApp.swf" ' + '/>';
         }
         document.getElementById('appContainer').innerHTML = html;
       }

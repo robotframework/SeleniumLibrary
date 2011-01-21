@@ -1,5 +1,5 @@
 *** Settings ***
-Suite Setup     Select Components Application
+Suite Setup     Select Component Application
 Test Setup      Select Default Language
 Test Template   Select Language and Verify Greeting
 Resource        flex_resource.txt
@@ -7,7 +7,7 @@ Resource        flex_resource.txt
 *** Variables ***
 ${GREETING IN ENGLISH}  Hello
 ${GREETING IN KLINGON}  nuqneH
-${GREETING IN KLINGON}  Päivää
+${GREETING IN FINNISH}  Päivää
 ${ENGLISH INDEX}  0
 ${KLINGON INDEX}  1
 

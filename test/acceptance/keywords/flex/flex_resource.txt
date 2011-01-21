@@ -1,18 +1,22 @@
 *** Settings ***
 Resource        ../../resource.txt
 
+*** Variables ***
+${Component App}  componentApp
+${Dynamic App}  dynamicApp
+
 *** Keywords ***
-Select Components Application
+Select Component Application
     Go To  ${ROOT}/flex/components.html
-    Select Flex Application  testApp
+    Select Flex Application  ${Component App}
+
+Select Dynamic Application
+    Go To  ${ROOT}/flex/dynamicflex.html
+    Select Flex Application  ${Dynamic App}
 
 Select Language
     [Arguments]  ${lang}
     Select From Flex Element  languageComboBox  ${lang}
-
-Select Dynamic Application
-    Go To  ${ROOT}/flex/dynamicflex.html
-    Select Flex Application  testApp
 
 Select Login Application
     Go To  ${ROOT}/flex/flex.html

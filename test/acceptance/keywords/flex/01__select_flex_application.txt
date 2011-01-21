@@ -2,32 +2,30 @@
 Suite Setup     Go To Page With Multiple Flex Apps
 Resource        flex_resource.txt
 
+*** Variables ***
+${first alias}  first
+${second alias}  second
+
 *** Test Cases ***
 Using Flex commands without selecting application
-    Run Keyword And Expect Error  NoFlexApplicationSelected  Click Flex Element  button
+    Run Keyword And Expect Error  NoFlexApplicationSelected  Click Flex Element  someComponent
 
-Selecting application returns an increasing index
-    ${id}=  Select Flex Application  loginApp  first_app
-    Should Be Equal As Numbers  ${id}  1
-    Login Application Should Be Selected
-    ${id}=  Select Flex Application  dynamicApp  second_app
-    Should Be Equal As Numbers  ${id}  2
+Select application
+    Select Flex Application  ${Component App}  ${first alias}
+    Component Application Should Be Selected
+    Select Flex Application  ${Dynamic App}  ${second alias}
     Dynamic App Should Be Selected
 
 Application may be switched
-    Switch Flex application  first_app
-    Login Application Should Be Selected
+    Switch Flex application  ${first alias}
+    Component Application Should Be Selected
     Switch Flex application  2
     Dynamic App Should Be Selected
 
 *** Keywords ***
-Login Application Should Be Selected
-    Flex Element Should Exist  username
+Component Application Should Be Selected
+    Flex Element Should Exist  languageComboBox
 
 Dynamic App Should Be Selected
     Flex Element Should Exist  clickCountLabel
-
-Select Language
-    [Arguments]  ${lang}
-    Select From Flex Element  languageComboBox  ${lang}
 
