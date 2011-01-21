@@ -15,6 +15,9 @@ Select Dynamic Application
     Select Flex Application  testApp
 
 Select Login Application
-    Go To    ${ROOT}/flex/flex.html
+    Go To  ${ROOT}/flex/flex.html
     Select Flex Application  loginApp
+
+Go To Page With Multiple Flex Apps
+    Go To   ${ROOT}/flex/multipleapps.html
 

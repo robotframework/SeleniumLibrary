@@ -1,6 +1,6 @@
 *** Settings ***
-Suite Setup     Go To  ${ROOT}/flex/multipleapps.html
-Resource        ../../resource.txt
+Suite Setup     Go To Page With Multiple Flex Apps
+Resource        flex_resource.txt
 
 *** Test Cases ***
 Using Flex commands without selecting application
