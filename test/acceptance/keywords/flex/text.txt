@@ -1,21 +1,20 @@
 *** Settings ***
-Suite Setup     Select Login Application
+Suite Setup     Select Component Application
 Resource        flex_resource.txt
 
 *** Variables ***
-${some username}  James Bond
-${HELP TEXT}  Input your username and password to log in
+${SOME TEXT}  James Bond
 
 *** Test Cases ***
 Input text
-    Input Text Into Flex Element  username  ${some username}
-    Flex Element Text Should Be  username  ${some username}
+    Input Text Into Flex Element  textInput  ${SOME TEXT}
+    Flex Element Text Should Be  textInput  ${SOME TEXT}
 
 Text in flex should be with buttons
-    Flex Element Text Should Be  helpButton  Help
+    Flex Element Text Should Be  singleClickButton  Click Me!
 
 Text in flex should be fails
-    Run Keyword And Expect Error  ERROR: Expected "not there", got "Help"  Flex Element Text Should Be  helpButton  not there
+    Run Keyword And Expect Error  ERROR: Expected "not there", got "Click Me!"  Flex Element Text Should Be  singleClickButton  not there
 
 Text in flex should be when element doesn't exist
     Run Keyword And Expect Error  Element 'id=nonExisting' does not exist  Flex Element Text Should Be  nonExisting  Whatever
