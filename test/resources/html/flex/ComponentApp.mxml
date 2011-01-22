@@ -36,6 +36,7 @@
   <mx:HBox id="staticContainer">
     <mx:Label id="staticLabel" name="stLabel" text="Some static text" />
   </mx:HBox>
+  <mx:TextInput id="textInput" />
   <mx:HBox>
     <mx:Label text="opened with:" />
     <mx:Label id="openedWithLabel" text="" />
