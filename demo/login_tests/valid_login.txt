@@ -1,7 +1,9 @@
 *** Settings ***
 Documentation  A test suite with a single test for valid login. This test has a workflow that is created using keywords from the resource file.
+Resource        ${SUT}_resource.txt
 
-Resource       resource.txt
+*** Variables ***
+${SUT}  html
 
 
 *** Test Cases ***
@@ -13,5 +15,3 @@ Valid Login
     Submit Credentials
     Welcome Page Should Be Open
     [Teardown]  Close Browser
-
-
