@@ -12,6 +12,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import time
+
 from runonfailure import RunOnFailure
 
 
@@ -43,16 +45,11 @@ class Flex(RunOnFailure):
         default value.
         """
         error = "Element '%s' did not appear in %%(timeout)s" % locator
-        self._wait_for_flex_element(self._flex_locator(locator),
-                                    timeout, error)
-
-    def _wait_for_flex_element(self, locator, timeout, error):
-        self._wait_until(lambda: self._element_exists(locator),
-                         error, timeout)
+        self._wait_until(lambda: self._element_exists(locator), error, timeout)
 
     def _element_exists(self, locator):
         try:
-            self._do_flex_command('flexAssertDisplayObject', locator)
+            self._flex_command('flexAssertDisplayObject', locator)
         except NoFlexApplicationSelected:
             raise
         except Exception:
@@ -106,7 +103,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        self._flex_command('flexAssertText', locator, 'validator='+expected)
+        self._flex_command_with_retry('flexAssertText', locator,
+                                      'validator='+expected)
 
     def flex_element_property_should_be(self, locator, name, expected):
         """Verifies property value of an element found by `locator`.
@@ -116,8 +114,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        self._flex_command('flexAssertProperty', locator,
-                           'validator=%s|%s' % (name, expected))
+        self._flex_command_with_retry('flexAssertProperty', locator,
+                                      'validator=%s|%s' % (name, expected))
 
     def input_text_into_flex_element(self, locator, text):
         """Input `value` in the text field found by `locator`.
@@ -151,10 +149,33 @@ class Flex(RunOnFailure):
                 return locator
         return 'label='+locator
 
+    def _flex_command_with_retry(self, command, locator, opts):
+        # TODO: Explain why this is needed
+        maxtime = time.time() + 1.0
+        while True:
+            try:
+                self._flex_command(command, locator, opts)
+            except Exception:
+                if time.time() > maxtime:
+                    raise
+                time.sleep(0.1)
+            else:
+                break
+
     def _flex_command(self, command, locator, option=None):
+        app = self._flex_apps.current
+        if not app:
+            raise NoFlexApplicationSelected
+        opts = self._get_options(locator, option)
+        self._debug("Executing command '%s' for application '%s' with options '%s'"
+                    % (command, app, opts))
+        self._selenium.do_command(command, [app, opts])
+
+    def _get_options(self, locator, option):
         locator = self._flex_locator(locator)
-        self._verify_flex_element_exists(locator)
-        self._do_flex_command(command, locator, option)
+        if option:
+            return '%s, %s' % (locator, option)
+        return locator
 
     def _flex_locator(self, locator):
         locator = locator.strip()
@@ -164,16 +185,3 @@ class Flex(RunOnFailure):
             if locator.startswith(prefix):
                 return locator
         return 'id=%s' % locator
-
-    def _verify_flex_element_exists(self, locator):
-        if not self._flex_apps.current:
-            raise NoFlexApplicationSelected
-        error = "Element '%s' does not exist" % locator
-        self._wait_for_flex_element(locator, '0.5s', error)
-
-    def _do_flex_command(self, command, *options):
-        app = self._flex_apps.current
-        opts = ', '.join([o for o in options if o is not None])
-        self._debug("Executing command '%s' for application '%s' with options '%s'"
-                    % (command, app, opts))
-        self._selenium.do_command(command, [app, opts])

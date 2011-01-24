@@ -16,14 +16,14 @@ Should Exist By Chain
     Flex Element Should Exist  chain=id:staticContainer/name:stLabel
 
 Should Exist Fails By Id
-    Element Lookup Fails  nonExisting  id=
+    Element Lookup Fails  nonExisting  id:nonExisting
 
 Should Exist Fails By Name
-    Element Lookup Fails  name=not-a-name
+    Element Lookup Fails  name=not-a-name  name:not-a-name
 
 Should Exist Fails By Chain
     ${chain}=  Set Variable  id:helpContainer/name:nonExisting
-    Element Lookup Fails  chain=${chain}
+    Element Lookup Fails  chain=${chain}  ${chain}
 
 Should Not Exist
     Flex Element Should Not Exist  nonExisting
@@ -35,7 +35,6 @@ Should Not Exist Fails
 
 *** Keywords ***
 Element Lookup Fails
-    [Arguments]  ${locator}  ${prefix}=
-    ${error}=  Set Variable  Element '${prefix}${locator}' does not exist
-    Run Keyword And Expect Error  ${error}  Flex Element Should Exist  ${locator}
+    [Arguments]  ${locator}  ${error chain}
+    Run Keyword And Expect Error  ERROR: The chain '${error chain}' was not found.  Flex Element Should Exist  ${locator}
 
