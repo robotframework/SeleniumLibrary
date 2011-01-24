@@ -10,11 +10,16 @@ Examples:
   rundemo.py login_tests/valid_login.text       # Run tests in a specific file
   rundemo.py --variable BROWSER:IE login_tests  # Override variable
   rundemo.py -v BROWSER:IE -v DELAY:0.5 login_tests
+  rundemo.py --variable SUT:flex login_tests
 
 By default tests are executed with Firefox browser, but this can be changed
 by overriding the `BROWSER` variable as illustrated above. Similarly it is
 possible to slow down the test execution by overriding the `DELAY` variable
 with a non-zero value.
+
+There are HTML and Flex implementations of the demo application and these tests
+can be executed against both. The HTML version is used by default, but this can
+be changed by overriding `SUT` variable with value `flex`.
 
 When tests are run, the demo application and Selenium Server are started and
 stopped automatically. It is possible to start and stop them also separately

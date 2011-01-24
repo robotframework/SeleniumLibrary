@@ -2,38 +2,25 @@
 Documentation   A test suite containing tests related to invalid login. These tests are data-driven by they nature. They use a single keyword called with different arguments to cover different scenarios.
 
 Suite Setup     Open Login Page
-Test Teardown   Go To Login Page
+Test Setup      Go To Login Page
+Test Template   Login Should Fail
 Suite Teardown  Close Browser
-Resource        resource.txt
+Resource        ${SUT}_resource.txt
+
+*** Variables ***
+${SUT}  html
 
 
 *** Test Cases ***              USER NAME      PASSWORD
 
-Invalid Username
-    Login Should Fail           invalid        ${VALID PASSWD}
+Invalid Username                invalid        ${VALID PASSWD}
 
-Invalid Password
-    Login Should Fail           ${VALID USER}  invalid
+Invalid Password                ${VALID USER}  invalid
 
-Invalid Username And Password
-    Login Should Fail           invalid        whatever
+Invalid Username And Password   invalid        whatever
 
-Empty Username
-    Login Should Fail           ${EMPTY}       ${VALID PASSWD}
+Empty Username                  ${EMPTY}       ${VALID PASSWD}
 
-Empty Password
-    Login Should Fail           ${VALID USER}  ${EMPTY}
+Empty Password                  ${VALID USER}  ${EMPTY}
 
-Empty Username And Password
-    Login Should Fail           ${EMPTY}       ${EMPTY}
-
-
-*** Keywords ***
-
-Login Should Fail  [Arguments]  ${username}  ${password}
-    Input Username  ${username}
-    Input Password  ${password}
-    Submit Credentials
-    Location Should Be  http://${HOST}/error.html
-    Title Should Be  Error Page
-
+Empty Username And Password     ${EMPTY}       ${EMPTY}
