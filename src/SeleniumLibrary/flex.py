@@ -34,8 +34,8 @@ class Flex(RunOnFailure):
         Application`
         """
         self.page_should_contain_element(locator)
-        # It seems that selenium timeout is used instead of given timeout.
-        self._selenium.do_command("waitForFlexReady", [locator, 'timeout'])
+        # It seems that Selenium timeout is used regardless what's given here
+        self._selenium.do_command("waitForFlexReady", [locator, self._timeout])
         return self._flex_apps.register(locator, alias)
 
     def wait_for_flex_element(self, locator, timeout=None):
@@ -45,9 +45,9 @@ class Flex(RunOnFailure):
         default value.
         """
         error = "Element '%s' did not appear in %%(timeout)s" % locator
-        self._wait_until(lambda: self._element_exists(locator), error, timeout)
+        self._wait_until(lambda: self._flex_element_exists(locator), error, timeout)
 
-    def _element_exists(self, locator):
+    def _flex_element_exists(self, locator):
         try:
             self._flex_command('flexAssertDisplayObject', locator)
         except NoFlexApplicationSelected:
@@ -149,9 +149,14 @@ class Flex(RunOnFailure):
                 return locator
         return 'label='+locator
 
-    def _flex_command_with_retry(self, command, locator, opts):
-        # TODO: Explain why this is needed
-        maxtime = time.time() + 1.0
+    def _flex_command_with_retry(self, command, locator, opts, timeout=1.0):
+        """Retry running `_flex_command` if it fails until `timeout`.
+
+        Retrying is needed because Flex Pilot's asserts sometime fail when done
+        immediately after updating components, most often after flexSelect.
+        This seems to be the cleanest workaround.
+        """ 
+        maxtime = time.time() + timeout
         while True:
             try:
                 self._flex_command(command, locator, opts)
