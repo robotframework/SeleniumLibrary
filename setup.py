@@ -13,5 +13,7 @@ setup(name         = 'robotframework-seleniumlibrary',
       url          = 'http://code.google.com/p/robotframework-seleniumlibrary',
       package_dir  = {'' : 'src'},
       packages     = ['SeleniumLibrary'],
-      package_data = {'SeleniumLibrary': ['lib/*.jar', 'firefoxprofile/*.*']},
+      package_data = {'SeleniumLibrary': ['lib/*.jar',
+                                          'lib/user-extensions.js',
+                                          'firefoxprofile/*.*']},
       )
