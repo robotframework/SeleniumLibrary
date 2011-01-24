@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                applicationComplete="init();">
+  <mx:Script>
+  <![CDATA[
+  import org.flex_pilot.FPBootstrap;
+
+  private function init():void {
+      FPBootstrap.flex_pilotLibPath = 'FlexPilot.swf';
+      FPBootstrap.init(stage);
+  }
+  ]]>
+  </mx:Script>
+
+  <mx:Script> 
+    <![CDATA[
+        import flash.events.MouseEvent;
+        import mx.controls.Alert;
+
+        private function submitLogin(eventObj:MouseEvent):void {
+          if (username_field.text == "demo" && password_field.text == "mode") {
+            appContainer.selectedChild = mainApp;
+          }
+          else {
+            Alert.show("Incorrect credentials");
+          }
+        }   
+    ]]>
+  </mx:Script>
+
+  <mx:ViewStack id="appContainer" width="100%">
+    <mx:Form id="loginForm" defaultButton="{login_button}">
+        <mx:FormItem label="Username">
+            <mx:TextInput id="username_field" width="100"/>
+        </mx:FormItem>
+        <mx:FormItem label="Password">
+            <mx:TextInput id="password_field" width="100" 
+                displayAsPassword="true"/>
+        </mx:FormItem>
+        <mx:FormItem>
+            <mx:Button id="login_button" label="Login" 
+                click="submitLogin(event);"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:VBox id="mainApp">
+      <mx:Text id="welcome_text" htmlText="Congratulations, you have been logged in."/>
+      <mx:Button label="Logout" click="appContainer.selectedChild=loginForm;"/>
+    </mx:VBox>
+  </mx:ViewStack>
+</mx:Application>
