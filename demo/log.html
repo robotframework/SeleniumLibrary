@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Expires" content="Mon, 20 Jan 2001 20:01:21 GMT" />
-<meta name="generator" content="Robot trunk 20100323 (Python 2.6.2 on linux2)" />
+<meta name="generator" content="Robot trunk 20101201 (Python 2.7 on win32)" />
 <style media="all" type="text/css">
   /* Generic styles */
   body {
@@ -16,6 +16,9 @@
   }
   h2 {
     margin-top: 1.2em;
+  }
+  br {
+    mso-data-placement: same-cell;  /* maintain line breaks in Excel */
   }
   /* Statistics Table */
   table.statistics {
@@ -305,27 +308,35 @@
         }
         return hash.slice(1).replace(/%20/g, ' ')
     }
-    function set_element_visible(name) {
-        var elements = document.body.getElementsByTagName('a')
+    function set_element_visible(id_or_name) {
+        var element = document.getElementById(id_or_name)
+        if (element) {
+            open_parents(element)
+            return
+        }
+        var elements = document.getElementsByName(id_or_name)
         for (var i=0; i<elements.length; i++) {
-            if (elements[i].getAttribute('name') == name) {
-                open_parents(elements[i])
-                return
-            }
+            open_parents(elements[i])
         }
     }
     // Find right type of parent element, open it and its parents
     function open_parents(element) {
         var parent = element.parentNode
+        if (!parent) {
+            return
+        }
         // Find a parent table with id
         while (parent.nodeName != 'TABLE' || parent.getAttribute('id') == null) {
             parent = parent.parentNode
+            if (!parent) {
+               return
+            }
         }
         var element_id = parent.getAttribute('id')
         if (document.getElementById(element_id+'_children').style.display == 'none') {
             toggle_child_visibility(element_id)
-            open_parents(parent)
         }
+        open_parents(parent)
     }
 </script>
 
@@ -335,7 +346,7 @@
 <div class="header">
   <h1>Login Tests Test Log</h1>
   <div class="times">
-    <span class="generated_time">Generated<br />20100428&nbsp;02:55:06&nbsp;GMT&nbsp;+03:00</span><br />
+    <span class="generated_time">Generated<br />20110124&nbsp;15:44:31&nbsp;GMT&nbsp;+03:00</span><br />
 	<span class="generated_ago">
 <script type="text/javascript">
   function get_end(number) {
@@ -357,7 +368,7 @@
   function get_year_str(years) {
     return years + ' year' + get_end(years)
   }
-  generated = 1272412506
+  generated = 1295876671
   current = Math.round(new Date().getTime() / 1000)  // getTime returns millis
   elapsed = current - generated
   // elapsed should only be negative if clocks are not in sync
@@ -522,8 +533,8 @@
 <div class="indent" id="suite000001_children" style="display: block;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests</td></tr>
-<tr><th>Source:</th><td><a href="login_tests">/home/peke/Devel/seleniumlibrary/demo/login_tests</a></td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:47.475 / 20100428 02:55:06.124 / 00:00:18.649</td></tr>
+<tr><th>Source:</th><td><a href="login_tests">d:\pekkalau\devel\selib\demo\login_tests</a></td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:12.444 / 20110124 15:44:31.585 / 00:00:19.141</td></tr>
 <tr><th>Overall Status:</th><td class="pass">PASS</td></tr>
 <tr><th>Message:</th><td>7&nbsp;critical&nbsp;tests,&nbsp;7&nbsp;passed,&nbsp;<span>0&nbsp;failed</span><br />7&nbsp;tests&nbsp;total,&nbsp;7&nbsp;passed,&nbsp;<span>0&nbsp;failed</span></td></tr>
 </table>
@@ -542,30 +553,30 @@
 <div class="indent" id="suite000002_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login</td></tr>
-<tr><th>Documentation:</th><td>A test suite containing tests related to invalid login. These tests are data-driven by they nature, they only use a single keyword that is used with different argument to cover different scenarios.</td></tr>
-<tr><th>Source:</th><td><a href="login_tests/invalid_login.txt">/home/peke/Devel/seleniumlibrary/demo/login_tests/invalid_login.txt</a></td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:47.518 / 20100428 02:54:58.503 / 00:00:10.985</td></tr>
+<tr><th>Documentation:</th><td>A test suite containing tests related to invalid login. These tests are data-driven by they nature. They use a single keyword called with different arguments to cover different scenarios.</td></tr>
+<tr><th>Source:</th><td><a href="login_tests/invalid_login.txt">d:\pekkalau\devel\selib\demo\login_tests\invalid_login.txt</a></td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:12.490 / 20110124 15:44:22.724 / 00:00:10.234</td></tr>
 <tr><th>Overall Status:</th><td class="pass">PASS</td></tr>
 <tr><th>Message:</th><td>6&nbsp;critical&nbsp;tests,&nbsp;6&nbsp;passed,&nbsp;<span>0&nbsp;failed</span><br />6&nbsp;tests&nbsp;total,&nbsp;6&nbsp;passed,&nbsp;<span>0&nbsp;failed</span></td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000001">
+<table class="keyword" id="kw000001">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000001_unfoldlink" onclick="toggle_child_visibility('kw000001');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000001_foldlink" onclick="toggle_child_visibility('kw000001');" style="display: block;">+</div>
 <span class="pass">SETUP: </span>
-<span class="name">resource.Open Login Page </span>
+<span class="name">html_resource.Open Login Page </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000001">
+<tr>
 <td>
 <div class="indent" id="kw000001_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:47.614 / 20100428 02:54:54.325 / 00:00:06.711</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:12.615 / 20110124 15:44:21.069 / 00:00:08.454</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000002">
+<table class="keyword" id="kw000002">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000002_unfoldlink" onclick="toggle_child_visibility('kw000002');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000002_foldlink" onclick="toggle_child_visibility('kw000002');" style="display: block;">+</div>
@@ -574,26 +585,26 @@
 <span class="arg">${LOGIN URL}, ${BROWSER}</span>
 </td>
 </tr>
-<tr id="kw000002">
+<tr>
 <td>
 <div class="indent" id="kw000002_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Opens a new browser instance to given url.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:47.614 / 20100428 02:54:54.102 / 00:00:06.488</td></tr>
+<tr><th>Documentation:</th><td>Opens a new browser instance to given URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:12.615 / 20110124 15:44:20.990 / 00:00:08.375</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:54.102</td>
+<td class="time">15:44:20.990</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening browser 'firefox' to base url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Opening browser 'firefox' to base url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000003">
+<table class="keyword" id="kw000003">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000003_unfoldlink" onclick="toggle_child_visibility('kw000003');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000003_foldlink" onclick="toggle_child_visibility('kw000003');" style="display: block;">+</div>
@@ -602,19 +613,19 @@
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000003">
+<tr>
 <td>
 <div class="indent" id="kw000003_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Maximizes current browser window.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.103 / 20100428 02:54:54.242 / 00:00:00.139</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:20.990 / 20110124 15:44:21.022 / 00:00:00.032</td></tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000004">
+<table class="keyword" id="kw000004">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000004_unfoldlink" onclick="toggle_child_visibility('kw000004');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000004_foldlink" onclick="toggle_child_visibility('kw000004');" style="display: block;">+</div>
@@ -623,19 +634,19 @@
 <span class="arg">${DELAY}</span>
 </td>
 </tr>
-<tr id="kw000004">
+<tr>
 <td>
 <div class="indent" id="kw000004_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Sets the delay that is waited after each Selenium command.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.243 / 20100428 02:54:54.251 / 00:00:00.008</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.022 / 20110124 15:44:21.038 / 00:00:00.016</td></tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000005">
+<table class="keyword" id="kw000005">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000005_unfoldlink" onclick="toggle_child_visibility('kw000005');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000005_foldlink" onclick="toggle_child_visibility('kw000005');" style="display: block;">+</div>
@@ -644,16 +655,16 @@
 <span class="arg">Login Page</span>
 </td>
 </tr>
-<tr id="kw000005">
+<tr>
 <td>
 <div class="indent" id="kw000005_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.251 / 20100428 02:54:54.324 / 00:00:00.073</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.038 / 20110124 15:44:21.069 / 00:00:00.031</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:54.324</td>
+<td class="time">15:44:21.069</td>
 <td class="info level">INFO</td>
 <td class="msg">Page title is 'Login Page'.</td>
 </tr>
@@ -666,8 +677,8 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000006">
+<table class="keyword" id="kw000006">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000006_unfoldlink" onclick="toggle_child_visibility('kw000006');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000006_foldlink" onclick="toggle_child_visibility('kw000006');" style="display: block;">+</div>
@@ -676,12 +687,12 @@
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000006">
+<tr>
 <td>
 <div class="indent" id="kw000006_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Closes the current browser.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.473 / 20100428 02:54:58.503 / 00:00:00.030</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.552 / 20110124 15:44:22.724 / 00:00:00.172</td></tr>
 </table>
 </div>
 </td>
@@ -702,61 +713,137 @@
 <div class="indent" id="test000001_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login.Invalid Username</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.325 / 20100428 02:54:55.076 / 00:00:00.751</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.069 / 20110124 15:44:21.365 / 00:00:00.296</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000007">
+<table class="keyword" id="kw000007">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000007_unfoldlink" onclick="toggle_child_visibility('kw000007');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000007_foldlink" onclick="toggle_child_visibility('kw000007');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">Login Should Fail </span>
-<span class="arg">invalid, ${VALID PASSWD}</span>
+<span class="pass">SETUP: </span>
+<span class="name">html_resource.Go To Login Page </span>
+<span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000007">
+<tr>
 <td>
 <div class="indent" id="kw000007_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.326 / 20100428 02:54:54.960 / 00:00:00.634</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.069 / 20110124 15:44:21.147 / 00:00:00.078</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000008">
+<table class="keyword" id="kw000008">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000008_unfoldlink" onclick="toggle_child_visibility('kw000008');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000008_foldlink" onclick="toggle_child_visibility('kw000008');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
-<span class="arg">${username}</span>
+<span class="name">SeleniumLibrary.Go To </span>
+<span class="arg">${LOGIN URL}</span>
 </td>
 </tr>
-<tr id="kw000008">
+<tr>
 <td>
 <div class="indent" id="kw000008_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.327 / 20100428 02:54:54.532 / 00:00:00.205</td></tr>
+<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.069 / 20110124 15:44:21.115 / 00:00:00.046</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000009">
+<table class="messages">
+<tr>
+<td class="time">15:44:21.115</td>
+<td class="info level">INFO</td>
+<td class="msg">Opening url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000009">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000009_unfoldlink" onclick="toggle_child_visibility('kw000009');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000009_foldlink" onclick="toggle_child_visibility('kw000009');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">SeleniumLibrary.Title Should Be </span>
+<span class="arg">Login Page</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000009_children" style="display: none;">
+<table class="metadata">
+<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.115 / 20110124 15:44:21.147 / 00:00:00.032</td></tr>
+</table>
+<table class="messages">
+<tr>
+<td class="time">15:44:21.147</td>
+<td class="info level">INFO</td>
+<td class="msg">Page title is 'Login Page'.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000010">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000010_unfoldlink" onclick="toggle_child_visibility('kw000010');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000010_foldlink" onclick="toggle_child_visibility('kw000010');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Login Should Fail </span>
+<span class="arg">invalid, ${VALID PASSWD}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000010_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.147 / 20110124 15:44:21.365 / 00:00:00.218</td></tr>
+</table>
+<table class="keyword" id="kw000011">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000011_unfoldlink" onclick="toggle_child_visibility('kw000011');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000011_foldlink" onclick="toggle_child_visibility('kw000011');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Input Username </span>
+<span class="arg">${username}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000011_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.147 / 20110124 15:44:21.194 / 00:00:00.047</td></tr>
+</table>
+<table class="keyword" id="kw000012">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000012_unfoldlink" onclick="toggle_child_visibility('kw000012');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000012_foldlink" onclick="toggle_child_visibility('kw000012');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000009">
+<tr>
 <td>
-<div class="indent" id="kw000009_children" style="display: none;">
+<div class="indent" id="kw000012_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.328 / 20100428 02:54:54.532 / 00:00:00.204</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.147 / 20110124 15:44:21.194 / 00:00:00.047</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:54.531</td>
+<td class="time">15:44:21.194</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'invalid' into text field 'username_field'</td>
 </tr>
@@ -769,42 +856,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000010">
+<table class="keyword" id="kw000013">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000010_unfoldlink" onclick="toggle_child_visibility('kw000010');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000010_foldlink" onclick="toggle_child_visibility('kw000010');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000013_unfoldlink" onclick="toggle_child_visibility('kw000013');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000013_foldlink" onclick="toggle_child_visibility('kw000013');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">${password}</span>
 </td>
 </tr>
-<tr id="kw000010">
+<tr>
 <td>
-<div class="indent" id="kw000010_children" style="display: none;">
+<div class="indent" id="kw000013_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.532 / 20100428 02:54:54.599 / 00:00:00.067</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.194 / 20110124 15:44:21.224 / 00:00:00.030</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000011">
+<table class="keyword" id="kw000014">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000011_unfoldlink" onclick="toggle_child_visibility('kw000011');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000011_foldlink" onclick="toggle_child_visibility('kw000011');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000014_unfoldlink" onclick="toggle_child_visibility('kw000014');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000014_foldlink" onclick="toggle_child_visibility('kw000014');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000011">
+<tr>
 <td>
-<div class="indent" id="kw000011_children" style="display: none;">
+<div class="indent" id="kw000014_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.533 / 20100428 02:54:54.598 / 00:00:00.065</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.194 / 20110124 15:44:21.224 / 00:00:00.030</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:54.598</td>
+<td class="time">15:44:21.224</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'mode' into text field 'password_field'</td>
 </tr>
@@ -817,42 +904,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000012">
+<table class="keyword" id="kw000015">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000012_unfoldlink" onclick="toggle_child_visibility('kw000012');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000012_foldlink" onclick="toggle_child_visibility('kw000012');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000015_unfoldlink" onclick="toggle_child_visibility('kw000015');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000015_foldlink" onclick="toggle_child_visibility('kw000015');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000012">
+<tr>
 <td>
-<div class="indent" id="kw000012_children" style="display: none;">
+<div class="indent" id="kw000015_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.599 / 20100428 02:54:54.872 / 00:00:00.273</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.224 / 20110124 15:44:21.319 / 00:00:00.095</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000013">
+<table class="keyword" id="kw000016">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000013_unfoldlink" onclick="toggle_child_visibility('kw000013');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000013_foldlink" onclick="toggle_child_visibility('kw000013');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000016_unfoldlink" onclick="toggle_child_visibility('kw000016');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000016_foldlink" onclick="toggle_child_visibility('kw000016');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Click Button </span>
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000013">
+<tr>
 <td>
-<div class="indent" id="kw000013_children" style="display: none;">
+<div class="indent" id="kw000016_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.600 / 20100428 02:54:54.872 / 00:00:00.272</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.224 / 20110124 15:44:21.319 / 00:00:00.095</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:54.871</td>
+<td class="time">15:44:21.319</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -865,132 +952,56 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000014">
-<td>
-<div class="foldingbutton" id="kw000014_unfoldlink" onclick="toggle_child_visibility('kw000014');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000014_foldlink" onclick="toggle_child_visibility('kw000014');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Location Should Be </span>
-<span class="arg"><a href="http://${HOST}/error.html">http://${HOST}/error.html</a></span>
-</td>
-</tr>
-<tr id="kw000014">
-<td>
-<div class="indent" id="kw000014_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.873 / 20100428 02:54:54.927 / 00:00:00.054</td></tr>
-</table>
-<table class="messages">
+<table class="keyword" id="kw000017">
 <tr>
-<td class="time">02:54:54.927</td>
-<td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/error.html">http://localhost:7272/error.html</a>'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000015">
-<td>
-<div class="foldingbutton" id="kw000015_unfoldlink" onclick="toggle_child_visibility('kw000015');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000015_foldlink" onclick="toggle_child_visibility('kw000015');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Error Page</span>
-</td>
-</tr>
-<tr id="kw000015">
-<td>
-<div class="indent" id="kw000015_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.928 / 20100428 02:54:54.960 / 00:00:00.032</td></tr>
-</table>
-<table class="messages">
-<tr>
-<td class="time">02:54:54.959</td>
-<td class="info level">INFO</td>
-<td class="msg">Page title is 'Error Page'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000016">
-<td>
-<div class="foldingbutton" id="kw000016_unfoldlink" onclick="toggle_child_visibility('kw000016');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000016_foldlink" onclick="toggle_child_visibility('kw000016');" style="display: block;">+</div>
-<span class="pass">TEARDOWN: </span>
-<span class="name">resource.Go To Login Page </span>
-<span class="arg"></span>
-</td>
-</tr>
-<tr id="kw000016">
-<td>
-<div class="indent" id="kw000016_children" style="display: none;">
-<table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.961 / 20100428 02:54:55.076 / 00:00:00.115</td></tr>
-</table>
-<table class="keyword">
-<tr id="kw000017">
 <td>
 <div class="foldingbutton" id="kw000017_unfoldlink" onclick="toggle_child_visibility('kw000017');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000017_foldlink" onclick="toggle_child_visibility('kw000017');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Go To </span>
-<span class="arg">${LOGIN URL}</span>
+<span class="name">SeleniumLibrary.Location Should Be </span>
+<span class="arg">${ERROR URL}</span>
 </td>
 </tr>
-<tr id="kw000017">
+<tr>
 <td>
 <div class="indent" id="kw000017_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:54.962 / 20100428 02:54:55.038 / 00:00:00.076</td></tr>
+<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.319 / 20110124 15:44:21.349 / 00:00:00.030</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.037</td>
+<td class="time">15:44:21.349</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/error.html">http://localhost:7272/html/error.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000018">
+<table class="keyword" id="kw000018">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000018_unfoldlink" onclick="toggle_child_visibility('kw000018');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000018_foldlink" onclick="toggle_child_visibility('kw000018');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Login Page</span>
+<span class="arg">Error Page</span>
 </td>
 </tr>
-<tr id="kw000018">
+<tr>
 <td>
 <div class="indent" id="kw000018_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.039 / 20100428 02:54:55.076 / 00:00:00.037</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.349 / 20110124 15:44:21.365 / 00:00:00.016</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.075</td>
+<td class="time">15:44:21.365</td>
 <td class="info level">INFO</td>
-<td class="msg">Page title is 'Login Page'.</td>
+<td class="msg">Page title is 'Error Page'.</td>
 </tr>
 </table>
 </div>
@@ -1020,61 +1031,137 @@
 <div class="indent" id="test000002_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login.Invalid Password</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.077 / 20100428 02:54:55.852 / 00:00:00.775</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.365 / 20110124 15:44:21.585 / 00:00:00.220</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000019">
+<table class="keyword" id="kw000019">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000019_unfoldlink" onclick="toggle_child_visibility('kw000019');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000019_foldlink" onclick="toggle_child_visibility('kw000019');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">Login Should Fail </span>
-<span class="arg">${VALID USER}, invalid</span>
+<span class="pass">SETUP: </span>
+<span class="name">html_resource.Go To Login Page </span>
+<span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000019">
+<tr>
 <td>
 <div class="indent" id="kw000019_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.078 / 20100428 02:54:55.634 / 00:00:00.556</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.365 / 20110124 15:44:21.427 / 00:00:00.062</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000020">
+<table class="keyword" id="kw000020">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000020_unfoldlink" onclick="toggle_child_visibility('kw000020');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000020_foldlink" onclick="toggle_child_visibility('kw000020');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
-<span class="arg">${username}</span>
+<span class="name">SeleniumLibrary.Go To </span>
+<span class="arg">${LOGIN URL}</span>
 </td>
 </tr>
-<tr id="kw000020">
+<tr>
 <td>
 <div class="indent" id="kw000020_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.080 / 20100428 02:54:55.184 / 00:00:00.104</td></tr>
+<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.365 / 20110124 15:44:21.413 / 00:00:00.048</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000021">
+<table class="messages">
+<tr>
+<td class="time">15:44:21.413</td>
+<td class="info level">INFO</td>
+<td class="msg">Opening url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000021">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000021_unfoldlink" onclick="toggle_child_visibility('kw000021');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000021_foldlink" onclick="toggle_child_visibility('kw000021');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">SeleniumLibrary.Title Should Be </span>
+<span class="arg">Login Page</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000021_children" style="display: none;">
+<table class="metadata">
+<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.413 / 20110124 15:44:21.427 / 00:00:00.014</td></tr>
+</table>
+<table class="messages">
+<tr>
+<td class="time">15:44:21.427</td>
+<td class="info level">INFO</td>
+<td class="msg">Page title is 'Login Page'.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000022">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000022_unfoldlink" onclick="toggle_child_visibility('kw000022');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000022_foldlink" onclick="toggle_child_visibility('kw000022');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Login Should Fail </span>
+<span class="arg">${VALID USER}, invalid</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000022_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.427 / 20110124 15:44:21.585 / 00:00:00.158</td></tr>
+</table>
+<table class="keyword" id="kw000023">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000023_unfoldlink" onclick="toggle_child_visibility('kw000023');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000023_foldlink" onclick="toggle_child_visibility('kw000023');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Input Username </span>
+<span class="arg">${username}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000023_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.427 / 20110124 15:44:21.444 / 00:00:00.017</td></tr>
+</table>
+<table class="keyword" id="kw000024">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000024_unfoldlink" onclick="toggle_child_visibility('kw000024');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000024_foldlink" onclick="toggle_child_visibility('kw000024');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000021">
+<tr>
 <td>
-<div class="indent" id="kw000021_children" style="display: none;">
+<div class="indent" id="kw000024_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.081 / 20100428 02:54:55.184 / 00:00:00.103</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.427 / 20110124 15:44:21.444 / 00:00:00.017</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.183</td>
+<td class="time">15:44:21.444</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'demo' into text field 'username_field'</td>
 </tr>
@@ -1087,42 +1174,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000022">
+<table class="keyword" id="kw000025">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000022_unfoldlink" onclick="toggle_child_visibility('kw000022');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000022_foldlink" onclick="toggle_child_visibility('kw000022');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000025_unfoldlink" onclick="toggle_child_visibility('kw000025');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000025_foldlink" onclick="toggle_child_visibility('kw000025');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">${password}</span>
 </td>
 </tr>
-<tr id="kw000022">
+<tr>
 <td>
-<div class="indent" id="kw000022_children" style="display: none;">
+<div class="indent" id="kw000025_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.185 / 20100428 02:54:55.297 / 00:00:00.112</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.444 / 20110124 15:44:21.474 / 00:00:00.030</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000023">
+<table class="keyword" id="kw000026">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000023_unfoldlink" onclick="toggle_child_visibility('kw000023');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000023_foldlink" onclick="toggle_child_visibility('kw000023');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000026_unfoldlink" onclick="toggle_child_visibility('kw000026');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000026_foldlink" onclick="toggle_child_visibility('kw000026');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000023">
+<tr>
 <td>
-<div class="indent" id="kw000023_children" style="display: none;">
+<div class="indent" id="kw000026_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.186 / 20100428 02:54:55.296 / 00:00:00.110</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.460 / 20110124 15:44:21.474 / 00:00:00.014</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.296</td>
+<td class="time">15:44:21.474</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'invalid' into text field 'password_field'</td>
 </tr>
@@ -1135,42 +1222,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000024">
+<table class="keyword" id="kw000027">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000024_unfoldlink" onclick="toggle_child_visibility('kw000024');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000024_foldlink" onclick="toggle_child_visibility('kw000024');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000027_unfoldlink" onclick="toggle_child_visibility('kw000027');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000027_foldlink" onclick="toggle_child_visibility('kw000027');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000024">
+<tr>
 <td>
-<div class="indent" id="kw000024_children" style="display: none;">
+<div class="indent" id="kw000027_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.297 / 20100428 02:54:55.395 / 00:00:00.098</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.474 / 20110124 15:44:21.538 / 00:00:00.064</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000025">
+<table class="keyword" id="kw000028">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000025_unfoldlink" onclick="toggle_child_visibility('kw000025');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000025_foldlink" onclick="toggle_child_visibility('kw000025');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000028_unfoldlink" onclick="toggle_child_visibility('kw000028');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000028_foldlink" onclick="toggle_child_visibility('kw000028');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Click Button </span>
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000025">
+<tr>
 <td>
-<div class="indent" id="kw000025_children" style="display: none;">
+<div class="indent" id="kw000028_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.298 / 20100428 02:54:55.394 / 00:00:00.096</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.474 / 20110124 15:44:21.538 / 00:00:00.064</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.394</td>
+<td class="time">15:44:21.538</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -1183,132 +1270,56 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000026">
-<td>
-<div class="foldingbutton" id="kw000026_unfoldlink" onclick="toggle_child_visibility('kw000026');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000026_foldlink" onclick="toggle_child_visibility('kw000026');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Location Should Be </span>
-<span class="arg"><a href="http://${HOST}/error.html">http://${HOST}/error.html</a></span>
-</td>
-</tr>
-<tr id="kw000026">
-<td>
-<div class="indent" id="kw000026_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.395 / 20100428 02:54:55.597 / 00:00:00.202</td></tr>
-</table>
-<table class="messages">
+<table class="keyword" id="kw000029">
 <tr>
-<td class="time">02:54:55.597</td>
-<td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/error.html">http://localhost:7272/error.html</a>'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000027">
-<td>
-<div class="foldingbutton" id="kw000027_unfoldlink" onclick="toggle_child_visibility('kw000027');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000027_foldlink" onclick="toggle_child_visibility('kw000027');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Error Page</span>
-</td>
-</tr>
-<tr id="kw000027">
-<td>
-<div class="indent" id="kw000027_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.598 / 20100428 02:54:55.634 / 00:00:00.036</td></tr>
-</table>
-<table class="messages">
-<tr>
-<td class="time">02:54:55.633</td>
-<td class="info level">INFO</td>
-<td class="msg">Page title is 'Error Page'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000028">
-<td>
-<div class="foldingbutton" id="kw000028_unfoldlink" onclick="toggle_child_visibility('kw000028');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000028_foldlink" onclick="toggle_child_visibility('kw000028');" style="display: block;">+</div>
-<span class="pass">TEARDOWN: </span>
-<span class="name">resource.Go To Login Page </span>
-<span class="arg"></span>
-</td>
-</tr>
-<tr id="kw000028">
-<td>
-<div class="indent" id="kw000028_children" style="display: none;">
-<table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.635 / 20100428 02:54:55.851 / 00:00:00.216</td></tr>
-</table>
-<table class="keyword">
-<tr id="kw000029">
 <td>
 <div class="foldingbutton" id="kw000029_unfoldlink" onclick="toggle_child_visibility('kw000029');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000029_foldlink" onclick="toggle_child_visibility('kw000029');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Go To </span>
-<span class="arg">${LOGIN URL}</span>
+<span class="name">SeleniumLibrary.Location Should Be </span>
+<span class="arg">${ERROR URL}</span>
 </td>
 </tr>
-<tr id="kw000029">
+<tr>
 <td>
 <div class="indent" id="kw000029_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.636 / 20100428 02:54:55.821 / 00:00:00.185</td></tr>
+<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.538 / 20110124 15:44:21.552 / 00:00:00.014</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.820</td>
+<td class="time">15:44:21.552</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/error.html">http://localhost:7272/html/error.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000030">
+<table class="keyword" id="kw000030">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000030_unfoldlink" onclick="toggle_child_visibility('kw000030');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000030_foldlink" onclick="toggle_child_visibility('kw000030');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Login Page</span>
+<span class="arg">Error Page</span>
 </td>
 </tr>
-<tr id="kw000030">
+<tr>
 <td>
 <div class="indent" id="kw000030_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.821 / 20100428 02:54:55.851 / 00:00:00.030</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.552 / 20110124 15:44:21.585 / 00:00:00.033</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.850</td>
+<td class="time">15:44:21.585</td>
 <td class="info level">INFO</td>
-<td class="msg">Page title is 'Login Page'.</td>
+<td class="msg">Page title is 'Error Page'.</td>
 </tr>
 </table>
 </div>
@@ -1338,61 +1349,137 @@
 <div class="indent" id="test000003_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login.Invalid Username And Password</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.852 / 20100428 02:54:56.324 / 00:00:00.472</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.585 / 20110124 15:44:21.835 / 00:00:00.250</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000031">
+<table class="keyword" id="kw000031">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000031_unfoldlink" onclick="toggle_child_visibility('kw000031');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000031_foldlink" onclick="toggle_child_visibility('kw000031');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">Login Should Fail </span>
-<span class="arg">invalid, whatever</span>
+<span class="pass">SETUP: </span>
+<span class="name">html_resource.Go To Login Page </span>
+<span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000031">
+<tr>
 <td>
 <div class="indent" id="kw000031_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.853 / 20100428 02:54:56.112 / 00:00:00.259</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.585 / 20110124 15:44:21.647 / 00:00:00.062</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000032">
+<table class="keyword" id="kw000032">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000032_unfoldlink" onclick="toggle_child_visibility('kw000032');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000032_foldlink" onclick="toggle_child_visibility('kw000032');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
-<span class="arg">${username}</span>
+<span class="name">SeleniumLibrary.Go To </span>
+<span class="arg">${LOGIN URL}</span>
 </td>
 </tr>
-<tr id="kw000032">
+<tr>
 <td>
 <div class="indent" id="kw000032_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.854 / 20100428 02:54:55.901 / 00:00:00.047</td></tr>
+<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.585 / 20110124 15:44:21.631 / 00:00:00.046</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000033">
+<table class="messages">
+<tr>
+<td class="time">15:44:21.631</td>
+<td class="info level">INFO</td>
+<td class="msg">Opening url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000033">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000033_unfoldlink" onclick="toggle_child_visibility('kw000033');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000033_foldlink" onclick="toggle_child_visibility('kw000033');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">SeleniumLibrary.Title Should Be </span>
+<span class="arg">Login Page</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000033_children" style="display: none;">
+<table class="metadata">
+<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.631 / 20110124 15:44:21.647 / 00:00:00.016</td></tr>
+</table>
+<table class="messages">
+<tr>
+<td class="time">15:44:21.647</td>
+<td class="info level">INFO</td>
+<td class="msg">Page title is 'Login Page'.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000034">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000034_unfoldlink" onclick="toggle_child_visibility('kw000034');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000034_foldlink" onclick="toggle_child_visibility('kw000034');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Login Should Fail </span>
+<span class="arg">invalid, whatever</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000034_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.663 / 20110124 15:44:21.835 / 00:00:00.172</td></tr>
+</table>
+<table class="keyword" id="kw000035">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000035_unfoldlink" onclick="toggle_child_visibility('kw000035');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000035_foldlink" onclick="toggle_child_visibility('kw000035');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Input Username </span>
+<span class="arg">${username}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000035_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.663 / 20110124 15:44:21.694 / 00:00:00.031</td></tr>
+</table>
+<table class="keyword" id="kw000036">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000036_unfoldlink" onclick="toggle_child_visibility('kw000036');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000036_foldlink" onclick="toggle_child_visibility('kw000036');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000033">
+<tr>
 <td>
-<div class="indent" id="kw000033_children" style="display: none;">
+<div class="indent" id="kw000036_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.855 / 20100428 02:54:55.901 / 00:00:00.046</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.663 / 20110124 15:44:21.694 / 00:00:00.031</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.900</td>
+<td class="time">15:44:21.694</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'invalid' into text field 'username_field'</td>
 </tr>
@@ -1405,42 +1492,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000034">
+<table class="keyword" id="kw000037">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000034_unfoldlink" onclick="toggle_child_visibility('kw000034');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000034_foldlink" onclick="toggle_child_visibility('kw000034');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000037_unfoldlink" onclick="toggle_child_visibility('kw000037');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000037_foldlink" onclick="toggle_child_visibility('kw000037');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">${password}</span>
 </td>
 </tr>
-<tr id="kw000034">
+<tr>
 <td>
-<div class="indent" id="kw000034_children" style="display: none;">
+<div class="indent" id="kw000037_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.902 / 20100428 02:54:55.930 / 00:00:00.028</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.694 / 20110124 15:44:21.710 / 00:00:00.016</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000035">
+<table class="keyword" id="kw000038">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000035_unfoldlink" onclick="toggle_child_visibility('kw000035');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000035_foldlink" onclick="toggle_child_visibility('kw000035');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000038_unfoldlink" onclick="toggle_child_visibility('kw000038');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000038_foldlink" onclick="toggle_child_visibility('kw000038');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000035">
+<tr>
 <td>
-<div class="indent" id="kw000035_children" style="display: none;">
+<div class="indent" id="kw000038_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.903 / 20100428 02:54:55.929 / 00:00:00.026</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.694 / 20110124 15:44:21.710 / 00:00:00.016</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:55.929</td>
+<td class="time">15:44:21.710</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'whatever' into text field 'password_field'</td>
 </tr>
@@ -1453,42 +1540,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000036">
+<table class="keyword" id="kw000039">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000036_unfoldlink" onclick="toggle_child_visibility('kw000036');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000036_foldlink" onclick="toggle_child_visibility('kw000036');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000039_unfoldlink" onclick="toggle_child_visibility('kw000039');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000039_foldlink" onclick="toggle_child_visibility('kw000039');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000036">
+<tr>
 <td>
-<div class="indent" id="kw000036_children" style="display: none;">
+<div class="indent" id="kw000039_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.930 / 20100428 02:54:56.047 / 00:00:00.117</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.710 / 20110124 15:44:21.788 / 00:00:00.078</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000037">
+<table class="keyword" id="kw000040">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000037_unfoldlink" onclick="toggle_child_visibility('kw000037');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000037_foldlink" onclick="toggle_child_visibility('kw000037');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000040_unfoldlink" onclick="toggle_child_visibility('kw000040');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000040_foldlink" onclick="toggle_child_visibility('kw000040');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Click Button </span>
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000037">
+<tr>
 <td>
-<div class="indent" id="kw000037_children" style="display: none;">
+<div class="indent" id="kw000040_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:55.931 / 20100428 02:54:56.046 / 00:00:00.115</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.710 / 20110124 15:44:21.788 / 00:00:00.078</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:56.046</td>
+<td class="time">15:44:21.788</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -1501,132 +1588,56 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000038">
-<td>
-<div class="foldingbutton" id="kw000038_unfoldlink" onclick="toggle_child_visibility('kw000038');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000038_foldlink" onclick="toggle_child_visibility('kw000038');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Location Should Be </span>
-<span class="arg"><a href="http://${HOST}/error.html">http://${HOST}/error.html</a></span>
-</td>
-</tr>
-<tr id="kw000038">
-<td>
-<div class="indent" id="kw000038_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.047 / 20100428 02:54:56.095 / 00:00:00.048</td></tr>
-</table>
-<table class="messages">
+<table class="keyword" id="kw000041">
 <tr>
-<td class="time">02:54:56.094</td>
-<td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/error.html">http://localhost:7272/error.html</a>'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000039">
-<td>
-<div class="foldingbutton" id="kw000039_unfoldlink" onclick="toggle_child_visibility('kw000039');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000039_foldlink" onclick="toggle_child_visibility('kw000039');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Error Page</span>
-</td>
-</tr>
-<tr id="kw000039">
-<td>
-<div class="indent" id="kw000039_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.095 / 20100428 02:54:56.111 / 00:00:00.016</td></tr>
-</table>
-<table class="messages">
-<tr>
-<td class="time">02:54:56.111</td>
-<td class="info level">INFO</td>
-<td class="msg">Page title is 'Error Page'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000040">
-<td>
-<div class="foldingbutton" id="kw000040_unfoldlink" onclick="toggle_child_visibility('kw000040');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000040_foldlink" onclick="toggle_child_visibility('kw000040');" style="display: block;">+</div>
-<span class="pass">TEARDOWN: </span>
-<span class="name">resource.Go To Login Page </span>
-<span class="arg"></span>
-</td>
-</tr>
-<tr id="kw000040">
-<td>
-<div class="indent" id="kw000040_children" style="display: none;">
-<table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.112 / 20100428 02:54:56.324 / 00:00:00.212</td></tr>
-</table>
-<table class="keyword">
-<tr id="kw000041">
 <td>
 <div class="foldingbutton" id="kw000041_unfoldlink" onclick="toggle_child_visibility('kw000041');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000041_foldlink" onclick="toggle_child_visibility('kw000041');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Go To </span>
-<span class="arg">${LOGIN URL}</span>
+<span class="name">SeleniumLibrary.Location Should Be </span>
+<span class="arg">${ERROR URL}</span>
 </td>
 </tr>
-<tr id="kw000041">
+<tr>
 <td>
 <div class="indent" id="kw000041_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.113 / 20100428 02:54:56.265 / 00:00:00.152</td></tr>
+<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.788 / 20110124 15:44:21.819 / 00:00:00.031</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:56.265</td>
+<td class="time">15:44:21.819</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/error.html">http://localhost:7272/html/error.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000042">
+<table class="keyword" id="kw000042">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000042_unfoldlink" onclick="toggle_child_visibility('kw000042');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000042_foldlink" onclick="toggle_child_visibility('kw000042');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Login Page</span>
+<span class="arg">Error Page</span>
 </td>
 </tr>
-<tr id="kw000042">
+<tr>
 <td>
 <div class="indent" id="kw000042_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.266 / 20100428 02:54:56.323 / 00:00:00.057</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.819 / 20110124 15:44:21.835 / 00:00:00.016</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:56.323</td>
+<td class="time">15:44:21.835</td>
 <td class="info level">INFO</td>
-<td class="msg">Page title is 'Login Page'.</td>
+<td class="msg">Page title is 'Error Page'.</td>
 </tr>
 </table>
 </div>
@@ -1656,61 +1667,137 @@
 <div class="indent" id="test000004_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login.Empty Username</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.325 / 20100428 02:54:57.056 / 00:00:00.731</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.835 / 20110124 15:44:22.069 / 00:00:00.234</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000043">
+<table class="keyword" id="kw000043">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000043_unfoldlink" onclick="toggle_child_visibility('kw000043');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000043_foldlink" onclick="toggle_child_visibility('kw000043');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">Login Should Fail </span>
-<span class="arg">${EMPTY}, ${VALID PASSWD}</span>
+<span class="pass">SETUP: </span>
+<span class="name">html_resource.Go To Login Page </span>
+<span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000043">
+<tr>
 <td>
 <div class="indent" id="kw000043_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.326 / 20100428 02:54:56.837 / 00:00:00.511</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.835 / 20110124 15:44:21.913 / 00:00:00.078</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000044">
+<table class="keyword" id="kw000044">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000044_unfoldlink" onclick="toggle_child_visibility('kw000044');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000044_foldlink" onclick="toggle_child_visibility('kw000044');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
-<span class="arg">${username}</span>
+<span class="name">SeleniumLibrary.Go To </span>
+<span class="arg">${LOGIN URL}</span>
 </td>
 </tr>
-<tr id="kw000044">
+<tr>
 <td>
 <div class="indent" id="kw000044_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.327 / 20100428 02:54:56.370 / 00:00:00.043</td></tr>
+<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.835 / 20110124 15:44:21.881 / 00:00:00.046</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000045">
+<table class="messages">
+<tr>
+<td class="time">15:44:21.881</td>
+<td class="info level">INFO</td>
+<td class="msg">Opening url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000045">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000045_unfoldlink" onclick="toggle_child_visibility('kw000045');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000045_foldlink" onclick="toggle_child_visibility('kw000045');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">SeleniumLibrary.Title Should Be </span>
+<span class="arg">Login Page</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000045_children" style="display: none;">
+<table class="metadata">
+<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.881 / 20110124 15:44:21.913 / 00:00:00.032</td></tr>
+</table>
+<table class="messages">
+<tr>
+<td class="time">15:44:21.913</td>
+<td class="info level">INFO</td>
+<td class="msg">Page title is 'Login Page'.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000046">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000046_unfoldlink" onclick="toggle_child_visibility('kw000046');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000046_foldlink" onclick="toggle_child_visibility('kw000046');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Login Should Fail </span>
+<span class="arg">${EMPTY}, ${VALID PASSWD}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000046_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.913 / 20110124 15:44:22.069 / 00:00:00.156</td></tr>
+</table>
+<table class="keyword" id="kw000047">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000047_unfoldlink" onclick="toggle_child_visibility('kw000047');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000047_foldlink" onclick="toggle_child_visibility('kw000047');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Input Username </span>
+<span class="arg">${username}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000047_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.913 / 20110124 15:44:21.927 / 00:00:00.014</td></tr>
+</table>
+<table class="keyword" id="kw000048">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000048_unfoldlink" onclick="toggle_child_visibility('kw000048');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000048_foldlink" onclick="toggle_child_visibility('kw000048');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000045">
+<tr>
 <td>
-<div class="indent" id="kw000045_children" style="display: none;">
+<div class="indent" id="kw000048_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.329 / 20100428 02:54:56.369 / 00:00:00.040</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.913 / 20110124 15:44:21.927 / 00:00:00.014</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:56.369</td>
+<td class="time">15:44:21.927</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text '' into text field 'username_field'</td>
 </tr>
@@ -1723,42 +1810,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000046">
+<table class="keyword" id="kw000049">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000046_unfoldlink" onclick="toggle_child_visibility('kw000046');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000046_foldlink" onclick="toggle_child_visibility('kw000046');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000049_unfoldlink" onclick="toggle_child_visibility('kw000049');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000049_foldlink" onclick="toggle_child_visibility('kw000049');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">${password}</span>
 </td>
 </tr>
-<tr id="kw000046">
+<tr>
 <td>
-<div class="indent" id="kw000046_children" style="display: none;">
+<div class="indent" id="kw000049_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.370 / 20100428 02:54:56.400 / 00:00:00.030</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.927 / 20110124 15:44:21.960 / 00:00:00.033</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000047">
+<table class="keyword" id="kw000050">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000047_unfoldlink" onclick="toggle_child_visibility('kw000047');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000047_foldlink" onclick="toggle_child_visibility('kw000047');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000050_unfoldlink" onclick="toggle_child_visibility('kw000050');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000050_foldlink" onclick="toggle_child_visibility('kw000050');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000047">
+<tr>
 <td>
-<div class="indent" id="kw000047_children" style="display: none;">
+<div class="indent" id="kw000050_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.371 / 20100428 02:54:56.399 / 00:00:00.028</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.927 / 20110124 15:44:21.960 / 00:00:00.033</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:56.399</td>
+<td class="time">15:44:21.960</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'mode' into text field 'password_field'</td>
 </tr>
@@ -1771,42 +1858,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000048">
+<table class="keyword" id="kw000051">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000048_unfoldlink" onclick="toggle_child_visibility('kw000048');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000048_foldlink" onclick="toggle_child_visibility('kw000048');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000051_unfoldlink" onclick="toggle_child_visibility('kw000051');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000051_foldlink" onclick="toggle_child_visibility('kw000051');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000048">
+<tr>
 <td>
-<div class="indent" id="kw000048_children" style="display: none;">
+<div class="indent" id="kw000051_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.400 / 20100428 02:54:56.627 / 00:00:00.227</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.960 / 20110124 15:44:22.022 / 00:00:00.062</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000049">
+<table class="keyword" id="kw000052">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000049_unfoldlink" onclick="toggle_child_visibility('kw000049');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000049_foldlink" onclick="toggle_child_visibility('kw000049');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000052_unfoldlink" onclick="toggle_child_visibility('kw000052');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000052_foldlink" onclick="toggle_child_visibility('kw000052');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Click Button </span>
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000049">
+<tr>
 <td>
-<div class="indent" id="kw000049_children" style="display: none;">
+<div class="indent" id="kw000052_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.401 / 20100428 02:54:56.627 / 00:00:00.226</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:21.960 / 20110124 15:44:22.022 / 00:00:00.062</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:56.626</td>
+<td class="time">15:44:22.022</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -1819,132 +1906,56 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000050">
-<td>
-<div class="foldingbutton" id="kw000050_unfoldlink" onclick="toggle_child_visibility('kw000050');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000050_foldlink" onclick="toggle_child_visibility('kw000050');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Location Should Be </span>
-<span class="arg"><a href="http://${HOST}/error.html">http://${HOST}/error.html</a></span>
-</td>
-</tr>
-<tr id="kw000050">
-<td>
-<div class="indent" id="kw000050_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.628 / 20100428 02:54:56.819 / 00:00:00.191</td></tr>
-</table>
-<table class="messages">
+<table class="keyword" id="kw000053">
 <tr>
-<td class="time">02:54:56.818</td>
-<td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/error.html">http://localhost:7272/error.html</a>'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000051">
-<td>
-<div class="foldingbutton" id="kw000051_unfoldlink" onclick="toggle_child_visibility('kw000051');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000051_foldlink" onclick="toggle_child_visibility('kw000051');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Error Page</span>
-</td>
-</tr>
-<tr id="kw000051">
-<td>
-<div class="indent" id="kw000051_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.820 / 20100428 02:54:56.837 / 00:00:00.017</td></tr>
-</table>
-<table class="messages">
-<tr>
-<td class="time">02:54:56.836</td>
-<td class="info level">INFO</td>
-<td class="msg">Page title is 'Error Page'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000052">
-<td>
-<div class="foldingbutton" id="kw000052_unfoldlink" onclick="toggle_child_visibility('kw000052');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000052_foldlink" onclick="toggle_child_visibility('kw000052');" style="display: block;">+</div>
-<span class="pass">TEARDOWN: </span>
-<span class="name">resource.Go To Login Page </span>
-<span class="arg"></span>
-</td>
-</tr>
-<tr id="kw000052">
-<td>
-<div class="indent" id="kw000052_children" style="display: none;">
-<table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.838 / 20100428 02:54:57.056 / 00:00:00.218</td></tr>
-</table>
-<table class="keyword">
-<tr id="kw000053">
 <td>
 <div class="foldingbutton" id="kw000053_unfoldlink" onclick="toggle_child_visibility('kw000053');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000053_foldlink" onclick="toggle_child_visibility('kw000053');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Go To </span>
-<span class="arg">${LOGIN URL}</span>
+<span class="name">SeleniumLibrary.Location Should Be </span>
+<span class="arg">${ERROR URL}</span>
 </td>
 </tr>
-<tr id="kw000053">
+<tr>
 <td>
 <div class="indent" id="kw000053_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:56.839 / 20100428 02:54:57.040 / 00:00:00.201</td></tr>
+<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.022 / 20110124 15:44:22.052 / 00:00:00.030</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.039</td>
+<td class="time">15:44:22.052</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/error.html">http://localhost:7272/html/error.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000054">
+<table class="keyword" id="kw000054">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000054_unfoldlink" onclick="toggle_child_visibility('kw000054');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000054_foldlink" onclick="toggle_child_visibility('kw000054');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Login Page</span>
+<span class="arg">Error Page</span>
 </td>
 </tr>
-<tr id="kw000054">
+<tr>
 <td>
 <div class="indent" id="kw000054_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.040 / 20100428 02:54:57.056 / 00:00:00.016</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.052 / 20110124 15:44:22.069 / 00:00:00.017</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.055</td>
+<td class="time">15:44:22.069</td>
 <td class="info level">INFO</td>
-<td class="msg">Page title is 'Login Page'.</td>
+<td class="msg">Page title is 'Error Page'.</td>
 </tr>
 </table>
 </div>
@@ -1974,61 +1985,137 @@
 <div class="indent" id="test000005_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login.Empty Password</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.057 / 20100428 02:54:57.690 / 00:00:00.633</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.069 / 20110124 15:44:22.319 / 00:00:00.250</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000055">
+<table class="keyword" id="kw000055">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000055_unfoldlink" onclick="toggle_child_visibility('kw000055');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000055_foldlink" onclick="toggle_child_visibility('kw000055');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">Login Should Fail </span>
-<span class="arg">${VALID USER}, ${EMPTY}</span>
+<span class="pass">SETUP: </span>
+<span class="name">html_resource.Go To Login Page </span>
+<span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000055">
+<tr>
 <td>
 <div class="indent" id="kw000055_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.058 / 20100428 02:54:57.460 / 00:00:00.402</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.069 / 20110124 15:44:22.147 / 00:00:00.078</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000056">
+<table class="keyword" id="kw000056">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000056_unfoldlink" onclick="toggle_child_visibility('kw000056');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000056_foldlink" onclick="toggle_child_visibility('kw000056');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
-<span class="arg">${username}</span>
+<span class="name">SeleniumLibrary.Go To </span>
+<span class="arg">${LOGIN URL}</span>
 </td>
 </tr>
-<tr id="kw000056">
+<tr>
 <td>
 <div class="indent" id="kw000056_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.059 / 20100428 02:54:57.088 / 00:00:00.029</td></tr>
+<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.069 / 20110124 15:44:22.131 / 00:00:00.062</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000057">
+<table class="messages">
+<tr>
+<td class="time">15:44:22.115</td>
+<td class="info level">INFO</td>
+<td class="msg">Opening url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000057">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000057_unfoldlink" onclick="toggle_child_visibility('kw000057');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000057_foldlink" onclick="toggle_child_visibility('kw000057');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">SeleniumLibrary.Title Should Be </span>
+<span class="arg">Login Page</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000057_children" style="display: none;">
+<table class="metadata">
+<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.131 / 20110124 15:44:22.147 / 00:00:00.016</td></tr>
+</table>
+<table class="messages">
+<tr>
+<td class="time">15:44:22.147</td>
+<td class="info level">INFO</td>
+<td class="msg">Page title is 'Login Page'.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000058">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000058_unfoldlink" onclick="toggle_child_visibility('kw000058');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000058_foldlink" onclick="toggle_child_visibility('kw000058');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Login Should Fail </span>
+<span class="arg">${VALID USER}, ${EMPTY}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000058_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.147 / 20110124 15:44:22.319 / 00:00:00.172</td></tr>
+</table>
+<table class="keyword" id="kw000059">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000059_unfoldlink" onclick="toggle_child_visibility('kw000059');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000059_foldlink" onclick="toggle_child_visibility('kw000059');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Input Username </span>
+<span class="arg">${username}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000059_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.147 / 20110124 15:44:22.177 / 00:00:00.030</td></tr>
+</table>
+<table class="keyword" id="kw000060">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000060_unfoldlink" onclick="toggle_child_visibility('kw000060');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000060_foldlink" onclick="toggle_child_visibility('kw000060');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000057">
+<tr>
 <td>
-<div class="indent" id="kw000057_children" style="display: none;">
+<div class="indent" id="kw000060_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.060 / 20100428 02:54:57.088 / 00:00:00.028</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.163 / 20110124 15:44:22.177 / 00:00:00.014</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.087</td>
+<td class="time">15:44:22.177</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'demo' into text field 'username_field'</td>
 </tr>
@@ -2041,42 +2128,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000058">
+<table class="keyword" id="kw000061">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000058_unfoldlink" onclick="toggle_child_visibility('kw000058');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000058_foldlink" onclick="toggle_child_visibility('kw000058');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000061_unfoldlink" onclick="toggle_child_visibility('kw000061');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000061_foldlink" onclick="toggle_child_visibility('kw000061');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">${password}</span>
 </td>
 </tr>
-<tr id="kw000058">
+<tr>
 <td>
-<div class="indent" id="kw000058_children" style="display: none;">
+<div class="indent" id="kw000061_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.088 / 20100428 02:54:57.126 / 00:00:00.038</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.177 / 20110124 15:44:22.194 / 00:00:00.017</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000059">
+<table class="keyword" id="kw000062">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000059_unfoldlink" onclick="toggle_child_visibility('kw000059');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000059_foldlink" onclick="toggle_child_visibility('kw000059');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000062_unfoldlink" onclick="toggle_child_visibility('kw000062');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000062_foldlink" onclick="toggle_child_visibility('kw000062');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000059">
+<tr>
 <td>
-<div class="indent" id="kw000059_children" style="display: none;">
+<div class="indent" id="kw000062_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.090 / 20100428 02:54:57.126 / 00:00:00.036</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.177 / 20110124 15:44:22.194 / 00:00:00.017</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.125</td>
+<td class="time">15:44:22.194</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text '' into text field 'password_field'</td>
 </tr>
@@ -2089,42 +2176,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000060">
+<table class="keyword" id="kw000063">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000060_unfoldlink" onclick="toggle_child_visibility('kw000060');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000060_foldlink" onclick="toggle_child_visibility('kw000060');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000063_unfoldlink" onclick="toggle_child_visibility('kw000063');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000063_foldlink" onclick="toggle_child_visibility('kw000063');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000060">
+<tr>
 <td>
-<div class="indent" id="kw000060_children" style="display: none;">
+<div class="indent" id="kw000063_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.127 / 20100428 02:54:57.277 / 00:00:00.150</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.194 / 20110124 15:44:22.272 / 00:00:00.078</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000061">
+<table class="keyword" id="kw000064">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000061_unfoldlink" onclick="toggle_child_visibility('kw000061');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000061_foldlink" onclick="toggle_child_visibility('kw000061');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000064_unfoldlink" onclick="toggle_child_visibility('kw000064');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000064_foldlink" onclick="toggle_child_visibility('kw000064');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Click Button </span>
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000061">
+<tr>
 <td>
-<div class="indent" id="kw000061_children" style="display: none;">
+<div class="indent" id="kw000064_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.127 / 20100428 02:54:57.276 / 00:00:00.149</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.210 / 20110124 15:44:22.272 / 00:00:00.062</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.276</td>
+<td class="time">15:44:22.272</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -2137,132 +2224,56 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000062">
-<td>
-<div class="foldingbutton" id="kw000062_unfoldlink" onclick="toggle_child_visibility('kw000062');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000062_foldlink" onclick="toggle_child_visibility('kw000062');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Location Should Be </span>
-<span class="arg"><a href="http://${HOST}/error.html">http://${HOST}/error.html</a></span>
-</td>
-</tr>
-<tr id="kw000062">
-<td>
-<div class="indent" id="kw000062_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.277 / 20100428 02:54:57.403 / 00:00:00.126</td></tr>
-</table>
-<table class="messages">
+<table class="keyword" id="kw000065">
 <tr>
-<td class="time">02:54:57.403</td>
-<td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/error.html">http://localhost:7272/error.html</a>'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000063">
-<td>
-<div class="foldingbutton" id="kw000063_unfoldlink" onclick="toggle_child_visibility('kw000063');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000063_foldlink" onclick="toggle_child_visibility('kw000063');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Error Page</span>
-</td>
-</tr>
-<tr id="kw000063">
-<td>
-<div class="indent" id="kw000063_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.404 / 20100428 02:54:57.459 / 00:00:00.055</td></tr>
-</table>
-<table class="messages">
-<tr>
-<td class="time">02:54:57.459</td>
-<td class="info level">INFO</td>
-<td class="msg">Page title is 'Error Page'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000064">
-<td>
-<div class="foldingbutton" id="kw000064_unfoldlink" onclick="toggle_child_visibility('kw000064');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000064_foldlink" onclick="toggle_child_visibility('kw000064');" style="display: block;">+</div>
-<span class="pass">TEARDOWN: </span>
-<span class="name">resource.Go To Login Page </span>
-<span class="arg"></span>
-</td>
-</tr>
-<tr id="kw000064">
-<td>
-<div class="indent" id="kw000064_children" style="display: none;">
-<table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.460 / 20100428 02:54:57.690 / 00:00:00.230</td></tr>
-</table>
-<table class="keyword">
-<tr id="kw000065">
 <td>
 <div class="foldingbutton" id="kw000065_unfoldlink" onclick="toggle_child_visibility('kw000065');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000065_foldlink" onclick="toggle_child_visibility('kw000065');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Go To </span>
-<span class="arg">${LOGIN URL}</span>
+<span class="name">SeleniumLibrary.Location Should Be </span>
+<span class="arg">${ERROR URL}</span>
 </td>
 </tr>
-<tr id="kw000065">
+<tr>
 <td>
 <div class="indent" id="kw000065_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.461 / 20100428 02:54:57.535 / 00:00:00.074</td></tr>
+<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.272 / 20110124 15:44:22.288 / 00:00:00.016</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.535</td>
+<td class="time">15:44:22.288</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/error.html">http://localhost:7272/html/error.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000066">
+<table class="keyword" id="kw000066">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000066_unfoldlink" onclick="toggle_child_visibility('kw000066');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000066_foldlink" onclick="toggle_child_visibility('kw000066');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Login Page</span>
+<span class="arg">Error Page</span>
 </td>
 </tr>
-<tr id="kw000066">
+<tr>
 <td>
 <div class="indent" id="kw000066_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.536 / 20100428 02:54:57.690 / 00:00:00.154</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.288 / 20110124 15:44:22.319 / 00:00:00.031</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.689</td>
+<td class="time">15:44:22.319</td>
 <td class="info level">INFO</td>
-<td class="msg">Page title is 'Login Page'.</td>
+<td class="msg">Page title is 'Error Page'.</td>
 </tr>
 </table>
 </div>
@@ -2292,61 +2303,137 @@
 <div class="indent" id="test000006_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Invalid Login.Empty Username And Password</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.691 / 20100428 02:54:58.472 / 00:00:00.781</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.319 / 20110124 15:44:22.552 / 00:00:00.233</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000067">
+<table class="keyword" id="kw000067">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000067_unfoldlink" onclick="toggle_child_visibility('kw000067');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000067_foldlink" onclick="toggle_child_visibility('kw000067');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">Login Should Fail </span>
-<span class="arg">${EMPTY}, ${EMPTY}</span>
+<span class="pass">SETUP: </span>
+<span class="name">html_resource.Go To Login Page </span>
+<span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000067">
+<tr>
 <td>
 <div class="indent" id="kw000067_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.692 / 20100428 02:54:58.374 / 00:00:00.682</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.319 / 20110124 15:44:22.381 / 00:00:00.062</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000068">
+<table class="keyword" id="kw000068">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000068_unfoldlink" onclick="toggle_child_visibility('kw000068');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000068_foldlink" onclick="toggle_child_visibility('kw000068');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
-<span class="arg">${username}</span>
+<span class="name">SeleniumLibrary.Go To </span>
+<span class="arg">${LOGIN URL}</span>
 </td>
 </tr>
-<tr id="kw000068">
+<tr>
 <td>
 <div class="indent" id="kw000068_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.694 / 20100428 02:54:57.791 / 00:00:00.097</td></tr>
+<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.319 / 20110124 15:44:22.365 / 00:00:00.046</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000069">
+<table class="messages">
+<tr>
+<td class="time">15:44:22.365</td>
+<td class="info level">INFO</td>
+<td class="msg">Opening url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000069">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000069_unfoldlink" onclick="toggle_child_visibility('kw000069');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000069_foldlink" onclick="toggle_child_visibility('kw000069');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">SeleniumLibrary.Title Should Be </span>
+<span class="arg">Login Page</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000069_children" style="display: none;">
+<table class="metadata">
+<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.365 / 20110124 15:44:22.381 / 00:00:00.016</td></tr>
+</table>
+<table class="messages">
+<tr>
+<td class="time">15:44:22.381</td>
+<td class="info level">INFO</td>
+<td class="msg">Page title is 'Login Page'.</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table class="keyword" id="kw000070">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000070_unfoldlink" onclick="toggle_child_visibility('kw000070');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000070_foldlink" onclick="toggle_child_visibility('kw000070');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Login Should Fail </span>
+<span class="arg">${EMPTY}, ${EMPTY}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000070_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.381 / 20110124 15:44:22.552 / 00:00:00.171</td></tr>
+</table>
+<table class="keyword" id="kw000071">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000071_unfoldlink" onclick="toggle_child_visibility('kw000071');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000071_foldlink" onclick="toggle_child_visibility('kw000071');" style="display: block;">+</div>
+<span class="pass">KEYWORD: </span>
+<span class="name">html_resource.Input Username </span>
+<span class="arg">${username}</span>
+</td>
+</tr>
+<tr>
+<td>
+<div class="indent" id="kw000071_children" style="display: none;">
+<table class="metadata">
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.381 / 20110124 15:44:22.413 / 00:00:00.032</td></tr>
+</table>
+<table class="keyword" id="kw000072">
+<tr>
+<td>
+<div class="foldingbutton" id="kw000072_unfoldlink" onclick="toggle_child_visibility('kw000072');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000072_foldlink" onclick="toggle_child_visibility('kw000072');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000069">
+<tr>
 <td>
-<div class="indent" id="kw000069_children" style="display: none;">
+<div class="indent" id="kw000072_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.695 / 20100428 02:54:57.791 / 00:00:00.096</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.381 / 20110124 15:44:22.413 / 00:00:00.032</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.790</td>
+<td class="time">15:44:22.413</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text '' into text field 'username_field'</td>
 </tr>
@@ -2359,42 +2446,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000070">
+<table class="keyword" id="kw000073">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000070_unfoldlink" onclick="toggle_child_visibility('kw000070');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000070_foldlink" onclick="toggle_child_visibility('kw000070');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000073_unfoldlink" onclick="toggle_child_visibility('kw000073');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000073_foldlink" onclick="toggle_child_visibility('kw000073');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">${password}</span>
 </td>
 </tr>
-<tr id="kw000070">
+<tr>
 <td>
-<div class="indent" id="kw000070_children" style="display: none;">
+<div class="indent" id="kw000073_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.792 / 20100428 02:54:57.812 / 00:00:00.020</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.413 / 20110124 15:44:22.427 / 00:00:00.014</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000071">
+<table class="keyword" id="kw000074">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000071_unfoldlink" onclick="toggle_child_visibility('kw000071');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000071_foldlink" onclick="toggle_child_visibility('kw000071');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000074_unfoldlink" onclick="toggle_child_visibility('kw000074');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000074_foldlink" onclick="toggle_child_visibility('kw000074');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Input Text </span>
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000071">
+<tr>
 <td>
-<div class="indent" id="kw000071_children" style="display: none;">
+<div class="indent" id="kw000074_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.793 / 20100428 02:54:57.812 / 00:00:00.019</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.413 / 20110124 15:44:22.427 / 00:00:00.014</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:57.811</td>
+<td class="time">15:44:22.427</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text '' into text field 'password_field'</td>
 </tr>
@@ -2407,42 +2494,42 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000072">
+<table class="keyword" id="kw000075">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000072_unfoldlink" onclick="toggle_child_visibility('kw000072');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000072_foldlink" onclick="toggle_child_visibility('kw000072');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000075_unfoldlink" onclick="toggle_child_visibility('kw000075');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000075_foldlink" onclick="toggle_child_visibility('kw000075');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000072">
+<tr>
 <td>
-<div class="indent" id="kw000072_children" style="display: none;">
+<div class="indent" id="kw000075_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.813 / 20100428 02:54:58.056 / 00:00:00.243</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.427 / 20110124 15:44:22.506 / 00:00:00.079</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000073">
+<table class="keyword" id="kw000076">
+<tr>
 <td>
-<div class="foldingbutton" id="kw000073_unfoldlink" onclick="toggle_child_visibility('kw000073');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000073_foldlink" onclick="toggle_child_visibility('kw000073');" style="display: block;">+</div>
+<div class="foldingbutton" id="kw000076_unfoldlink" onclick="toggle_child_visibility('kw000076');" style="display: none;">-</div>
+<div class="foldingbutton" id="kw000076_foldlink" onclick="toggle_child_visibility('kw000076');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Click Button </span>
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000073">
+<tr>
 <td>
-<div class="indent" id="kw000073_children" style="display: none;">
+<div class="indent" id="kw000076_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:57.813 / 20100428 02:54:58.055 / 00:00:00.242</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.427 / 20110124 15:44:22.506 / 00:00:00.079</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:58.055</td>
+<td class="time">15:44:22.506</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -2455,132 +2542,56 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000074">
-<td>
-<div class="foldingbutton" id="kw000074_unfoldlink" onclick="toggle_child_visibility('kw000074');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000074_foldlink" onclick="toggle_child_visibility('kw000074');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Location Should Be </span>
-<span class="arg"><a href="http://${HOST}/error.html">http://${HOST}/error.html</a></span>
-</td>
-</tr>
-<tr id="kw000074">
-<td>
-<div class="indent" id="kw000074_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.056 / 20100428 02:54:58.347 / 00:00:00.291</td></tr>
-</table>
-<table class="messages">
+<table class="keyword" id="kw000077">
 <tr>
-<td class="time">02:54:58.347</td>
-<td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/error.html">http://localhost:7272/error.html</a>'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000075">
-<td>
-<div class="foldingbutton" id="kw000075_unfoldlink" onclick="toggle_child_visibility('kw000075');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000075_foldlink" onclick="toggle_child_visibility('kw000075');" style="display: block;">+</div>
-<span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Error Page</span>
-</td>
-</tr>
-<tr id="kw000075">
-<td>
-<div class="indent" id="kw000075_children" style="display: none;">
-<table class="metadata">
-<tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.348 / 20100428 02:54:58.374 / 00:00:00.026</td></tr>
-</table>
-<table class="messages">
-<tr>
-<td class="time">02:54:58.373</td>
-<td class="info level">INFO</td>
-<td class="msg">Page title is 'Error Page'.</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</td>
-</tr>
-</table>
-<table class="keyword">
-<tr id="kw000076">
-<td>
-<div class="foldingbutton" id="kw000076_unfoldlink" onclick="toggle_child_visibility('kw000076');" style="display: none;">-</div>
-<div class="foldingbutton" id="kw000076_foldlink" onclick="toggle_child_visibility('kw000076');" style="display: block;">+</div>
-<span class="pass">TEARDOWN: </span>
-<span class="name">resource.Go To Login Page </span>
-<span class="arg"></span>
-</td>
-</tr>
-<tr id="kw000076">
-<td>
-<div class="indent" id="kw000076_children" style="display: none;">
-<table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.375 / 20100428 02:54:58.472 / 00:00:00.097</td></tr>
-</table>
-<table class="keyword">
-<tr id="kw000077">
 <td>
 <div class="foldingbutton" id="kw000077_unfoldlink" onclick="toggle_child_visibility('kw000077');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000077_foldlink" onclick="toggle_child_visibility('kw000077');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">SeleniumLibrary.Go To </span>
-<span class="arg">${LOGIN URL}</span>
+<span class="name">SeleniumLibrary.Location Should Be </span>
+<span class="arg">${ERROR URL}</span>
 </td>
 </tr>
-<tr id="kw000077">
+<tr>
 <td>
 <div class="indent" id="kw000077_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Navigates the active browser instance to the provided URL.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.375 / 20100428 02:54:58.443 / 00:00:00.068</td></tr>
+<tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.506 / 20110124 15:44:22.538 / 00:00:00.032</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:58.442</td>
+<td class="time">15:44:22.538</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/error.html">http://localhost:7272/html/error.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000078">
+<table class="keyword" id="kw000078">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000078_unfoldlink" onclick="toggle_child_visibility('kw000078');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000078_foldlink" onclick="toggle_child_visibility('kw000078');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
 <span class="name">SeleniumLibrary.Title Should Be </span>
-<span class="arg">Login Page</span>
+<span class="arg">Error Page</span>
 </td>
 </tr>
-<tr id="kw000078">
+<tr>
 <td>
 <div class="indent" id="kw000078_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.443 / 20100428 02:54:58.471 / 00:00:00.028</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.538 / 20110124 15:44:22.552 / 00:00:00.014</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:54:58.471</td>
+<td class="time">15:44:22.552</td>
 <td class="info level">INFO</td>
-<td class="msg">Page title is 'Login Page'.</td>
+<td class="msg">Page title is 'Error Page'.</td>
 </tr>
 </table>
 </div>
@@ -2615,8 +2626,8 @@
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Valid Login</td></tr>
 <tr><th>Documentation:</th><td>A test suite with a single test for valid login. This test has a workflow that is created using keywords from the resource file.</td></tr>
-<tr><th>Source:</th><td><a href="login_tests/valid_login.txt">/home/peke/Devel/seleniumlibrary/demo/login_tests/valid_login.txt</a></td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.504 / 20100428 02:55:06.123 / 00:00:07.619</td></tr>
+<tr><th>Source:</th><td><a href="login_tests/valid_login.txt">d:\pekkalau\devel\selib\demo\login_tests\valid_login.txt</a></td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.740 / 20110124 15:44:31.585 / 00:00:08.845</td></tr>
 <tr><th>Overall Status:</th><td class="pass">PASS</td></tr>
 <tr><th>Message:</th><td>1&nbsp;critical&nbsp;test,&nbsp;1&nbsp;passed,&nbsp;<span>0&nbsp;failed</span><br />1&nbsp;test&nbsp;total,&nbsp;1&nbsp;passed,&nbsp;<span>0&nbsp;failed</span></td></tr>
 </table>
@@ -2635,27 +2646,27 @@
 <div class="indent" id="test000007_children" style="display: none;">
 <table class="metadata">
 <tr><th>Full Name:</th><td>Login Tests.Valid Login.Valid Login</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.582 / 20100428 02:55:06.122 / 00:00:07.540</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.740 / 20110124 15:44:31.585 / 00:00:08.845</td></tr>
 <tr><th>Status:</th><td class="pass">PASS (critical)</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000079">
+<table class="keyword" id="kw000079">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000079_unfoldlink" onclick="toggle_child_visibility('kw000079');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000079_foldlink" onclick="toggle_child_visibility('kw000079');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Open Login Page </span>
+<span class="name">html_resource.Open Login Page </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000079">
+<tr>
 <td>
 <div class="indent" id="kw000079_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.583 / 20100428 02:55:05.516 / 00:00:06.933</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.740 / 20110124 15:44:31.147 / 00:00:08.407</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000080">
+<table class="keyword" id="kw000080">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000080_unfoldlink" onclick="toggle_child_visibility('kw000080');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000080_foldlink" onclick="toggle_child_visibility('kw000080');" style="display: block;">+</div>
@@ -2664,26 +2675,26 @@
 <span class="arg">${LOGIN URL}, ${BROWSER}</span>
 </td>
 </tr>
-<tr id="kw000080">
+<tr>
 <td>
 <div class="indent" id="kw000080_children" style="display: none;">
 <table class="metadata">
-<tr><th>Documentation:</th><td>Opens a new browser instance to given url.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:54:58.583 / 20100428 02:55:05.339 / 00:00:06.756</td></tr>
+<tr><th>Documentation:</th><td>Opens a new browser instance to given URL.</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:22.740 / 20110124 15:44:31.085 / 00:00:08.345</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:05.339</td>
+<td class="time">15:44:31.085</td>
 <td class="info level">INFO</td>
-<td class="msg">Opening browser 'firefox' to base url '<a href="http://localhost:7272/index.html">http://localhost:7272/index.html</a>'</td>
+<td class="msg">Opening browser 'firefox' to base url '<a href="http://localhost:7272/html/">http://localhost:7272/html/</a>'</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000081">
+<table class="keyword" id="kw000081">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000081_unfoldlink" onclick="toggle_child_visibility('kw000081');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000081_foldlink" onclick="toggle_child_visibility('kw000081');" style="display: block;">+</div>
@@ -2692,19 +2703,19 @@
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000081">
+<tr>
 <td>
 <div class="indent" id="kw000081_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Maximizes current browser window.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.340 / 20100428 02:55:05.402 / 00:00:00.062</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.085 / 20110124 15:44:31.099 / 00:00:00.014</td></tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000082">
+<table class="keyword" id="kw000082">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000082_unfoldlink" onclick="toggle_child_visibility('kw000082');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000082_foldlink" onclick="toggle_child_visibility('kw000082');" style="display: block;">+</div>
@@ -2713,19 +2724,19 @@
 <span class="arg">${DELAY}</span>
 </td>
 </tr>
-<tr id="kw000082">
+<tr>
 <td>
 <div class="indent" id="kw000082_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Sets the delay that is waited after each Selenium command.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.402 / 20100428 02:55:05.413 / 00:00:00.011</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.099 / 20110124 15:44:31.115 / 00:00:00.016</td></tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000083">
+<table class="keyword" id="kw000083">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000083_unfoldlink" onclick="toggle_child_visibility('kw000083');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000083_foldlink" onclick="toggle_child_visibility('kw000083');" style="display: block;">+</div>
@@ -2734,16 +2745,16 @@
 <span class="arg">Login Page</span>
 </td>
 </tr>
-<tr id="kw000083">
+<tr>
 <td>
 <div class="indent" id="kw000083_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.414 / 20100428 02:55:05.516 / 00:00:00.102</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.115 / 20110124 15:44:31.147 / 00:00:00.032</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:05.516</td>
+<td class="time">15:44:31.147</td>
 <td class="info level">INFO</td>
 <td class="msg">Page title is 'Login Page'.</td>
 </tr>
@@ -2756,24 +2767,24 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000084">
+<table class="keyword" id="kw000084">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000084_unfoldlink" onclick="toggle_child_visibility('kw000084');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000084_foldlink" onclick="toggle_child_visibility('kw000084');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Username </span>
+<span class="name">html_resource.Input Username </span>
 <span class="arg">demo</span>
 </td>
 </tr>
-<tr id="kw000084">
+<tr>
 <td>
 <div class="indent" id="kw000084_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.517 / 20100428 02:55:05.553 / 00:00:00.036</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.147 / 20110124 15:44:31.177 / 00:00:00.030</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000085">
+<table class="keyword" id="kw000085">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000085_unfoldlink" onclick="toggle_child_visibility('kw000085');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000085_foldlink" onclick="toggle_child_visibility('kw000085');" style="display: block;">+</div>
@@ -2782,16 +2793,16 @@
 <span class="arg">username_field, ${username}</span>
 </td>
 </tr>
-<tr id="kw000085">
+<tr>
 <td>
 <div class="indent" id="kw000085_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.518 / 20100428 02:55:05.552 / 00:00:00.034</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.147 / 20110124 15:44:31.177 / 00:00:00.030</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:05.552</td>
+<td class="time">15:44:31.177</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'demo' into text field 'username_field'</td>
 </tr>
@@ -2804,24 +2815,24 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000086">
+<table class="keyword" id="kw000086">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000086_unfoldlink" onclick="toggle_child_visibility('kw000086');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000086_foldlink" onclick="toggle_child_visibility('kw000086');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Input Password </span>
+<span class="name">html_resource.Input Password </span>
 <span class="arg">mode</span>
 </td>
 </tr>
-<tr id="kw000086">
+<tr>
 <td>
 <div class="indent" id="kw000086_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.553 / 20100428 02:55:05.618 / 00:00:00.065</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.177 / 20110124 15:44:31.240 / 00:00:00.063</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000087">
+<table class="keyword" id="kw000087">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000087_unfoldlink" onclick="toggle_child_visibility('kw000087');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000087_foldlink" onclick="toggle_child_visibility('kw000087');" style="display: block;">+</div>
@@ -2830,16 +2841,16 @@
 <span class="arg">password_field, ${password}</span>
 </td>
 </tr>
-<tr id="kw000087">
+<tr>
 <td>
 <div class="indent" id="kw000087_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Types the given `text` into text field identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.554 / 20100428 02:55:05.618 / 00:00:00.064</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.177 / 20110124 15:44:31.240 / 00:00:00.063</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:05.617</td>
+<td class="time">15:44:31.240</td>
 <td class="info level">INFO</td>
 <td class="msg">Typing text 'mode' into text field 'password_field'</td>
 </tr>
@@ -2852,24 +2863,24 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000088">
+<table class="keyword" id="kw000088">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000088_unfoldlink" onclick="toggle_child_visibility('kw000088');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000088_foldlink" onclick="toggle_child_visibility('kw000088');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Submit Credentials </span>
+<span class="name">html_resource.Submit Credentials </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000088">
+<tr>
 <td>
 <div class="indent" id="kw000088_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.619 / 20100428 02:55:06.040 / 00:00:00.421</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.240 / 20110124 15:44:31.335 / 00:00:00.095</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000089">
+<table class="keyword" id="kw000089">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000089_unfoldlink" onclick="toggle_child_visibility('kw000089');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000089_foldlink" onclick="toggle_child_visibility('kw000089');" style="display: block;">+</div>
@@ -2878,16 +2889,16 @@
 <span class="arg">login_button</span>
 </td>
 </tr>
-<tr id="kw000089">
+<tr>
 <td>
 <div class="indent" id="kw000089_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Clicks a button identified by `locator`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:05.619 / 20100428 02:55:06.040 / 00:00:00.421</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.240 / 20110124 15:44:31.335 / 00:00:00.095</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:06.039</td>
+<td class="time">15:44:31.335</td>
 <td class="info level">INFO</td>
 <td class="msg">Clicking button 'login_button'.</td>
 </tr>
@@ -2900,24 +2911,24 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000090">
+<table class="keyword" id="kw000090">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000090_unfoldlink" onclick="toggle_child_visibility('kw000090');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000090_foldlink" onclick="toggle_child_visibility('kw000090');" style="display: block;">+</div>
 <span class="pass">KEYWORD: </span>
-<span class="name">resource.Welcome Page Should Be Open </span>
+<span class="name">html_resource.Welcome Page Should Be Open </span>
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000090">
+<tr>
 <td>
 <div class="indent" id="kw000090_children" style="display: none;">
 <table class="metadata">
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:06.041 / 20100428 02:55:06.091 / 00:00:00.050</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.335 / 20110124 15:44:31.397 / 00:00:00.062</td></tr>
 </table>
-<table class="keyword">
-<tr id="kw000091">
+<table class="keyword" id="kw000091">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000091_unfoldlink" onclick="toggle_child_visibility('kw000091');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000091_foldlink" onclick="toggle_child_visibility('kw000091');" style="display: block;">+</div>
@@ -2926,26 +2937,26 @@
 <span class="arg">${WELCOME URL}</span>
 </td>
 </tr>
-<tr id="kw000091">
+<tr>
 <td>
 <div class="indent" id="kw000091_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current URL is exactly `url`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:06.041 / 20100428 02:55:06.063 / 00:00:00.022</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.335 / 20110124 15:44:31.381 / 00:00:00.046</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:06.063</td>
+<td class="time">15:44:31.381</td>
 <td class="info level">INFO</td>
-<td class="msg">Current location is '<a href="http://localhost:7272/welcome.html">http://localhost:7272/welcome.html</a>'.</td>
+<td class="msg">Current location is '<a href="http://localhost:7272/html/welcome.html">http://localhost:7272/html/welcome.html</a>'.</td>
 </tr>
 </table>
 </div>
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000092">
+<table class="keyword" id="kw000092">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000092_unfoldlink" onclick="toggle_child_visibility('kw000092');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000092_foldlink" onclick="toggle_child_visibility('kw000092');" style="display: block;">+</div>
@@ -2954,16 +2965,16 @@
 <span class="arg">Welcome Page</span>
 </td>
 </tr>
-<tr id="kw000092">
+<tr>
 <td>
 <div class="indent" id="kw000092_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Verifies that current page title equals `title`.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:06.064 / 20100428 02:55:06.090 / 00:00:00.026</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.381 / 20110124 15:44:31.397 / 00:00:00.016</td></tr>
 </table>
 <table class="messages">
 <tr>
-<td class="time">02:55:06.090</td>
+<td class="time">15:44:31.397</td>
 <td class="info level">INFO</td>
 <td class="msg">Page title is 'Welcome Page'.</td>
 </tr>
@@ -2976,8 +2987,8 @@
 </td>
 </tr>
 </table>
-<table class="keyword">
-<tr id="kw000093">
+<table class="keyword" id="kw000093">
+<tr>
 <td>
 <div class="foldingbutton" id="kw000093_unfoldlink" onclick="toggle_child_visibility('kw000093');" style="display: none;">-</div>
 <div class="foldingbutton" id="kw000093_foldlink" onclick="toggle_child_visibility('kw000093');" style="display: block;">+</div>
@@ -2986,12 +2997,12 @@
 <span class="arg"></span>
 </td>
 </tr>
-<tr id="kw000093">
+<tr>
 <td>
 <div class="indent" id="kw000093_children" style="display: none;">
 <table class="metadata">
 <tr><th>Documentation:</th><td>Closes the current browser.</td></tr>
-<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20100428 02:55:06.091 / 20100428 02:55:06.122 / 00:00:00.031</td></tr>
+<tr><th>Start&nbsp;/&nbsp;End&nbsp;/&nbsp;Elapsed:</th><td>20110124 15:44:31.397 / 20110124 15:44:31.585 / 00:00:00.188</td></tr>
 </table>
 </div>
 </td>
