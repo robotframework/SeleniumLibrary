@@ -38,7 +38,7 @@ class Flex(RunOnFailure):
 
         Because this keyword waits until the selected application is active,
         it is recommended to use this if the page where the application is
-        located is reloaded. The timeout to wait is same Selenium timeou thatt
+        located is reloaded. The timeout used is the same Selenium timeout that
         can be set in `importing` and with `Set Selenium Timeout` keyword.
 
         The application is found using `locator` that must be either `id` or
@@ -84,7 +84,7 @@ class Flex(RunOnFailure):
         self._flex_command('flexAssertDisplayObject', locator)
 
     def flex_element_should_not_exist(self, locator):
-        """Verifies that an element cannot be found by `locator`.
+        """Verifies that an element is not found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
@@ -144,7 +144,7 @@ class Flex(RunOnFailure):
         `value` specifies the value to select. By default the value is selected
         by `label` attribute (i.e. visible text). Other supported value
         locators are `index`, `text`, `data` and `value`. To use them, you need
-        to prefix the value with the locator type like `index=1`. 
+        to prefix the value with the locator type like `index=1`.
 
         Examples:
         | Select From Flex Element | Text          | # Select by visible text |
