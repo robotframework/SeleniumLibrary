@@ -28,13 +28,24 @@ class Flex(RunOnFailure):
         """Selects Flex application to work with and waits until it is active.
 
         All further Flex keywords will operate on the selected application and
-        you must always use this keyword before them. You must also use this
-        when you want to operate another Flex application...
-        You must always use this keyword before other Flex keywords* and
-        also if you want to 
+        thus you *must always* use this keyword before them. You must also use
+        this keyword when you want to operate another Flex application.
 
+        Because this keyword waits until the selected application is active,
+        it is recommended to use this if the page where the application is
+        located is reloaded. The timeout to wait is same Selenium timeou thatt
+        can be set in `importing` and with `Set Selenium Timeout` keyword.
 
-        `locator` is the value `id` or `name` attribute of the movie in HTML.
+        The application is found using `locator` that must be either `id` or
+        `name` of the application in HTML. Notice that if you have different
+        elements for different browsers (<object> vs. <embed>), you need to
+        use different attributes depending on the browser.
+
+        Example:
+        | Select Flex Application     | exampleFlexApp |
+        | Click Flex Element          | myButton       |
+        | Select Flex Application     | secondFlexApp  |
+        | Flex Element Text Should Be | Hello, Flex!   |
         """
         self.page_should_contain_element(locator)
         # It seems that Selenium timeout is used regardless what's given here
@@ -42,10 +53,10 @@ class Flex(RunOnFailure):
         self._flex_app = locator
 
     def wait_for_flex_element(self, locator, timeout=None):
-        """Wait until an element is found by `locator` or `timeout` expires.
+        """Waits until an element is found by `locator` or `timeout` expires.
 
-        See `introduction` for more information about `timeout` and its
-        default value.
+        See `introduction` for more information about locating Flex elements
+        and timeouts.
         """
         error = "Element '%s' did not appear in %%(timeout)s" % locator
         self._wait_until(lambda: self._flex_element_exists(locator), error, timeout)
@@ -61,14 +72,14 @@ class Flex(RunOnFailure):
             return True
 
     def flex_element_should_exist(self, locator):
-        """Verifies that Flex component can be found by `locator`.
+        """Verifies that an element can be found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexAssertDisplayObject', locator)
 
     def flex_element_should_not_exist(self, locator):
-        """Verifies that Flex component cannot be found by `locator`.
+        """Verifies that an element cannot be found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
@@ -80,50 +91,54 @@ class Flex(RunOnFailure):
             raise AssertionError("Element '%s' exists" % locator)
 
     def click_flex_element(self, locator):
-        """Click the Flex element found by `locator`.
+        """Clicks an element found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexClick', locator)
 
     def double_click_flex_element(self, locator):
-        """Double click the Flex element found by `locator`.
+        """Double clicks an element found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexDoubleClick', locator)
 
     def flex_element_text_should_be(self, locator, expected):
-        """Verifies the value of the text field found by `locator` is `expected`.
+        """Verifies that an element found by `locator` has text `expected`.
 
         See `introduction` about rules for locating Flex elements.
         """
         self._flex_command_with_retry('flexAssertText', locator,
                                       'validator='+expected)
 
-    def flex_element_property_should_be(self, locator, name, expected):
-        """Verifies property value of an element found by `locator`.
+    def flex_element_property_should_be(self, locator, property, expected):
+        """Verifies than an element found by `locator` has correct property.
 
-        `name` is the name of the property and `expected` is the expected
+        `property` is the name of the property and `expected` is the expected
         value.
 
         See `introduction` about rules for locating Flex elements.
         """
         self._flex_command_with_retry('flexAssertProperty', locator,
-                                      'validator=%s|%s' % (name, expected))
+                                      'validator=%s|%s' % (property, expected))
 
     def input_text_into_flex_element(self, locator, text):
-        """Input `value` in the text field found by `locator`.
+        """Inputs `text` into an element found by `locator`.
 
         See `introduction` about rules for locating Flex elements.
         """
         self._flex_command('flexType', locator, 'text='+text)
 
     def select_from_flex_element(self, locator, value):
-        """Select `value` from Flex element found by `locator`.
+        """Select `value` from an element found by `locator`.
 
-        `value` may be either an index, visible text, or associated data of
-        the item to be selected.
+        *TODO*
+
+        `value` may be either an index, a visible text, or associated data of
+        the item to be selected. 
+
+        index=', 'label=', 'text=', 'data=', 'value='
 
         Examples:
         | Select From Flex Element | Text | # Select by visible text |
