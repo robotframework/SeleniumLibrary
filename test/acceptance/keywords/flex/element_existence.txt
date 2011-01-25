@@ -33,6 +33,11 @@ Should Not Exist Fails
     Run Keyword And Expect Error  Element 'staticLabel' exists  Flex Element Should Not Exist  staticLabel
     Run Keyword And Expect Error  Element 'name=stLabel' exists  Flex Element Should Not Exist  name=stLabel
 
+Should Exist With Wildcards
+    Flex Element Should Exist  st*el
+    Flex Element Should Exist  name=st*el
+    Flex Element Should Exist  chain=id:static*er/name:stLabel
+
 *** Keywords ***
 Element Lookup Fails
     [Arguments]  ${locator}  ${error chain}
