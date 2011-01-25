@@ -155,7 +155,7 @@ class Flex(RunOnFailure):
         Retrying is needed because Flex Pilot's asserts sometime fail when done
         immediately after updating components, most often after flexSelect.
         This seems to be the cleanest workaround.
-        """ 
+        """
         maxtime = time.time() + timeout
         while True:
             try:
@@ -177,10 +177,15 @@ class Flex(RunOnFailure):
         self._selenium.do_command(command, [app, opts])
 
     def _get_options(self, locator, option):
-        locator = self._flex_locator(locator)
+        # TODO: Cleanup
+        loctype, locval = self._flex_locator(locator).split('=', 1)
         if option:
-            return '%s, %s' % (locator, option)
-        return locator
+            opttype, optvalue = option.split('=', 1)
+            for spec_char, escape in [('&', '&amp;'), ("'", '&apos;'), ('"', '&quot;'),
+                                      ('<', '&lt;'), ('>', '&gt;')]:
+                optvalue = optvalue.replace(spec_char, escape)
+            return "{'%s': '%s', '%s': '%s'}" % (loctype, locval, opttype, optvalue)
+        return "{'%s': '%s'}" % (loctype, locval)
 
     def _flex_locator(self, locator):
         locator = locator.strip()
