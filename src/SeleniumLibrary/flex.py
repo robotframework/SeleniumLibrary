@@ -136,7 +136,7 @@ class Flex(RunOnFailure):
         *TODO*
 
         `value` may be either an index, a visible text, or associated data of
-        the item to be selected. 
+        the item to be selected.
 
         index=', 'label=', 'text=', 'data=', 'value='
 
@@ -151,13 +151,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
-        self._flex_command('flexSelect', locator, self._choice_locator(value))
-
-    def _choice_locator(self, locator):
-        for prefix in ['index=', 'label=', 'text=', 'data=', 'value=']:
-            if locator.startswith(prefix):
-                return locator
-        return 'label='+locator
+        self._flex_command('flexSelect', locator,
+                           self._flex_locator(value, default='label='))
 
     def _flex_command_with_retry(self, command, locator, opts, timeout=1.0):
         """Retry running `_flex_command` if it fails until `timeout`.
@@ -197,11 +192,8 @@ class Flex(RunOnFailure):
             return "{'%s': '%s', '%s': '%s'}" % (loctype, locval, opttype, optvalue)
         return "{'%s': '%s'}" % (loctype, locval)
 
-    def _flex_locator(self, locator):
+    def _flex_locator(self, locator, default='id='):
         locator = locator.strip()
-        # prefixes gotten from org/flex_pilot/FPLocator.as
-        for prefix in ['id=', 'automationName=', 'name=', 'chain=', 'label=',
-                       'htmlText=']:
-            if locator.startswith(prefix):
-                return locator
-        return 'id=%s' % locator
+        if '=' in locator:
+            return locator
+        return default + locator
