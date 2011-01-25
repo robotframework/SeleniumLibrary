@@ -173,21 +173,24 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
 
     *Locating Flex components*
 
-    Starting from SeleniumLibary 2.6, it is also possible to use SeleniumLibary
-    to test Flex applications inside an embedded Flash player. The rules for
-    locating Flex component vary slightly from those used with normal HTML
-    components.
+    SeleniumLibary 2.6 and newer support testing Adobe Flex and Flash
+    applications using Flex Pilot tool. For more information, including the
+    required bootstrapping, see
+    http://code.google.com/p/robotframework-seleniumlibrary/wiki/FlexTesting
 
-    The main difference is that there are no specific keywords for element types.
-    `Click Flex Element` is used to click any Flex element. Thus there are also
-    no specific key attributes for some Flex element type. Following table
-    describes ways to locate Flex elements:
+    By default Flex elements are located based on `id` they have in Flex source
+    code. Other supported locators are `name`, `automationName`, `text`,
+    `htmlText`, `label` and xpath-like `chain`. To use them, you need to prefix
+    the value with the locator type like `name=example`. Locators also support
+    `*` as a wildcard.
 
-    | Click Flex Element | foo | # Search by id |
-    | Click Flex Element | name=myName | # Search by name |
-    | Click Flex Element | label=Hello! | # Search by label text |
-    | Click Flex Element | htmlText=some text | # Search by rendered HTML text |
-    | Click Flex Element | chain=id:someId/name:someName | # Search for component with name matching `someName` and whose parent component's id is `someId` |
+    Examples:
+    | Click Flex Element | foo          | # Search element by id |
+    | Click Flex Element | name=myName  | # Search element by name |
+    | Click Flex Element | label=Hello! | # Search element by label text |
+    | Click Flex Element | chain=id:someId/name:someName | # Search element first by id and then its child by name |
+    | Click Flex Element | name=wild*   | # Name with wildcard |
+    | Click Flex Element | chain=name:*llo/name:world | # Chain with wildcard |
 
     *Handling page load events*
 

@@ -23,6 +23,11 @@ class NoFlexApplicationSelected(Exception):
 
 class Flex(RunOnFailure):
     _flex_app = None
+    # First locator is the default
+    _flex_element_locators = ['id=', 'name=', 'automationName=', 'label=',
+                              'text=', 'htmlText=', 'chain=']
+    _flex_select_locators = ['label=', 'index=', 'text=', 'data=', 'value=']
+
 
     def select_flex_application(self, locator):
         """Selects Flex application to work with and waits until it is active.
@@ -131,28 +136,26 @@ class Flex(RunOnFailure):
         self._flex_command('flexType', locator, 'text='+text)
 
     def select_from_flex_element(self, locator, value):
-        """Select `value` from an element found by `locator`.
+        """Selects `value` from an element found by `locator`.
 
-        *TODO*
+        `locator` is used for finding the correct Flex element as explained
+        in `introduction`.
 
-        `value` may be either an index, a visible text, or associated data of
-        the item to be selected.
-
-        index=', 'label=', 'text=', 'data=', 'value='
+        `value` specifies the value to select. By default the value is selected
+        by `label` attribute (i.e. visible text). Other supported value
+        locators are `index`, `text`, `data` and `value`. To use them, you need
+        to prefix the value with the locator type like `index=1`. 
 
         Examples:
-        | Select From Flex Element | Text | # Select by visible text |
-        | Select From Flex Element | index=1 | # Select by index |
+        | Select From Flex Element | Text          | # Select by visible text |
+        | Select From Flex Element | index=1       | # Select by index |
         | Select From Flex Element | data=someData | # Select by associated data |
 
-        *NOTE* This keyword generates mx.events.ListEvent.CHANGE event, which
-        means that event handlers associated with opening or closing a drop down
-        menu will not be executed.
-
-        See `introduction` about rules for locating Flex elements.
+        *NOTE:* This keyword only generates `mx.events.ListEvent.CHANGE` event.
+        Event handlers associated with open or close events are thus not executed.
         """
         self._flex_command('flexSelect', locator,
-                           self._flex_locator(value, default='label='))
+                           self._flex_locator(value, self._flex_select_locators))
 
     def _flex_command_with_retry(self, command, locator, opts, timeout=1.0):
         """Retry running `_flex_command` if it fails until `timeout`.
@@ -192,8 +195,9 @@ class Flex(RunOnFailure):
             return "{'%s': '%s', '%s': '%s'}" % (loctype, locval, opttype, optvalue)
         return "{'%s': '%s'}" % (loctype, locval)
 
-    def _flex_locator(self, locator, default='id='):
+    def _flex_locator(self, locator, prefixes=_flex_element_locators):
         locator = locator.strip()
-        if '=' in locator:
-            return locator
-        return default + locator
+        for prefix in prefixes:
+            if locator.startswith(prefix):
+                return locator
+        return prefixes[0] + locator
