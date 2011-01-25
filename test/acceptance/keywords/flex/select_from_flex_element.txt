@@ -25,6 +25,12 @@ Select by data
     data=${GREETING IN KLINGON}  ${GREETING IN KLINGON}
     value=${GREETING IN ENGLISH}  ${GREETING IN ENGLISH}
 
+Verify change after selection multiple times
+    [Documentation]  FlexPilot has a bug in asserting element properties right after they have been changed, which may result in error message like "There was problem with your parameters". We have a workaround in SeleniumLibrary, and this test verifies the workaround.
+    : FOR  ${ignored}  IN RANGE  10
+    \  index=${KLINGON INDEX}  ${GREETING IN KLINGON}
+    \  index=${ENGLISH INDEX}  ${GREETING IN ENGLISH}
+
 *** Keywords ***
 Select Default Language
     Select Language and Verify Greeting  English  ${GREETING IN ENGLISH}
