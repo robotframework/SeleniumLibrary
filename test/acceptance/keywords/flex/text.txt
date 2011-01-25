@@ -19,3 +19,9 @@ Text in flex should be fails
 Text in flex should be when element doesn't exist
     Run Keyword And Expect Error  ERROR: The chain 'id:nonExisting' was not found.  Flex Element Text Should Be  nonExisting  Whatever
 
+Text in flex with special characters in value
+    ${specials}=  Set Variable  special:, '= " |! (){}[]<> &
+    ${specials escaped}=  Set Variable  special:, &apos;= &quot; |! (){}[]&lt;&gt; &amp;
+    Flex Element Text Should Be  specialChars  ${specials}
+    Run Keyword And Expect Error  ERROR: Expected "${specials escaped} wrong", got "${specials escaped}"  Flex Element Text Should Be  specialChars  ${specials} wrong
+
