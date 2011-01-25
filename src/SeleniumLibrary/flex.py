@@ -22,21 +22,24 @@ class NoFlexApplicationSelected(Exception):
 
 
 class Flex(RunOnFailure):
+    _flex_app = None
 
-    def select_flex_application(self, locator, alias=None):
-        """Select flex application to work with.
+    def select_flex_application(self, locator):
+        """Selects Flex application to work with and waits until it is active.
 
-        All further Flex-keywords will operate on the selected application.
+        All further Flex keywords will operate on the selected application and
+        you must always use this keyword before them. You must also use this
+        when you want to operate another Flex application...
+        You must always use this keyword before other Flex keywords* and
+        also if you want to 
+
 
         `locator` is the value `id` or `name` attribute of the movie in HTML.
-
-        Return index if this application that can be used with `Switch Flex
-        Application`
         """
         self.page_should_contain_element(locator)
         # It seems that Selenium timeout is used regardless what's given here
         self._selenium.do_command("waitForFlexReady", [locator, self._timeout])
-        return self._flex_apps.register(locator, alias)
+        self._flex_app = locator
 
     def wait_for_flex_element(self, locator, timeout=None):
         """Wait until an element is found by `locator` or `timeout` expires.
@@ -56,14 +59,6 @@ class Flex(RunOnFailure):
             return False
         else:
             return True
-
-    def switch_flex_application(self, index_or_alias):
-        """Switches between active flex applications  using index or alias.
-
-        `index_or_alias` is got from `Select Flex Application` and alias can
-        be given to it.
-        """
-        self._flex_apps.switch(index_or_alias)
 
     def flex_element_should_exist(self, locator):
         """Verifies that Flex component can be found by `locator`.
@@ -169,13 +164,12 @@ class Flex(RunOnFailure):
                 break
 
     def _flex_command(self, command, locator, option=None):
-        app = self._flex_apps.current
-        if not app:
+        if not self._flex_app:
             raise NoFlexApplicationSelected
         opts = self._get_options(locator, option)
         self._debug("Executing command '%s' for application '%s' with options '%s'"
-                    % (command, app, opts))
-        self._selenium.do_command(command, [app, opts])
+                    % (command, self._flex_app, opts))
+        self._selenium.do_command(command, [self._flex_app, opts])
 
     def _get_options(self, locator, option):
         # TODO: Cleanup

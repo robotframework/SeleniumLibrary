@@ -281,7 +281,6 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
-        self._flex_apps = utils.ConnectionCache()
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
