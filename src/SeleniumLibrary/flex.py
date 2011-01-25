@@ -163,6 +163,7 @@ class Flex(RunOnFailure):
             except Exception:
                 if time.time() > maxtime:
                     raise
+                self._debug("Command '%s' failed. Retrying in 0.1s." % command)
                 time.sleep(0.1)
             else:
                 break
