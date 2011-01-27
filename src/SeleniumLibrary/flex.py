@@ -17,17 +17,12 @@ import time
 from runonfailure import RunOnFailure
 
 
-class NoFlexApplicationSelected(Exception):
-    pass
-
-
 class Flex(RunOnFailure):
     _flex_app = None
     # First locator is the default
     _flex_element_locators = ['id=', 'name=', 'automationName=', 'label=',
                               'text=', 'htmlText=', 'chain=']
     _flex_select_locators = ['label=', 'index=', 'text=', 'data=', 'value=']
-
 
     def select_flex_application(self, locator):
         """Selects Flex application to work with and waits until it is active.
@@ -46,16 +41,22 @@ class Flex(RunOnFailure):
         elements for different browsers (<object> vs. <embed>), you need to
         use different attributes depending on the browser.
 
+        The old locator is returned and can be used to switch back to the
+        previous application.
+
         Example:
-        | Select Flex Application     | exampleFlexApp |
-        | Click Flex Element          | myButton       |
-        | Select Flex Application     | secondFlexApp  |
-        | Flex Element Text Should Be | Hello, Flex!   |
+        | Select Flex Application                 | exampleFlexApp |
+        | Click Flex Element                      | myButton       |
+        | ${prev app} | = Select Flex Application | secondFlexApp  |
+        | Flex Element Text Should Be             | Hello, Flex!   |
+        | Select Flex Application                 | ${prev app}    |
         """
-        self.page_should_contain_element(locator)
-        # It seems that Selenium timeout is used regardless what's given here
-        self._selenium.do_command("waitForFlexReady", [locator, self._timeout])
-        self._flex_app = locator
+        self._flex_app, old = locator, self._flex_app
+        if locator:
+            self.page_should_contain_element(locator)
+            # It seems that Selenium timeout is used regardless what's given here
+            self._selenium.do_command("waitForFlexReady", [locator, self._timeout])
+        return old
 
     def wait_for_flex_element(self, locator, timeout=None):
         """Waits until an element is found by `locator` or `timeout` expires.
@@ -63,14 +64,14 @@ class Flex(RunOnFailure):
         See `introduction` for more information about locating Flex elements
         and timeouts.
         """
-        error = "Element '%s' did not appear in %%(timeout)s" % locator
-        self._wait_until(lambda: self._flex_element_exists(locator), error, timeout)
+        self._info("Waiting %s for element '%s' to appear" % (timeout, locator))
+        self._verify_flex_app_selected()
+        error = "Element '%s' did not appear in %%(TIMEOUT)s" % locator
+        self._wait_until(timeout, error, self._flex_element_exists, locator) 
 
     def _flex_element_exists(self, locator):
         try:
             self._flex_command('flexAssertDisplayObject', locator)
-        except NoFlexApplicationSelected:
-            raise
         except Exception:
             return False
         else:
@@ -81,6 +82,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that element '%s' exists" % locator)
         self._flex_command('flexAssertDisplayObject', locator)
 
     def flex_element_should_not_exist(self, locator):
@@ -88,6 +90,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that element '%s' is not found" % locator)
         try:
             self.flex_element_should_exist(locator)
         except Exception:
@@ -100,6 +103,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Clicking element '%s'" % locator)
         self._flex_command('flexClick', locator)
 
     def double_click_flex_element(self, locator):
@@ -107,6 +111,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Double clicking element '%s'" % locator)
         self._flex_command('flexDoubleClick', locator)
 
     def flex_element_text_should_be(self, locator, expected):
@@ -114,6 +119,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that text of element '%s' is exactly '%s'"
+                   % (locator, expected))
         self._flex_command_with_retry('flexAssertText', locator,
                                       'validator='+expected)
 
@@ -125,6 +132,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that element '%s' has property '%s' with value '%s'"
+                   % (locator, property, expected))
         self._flex_command_with_retry('flexAssertProperty', locator,
                                       'validator=%s|%s' % (property, expected))
 
@@ -133,6 +142,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Writing text '%s' into element '%s'" % (text, locator))
         self._flex_command('flexType', locator, 'text='+text)
 
     def select_from_flex_element(self, locator, value):
@@ -154,6 +164,7 @@ class Flex(RunOnFailure):
         *NOTE:* This keyword only generates `mx.events.ListEvent.CHANGE` event.
         Event handlers associated with open or close events are thus not executed.
         """
+        self._info("Selecting '%s' from element '%s'" % (value, locator))
         self._flex_command('flexSelect', locator,
                            self._flex_locator(value, self._flex_select_locators))
 
@@ -161,7 +172,7 @@ class Flex(RunOnFailure):
         """Retry running `_flex_command` if it fails until `timeout`.
 
         Retrying is needed because Flex Pilot's asserts sometime fail when done
-        immediately after updating components, most often after flexSelect.
+        immediately after updating elements, most often after flexSelect.
         This seems to be the cleanest workaround.
         """
         maxtime = time.time() + timeout
@@ -177,12 +188,17 @@ class Flex(RunOnFailure):
                 break
 
     def _flex_command(self, command, locator, option=None):
-        if not self._flex_app:
-            raise NoFlexApplicationSelected
+        app = self._verify_flex_app_selected()
         opts = self._get_options(locator, option)
         self._debug("Executing command '%s' for application '%s' with options '%s'"
-                    % (command, self._flex_app, opts))
-        self._selenium.do_command(command, [self._flex_app, opts])
+                    % (command, app, opts))
+        self._selenium.do_command(command, [app, opts])
+
+    def _verify_flex_app_selected(self):
+        if not self._flex_app:
+            raise RuntimeError('No Flex application selected. Use `Select '
+                               'Flex Application` keyword to select one.')
+        return self._flex_app
 
     def _get_options(self, locator, option):
         # TODO: Cleanup

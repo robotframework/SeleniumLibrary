@@ -3,6 +3,7 @@ Test Setup      Go To Front Page
 Default Tags    assertions
 Resource        ../resource.txt
 
+
 *** Test Cases ***
 Location Should Be
     [Documentation]  LOG 1 Current location is '${FRONT PAGE}'.
@@ -20,13 +21,13 @@ Title Should Be
     Run Keyword And Expect Error  Title should have been 'not a title' but was '(root)/index.html'  Title Should Be  not a title
 
 Page Should Contain
-    [Documentation]  LOG 1 Current page contains text 'needle'. LOG 3.1:2 REGEXP: <head>.*</body>
+    [Documentation]  LOG 1 Current page contains text 'needle'. LOG 3.1:2 REGEXP: (?i)<head>.*</body>
     Page Should Contain  needle
     Page Should Contain  This is the haystack
     Run Keyword And Expect Error  Page should have contained text 'non existing text' but did not  Page Should Contain  non existing text
 
 Page Should Contain With Custom Log Level
-    [Documentation]  LOG 1.1:2 DEBUG REGEXP: <head>.*</body>
+    [Documentation]  LOG 1.1:2 DEBUG REGEXP: (?i)<head>.*</body>
     Run Keyword And Expect Error  Page should have contained text 'non existing text' but did not  Page Should Contain  non existing text  DEBUG
 
 Page Should Contain With Disabling Source Logging
@@ -40,12 +41,12 @@ Page Should Contain With Frames
     Page Should Contain  You're looking at right.
 
 Page Should Not Contain
-    [Documentation]  LOG 1:2 Current page does not contain text 'non existing text'. LOG 2.1:1 REGEXP: <head>.*</body>
+    [Documentation]  LOG 1:2 Current page does not contain text 'non existing text'. LOG 2.1:1 REGEXP: (?i)<head>.*</body>
     Page Should Not Contain  non existing text
     Run Keyword And Expect Error  Page should not have contained text 'needle'  Page Should Not Contain  needle
 
 Page Should Not Contain With Custom Log Level
-    [Documentation]  LOG 1.1 DEBUG REGEXP: <head>.*</body>
+    [Documentation]  LOG 1.1 DEBUG REGEXP: (?i)<head>.*</body>
     Run Keyword And Expect Error  Page should not have contained text 'needle'  Page Should Not Contain  needle  DEBUG
 
 Page Should Not Contain With Disabling Source Logging

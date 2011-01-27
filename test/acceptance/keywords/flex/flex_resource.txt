@@ -2,25 +2,23 @@
 Resource        ../../resource.txt
 
 *** Variables ***
-${Component App}  componentApp
-${Dynamic App}  dynamicApp
+${COMPONENT APP}      componentApp
+${DYNAMIC APP}        dynamicApp
+${NO FLEX APP ERROR}  No Flex application selected. Use `Select Flex Application` keyword to select one.
+
 
 *** Keywords ***
 Select Component Application
     Go To  ${ROOT}/flex/components.html
-    Select Flex Application  ${Component App}
+    Select Flex Application  ${COMPONENT APP}
 
 Select Dynamic Application
     Go To  ${ROOT}/flex/dynamicflex.html
-    Select Flex Application  ${Dynamic App}
+    Select Flex Application  ${DYNAMIC APP}
 
 Select Language
     [Arguments]  ${lang}
     Select From Flex Element  languageComboBox  ${lang}
-
-Select Login Application
-    Go To  ${ROOT}/flex/flex.html
-    Select Flex Application  loginApp
 
 Go To Page With Multiple Flex Apps
     Go To   ${ROOT}/flex/multipleapps.html

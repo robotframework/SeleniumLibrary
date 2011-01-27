@@ -1,0 +1,12 @@
+*** Settings ***
+Resource        ../../resource.txt
+
+*** Keywords ***
+Run Table Keyword With Different Locators
+    [Arguments]  ${keyword}  ${table id}  @{args}
+    Run Keyword  ${keyword}  ${table id}  @{args}
+    ${xpath}=  Get Table XPath  ${table id}
+    Run Keyword  ${keyword}  ${xpath}  @{args}
+
+Get Table XPath  [Arguments]  ${table id}
+    [Return]  xpath=//table[@id="${table id}"]

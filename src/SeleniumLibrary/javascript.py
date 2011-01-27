@@ -12,10 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-import time
 import os.path
-
-from robot import utils
 
 from runonfailure import RunOnFailure
 
@@ -134,7 +131,7 @@ class JavaScript(RunOnFailure):
         Element` and BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Condition '%s' did not become true in %%(timeout)s" \
-                % condition
-        self._wait_until(lambda: self._selenium.get_eval(condition) == 'true',
-                         error, timeout)
+            error = "Condition '%s' did not become true in %%(TIMEOUT)s" % condition
+        self._wait_until(timeout, error,
+                         lambda: self._selenium.get_eval(condition) == 'true')
+

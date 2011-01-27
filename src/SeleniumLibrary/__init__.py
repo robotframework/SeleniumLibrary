@@ -143,11 +143,10 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     *Locating elements*
 
     All keywords in SeleniumLibrary that need to find an element on the page
-    take an argument, `locator`. This chapter explains how this `locator` is
-    used to find components on the page. In the most common case, `locator` is
+    take an argument, `locator`. In the most common case, `locator` is
     matched against the values of key attributes of the particular element type.
-    For example, `id` and `name` are key attributes to all elements, and locating
-    components is easy using just the `id` as a `locator`.
+    For example, `id` and `name` are key attributes to all elements, and
+    locating elements is easy using just the `id` as a `locator`.
 
     Asterisk character may be used as a wildcard in locators, but it only works
     as the last character of the expression. In the middle of the locator it
@@ -163,15 +162,16 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     | Select Checkbox | xpath=//table[0]/input[@name='my_checkbox'] | # Using XPath |
     | Click Image     | dom=document.images[56] | # Using a DOM expression |
 
-    All table related keywords (`Table Should Contain`, etc.) allow to identity a table either by
-    the id of the table element, or by a css locator. Both of the following examples work. It's not
-    possible to use an xpath or dom expression, since the table keywords use a css locator internally.
+    Table related keywords, such as `Table Should Contain`, allow identifying
+    tables either by an id, by a CSS locator, or by an XPath expression.
+    The XPath support was added in SeleniumLibrary 2.6.
 
-    Table Examples:
-    | Table Should Contain | tableID | $ 43,00 |
+    Examples:
+    | Table Should Contain | tableID | text |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
+    | Table Should Contain | xpath=//table/[@name="myTable"] | text |
 
-    *Locating Flex components*
+    *Locating Flex elements*
 
     SeleniumLibary 2.6 and newer support testing Adobe Flex and Flash
     applications using Flex Pilot tool. For more information, including the
@@ -593,11 +593,11 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     def _error_contains(self, exception, message):
         return message in self._get_error_message(exception)
 
-    def _wait_until(self, callable, error, timeout=None):
+    def _wait_until(self, timeout, error, function, *args):
         timeout = self._get_timeout(timeout)
-        error = error % {'timeout': utils.secs_to_timestr(timeout)}
+        error = error % {'TIMEOUT': utils.secs_to_timestr(timeout)}
         maxtime = time.time() + timeout
-        while not callable():
+        while not function(*args):
             if time.time() > maxtime:
                 raise AssertionError(error)
             time.sleep(0.2)
@@ -607,6 +607,12 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
             return utils.timestr_to_secs(timeout)
         return self._timeout
 
+    def _log_list(self, items, what='item'):
+        msg = ['Altogether %d %s%s.' % (len(items), what, ['s',''][len(items)==1])]
+        for index, item in enumerate(items):
+            msg.append('%d: %s' % (index+1, item))
+        self._info('\n'.join(msg))
+        return items
 
 class _NoBrowser(object):
     set_timeout = lambda self, timeout: None

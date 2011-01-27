@@ -5,18 +5,28 @@ Resource        flex_resource.txt
 
 *** Test Cases ***
 Using Flex commands without selecting application
-    Run Keyword And Expect Error  NoFlexApplicationSelected  Click Flex Element  someComponent
+    No Flex Application Should Be Selected
 
 Select application
-    Select Flex Application  ${Component App}
-    Component Application Should Be Selected
-    Select Flex Application  ${Dynamic App}
-    Dynamic App Should Be Selected
-
+    [Template]  Test Selecting Application
+    ${COMPONENT APP}  ${None}          Component Application Should Be Selected
+    ${DYNAMIC APP}    ${COMPONENTAPP}  Dynamic Application Should Be Selected
+    ${None}           ${DYNAMIC APP}   No Flex Application Should Be Selected
 
 *** Keywords ***
+
+No Flex Application Should Be Selected
+    Run Keyword And Expect Error  ${NO FLEX APP ERROR}  Click Flex Element  someComponent
+
 Component Application Should Be Selected
     Flex Element Should Exist  languageComboBox
 
-Dynamic App Should Be Selected
+Dynamic Application Should Be Selected
     Flex Element Should Exist  clickCountLabel
+
+Test Selecting Application
+    [Arguments]  ${newapp}  ${oldapp}  ${application should be selected}
+    ${old} =  Select Flex Application  ${newapp}
+    Should Be Equal  ${old}  ${oldapp}
+    Run Keyword  ${application should be selected}
+

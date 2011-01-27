@@ -92,10 +92,12 @@ Click Link With Text And Image
     Verify Location Is "index.html"
 
 Target Opens in New Window
+    Cannot Be Executed in IE
     Click Link  Target opens in new window  dont wait
+    Get Window Titles
     Select Window  ${INDEX TITLE}
     Verify Location Is "index.html"
-    [Teardown]  Run Keywords  Close Window  Select Window
+    [Teardown]  Run Keyword If Test Passed  Run Keywords  Close Window  Select Window
 
 Wait Until Page Loaded
     Click Link  Relative  and don't wait
