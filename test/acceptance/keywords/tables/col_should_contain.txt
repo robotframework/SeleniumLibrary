@@ -3,12 +3,13 @@ Resource        table_resource.txt
 
 *** Test Cases ***
 Should Find Text In Specific Column
-    Table Column Should Contain  simpleTable  2  simpleTable_B2
-    Table Column Should Contain  simpleWithNested  2  nestedTable_A1
-    Table Column Should Contain  nestedTable  3  nestedTable_C1
-    Table Column Should Contain  tableWithSingleHeader  1  tableWithSingleHeader_A1
-    Table Column Should Contain  tableWithSingleHeader  1  tableWithSingleHeader_A3
-    Table Column Should Contain  tableWithTwoHeaders  2  tableWithTwoHeaders_B2
+    [Template]  Table Column Should Contain with Different Locators
+    simpleTable  2  simpleTable_B2
+    simpleWithNested  2  nestedTable_A1
+    nestedTable  3  nestedTable_C1
+    tableWithSingleHeader  1  tableWithSingleHeader_A1
+    tableWithSingleHeader  1  tableWithSingleHeader_A3
+    tableWithTwoHeaders  2  tableWithTwoHeaders_B2
 
 Should Give Error Message When Content Not Found In Table Column
     Run Keyword And Expect Error  Column #2 in table identified by 'simpleTable' should have contained text 'simpleTable_C3'.  Table Column Should Contain  simpleTable  2  simpleTable_C3
@@ -16,3 +17,7 @@ Should Give Error Message When Content Not Found In Table Column
 Should Give Error Message When Column Number Out Of Bounds
     Run Keyword And Expect Error  Column #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.  Table Column Should Contain  simpleTable  20  simpleTable_B3
 
+*** Keywords ***
+Table Column Should Contain with Different Locators
+    [Arguments]  ${table id}  ${col}  ${expected}
+    Run Table Keyword with Different Locators  Table Column Should Contain  ${table id}  ${col}  ${expected}
