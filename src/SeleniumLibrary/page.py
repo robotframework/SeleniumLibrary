@@ -95,9 +95,8 @@ class Page(RunOnFailure):
         BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Text '%s' did not appear in %%(timeout)s" % text
-        self._wait_until(lambda: self._selenium.is_text_present(text),
-                         error, timeout)
+            error = "Text '%s' did not appear in %%(TIMEOUT)s" % text
+        self._wait_until(timeout, error, self._selenium.is_text_present, text)
 
     def wait_until_page_contains_element(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` appears on current page.
@@ -112,10 +111,9 @@ class Page(RunOnFailure):
         BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Element '%s' did not appear in %%(timeout)s" % locator
+            error = "Element '%s' did not appear in %%(TIMEOUT)s" % locator
         locator = self._parse_locator(locator)
-        self._wait_until(lambda: self._selenium.is_element_present(locator),
-                         error, timeout)
+        self._wait_until(timeout, error, self._selenium.is_element_present, locator)
 
     def page_should_contain(self, text, loglevel='INFO'):
         """Verifies that current page contains `text`.
