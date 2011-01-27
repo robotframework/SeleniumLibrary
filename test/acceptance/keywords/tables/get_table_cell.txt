@@ -3,19 +3,20 @@ Resource        table_resource.txt
 
 *** Test Cases ***
 Should Retrieve Text From Cell
-    Table Cell Should Be Equal  simpleTable  1  1  simpleTable_A1
-    Table Cell Should Be Equal  tableWithSingleHeader  1  1  tableWithSingleHeader_A1
-    Table Cell Should Be Equal  tableWithSingleHeader  3  3  tableWithSingleHeader_C3
-    Table Cell Should Be Equal  withHeadAndFoot  1  2  withHeadAndFoot_BH1
-    Table Cell Should Be Equal  withHeadAndFoot  4  3  withHeadAndFoot_C2
-    Table Cell Should Be Equal  withHeadAndFoot  6  1  withHeadAndFoot_AF1
-    Table Cell Should Be Equal  mergedRows  2  1  mergedRows_B2
-    Table Cell Should Be Equal  mergedCols  1  2  mergedCols_C1
-    Table Cell Should Be Equal  formattedTable  1  1  formattedTable_A1
-    Table Cell Should Be Equal  formattedTable  1  4  formattedTable_D1
-    Table Cell Should Be Equal  formattedTable  2  2  formattedTable_B2
-    Table Cell Should Be Equal  formattedTable  2  3  formattedTable_ÄÖÜäöüß
-    Table Cell Should Be Equal  formattedTable  2  4  äöü€&äöü€&
+    [Template]  Table Cell Should Be Equal with Different Locators
+    simpleTable  1  1  simpleTable_A1
+    tableWithSingleHeader  1  1  tableWithSingleHeader_A1
+    tableWithSingleHeader  3  3  tableWithSingleHeader_C3
+    withHeadAndFoot  1  2  withHeadAndFoot_BH1
+    withHeadAndFoot  4  3  withHeadAndFoot_C2
+    withHeadAndFoot  6  1  withHeadAndFoot_AF1
+    mergedRows  2  1  mergedRows_B2
+    mergedCols  1  2  mergedCols_C1
+    formattedTable  1  1  formattedTable_A1
+    formattedTable  1  4  formattedTable_D1
+    formattedTable  2  2  formattedTable_B2
+    formattedTable  2  3  formattedTable_ÄÖÜäöüß
+    formattedTable  2  4  äöü€&äöü€&
 
 Should Give Error Message When Content Not Found In Table Cell
     Run Keyword And Expect Error  Cell in table 'simpleTable' in row #1 and column #2 should have contained text 'simpleTable_B3'.  Table Cell Should Contain  simpleTable  1  2  simpleTable_B3
@@ -23,17 +24,11 @@ Should Give Error Message When Content Not Found In Table Cell
 Should Give Error Message When Index Out Of Bounds
     Run Keyword And Expect Error  Cell in table 'simpleTable' in row #10 and column #20 should have contained text 'simpleTable_B3'.  Table Cell Should Contain  simpleTable  10  20  simpleTable_B3
 
-Should Identify Table By CSS
-    Table Should Contain  css=table#simpleTable  simpleTable
-    Table Header Should Contain  css=table#tableWithTwoHeaders  tableWithTwoHeaders_C2
-    Table Footer Should Contain  css=table#withHeadAndFoot  withHeadAndFoot_AF1
-    Table Row Should Contain  css=table#mergedRows  1  mergedRows_D1
-    Table Column Should Contain  css=table#mergedCols  1  mergedCols_D1
-    Table Cell Should Contain  css=table#formattedTable  1  1  formattedTable_A1
-    Table Cell Should Be Equal  css=table#formattedTable  2  4  äöü€&äöü€&
-    Table Cell Should Be Equal  css=h2.someClass ~ table:last-child  2  4  äöü€&äöü€&
-
 *** Keywords ***
+Table Cell Should Be Equal with Different Locators
+    [Arguments]  ${tableId}  ${row}  ${col}  ${content}
+    Run Table Keyword with Different Locators  Table Cell Should Be Equal  ${table id}  ${row}  ${col}  ${content}
+    
 Table Cell Should Be Equal
     [Arguments]  ${tableId}  ${row}  ${col}  ${content}
     ${cell}=  Get Table Cell  ${tableId}  ${row}  ${col}

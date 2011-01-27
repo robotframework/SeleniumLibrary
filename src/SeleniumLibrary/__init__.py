@@ -162,13 +162,14 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     | Select Checkbox | xpath=//table[0]/input[@name='my_checkbox'] | # Using XPath |
     | Click Image     | dom=document.images[56] | # Using a DOM expression |
 
-    All table related keywords (`Table Should Contain`, etc.) allow to identity a table either by
-    the id of the table element, or by a css locator. Both of the following examples work. It's not
-    possible to use an xpath or dom expression, since the table keywords use a css locator internally.
+    Table related keywords, such as `Table Should Contain`, allow identifying
+    tables either by an id, by a CSS locator, or by an XPath expression.
+    The XPath support was added in SeleniumLibrary 2.6.
 
-    Table Examples:
-    | Table Should Contain | tableID | $ 43,00 |
+    Examples:
+    | Table Should Contain | tableID | text |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
+    | Table Should Contain | xpath=//table/[@name="myTable"] | text |
 
     *Locating Flex elements*
 
