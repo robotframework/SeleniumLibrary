@@ -17,8 +17,8 @@ from runonfailure import RunOnFailure
 
 class Table(RunOnFailure):
 
-    def table_should_contain(self, table_locator, expected_content, loglevel='INFO'):
-        """Verifies that the `expected content` can be found somewhere in the table.
+    def table_should_contain(self, table_locator, expected, loglevel='INFO'):
+        """Verifies that `expected` can be found somewhere in the table.
 
         To understand how tables are identified, please take a look at
         the `introduction`.
@@ -26,14 +26,13 @@ class Table(RunOnFailure):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        locator = "%s:contains('%s')" % (self._get_table_locator(table_locator),
-                                         expected_content)
-        message = "Table identified by '%s' should have contained text '%s'." \
-            % (table_locator, expected_content)
-        self._page_should_contain_element(locator, 'element', message, loglevel)
+        msg = "Table identified by '%s' should have contained text '%s'." \
+                % (table_locator, expected)
+        locator = TableLocator(table_locator).content(expected)
+        self._page_should_contain_element(locator, 'element', msg, loglevel)
 
-    def table_header_should_contain(self, table_locator, expected_content, loglevel='INFO'):
-        """Verifies that the table header, i.e. any <th>...</th> element, contains the `expected_content`.
+    def table_header_should_contain(self, table_locator, expected, loglevel='INFO'):
+        """Verifies that the table header, i.e. any <th>...</th> element, contains `expected`.
 
         To understand how tables are identified, please take a look at
         the `introduction`.
@@ -41,14 +40,13 @@ class Table(RunOnFailure):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        locator = "%s th:contains('%s')" % (self._get_table_locator(table_locator),
-                                            expected_content)
-        message = ("Header in table identified by '%s' should have contained "
-                   "text '%s'." % (table_locator, expected_content))
-        self._page_should_contain_element(locator, 'element', message, loglevel)
+        msg = ("Header in table identified by '%s' should have contained "
+               "text '%s'." % (table_locator, expected))
+        locator = TableLocator(table_locator).header(expected)
+        self._page_should_contain_element(locator, 'element', msg, loglevel)
 
-    def table_footer_should_contain(self, table_locator, expected_content, loglevel='INFO'):
-        """Verifies that the table footer contains the `expected_content`.
+    def table_footer_should_contain(self, table_locator, expected, loglevel='INFO'):
+        """Verifies that the table footer contains `expected`.
 
         With table footer can be described as any <td>-element that is
         child of a <tfoot>-element.  To understand how tables are
@@ -57,14 +55,13 @@ class Table(RunOnFailure):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        locator = "%s tfoot td:contains('%s')" \
-            % (self._get_table_locator(table_locator), expected_content)
         message = ("Footer in table identified by '%s' should have contained "
-                   "text '%s'." % (table_locator, expected_content))
+                   "text '%s'." % (table_locator, expected))
+        locator = TableLocator(table_locator).footer(expected)
         self._page_should_contain_element(locator, 'element', message, loglevel)
 
-    def table_row_should_contain(self, table_locator, row, expected_content, loglevel='INFO'):
-        """Verifies that a specific table row contains the `expected_content`.
+    def table_row_should_contain(self, table_locator, row, expected, loglevel='INFO'):
+        """Verifies that a specific table row contains `expected`.
 
         The uppermost row is row number 1. For tables that are
         structured with thead, tbody and tfoot, only the tbody section
@@ -79,14 +76,13 @@ class Table(RunOnFailure):
 
         See `Page Should Contain Element` for explanation about `loglevel` argument.
         """
-        locator = "%s tr:nth-child(%s):contains('%s')" \
-            % (self._get_table_locator(table_locator), row, expected_content)
         message = ("Row #%s in table identified by '%s' should have contained "
-                   "text '%s'." % (row, table_locator, expected_content))
+                   "text '%s'." % (row, table_locator, expected))
+        locator = TableLocator(table_locator).row(row, expected)
         self._page_should_contain_element(locator, 'element', message, loglevel)
 
-    def table_column_should_contain(self, table_locator, col, expected_content, loglevel='INFO'):
-        """Verifies that a specific column contains the `expected_content`.
+    def table_column_should_contain(self, table_locator, col, expected, loglevel='INFO'):
+        """Verifies that a specific column contains `expected`.
 
         The first leftmost column is column number 1. If the table
         contains cells that span multiple columns, those merged cells
@@ -104,18 +100,17 @@ class Table(RunOnFailure):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        locator = "%s tr td:nth-child(%s):contains('%s')" \
-            % (self._get_table_locator(table_locator), col, expected_content)
         message = ("Column #%s in table identified by '%s' "
                    "should have contained text '%s'."
-                   % (col, table_locator, expected_content))
+                   % (col, table_locator, expected))
+        locators = TableLocator(table_locator).col(col, expected)
         try:
-            self._page_should_contain_element(locator, 'element', message,
+            self._page_should_contain_element(locators[0], 'element', message,
                                               loglevel)
         except AssertionError:
-            locator = "%s tr th:nth-child(%s):contains('%s')" \
-                % (self._get_table_locator(table_locator), col, expected_content)
-            self._page_should_contain_element(locator, 'element', message,
+            if not len(locators) > 1:
+                raise
+            self._page_should_contain_element(locators[1], 'element', message,
                                               loglevel)
 
     def get_table_cell(self, table_locator, row, column):
@@ -127,12 +122,13 @@ class Table(RunOnFailure):
         understand how tables are identified, please take a look at
         the `introduction`.
         """
-        locator = "%s.%d.%d" % (self._get_table_locator(table_locator),
+        locator = "%s.%d.%d" % (TableLocator(table_locator).locator,
                                 int(row)-1, int(column)-1)
+        self._debug('Using locator: %s' % locator)
         return self._selenium.get_table(locator)
 
-    def table_cell_should_contain(self, table_locator, row, column, expected_content):
-        """Verifies that a certain cell in a table contains the `expected content`.
+    def table_cell_should_contain(self, table_locator, row, column, expected):
+        """Verifies that a certain cell in a table contains `expected`.
 
         Row and Column number start from 1. This keyword passes if the
         specified cell contains the given content. If you want to test
@@ -146,18 +142,50 @@ class Table(RunOnFailure):
         """
         message = ("Cell in table '%s' in row #%s and column #%s "
                    "should have contained text '%s'."
-                   % (table_locator, row, column, expected_content))
+                   % (table_locator, row, column, expected))
         try:
             content = self.get_table_cell(table_locator, row, column)
         except Exception, err:
             self._info(self._get_error_message(err))
             raise AssertionError(message)
         self._info("Cell contains %s." % (content))
-        if expected_content not in content:
+        if expected not in content:
             raise AssertionError(message)
 
-    def _get_table_locator(self, table_locator):
-        if table_locator.startswith("css="):
-            return table_locator
+
+class TableLocator(object):
+    _css_selectors = dict(
+        content = ':contains("%s")',
+        header  = ' th:contains("%s")',
+        footer  = ' tfoot td:contains("%s")',
+        row     = ' tr:nth-child(%s):contains("%s")',
+        col     = [' tr td:nth-child(%s):contains("%s")',
+                   ' tr th:nth-child(%s):contains("%s")']
+    )
+    _xpath_selectors = dict(
+        content = '//*[descendant-or-self::text()="%s"]',
+        header  = '//th[descendant-or-self::text()="%s"]',
+        footer  = '//tfoot//td[descendant-or-self::text()="%s"]',
+        row     = '//tr[%s]//*[descendant-or-self::text()="%s"]',
+        col     = ['//tr//*[self::td or self::th][%s][descendant-or-self::text()="%s"]']
+    )
+
+    def __init__(self, locator):
+        self.locator = self._tablelocator(locator)
+        if self.locator.startswith('xpath='):
+            self._selectors = self._xpath_selectors
         else:
-            return "css=table#%s" % (table_locator)
+            self._selectors = self._css_selectors
+
+    def _tablelocator(self, locator):
+        if locator.startswith('xpath=') or locator.startswith('css='):
+            return locator
+        return 'css=table#%s' % locator
+
+    def __getattr__(self, name):
+        if name not in self._selectors:
+            raise AttributeError(name)
+        selector = self._selectors[name]
+        if isinstance(selector, list):
+            return lambda *args: [self.locator + s % args for s in selector]
+        return lambda *args: self.locator + selector % args
