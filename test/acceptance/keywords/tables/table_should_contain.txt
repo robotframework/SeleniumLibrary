@@ -1,0 +1,30 @@
+*** Settings ***
+Resource        table_resource.txt
+
+*** Test Cases ***
+Should Find Text In Table Content
+    Table Should Contain  simpleTable  simpleTable_A1
+    Table Should Contain  simpleTable  simpleTable_C3
+    Table Should Contain  simpleWithNested  simpleWithNested_A1
+    Table Should Contain  simpleWithNested  nestedTable_A1
+    Table Should Contain  nestedTable  nestedTable_A1
+    Table Should Contain  nestedTable  nestedTable_C3
+    Table Should Contain  tableWithSingleHeader  tableWithSingleHeader_B1
+    Table Should Contain  tableWithSingleHeader  tableWithSingleHeader_B2
+    Table Should Contain  withHeadAndFoot  withHeadAndFoot_AH1
+    Table Should Contain  withHeadAndFoot  withHeadAndFoot_B2
+    Table Should Contain  withHeadAndFoot  withHeadAndFoot_CF1
+    Table Should Contain  mergedRows  mergedRows_A1
+    Table Should Contain  mergedCols  mergedCols_B2
+    Table Should Contain  formattedTable  formattedTable_A1
+    Table Should Contain  formattedTable  formattedTable_B1
+    Table Should Contain  formattedTable  formattedTable_C1
+    Table Should Contain  formattedTable  formattedTable_D1
+    Table Should Contain  formattedTable  formattedTable_A2
+    Table Should Contain  formattedTable  formattedTable_B2
+    Table Should Contain  formattedTable  formattedTable_ÄÖÜäöüß
+    Table Should Contain  formattedTable  äöü€&äöü€&
+
+Should Give Error Message When Content Not Found In Table
+    Run Keyword And Expect Error  Table identified by 'simpleTable' should have contained text 'XXX'.  Table Should Contain  simpleTable  XXX
+

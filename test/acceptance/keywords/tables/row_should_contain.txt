@@ -1,0 +1,32 @@
+*** Settings ***
+Resource        table_resource.txt
+
+*** Test Cases ***
+Should Find Text In Specific Row
+    Table Row Should Contain  simpleTable  1  simpleTable_A1
+    Table Row Should Contain  simpleTable  3  simpleTable_C3
+    Table Row Should Contain  simpleWithNested  1  simpleWithNested_A1
+    Table Row Should Contain  simpleWithNested  1  nestedTable_A1
+    Table Row Should Contain  nestedTable  1  nestedTable_A1
+    Table Row Should Contain  nestedTable  3  nestedTable_C3
+    Table Row Should Contain  tableWithSingleHeader  1  tableWithSingleHeader_B1
+    Table Row Should Contain  tableWithSingleHeader  2  tableWithSingleHeader_B2
+    Table Row Should Contain  withHeadAndFoot  2  withHeadAndFoot_B2
+    Table Row Should Contain  mergedRows  1  mergedRows_A1
+    Table Row Should Contain  mergedCols  2  mergedCols_B2
+    Table Row Should Contain  formattedTable  1  formattedTable_A1
+    Table Row Should Contain  formattedTable  1  formattedTable_B1
+    Table Row Should Contain  formattedTable  1  formattedTable_C1
+    Table Row Should Contain  formattedTable  1  formattedTable_D1
+    Table Row Should Contain  formattedTable  2  formattedTable_A2
+    Table Row Should Contain  formattedTable  2  formattedTable_B2
+    Table Row Should Contain  formattedTable  2  formattedTable_ÄÖÜäöüß
+    Table Row Should Contain  formattedTable  2  äöü€&äöü€&
+
+Should Give Error Message When Content Not Found In Table Row
+    Run Keyword And Expect Error  Row #2 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.  Table Row Should Contain  simpleTable  2  simpleTable_B3
+
+
+Should Give Error Message When Row Number Out Of Bounds
+    Run Keyword And Expect Error  Row #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.  Table Row Should Contain  simpleTable  20  simpleTable_B3
+
