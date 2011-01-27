@@ -20,9 +20,9 @@ try:
 except ImportError:
     subprocess = None  # subprocess not available on Python/Jython < 2.5
 
-#from robot.errors import DataError
-#from robot.variables import GLOBAL_VARIABLES
-#from robot import utils
+from robot.errors import DataError
+from robot.variables import GLOBAL_VARIABLES
+from robot import utils
 from selenium import selenium
 
 from browser import Browser
