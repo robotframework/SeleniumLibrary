@@ -92,6 +92,7 @@ Click Link With Text And Image
     Verify Location Is "index.html"
 
 Target Opens in New Window
+    Cannot Be Executed in IE
     Click Link  Target opens in new window  dont wait
     Get Window Titles
     Select Window  ${INDEX TITLE}

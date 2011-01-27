@@ -84,6 +84,9 @@ class Browser(RunOnFailure):
         | Select Window | popupName |
         | Title Should Be | Popup Title |
         | Select Window |  | | # Chooses the main window again |
+
+        *NOTE:* Selecting windows opened by links with target `_blank` does
+        not seem to work on Internet Explorer.
         """
         if locator.lower() == 'main':
             locator = 'null'
