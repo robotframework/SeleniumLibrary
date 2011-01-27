@@ -1,23 +1,21 @@
 *** Settings ***
 
-Documentation  A resource file containing the demo app specific keywords and variables that create our own domain specific language. Also SeleniumLibrary itself is imported here so that tests only need to import this resource file. This resource implements keywords for testing Flex version of the test application, see html_resource.txt for HTML implementation.
-
-Library        SeleniumLibrary
+Documentation  A resource file containing the application specific keywords
+...            that create our own domain specific language. This resource
+...            implements keywords for testing Flex version of the test
+...            application. Keywords for HTML version are in flex_resource.txt
+...            and common_resource.txt is used to select which one to use.
 
 
 *** Variables ***
 
-${BROWSER}       firefox
-${DELAY}         0
-${HOST}          localhost:7272
-${LOGIN URL}     http://${HOST}/flex/
-${VALID USER}    demo
-${VALID PASSWD}  mode
+${LOGIN URL}             http://${SERVER}/flex/
+${LOGIN FAILED LOCATOR}  chain=name:Alert*/name:AlertForm*/name:UITextField*
 
 
 *** Keywords ***
 
-Open Login Page
+Open Browser To Login Page
     Open Browser  ${LOGIN URL}  ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed  ${DELAY}
@@ -41,9 +39,6 @@ Submit Credentials
 Welcome Page Should Be Open
     Flex Element Should Exist  welcome_text
 
-Login Should Fail  [Arguments]  ${username}  ${password}
-    Input Username  ${username}
-    Input Password  ${password}
-    Submit Credentials
-    Flex Element Text Should Be  chain=name:Alert*/name:AlertForm*/name:UITextField*  Incorrect credentials
+Login Should Have Failed
+    Flex Element Text Should Be  ${LOGIN FAILED LOCATOR}  Incorrect credentials
     Click Flex Element  name=OK
