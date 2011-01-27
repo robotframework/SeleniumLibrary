@@ -28,7 +28,6 @@ class Flex(RunOnFailure):
                               'text=', 'htmlText=', 'chain=']
     _flex_select_locators = ['label=', 'index=', 'text=', 'data=', 'value=']
 
-
     def select_flex_application(self, locator):
         """Selects Flex application to work with and waits until it is active.
 
@@ -64,7 +63,7 @@ class Flex(RunOnFailure):
         and timeouts.
         """
         error = "Element '%s' did not appear in %%(timeout)s" % locator
-        self._wait_until(lambda: self._flex_element_exists(locator), error, timeout)
+        self._wait_until((self._flex_element_exists, locator), error, timeout)
 
     def _flex_element_exists(self, locator):
         try:

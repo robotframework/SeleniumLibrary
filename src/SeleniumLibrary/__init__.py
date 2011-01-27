@@ -593,14 +593,21 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     def _error_contains(self, exception, message):
         return message in self._get_error_message(exception)
 
-    def _wait_until(self, callable, error, timeout=None):
+    def _wait_until(self, function, error, timeout=None):
+        function = self._get_function(function)
         timeout = self._get_timeout(timeout)
         error = error % {'timeout': utils.secs_to_timestr(timeout)}
         maxtime = time.time() + timeout
-        while not callable():
+        while not function():
             if time.time() > maxtime:
                 raise AssertionError(error)
             time.sleep(0.2)
+
+    def _get_function(self, function):
+        if callable(function):
+            return function
+        func, args = function[0], function[1:]
+        return lambda: func(*args)
 
     def _get_timeout(self, timeout=None):
         if timeout:
