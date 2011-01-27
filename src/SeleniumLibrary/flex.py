@@ -41,7 +41,7 @@ class Flex(RunOnFailure):
         elements for different browsers (<object> vs. <embed>), you need to
         use different attributes depending on the browser.
 
-        The old locator is returned and can be used to switch back to the 
+        The old locator is returned and can be used to switch back to the
         previous application.
 
         Example:
@@ -64,6 +64,7 @@ class Flex(RunOnFailure):
         See `introduction` for more information about locating Flex elements
         and timeouts.
         """
+        self._info("Waiting %s for element '%s' to appear" % (timeout, locator))
         self._verify_flex_app_selected()
         error = "Element '%s' did not appear in %%(timeout)s" % locator
         self._wait_until((self._flex_element_exists, locator), error, timeout)
@@ -81,6 +82,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that element '%s' exists" % locator)
         self._flex_command('flexAssertDisplayObject', locator)
 
     def flex_element_should_not_exist(self, locator):
@@ -88,6 +90,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that element '%s' is not found" % locator)
         try:
             self.flex_element_should_exist(locator)
         except Exception:
@@ -100,6 +103,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Clicking element '%s'" % locator)
         self._flex_command('flexClick', locator)
 
     def double_click_flex_element(self, locator):
@@ -107,6 +111,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Double clicking element '%s'" % locator)
         self._flex_command('flexDoubleClick', locator)
 
     def flex_element_text_should_be(self, locator, expected):
@@ -114,6 +119,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that text of element '%s' is exactly '%s'"
+                   % (locator, expected))
         self._flex_command_with_retry('flexAssertText', locator,
                                       'validator='+expected)
 
@@ -125,6 +132,8 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Verifying that element '%s' has property '%s' with value '%s'"
+                   % (locator, property, expected))
         self._flex_command_with_retry('flexAssertProperty', locator,
                                       'validator=%s|%s' % (property, expected))
 
@@ -133,6 +142,7 @@ class Flex(RunOnFailure):
 
         See `introduction` about rules for locating Flex elements.
         """
+        self._info("Writing text '%s' into element '%s'" % (text, locator))
         self._flex_command('flexType', locator, 'text='+text)
 
     def select_from_flex_element(self, locator, value):
@@ -154,6 +164,7 @@ class Flex(RunOnFailure):
         *NOTE:* This keyword only generates `mx.events.ListEvent.CHANGE` event.
         Event handlers associated with open or close events are thus not executed.
         """
+        self._info("Selecting '%s' from element '%s'" % (value, locator))
         self._flex_command('flexSelect', locator,
                            self._flex_locator(value, self._flex_select_locators))
 
