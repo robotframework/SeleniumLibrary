@@ -16,6 +16,3 @@ ${BROWSER}       firefox
 ${DELAY}         0
 ${VALID USER}    demo
 ${VALID PASSWD}  mode
-
-
-
