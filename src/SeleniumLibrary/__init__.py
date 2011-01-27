@@ -143,11 +143,10 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     *Locating elements*
 
     All keywords in SeleniumLibrary that need to find an element on the page
-    take an argument, `locator`. This chapter explains how this `locator` is
-    used to find components on the page. In the most common case, `locator` is
+    take an argument, `locator`. In the most common case, `locator` is
     matched against the values of key attributes of the particular element type.
-    For example, `id` and `name` are key attributes to all elements, and locating
-    components is easy using just the `id` as a `locator`.
+    For example, `id` and `name` are key attributes to all elements, and
+    locating elements is easy using just the `id` as a `locator`.
 
     Asterisk character may be used as a wildcard in locators, but it only works
     as the last character of the expression. In the middle of the locator it
@@ -171,7 +170,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     | Table Should Contain | tableID | $ 43,00 |
     | Table Should Contain | css=h2.someClass ~ table:last-child() | text |
 
-    *Locating Flex components*
+    *Locating Flex elements*
 
     SeleniumLibary 2.6 and newer support testing Adobe Flex and Flash
     applications using Flex Pilot tool. For more information, including the

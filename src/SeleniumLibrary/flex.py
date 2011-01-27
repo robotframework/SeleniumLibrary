@@ -160,7 +160,7 @@ class Flex(RunOnFailure):
         """Retry running `_flex_command` if it fails until `timeout`.
 
         Retrying is needed because Flex Pilot's asserts sometime fail when done
-        immediately after updating components, most often after flexSelect.
+        immediately after updating elements, most often after flexSelect.
         This seems to be the cleanest workaround.
         """
         maxtime = time.time() + timeout
