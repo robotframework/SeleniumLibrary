@@ -607,6 +607,12 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
             return utils.timestr_to_secs(timeout)
         return self._timeout
 
+    def _log_list(self, items, what='item'):
+        msg = ['Altogether %d %s%s.' % (len(items), what, ['s',''][len(items)==1])]
+        for index, item in enumerate(items):
+            msg.append('%d: %s' % (index+1, item))
+        self._info('\n'.join(msg))
+        return items
 
 class _NoBrowser(object):
     set_timeout = lambda self, timeout: None
