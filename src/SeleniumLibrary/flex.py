@@ -67,7 +67,7 @@ class Flex(RunOnFailure):
         self._info("Waiting %s for element '%s' to appear" % (timeout, locator))
         self._verify_flex_app_selected()
         error = "Element '%s' did not appear in %%(TIMEOUT)s" % locator
-        self._wait_until(timeout, error, self._flex_element_exists, locator) 
+        self._wait_until(timeout, error, self._flex_element_exists, locator)
 
     def _flex_element_exists(self, locator):
         try:
@@ -122,7 +122,7 @@ class Flex(RunOnFailure):
         self._info("Verifying that text of element '%s' is exactly '%s'"
                    % (locator, expected))
         self._flex_command_with_retry('flexAssertText', locator,
-                                      'validator='+expected)
+                                      validator=expected)
 
     def flex_element_property_should_be(self, locator, property, expected):
         """Verifies than an element found by `locator` has correct property.
@@ -135,7 +135,7 @@ class Flex(RunOnFailure):
         self._info("Verifying that element '%s' has property '%s' with value '%s'"
                    % (locator, property, expected))
         self._flex_command_with_retry('flexAssertProperty', locator,
-                                      'validator=%s|%s' % (property, expected))
+                                      validator='%s|%s' % (property, expected))
 
     def input_text_into_flex_element(self, locator, text):
         """Inputs `text` into an element found by `locator`.
@@ -143,7 +143,7 @@ class Flex(RunOnFailure):
         See `introduction` about rules for locating Flex elements.
         """
         self._info("Writing text '%s' into element '%s'" % (text, locator))
-        self._flex_command('flexType', locator, 'text='+text)
+        self._flex_command('flexType', locator, text=text)
 
     def select_from_flex_element(self, locator, value):
         """Selects `value` from an element found by `locator`.
@@ -166,9 +166,9 @@ class Flex(RunOnFailure):
         """
         self._info("Selecting '%s' from element '%s'" % (value, locator))
         self._flex_command('flexSelect', locator,
-                           self._flex_locator(value, self._flex_select_locators))
+                           **self._flex_locator(value, self._flex_select_locators))
 
-    def _flex_command_with_retry(self, command, locator, opts, timeout=1.0):
+    def _flex_command_with_retry(self, command, locator, timeout=1.0, **opts):
         """Retry running `_flex_command` if it fails until `timeout`.
 
         Retrying is needed because Flex Pilot's asserts sometime fail when done
@@ -178,7 +178,7 @@ class Flex(RunOnFailure):
         maxtime = time.time() + timeout
         while True:
             try:
-                self._flex_command(command, locator, opts)
+                self._flex_command(command, locator, **opts)
             except Exception:
                 if time.time() > maxtime:
                     raise
@@ -187,9 +187,9 @@ class Flex(RunOnFailure):
             else:
                 break
 
-    def _flex_command(self, command, locator, option=None):
+    def _flex_command(self, command, locator, **options):
         app = self._verify_flex_app_selected()
-        opts = self._get_options(locator, option)
+        opts = self._get_options(locator, options)
         self._debug("Executing command '%s' for application '%s' with options '%s'"
                     % (command, app, opts))
         self._selenium.do_command(command, [app, opts])
@@ -200,20 +200,29 @@ class Flex(RunOnFailure):
                                'Flex Application` keyword to select one.')
         return self._flex_app
 
-    def _get_options(self, locator, option):
-        # TODO: Cleanup
-        loctype, locval = self._flex_locator(locator).split('=', 1)
-        if option:
-            opttype, optvalue = option.split('=', 1)
-            for spec_char, escape in [('&', '&amp;'), ("'", '&apos;'), ('"', '&quot;'),
-                                      ('<', '&lt;'), ('>', '&gt;')]:
-                optvalue = optvalue.replace(spec_char, escape)
-            return "{'%s': '%s', '%s': '%s'}" % (loctype, locval, opttype, optvalue)
-        return "{'%s': '%s'}" % (loctype, locval)
+    def _get_options(self, locator, options):
+        options.update(self._flex_locator(locator))
+        for opt in options:
+            options[opt] = self._html_escape(options[opt])
+        return self._dict_to_js_object(options)
+
+    def _html_escape(self, string):
+        for char, escape in [('&', '&amp;'), ("'", '&apos;'), ('"', '&quot;'),
+                             ('<', '&lt;'), ('>', '&gt;')]:
+            string = string.replace(char, escape)
+        return string
+
+    def _dict_to_js_object(self, dictionary):
+        return str(dict([(str(k), str(dictionary[k])) for k in dictionary]))
 
     def _flex_locator(self, locator, prefixes=_flex_element_locators):
         locator = locator.strip()
+        prefix, value = self._split_flex_locator(locator, prefixes)
+        return {prefix: value}
+
+    def _split_flex_locator(self, locator, prefixes):
         for prefix in prefixes:
             if locator.startswith(prefix):
-                return locator
-        return prefixes[0] + locator
+                return locator.split('=', 1)
+        default_prefix = prefixes[0][:-1]
+        return default_prefix, locator
