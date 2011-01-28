@@ -67,10 +67,14 @@ def start_selenium_server(logfile, jarpath=None, *params):
     None. If None, the jar file distributed with the library will be used.
 
     It is possible to give a list of additional command line options to
-    Selenium Server in `*params`. A custom automation friendly Firefox
-    profile is enabled by default using the `-firefoxProfileTemplate` option.
-    For more information see the documentation of the start_selenium_server
-    method of the Selenium class.
+    Selenium Server in `*params`.
+
+    A custom automation friendly Firefox profile is enabled by default using
+    the `-firefoxProfileTemplate` option.  If there is `user-extensions.js`
+    file in the same directory as the jar, it is loaded automatically using the
+    option `-userExtensions`.  For more information  about these options, see
+    the documentation of the start_selenium_server method of the Selenium
+    class.
 
     Note that this function requires `subprocess` module which is available
     on Python/Jython 2.5 or newer.
@@ -90,7 +94,6 @@ def _server_startup_command(jarpath, *params):
 
 def _add_default_user_extension(jarpath, params):
     extpath = os.path.join(os.path.dirname(jarpath), 'user-extensions.js')
-    #TODO: document automatic addition of user extensions.
     if os.path.isfile(extpath) and '-userExtensions' not in params:
         params.extend(['-userExtensions', extpath])
     return params
@@ -304,6 +307,12 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         custom Firefox profile automatically is a new feature in
         SeleniumLibrary 2.5. For more information see
         http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile
+
+        3) Starting from SeleniumLibrary 2.6, if there is `user-extensions.js`
+        file in the same directory as Selenium Server jar, it is loaded using
+        the `-userExtensions` option.  This is not done if the option is
+        defined in `params`.  By default, such extension file providing Flex
+        testing support is loaded automatically.
 
         Examples:
         | Start Selenium Server | | | # Default settings. Uses the Firefox profile supplied with the library. |
