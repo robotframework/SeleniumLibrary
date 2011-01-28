@@ -83,17 +83,23 @@ class Button(RunOnFailure):
         self._info("Selecting '%s' from radio button '%s'." % (value, group_name))
         xpath = "xpath=//input[@type='radio' and @name='%s' and (@value='%s' or @id='%s')]" \
                  % (group_name, value, value)
+        self._debug('Radio group locator: ' + xpath)
         if not self._selenium.is_checked(xpath):
             self._selenium.click(xpath)
             if wait:
                 self.wait_until_page_loaded()
 
     def radio_button_should_be_set_to(self, group_name, value):
-        """Verifies radio button group identified by `group_name` has its selection set to `value`."""
+        """Verifies radio button group identified by `group_name` has its selection set to `value`.
+
+        See `Select Radio Button` for information about how radio buttons are
+        located. 
+        """
         self._info("Verifying radio button '%s' has selection '%s'." \
                    % (group_name, value))
         xpath = "xpath=//input[@type='radio' and @name='%s' and @value='%s']" \
                     % (group_name, value)
+        self._debug('Radio group locator: ' + xpath)
         if not self._selenium.is_checked(xpath):
             actual_value = self._get_value_of_selected_radio_button(group_name)
             raise AssertionError("Selection of radio button '%s' should have "
@@ -101,7 +107,11 @@ class Button(RunOnFailure):
                                   % (group_name, value, actual_value))
 
     def radio_button_should_not_be_selected(self, group_name):
-        """Verifies radio button group identified by `group_name` has no selection."""
+        """Verifies radio button group identified by `group_name` has no selection.
+
+        See `Select Radio Button` for information about how radio buttons are
+        located. 
+        """
         self._info("Verifying radio button '%s' has no selection." % group_name)
         value = self._get_value_of_selected_radio_button(group_name)
         if value:
@@ -117,7 +127,7 @@ class Button(RunOnFailure):
         num = self._get_number_of_radio_buttons_in_group(group_name)
         for i in range(num):
             xpath = "xpath=//input[@name='%s'][%d]" % (group_name, i+1)
+            self._debug('Radio button locator: ' + xpath)
             if self._selenium.is_checked(xpath):
                 return self._selenium.get_attribute(xpath+'@value')
         return ''
-
