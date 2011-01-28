@@ -1,8 +1,16 @@
-*Setting*
-Resource  resource.txt
-Suite Setup  Start Selenium Server
-Suite Teardown  Stop Selenium Server
-Force Tags  Regression
+*** Setting ***
+Resource          resource.txt
+Suite Setup       Start Selenium Server If Needed
+Suite Teardown    Stop Selenium Server If Needed
+Force Tags        Regression
 
 *** Variables ***
-${FF PROFILE DIR}=  ${CURDIR}${/}..${/}resources${/}firefoxprofile
+${FF PROFILE DIR}=   ${CURDIR}${/}..${/}resources${/}firefoxprofile
+${START SELENIUM} =  yes
+
+*** Keywords ***
+Start Selenium Server If Needed
+    Run Keyword If  "${START SELENIUM}" == "yes"  Start Selenium Server
+
+Stop Selenium Server If Needed
+    Run Keyword If  "${START SELENIUM}" == "yes"  Stop Selenium Server
