@@ -213,7 +213,8 @@ class Flex(RunOnFailure):
         return string
 
     def _dict_to_js_object(self, dictionary):
-        return str(dict([(str(k), str(dictionary[k])) for k in dictionary]))
+        enc = lambda s: s.encode('ISO-8859-1')
+        return str(dict([(enc(k), enc(dictionary[k])) for k in dictionary]))
 
     def _flex_locator(self, locator, prefixes=_flex_element_locators):
         locator = locator.strip()
