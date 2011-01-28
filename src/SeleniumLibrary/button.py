@@ -93,7 +93,7 @@ class Button(RunOnFailure):
         """Verifies radio button group identified by `group_name` has its selection set to `value`.
 
         See `Select Radio Button` for information about how radio buttons are
-        located. 
+        located.
         """
         self._info("Verifying radio button '%s' has selection '%s'." \
                    % (group_name, value))
@@ -110,7 +110,7 @@ class Button(RunOnFailure):
         """Verifies radio button group identified by `group_name` has no selection.
 
         See `Select Radio Button` for information about how radio buttons are
-        located. 
+        located.
         """
         self._info("Verifying radio button '%s' has no selection." % group_name)
         value = self._get_value_of_selected_radio_button(group_name)
@@ -129,5 +129,7 @@ class Button(RunOnFailure):
             xpath = "xpath=//input[@name='%s'][%d]" % (group_name, i+1)
             self._debug('Radio button locator: ' + xpath)
             if self._selenium.is_checked(xpath):
-                return self._selenium.get_attribute(xpath+'@value')
+                # self._selenium.get_attribute(xpath+'@value') doesn't work in IE8
+                js = "window.document.getElementsByName('%s')[%d].value" % (group_name, i)
+                return self._selenium.get_eval(js)
         return ''
