@@ -10,16 +10,20 @@ Input text
     Input Text Into Flex Element  textInput  ${SOME TEXT}
     Flex Element Text Should Be  textInput  ${SOME TEXT}
 
-Text in flex should be with buttons
+Text should be with buttons
     Flex Element Text Should Be  singleClickButton  Click Me!
 
-Text in flex should be fails
+Text should be fails
     Run Keyword And Expect Error  ERROR: Expected "not there", got "Click Me!"  Flex Element Text Should Be  singleClickButton  not there
 
-Text in flex should be when element doesn't exist
+Text should be when element doesn't exist
     Run Keyword And Expect Error  ERROR: The chain 'id:nonExisting' was not found.  Flex Element Text Should Be  nonExisting  Whatever
 
-Text in flex with special characters in value
+Text should be with non-ascii
+    Select From Flex Element  languageComboBox  Finnish
+    Flex Element Text Should Be  greetingLabel  Päivää
+
+Text should be with special characters in value
     ${specials}=  Set Variable  special:, '= " |! (){}[]<> &
     ${specials escaped}=  Set Variable  special:, &apos;= &quot; |! (){}[]&lt;&gt; &amp;
     Flex Element Text Should Be  specialChars  ${specials}
