@@ -1,0 +1,18 @@
+*** Settings ***
+
+Documentation  A resource file with variables common to both HTML and Flex
+...            versions of the application. The correct SUT specific resource
+...            is imported based on ${SUT} variable. SeleniumLibrary is also
+...            imported here so that no other file needs to import it.
+Resource       ${SUT}_resource.txt
+Library        SeleniumLibrary
+
+
+*** Variables ***
+
+${SUT}           html
+${SERVER}        localhost:7272
+${BROWSER}       firefox
+${DELAY}         0
+${VALID USER}    demo
+${VALID PASSWD}  mode

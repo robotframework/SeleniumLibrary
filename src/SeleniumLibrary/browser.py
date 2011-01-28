@@ -56,40 +56,41 @@ class Browser(RunOnFailure):
         self._selenium.window_maximize()
 
     def get_window_names(self):
-        """Returns names of all windows known to the browser."""
-        return self._selenium.get_all_window_names()
+        """Returns and logs names of all windows known to the browser."""
+        return self._log_list(self._selenium.get_all_window_names(), 'name')
 
     def get_window_titles(self):
-        """Returns titles of all windows known to the browser."""
-        return self._selenium.get_all_window_titles()
+        """Returns and logs titles of all windows known to the browser."""
+        return self._log_list(self._selenium.get_all_window_titles(), 'title')
 
     def get_window_identifiers(self):
-        """Returns values of id attributes of all windows known to the browser."""
-        return self._selenium.get_all_window_ids()
+        """Returns and logs id attributes of all windows known to the browser."""
+        return self._log_list(self._selenium.get_all_window_ids(), 'identifier')
 
-    def select_window(self, windowID=None):
-        """Selects the window found with `windowID` as the context of actions.
+    def select_window(self, locator='main'):
+        """Selects the window found with `locator` as the context of actions.
 
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
 
-        `windowID` may be either the title of the window or the name of the window
-        in the JavaScript code that creates it. Name is second argument passed
-        to JavaScript function window.open(). In case of multiple windows with
+        `locator` may be either the title of the window or the name of the window
+        in the JavaScript code that creates it. If multiple windows with
         same identifier are found, the first one is selected.
 
-        To select main window, the argument can be left empty, or name 'main'
-        can be used.
+        Special locator `main` (default) can be used to select the main window.
 
         Example:
         | Click Link | popup_link | don't wait | # opens new window |
         | Select Window | popupName |
         | Title Should Be | Popup Title |
         | Select Window |  | | # Chooses the main window again |
+
+        *NOTE:* Selecting windows opened by links with target `_blank` does
+        not seem to work on Internet Explorer.
         """
-        if not windowID or windowID.lower() == 'main':
-            windowID = 'null'
-        self._selenium.select_window(windowID)
+        if locator.lower() == 'main':
+            locator = 'null'
+        self._selenium.select_window(locator)
 
     def close_window(self):
         """Closes currently opened pop-up window."""

@@ -1,25 +1,22 @@
 *** Settings ***
 
-Documentation  A resource file containing the demo app specific keywords and variables that create our own domain specific language. Also SeleniumLibrary itself is imported here so that tests only need to import this resource file. This resource implements keywords for testing HTML version of the test application, see flex_resource.txt for Flex implementation.
-
-Library        SeleniumLibrary
+Documentation  A resource file containing the application specific keywords
+...            that create our own domain specific language. This resource
+...            implements keywords for testing HTML version of the test
+...            application. Keywords for Flex version are in flex_resource.txt
+...            and common_resource.txt is used to select which one to use.
 
 
 *** Variables ***
 
-${BROWSER}       firefox
-${DELAY}         0
-${HOST}          localhost:7272
-${LOGIN URL}     http://${HOST}/html/
-${WELCOME URL}   http://${HOST}/html/welcome.html
-${ERROR URL}     http://${HOST}/html/error.html
-${VALID USER}    demo
-${VALID PASSWD}  mode
+${LOGIN URL}     http://${SERVER}/html/
+${WELCOME URL}   http://${SERVER}/html/welcome.html
+${ERROR URL}     http://${SERVER}/html/error.html
 
 
 *** Keywords ***
 
-Open Login Page
+Open Browser To Login Page
     Open Browser  ${LOGIN URL}  ${BROWSER}
     Maximize Browser Window
     Set Selenium Speed  ${DELAY}
@@ -42,9 +39,6 @@ Welcome Page Should Be Open
     Location Should Be  ${WELCOME URL}
     Title Should Be  Welcome Page
 
-Login Should Fail  [Arguments]  ${username}  ${password}
-    Input Username  ${username}
-    Input Password  ${password}
-    Submit Credentials
+Login Should Have Failed
     Location Should Be  ${ERROR URL}
     Title Should Be  Error Page
