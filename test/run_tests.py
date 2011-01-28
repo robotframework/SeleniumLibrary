@@ -38,8 +38,9 @@ ARG_VALUES = {'outdir': RESULTDIR, 'pythonpath': SRCDIR}
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     start_http_server()
-    suffix = os.sep == '\\' and 'ybot.bat' or 'ybot'
-    runner = "%s%s" % ('jython' == interpreter and 'j' or 'p', suffix)
+    runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
+    if os.sep == '\\':
+        runner += '.bat'
     execute_tests(runner)
     stop_http_server()
     return process_output()
@@ -52,10 +53,10 @@ def start_http_server():
 def execute_tests(runner):
     if not os.path.exists(RESULTDIR):
         os.mkdir(RESULTDIR)
-    command = [runner] + [ arg % ARG_VALUES for arg in ROBOT_ARGS] + args +\
-            [ TESTDATADIR ]
+    command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [TESTDATADIR]
+    print 'Starting test execution with command:\n' + ' '.join(command)
     syslog = os.path.join(RESULTDIR, 'syslog.txt')
-    call(command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
+    call(command, shell=True, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
     call(['python', HTPPSERVER, 'stop'])
@@ -64,7 +65,7 @@ def process_output():
     print
     call(['python', os.path.join(RESOURCEDIR, 'statuschecker.py'),
          os.path.join(RESULTDIR, 'output.xml')])
-    rebot = os.sep == '\\' and 'rebot.bat' or 'rebot'
+    rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
     rc = call(rebot_cmd, env=os.environ)
@@ -99,7 +100,7 @@ if __name__ ==  '__main__':
     unit_failures = _run_unit_tests()
     if unit_failures:
         _exit(unit_failures)
-    interpreter = ('jython' in sys.argv[1]) and 'jython' or 'python'
+    interpreter = sys.argv[1]
     browser = sys.argv[2].lower()
     args = sys.argv[3:]
     if browser != 'unit':
