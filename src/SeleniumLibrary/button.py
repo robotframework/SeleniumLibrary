@@ -75,8 +75,8 @@ class Button(RunOnFailure):
         //input[@type='radio' and @name='group_name' and (@value='value' or @id='value')]
 
         Examples:
-        | Select Radio Button | size | XL | # Matches HTML like <input type="radio" name="size" value="XL">XL</input>
-        | Select Radio Button | size | sizeXL | # Matches HTML like <input type="radio" name="size" value="XL" id="sizeXL">XL</input>
+        | Select Radio Button | size | XL | # Matches HTML like <input type="radio" name="size" value="XL">XL</input> |
+        | Select Radio Button | size | sizeXL | # Matches HTML like <input type="radio" name="size" value="XL" id="sizeXL">XL</input> |
 
         See `introduction` for details about `wait` argument.
         """
