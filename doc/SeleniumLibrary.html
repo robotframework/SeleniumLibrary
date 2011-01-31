@@ -86,7 +86,7 @@ a {
 </head>
 <body>
 <h1>SeleniumLibrary</h1>
-<b>Version:</b> devel<br>
+<b>Version:</b> 2.6<br>
 <b>Scope:</b> global<br>
 <b>Named arguments: </b>
 supported
@@ -104,7 +104,7 @@ Prior to running test cases using SeleniumLibrary, the Selenium Server must be s
 <br />
 <b>Locating elements</b><br />
 <br />
-All keywords in SeleniumLibrary that need to find an element on the page take an argument, <span class="name">locator</span>. This chapter explains how this <span class="name">locator</span> is used to find components on the page. In the most common case, <span class="name">locator</span> is matched against the values of key attributes of the particular element type. For example, <span class="name">id</span> and <span class="name">name</span> are key attributes to all elements, and locating components is easy using just the <span class="name">id</span> as a <span class="name">locator</span>.<br />
+All keywords in SeleniumLibrary that need to find an element on the page take an argument, <span class="name">locator</span>. In the most common case, <span class="name">locator</span> is matched against the values of key attributes of the particular element type. For example, <span class="name">id</span> and <span class="name">name</span> are key attributes to all elements, and locating elements is easy using just the <span class="name">id</span> as a <span class="name">locator</span>.<br />
 <br />
 Asterisk character may be used as a wildcard in locators, but it only works as the last character of the expression. In the middle of the locator it is interpreted as literal '*'.<br />
 <br />
@@ -134,23 +134,28 @@ Examples:<br />
 </tr>
 </table>
 <br />
-All table related keywords (<a href="#Table Should Contain" class="name">Table Should Contain</a>, etc.) allow to identity a table either by the id of the table element, or by a css locator. Both of the following examples work. It's not possible to use an xpath or dom expression, since the table keywords use a css locator internally.<br />
+Table related keywords, such as <a href="#Table Should Contain" class="name">Table Should Contain</a>, allow identifying tables either by an id, by a CSS locator, or by an XPath expression. The XPath support was added in SeleniumLibrary 2.6.<br />
 <br />
-Table Examples:<br />
+Examples:<br />
 <table border="1" class="doc">
 <tr>
 <td>Table Should Contain</td>
 <td>tableID</td>
-<td>$ 43,00</td>
+<td>text</td>
 </tr>
 <tr>
 <td>Table Should Contain</td>
 <td>css=h2.someClass ~ table:last-child()</td>
 <td>text</td>
 </tr>
+<tr>
+<td>Table Should Contain</td>
+<td>xpath=//table/[@name="myTable"]</td>
+<td>text</td>
+</tr>
 </table>
 <br />
-<b>Locating Flex components</b><br />
+<b>Locating Flex elements</b><br />
 <br />
 SeleniumLibary 2.6 and newer support testing Adobe Flex and Flash applications using Flex Pilot tool. For more information, including the required bootstrapping, see <a href="http://code.google.com/p/robotframework-seleniumlibrary/wiki/FlexTesting">http://code.google.com/p/robotframework-seleniumlibrary/wiki/FlexTesting</a><br />
 <br />
@@ -399,11 +404,11 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Get Vertical Position" title="Returns vertical position of element identified by `locator`.">Get&nbsp;Vertical&nbsp;Position</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Window Identifiers" title="Returns values of id attributes of all windows known to the browser.">Get&nbsp;Window&nbsp;Identifiers</a>
+<a href="#Get Window Identifiers" title="Returns and logs id attributes of all windows known to the browser.">Get&nbsp;Window&nbsp;Identifiers</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Window Names" title="Returns names of all windows known to the browser.">Get&nbsp;Window&nbsp;Names</a>
+<a href="#Get Window Names" title="Returns and logs names of all windows known to the browser.">Get&nbsp;Window&nbsp;Names</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Window Titles" title="Returns titles of all windows known to the browser.">Get&nbsp;Window&nbsp;Titles</a>
+<a href="#Get Window Titles" title="Returns and logs titles of all windows known to the browser.">Get&nbsp;Window&nbsp;Titles</a>
 &nbsp;&middot;&nbsp;
 <a href="#Go Back" title="Simulates the user clicking the &quot;back&quot; button on their browser.">Go&nbsp;Back</a>
 &nbsp;&middot;&nbsp;
@@ -503,7 +508,7 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Select Radio Button" title="Sets selection of radio button group identified by `group_name` to `value`.">Select&nbsp;Radio&nbsp;Button</a>
 &nbsp;&middot;&nbsp;
-<a href="#Select Window" title="Selects the window found with `windowID` as the context of actions.">Select&nbsp;Window</a>
+<a href="#Select Window" title="Selects the window found with `locator` as the context of actions.">Select&nbsp;Window</a>
 &nbsp;&middot;&nbsp;
 <a href="#Set Selenium Speed" title="Sets the delay that is waited after each Selenium command.">Set&nbsp;Selenium&nbsp;Speed</a>
 &nbsp;&middot;&nbsp;
@@ -519,17 +524,17 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains the `expected content`.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains `expected`.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Column Should Contain" title="Verifies that a specific column contains the `expected_content`.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Column Should Contain" title="Verifies that a specific column contains `expected`.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Footer Should Contain" title="Verifies that the table footer contains the `expected_content`.">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Footer Should Contain" title="Verifies that the table footer contains `expected`.">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Header Should Contain" title="Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the `expected_content`.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Header Should Contain" title="Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains `expected`.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Row Should Contain" title="Verifies that a specific table row contains the `expected_content`.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Row Should Contain" title="Verifies that a specific table row contains `expected`.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Should Contain" title="Verifies that the `expected content` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Should Contain" title="Verifies that `expected` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Textfield Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Textfield&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
@@ -1109,17 +1114,17 @@ See also <a href="#Get Horizontal Position" class="name">Get Horizontal Position
 <tr>
   <td class="kw"><a name="Get Window Identifiers"></a>Get Window Identifiers</td>
   <td class="arg"></td>
-  <td class="doc">Returns values of id attributes of all windows known to the browser.</td>
+  <td class="doc">Returns and logs id attributes of all windows known to the browser.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Window Names"></a>Get Window Names</td>
   <td class="arg"></td>
-  <td class="doc">Returns names of all windows known to the browser.</td>
+  <td class="doc">Returns and logs names of all windows known to the browser.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Window Titles"></a>Get Window Titles</td>
   <td class="arg"></td>
-  <td class="doc">Returns titles of all windows known to the browser.</td>
+  <td class="doc">Returns and logs titles of all windows known to the browser.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Go Back"></a>Go Back</td>
@@ -1557,12 +1562,16 @@ Notice that this keyword is very fragile and, for example, using the keyboard or
 <tr>
   <td class="kw"><a name="Radio Button Should Be Set To"></a>Radio Button Should Be Set To</td>
   <td class="arg">group_name, value</td>
-  <td class="doc">Verifies radio button group identified by <span class="name">group_name</span> has its selection set to <span class="name">value</span>.</td>
+  <td class="doc">Verifies radio button group identified by <span class="name">group_name</span> has its selection set to <span class="name">value</span>.<br />
+<br />
+See <a href="#Select Radio Button" class="name">Select Radio Button</a> for information about how radio buttons are located.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Radio Button Should Not Be Selected"></a>Radio Button Should Not Be Selected</td>
   <td class="arg">group_name</td>
-  <td class="doc">Verifies radio button group identified by <span class="name">group_name</span> has no selection.</td>
+  <td class="doc">Verifies radio button group identified by <span class="name">group_name</span> has no selection.<br />
+<br />
+See <a href="#Select Radio Button" class="name">Select Radio Button</a> for information about how radio buttons are located.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Register Keyword To Run On Failure"></a>Register Keyword To Run On Failure</td>
@@ -1624,23 +1633,34 @@ Because this keyword waits until the selected application is active, it is recom
 <br />
 The application is found using <span class="name">locator</span> that must be either <span class="name">id</span> or <span class="name">name</span> of the application in HTML. Notice that if you have different elements for different browsers (&lt;object&gt; vs. &lt;embed&gt;), you need to use different attributes depending on the browser.<br />
 <br />
+The old locator is returned and can be used to switch back to the previous application.<br />
+<br />
 Example:<br />
 <table border="1" class="doc">
 <tr>
 <td>Select Flex Application</td>
 <td>exampleFlexApp</td>
+<td></td>
 </tr>
 <tr>
 <td>Click Flex Element</td>
 <td>myButton</td>
+<td></td>
 </tr>
 <tr>
-<td>Select Flex Application</td>
+<td>${prev app}</td>
+<td>= Select Flex Application</td>
 <td>secondFlexApp</td>
 </tr>
 <tr>
 <td>Flex Element Text Should Be</td>
 <td>Hello, Flex!</td>
+<td></td>
+</tr>
+<tr>
+<td>Select Flex Application</td>
+<td>${prev app}</td>
+<td></td>
 </tr>
 </table>
 </td>
@@ -1712,14 +1732,14 @@ See <a href="#introduction" class="name">introduction</a> for details about <spa
 </tr>
 <tr>
   <td class="kw"><a name="Select Window"></a>Select Window</td>
-  <td class="arg">windowID=None</td>
-  <td class="doc">Selects the window found with <span class="name">windowID</span> as the context of actions.<br />
+  <td class="arg">locator=main</td>
+  <td class="doc">Selects the window found with <span class="name">locator</span> as the context of actions.<br />
 <br />
 If the window is found, all subsequent commands use that window, until this keyword is used again. If the window is not found, this keyword fails.<br />
 <br />
-<span class="name">windowID</span> may be either the title of the window or the name of the window in the JavaScript code that creates it. Name is second argument passed to JavaScript function window.open(). In case of multiple windows with same identifier are found, the first one is selected.<br />
+<span class="name">locator</span> may be either the title of the window or the name of the window in the JavaScript code that creates it. If multiple windows with same identifier are found, the first one is selected.<br />
 <br />
-To select main window, the argument can be left empty, or name 'main' can be used.<br />
+Special locator <span class="name">main</span> (default) can be used to select the main window.<br />
 <br />
 Example:<br />
 <table border="1" class="doc">
@@ -1748,7 +1768,8 @@ Example:<br />
 <td># Chooses the main window again</td>
 </tr>
 </table>
-</td>
+<br />
+<b>NOTE:</b> Selecting windows opened by links with target <span class="name">_blank</span> does not seem to work on Internet Explorer.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Set Selenium Speed"></a>Set Selenium Speed</td>
@@ -1814,6 +1835,8 @@ See <a href="#introduction" class="name">introduction</a> for details about loca
 1) The port given in <a href="#importing" class="name">importing</a> is added to <span class="name">params</span> automatically using the <span class="name">-port</span> option.<br />
 <br />
 2) A custom Firefox profile that is included with the library and contains automation friendly settings is enabled via the <span class="name">-firefoxProfileTemplate</span> option. You can override this profile with your own custom profile by using the same argument in <span class="name">params</span> yourself. To use the default profile on your machine, use this argument with <span class="name">DEFAULT</span> value (case-sensitive). Using a custom Firefox profile automatically is a new feature in SeleniumLibrary 2.5. For more information see <a href="http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile">http://code.google.com/p/robotframework-seleniumlibrary/wiki/CustomFirefoxProfile</a><br />
+<br />
+3) Starting from SeleniumLibrary 2.6, if there is <span class="name">user-extensions.js</span> file in the same directory as Selenium Server jar, it is loaded using the <span class="name">-userExtensions</span> option. &nbsp;This is not done if the option is defined in <span class="name">params</span>. &nbsp;By default, such extension file providing Flex testing support is loaded automatically.<br />
 <br />
 Examples:<br />
 <table border="1" class="doc">
@@ -1952,8 +1975,8 @@ Above example expects that there was no other open browsers when opening the fir
 </tr>
 <tr>
   <td class="kw"><a name="Table Cell Should Contain"></a>Table Cell Should Contain</td>
-  <td class="arg">table_locator, row, column, expected_content</td>
-  <td class="doc">Verifies that a certain cell in a table contains the <span class="name">expected content</span>.<br />
+  <td class="arg">table_locator, row, column, expected</td>
+  <td class="doc">Verifies that a certain cell in a table contains <span class="name">expected</span>.<br />
 <br />
 Row and Column number start from 1. This keyword passes if the specified cell contains the given content. If you want to test that the cell content matches exactly, or that it e.g. starts with some text, use <a href="#Get Table Cell" class="name">Get Table Cell</a> keyword in combination with built-in keywords such as <span class="name">Should Be Equal</span> or <span class="name">Should Start With</span>.<br />
 <br />
@@ -1961,8 +1984,8 @@ To understand how tables are identified, please take a look at the <a href="#int
 </tr>
 <tr>
   <td class="kw"><a name="Table Column Should Contain"></a>Table Column Should Contain</td>
-  <td class="arg">table_locator, col, expected_content, loglevel=INFO</td>
-  <td class="doc">Verifies that a specific column contains the <span class="name">expected_content</span>.<br />
+  <td class="arg">table_locator, col, expected, loglevel=INFO</td>
+  <td class="doc">Verifies that a specific column contains <span class="name">expected</span>.<br />
 <br />
 The first leftmost column is column number 1. If the table contains cells that span multiple columns, those merged cells count as a single column. For example both tests below work, if in one row columns A and B are merged with colspan="2", and the logical third column contains "C".<br />
 <br />
@@ -1988,8 +2011,8 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 </tr>
 <tr>
   <td class="kw"><a name="Table Footer Should Contain"></a>Table Footer Should Contain</td>
-  <td class="arg">table_locator, expected_content, loglevel=INFO</td>
-  <td class="doc">Verifies that the table footer contains the <span class="name">expected_content</span>.<br />
+  <td class="arg">table_locator, expected, loglevel=INFO</td>
+  <td class="doc">Verifies that the table footer contains <span class="name">expected</span>.<br />
 <br />
 With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element. &nbsp;To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
 <br />
@@ -1997,8 +2020,8 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 </tr>
 <tr>
   <td class="kw"><a name="Table Header Should Contain"></a>Table Header Should Contain</td>
-  <td class="arg">table_locator, expected_content, loglevel=INFO</td>
-  <td class="doc">Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains the <span class="name">expected_content</span>.<br />
+  <td class="arg">table_locator, expected, loglevel=INFO</td>
+  <td class="doc">Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains <span class="name">expected</span>.<br />
 <br />
 To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
 <br />
@@ -2006,8 +2029,8 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 </tr>
 <tr>
   <td class="kw"><a name="Table Row Should Contain"></a>Table Row Should Contain</td>
-  <td class="arg">table_locator, row, expected_content, loglevel=INFO</td>
-  <td class="doc">Verifies that a specific table row contains the <span class="name">expected_content</span>.<br />
+  <td class="arg">table_locator, row, expected, loglevel=INFO</td>
+  <td class="doc">Verifies that a specific table row contains <span class="name">expected</span>.<br />
 <br />
 The uppermost row is row number 1. For tables that are structured with thead, tbody and tfoot, only the tbody section is searched. Please use <a href="#Table Header Should Contain" class="name">Table Header Should Contain</a> or <a href="#Table Footer Should Contain" class="name">Table Footer Should Contain</a> for tests against the header or footer content.<br />
 <br />
@@ -2017,8 +2040,8 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 </tr>
 <tr>
   <td class="kw"><a name="Table Should Contain"></a>Table Should Contain</td>
-  <td class="arg">table_locator, expected_content, loglevel=INFO</td>
-  <td class="doc">Verifies that the <span class="name">expected content</span> can be found somewhere in the table.<br />
+  <td class="arg">table_locator, expected, loglevel=INFO</td>
+  <td class="doc">Verifies that <span class="name">expected</span> can be found somewhere in the table.<br />
 <br />
 To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.<br />
 <br />
@@ -2138,7 +2161,7 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 <p id="footer">
 Altogether 131 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-01-25 15:29:35.
+on 2011-01-31 15:07:26.
 </p>
 </body>
 </html>
