@@ -219,7 +219,7 @@ class Flex(RunOnFailure):
     def _flex_locator(self, locator, prefixes=_flex_element_locators):
         locator = locator.strip()
         prefix, value = self._split_flex_locator(locator, prefixes)
-        return {prefix: value}
+        return {str(prefix): value}
 
     def _split_flex_locator(self, locator, prefixes):
         for prefix in prefixes:
