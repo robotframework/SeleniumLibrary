@@ -7,7 +7,8 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 FILES = {'': ['rundemo.py', 'README.txt'],
          'login_tests': ['valid_login.txt', 'invalid_login.txt',
-                         'html_resource.txt', 'flex_resource.txt'],
+                         'html_resource.txt', 'flex_resource.txt',
+                         'common_resource.txt'],
          'demoapp': ['server.py'],
          'demoapp/html': ['index.html', 'welcome.html', 'error.html',
                           'demo.css'],
