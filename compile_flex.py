@@ -1,4 +1,6 @@
-"""Usage: python compile_flex.py [file name] 
+#!/usr/bin/env python
+
+"""Usage: python compile_flex.py [file name]
 e.g. python compile_flex.py test/resources/html/flex/LoginApp.mxml
 
 Troubleshooting:
@@ -14,11 +16,12 @@ import subprocess
 import sys
 
 
-def compile_flex(file_name):
-    subprocess.call([os.path.join(os.environ['FLEX_HOME'], 'bin', 'mxmlc'), 
-                     '-source-path=../flex-pilot/src/', 
-                     '-source-path+=test/resources/html/flex/',
-                     file_name])
+def compile_flex(file_names):
+    for file_name in file_names:
+        subprocess.call([os.path.join(os.environ['FLEX_HOME'], 'bin', 'mxmlc'),
+                         '-source-path=../flex-pilot/src/',
+                         '-source-path+=test/resources/html/flex/',
+                         file_name])
 
 def exit_with(msg):
     print msg
@@ -37,4 +40,4 @@ if __name__ == "__main__":
             exit_with(__doc__)
     if not 'FLEX_HOME' in os.environ:
         exit_with('Please set FLEX_HOME environment variable.')
-    compile_flex(sys.argv[1])
+    compile_flex(sys.argv[1:])
