@@ -1,5 +1,5 @@
 *Setting*
-Library  SeleniumLibrary  \  \  4455  \  NONE
+Library  SeleniumLibrary  \  \  4455  ${JARPATH}  NONE
 Library  Collections
 Library  OperatingSystem
 
@@ -10,6 +10,7 @@ ${BROWSER}  *firefox
 ${ROOT}  http://${SERVER}/html
 ${FRONT PAGE}  ${ROOT}/
 ${SPEED}  0
+${JARPATH}=  ${NONE}
 
 
 *Keyword*
