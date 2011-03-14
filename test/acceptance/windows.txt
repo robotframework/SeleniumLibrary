@@ -9,6 +9,7 @@ Resource  resource.txt
 
 *Test Cases*
 Popup Windows Created With Javascript
+  Cannot Be Executed in IE
   Open Popup Window, Select It And Verify  myName
   Do Action In Popup Window And Verify
   Select Main Window And Verify
