@@ -12,11 +12,158 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+import time
+import socket
+
+from robot.errors import DataError
+
+from selenium import selenium
 from runonfailure import RunOnFailure
+
+
+BROWSER_ALIASES = {'ff': '*firefox',
+                   'firefox': '*firefox',
+                   'ie': '*iexplore',
+                   'internetexplorer': '*iexplore',
+                   'googlechrome': '*googlechrome',
+                   'opera': '*opera',
+                   'safari': '*safari'}
+SELENIUM_CONNECTION_TIMEOUT = 40
 
 
 class Browser(RunOnFailure):
     """Contains keywords for doing browser actions."""
+
+    def open_browser(self, url, browser='firefox', alias=None):
+        """Opens a new browser instance to given URL.
+
+        Possible already opened connections are cached.
+
+        Returns the index of this browser instance which can be used later to
+        switch back to it. Index starts from 1 and is reset back to it when
+        `Close All Browsers` keyword is used. See `Switch Browser` for
+        example.
+
+        Optional alias is a alias for the browser instance and it can be used
+        for switching between browsers similarly as the index. See `Switch
+        Browser` for more details about that.
+
+        Possible values for `browser` are all the values supported by Selenium
+        and some aliases that are defined for convenience. The table below
+        lists the aliases for most common supported browsers.
+
+        | firefox          | FireFox   |
+        | ff               | FireFox   |
+        | ie               | Internet Explorer |
+        | internetexplorer | Internet Explorer |
+        | safari           | Safari |
+        | googlechrome     | Google Chrome |
+        | opera            | Opera |
+
+        Additionally, a string like `*custom /path/to/browser-executable` can
+        be used to specify the browser directly. In this case, the path needs to
+        point to an executable, not a script, otherwise the library may not be
+        able to shut down the browser properly.
+
+        Note, that you will encounter strange behavior, if you open
+        multiple Internet Explorer browser instances. That is also why
+        `Switch Browser` only works with one IE browser at most.
+        For more information see:
+        http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
+        """
+        self._info("Opening browser '%s' to base url '%s'" % (browser, url))
+        browser = self._get_browser(browser)
+        self._selenium = selenium(self._server_host, self._server_port, browser,
+                                  url)
+        self._connect_to_selenium_server()
+        self._selenium.set_timeout(self._timeout * 1000)
+        self._selenium.open(url, ignoreResponseCode=True)
+        self._debug('Opened browser with Selenium session id %s'
+                    % self._selenium.sessionId)
+        return self._cache.register(self._selenium, alias)
+
+    def _get_browser(self, browser):
+        return BROWSER_ALIASES.get(browser.lower().replace(' ', ''), browser)
+
+    def _connect_to_selenium_server(self):
+        timeout = time.time() + SELENIUM_CONNECTION_TIMEOUT
+        while time.time() < timeout:
+            try:
+                self._selenium.start()
+            # AssertionError occurs on Jython: http://bugs.jython.org/issue1697
+            except (socket.error, AssertionError):
+                time.sleep(2)
+            else:
+                return
+        self._selenium = NoBrowserOpen()
+        raise RuntimeError("Could not connect to Selenium Server in %d seconds. "
+                           "Please make sure Selenium Server is running."
+                           % SELENIUM_CONNECTION_TIMEOUT)
+
+    def close_browser(self):
+        """Closes the current browser."""
+        if self._selenium:
+            self._debug('Closing browser with Selenium session id %s'
+                        % self._selenium.sessionId)
+            self._selenium.stop()
+            self._cache.current = None
+            self._selenium = NoBrowserOpen()
+
+    def close_all_browsers(self):
+        """Closes all open browsers and empties the connection cache.
+
+        After this keyword new indexes get from Open Browser keyword are reset
+        to 1.
+
+        This keyword should be used in test or suite teardown to make sure
+        all browsers are closed.
+        """
+        # ConnectionCache's connections attribute was renamed to _connections
+        # in RF 2.0.2 (which was actually a stupid decision)
+        try:
+            connections = self._cache._connections
+        except AttributeError:
+            connections = self._cache.connections
+        for sel in connections:
+            if sel is not None and sel.sessionId is not None:
+                self._debug('Closing browser with Selenium session id %s'
+                            % sel.sessionId)
+                sel.stop()
+        self._selenium = NoBrowserOpen()
+        self._cache.empty_cache()
+
+    def switch_browser(self, index_or_alias):
+        """Switches between active browsers using index or alias.
+
+        Index is got from `Open Browser` and alias can be given to it.
+
+        Examples:
+        | Open Browser        | http://google.com | ff       |
+        | Location Should Be  | http://google.com |          |
+        | Open Browser        | http://yahoo.com  | ie       | 2nd conn |
+        | Location Should Be  | http://yahoo.com  |          |
+        | Switch Browser      | 1                 | # index  |
+        | Page Should Contain | I'm feeling lucky |          |
+        | Switch Browser      | 2nd conn          | # alias  |
+        | Page Should Contain | More Yahoo!       |          |
+        | Close All Browsers  |                   |          |
+
+        Above example expects that there was no other open browsers when
+        opening the first one because it used index '1' when switching to it
+        later. If you aren't sure about that you can store the index into
+        a variable as below.
+
+        | ${id} =            | Open Browser  | http://google.com | *firefox |
+        | # Do something ... |
+        | Switch Browser     | ${id}         |                   |          |
+        """
+        try:
+            self._selenium = self._cache.switch(index_or_alias)
+            self._debug('Switched to browser with Selenium session id %s'
+                         % self._selenium.sessionId)
+        except DataError:
+            raise RuntimeError("No browser with index or alias '%s' found."
+                               % index_or_alias)
 
     def go_to(self, url):
         """Navigates the active browser instance to the provided URL."""
@@ -137,3 +284,13 @@ class Browser(RunOnFailure):
     def delete_all_cookies(self):
         """Deletes all cookies by calling `Delete Cookie` repeatedly."""
         self._selenium.delete_all_visible_cookies()
+
+
+class NoBrowserOpen(object):
+    set_timeout = lambda self, timeout: None
+
+    def __getattr__(self, name):
+        raise RuntimeError('No browser is open')
+
+    def __nonzero__(self):
+        return False

@@ -21,12 +21,11 @@ try:
 except ImportError:
     subprocess = None  # subprocess not available on Python/Jython < 2.5
 
-from robot.errors import DataError
 from robot.variables import GLOBAL_VARIABLES
 from robot import utils
 from selenium import selenium
 
-from browser import Browser
+from browser import Browser, NoBrowserOpen
 from button import Button
 from page import Page
 from click import Click
@@ -43,14 +42,6 @@ from xpath import LocatorParser
 from version import VERSION
 
 __version__ = VERSION
-BROWSER_ALIASES = {'ff': '*firefox',
-                   'firefox': '*firefox',
-                   'ie': '*iexplore',
-                   'internetexplorer': '*iexplore',
-                   'googlechrome': '*googlechrome',
-                   'opera': '*opera',
-                   'safari': '*safari'}
-SELENIUM_CONNECTION_TIMEOUT = 40
 _SELLIB_DIR = os.path.dirname(os.path.abspath(__file__))
 SELENIUM_SERVER_PATH = os.path.join(_SELLIB_DIR, 'lib', 'selenium-server.jar')
 FIREFOX_PROFILE_DIR = os.path.join(_SELLIB_DIR, 'firefoxprofile')
@@ -255,7 +246,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         Browsers opened with this SeleniumLibrary instance will be attached to
         that server. Note that the Selenium Server must be running before `Open
         Browser` keyword can be used. Selenium Server can be started with
-        keyword `Start Selenium Server`. Starting from SeleniumLibrary 2.7,
+        keyword `Start Selenium Server`. Starting from SeleniumLibrary 2.6.1,
         it is possible to give `server_host` as a URL with a possible embedded
         port, for example `http://192.168.52.1:4444`. If `server_host` contains
         port, the value of `server_port` is ignored.
@@ -283,7 +274,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         | Library | SeleniumLibrary | run_on_failure=Nothing | | | # Do nothing on failure. |
         """
         self._cache = utils.ConnectionCache()
-        self._selenium = _NoBrowser()
+        self._selenium = NoBrowserOpen()
         self.set_selenium_timeout(timeout or 5.0)
         self._server_host, self._server_port \
                 = self._parse_host_and_port(server_host or 'localhost',
@@ -358,140 +349,9 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
     def stop_selenium_server(self):
         """Stops the selenium server (and closes all browsers)."""
         shut_down_selenium_server(self._server_host, self._server_port)
-        self._selenium = _NoBrowser()
+        self._selenium = NoBrowserOpen()
         if self._selenium_log:
             self._selenium_log.close()
-
-    def open_browser(self, url, browser='firefox', alias=None):
-        """Opens a new browser instance to given URL.
-
-        Possible already opened connections are cached.
-
-        Returns the index of this browser instance which can be used later to
-        switch back to it. Index starts from 1 and is reset back to it when
-        `Close All Browsers` keyword is used. See `Switch Browser` for
-        example.
-
-        Optional alias is a alias for the browser instance and it can be used
-        for switching between browsers similarly as the index. See `Switch
-        Browser` for more details about that.
-
-        Possible values for `browser` are all the values supported by Selenium
-        and some aliases that are defined for convenience. The table below
-        lists the aliases for most common supported browsers.
-
-        | firefox          | FireFox   |
-        | ff               | FireFox   |
-        | ie               | Internet Explorer |
-        | internetexplorer | Internet Explorer |
-        | safari           | Safari |
-        | googlechrome     | Google Chrome |
-        | opera            | Opera |
-
-        Additionally, a string like `*custom /path/to/browser-executable` can
-        be used to specify the browser directly. In this case, the path needs to
-        point to an executable, not a script, otherwise the library may not be
-        able to shut down the browser properly.
-
-        Note, that you will encounter strange behavior, if you open
-        multiple Internet Explorer browser instances. That is also why
-        `Switch Browser` only works with one IE browser at most.
-        For more information see:
-        http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
-        """
-        self._info("Opening browser '%s' to base url '%s'" % (browser, url))
-        browser = self._get_browser(browser)
-        self._selenium = selenium(self._server_host, self._server_port, browser,
-                                  url)
-        self._connect_to_selenium_server()
-        self._selenium.set_timeout(self._timeout * 1000)
-        self._selenium.open(url, ignoreResponseCode=True)
-        self._debug('Opened browser with Selenium session id %s'
-                    % self._selenium.sessionId)
-        return self._cache.register(self._selenium, alias)
-
-    def _get_browser(self, browser):
-        return BROWSER_ALIASES.get(browser.lower().replace(' ', ''), browser)
-
-    def _connect_to_selenium_server(self):
-        timeout = time.time() + SELENIUM_CONNECTION_TIMEOUT
-        while time.time() < timeout:
-            try:
-                self._selenium.start()
-            # AssertionError occurs on Jython: http://bugs.jython.org/issue1697
-            except (socket.error, AssertionError):
-                time.sleep(2)
-            else:
-                return
-        self._selenium = _NoBrowser()
-        raise RuntimeError("Could not connect to Selenium Server in %d seconds. "
-                           "Please make sure Selenium Server is running."
-                           % SELENIUM_CONNECTION_TIMEOUT)
-
-    def close_browser(self):
-        """Closes the current browser."""
-        if self._selenium:
-            self._debug('Closing browser with Selenium session id %s'
-                        % self._selenium.sessionId)
-            self._selenium.stop()
-            self._cache.current = None
-            self._selenium = _NoBrowser()
-
-    def close_all_browsers(self):
-        """Closes all open browsers and empties the connection cache.
-
-        After this keyword new indexes get from Open Browser keyword are reset
-        to 1.
-
-        This keyword should be used in test or suite teardown to make sure
-        all browsers are closed.
-        """
-        # ConnectionCache's connections attribute was renamed to _connections
-        # in RF 2.0.2 (which was actually a stupid decision)
-        try:
-            connections = self._cache._connections
-        except AttributeError:
-            connections = self._cache.connections
-        for sel in connections:
-            if sel is not None and sel.sessionId is not None:
-                self._debug('Closing browser with Selenium session id %s'
-                            % sel.sessionId)
-                sel.stop()
-        self._selenium = _NoBrowser()
-        self._cache.empty_cache()
-
-    def switch_browser(self, index_or_alias):
-        """Switches between active browsers using index or alias.
-
-        Index is got from `Open Browser` and alias can be given to it.
-
-        Examples:
-        | Open Browser        | http://google.com | ff       |
-        | Location Should Be  | http://google.com |          |
-        | Open Browser        | http://yahoo.com  | ie       | 2nd conn |
-        | Location Should Be  | http://yahoo.com  |          |
-        | Switch Browser      | 1                 | # index  |
-        | Page Should Contain | I'm feeling lucky |          |
-        | Switch Browser      | 2nd conn          | # alias  |
-        | Page Should Contain | More Yahoo!       |          |
-        | Close All Browsers  |                   |          |
-
-        Above example expects that there was no other open browsers when
-        opening the first one because it used index '1' when switching to it
-        later. If you aren't sure about that you can store the index into
-        a variable as below.
-
-        | ${id} =            | Open Browser  | http://google.com | *firefox |
-        | # Do something ... |
-        | Switch Browser     | ${id}         |                   |          |
-        """
-        try:
-            self._selenium = self._cache.switch(index_or_alias)
-            self._debug('Switched to browser with Selenium session id %s'
-                         % self._selenium.sessionId)
-        except DataError:
-            raise RuntimeError("No browser with index or alias '%s' found."
-                               % index_or_alias)
 
     def set_selenium_timeout(self, seconds):
         """Sets the timeout used by various keywords.
@@ -635,13 +495,6 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
             msg.append('%d: %s' % (index+1, item))
         self._info('\n'.join(msg))
         return items
-
-class _NoBrowser(object):
-    set_timeout = lambda self, timeout: None
-    def __getattr__(self, name):
-        raise RuntimeError('No browser is open')
-    def __nonzero__(self):
-        return False
 
 
 class _NameGenerator(object):
