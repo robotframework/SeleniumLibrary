@@ -42,6 +42,13 @@ class Browser(RunOnFailure):
         timeout = self._get_timeout(timeout)
         self._selenium.wait_for_page_to_load(timeout * 1000)
 
+    def reload_page(self):
+        """Simulates user reloading page.
+
+        New in SeleniumLibrary 2.7.
+        """
+        self._selenium.refresh()
+
     def go_back(self, dont_wait=''):
         """Simulates the user clicking the "back" button on their browser.
 
