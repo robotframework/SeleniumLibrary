@@ -255,7 +255,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         Browsers opened with this SeleniumLibrary instance will be attached to
         that server. Note that the Selenium Server must be running before `Open
         Browser` keyword can be used. Selenium Server can be started with
-        keyword `Start Selenium Server`. Starting from SeleniumLibrary 2.6.1,
+        keyword `Start Selenium Server`. Starting from SeleniumLibrary 2.7,
         it is possible to give `server_host` as a URL with a possible embedded
         port, for example `http://192.168.52.1:4444`. If `server_host` contains
         port, the value of `server_port` is ignored.
