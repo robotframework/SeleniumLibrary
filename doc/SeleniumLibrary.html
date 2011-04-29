@@ -257,7 +257,7 @@ Usually, https works out of the box. However, there may be trouble with self-sig
 <br />
 <span class="name">timeout</span> is the default timeout used to wait for page load actions. It can be later set with <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a><br />
 <br />
-<span class="name">server_host</span> and <span class="name">server_port</span> are used to connect to Selenium Server. Browsers opened with this SeleniumLibrary instance will be attached to that server. Note that the Selenium Server must be running before <a href="#Open Browser" class="name">Open Browser</a> keyword can be used. Selenium Server can be started with keyword <a href="#Start Selenium Server" class="name">Start Selenium Server</a>. Starting from SeleniumLibrary 2.6.1, it is possible to give <span class="name">server_host</span> as a URL with a possible embedded port, for example <span class="name">http://192.168.52.1:4444</span>. If <span class="name">server_host</span> contains port, the value of <span class="name">server_port</span> is ignored.<br />
+<span class="name">server_host</span> and <span class="name">server_port</span> are used to connect to Selenium Server. Browsers opened with this SeleniumLibrary instance will be attached to that server. Note that the Selenium Server must be running before <a href="#Open Browser" class="name">Open Browser</a> keyword can be used. Selenium Server can be started with keyword <a href="#Start Selenium Server" class="name">Start Selenium Server</a>. Starting from SeleniumLibrary 2.7, it is possible to give <span class="name">server_host</span> as a URL with a possible embedded port, for example <span class="name">http://192.168.52.1:4444</span>. If <span class="name">server_host</span> contains port, the value of <span class="name">server_port</span> is ignored.<br />
 <br />
 <span class="name">jar_path</span> is the absolute path to the selenium-server.jar file to be used by the library. If set, a custom, modified version can be started instead of the default one distributed with the library.<br />
 <br />
@@ -309,6 +309,8 @@ Examples:<br />
 <a href="#Add Location Strategy" title="Adds a custom location strategy.">Add&nbsp;Location&nbsp;Strategy</a>
 &nbsp;&middot;&nbsp;
 <a href="#Alert Should Be Present" title="Verifies an alert is present and dismisses it.">Alert&nbsp;Should&nbsp;Be&nbsp;Present</a>
+&nbsp;&middot;&nbsp;
+<a href="#Assign Id To Element" title="Assigns a temporary identifier to element specified by `locator`.">Assign&nbsp;Id&nbsp;To&nbsp;Element</a>
 &nbsp;&middot;&nbsp;
 <a href="#Call Selenium Api" title="Calls a method in the Selenium remote control API directly.">Call&nbsp;Selenium&nbsp;Api</a>
 &nbsp;&middot;&nbsp;
@@ -502,6 +504,8 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Register Keyword To Run On Failure" title="Sets the keyword to execute when a SeleniumLibrary keyword fails.">Register&nbsp;Keyword&nbsp;To&nbsp;Run&nbsp;On&nbsp;Failure</a>
 &nbsp;&middot;&nbsp;
+<a href="#Reload Page" title="Simulates user reloading page.">Reload&nbsp;Page</a>
+&nbsp;&middot;&nbsp;
 <a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select Checkbox" title="Selects checkbox identified by `locator`.">Select&nbsp;Checkbox</a>
@@ -612,6 +616,30 @@ Example:<br />
 If <span class="name">text</span> is a non-empty string, then it is also verified that the message of the alert equals to <span class="name">text</span>.<br />
 <br />
 Will fail if no alert is present. Note that when running tests with selenium, the alerts will not be visible in the browser. Nevertheless, following keywords will fail unless the alert is dismissed by this keyword or by <a href="#Get Alert Message" class="name">Get Alert Message</a>.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Assign Id To Element"></a>Assign Id To Element</td>
+  <td class="arg">locator, id</td>
+  <td class="doc">Assigns a temporary identifier to element specified by <span class="name">locator</span>.<br />
+<br />
+This is mainly useful if the locator is complicated/slow XPath expression. Identifier expires when the page is reloaded.<br />
+<br />
+New in SeleniumLibrary 2.7.<br />
+<br />
+Example:<br />
+<table border="1" class="doc">
+<tr>
+<td>Assign ID to Element</td>
+<td>xpath=//div[@id="first_div"]</td>
+<td>my id</td>
+</tr>
+<tr>
+<td>Page Should Contain Element</td>
+<td>my id</td>
+<td></td>
+</tr>
+</table>
+</td>
 </tr>
 <tr>
   <td class="kw"><a name="Call Selenium Api"></a>Call Selenium Api</td>
@@ -1617,6 +1645,13 @@ Examples:<br />
 The whole run-on-failure functionality is new in SeleniumLibrary 2.5. It only works when running tests on Python/Jython 2.4 or newer and it does not work on IronPython at all.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Reload Page"></a>Reload Page</td>
+  <td class="arg"></td>
+  <td class="doc">Simulates user reloading page.<br />
+<br />
+New in SeleniumLibrary 2.7.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Select All From List"></a>Select All From List</td>
   <td class="arg">locator, wait=</td>
   <td class="doc">Selects all values from multi-select list identified by <span class="name">id</span>.<br />
@@ -2179,9 +2214,9 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 </table>
 <p id="footer">
-Altogether 131 keywords.<br />
+Altogether 133 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-04-29 13:36:47.
+on 2011-04-29 14:05:13.
 </p>
 </body>
 </html>
