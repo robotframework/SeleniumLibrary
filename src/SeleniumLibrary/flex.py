@@ -66,7 +66,7 @@ class Flex(RunOnFailure):
         """
         self._info("Waiting %s for element '%s' to appear" % (timeout, locator))
         self._verify_flex_app_selected()
-        error = "Element '%s' did not appear in %%(TIMEOUT)s" % locator
+        error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, self._flex_element_exists, locator)
 
     def _flex_element_exists(self, locator):

@@ -13,6 +13,7 @@ Wait Until Page Contains
     Run Keyword And Expect Error  Text 'invalid' did not appear in 100 milliseconds  Wait Until Page Contains  invalid  0.1
 
 Wait Until Page Contains Element
+    [Documentation]  Tests also that format characters (e.g. %c) are handled correctly in error messages
     Wait Until Page Contains Element  new div  2 seconds
-    Run Keyword And Expect Error  Element 'non-existent' did not appear in 100 milliseconds  Wait Until Page Contains Element  non-existent  0.1 seconds
+    Run Keyword And Expect Error  Element '%cnon-existent' did not appear in 100 milliseconds  Wait Until Page Contains Element  %cnon-existent  0.1 seconds
 

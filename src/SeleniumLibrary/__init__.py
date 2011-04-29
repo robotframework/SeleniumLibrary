@@ -604,7 +604,7 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
 
     def _wait_until(self, timeout, error, function, *args):
         timeout = self._get_timeout(timeout)
-        error = error % {'TIMEOUT': utils.secs_to_timestr(timeout)}
+        error = error.replace('<TIMEOUT>', utils.secs_to_timestr(timeout))
         maxtime = time.time() + timeout
         while not function(*args):
             if time.time() > maxtime:

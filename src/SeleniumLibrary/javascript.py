@@ -131,7 +131,7 @@ class JavaScript(RunOnFailure):
         Element` and BuiltIn keyword `Wait Until Keyword Succeeds`.
         """
         if not error:
-            error = "Condition '%s' did not become true in %%(TIMEOUT)s" % condition
+            error = "Condition '%s' did not become true in <TIMEOUT>" % condition
         self._wait_until(timeout, error,
                          lambda: self._selenium.get_eval(condition) == 'true')
 
