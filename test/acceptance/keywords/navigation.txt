@@ -87,6 +87,13 @@ Click Element
     Click Element  xpath=//a[text()='Link']
     Verify Location Is "target/first.html"
 
+Click Element With Coordinates
+    [Documentation]  LOG 2:1 Clicking element 'xpath=//a[text()='Link']'.
+    ...  LOG 2:3 Clicking at coordinates '3,1'.
+    Go To Page "links.html"
+    Click Element  xpath=//a[text()='Link']  coordinates=3,1
+    Verify Location Is "target/first.html"
+
 Click Link With Text And Image
     Click Link  Text and image
     Verify Location Is "index.html"

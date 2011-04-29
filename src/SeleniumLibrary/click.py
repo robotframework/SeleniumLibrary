@@ -18,20 +18,34 @@ from runonfailure import RunOnFailure
 class Click(RunOnFailure):
     """Contains keywords for clicking different elements."""
 
-    def _click(self, locator, dont_wait=''):
-        self._selenium.click(locator)
+    def _click(self, locator, dont_wait='', coordinates=None):
+        if coordinates:
+            self._info("Clicking at coordinates '%s'." % coordinates)
+            self._selenium.click_at(locator, coordinates)
+        else:
+            self._selenium.click(locator)
         if not dont_wait:
             self.wait_until_page_loaded()
 
-    def click_element(self, locator, dont_wait=''):
+    def click_element(self, locator, dont_wait='', coordinates=None):
         """Click element identified by `locator`.
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements and about meaning
         of `dont_wait` argument.
+
+        If you want to click the element at certain coordinates, you can
+        specify the position with `coordinates` argument in format `x,y`.
+        Support for coordinates was added in SeleniumLibrary 2.7.
+
+        Examples:
+        | Click Element | my_id |
+        | Click Element | my_id | and don't wait |
+        | Click Element | my_id |  | 100,150 |
+        | Click Element | my_id | coordinates=100,150 | # Use named argument syntax available in RF 2.5 and newer |
         """
         self._info("Clicking element '%s'." % locator)
-        self._click(self._parse_locator(locator), dont_wait)
+        self._click(self._parse_locator(locator), dont_wait, coordinates)
 
     def click_link(self, locator, dont_wait=''):
         """Clicks a link identified by locator.
