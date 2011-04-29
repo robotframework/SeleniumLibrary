@@ -15,6 +15,7 @@
 import os
 import time
 import socket
+import urlparse
 try:
     import subprocess
 except ImportError:
@@ -250,11 +251,14 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
         `timeout` is the default timeout used to wait for page load actions.
         It can be later set with `Set Selenium Timeout`
 
-        `host` and `port` are used to connect to Selenium Server. Browsers
-        opened with this SeleniumLibrary instance will be attached to that
-        server. Note that the Selenium Server must be running before `Open
+        `server_host` and `server_port` are used to connect to Selenium Server.
+        Browsers opened with this SeleniumLibrary instance will be attached to
+        that server. Note that the Selenium Server must be running before `Open
         Browser` keyword can be used. Selenium Server can be started with
-        keyword `Start Selenium Server`.
+        keyword `Start Selenium Server`. Starting from SeleniumLibrary 2.6.1,
+        it is possible to give `server_host` as a URL with a possible embedded
+        port, for example `http://192.168.52.1:4444`. If `server_host` contains
+        port, the value of `server_port` is ignored.
 
         `jar_path` is the absolute path to the selenium-server.jar file to be
         used by the library. If set, a custom, modified version can be started
@@ -270,23 +274,32 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
 
         Because there are many optional arguments, it is often a good idea to
         use the handy named-arguments syntax supported by Robot Framework 2.5
-        and later. This is demonstrated by the last example below.
+        and later. This is demonstrated by the last two examples below.
 
         Examples:
         | Library | SeleniumLibrary | 15 | | | # Sets default timeout |
         | Library | SeleniumLibrary | | | 4455 | # Use default timeout and host but specify different port. |
-        | Library | SeleniumLibrary | run_on_failure=Nothing | # Do nothing on failure. |
+        | Library | SeleniumLibrary | server_host=http://192.168.52.1:4444 | | | # Host as URL. |
+        | Library | SeleniumLibrary | run_on_failure=Nothing | | | # Do nothing on failure. |
         """
         self._cache = utils.ConnectionCache()
         self._selenium = _NoBrowser()
         self.set_selenium_timeout(timeout or 5.0)
-        self._server_host = server_host or 'localhost'
-        self._server_port = int(server_port or 4444)
+        self._server_host, self._server_port \
+                = self._parse_host_and_port(server_host or 'localhost',
+                                            server_port or 4444)
         self._jar_path = jar_path
         self._set_run_on_failure(run_on_failure)
         self._selenium_log = None
         self._locator_parser = LocatorParser(self)
         self._namegen = _NameGenerator()
+
+    def _parse_host_and_port(self, host, port):
+        if '://' in host:
+            host = urlparse.urlparse(host).netloc
+        if ':' in host:
+            host, port = host.split(':', 1)
+        return host, int(port)
 
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.

@@ -60,5 +60,33 @@ class TestServerArguments(unittest.TestCase):
                           ['-someOpt', 'value', '-otherOpt', FIREFOX_TEMPLATE_ARG, FIREFOX_PROFILE_DIR])
 
 
+class TestInitialization(unittest.TestCase):
+
+    def test_host_and_port_have_default_values(self):
+        self._verify_host_and_port(SeleniumLibrary(), 'localhost', 4444)
+
+    def test_host_and_port_can_be_given_separately(self):
+        lib = SeleniumLibrary(server_host='1.2.3.4', server_port='1234')
+        self._verify_host_and_port(lib, '1.2.3.4', 1234)
+
+    def test_protocol_is_ignored_in_host(self):
+        lib = SeleniumLibrary(server_host='http://1.2.3.4')
+        self._verify_host_and_port(lib, '1.2.3.4', 4444)
+
+    def test_port_can_be_given_as_part_of_host(self):
+        lib = SeleniumLibrary(server_host='http://1.2.3.4:8001')
+        self._verify_host_and_port(lib, '1.2.3.4', 8001)
+        lib = SeleniumLibrary(server_host='127.0.0.1:1000')
+        self._verify_host_and_port(lib, '127.0.0.1', 1000)
+
+    def test_port_given_as_part_of_host_overrides_possible_port(self):
+        lib = SeleniumLibrary(server_host='http://1.2.3.4:8001', server_port='1234')
+        self._verify_host_and_port(lib, '1.2.3.4', 8001)
+
+    def _verify_host_and_port(self, lib, host, port):
+        self.assertEquals(lib._server_host, host)
+        self.assertEquals(lib._server_port, port)
+
+
 if __name__ == "__main__":
     unittest.main()
