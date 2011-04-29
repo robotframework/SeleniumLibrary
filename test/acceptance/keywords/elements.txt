@@ -3,6 +3,14 @@ Suite Setup     Go To Page "links.html"
 Resource        ../resource.txt
 
 *** Test Cases ***
+Assign Id To Element
+    [Documentation]  Tests also Reload Page keyword.
+    Page Should Not Contain Element  my id
+    Assign ID to Element  //div[@id="first_div"]  my id
+    Page Should Contain Element  my id
+    Reload Page
+    Page Should Not Contain Element  my id
+
 Get Element Attribute
     ${id}=  Get Element Attribute  link=Link with id@id
     Should Be Equal  ${id}  some_id

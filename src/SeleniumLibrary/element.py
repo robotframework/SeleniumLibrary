@@ -18,6 +18,21 @@ from runonfailure import RunOnFailure
 class Element(RunOnFailure):
     """Contains keywords for operating on arbitrary elements."""
 
+    def assign_id_to_element(self, locator, id):
+        """Assigns a temporary identifier to element specified by `locator`.
+
+        This is mainly useful if the locator is complicated/slow XPath expression.
+        Identifier expires when the page is reloaded.
+
+        New in SeleniumLibrary 2.7.
+
+        Example:
+        | Assign ID to Element | xpath=//div[@id="first_div"] | my id |
+        | Page Should Contain Element | my id |
+        """
+        self._info("Assigning temporary id '%s' to element '%s'" % (id, locator))
+        self._selenium.assign_id(self._parse_locator(locator), id)
+
     def element_should_contain(self, locator, expected, message=''):
         """Verifies element identified by `locator` contains text `expected`.
 
