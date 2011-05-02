@@ -11,6 +11,7 @@
 
 user_pref("app.update.lastUpdateTime.places-maintenance-timer", 1296213578);
 user_pref("app.update.lastUpdateTime.search-engine-update-timer", 1296213595);
+user_pref("app.update.enabled", false);
 user_pref("browser.download.manager.showWhenStarting", false);
 user_pref("browser.history_expire_days.mirror", 180);
 user_pref("browser.migration.version", 1);
@@ -23,14 +24,11 @@ user_pref("browser.safebrowsing.malware.enabled", false);
 user_pref("browser.search.update", false);
 user_pref("browser.sessionstore.resume_session_once", true);
 user_pref("browser.startup.homepage", "about:blank");
-user_pref("browser.startup.homepage_override.mstone", "rv:1.9.2.13");
 user_pref("browser.tabs.autoHide", true);
 user_pref("browser.tabs.warnOnClose", false);
 user_pref("browser.tabs.warnOnOpen", false);
 user_pref("distribution.canonical.bookmarksProcessed", true);
 user_pref("dom.disable_open_during_load", false);
-user_pref("extensions.enabledItems", "langpack-en@firefox-3.6.ubuntu.com:3.6,langpack-en-CA@firefox-3.6.ubuntu.com:3.6,langpack-en-GB@firefox-3.6.ubuntu.com:3.6,langpack-en-AU@firefox-3.6.ubuntu.com:3.6,ubufox@ubuntu.com:0.9rc2,{972ce4c6-7e08-4474-a285-3208198ce6fd}:3.6.13");
-user_pref("extensions.lastAppVersion", "3.6.13");
 user_pref("extensions.newAddons", false);
 user_pref("extensions.update.enabled", false);
 user_pref("extensions.update.notifyUser ", false);
