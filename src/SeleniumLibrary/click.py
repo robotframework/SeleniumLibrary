@@ -48,13 +48,9 @@ class Click(RunOnFailure):
         If you want to double click the element at certain coordinates, you can
         specify the position with `coordinates` argument in format `x,y`.
 
-        This keyword is new in SeleniumLibrary 2.7.
+        See `Click Element` for usage examples.
 
-        Examples:
-        | Click Element | my_id |
-        | Click Element | my_id | and don't wait |
-        | Click Element | my_id |  | 100,150 |
-        | Click Element | my_id | coordinates=100,150 | # Use named argument syntax available in RF 2.5 and newer |
+        This keyword is new in SeleniumLibrary 2.7.
         """
         self._info("Double clicking element '%s'." % locator)
         self._double_click(self._parse_locator(locator), dont_wait, coordinates)
