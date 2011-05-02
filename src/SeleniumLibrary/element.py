@@ -148,13 +148,33 @@ class Element(RunOnFailure):
         """
         self._selenium.focus(locator)
 
-    def drag_and_drop(self, locator, movement):
-        """Drags element identified with `locator` by `movement`
+    def drag_and_drop(self, locator, movement=None, target=None):
+        """Drags element identified with `locator`.
 
-        `movement is a string in format "+70 -300" interpreted as pixels in
-        relation to elements current position.
+        Element can be moved either by a certain amount of pixels with
+        `movement` argument, or on top of another element with `target`
+        argument.
+
+        `movement` is a string in format "+70 -300" interpreted as pixels
+        relative to the dragged element's original position.
+
+        `target` is a locator of the element where the dragged object is
+        dropped. This argument was added in SeleniumLibrary 2.7.
+
+        Examples:
+        | Drag And Drop | myElem | +50 -35 | # Move myElem 50px right and 35px down. |
+        | Drag And Drop | elem1 | target=elem2 | # Move elem1 over elem2. |
         """
-        self._selenium.dragdrop(self._parse_locator(locator), movement)
+        if movement and target:
+            raise RuntimeError("Use only movement or target.")
+        if not (movement or target):
+            raise RuntimeError("Either movement or target must be given.")
+        locator = self._parse_locator(locator)
+        if movement:
+            self._selenium.drag_and_drop(locator, movement)
+        if target:
+            target = self._parse_locator(target)
+            self._selenium.drag_and_drop_to_object(locator, target)
 
     def press_key(self, locator, key, wait=''):
         """Simulates user pressing key on element identified by `locator`.
