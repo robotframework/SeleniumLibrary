@@ -86,7 +86,7 @@ a {
 </head>
 <body>
 <h1>SeleniumLibrary</h1>
-<b>Version:</b> devel<br>
+<b>Version:</b> 2.7<br>
 <b>Scope:</b> global<br>
 <b>Named arguments: </b>
 supported
@@ -257,7 +257,7 @@ Usually, https works out of the box. However, there may be trouble with self-sig
 <br />
 <span class="name">timeout</span> is the default timeout used to wait for page load actions. It can be later set with <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a><br />
 <br />
-<span class="name">server_host</span> and <span class="name">server_port</span> are used to connect to Selenium Server. Browsers opened with this SeleniumLibrary instance will be attached to that server. Note that the Selenium Server must be running before <a href="#Open Browser" class="name">Open Browser</a> keyword can be used. Selenium Server can be started with keyword <a href="#Start Selenium Server" class="name">Start Selenium Server</a>. Starting from SeleniumLibrary 2.7, it is possible to give <span class="name">server_host</span> as a URL with a possible embedded port, for example <span class="name">http://192.168.52.1:4444</span>. If <span class="name">server_host</span> contains port, the value of <span class="name">server_port</span> is ignored.<br />
+<span class="name">server_host</span> and <span class="name">server_port</span> are used to connect to Selenium Server. Browsers opened with this SeleniumLibrary instance will be attached to that server. Note that the Selenium Server must be running before <a href="#Open Browser" class="name">Open Browser</a> keyword can be used. Selenium Server can be started with keyword <a href="#Start Selenium Server" class="name">Start Selenium Server</a>. Starting from SeleniumLibrary 2.6.1, it is possible to give <span class="name">server_host</span> as a URL with a possible embedded port, for example <span class="name">http://192.168.52.1:4444</span>. If <span class="name">server_host</span> contains port, the value of <span class="name">server_port</span> is ignored.<br />
 <br />
 <span class="name">jar_path</span> is the absolute path to the selenium-server.jar file to be used by the library. If set, a custom, modified version can be started instead of the default one distributed with the library.<br />
 <br />
@@ -352,9 +352,11 @@ Examples:<br />
 &nbsp;&middot;&nbsp;
 <a href="#Delete Cookie" title="Deletes cookie matching `name` and `options`.">Delete&nbsp;Cookie</a>
 &nbsp;&middot;&nbsp;
+<a href="#Double Click Element" title="Double click element identified by `locator`.">Double&nbsp;Click&nbsp;Element</a>
+&nbsp;&middot;&nbsp;
 <a href="#Double Click Flex Element" title="Double clicks an element found by `locator`.">Double&nbsp;Click&nbsp;Flex&nbsp;Element</a>
 &nbsp;&middot;&nbsp;
-<a href="#Drag And Drop" title="Drags element identified with `locator` by `movement`">Drag&nbsp;And&nbsp;Drop</a>
+<a href="#Drag And Drop" title="Drags element identified with `locator`.">Drag&nbsp;And&nbsp;Drop</a>
 &nbsp;&middot;&nbsp;
 <a href="#Element Should Be Disabled" title="Verifies that element identified with `locator` is disabled.">Element&nbsp;Should&nbsp;Be&nbsp;Disabled</a>
 &nbsp;&middot;&nbsp;
@@ -756,10 +758,41 @@ Key attributes for buttons are <span class="name">id</span>, <span class="name">
 </tr>
 <tr>
   <td class="kw"><a name="Click Element"></a>Click Element</td>
-  <td class="arg">locator, dont_wait=</td>
+  <td class="arg">locator, dont_wait=, coordinates=None</td>
   <td class="doc">Click element identified by <span class="name">locator</span>.<br />
 <br />
-Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements and about meaning of <span class="name">dont_wait</span> argument.</td>
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements and about meaning of <span class="name">dont_wait</span> argument.<br />
+<br />
+If you want to click the element at certain coordinates, you can specify the position with <span class="name">coordinates</span> argument in format <span class="name">x,y</span>. Support for coordinates was added in SeleniumLibrary 2.7.<br />
+<br />
+Examples:<br />
+<table border="1" class="doc">
+<tr>
+<td>Click Element</td>
+<td>my_id</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Click Element</td>
+<td>my_id</td>
+<td>and don't wait</td>
+<td></td>
+</tr>
+<tr>
+<td>Click Element</td>
+<td>my_id</td>
+<td></td>
+<td>100,150</td>
+</tr>
+<tr>
+<td>Click Element</td>
+<td>my_id</td>
+<td>coordinates=100,150</td>
+<td># Use named argument syntax available in RF 2.5 and newer</td>
+</tr>
+</table>
+</td>
 </tr>
 <tr>
   <td class="kw"><a name="Click Flex Element"></a>Click Flex Element</td>
@@ -882,6 +915,19 @@ If the cookie is not found, nothing happens.<br />
 <span class="name">options</span> is the options for the cookie as a string. Currently supported options include <span class="name">path</span>, <span class="name">domain</span> and <span class="name">recurse.</span> Format for <span class="name">options</span> is <span class="name">path=/path/, domain=.foo.com, recurse=true</span>. The order of options is irrelevant. Note that specifying a domain that is not a subset of the current domain will usually fail. Setting <span class="name">recurse=true</span> will cause this keyword to search all sub-domains of current domain with all paths that are subset of current path. This can take a long time.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Double Click Element"></a>Double Click Element</td>
+  <td class="arg">locator, dont_wait=, coordinates=None</td>
+  <td class="doc">Double click element identified by <span class="name">locator</span>.<br />
+<br />
+Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements and about meaning of <span class="name">dont_wait</span> argument.<br />
+<br />
+If you want to double click the element at certain coordinates, you can specify the position with <span class="name">coordinates</span> argument in format <span class="name">x,y</span>.<br />
+<br />
+See <a href="#Click Element" class="name">Click Element</a> for usage examples.<br />
+<br />
+This keyword is new in SeleniumLibrary 2.7.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Double Click Flex Element"></a>Double Click Flex Element</td>
   <td class="arg">locator</td>
   <td class="doc">Double clicks an element found by <span class="name">locator</span>.<br />
@@ -890,10 +936,31 @@ See <a href="#introduction" class="name">introduction</a> about rules for locati
 </tr>
 <tr>
   <td class="kw"><a name="Drag And Drop"></a>Drag And Drop</td>
-  <td class="arg">locator, movement</td>
-  <td class="doc">Drags element identified with <span class="name">locator</span> by <span class="name">movement</span><br />
+  <td class="arg">locator, movement=None, target=None</td>
+  <td class="doc">Drags element identified with <span class="name">locator</span>.<br />
 <br />
-`movement is a string in format "+70 -300" interpreted as pixels in relation to elements current position.</td>
+Element can be moved either by a certain amount of pixels with <span class="name">movement</span> argument, or on top of another element with <span class="name">target</span> argument.<br />
+<br />
+<span class="name">movement</span> is a string in format "+70 -300" interpreted as pixels relative to the dragged element's original position.<br />
+<br />
+<span class="name">target</span> is a locator of the element where the dragged object is dropped. This argument was added in SeleniumLibrary 2.7.<br />
+<br />
+Examples:<br />
+<table border="1" class="doc">
+<tr>
+<td>Drag And Drop</td>
+<td>myElem</td>
+<td>+50 -35</td>
+<td># Move myElem 50px right and 35px down.</td>
+</tr>
+<tr>
+<td>Drag And Drop</td>
+<td>elem1</td>
+<td>target=elem2</td>
+<td># Move elem1 over elem2.</td>
+</tr>
+</table>
+</td>
 </tr>
 <tr>
   <td class="kw"><a name="Element Should Be Disabled"></a>Element Should Be Disabled</td>
@@ -2214,9 +2281,9 @@ This keyword was added in SeleniumLibrary 2.5.</td>
 </tr>
 </table>
 <p id="footer">
-Altogether 133 keywords.<br />
+Altogether 134 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-04-29 14:05:13.
+on 2011-05-02 14:57:56.
 </p>
 </body>
 </html>
