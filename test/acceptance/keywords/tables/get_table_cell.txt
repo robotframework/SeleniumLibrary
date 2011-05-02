@@ -3,7 +3,7 @@ Resource        table_resource.txt
 
 *** Test Cases ***
 Should Retrieve Text From Cell
-    [Template]  Table Cell Should Be Equal with Different Locators
+    [Template]  Table Cell Should Be Equal With CSS And XPath Locators
     simpleTable  1  1  simpleTable_A1
     tableWithSingleHeader  1  1  tableWithSingleHeader_A1
     tableWithSingleHeader  3  3  tableWithSingleHeader_C3
@@ -25,10 +25,10 @@ Should Give Error Message When Index Out Of Bounds
     Run Keyword And Expect Error  Cell in table 'simpleTable' in row #10 and column #20 should have contained text 'simpleTable_B3'.  Table Cell Should Contain  simpleTable  10  20  simpleTable_B3
 
 *** Keywords ***
-Table Cell Should Be Equal with Different Locators
+Table Cell Should Be Equal With CSS And XPath Locators
     [Arguments]  ${tableId}  ${row}  ${col}  ${content}
-    Run Table Keyword with Different Locators  Table Cell Should Be Equal  ${table id}  ${row}  ${col}  ${content}
-    
+    Run Table Keyword With CSS And XPath Locators  Table Cell Should Be Equal  ${table id}  ${row}  ${col}  ${content}
+
 Table Cell Should Be Equal
     [Arguments]  ${tableId}  ${row}  ${col}  ${content}
     ${cell}=  Get Table Cell  ${tableId}  ${row}  ${col}

@@ -3,7 +3,7 @@ Resource        table_resource.txt
 
 *** Test Cases ***
 Should Find Text In Table Content
-    [Template]  Verify Table Contains with Different Locators
+    [Template]  Verify Table Contains With CSS And XPath Locators
     simpleTable  simpleTable_A1
     simpleTable  simpleTable_C3
     simpleWithNested  simpleWithNested_A1
@@ -29,19 +29,20 @@ Should Find Text In Table Content with CSS Specific Mechnanics
     Table Should Contain  formattedTable  formattedTable_D1
 
 Should Give Error Message When Content Not Found In Table
-    [Template]  Table Should Contain Fails with Different Locators
+    [Template]  Table Should Contain Fails With CSS And XPath Locators
     simpleTable  Not here
 
 *** Keywords ***
-Verify Table Contains with Different Locators
+Verify Table Contains With CSS And XPath Locators
     [Arguments]  ${table id}  ${expected}
-    Run Table Keyword With Different Locators  Table Should Contain  ${table id}  ${expected}
+    Run Table Keyword With CSS And XPath Locators  Table Should Contain  ${table id}  ${expected}
 
-Table Should Contain Fails with Different Locators
+Table Should Contain Fails With CSS And XPath Locators
     [Arguments]  ${table id}  ${expected}
-    Run Table Keyword With Different Locators  Table Should Contain Fails  ${table id}  ${expected}
+    Run Table Keyword With CSS And XPath Locators  Table Should Contain Fails  ${table id}  ${expected}
 
 Table Should Contain Fails
     [Arguments]  ${locator}  ${expected}
-    ${err}=  Set Variable  Table identified by '${locator}' should have contained text '${expected}'. 
+    ${err}=  Set Variable  Table identified by '${locator}' should have contained text '${expected}'.
     Run Keyword And Expect Error  ${err}  Table Should Contain  ${locator}  ${expected}
+
