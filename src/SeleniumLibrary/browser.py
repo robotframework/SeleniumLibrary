@@ -195,6 +195,7 @@ class Browser(RunOnFailure):
         New in SeleniumLibrary 2.7.
         """
         self._selenium.refresh()
+        self.wait_until_page_loaded()
 
     def go_back(self, dont_wait=''):
         """Simulates the user clicking the "back" button on their browser.
