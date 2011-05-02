@@ -1,0 +1,17 @@
+*** Settings ***
+Test Setup      Go To Page "links.html"
+Resource        ../resource.txt
+
+*** Test Cases ***
+Click Element
+    [Documentation]  LOG 2 Clicking element 'xpath=//a[text()='Link']'.
+    Click Element  xpath=//a[text()='Link']
+    Verify Location Is "target/first.html"
+
+Click Element With Coordinates
+    [Documentation]  LOG 2:1 Clicking element 'xpath=//a[text()='Link']'.
+    ...  LOG 2:3 Clicking at coordinates '3,1'.
+    Click Element  xpath=//a[text()='Link']  coordinates=3,1
+    Verify Location Is "target/first.html"
+
+
