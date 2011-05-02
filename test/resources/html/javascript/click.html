@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function singleClick() {
+        document.getElementById("output").innerHTML="single clicked";
+      }
+      function doubleClick() {
+        document.getElementById("output").innerHTML="double clicked";
+      }
+    </script>
+  </head>
+
+  <body>
+    <h1>Clicking</h1>
+    <p id="info">Watch the output below</p>
+    <p id="output"></p>
+    <button type="button" id="singleClickButton" onclick="singleClick()">Click me!</button>
+    <button type="button" id="doubleClickButton" ondblclick="doubleClick()">Double click me!</button>
+  </body>
+</html>
+

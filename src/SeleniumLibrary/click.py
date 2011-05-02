@@ -18,15 +18,6 @@ from runonfailure import RunOnFailure
 class Click(RunOnFailure):
     """Contains keywords for clicking different elements."""
 
-    def _click(self, locator, dont_wait='', coordinates=None):
-        if coordinates:
-            self._info("Clicking at coordinates '%s'." % coordinates)
-            self._selenium.click_at(locator, coordinates)
-        else:
-            self._selenium.click(locator)
-        if not dont_wait:
-            self.wait_until_page_loaded()
-
     def click_element(self, locator, dont_wait='', coordinates=None):
         """Click element identified by `locator`.
 
@@ -46,6 +37,27 @@ class Click(RunOnFailure):
         """
         self._info("Clicking element '%s'." % locator)
         self._click(self._parse_locator(locator), dont_wait, coordinates)
+
+    def double_click_element(self, locator, dont_wait='', coordinates=None):
+        """Double click element identified by `locator`.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements and about meaning
+        of `dont_wait` argument.
+
+        If you want to double click the element at certain coordinates, you can
+        specify the position with `coordinates` argument in format `x,y`.
+
+        This keyword is new in SeleniumLibrary 2.7.
+
+        Examples:
+        | Click Element | my_id |
+        | Click Element | my_id | and don't wait |
+        | Click Element | my_id |  | 100,150 |
+        | Click Element | my_id | coordinates=100,150 | # Use named argument syntax available in RF 2.5 and newer |
+        """
+        self._info("Double clicking element '%s'." % locator)
+        self._double_click(self._parse_locator(locator), dont_wait, coordinates)
 
     def click_link(self, locator, dont_wait=''):
         """Clicks a link identified by locator.
@@ -92,6 +104,26 @@ class Click(RunOnFailure):
                 raise
             # A form may have an image as it's submit trigger.
             self._click(self._parse_locator(locator, 'input'), dont_wait)
+
+    def _click(self, locator, dont_wait='', coordinates=None):
+        self._click_or_click_at(locator, self._selenium.click,
+                                self._selenium.click_at, coordinates,
+                                dont_wait)
+
+    def _double_click(self, locator, dont_wait='', coordinates=None):
+        self._click_or_click_at(locator, self._selenium.double_click,
+                                self._selenium.double_click_at, coordinates,
+                                dont_wait)
+
+    def _click_or_click_at(self, locator, action, action_with_coordinates,
+                           coordinates, dont_wait):
+        if coordinates:
+            self._info("Clicking at coordinates '%s'." % coordinates)
+            action_with_coordinates(locator, coordinates)
+        else:
+            action(locator)
+        if not dont_wait:
+            self.wait_until_page_loaded()
 
     def submit_form(self, locator='', dont_wait=''):
         """Submits a form identified by `locator`.

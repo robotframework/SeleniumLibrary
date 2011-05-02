@@ -1,17 +1,31 @@
 *** Settings ***
-Test Setup      Go To Page "links.html"
+Suite Setup      Go To Page "javascript/click.html"
+Test Setup       Reload Page
 Resource        ../resource.txt
 
 *** Test Cases ***
 Click Element
-    [Documentation]  LOG 2 Clicking element 'xpath=//a[text()='Link']'.
-    Click Element  xpath=//a[text()='Link']
-    Verify Location Is "target/first.html"
+    [Documentation]  LOG 2 Clicking element 'singleClickButton'.
+    Element Text Should Be   output  ${EMPTY}
+    Click Element  singleClickButton  and don't wait
+    Element Text Should Be   output  single clicked
 
 Click Element With Coordinates
-    [Documentation]  LOG 2:1 Clicking element 'xpath=//a[text()='Link']'.
+    [Documentation]  LOG 2:1 Clicking element 'singleClickButton'.
     ...  LOG 2:3 Clicking at coordinates '3,1'.
-    Click Element  xpath=//a[text()='Link']  coordinates=3,1
-    Verify Location Is "target/first.html"
+    Element Text Should Be   output  ${EMPTY}
+    Click Element  singleClickButton  and don't wait  3,1
+    Element Text Should Be   output  single clicked
 
+Double Click Element
+    [Documentation]  LOG 2 Double clicking element 'doubleClickButton'.
+    Element Text Should Be   output  ${EMPTY}
+    Double Click Element  doubleClickButton  and don't wait
+    Element Text Should Be   output  double clicked
 
+Double Click Element With Coordinates
+    [Documentation]  LOG 2 Double clicking element 'doubleClickButton'.
+    ...  LOG 2:3 Clicking at coordinates '10,5'.
+    Element Text Should Be   output  ${EMPTY}
+    Double Click Element  doubleClickButton  and don't wait  10,5
+    Element Text Should Be   output  double clicked
