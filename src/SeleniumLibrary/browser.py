@@ -161,7 +161,7 @@ class Browser(RunOnFailure):
             self._selenium = self._cache.switch(index_or_alias)
             self._debug('Switched to browser with Selenium session id %s'
                          % self._selenium.sessionId)
-        except DataError:
+        except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
 
