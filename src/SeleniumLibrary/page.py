@@ -377,7 +377,7 @@ class Page(RunOnFailure):
         If you wish to assert the number of matching elements, use
         `Xpath Should Match X Times`.
         """
-        return self._selenium.get_xpath_count(xpath)
+        return str(self._selenium.get_xpath_count(xpath))
 
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
@@ -388,8 +388,7 @@ class Page(RunOnFailure):
         This keyword was added in SeleniumLibrary 2.5.
         """
         actual_xpath_count = self._selenium.get_xpath_count(xpath)
-        expected_xpath_count = str(expected_xpath_count)
-        if actual_xpath_count != expected_xpath_count:
+        if int(actual_xpath_count) != int(expected_xpath_count):
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
                             %(xpath, expected_xpath_count, actual_xpath_count)
