@@ -19,7 +19,7 @@ __docformat__ = "restructuredtext en"
 import httplib
 import urllib
 
-class selenium:
+class selenium(object):
     """
     Defines an object that runs Selenium commands.
     
@@ -225,6 +225,8 @@ class selenium:
 
     def get_string_array(self, verb, args):
         csv = self.get_string(verb, args)
+        if not csv:
+            return []
         token = ""
         tokens = []
         escape = False
@@ -245,12 +247,15 @@ class selenium:
         return tokens
 
     def get_number(self, verb, args):
-        # FIXME: Talk to the group about this, it should return a number
-        return self.get_string(verb, args)
+        return int(self.get_string(verb, args))
 
     def get_number_array(self, verb, args):
-        # FIXME: Talk to the group about this, it should return a number
-        return self.get_string_array(verb, args)
+        string_array = self.get_string_array(verb, args)
+        num_array = []
+        for i in string_array:
+            num_array.append(int(i))
+
+        return num_array 
 
     def get_boolean(self, verb, args):
         boolstr = self.get_string(verb, args)
@@ -753,7 +758,7 @@ class selenium:
         """
         self.do_command("submit", [formLocator,])
 
-    def open(self,url,ignoreResponseCode=False):
+    def open(self,url,ignoreResponseCode=True):
         """
         Opens an URL in the test frame. This accepts both relative and absolute
         URLs.
@@ -1642,6 +1647,14 @@ class selenium:
         """
         return self.get_number("getXpathCount", [xpath,])
 
+    def get_css_count(self,css):
+        """
+        Returns the number of nodes that match the specified css selector, eg. "css=table" would give
+        the number of tables.
+
+        'css' is the css selector to evaluate. do NOT wrap this expression in a 'count()' function; we will do that for you.
+        """
+        return self.get_number("getCssCount", [css,])
 
     def assign_id(self,locator,identifier):
         """
@@ -1996,6 +2009,9 @@ class selenium:
         """
         return self.get_string("captureNetworkTraffic", [type,])
 
+    def capture_network_traffic(self, type):
+        return self.captureNetworkTraffic(type)
+
     def addCustomRequestHeader(self, key, value):
         """
         Tells the Selenium server to add the specificed key and value as a custom outgoing request header. This only works if the browser is configured to use the built in Selenium proxy.
@@ -2004,6 +2020,9 @@ class selenium:
         'value' the header value.
         """
         return self.do_command("addCustomRequestHeader", [key,value,])
+
+    def add_custom_request_header(self, key, value):
+        return self.addCustomRequestHeader(key, value)
 
     def capture_entire_page_screenshot_to_string(self,kwargs):
         """
