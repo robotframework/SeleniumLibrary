@@ -20,18 +20,21 @@ class Select(RunOnFailure):
     def get_list_items(self, locator):
         """Returns the values in the list identified by `locator`.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
-
-        This keyword was added in SeleniumLibrary 2.5.
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
         """
         return self._selenium.get_select_options(locator)
 
     def get_selected_list_value(self, locator):
         """Returns the value of the selected element from the list identified by `locator`.
 
-        Works both on lists and combo boxes. Fails if there are zero or more
-        than one selection.
+        Return value is read from `value` attribute of the selected element.
+        Fails if there are zero or more than one selection.
+
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
 
         This keyword was added in SeleniumLibrary 2.8.
         """
@@ -40,7 +43,11 @@ class Select(RunOnFailure):
     def get_selected_list_values(self, locator):
         """Returns the values of selected elements (as a list) from the list identified by `locator`.
 
-        Works both on lists and combo boxes. Fails if there is no selection.
+        Fails if there is no selection.
+
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
 
         This keyword was added in SeleniumLibrary 2.8.
         """
@@ -49,8 +56,11 @@ class Select(RunOnFailure):
     def get_selected_list_label(self, locator):
         """Returns the visible label of the selected element from the list identified by `locator`.
 
-        Works both on lists and combo boxes. Fails if there are zero or more
-        than one selection.
+        Fails if there are zero or more than one selection.
+
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
 
         This keyword was added in SeleniumLibrary 2.8.
         """
@@ -59,7 +69,11 @@ class Select(RunOnFailure):
     def get_selected_list_labels(self, locator):
         """Returns the visible labels of selected elements (as a list) from the list identified by `locator`.
 
-        Works both on lists and combo boxes. Fails if there is no selection.
+        Fails if there is no selection.
+
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
 
         This keyword was added in SeleniumLibrary 2.8.
         """
@@ -70,8 +84,9 @@ class Select(RunOnFailure):
 
         If you want to test that no option is selected, simply give no `values`.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
         """
         opts = values and 'options [ %s ]' % ' | '.join(values) or 'no options'
         self._info("Verifying list '%s' has %s selected." % (locator, opts))
@@ -99,8 +114,9 @@ class Select(RunOnFailure):
         value will be selected. If the target list is a multi-selection list,
         and `*values` is an empty list, all values of the list will be selected.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
 
         This keyword does not support waiting for possible page load
         automatically. If that is needed, keyword `Wait Until Page Loaded`
@@ -145,8 +161,9 @@ class Select(RunOnFailure):
         As a special case, giving empty list as `*selection` will remove all
         selections.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
 
         This keyword does not support waiting for possible page load
         automatically. If that is needed, keyword `Wait Until Page Loaded`
@@ -191,8 +208,9 @@ class Select(RunOnFailure):
     def list_should_have_no_selections(self, locator):
         """Verifies list identified by `locator` has no selections.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        more details on key attributes and locating elements.
+        List keywords work on both lists and combo boxes. Key attributes for
+        lists are `id` and `name`. See `introduction` for details about
+        locating elements.
         """
         self._info("Verifying list '%s' has no selection." % locator)
         if self._selenium.is_something_selected(locator):
