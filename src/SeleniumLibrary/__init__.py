@@ -292,6 +292,11 @@ class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
             host, port = host.split(':', 1)
         return host, int(port)
 
+    @property
+    def selenium(self):
+        """The selenium remote control instance of currently active browser."""
+        return self._selenium
+
     def start_selenium_server(self, *params):
         """Starts the Selenium Server provided with SeleniumLibrary.
 
