@@ -13,6 +13,27 @@ Get List Items From Multi-Select List
     ${expected}=  Create List  Males  Females  Others
     Should Be Equal  ${items}  ${expected}
 
+Get Selected List Value
+    ${selected}=  Get Selected List Value   preferred_channel
+    Should Be Equal   ${selected}   phone
+
+Get Selected List Values
+    ${selected}=  Get Selected List Values   preferred_channel
+    ${expected}=  Create List   phone
+    Should Be Equal   ${selected}   ${expected}
+
+Get Selected List Label
+    ${selected}=  Get Selected List Label   preferred_channel
+    Should Be Equal   ${selected}   Telephone
+    Select From List  interests   Males
+    ${selected}=  Get Selected List Label   interests
+    Should Be Equal   ${selected}   Males
+
+Get Selected List Labels
+    ${selected}=  Get Selected List Labels   possible_channels
+    ${expected}=  Create List   Email   Telephone
+    Should Be Equal   ${selected}   ${expected}
+
 List Selection Should Be
     [Documentation]  LOG 1 Verifying list 'interests' has no options selected. LOG 4 Verifying list 'possible_channels' has options [ email | Telephone ] selected.
     List Selection Should Be  interests

@@ -27,6 +27,44 @@ class Select(RunOnFailure):
         """
         return self._selenium.get_select_options(locator)
 
+    def get_selected_list_value(self, locator):
+        """Returns the value of the selected element from the list identified by `locator`.
+
+        Works both on lists and combo boxes. Fails if there are zero or more
+        than one selection.
+
+        This keyword was added in SeleniumLibrary 2.8.
+        """
+        return self._selenium.get_selected_value(locator)
+
+    def get_selected_list_values(self, locator):
+        """Returns the values of selected elements (as a list) from the list identified by `locator`.
+
+        Works both on lists and combo boxes. Fails if there is no selection.
+
+        This keyword was added in SeleniumLibrary 2.8.
+        """
+        return self._selenium.get_selected_values(locator)
+
+    def get_selected_list_label(self, locator):
+        """Returns the visible label of the selected element from the list identified by `locator`.
+
+        Works both on lists and combo boxes. Fails if there are zero or more
+        than one selection.
+
+        This keyword was added in SeleniumLibrary 2.8.
+        """
+        return self._selenium.get_selected_label(locator)
+
+    def get_selected_list_labels(self, locator):
+        """Returns the visible labels of selected elements (as a list) from the list identified by `locator`.
+
+        Works both on lists and combo boxes. Fails if there is no selection.
+
+        This keyword was added in SeleniumLibrary 2.8.
+        """
+        return self._selenium.get_selected_labels(locator)
+
     def list_selection_should_be(self, locator, *values):
         """Verifies the selection of list identified by `locator` is exactly `*values`.
 
