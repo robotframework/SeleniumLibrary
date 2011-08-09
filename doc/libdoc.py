@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#  Copyright 2008-2010 Nokia Siemens Networks Oyj
+#  Copyright 2008-2011 Nokia Siemens Networks Oyj
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
 
 """Robot Framework Library and Resource File Documentation Generator
 
@@ -67,7 +66,10 @@ from httplib import HTTPConnection
 from HTMLParser import HTMLParser
 
 from robot.running import TestLibrary, UserLibrary
-from robot.serializing import Template, Namespace
+try:
+    from robot.utils.templating import Template, Namespace
+except ImportError:  # Support for 2.5.x
+    from robot.serializing.templating import Template, Namespace
 from robot.errors import DataError, Information
 from robot.parsing import populators
 from robot import utils
@@ -89,9 +91,8 @@ def create_html_doc(lib, outpath, title=None, styles=None):
     namespace = Namespace(LIB=lib, TITLE=title, STYLES=_get_styles(styles),
                           GENERATED=generated)
     doc = Template(template=HTML_TEMPLATE).generate(namespace) + '\n'
-    outfile = open(outpath, 'w')
-    outfile.write(doc.encode('UTF-8'))
-    outfile.close()
+    with open(outpath, 'w') as outfile:
+        outfile.write(doc.encode('UTF-8'))
 
 def _get_styles(styles):
     if not styles:
@@ -150,14 +151,17 @@ class _DocHelper:
     _name_regexp = re.compile("`(.+?)`")
     _list_or_table_regexp = re.compile('^(\d+\.|[-*|]|\[\d+\]) .')
 
-    def __getattr__(self, name):
-        if name == 'htmldoc':
-            return self._get_htmldoc(self.doc)
-        if name == 'htmlshortdoc':
-            return utils.html_attr_escape(self.shortdoc)
-        if name == 'htmlname':
-            return utils.html_attr_escape(self.name)
-        raise AttributeError("Non-existing attribute '%s'" % name)
+    @property
+    def htmldoc(self):
+        return self._get_htmldoc(self.doc)
+
+    @property
+    def htmlshortdoc(self):
+        return utils.html_attr_escape(self.shortdoc)
+
+    @property
+    def htmlname(self):
+        return utils.html_attr_escape(self.name)
 
     def _process_doc(self, doc):
         ret = ['']
@@ -181,15 +185,12 @@ class _DocHelper:
         return ' '
 
     def _get_htmldoc(self, doc):
-        doc = utils.html_escape(doc, formatting=True)
+        doc = utils.html_format(doc)
         return self._name_regexp.sub(self._link_keywords, doc)
 
     def _link_keywords(self, res):
         name = res.group(1)
-        try:
-            lib = self.lib
-        except AttributeError:
-            lib = self
+        lib = self.lib if hasattr(self, 'lib') else self
         for kw in lib.keywords:
             if utils.eq(name, kw.name):
                 return '<a href="#%s" class="name">%s</a>' % (kw.name, name)
@@ -282,10 +283,9 @@ class _BaseKeywordDoc(_DocHelper):
     def __cmp__(self, other):
         return cmp(self.name.lower(), other.name.lower())
 
-    def __getattr__(self, name):
-        if name == 'argstr':
-            return ', '.join(self.args)
-        return _DocHelper.__getattr__(self, name)
+    @property
+    def argstr(self):
+        return ', '.join(self.args)
 
     def __repr__(self):
         return "'Keyword %s from library %s'" % (self.name, self.lib.name)
@@ -485,6 +485,9 @@ body {
   font-family: sans-serif;
   padding: 0.1em 0.5em;
 }
+.libdoc {
+  white-space: pre-wrap;
+}
 a.name, span.name {
   font-style: italic;
 }
@@ -583,11 +586,11 @@ not supported
 <!-- END IF -->
 
 <h2 id="introduction">Introduction</h2>
-<p>${LIB.htmldoc}</p>
+<div class="libdoc">${LIB.htmldoc}</div>
 
 <!-- IF ${LIB.inits} -->
 <h2 id="importing">Importing</h2>
-<table border="1" class="keywords">
+<table border="1" class="keywords libdoc">
 <tr>
   <th class="arg">Arguments</th>
   <th class="doc">Documentation</th>
@@ -612,7 +615,7 @@ not supported
 </div>
 
 <h2>Keywords</h2>
-<table border="1" class="keywords">
+<table border="1" class="keywords libdoc">
 <tr>
   <th class="kw">Keyword</th>
   <th class="arg">Arguments</th>
