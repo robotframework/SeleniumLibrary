@@ -105,6 +105,7 @@ class Browser(RunOnFailure):
         if self._selenium:
             self._debug('Closing browser with Selenium session id %s'
                         % self._selenium.sessionId)
+            self.close_window()
             self._selenium.stop()
             self._cache.current = None
             self._selenium = NoBrowserOpen()
