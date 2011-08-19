@@ -1,5 +1,5 @@
 *Setting*
-Library  SeleniumLibrary  \  \  4455  ${JARPATH}  NONE
+Library  Selenium2Library  \  \  4455  ${JARPATH}  NONE
 Library  Collections
 Library  OperatingSystem
 

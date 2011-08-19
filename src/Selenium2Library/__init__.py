@@ -114,7 +114,7 @@ def shut_down_selenium_server(host='localhost', port=4444):
         pass
 
 
-class SeleniumLibrary(Browser, Page, Button, Click, JavaScript, Mouse, Select,
+class Selenium2Library(Browser, Page, Button, Click, JavaScript, Mouse, Select,
                       Element, Screenshot, Table, TextField, Flex):
     """SeleniumLibrary is a web testing library for Robot Test Automation Framework.
 
