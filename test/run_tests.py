@@ -21,7 +21,7 @@ ROBOT_ARGS = [
 '--escape', 'space:SP',
 '--report', 'none',
 '--log', 'none',
-#'--suite', '...',
+'--suite', 'Acceptance.Open And Close',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

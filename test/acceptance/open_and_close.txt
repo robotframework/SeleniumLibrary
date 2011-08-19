@@ -2,9 +2,12 @@
 Resource        resource.txt
 
 *** Test Cases ***
+Browser Should Open And Close
+	Open Browser To Start Page Without Testing Default Options
+	Close Browser
+
 There Should Be A Good Error Message If Browser Is Not Opened
     Run Keyword And Expect Error  No browser is open  Title Should Be  foo
 
 Close Browser Does Nothing When No Browser Is Opened
     Close Browser
-

@@ -1,13 +1,59 @@
 import os
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
 import sys
+sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.4.0", "py"))
 
 from robot.variables import GLOBAL_VARIABLES
 from robot import utils
+
+from selenium import webdriver
+    
+FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'firefoxprofile')
+BROWSER_ALIASES = {'ff': '*firefox',
+                    'firefox': '*firefox',
+                    'ie': '*iexplore',
+                    'internetexplorer': '*iexplore',
+                    'googlechrome': '*googlechrome',
+                    'gc': '*googlechrome'
+                   }
 
 class Selenium2Library():
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = 0.5
+
+    def __init__(self):
+        self._cache = utils.ConnectionCache()
+        self._browser = None
+
+    def open_browser(self, url, browser='firefox', alias=None):
+        self._info("Opening browser '%s' to base url '%s'" % (browser, url))
+        self._browser = self._get_browser_instance(browser)
+        self._browser.get(url)
+        self._debug('Opened browser with session id %s'
+                    % self._browser.session_id)
+        return self._cache.register(self._browser, alias)
+
+    def close_browser(self):
+        if (self._browser):
+            self._debug('Closing browser with session id %s'
+                        % self._browser.session_id)
+            self._cache.current = None
+            self._browser.close();
+
+    def _get_browser_instance(self, browser_alias):
+        browser_token = self._get_browser_token(browser_alias)
+        if browser_token == '*firefox':
+            return webdriver.Firefox(FirefoxProfile(FIREFOX_PROFILE_DIR))
+        if browser_token == '*googlechrome':
+            return webdriver.Chrome()
+        if browser_token == '*iexplore':
+            return webdriver.Ie()
+        raise AssertionError(browser_alias + " is not a supported browser alias")
+
+    def _get_browser_token(self, browser_alias):
+        return BROWSER_ALIASES.get(browser_alias.lower().replace(' ', ''), browser_alias)
 
     def _get_log_dir(self):
         logfile = GLOBAL_VARIABLES['${LOG FILE}']
