@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="chrome://browser/content/sanitize.xul#detailsExpander"
+                   class="expander-up" />
+  <RDF:Description RDF:about="chrome://browser/content/preferences/securityWarnings.xul#SecurityWarnings"
+                   screenX="10"
+                   screenY="197" />
+  <RDF:Description RDF:about="chrome://browser/content/sanitize.xul#SanitizeDialog"
+                   screenX="128"
+                   screenY="119" />
+  <RDF:Description RDF:about="chrome://browser/content/preferences/preferences.xul#BrowserPreferences"
+                   screenX="893"
+                   screenY="284"
+                   lastSelected="paneAdvanced" />
+  <RDF:Description RDF:about="chrome://browser/content/preferences/preferences.xul">
+    <NC:persist RDF:resource="chrome://browser/content/preferences/preferences.xul#BrowserPreferences"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="chrome://browser/content/sanitize.xul#itemList"
+                   collapsed="false" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#nav-bar"
+                   collapsed="false"
+                   iconsize="small"
+                   currentset="unified-back-forward-button,back-button,forward-button,reload-button,stop-button,home-button,urlbar-container" />
+  <RDF:Description RDF:about="chrome://browser/content/sanitize.xul">
+    <NC:persist RDF:resource="chrome://browser/content/sanitize.xul#detailsExpander"/>
+    <NC:persist RDF:resource="chrome://browser/content/sanitize.xul#itemList"/>
+    <NC:persist RDF:resource="chrome://browser/content/sanitize.xul#SanitizeDialog"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#status-bar"
+                   hidden="true" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#PersonalToolbar"
+                   collapsed="true"
+                   iconsize="small"
+                   currentset="personal-bookmarks" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#main-window"
+                   sizemode="normal"
+                   width="924"
+                   height="885"
+                   screenY="107"
+                   screenX="898" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#toggle_taskbar"
+                   checked="false" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#navigator-toolbox"
+                   iconsize="small" />
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul">
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#main-window"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#status-bar"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#toggle_taskbar"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#nav-bar"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#PersonalToolbar"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#sidebar-box"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#sidebar-title"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#navigator-toolbox"/>
+    <NC:persist RDF:resource="chrome://browser/content/browser.xul#toolbar-menubar"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#sidebar-title"
+                   value="" />
+  <RDF:Description RDF:about="chrome://browser/content/preferences/securityWarnings.xul">
+    <NC:persist RDF:resource="chrome://browser/content/preferences/securityWarnings.xul#SecurityWarnings"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="chrome://browser/content/browser.xul#toolbar-menubar"
+                   iconsize="small"
+                   currentset="menubar-items" />
+  <RDF:Description RDF:about="chrome://global/content/customizeToolbar.xul#CustomizeToolbarWindow"
+                   width="636"
+                   height="400" />
+  <RDF:Description RDF:about="chrome://global/content/customizeToolbar.xul">
+    <NC:persist RDF:resource="chrome://global/content/customizeToolbar.xul#CustomizeToolbarWindow"/>
+  </RDF:Description>
+</RDF:RDF>
