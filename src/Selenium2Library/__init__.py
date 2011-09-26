@@ -41,11 +41,29 @@ class Selenium2Library():
                         % self._browser.session_id)
             self._cache.current = None
             self._browser.close();
+            self._browser = None
+
+    def get_title(self):
+        """Returns title of current page."""
+        self._ensure_browser()
+        return self._browser.title
+
+    def title_should_be(self, title):
+        """Verifies that current page title equals `title`."""
+        actual = self.get_title()
+        if actual != title:
+            raise AssertionError("Title should have been '%s' but was '%s'"
+                                  % (title, actual))
+        self._info("Page title is '%s'." % title)
+
+    def _ensure_browser(self):
+        if not self._browser:
+            raise RuntimeError('No browser is open')
 
     def _get_browser_instance(self, browser_alias):
         browser_token = self._get_browser_token(browser_alias)
         if browser_token == '*firefox':
-            return webdriver.Firefox(FirefoxProfile(FIREFOX_PROFILE_DIR))
+            return webdriver.Firefox(webdriver.FirefoxProfile(FIREFOX_PROFILE_DIR))
         if browser_token == '*googlechrome':
             return webdriver.Chrome()
         if browser_token == '*iexplore':
