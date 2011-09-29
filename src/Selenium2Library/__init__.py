@@ -5,18 +5,20 @@ import sys
 sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.4.0", "py"))
 
 from robot.variables import GLOBAL_VARIABLES
+from robot.errors import DataError
 from robot import utils
+from browsercache import BrowserCache
 
 from selenium import webdriver
     
 FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'firefoxprofile')
-BROWSER_ALIASES = {'ff': '*firefox',
-                    'firefox': '*firefox',
-                    'ie': '*iexplore',
-                    'internetexplorer': '*iexplore',
-                    'googlechrome': '*googlechrome',
-                    'gc': '*googlechrome'
-                   }
+BROWSER_NAMES = {'ff': '*firefox',
+                 'firefox': '*firefox',
+                 'ie': '*iexplore',
+                 'internetexplorer': '*iexplore',
+                 'googlechrome': '*googlechrome',
+                 'gc': '*googlechrome'
+                }
 
 class Selenium2Library():
 
@@ -24,54 +26,73 @@ class Selenium2Library():
     ROBOT_LIBRARY_VERSION = 0.5
 
     def __init__(self):
-        self._cache = utils.ConnectionCache()
-        self._browser = None
+        self._cache = BrowserCache()
 
     def open_browser(self, url, browser='firefox', alias=None):
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
-        self._browser = self._get_browser_instance(browser)
-        self._browser.get(url)
+        browser_name = browser
+        browser = self._get_browser(browser_name)
+        browser.get(url)
         self._debug('Opened browser with session id %s'
-                    % self._browser.session_id)
-        return self._cache.register(self._browser, alias)
+                    % browser.session_id)
+        return self._cache.register(browser, alias)
 
     def close_browser(self):
-        if (self._browser):
+        if self._cache.current:
             self._debug('Closing browser with session id %s'
-                        % self._browser.session_id)
-            self._cache.current = None
-            self._browser.close();
-            self._browser = None
+                        % self._cache.current.session_id)
+            self._cache.close()
+
+    def close_all_browsers(self):
+        self._debug('Closing all browsers')
+        self._cache.close_all()
 
     def get_title(self):
-        """Returns title of current page."""
-        self._ensure_browser()
-        return self._browser.title
+        return self._current_browser().title
 
     def title_should_be(self, title):
-        """Verifies that current page title equals `title`."""
         actual = self.get_title()
         if actual != title:
             raise AssertionError("Title should have been '%s' but was '%s'"
                                   % (title, actual))
         self._info("Page title is '%s'." % title)
 
-    def _ensure_browser(self):
-        if not self._browser:
-            raise RuntimeError('No browser is open')
+    def get_url(self):
+        return self._current_browser().current_url
 
-    def _get_browser_instance(self, browser_alias):
-        browser_token = self._get_browser_token(browser_alias)
+    def location_should_be(self, url):
+        actual = self.get_url()
+        if  actual != url:
+            raise AssertionError("Location should have been '%s' but was '%s'"
+                                 % (url, actual))
+        self._info("Current location is '%s'." % url)
+
+    def switch_browser(self, index_or_alias):
+        try:
+            self._cache.switch(index_or_alias)
+            self._debug('Switched to browser with Selenium session id %s'
+                         % self._cache.current.session_id)
+        except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
+            raise RuntimeError("No browser with index or alias '%s' found."
+                               % index_or_alias)
+
+    def _current_browser(self):
+        if not self._cache.current:
+            raise RuntimeError('No browser is open')
+        return self._cache.current
+
+    def _get_browser(self, browser_name):
+        browser_token = self._get_browser_token(browser_name)
         if browser_token == '*firefox':
             return webdriver.Firefox(webdriver.FirefoxProfile(FIREFOX_PROFILE_DIR))
         if browser_token == '*googlechrome':
             return webdriver.Chrome()
         if browser_token == '*iexplore':
             return webdriver.Ie()
-        raise AssertionError(browser_alias + " is not a supported browser alias")
+        raise AssertionError(browser_name + " is not a supported browser")
 
-    def _get_browser_token(self, browser_alias):
-        return BROWSER_ALIASES.get(browser_alias.lower().replace(' ', ''), browser_alias)
+    def _get_browser_token(self, browser_name):
+        return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
     def _get_log_dir(self):
         logfile = GLOBAL_VARIABLES['${LOG FILE}']
