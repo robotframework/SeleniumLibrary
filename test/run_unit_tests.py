@@ -8,8 +8,13 @@ def run_unit_tests():
     testfile = re.compile("^test_.*\.py$", re.IGNORECASE)
     basedir = os.path.abspath(os.path.dirname(__file__))
     testdir = os.path.join(basedir, 'unit')
+    path_dirs = [
+        testdir,
+        os.path.join(basedir, 'lib'),
+        os.path.join(basedir, '..', 'src')
+    ]
 
-    for path in [testdir, os.path.join(basedir, '..', 'src')]:
+    for path in path_dirs:
         if path not in sys.path:
             sys.path.insert(0, path)
 

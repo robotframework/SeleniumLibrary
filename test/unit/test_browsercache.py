@@ -1,8 +1,9 @@
 import unittest
 import os
 from Selenium2Library.browsercache import BrowserCache
+from mockito import *
 
-class MyTests(unittest.TestCase):
+class BrowserCacheTests(unittest.TestCase): 
 
     def test_no_current_message(self):
         cache = BrowserCache()
@@ -10,33 +11,33 @@ class MyTests(unittest.TestCase):
             cache.current.anyMember()
         self.assertEqual(context.exception.message, "No current browser")
 
+    def test_close(self):
+        cache = BrowserCache()
+        browser = mock()
+        cache.register(browser)
+
+        verify(browser, times=0).close() # sanity check
+        cache.close()
+        verify(browser, times=1).close()
+
     def test_close_only_called_once(self):
         cache = BrowserCache()
 
-        browser1 = FakeBrowser()
-        browser2 = FakeBrowser()
-        browser3 = FakeBrowser()
+        browser1 = mock()
+        browser2 = mock()
+        browser3 = mock()
 
         cache.register(browser1)
         cache.register(browser2)
         cache.register(browser3)
 
-        self.assertIs(cache.current, browser3) # sanity check
-        cache.close() # called on browser3
-        self.assertEquals(browser3.close_count, 1) # ensure close called
+        cache.close()
+        verify(browser3, times=1).close()
 
         cache.close_all()
-        self.assertEquals(browser1.close_count, 1)
-        self.assertEquals(browser2.close_count, 1)
-        self.assertEquals(browser3.close_count, 1)
-
-class FakeBrowser:
-
-    def __init__(self):
-        self.close_count = 0
-
-    def close(self):
-        self.close_count = self.close_count + 1
+        verify(browser1, times=1).close()
+        verify(browser2, times=1).close()
+        verify(browser3, times=1).close()
 
 if __name__ == "__main__":
     unittest.main()
