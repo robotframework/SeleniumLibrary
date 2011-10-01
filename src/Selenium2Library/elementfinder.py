@@ -5,13 +5,14 @@ class ElementFinder(object):
 
     def __init__(self):
         self._strategies = {
-            'class': self._find_by_class_name,
-            'css': self._find_by_css_selector,
+            'identifier': self._find_by_identifier,
             'id': self._find_by_id,
             'name': self._find_by_name,
-            'tag': self._find_by_tag_name,
             'xpath': self._find_by_xpath,
-            None: self._find_by_key_attrs
+            'link': self._find_by_link_text,
+            'css': self._find_by_css_selector,
+            'tag': self._find_by_tag_name,
+            None: self._find_by_default
         }
 
     def find(self, browser, locator, tag=None):
@@ -24,6 +25,46 @@ class ElementFinder(object):
         return strategy(browser, criteria, tag)
 
     # Strategy routines, private
+
+    def _find_by_identifier(self, browser, criteria, tag):
+        elements = browser.find_elements_by_id(criteria)
+        elements.extend(browser.find_elements_by_name(criteria))
+        return self._filter_by_tag(elements, tag)
+
+    def _find_by_id(self, browser, criteria, tag):
+        return self._filter_by_tag(
+            browser.find_elements_by_id(criteria),
+            tag)
+
+    def _find_by_name(self, browser, criteria, tag):
+        return self._filter_by_tag(
+            browser.find_elements_by_name(criteria),
+            tag)
+
+    def _find_by_xpath(self, browser, criteria, tag):
+        return self._filter_by_tag(
+            browser.find_elements_by_xpath(criteria),
+            tag)
+
+    def _find_by_link_text(self, browser, criteria, tag):
+        return self._filter_by_tag(
+            browser.find_elements_by_link_text(criteria),
+            tag)
+
+    def _find_by_css_selector(self, browser, criteria, tag):
+        return self._filter_by_tag(
+            browser.find_elements_by_css_selector(criteria),
+            tag)
+
+    def _find_by_tag_name(self, browser, criteria, tag):
+        return self._filter_by_tag(
+            browser.find_elements_by_tag_name(criteria),
+            tag)
+
+    def _find_by_default(self, browser, criteria, tag):
+        if criteria.startswith('//'):
+            return self._find_by_xpath(browser, criteria, tag)
+        return self._find_by_key_attrs(browser, criteria, tag)
 
     def _find_by_key_attrs(self, browser, criteria, tag):
         key_attrs = self._key_attrs.get(None)
@@ -38,36 +79,6 @@ class ElementFinder(object):
         xpath = "//%s[%s]" % (xpath_tag, ' or '.join(xpath_attrs))
 
         return browser.find_elements_by_xpath(xpath)
-
-    def _find_by_class_name(self, browser, criteria, tag):
-        return self._filter_by_tag(
-            browser.find_elements_by_class_name(criteria),
-            tag)
-
-    def _find_by_css_selector(self, browser, criteria, tag):
-        return self._filter_by_tag(
-            browser.find_elements_by_css_selector(criteria),
-            tag)
-
-    def _find_by_id(self, browser, criteria, tag):
-        return self._filter_by_tag(
-            browser.find_elements_by_id(criteria),
-            tag)
-
-    def _find_by_name(self, browser, criteria, tag):
-        return self._filter_by_tag(
-            browser.find_elements_by_name(criteria),
-            tag)
-
-    def _find_by_tag_name(self, browser, criteria, tag):
-        return self._filter_by_tag(
-            browser.find_elements_by_tag_name(criteria),
-            tag)
-
-    def _find_by_xpath(self, browser, criteria, tag):
-        return self._filter_by_tag(
-            browser.find_elements_by_xpath(criteria),
-            tag)
 
     # Private
 
@@ -111,10 +122,11 @@ class ElementFinder(object):
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
-        locator_parts = locator.partition('=')        
-        if len(locator_parts[1]) > 0:
-            prefix = locator_parts[0].lower()
-            criteria = locator_parts[2]
+        if not locator.startswith('//'):
+            locator_parts = locator.partition('=')
+            if len(locator_parts[1]) > 0:
+                prefix = locator_parts[0].lower()
+                criteria = locator_parts[2]
         return (prefix, criteria)
 
     def _xpath_criteria_escape(self, str):

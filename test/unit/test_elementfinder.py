@@ -98,35 +98,40 @@ class ElementFinderTests(unittest.TestCase):
         verify(browser).find_elements_by_xpath(
             "//button[@id='test1' or @name='test1' or @value='test1' or normalize-space(descendant-or-self::text())='test1']")
 
-    def test_find_by_class_name(self):
+    def test_find_with_implicit_xpath(self):
         finder = ElementFinder()
         browser = mock()
 
-        elements = self.make_mock_elements('div', 'a', 'body', 'a')
-        when(browser).find_elements_by_class_name("test1").thenReturn(elements)
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_xpath("//*[@test='1']").thenReturn(elements)
 
-        result = finder.find(browser, "class=test1")
+        result = finder.find(browser, "//*[@test='1']")
         self.assertEqual(result, elements)
-        result = finder.find(browser, "class=test1", tag='a')
+        result = finder.find(browser, "//*[@test='1']", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
 
-    def test_find_by_css_selector(self):
+    def test_find_by_identifier(self):
         finder = ElementFinder()
         browser = mock()
 
-        elements = self.make_mock_elements('div', 'a', 'body', 'a')
-        when(browser).find_elements_by_css_selector("#test1").thenReturn(elements)
+        id_elements = self._make_mock_elements('div', 'a')
+        name_elements = self._make_mock_elements('span', 'a')
+        when(browser).find_elements_by_id("test1").thenReturn(list(id_elements)).thenReturn(list(id_elements))
+        when(browser).find_elements_by_name("test1").thenReturn(list(name_elements)).thenReturn(list(name_elements))
 
-        result = finder.find(browser, "css=#test1")
-        self.assertEqual(result, elements)
-        result = finder.find(browser, "css=#test1", tag='a')
-        self.assertEqual(result, [elements[1], elements[3]])
+        all_elements = list(id_elements)
+        all_elements.extend(name_elements)
+
+        result = finder.find(browser, "identifier=test1")
+        self.assertEqual(result, all_elements)
+        result = finder.find(browser, "identifier=test1", tag='a')
+        self.assertEqual(result, [id_elements[1], name_elements[1]])
 
     def test_find_by_id(self):
         finder = ElementFinder()
         browser = mock()
 
-        elements = self.make_mock_elements('div', 'a', 'body', 'a')
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(browser).find_elements_by_id("test1").thenReturn(elements)
 
         result = finder.find(browser, "id=test1")
@@ -138,7 +143,7 @@ class ElementFinderTests(unittest.TestCase):
         finder = ElementFinder()
         browser = mock()
 
-        elements = self.make_mock_elements('div', 'a', 'body', 'a')
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(browser).find_elements_by_name("test1").thenReturn(elements)
 
         result = finder.find(browser, "name=test1")
@@ -146,23 +151,11 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "name=test1", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
 
-    def test_find_by_tag_name(self):
-        finder = ElementFinder()
-        browser = mock()
-
-        elements = self.make_mock_elements('div', 'a', 'body', 'a')
-        when(browser).find_elements_by_tag_name("div").thenReturn(elements)
-
-        result = finder.find(browser, "tag=div")
-        self.assertEqual(result, elements)
-        result = finder.find(browser, "tag=div", tag='a')
-        self.assertEqual(result, [elements[1], elements[3]])
-
     def test_find_by_xpath(self):
         finder = ElementFinder()
         browser = mock()
 
-        elements = self.make_mock_elements('div', 'a', 'body', 'a')
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(browser).find_elements_by_xpath("//*[@test='1']").thenReturn(elements)
 
         result = finder.find(browser, "xpath=//*[@test='1']")
@@ -170,8 +163,43 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "xpath=//*[@test='1']", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
 
+    def test_find_by_link_text(self):
+        finder = ElementFinder()
+        browser = mock()
 
-    def make_mock_elements(self, *tags):
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_link_text("my link").thenReturn(elements)
+
+        result = finder.find(browser, "link=my link")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "link=my link", tag='a')
+        self.assertEqual(result, [elements[1], elements[3]])
+
+    def test_find_by_css_selector(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_css_selector("#test1").thenReturn(elements)
+
+        result = finder.find(browser, "css=#test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "css=#test1", tag='a')
+        self.assertEqual(result, [elements[1], elements[3]])
+
+    def test_find_by_tag_name(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_tag_name("div").thenReturn(elements)
+
+        result = finder.find(browser, "tag=div")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "tag=div", tag='a')
+        self.assertEqual(result, [elements[1], elements[3]])
+
+    def _make_mock_elements(self, *tags):
         elements = []
         for tag in tags:
             element = mock()
