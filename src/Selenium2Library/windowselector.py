@@ -43,7 +43,7 @@ class WindowSelector(object):
 
     def _select_by_default(self, browser, criteria):
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            browser.switch_to_window(None)
+            browser.switch_to_window('')
             return
 
         try:

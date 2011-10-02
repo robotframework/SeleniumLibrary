@@ -244,7 +244,7 @@ class WindowSelectorTests(unittest.TestCase):
                 first_window = window
 
         def switch_to_window(handle_or_name):
-            if handle_or_name is None:
+            if handle_or_name == '':
                 browser.current_window = first_window
                 return
             for window in windows:
