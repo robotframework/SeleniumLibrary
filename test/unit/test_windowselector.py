@@ -2,6 +2,8 @@ import unittest
 import os
 from Selenium2Library.windowselector import WindowSelector
 from mockito import *
+import uuid
+from selenium.common.exceptions import NoSuchWindowException
 
 class WindowSelectorTests(unittest.TestCase):
 
@@ -25,7 +27,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "title=Title 2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_title_sloppy_match(self):
         selector = WindowSelector()
@@ -35,7 +37,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "title= tItLe 2  ")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_title_with_multiple_matches(self):
         selector = WindowSelector()
@@ -45,7 +47,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win2b', 'title': "Title 2", 'url': 'http://localhost/page2b.html' })
 
         selector.select(browser, "title=Title 2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2a')
+        self.assertEqual(browser.current_window.name, 'win2a')
 
     def test_select_by_title_no_match(self):
         selector = WindowSelector()
@@ -56,7 +58,7 @@ class WindowSelectorTests(unittest.TestCase):
 
         with self.assertRaises(ValueError) as context:
             selector.select(browser, "title=Title -1")
-        self.assertEqual(context.exception.message, "Could not find window with title 'Title -1'")
+        self.assertEqual(context.exception.message, "Unable to locate window with title 'Title -1'")
 
     def test_select_by_name(self):
         selector = WindowSelector()
@@ -66,7 +68,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "name=win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_name_sloppy_match(self):
         selector = WindowSelector()
@@ -76,7 +78,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "name= win2  ")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_name_with_bad_case(self):
         selector = WindowSelector()
@@ -87,7 +89,7 @@ class WindowSelectorTests(unittest.TestCase):
 
         with self.assertRaises(ValueError) as context:
             selector.select(browser, "name=Win2")
-        self.assertEqual(context.exception.message, "Could not find window with name 'Win2'")
+        self.assertEqual(context.exception.message, "Unable to locate window with name 'Win2'")
 
     def test_select_by_name_no_match(self):
         selector = WindowSelector()
@@ -98,7 +100,7 @@ class WindowSelectorTests(unittest.TestCase):
 
         with self.assertRaises(ValueError) as context:
             selector.select(browser, "name=win-1")
-        self.assertEqual(context.exception.message, "Could not find window with name 'win-1'")
+        self.assertEqual(context.exception.message, "Unable to locate window with name 'win-1'")
 
     def test_select_by_url(self):
         selector = WindowSelector()
@@ -108,7 +110,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "url=http://localhost/page2.html")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_url_sloppy_match(self):
         selector = WindowSelector()
@@ -118,7 +120,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "url=   http://LOCALHOST/page2.html  ")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_url_with_multiple_matches(self):
         selector = WindowSelector()
@@ -128,7 +130,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win2b', 'title': "Title 2b", 'url': 'http://localhost/page2.html' })
 
         selector.select(browser, "url=http://localhost/page2.html")
-        self.assertEqual(browser.get_current_window_handle(), 'win2a')
+        self.assertEqual(browser.current_window.name, 'win2a')
 
     def test_select_by_url_no_match(self):
         selector = WindowSelector()
@@ -139,7 +141,7 @@ class WindowSelectorTests(unittest.TestCase):
 
         with self.assertRaises(ValueError) as context:
             selector.select(browser, "url=http://localhost/page-1.html")
-        self.assertEqual(context.exception.message, "Could not find window with URL 'http://localhost/page-1.html'")
+        self.assertEqual(context.exception.message, "Unable to locate window with URL 'http://localhost/page-1.html'")
 
     def test_select_with_null_locator(self):
         selector = WindowSelector()
@@ -149,9 +151,9 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "name=win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
         selector.select(browser, None)
-        self.assertEqual(browser.get_current_window_handle(), 'win1')
+        self.assertEqual(browser.current_window.name, 'win1')
 
     def test_select_with_null_string_locator(self):
         selector = WindowSelector()
@@ -161,9 +163,9 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "name=win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
         selector.select(browser, "null")
-        self.assertEqual(browser.get_current_window_handle(), 'win1')
+        self.assertEqual(browser.current_window.name, 'win1')
 
     def test_select_with_empty_locator(self):
         selector = WindowSelector()
@@ -173,9 +175,9 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "name=win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
         selector.select(browser, "")
-        self.assertEqual(browser.get_current_window_handle(), 'win1')
+        self.assertEqual(browser.current_window.name, 'win1')
 
     def test_select_by_default_with_name(self):
         selector = WindowSelector()
@@ -185,7 +187,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_default_with_title(self):
         selector = WindowSelector()
@@ -195,7 +197,7 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "Title 2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def test_select_by_default_no_match(self):
         selector = WindowSelector()
@@ -206,7 +208,7 @@ class WindowSelectorTests(unittest.TestCase):
 
         with self.assertRaises(ValueError) as context:
             selector.select(browser, "win-1")
-        self.assertEqual(context.exception.message, "Could not find window with name or title 'win-1'")
+        self.assertEqual(context.exception.message, "Unable to locate window with name or title 'win-1'")
 
     def test_select_with_sloppy_prefix(self):
         selector = WindowSelector()
@@ -216,41 +218,43 @@ class WindowSelectorTests(unittest.TestCase):
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
         selector.select(browser, "name=win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
         selector.select(browser, "nAmE=win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
         selector.select(browser, " name  =win2")
-        self.assertEqual(browser.get_current_window_handle(), 'win2')
+        self.assertEqual(browser.current_window.name, 'win2')
 
     def _make_mock_browser(self, *window_specs):
         browser = mock()
 
-        windows = {}
+        windows = []
         window_handles = []
         first_window = None
         for window_spec in window_specs:
-            window_handle = window_spec['name']
             window = mock()
-            window.name = window_handle
+            window.handle = uuid.uuid4().hex
+            window.name = window_spec['name']
             window.title = window_spec['title']
             window.url = window_spec['url']
 
-            window_handles.append(window_handle)
-            windows[window_handle] = window
+            windows.append(window)
+            window_handles.append(window.handle)
+
             if first_window is None:
                 first_window = window
 
-        def switch_to_window(handle):
-            if handle is None:
+        def switch_to_window(handle_or_name):
+            if handle_or_name is None:
                 browser.current_window = first_window
                 return
-            if handle in window_handles:
-                browser.current_window = windows[handle]
-                return   
-            raise ValueError("No window called " + handle)
+            for window in windows:
+                if window.handle == handle_or_name or window.name == handle_or_name:
+                    browser.current_window = window
+                    return
+            raise NoSuchWindowException(u'Unable to locate window "' + handle_or_name + '"')
 
         browser.current_window = first_window
-        browser.get_current_window_handle = lambda: browser.current_window.name
+        browser.get_current_window_handle = lambda: browser.current_window.handle
         browser.get_title = lambda: browser.current_window.title
         browser.get_current_url = lambda: browser.current_window.url
         browser.get_window_handles = lambda: window_handles
