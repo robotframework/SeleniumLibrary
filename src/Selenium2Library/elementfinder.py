@@ -16,12 +16,15 @@ class ElementFinder(object):
         }
 
     def find(self, browser, locator, tag=None):
+        assert browser is not None
+        assert locator is not None and len(locator) > 0
+
         (prefix, criteria) = self._parse_locator(locator)
         if tag is not None:
             tag = self._tag_synonyms.get(tag, tag)
         strategy = self._strategies.get(prefix)
         if strategy is None:
-            raise ValueError("Locator with prefix '" + prefix + "' is not supported")
+            raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
         return strategy(browser, criteria, tag)
 
     # Strategy routines, private
@@ -125,8 +128,8 @@ class ElementFinder(object):
         if not locator.startswith('//'):
             locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0].lower()
-                criteria = locator_parts[2]
+                prefix = locator_parts[0].strip().lower()
+                criteria = locator_parts[2].strip()
         return (prefix, criteria)
 
     def _xpath_criteria_escape(self, str):

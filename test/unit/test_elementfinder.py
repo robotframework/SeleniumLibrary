@@ -10,7 +10,24 @@ class ElementFinderTests(unittest.TestCase):
         browser = mock()
         with self.assertRaises(ValueError) as context:
             finder.find(browser, "something=test1")
-        self.assertEqual(context.exception.message, "Locator with prefix 'something' is not supported")
+        self.assertEqual(context.exception.message, "Element locator with prefix 'something' is not supported")
+
+    def test_find_with_null_browser(self):
+        finder = ElementFinder()
+        with self.assertRaises(AssertionError):
+            finder.find(None, "id=test1")
+
+    def test_find_with_null_locator(self):
+        finder = ElementFinder()
+        browser = mock()
+        with self.assertRaises(AssertionError):
+            finder.find(browser, None)
+
+    def test_find_with_empty_locator(self):
+        finder = ElementFinder()
+        browser = mock()
+        with self.assertRaises(AssertionError):
+            finder.find(browser, "")
 
     def test_find_with_no_tag(self):
         finder = ElementFinder()
@@ -198,6 +215,32 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, elements)
         result = finder.find(browser, "tag=div", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
+
+    def test_find_with_sloppy_prefix(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_id("test1").thenReturn(elements)
+
+        result = finder.find(browser, "ID=test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "iD=test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "id=test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "  id =test1")
+        self.assertEqual(result, elements)
+
+    def test_find_with_sloppy_criteria(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_id("test1").thenReturn(elements)
+
+        result = finder.find(browser, "id= test1  ")
+        self.assertEqual(result, elements)
 
     def _make_mock_elements(self, *tags):
         elements = []
