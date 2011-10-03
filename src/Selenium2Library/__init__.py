@@ -12,6 +12,7 @@ from elementfinder import ElementFinder
 from windowmanager import WindowManager
 
 from selenium import webdriver
+import webdrivermonkeypatches
     
 FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'firefoxprofile')
 BROWSER_NAMES = {'ff': '*firefox',
@@ -31,6 +32,8 @@ class Selenium2Library(object):
         self._cache = BrowserCache()
         self._element_finder = ElementFinder()
         self._window_manager = WindowManager()
+        self._speed_in_secs = float(0)
+        self._timeout_in_secs = float(5)
 
     def open_browser(self, url, browser='firefox', alias=None):
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -98,6 +101,26 @@ class Selenium2Library(object):
     def get_window_identifiers(self):
         return self._window_manager.get_window_handles(self._current_browser())
 
+    def get_selenium_speed(self):
+        return utils.secs_to_timestr(self._speed_in_secs)
+
+    def set_selenium_speed(self, seconds):
+        old_speed = self.get_selenium_speed()
+        self._speed_in_secs = utils.timestr_to_secs(seconds)
+        for browser in self._cache.browsers:
+            browser.set_speed(self._speed_in_secs)
+        return old_speed
+
+    def get_selenium_timeout(self):
+        return utils.secs_to_timestr(self._timeout_in_secs)
+
+    def set_selenium_timeout(self, seconds):
+        old_timeout = self.get_selenium_timeout()
+        self._timeout_in_secs = utils.timestr_to_secs(seconds)
+        for browser in self._cache.browsers:
+            browser.set_script_timeout(self._timeout_in_secs)
+        return old_timeout
+
     def _current_browser(self):
         if not self._cache.current:
             raise RuntimeError('No browser is open')
@@ -123,15 +146,13 @@ class Selenium2Library(object):
         elif browser_token == '*iexplore':
             browser = webdriver.Ie()
 
-        if browser is not None:
-            # redefine properties as get methods so that they can be stubbed during tests
-            browser.get_title = lambda: browser.title
-            browser.get_current_url = lambda: browser.current_url
-            browser.get_current_window_handle = lambda: browser.current_window_handle
-            browser.get_window_handles = lambda: browser.window_handles
-            return browser
+        if browser is None:
+            raise ValueError(browser_name + " is not a supported browser")
 
-        raise AssertionError(browser_name + " is not a supported browser")
+        browser.set_speed(self._speed_in_secs)
+        browser.set_script_timeout(self._timeout_in_secs)
+
+        return browser
 
     def _get_browser_token(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)

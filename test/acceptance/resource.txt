@@ -22,9 +22,9 @@ Open Browser To Start Page
 
 Open Browser To Start Page Without Testing Default Options
   Open Browser  ${FRONT PAGE}  ${BROWSER}
-  #${orig speed} =  Set Selenium Speed  ${SPEED}
-  #${orig timeout} =  Set Selenium Timeout  10 seconds
-  #[Return]  ${orig speed}  ${orig timeout}
+  ${orig speed} =  Set Selenium Speed  ${SPEED}
+  ${orig timeout} =  Set Selenium Timeout  10 seconds
+  [Return]  ${orig speed}  ${orig timeout}
 
 Cannot Be Executed In IE
   ${runsInIE}=  Set Variable If  "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']  ${TRUE}
