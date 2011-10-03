@@ -5,6 +5,10 @@ class BrowserCache(ConnectionCache):
     def __init__(self):
         ConnectionCache.__init__(self, no_current_msg='No current browser')
         self._closed = set()
+
+    @property
+    def browsers(self):
+        return self._connections
     
     def close(self):
         if self.current:

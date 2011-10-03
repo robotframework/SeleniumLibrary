@@ -11,6 +11,22 @@ class BrowserCacheTests(unittest.TestCase):
             cache.current.anyMember()
         self.assertEqual(context.exception.message, "No current browser")
 
+    def test_browsers_property(self):
+        cache = BrowserCache()
+
+        browser1 = mock()
+        browser2 = mock()
+        browser3 = mock()
+
+        cache.register(browser1)
+        cache.register(browser2)
+        cache.register(browser3)
+
+        self.assertEqual(len(cache.browsers), 3)
+        self.assertEqual(cache.browsers[0], browser1)
+        self.assertEqual(cache.browsers[1], browser2)
+        self.assertEqual(cache.browsers[2], browser3)
+
     def test_close(self):
         cache = BrowserCache()
         browser = mock()
