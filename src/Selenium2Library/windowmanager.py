@@ -2,7 +2,7 @@ from robot import utils
 from types import *
 from selenium.common.exceptions import NoSuchWindowException
 
-class WindowSelector(object):
+class WindowManager(object):
 
     def __init__(self):
         self._strategies = {
