@@ -23,6 +23,7 @@ ROBOT_ARGS = [
 '--log', 'none',
 '--suite', 'Acceptance.Open And Close',
 '--suite', 'Acceptance.Multiple Browsers',
+'--suite', 'Acceptance.Windows',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

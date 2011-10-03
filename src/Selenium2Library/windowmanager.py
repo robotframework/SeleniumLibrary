@@ -12,6 +12,9 @@ class WindowManager(object):
             None: self._select_by_default
         }
 
+    def get_window_handles(self, browser):
+        return browser.get_window_handles()
+
     def select(self, browser, locator):
         assert browser is not None
 

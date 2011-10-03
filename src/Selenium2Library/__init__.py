@@ -8,6 +8,8 @@ from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
 from robot import utils
 from browsercache import BrowserCache
+from elementfinder import ElementFinder
+from windowmanager import WindowManager
 
 from selenium import webdriver
     
@@ -20,18 +22,20 @@ BROWSER_NAMES = {'ff': '*firefox',
                  'gc': '*googlechrome'
                 }
 
-class Selenium2Library():
+class Selenium2Library(object):
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = 0.5
 
     def __init__(self):
         self._cache = BrowserCache()
+        self._element_finder = ElementFinder()
+        self._window_manager = WindowManager()
 
     def open_browser(self, url, browser='firefox', alias=None):
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._get_browser(browser_name)
+        browser = self._make_browser(browser_name)
         browser.get(url)
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
@@ -58,7 +62,7 @@ class Selenium2Library():
         self._info("Page title is '%s'." % title)
 
     def get_url(self):
-        return self._current_browser().current_url
+        return self._current_browser().get_current_url()
 
     def location_should_be(self, url):
         actual = self.get_url()
@@ -76,19 +80,57 @@ class Selenium2Library():
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
 
+    def go_to(self, url):
+        self._info("Opening url '%s'" % url)
+        self._current_browser().get(url)
+
+    def click_link(self, locator):
+        self._info("Clicking link '%s'." % locator)
+        link = self._element_find(locator, True, True, tag='a')
+        link.click()
+
+    def select_window(self, locator=None):
+        self._window_manager.select(self._current_browser(), locator)
+
+    def close_window(self):
+        self._current_browser().close()
+
+    def get_window_identifiers(self):
+        return self._window_manager.get_window_handles(self._current_browser())
+
     def _current_browser(self):
         if not self._cache.current:
             raise RuntimeError('No browser is open')
         return self._cache.current
 
-    def _get_browser(self, browser_name):
+    def _element_find(self, locator, first_only, required, tag=None):
+        browser = self._current_browser()
+        elements = self._element_finder.find(browser, locator, tag)
+        if required and len(elements) == 0:
+            raise ValueError("Element locator '" + locator + "' did not match any elements")
+        if first_only:
+            if len(elements) == 0: return None
+            return elements[0]
+        return elements
+
+    def _make_browser(self, browser_name):
         browser_token = self._get_browser_token(browser_name)
+        browser = None
         if browser_token == '*firefox':
-            return webdriver.Firefox(webdriver.FirefoxProfile(FIREFOX_PROFILE_DIR))
-        if browser_token == '*googlechrome':
-            return webdriver.Chrome()
-        if browser_token == '*iexplore':
-            return webdriver.Ie()
+            browser = webdriver.Firefox(webdriver.FirefoxProfile(FIREFOX_PROFILE_DIR))
+        elif browser_token == '*googlechrome':
+            browser = webdriver.Chrome()
+        elif browser_token == '*iexplore':
+            browser = webdriver.Ie()
+
+        if browser is not None:
+            # redefine properties as get methods so that they can be stubbed during tests
+            browser.get_title = lambda: browser.title
+            browser.get_current_url = lambda: browser.current_url
+            browser.get_current_window_handle = lambda: browser.current_window_handle
+            browser.get_window_handles = lambda: browser.window_handles
+            return browser
+
         raise AssertionError(browser_name + " is not a supported browser")
 
     def _get_browser_token(self, browser_name):

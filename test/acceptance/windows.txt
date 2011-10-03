@@ -14,28 +14,19 @@ Popup Windows Created With Javascript
   Do Action In Popup Window And Verify
   Select Main Window And Verify
 
-Get Window Titles
-  ${exp_titles}=  Create List  Click link to show a popup window  Original
-  Click Link  my popup  don't wait
-  ${titles}=  Get Window Titles
-  Should Be Equal  ${titles}  ${exp_titles}
-
-Get Window Names
-  ${exp_names}=  Create List  selenium_main_app_window  myName
-  Click Link  my popup  don't wait
-  ${names}=  Get Window Names
-  Should Be Equal  ${names}  ${exp_names}
-
 Get Window Identifiers
-  ${exp_ids}=  Create List  undefined  undefined
-  Click Link  my popup  don't wait
-  ${ids}=  Get Window Identifiers
-  Should Be Equal  ${ids}  ${exp_ids}
+  Click Link  my popup
+  @{window_ids}=  Get Window Identifiers
+  Length Should Be  ${window_ids}  2
+  Select Window  @{window_ids}[0]
+  Title Should Be  Click link to show a popup window
+  Select Window  @{window_ids}[1]
+  Title Should Be  Original
 
 *Keywords*
 Open Popup Window, Select It And Verify
   [Arguments]  ${window_id}
-  Click Link  my popup  don't wait
+  Click Link  my popup
   Select Window  ${window_id}
   Title should Be  Original
 
@@ -45,5 +36,5 @@ Select Main Window And Verify
   Title Should Be  Click link to show a popup window
 
 Do Action In Popup Window And Verify
-  Click Link  change title  and don't wait
+  Click Link  change title
   Title Should Be  Changed
