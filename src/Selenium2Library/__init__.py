@@ -7,6 +7,7 @@ sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.4.0", "py"))
 from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
 from robot import utils
+from robot.output import LOGGER, Message
 from browsercache import BrowserCache
 from elementfinder import ElementFinder
 from windowmanager import WindowManager
@@ -117,9 +118,80 @@ class Selenium2Library(object):
     def set_selenium_timeout(self, seconds):
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = utils.timestr_to_secs(seconds)
-        for browser in self._cache.browsers:
+        for browser in self._cache.get_open_browsers():
             browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
+
+    def checkbox_should_be_selected(self, locator):
+        self._info("Verifying checkbox '%s' is selected." % locator)
+        element = self._get_checkbox(locator)
+        if not element.is_selected():
+            raise AssertionError("Checkbox '%s' should have been selected "
+                                 "but was not" % locator)
+
+    def checkbox_should_not_be_selected(self, locator):
+        self._info("Verifying checkbox '%s' is not selected." % locator)
+        element = self._get_checkbox(locator)
+        if element.is_selected():
+            raise AssertionError("Checkbox '%s' should not have been selected"
+                                  % locator)
+
+    def select_checkbox(self, locator):
+        self._info("Selecting checkbox '%s'." % locator)
+        element = self._get_checkbox(locator)
+        if not element.is_selected():
+            element.click()
+
+    def unselect_checkbox(self, locator):
+        self._info("Unselecting checkbox '%s'." % locator)
+        element = self._get_checkbox(locator)
+        if element.is_selected():
+            element.click()
+
+    def radio_button_should_be_set_to(self, group_name, value):
+        self._info("Verifying radio button '%s' has selection '%s'." \
+                   % (group_name, value))
+        elements = self._get_radio_buttons(group_name)
+        actual_value = self._get_value_from_radio_buttons(elements)
+        if actual_value is None or actual_value != value:
+            raise AssertionError("Selection of radio button '%s' should have "
+                                 "been '%s' but was '%s'"
+                                  % (group_name, value, actual_value))
+
+    def select_radio_button(self, group_name, value):
+        self._info("Selecting '%s' from radio button '%s'." % (value, group_name))
+        element = self._get_radio_button_with_value(group_name, value)
+        if not element.is_selected():
+            element.click()
+
+    def radio_button_should_not_be_selected(self, group_name):
+        self._info("Verifying radio button '%s' has no selection." % group_name)
+        elements = self._get_radio_buttons(group_name)
+        actual_value = self._get_value_from_radio_buttons(elements)
+        if actual_value is not None:
+            raise AssertionError("Radio button group '%s' should not have had "
+                                 "selection, but '%s' was selected"
+                                  % (group_name, actual_value))
+
+    def _get_checkbox(self, locator):
+        return self._element_find(locator, True, True, tag='input')
+
+    def _get_radio_buttons(self, group_name):
+        xpath = "xpath=//input[@type='radio' and @name='%s']" % group_name
+        self._debug('Radio group locator: ' + xpath)
+        return self._element_find(xpath, False, True)
+
+    def _get_radio_button_with_value(self, group_name, value):
+        xpath = "xpath=//input[@type='radio' and @name='%s' and (@value='%s' or @id='%s')]" \
+                 % (group_name, value, value)
+        self._debug('Radio group locator: ' + xpath)
+        return self._element_find(xpath, True, True)
+
+    def _get_value_from_radio_buttons(self, elements):
+        for element in elements:
+            if element.is_selected():
+                return element.get_attribute('value')
+        return None
 
     def _current_browser(self):
         if not self._cache.current:
@@ -165,7 +237,7 @@ class Selenium2Library(object):
 
     def _log(self, message, level='INFO'):
         if level != 'NONE':
-            print '*%s* %s' % (level, message)
+            LOGGER.log_message(Message(message, level))
 
     def _info(self, message):
         self._log(message)

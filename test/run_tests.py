@@ -24,6 +24,7 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Open And Close',
 '--suite', 'Acceptance.Multiple Browsers',
 '--suite', 'Acceptance.Windows',
+'--suite', 'Acceptance.Keywords.Checkbox And Radio Buttons',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

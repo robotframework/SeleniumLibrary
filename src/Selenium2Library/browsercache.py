@@ -9,6 +9,13 @@ class BrowserCache(ConnectionCache):
     @property
     def browsers(self):
         return self._connections
+
+    def get_open_browsers(self):
+        open_browsers = []
+        for browser in self._connections:
+            if browser not in self._closed:
+                open_browsers.append(browser)
+        return open_browsers
     
     def close(self):
         if self.current:

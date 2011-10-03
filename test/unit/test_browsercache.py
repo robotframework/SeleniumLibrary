@@ -27,6 +27,29 @@ class BrowserCacheTests(unittest.TestCase):
         self.assertEqual(cache.browsers[1], browser2)
         self.assertEqual(cache.browsers[2], browser3)
 
+    def test_get_open_browsers(self):
+        cache = BrowserCache()
+
+        browser1 = mock()
+        browser2 = mock()
+        browser3 = mock()
+
+        cache.register(browser1)
+        cache.register(browser2)
+        cache.register(browser3)
+
+        browsers = cache.get_open_browsers()
+        self.assertEqual(len(browsers), 3)
+        self.assertEqual(browsers[0], browser1)
+        self.assertEqual(browsers[1], browser2)
+        self.assertEqual(browsers[2], browser3)
+
+        cache.close()
+        browsers = cache.get_open_browsers()
+        self.assertEqual(len(browsers), 2)
+        self.assertEqual(browsers[0], browser1)
+        self.assertEqual(browsers[1], browser2)
+
     def test_close(self):
         cache = BrowserCache()
         browser = mock()
