@@ -173,6 +173,24 @@ class Selenium2Library(object):
                                  "selection, but '%s' was selected"
                                   % (group_name, actual_value))
 
+    def reload_page(self):
+        self._current_browser().refresh()
+
+    def element_text_should_be(self, locator, expected, message=''):
+        self._info("Verifying element '%s' contains exactly text '%s'."
+                    % (locator, expected))
+        element = self._element_find(locator, True, True)
+        actual = element.text
+        if expected != actual:
+            if not message:
+                message = "The text of element '%s' should have been '%s' but "\
+                          "in fact it was '%s'." % (locator, expected, actual)
+            raise AssertionError(message)
+
+    def click_element(self, locator):
+        self._info("Clicking element '%s'." % locator)
+        self._element_find(locator, True, True).click()
+
     def _get_checkbox(self, locator):
         return self._element_find(locator, True, True, tag='input')
 
