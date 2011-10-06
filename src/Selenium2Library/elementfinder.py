@@ -1,6 +1,8 @@
 from robot import utils
 from types import *
 
+import sys
+
 class ElementFinder(object):
 
     def __init__(self):
@@ -20,76 +22,74 @@ class ElementFinder(object):
         assert locator is not None and len(locator) > 0
 
         (prefix, criteria) = self._parse_locator(locator)
-        if tag is not None:
-            tag = self._tag_synonyms.get(tag, tag)
         strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
-        return strategy(browser, criteria, tag)
+        (tag, constraints) = self._get_tag_and_constraints(tag)
+        return strategy(browser, criteria, tag, constraints)
 
     # Strategy routines, private
 
-    def _find_by_identifier(self, browser, criteria, tag):
+    def _find_by_identifier(self, browser, criteria, tag, constraints):
         elements = browser.find_elements_by_id(criteria)
         elements.extend(browser.find_elements_by_name(criteria))
-        return self._filter_by_tag(elements, tag)
+        return self._filter_elements(elements, tag, constraints)
 
-    def _find_by_id(self, browser, criteria, tag):
-        return self._filter_by_tag(
+    def _find_by_id(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
             browser.find_elements_by_id(criteria),
-            tag)
+            tag, constraints)
 
-    def _find_by_name(self, browser, criteria, tag):
-        return self._filter_by_tag(
+    def _find_by_name(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
             browser.find_elements_by_name(criteria),
-            tag)
+            tag, constraints)
 
-    def _find_by_xpath(self, browser, criteria, tag):
-        return self._filter_by_tag(
+    def _find_by_xpath(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
             browser.find_elements_by_xpath(criteria),
-            tag)
+            tag, constraints)
 
-    def _find_by_link_text(self, browser, criteria, tag):
-        return self._filter_by_tag(
+    def _find_by_link_text(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
             browser.find_elements_by_link_text(criteria),
-            tag)
+            tag, constraints)
 
-    def _find_by_css_selector(self, browser, criteria, tag):
-        return self._filter_by_tag(
+    def _find_by_css_selector(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
             browser.find_elements_by_css_selector(criteria),
-            tag)
+            tag, constraints)
 
-    def _find_by_tag_name(self, browser, criteria, tag):
-        return self._filter_by_tag(
+    def _find_by_tag_name(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
             browser.find_elements_by_tag_name(criteria),
-            tag)
+            tag, constraints)
 
-    def _find_by_default(self, browser, criteria, tag):
+    def _find_by_default(self, browser, criteria, tag, constraints):
         if criteria.startswith('//'):
-            return self._find_by_xpath(browser, criteria, tag)
-        return self._find_by_key_attrs(browser, criteria, tag)
+            return self._find_by_xpath(browser, criteria, tag, constraints)
+        return self._find_by_key_attrs(browser, criteria, tag, constraints)
 
-    def _find_by_key_attrs(self, browser, criteria, tag):
+    def _find_by_key_attrs(self, browser, criteria, tag, constraints):
         key_attrs = self._key_attrs.get(None)
         if tag is not None:
             key_attrs = self._key_attrs.get(tag, key_attrs)
 
         xpath_criteria = self._xpath_criteria_escape(criteria)
         xpath_tag = tag if tag is not None else '*'
-        xpath_attrs = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
-        xpath_attrs.extend(
+        xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
+        xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
+        xpath_searchers.extend(
             self._get_attrs_with_url(key_attrs, criteria, browser))
-        xpath = "//%s[%s]" % (xpath_tag, ' or '.join(xpath_attrs))
+        xpath = "//%s[%s(%s)]" % (
+            xpath_tag,
+            ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
+            ' or '.join(xpath_searchers))
 
         return browser.find_elements_by_xpath(xpath)
 
     # Private
 
-    _tag_synonyms = {
-        'link': 'a',
-        'image': 'img',
-        'radio button': 'input'
-    }
     _key_attrs = {
         None: ['@id', '@name'],
         'a': ['@id', '@name', '@href', 'normalize-space(descendant-or-self::text())'],
@@ -98,10 +98,40 @@ class ElementFinder(object):
         'button': ['@id', '@name', '@value', 'normalize-space(descendant-or-self::text())']
     }
 
-    def _filter_by_tag(self, elements, tag):
+    def _get_tag_and_constraints(self, tag):
+        if tag is None: return None, {}
+
+        tag = tag.lower()
+        constraints = {}
+        if tag == 'link':
+            tag = 'a'
+        elif tag == 'image':
+            tag = 'img'
+        elif tag == 'list':
+            tag = 'select'
+        elif tag == 'radio button':
+            tag = 'input'
+            constraints['type'] = 'radio'
+        elif tag == 'checkbox':
+            tag = 'input'
+            constraints['type'] = 'checkbox'
+        elif tag == 'text field':
+            tag = 'input'
+            constraints['type'] = 'text'
+        return tag, constraints
+
+    def _element_matches(self, element, tag, constraints):
+        if not element.tag_name.lower() == tag:
+            return False
+        for name in constraints:
+            if not element.get_attribute(name) == constraints[name]:
+                return False
+        return True
+
+    def _filter_elements(self, elements, tag, constraints):
         if tag is None: return elements
         return filter(
-            lambda element: element.tag_name.lower() == tag,
+            lambda element: self._element_matches(element, tag, constraints),
             elements)
 
     def _get_attrs_with_url(self, key_attrs, criteria, browser):
