@@ -56,7 +56,7 @@ class Selenium2Library(object):
         self._cache.close_all()
 
     def get_title(self):
-        return self._current_browser().title
+        return self._current_browser().get_title()
 
     def title_should_be(self, title):
         actual = self.get_title()
@@ -74,6 +74,16 @@ class Selenium2Library(object):
             raise AssertionError("Location should have been '%s' but was '%s'"
                                  % (url, actual))
         self._info("Current location is '%s'." % url)
+
+    def location_should_contain(self, expected):
+        actual = self.get_url()
+        if not expected in actual:
+            raise AssertionError("Location should have contained '%s' "
+                                 "but it was '%s'." % (expected, actual))
+        self._info("Current location contains '%s'." % expected)
+
+    def get_source(self):
+        return self._current_browser().get_page_source()
 
     def switch_browser(self, index_or_alias):
         try:
@@ -190,6 +200,213 @@ class Selenium2Library(object):
     def click_element(self, locator):
         self._info("Clicking element '%s'." % locator)
         self._element_find(locator, True, True).click()
+
+    def log_source(self, level='INFO'):
+        source = self.get_source()
+        self._log(source, level.upper())
+        return source
+
+    def page_should_contain(self, text, loglevel='INFO'):
+        if not self._page_contains(text):
+            self.log_source(loglevel)
+            raise AssertionError("Page should have contained text '%s' "
+                                 "but did not" % text)
+        self._info("Current page contains text '%s'." % text)
+
+    def page_should_not_contain(self, text, loglevel='INFO'):
+        if self._page_contains(text):
+            self.log_source(loglevel)
+            raise AssertionError("Page should not have contained text '%s'" % text)
+        self._info("Current page does not contain text '%s'." % text)
+
+    def page_should_contain_element(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, None, message, loglevel)
+
+    def page_should_not_contain_element(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, None, message, loglevel)
+
+    def element_should_contain(self, locator, expected, message=''):
+        self._info("Verifying element '%s' contains text '%s'."
+                    % (locator, expected))
+        actual = self._get_text(locator)
+        if not expected in actual:
+            if not message:
+                message = "Element '%s' should have contained text '%s' but "\
+                          "its text was '%s'." % (locator, expected, actual)
+            raise AssertionError(message)
+
+    def element_should_be_visible(self, locator, message=''):
+        self._info("Verifying element '%s' is visible." % locator)
+        visible = self._is_visible(locator)
+        if not visible:
+            if not message:
+                message = "The element '%s' should be visible, but it "\
+                          "is not." % locator
+            raise AssertionError(message)
+
+    def element_should_not_be_visible(self, locator, message=''):
+        self._info("Verifying element '%s' is not visible." % locator)
+        visible = self._is_visible(locator)
+        if visible:
+            if not message:
+                message = "The element '%s' should not be visible, "\
+                          "but it is." % locator
+            raise AssertionError(message)
+
+    def page_should_contain_checkbox(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, 'checkbox', message, loglevel)
+
+    def page_should_not_contain_checkbox(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'checkbox', message, loglevel)
+
+    def page_should_contain_radio_button(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, 'radio button', message, loglevel)
+
+    def page_should_not_contain_radio_button(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'radio button', message, loglevel)
+
+    def page_should_contain_image(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, 'image', message, loglevel)
+
+    def page_should_not_contain_image(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'image', message, loglevel)
+
+    def page_should_contain_link(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, 'link', message, loglevel)
+
+    def page_should_not_contain_link(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'link', message, loglevel)
+
+    def page_should_contain_list(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, 'list', message, loglevel)
+
+    def page_should_not_contain_list(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'list', message, loglevel)
+
+    def page_should_contain_textfield(self, locator, message='', loglevel='INFO'):
+        self._page_should_contain_element(locator, 'text field', message, loglevel)
+
+    def page_should_not_contain_textfield(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'text field', message, loglevel)
+
+    def textfield_should_contain(self, locator, expected, message=''):
+        element = self._element_find(locator, True, False, 'text field')
+        actual = element.get_attribute('value') if element is not None else None
+        if not expected in actual:
+            if not message:
+                message = "Text field '%s' should have contained text '%s' "\
+                          "but it contained '%s'" % (locator, expected, actual)
+            raise AssertionError(message)
+        self._info("Text field '%s' contains text '%s'." % (locator, expected))
+
+    def input_text(self, locator, text):
+        self._info("Typing text '%s' into text field '%s'" % (text, locator))
+        element = self._element_find(locator, True, True, 'text field')
+        element.send_keys(text)
+
+    def textfield_value_should_be(self, locator, expected, message=''):
+        element = self._element_find(locator, True, False, 'text field')
+        actual = element.get_attribute('value') if element is not None else None
+        if actual != expected:
+            if not message:
+                message = "Value of text field '%s' should have been '%s' "\
+                          "but was '%s'" % (locator, expected, actual)
+            raise AssertionError(message)
+        self._info("Content of text field '%s' is '%s'." % (locator, expected))
+
+    def page_should_contain_button(self, locator, message='', loglevel='INFO'):
+        try:
+            self._page_should_contain_element(locator, 'input', message, loglevel)
+        except AssertionError:
+            self._page_should_contain_element(locator, 'button', message, loglevel)
+
+    def page_should_not_contain_button(self, locator, message='', loglevel='INFO'):
+        self._page_should_not_contain_element(locator, 'button', message, loglevel)
+        self._page_should_not_contain_element(locator, 'input', message, loglevel)
+
+    def get_all_links(self):
+        links = []
+        for anchor in self._element_find("tag=a", False, False, 'a'):
+            links.append(anchor.get_attribute('id'))
+        return links
+
+    def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
+        actual_xpath_count = len(self._element_find("xpath=" + xpath, False, False))
+        if int(actual_xpath_count) != int(expected_xpath_count):
+            if not message:
+                message = "Xpath %s should have matched %s times but matched %s times"\
+                            %(xpath, expected_xpath_count, actual_xpath_count)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Current page contains %s elements matching '%s'."
+                   % (actual_xpath_count, xpath))
+
+    def _is_visible(self, locator):
+        element = self._element_find(locator, True, False)
+        if element is not None:
+            return element.is_displayed()
+        return None
+
+    def _get_text(self, locator):
+        element = self._element_find(locator, True, False)
+        if element is not None:
+            return element.text
+        return None
+
+    def _is_element_present(self, locator, tag=None):
+        return (self._element_find(locator, True, False, tag=tag) != None)
+
+    def _page_should_contain_element(self, locator, tag, message, loglevel):
+        element_name = tag if tag is not None else 'element'
+        if not self._is_element_present(locator, tag):
+            if not message:
+                message = "Page should have contained %s '%s' but did not"\
+                           % (element_name, locator)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Current page contains %s '%s'." % (element_name, locator))
+
+    def _page_should_not_contain_element(self, locator, tag, message, loglevel):
+        element_name = tag if tag is not None else 'element'
+        if self._is_element_present(locator, tag):
+            if not message:
+                message = "Page should not have contained %s '%s'"\
+                           % (element_name, locator)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Current page does not contain %s '%s'."
+                   % (element_name, locator))
+
+    def _is_text_present(self, text):
+        locator = "xpath=//*[contains(., %s)]" % self._xpath_criteria_escape(text);
+        return self._is_element_present(locator)
+
+    def _page_contains(self, text):
+        browser = self._current_browser()
+        browser.switch_to_default_content()
+
+        if self._is_text_present(text):
+            return True
+
+        js_for_num_subframes = "return window.document.getElementsByTagName('frame').length"
+        num_subframes = int(browser.execute_script(js_for_num_subframes))
+        self._debug('Current frame has %d subframes' % num_subframes)
+        for i in range(num_subframes):
+            browser.switch_to_frame(i)
+            found_text = self._is_text_present(text)
+            browser.switch_to_default_content()
+            if found_text:
+                return True
+
+        return False
+
+    def _xpath_criteria_escape(self, str):
+        if '"' in str and '\'' in str:
+            parts_wo_apos = str.split('\'')
+            return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
+        if '\'' in str:
+            return "\"%s\"" % str
+        return "'%s'" % str
 
     def _get_checkbox(self, locator):
         return self._element_find(locator, True, True, tag='input')

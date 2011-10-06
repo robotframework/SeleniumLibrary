@@ -26,6 +26,7 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Windows',
 '--suite', 'Acceptance.Keywords.Checkbox And Radio Buttons',
 '--suite', 'Acceptance.Keywords.Click Element',
+'--suite', 'Acceptance.Keywords.Content Assertions',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

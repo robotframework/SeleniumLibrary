@@ -6,28 +6,28 @@ Resource        ../resource.txt
 
 *** Test Cases ***
 Location Should Be
-    [Documentation]  LOG 1 Current location is '${FRONT PAGE}'.
+    [Documentation]  LOG 1:2 Current location is '${FRONT PAGE}'.
     Location Should Be  ${FRONT PAGE}
     Run Keyword And Expect Error  Location should have been 'non existing' but was '${FRONT PAGE}'  Location Should Be  non existing
 
 Location Should Contain
-    [Documentation]  LOG 1 Current location contains 'html'.
+    [Documentation]  LOG 1:2 Current location contains 'html'.
     Location Should Contain  html
     Run Keyword And Expect Error  Location should have contained 'not a location' but it was '${FRONT PAGE}'.  Location Should Contain  not a location
 
 Title Should Be
-    [Documentation]  LOG 1 Page title is '(root)/index.html'.
+    [Documentation]  LOG 1:2 Page title is '(root)/index.html'.
     Title Should Be  (root)/index.html
     Run Keyword And Expect Error  Title should have been 'not a title' but was '(root)/index.html'  Title Should Be  not a title
 
 Page Should Contain
-    [Documentation]  LOG 1 Current page contains text 'needle'. LOG 3.1:2 REGEXP: (?i)<head>.*</body>
+    [Documentation]  LOG 1:3 Current page contains text 'needle'. LOG 3.1:6 REGEXP: (?i)<html .*</html>
     Page Should Contain  needle
     Page Should Contain  This is the haystack
     Run Keyword And Expect Error  Page should have contained text 'non existing text' but did not  Page Should Contain  non existing text
 
 Page Should Contain With Custom Log Level
-    [Documentation]  LOG 1.1:2 DEBUG REGEXP: (?i)<head>.*</body>
+    [Documentation]  LOG 1.1:6 DEBUG REGEXP: (?i)<html .*</html>
     Run Keyword And Expect Error  Page should have contained text 'non existing text' but did not  Page Should Contain  non existing text  DEBUG
 
 Page Should Contain With Disabling Source Logging
@@ -41,12 +41,12 @@ Page Should Contain With Frames
     Page Should Contain  You're looking at right.
 
 Page Should Not Contain
-    [Documentation]  LOG 1:2 Current page does not contain text 'non existing text'. LOG 2.1:1 REGEXP: (?i)<head>.*</body>
+    [Documentation]  LOG 1:5 Current page does not contain text 'non existing text'. LOG 2.1:4 REGEXP: (?i)<html .*</html>
     Page Should Not Contain  non existing text
     Run Keyword And Expect Error  Page should not have contained text 'needle'  Page Should Not Contain  needle
 
 Page Should Not Contain With Custom Log Level
-    [Documentation]  LOG 1.1 DEBUG REGEXP: (?i)<head>.*</body>
+    [Documentation]  LOG 1.1:4 DEBUG REGEXP: (?i)<html .*</html>
     Run Keyword And Expect Error  Page should not have contained text 'needle'  Page Should Not Contain  needle  DEBUG
 
 Page Should Not Contain With Disabling Source Logging
@@ -97,14 +97,14 @@ Element Should Not Be Visible
     Run Keyword And Expect Error  The element 'i_am_visible' should not be visible, but it is.  Element Should Not Be Visible  i_am_visible
 
 Page Should Contain Checkbox
-    [Documentation]  LOG 1:2 Current page contains checkbox 'can_send_email'.
+    [Documentation]  LOG 1:3 Current page contains checkbox 'can_send_email'.
     [Setup]  Go To Page "forms/prefilled_email_form.html"
     Page Should Contain Checkbox  can_send_email
     Page Should Contain Checkbox  xpath=//input[@type='checkbox' and @name='can_send_sms']
     Run Keyword And Expect Error  Page should have contained checkbox 'non-existing' but did not  Page Should Contain Checkbox  non-existing
 
 Page Should Not Contain Checkbox
-    [Documentation]  LOG 1:2 Current page does not contain checkbox 'non-existing'.
+    [Documentation]  LOG 1:3 Current page does not contain checkbox 'non-existing'.
     [Setup]  Go To Page "forms/prefilled_email_form.html"
     Page Should Not Contain Checkbox  non-existing
     Run Keyword And Expect Error  Page should not have contained checkbox 'can_send_email'  Page Should Not Contain Checkbox  can_send_email
@@ -163,7 +163,7 @@ Page Should Not Contain Text Field
     Run Keyword And Expect Error  Page should not have contained text field 'name'  Page Should Not Contain Text Field  name
 
 TextField Should Contain
-    [Documentation]  LOG 1:2 Text field 'name' contains text ''.
+    [Documentation]  LOG 1:4 Text field 'name' contains text ''.
     [Setup]  Go To Page "forms/email_form.html"
     TextField Should contain  name  ${EMPTY}
     Input Text  name  my name
@@ -171,7 +171,7 @@ TextField Should Contain
     Run Keyword And Expect Error  Text field 'name' should have contained text 'non-existing' but it contained 'my name'  TextField Should contain  name  non-existing
 
 TextField Value Should Be
-    [Documentation]  LOG 1:2 Content of text field 'name' is ''.
+    [Documentation]  LOG 1:4 Content of text field 'name' is ''.
     [Setup]  Go To Page "forms/email_form.html"
     textfield Value Should Be  name  ${EMPTY}
     Input Text  name  my name
