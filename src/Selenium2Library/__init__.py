@@ -341,6 +341,10 @@ class Selenium2Library(object):
         self._info("Current page contains %s elements matching '%s'."
                    % (actual_xpath_count, xpath))
 
+    def get_matching_xpath_count(self, xpath):
+        count = len(self._element_find("xpath=" + xpath, False, False))
+        return str(count)
+
     def delete_all_cookies(self):
         self._current_browser().delete_all_cookies()
 
@@ -366,6 +370,33 @@ class Selenium2Library(object):
     def element_should_be_disabled(self, locator):
         if self._is_enabled(locator):
             raise AssertionError("Element '%s' is enabled." % (locator))
+
+    def get_element_attribute(self, attribute_locator):
+        locator, attribute_name = self._parse_attribute_locator(attribute_locator)
+        element = self._element_find(locator, True, False)
+        if element is None:
+            return None
+        return element.get_attribute(attribute_name)
+
+    def get_horizontal_position(self, locator):
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("Could not determine position for '%s'" % (locator))
+        return element.location['x']
+
+    def get_vertical_position(self, locator):
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("Could not determine position for '%s'" % (locator))
+        return element.location['y']
+
+    def _parse_attribute_locator(self, attribute_locator):
+        parts = attribute_locator.partition('@')
+        if len(parts[0]) == 0:
+            raise ValueError("Attribute locator '%s' does not contain an element locator" % (locator))
+        if len(parts[2]) == 0:
+            raise ValueError("Attribute locator '%s' does not contain an attribute name" % (locator))
+        return (parts[0], parts[2])
 
     def _is_enabled(self, locator):
         element = self._element_find(locator, True, True)
