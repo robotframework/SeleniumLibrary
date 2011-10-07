@@ -2,7 +2,7 @@ import os
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 import sys
-sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.4.0", "py"))
+sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.8.1", "py"))
 
 from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
