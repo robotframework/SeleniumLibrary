@@ -204,6 +204,11 @@ class Selenium2Library(object):
         self._info("Clicking element '%s'." % locator)
         self._element_find(locator, True, True).click()
 
+    def double_click_element(self, locator):
+        self._info("Double clicking element '%s'." % locator)
+        element = self._element_find(locator, True, True)
+        ActionChains(self._current_browser()).double_click(element).perform()
+
     def log_source(self, level='INFO'):
         source = self.get_source()
         self._log(source, level.upper())
