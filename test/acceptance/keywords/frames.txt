@@ -13,7 +13,7 @@ Frame Should Contain
 Select And Unselect Frame
   [Documentation]  LOG 1 Selecting frame 'left'.
   Select Frame  left
-  Click Link  foo  don't wait
+  Click Link  foo
   Unselect Frame
   Select Frame  right
   Current Frame Contains  You're looking at foo.

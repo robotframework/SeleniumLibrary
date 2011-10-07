@@ -421,6 +421,28 @@ class Selenium2Library(object):
             element = self._element_find(locator, True, True, 'input')
         element.click()
 
+    def frame_should_contain(self, locator, text, loglevel='INFO'):
+        if not self._frame_contains(locator, text):
+            self.log_source(loglevel)
+            raise AssertionError("Page should have contained text '%s' "
+                                 "but did not" % text)
+        self._info("Current page contains text '%s'." % text)
+
+    def unselect_frame(self):
+        self._current_browser().switch_to_default_content()
+
+    def select_frame(self, locator):
+        self._info("Selecting frame '%s'." % locator)
+        element = self._element_find(locator, True, True, tag='frame')
+        self._current_browser().switch_to_frame(element)
+
+    def current_frame_contains(self, text, logLevel='INFO'):
+        if not self._is_text_present(text):
+            self.log_source(loglevel)
+            raise AssertionError("Page should have contained text '%s' "
+                                 "but did not" % text)
+        self._info("Current page contains text '%s'." % text)
+
     def _get_value(self, locator, tag=None):
         element = self._element_find(locator, True, False, tag=tag)
         return element.get_attribute('value') if element is not None else None
@@ -497,17 +519,25 @@ class Selenium2Library(object):
         if self._is_text_present(text):
             return True
 
-        js_for_num_subframes = "return window.document.getElementsByTagName('frame').length"
-        num_subframes = int(browser.execute_script(js_for_num_subframes))
-        self._debug('Current frame has %d subframes' % num_subframes)
-        for i in range(num_subframes):
-            browser.switch_to_frame(i)
+        subframes = self._element_find("tag=frame", False, False, 'frame')
+        self._debug('Current frame has %d subframes' % len(subframes))
+        for frame in subframes:
+            browser.switch_to_frame(frame)
             found_text = self._is_text_present(text)
             browser.switch_to_default_content()
             if found_text:
                 return True
 
         return False
+
+    def _frame_contains(self, locator, text):
+        browser = self._current_browser()
+        element = self._element_find(locator, True, True, 'frame')
+        browser.switch_to_frame(element)
+        self._info("Searching for text from frame '%s'." % locator)
+        found = self._is_text_present(text)
+        browser.switch_to_default_content()
+        return found
 
     def _xpath_criteria_escape(self, str):
         if '"' in str and '\'' in str:
