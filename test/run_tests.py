@@ -28,6 +28,7 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Keywords.Click Element',
 '--suite', 'Acceptance.Keywords.Content Assertions',
 '--suite', 'Acceptance.Keywords.Cookies',
+'--suite', 'Acceptance.Keywords.Element Should Be Enabled And Disabled',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

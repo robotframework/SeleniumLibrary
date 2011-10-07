@@ -359,6 +359,31 @@ class Selenium2Library(object):
     def delete_cookie(self, name):
         self._current_browser().delete_cookie(name)
 
+    def element_should_be_enabled(self, locator):
+        if not self._is_enabled(locator):
+            raise AssertionError("Element '%s' is disabled." % (locator))
+
+    def element_should_be_disabled(self, locator):
+        if self._is_enabled(locator):
+            raise AssertionError("Element '%s' is enabled." % (locator))
+
+    def _is_enabled(self, locator):
+        element = self._element_find(locator, True, True)
+        if not self._is_form_element(element):
+            raise AssertionError("ERROR: Element %s is not an input." % (locator))
+        if not element.is_enabled():
+            return False
+        read_only = element.get_attribute('readonly')
+        if read_only == 'readonly' or read_only == 'true':
+            return False
+        return True
+
+    def _is_form_element(self, element):
+        if element is None:
+            return False
+        tag = element.tag_name.lower()
+        return tag == 'input' or tag == 'select' or tag == 'textarea' or tag == 'button'
+
     def _is_visible(self, locator):
         element = self._element_find(locator, True, False)
         if element is not None:
