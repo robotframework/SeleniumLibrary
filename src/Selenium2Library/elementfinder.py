@@ -118,6 +118,9 @@ class ElementFinder(object):
         elif tag == 'text field':
             tag = 'input'
             constraints['type'] = 'text'
+        elif tag == 'file upload':
+            tag = 'input'
+            constraints['type'] = 'file'
         return tag, constraints
 
     def _element_matches(self, element, tag, constraints):

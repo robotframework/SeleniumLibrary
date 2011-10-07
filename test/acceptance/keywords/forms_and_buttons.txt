@@ -25,7 +25,7 @@ Click Ok Button By Name
     Verify Location Is "${FORM SUBMITTED}"
 
 Click Cancel Button By Name
-    Click Button   cancel_button   And Don't Wait
+    Click Button   cancel_button
     Value Should Be Cancel
 
 Click Ok Button By Value
@@ -33,7 +33,7 @@ Click Ok Button By Value
     Verify Location Is "${FORM SUBMITTED}"
 
 Click Cancel Button By Value
-    Click Button   Cancel   And Don't Wait
+    Click Button   Cancel
     Value Should Be Cancel
 
 Click button created with <button> by id
@@ -68,7 +68,7 @@ Value Should Be Cancel
     ${value} =   Get Value   textfield
     Should Be Equal   ${value}   Cancel
 
-Navigate To File Upload Form And CreateTemp File To Upload
+Navigate To File Upload Form And Create Temp File To Upload
   Cannot Be Executed in IE
   Go To Page "forms/file_upload_form.html"
   Touch   ${CURDIR}/temp.txt

@@ -290,8 +290,7 @@ class Selenium2Library(object):
         self._page_should_not_contain_element(locator, 'text field', message, loglevel)
 
     def textfield_should_contain(self, locator, expected, message=''):
-        element = self._element_find(locator, True, False, 'text field')
-        actual = element.get_attribute('value') if element is not None else None
+        actual = self._get_value(locator, 'text field')
         if not expected in actual:
             if not message:
                 message = "Text field '%s' should have contained text '%s' "\
@@ -306,6 +305,7 @@ class Selenium2Library(object):
 
     def textfield_value_should_be(self, locator, expected, message=''):
         element = self._element_find(locator, True, False, 'text field')
+        if element is None: element = self._element_find(locator, True, False, 'file upload')
         actual = element.get_attribute('value') if element is not None else None
         if actual != expected:
             if not message:
@@ -389,6 +389,41 @@ class Selenium2Library(object):
         if element is None:
             raise AssertionError("Could not determine position for '%s'" % (locator))
         return element.location['y']
+
+    def submit_form(self, locator=None):
+        self._info("Submitting form '%s'." % locator)
+        if not locator:
+            locator = 'xpath=//form'
+        element = self._element_find(locator, True, True, 'form')
+        element.submit()
+
+    def click_button(self, locator):
+        self._info("Clicking button '%s'." % locator)
+        element = self._element_find(locator, True, False, 'input')
+        if element is None:
+            element = self._element_find(locator, True, True, 'button')
+        element.click()
+
+    def get_value(self, locator):
+        return self._get_value(locator)
+
+    def choose_file(self, locator, file_path):
+        if not os.path.isfile(file_path):
+            self._info("File '%s' does not exist on the local file system"
+                        % file_path)
+        self._element_find(locator, True, True).send_keys(file_path)
+
+    def click_image(self, locator):
+        self._info("Clicking image '%s'." % locator)
+        element = self._element_find(locator, True, False, 'image')
+        if element is None:
+            # A form may have an image as it's submit trigger.
+            element = self._element_find(locator, True, True, 'input')
+        element.click()
+
+    def _get_value(self, locator, tag=None):
+        element = self._element_find(locator, True, False, tag=tag)
+        return element.get_attribute('value') if element is not None else None
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.partition('@')

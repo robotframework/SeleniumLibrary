@@ -116,6 +116,14 @@ class ElementFinderTests(unittest.TestCase):
         verify(browser).find_elements_by_xpath(
             "//input[@type='checkbox' and (@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
 
+    def test_find_with_file_upload_synonym(self):
+        finder = ElementFinder()
+        browser = mock()
+        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        finder.find(browser, "test1", tag='file upload')
+        verify(browser).find_elements_by_xpath(
+            "//input[@type='file' and (@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
+
     def test_find_with_text_field_synonym(self):
         finder = ElementFinder()
         browser = mock()
@@ -276,22 +284,25 @@ class ElementFinderTests(unittest.TestCase):
         finder = ElementFinder()
         browser = mock()
 
-        elements = self._make_mock_elements('div', 'input', 'span', 'input', 's', 'input')
+        elements = self._make_mock_elements('div', 'input', 'span', 'input', 'a', 'input', 'div', 'input')
         elements[1].set_attribute('type', 'radio')
         elements[3].set_attribute('type', 'checkbox')
         elements[5].set_attribute('type', 'text')
+        elements[7].set_attribute('type', 'file')
         when(browser).find_elements_by_id("test1").thenReturn(elements)
 
         result = finder.find(browser, "id=test1")
         self.assertEqual(result, elements)
         result = finder.find(browser, "id=test1", tag='input')
-        self.assertEqual(result, [elements[1], elements[3], elements[5]])
+        self.assertEqual(result, [elements[1], elements[3], elements[5], elements[7]])
         result = finder.find(browser, "id=test1", tag='radio button')
         self.assertEqual(result, [elements[1]])
         result = finder.find(browser, "id=test1", tag='checkbox')
         self.assertEqual(result, [elements[3]])
         result = finder.find(browser, "id=test1", tag='text field')
         self.assertEqual(result, [elements[5]])
+        result = finder.find(browser, "id=test1", tag='file upload')
+        self.assertEqual(result, [elements[7]])
 
     def _make_mock_elements(self, *tags):
         elements = []
