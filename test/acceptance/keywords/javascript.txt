@@ -5,21 +5,21 @@ Resource        ../resource.txt
 *** Test Cases ***
 Clicking Elements Should Activate Javascript
     Title Should Be  Original
-    Click Element  link=change title  And Don't Wait
+    Click Element  link=change title
     Title Should Be  Changed
 
 Alert Should Be Present
     [Setup]  Go To Page "javascript/alert.html"
-    Click Link  Click Me!  And Don't Wait
+    Click Link  Click Me!
     Alert Should Be Present
-    Click Link  Click Me Too!  And Don't Wait
+    Click Link  Click Me Too!
     Alert Should Be Present  MULTILINE ALERT!
-    Click Link  Click Me!  And Don't Wait
+    Click Link  Click Me!
     Run Keyword And Expect Error  Alert text should have been 'foo bar' but was 'ALERT!'  Alert Should Be Present  foo bar
 
 Get Alert Message
     [Setup]  Go To Page "javascript/alert.html"
-    Click Link  Click Me!  And Don't Wait
+    Click Link  Click Me!
     ${msg} =  Get Alert Message
     Should Be Equal  ${msg}  ALERT!
     Run Keyword And Expect Error  There were no alerts  Get Alert Message
@@ -33,14 +33,14 @@ Mouse Down On Link
     Text Field Should Contain  textfield  onmousedown
 
 Confirm Action
-    Click Button  Change the title  and don't wait
+    Click Button  Change the title
     ${msg}=  Confirm Action
     Title Should Be  Changed after confirmation
     Should Be Equal  ${msg}  Really change the title?
 
 Cancel Action
     Choose Cancel On Next Confirmation
-    Click Button  Change the title  and don't wait
+    Click Button  Change the title
     ${msg}=  Confirm Action
     Title Should Be  Original
     Should Be Equal  ${msg}  Really change the title?
