@@ -614,6 +614,37 @@ class Selenium2Library(object):
             raise AssertionError("List '%s' should have had no selection "
                                  "(selection was [ %s ])" % (locator, items_str))
 
+    def mouse_over(self, locator):
+        self._info("Simulating Mouse Over on element '%s'" % locator)
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % (locator))
+        ActionChains(self._current_browser()).move_to_element(element).perform()
+
+    def mouse_out(self, locator):
+        self._info("Simulating Mouse Out on element '%s'" % locator)
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % (locator))
+        size = element.size
+        offsetx = (size['width'] / 2) + 1
+        offsety = (size['height'] / 2) + 1
+        ActionChains(self._current_browser()).move_to_element(element).move_by_offset(offsetx, offsety).perform()
+
+    def mouse_down(self, locator):
+        self._info("Simulating Mouse Down on element '%s'" % locator)
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % (locator))
+        ActionChains(self._current_browser()).click_and_hold(element).perform()
+
+    def mouse_up(self, locator):
+        self._info("Simulating Mouse Up on element '%s'" % locator)
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % (locator))
+        ActionChains(self._current_browser()).click_and_hold(element).release(element).perform()
+
     def _is_multiselect_list(self, select):
         multiple_value = select.get_attribute('multiple')
         if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
