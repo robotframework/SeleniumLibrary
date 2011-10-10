@@ -36,6 +36,7 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Keywords.Lists',
 '--suite', 'Acceptance.Keywords.Mouse',
 '--suite', 'Acceptance.Keywords.Navigation',
+'--suite', 'Acceptance.Keywords.Run On Failure',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

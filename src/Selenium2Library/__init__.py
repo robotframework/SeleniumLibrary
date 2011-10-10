@@ -4,10 +4,14 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 import sys
 sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.8.1", "py"))
 
+import inspect
+
 from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
 from robot import utils
-from robot.output import LOGGER, Message
+from robot.api import logger
+from robot.libraries import BuiltIn
+
 from browsercache import BrowserCache
 from elementfinder import ElementFinder
 from windowmanager import WindowManager
@@ -27,8 +31,27 @@ BROWSER_NAMES = {'ff': '*firefox',
                  'googlechrome': '*googlechrome',
                  'gc': '*googlechrome'
                 }
+BUILTIN = BuiltIn.BuiltIn()
+
+def runs_keyword_on_failure(method):
+    def wrapper(*args):
+        try:
+            return method(*args)
+        except Exception, err:
+            self = args[0]
+            self._run_on_failure()
+            raise
+    return wrapper
+
+class Selenium2LibraryType(type):
+    def __new__(cls, clsname, bases, dict):
+        for name, method in dict.items():
+            if not name.startswith('_') and inspect.isroutine(method):
+                dict[name] = runs_keyword_on_failure(method)
+        return type.__new__(cls, clsname, bases, dict)
 
 class Selenium2Library(object):
+    __metaclass__ = Selenium2LibraryType
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = 0.5
@@ -40,6 +63,7 @@ class Selenium2Library(object):
         self._speed_in_secs = float(0)
         self._timeout_in_secs = float(5)
         self._cancel_on_next_confirmation = False
+        self._run_on_failure_keyword = None
 
     def open_browser(self, url, browser='firefox', alias=None):
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -211,9 +235,9 @@ class Selenium2Library(object):
         element = self._element_find(locator, True, True)
         ActionChains(self._current_browser()).double_click(element).perform()
 
-    def log_source(self, level='INFO'):
+    def log_source(self, logLevel='INFO'):
         source = self.get_source()
-        self._log(source, level.upper())
+        self._log(source, logLevel.upper())
         return source
 
     def page_should_contain(self, text, loglevel='INFO'):
@@ -648,6 +672,28 @@ class Selenium2Library(object):
     def go_back(self):
         self._current_browser().back()
 
+    def log_title(self):
+        self._info(self.get_title())
+
+    def log_url(self):
+        self._info(self.get_url())
+
+    def register_keyword_to_run_on_failure(self, keyword):
+        old_keyword = self._run_on_failure_keyword
+        old_keyword_text = old_keyword if old_keyword is not None else "No keyword"
+
+        new_keyword = keyword if keyword.strip().lower() != "nothing" else None
+        new_keyword_text = new_keyword if new_keyword is not None else "No keyword"
+
+        self._run_on_failure_keyword = new_keyword
+        self._info('%s will be run on failure.' % new_keyword_text)
+
+        return old_keyword_text
+
+    def _run_on_failure(self):
+        if self._run_on_failure_keyword is not None:
+            BUILTIN.run_keyword(self._run_on_failure_keyword)
+
     def _is_multiselect_list(self, select):
         multiple_value = select.get_attribute('multiple')
         if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
@@ -874,33 +920,20 @@ class Selenium2Library(object):
         return GLOBAL_VARIABLES['${OUTPUTDIR}']
 
     def _log(self, message, level='INFO'):
-        if level != 'NONE':
-            LOGGER.log_message(Message(message, level))
+        level = level.upper()
+        if (level == 'INFO'): self._info(message)
+        elif (level == 'DEBUG'): self._debug(message)
+        elif (level == 'WARN'): self._warn(message)
+        elif (level == 'HTML'): self._html(message)
 
     def _info(self, message):
-        self._log(message)
+        logger.info(message)
 
     def _debug(self, message):
-        self._log(message, 'DEBUG')
+        logger.debug(message)
 
     def _warn(self, message):
-        self._log(message,  "WARN")
+        logger.warn(message)
 
     def _html(self, message):
-        self._log(message, 'HTML')
-
-    def _get_error_message(self, exception):
-        # Cannot use unicode(exception) because it fails on Python 2.5 and
-        # earlier if the message contains non-ASCII chars.
-        # See for details: http://bugs.jython.org/issue1585
-        return unicode(exception.args and exception.args[0] or '')
-
-    def _error_contains(self, exception, message):
-        return message in self._get_error_message(exception)
-
-    def _log_list(self, items, what='item'):
-        msg = ['Altogether %d %s%s.' % (len(items), what, ['s',''][len(items)==1])]
-        for index, item in enumerate(items):
-            msg.append('%d: %s' % (index+1, item))
-        self._info('\n'.join(msg))
-        return items
+        logger.info(message, True, False)
