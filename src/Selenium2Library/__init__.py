@@ -645,6 +645,9 @@ class Selenium2Library(object):
             raise AssertionError("ERROR: Element %s not found." % (locator))
         ActionChains(self._current_browser()).click_and_hold(element).release(element).perform()
 
+    def go_back(self):
+        self._current_browser().back()
+
     def _is_multiselect_list(self, select):
         multiple_value = select.get_attribute('multiple')
         if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
