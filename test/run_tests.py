@@ -33,6 +33,7 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Keywords.Forms And Buttons',
 '--suite', 'Acceptance.Keywords.Frames',
 '--suite', 'Acceptance.Keywords.Javascript',
+'--suite', 'Acceptance.Keywords.Lists',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]
@@ -65,6 +66,7 @@ def execute_tests(runner):
     if not os.path.exists(RESULTDIR):
         os.mkdir(RESULTDIR)
     command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [TESTDATADIR]
+    print ''
     print 'Starting test execution with command:\n' + ' '.join(command)
     syslog = os.path.join(RESULTDIR, 'syslog.txt')
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
