@@ -26,9 +26,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 import webdrivermonkeypatches
 
-from browsercache import BrowserCache
-from locators import *
 import utils
+from utils import *
+from locators import *
     
 FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'resources', 'firefoxprofile')
 BROWSER_NAMES = {'ff': '*firefox',

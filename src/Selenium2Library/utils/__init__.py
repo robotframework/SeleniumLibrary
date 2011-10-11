@@ -1,3 +1,6 @@
+from browsercache import BrowserCache
+
+__all__ = ["BrowserCache"]
 
 def escape_xpath_value(value):
     value = unicode(value)
