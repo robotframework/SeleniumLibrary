@@ -4,6 +4,7 @@ import time
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.8.1", "py"))
+sys.path.append(os.path.join(_THIS_DIR, "lib", "decorator-3.3.2"))
 
 import inspect
 try:
@@ -36,7 +37,8 @@ BROWSER_NAMES = {'ff': '*firefox',
                  'ie': '*iexplore',
                  'internetexplorer': '*iexplore',
                  'googlechrome': '*googlechrome',
-                 'gc': '*googlechrome'
+                 'gc': '*googlechrome',
+                 'chrome': '*googlechrome'
                 }
 BUILTIN = BuiltIn.BuiltIn()
 
