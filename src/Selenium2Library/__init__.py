@@ -5,6 +5,12 @@ import sys
 sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.8.1", "py"))
 
 import inspect
+try:
+    from decorator import decorator
+except SyntaxError: # decorator module requires Python/Jython 2.4+
+    decorator = None
+if sys.platform == 'cli':
+    decorator = None # decorator module doesn't work with IronPython 2.6
 
 from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
@@ -33,21 +39,20 @@ BROWSER_NAMES = {'ff': '*firefox',
                 }
 BUILTIN = BuiltIn.BuiltIn()
 
-def runs_keyword_on_failure(method):
-    def wrapper(*args):
-        try:
-            return method(*args)
-        except Exception, err:
-            self = args[0]
-            self._run_on_failure()
-            raise
-    return wrapper
+def _run_keyword_on_failure_decorator(method, *args, **kwargs):
+    try:
+        return method(*args, **kwargs)
+    except Exception, err:
+        self = args[0]
+        self._run_on_failure()
+        raise
 
 class Selenium2LibraryType(type):
     def __new__(cls, clsname, bases, dict):
-        for name, method in dict.items():
-            if not name.startswith('_') and inspect.isroutine(method):
-                dict[name] = runs_keyword_on_failure(method)
+        if decorator:
+            for name, method in dict.items():
+                if not name.startswith('_') and inspect.isroutine(method):
+                    dict[name] = decorator(_run_keyword_on_failure_decorator, method)
         return type.__new__(cls, clsname, bases, dict)
 
 class Selenium2Library(object):
