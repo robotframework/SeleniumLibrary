@@ -277,6 +277,3 @@ class WindowManagerTests(unittest.TestCase):
         browser.switch_to_window = switch_to_window
 
         return browser
-
-if __name__ == "__main__":
-    unittest.main()

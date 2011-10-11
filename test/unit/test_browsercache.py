@@ -77,6 +77,3 @@ class BrowserCacheTests(unittest.TestCase):
         verify(browser1, times=1).quit()
         verify(browser2, times=1).quit()
         verify(browser3, times=1).quit()
-
-if __name__ == "__main__":
-    unittest.main()

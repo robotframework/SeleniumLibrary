@@ -325,6 +325,3 @@ class ElementFinderTests(unittest.TestCase):
         element.get_attribute = get_attribute
 
         return element
-
-if __name__ == "__main__":
-    unittest.main()
