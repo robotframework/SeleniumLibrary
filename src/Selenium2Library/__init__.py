@@ -32,7 +32,7 @@ from windowmanager import WindowManager
 from tableelementfinder import TableElementFinder
 import utils
     
-FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'firefoxprofile')
+FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'resources', 'firefoxprofile')
 BROWSER_NAMES = {'ff': '*firefox',
                  'firefox': '*firefox',
                  'ie': '*iexplore',
