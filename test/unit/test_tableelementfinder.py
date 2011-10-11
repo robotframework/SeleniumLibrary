@@ -10,25 +10,59 @@ class ElementFinderTests(unittest.TestCase):
         browser = mock()
         when(browser).find_elements_by_css_selector("table#test1").thenReturn([])
         
-        finder.find_by_content(browser, "test1", 'hi')
+        finder.find(browser, "test1")
 
         verify(browser).find_elements_by_css_selector("table#test1")
+
+    def test_find_with_css_selector(self):
+        finder = TableElementFinder()
+        browser = mock()
+        elements = self._make_mock_elements('table', 'table', 'table')
+        when(browser).find_elements_by_css_selector("table#test1").thenReturn(elements)
+        
+        self.assertEqual(
+            finder.find(browser, "css=table#test1"),
+            elements[0])
+
+        verify(browser).find_elements_by_css_selector("table#test1")
+
+    def test_find_with_xpath_selector(self):
+        finder = TableElementFinder()
+        browser = mock()
+        elements = self._make_mock_elements('table', 'table', 'table')
+        when(browser).find_elements_by_xpath("//table[@id='test1']").thenReturn(elements)
+        
+        self.assertEqual(
+            finder.find(browser, "xpath=//table[@id='test1']"),
+            elements[0])
+
+        verify(browser).find_elements_by_xpath("//table[@id='test1']")
 
     def test_find_with_content_constraint(self):
         finder = TableElementFinder()
         browser = mock()
         elements = self._make_mock_elements('td', 'td', 'td')
+        elements[1].text = 'hi'
         when(browser).find_elements_by_css_selector("table#test1").thenReturn(elements)
-        when(elements[0]).find_element_by_xpath(".[contains(., 'hi')]").thenRaise(NoSuchElementException())
-        when(elements[1]).find_element_by_xpath(".[contains(., 'hi')]").thenReturn(elements[1])
         
         self.assertEqual(
             finder.find_by_content(browser, "test1", 'hi'),
             elements[1])
 
         verify(browser).find_elements_by_css_selector("table#test1")
-        verify(elements[0]).find_element_by_xpath(".[contains(., 'hi')]")
-        verify(elements[1]).find_element_by_xpath(".[contains(., 'hi')]")
+
+    def test_find_with_null_content_constraint(self):
+        finder = TableElementFinder()
+        browser = mock()
+        elements = self._make_mock_elements('td', 'td', 'td')
+        elements[1].text = 'hi'
+        when(browser).find_elements_by_css_selector("table#test1").thenReturn(elements)
+        
+        self.assertEqual(
+            finder.find_by_content(browser, "test1", None),
+            elements[0])
+
+        verify(browser).find_elements_by_css_selector("table#test1")
 
     def test_find_by_content_with_css_locator(self):
         finder = TableElementFinder()
@@ -133,6 +167,7 @@ class ElementFinderTests(unittest.TestCase):
         element = mock()
         element.tag_name = tag
         element.attributes = {}
+        element.text = None
 
         def set_attribute(name, value):
             element.attributes[name] = value

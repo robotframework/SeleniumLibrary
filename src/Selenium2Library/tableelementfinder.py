@@ -11,18 +11,24 @@ class TableElementFinder(object):
         self._element_finder = element_finder
 
         self._locator_suffixes = {
+            ('css', 'default'): [''],
             ('css', 'content'): [''],
             ('css', 'header'): [' th'],
             ('css', 'footer'): [' tfoot td'],
             ('css', 'row'): [' tr:nth-child(%s)'],
             ('css', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
 
+            ('xpath', 'default'): [''],
             ('xpath', 'content'): ['//*'],
             ('xpath', 'header'): ['//th'],
             ('xpath', 'footer'): ['//tfoot//td'],
             ('xpath', 'row'): ['//tr[%s]//*'],
             ('xpath', 'col'): ['//tr//*[self::td or self::th][%s]']
         };
+
+    def find(self, browser, table_locator):
+        locators = self._parse_table_locator(table_locator, 'default')
+        return self._search_in_locators(browser, locators, None)
 
     def find_by_content(self, browser, table_locator, content):
         locators = self._parse_table_locator(table_locator, 'content')
@@ -63,8 +69,9 @@ class TableElementFinder(object):
     def _search_in_locators(self, browser, locators, content):
         for locator in locators:
             elements = self._element_finder.find(browser, locator)
-            content_matcher = ".[contains(., %s)]" % utils.escape_xpath_value(content)
             for element in elements:
-                try: return element.find_element_by_xpath(content_matcher)
-                except NoSuchElementException: pass
+                if content is None: return element
+                element_text = element.text
+                if element_text and content in element_text:
+                    return element
         return None
