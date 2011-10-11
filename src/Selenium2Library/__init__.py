@@ -64,6 +64,7 @@ class Selenium2Library(object):
         self._timeout_in_secs = float(5)
         self._cancel_on_next_confirmation = False
         self._run_on_failure_keyword = None
+        self._screenshot_index = 0
 
     def open_browser(self, url, browser='firefox', alias=None):
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -235,9 +236,9 @@ class Selenium2Library(object):
         element = self._element_find(locator, True, True)
         ActionChains(self._current_browser()).double_click(element).perform()
 
-    def log_source(self, logLevel='INFO'):
+    def log_source(self, loglevel='INFO'):
         source = self.get_source()
-        self._log(source, logLevel.upper())
+        self._log(source, loglevel.upper())
         return source
 
     def page_should_contain(self, text, loglevel='INFO'):
@@ -689,6 +690,25 @@ class Selenium2Library(object):
         self._info('%s will be run on failure.' % new_keyword_text)
 
         return old_keyword_text
+
+    def capture_page_screenshot(self, filename=None):
+        path, link = self._get_screenshot_paths(filename)
+        self._current_browser().save_screenshot(path)
+
+        # Image is shown on its own row and thus prev row is closed on purpose
+        self._html('</td></tr><tr><td colspan="3"><a href="%s">'
+                   '<img src="%s" width="800px"></a>' % (link, link))
+
+    def _get_screenshot_paths(self, filename):
+        if not filename:
+            self._screenshot_index += 1
+            filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+        else:
+            filename = filename.replace('/', os.sep)
+        logdir = self._get_log_dir()
+        path = os.path.join(logdir, filename)
+        link = utils.get_link_path(path, logdir)
+        return path, link
 
     def _run_on_failure(self):
         if self._run_on_failure_keyword is not None:

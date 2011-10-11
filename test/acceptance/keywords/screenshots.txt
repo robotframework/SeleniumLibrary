@@ -5,31 +5,23 @@ Suite Setup  Go To Page "links.html"
 
 * Test Cases *
 
-Capture screenshot to default location
-  [Documentation]  LOG 1  REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
+Capture page screenshot to default location
+  [Documentation]  LOG 1:2  REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
   [Setup]  Remove Files  ${OUTPUTDIR}/selenium-screenshot-*.png
-  Capture Screenshot
+  Capture Page Screenshot
   ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-?.png
   Should Be Equal As Integers  ${count}  1
   Click Link  Relative
-  Capture Screenshot
+  Capture Page Screenshot
   ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-?.png
   Should Be Equal As Integers  ${count}  2
 
-Capture screenshot to custom file
+Capture page screenshot to custom file
   [Setup]  Remove Files  ${OUTPUTDIR}/custom-screenshot.png
-  Capture Screenshot  custom-screenshot.png
+  Capture Page Screenshot  custom-screenshot.png
   File Should Exist  ${OUTPUTDIR}/custom-screenshot.png
 
-Capture screenshot to custom directory
+Capture page screenshot to custom directory
   [Setup]  Remove Files  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
-  Capture Screenshot  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
+  Capture Page Screenshot  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
   File Should Exist  ${TEMPDIR}/seleniumlibrary-screenshot-test.png
-
-Capture Page Screenshot
-  [Documentation]  The keyword uses the same underlying mechanism for
-  ...  resolving path as Capture Screenshot does. Thus one test is enough.
-  [Setup]  Remove Files  ${OUTPUTDIR}/page-screenshot.png
-  Cannot Be Executed in IE
-  Capture Page Screenshot  page-screenshot.png
-  File Should Exist   ${OUTPUTDIR}/page-screenshot.png
