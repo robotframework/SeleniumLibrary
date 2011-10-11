@@ -340,8 +340,7 @@ class Selenium2Library(object):
 
     def input_text(self, locator, text):
         self._info("Typing text '%s' into text field '%s'" % (text, locator))
-        element = self._element_find(locator, True, True, 'text field')
-        element.send_keys(text)
+        self._input_text_into_text_field(locator, text)
 
     def textfield_value_should_be(self, locator, expected, message=''):
         element = self._element_find(locator, True, False, 'text field')
@@ -703,6 +702,48 @@ class Selenium2Library(object):
         # Image is shown on its own row and thus prev row is closed on purpose
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'
                    '<img src="%s" width="800px"></a>' % (link, link))
+
+    def input_password(self, locator, text):
+        self._info("Typing password into text field '%s'" % locator)
+        self._input_text_into_text_field(locator, text)
+
+    def press_key(self, locator, key):
+        if key.startswith('\\') and len(key) > 1:
+            key = self._map_ascii_key_code_to_key(int(key[1:]))
+        if len(key) > 1:
+            raise ValueError("Key value '%s' is invalid.", key)
+        element = self._element_find(locator, True, True)
+        element.send_keys(key)
+
+    def _map_ascii_key_code_to_key(self, key_code):
+        map = {
+            0: Keys.NULL,
+            8: Keys.BACK_SPACE,
+            9: Keys.TAB,
+            10: Keys.RETURN,
+            13: Keys.ENTER,
+            24: Keys.CANCEL,
+            27: Keys.ESCAPE,
+            32: Keys.SPACE,
+            42: Keys.MULTIPLY,
+            43: Keys.ADD,
+            44: Keys.SEPARATOR,
+            45: Keys.SUBTRACT,
+            56: Keys.DECIMAL,
+            57: Keys.DIVIDE,
+            59: Keys.SEMICOLON,
+            61: Keys.EQUALS,
+            127: Keys.DELETE
+        }
+        key = map.get(key_code)
+        if key is None:
+            key = chr(key_code)
+        return key
+
+    def _input_text_into_text_field(self, locator, text):
+        element = self._element_find(locator, True, True)
+        element.clear()
+        element.send_keys(text)
 
     def _get_screenshot_paths(self, filename):
         if not filename:

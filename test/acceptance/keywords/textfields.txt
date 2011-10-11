@@ -28,17 +28,5 @@ Press Key
   Cannot Be Executed in IE
   Input Text  username_field  James Bond
   Press Key  password_field  f
-  Press Key  login_button  \\13  and wait
+  Press Key  login_button  \\13
   Verify Location Is "forms/submit.html"
-
-Press Key Native
-  [Setup]  Go To Page "forms/login.html"
-  [Documentation]  Due to the fact that test are run with xvfb in CI, this test does not work there.
-  [Tags]  ci-incompatible
-  Input Text  username_field  James Bond
-  # Window needs focus, so that keypress is recognized in correct Window
-  Execute Javascript  window.focus()
-  Focus  login_button
-  Press Key Native  10  and wait
-  Verify Location Is "forms/submit.html"
-
