@@ -41,6 +41,11 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Keywords.Textfields',
 '--suite', 'Acceptance.Keywords.Tables.Col Should Contain',
 '--suite', 'Acceptance.Keywords.Tables.Finding Tables',
+'--suite', 'Acceptance.Keywords.Tables.Footer Should Contain',
+'--suite', 'Acceptance.Keywords.Tables.Get Table Cell',
+'--suite', 'Acceptance.Keywords.Tables.Header Should Contain',
+'--suite', 'Acceptance.Keywords.Tables.Row Should Contain',
+'--suite', 'Acceptance.Keywords.Tables.Table Should Contain',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

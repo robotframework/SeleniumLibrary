@@ -755,15 +755,20 @@ class Selenium2Library(object):
                    % (col, table_locator, expected))
 
     def get_table_cell(self, table_locator, row, column, loglevel='INFO'):
-        row = int(row) - 1
-        column = int(column) - 1
+        row = int(row)
+        row_index = row - 1
+        column = int(column)
+        column_index = column - 1
         table = self._table_element_finder.find(self._current_browser(), table_locator)
         if table is not None:
-            rows = table.find_elements_by_xpath('./tbody/tr')
-            if row < len(rows):
-                columns = rows[row].find_elements_by_tag_name('td')
-                if column < len(columns):
-                    return columns[column].text
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                if column_index >= len(columns): columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                if column_index < len(columns):
+                    return columns[column_index].text
         self.log_source(loglevel)
         raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
             % (table_locator, str(row), str(column)))
@@ -775,7 +780,7 @@ class Selenium2Library(object):
         try:
             content = self.get_table_cell(table_locator, row, column, loglevel='NONE')
         except AssertionError, err:
-            self._warn(err)
+            self._info(err)
             self.log_source(loglevel)
             raise AssertionError(message)
         self._info("Cell contains %s." % (content))
