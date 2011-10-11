@@ -1,6 +1,5 @@
 import unittest
-from Selenium2Library.tableelementfinder import TableElementFinder
-from selenium.common.exceptions import NoSuchElementException
+from Selenium2Library.locators import TableElementFinder
 from mockito import *
 
 class ElementFinderTests(unittest.TestCase):

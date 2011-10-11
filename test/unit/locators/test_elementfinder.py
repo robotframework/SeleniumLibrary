@@ -1,6 +1,6 @@
 import unittest
 import os
-from Selenium2Library.elementfinder import ElementFinder
+from Selenium2Library.locators import ElementFinder
 from mockito import *
 
 class ElementFinderTests(unittest.TestCase):

@@ -27,9 +27,7 @@ from selenium.webdriver.remote.webelement import WebElement
 import webdrivermonkeypatches
 
 from browsercache import BrowserCache
-from elementfinder import ElementFinder
-from windowmanager import WindowManager
-from tableelementfinder import TableElementFinder
+from locators import *
 import utils
     
 FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'resources', 'firefoxprofile')
