@@ -3,7 +3,7 @@ import os.path
 import sys
 import unittest
 
-def run_unit_tests(modules_to_run):
+def run_unit_tests(modules_to_run=[]):
     basedir = os.path.abspath(os.path.dirname(__file__))
     testdir = os.path.join(basedir, 'unit')
     path_dirs = [

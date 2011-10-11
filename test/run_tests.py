@@ -39,6 +39,7 @@ ROBOT_ARGS = [
 '--suite', 'Acceptance.Keywords.Run On Failure',
 '--suite', 'Acceptance.Keywords.Screenshots',
 '--suite', 'Acceptance.Keywords.Textfields',
+'--suite', 'Acceptance.Keywords.Tables.Col Should Contain',
 '--loglevel', 'DEBUG',
 '--pythonpath', '%(pythonpath)s',
 ]

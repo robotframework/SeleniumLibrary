@@ -12,15 +12,11 @@ except SyntaxError: # decorator module requires Python/Jython 2.4+
 if sys.platform == 'cli':
     decorator = None # decorator module doesn't work with IronPython 2.6
 
+import robot
 from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
-from robot import utils
 from robot.api import logger
 from robot.libraries import BuiltIn
-
-from browsercache import BrowserCache
-from elementfinder import ElementFinder
-from windowmanager import WindowManager
 
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -28,6 +24,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 import webdrivermonkeypatches
+
+from browsercache import BrowserCache
+from elementfinder import ElementFinder
+from windowmanager import WindowManager
+from tableelementfinder import TableElementFinder
+import utils
     
 FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'firefoxprofile')
 BROWSER_NAMES = {'ff': '*firefox',
@@ -64,6 +66,7 @@ class Selenium2Library(object):
     def __init__(self):
         self._cache = BrowserCache()
         self._element_finder = ElementFinder()
+        self._table_element_finder = TableElementFinder(self._element_finder)
         self._window_manager = WindowManager()
         self._speed_in_secs = float(0)
         self._timeout_in_secs = float(5)
@@ -148,21 +151,21 @@ class Selenium2Library(object):
         return self._window_manager.get_window_handles(self._current_browser())
 
     def get_selenium_speed(self):
-        return utils.secs_to_timestr(self._speed_in_secs)
+        return robot.utils.secs_to_timestr(self._speed_in_secs)
 
     def set_selenium_speed(self, seconds):
         old_speed = self.get_selenium_speed()
-        self._speed_in_secs = utils.timestr_to_secs(seconds)
+        self._speed_in_secs = robot.utils.timestr_to_secs(seconds)
         for browser in self._cache.browsers:
             browser.set_speed(self._speed_in_secs)
         return old_speed
 
     def get_selenium_timeout(self):
-        return utils.secs_to_timestr(self._timeout_in_secs)
+        return robot.utils.secs_to_timestr(self._timeout_in_secs)
 
     def set_selenium_timeout(self, seconds):
         old_timeout = self.get_selenium_timeout()
-        self._timeout_in_secs = utils.timestr_to_secs(seconds)
+        self._timeout_in_secs = robot.utils.timestr_to_secs(seconds)
         for browser in self._cache.get_open_browsers():
             browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
@@ -715,6 +718,13 @@ class Selenium2Library(object):
         element = self._element_find(locator, True, True)
         element.send_keys(key)
 
+    def table_column_should_contain(self, table_locator, col, expected, loglevel='INFO'):
+        element = self._table_element_finder.find_by_col(self._current_browser(), table_locator, col, expected)
+        if element is None:
+            raise AssertionError("Column #%s in table identified by '%s' "
+                   "should have contained text '%s'."
+                   % (col, table_locator, expected))
+
     def _map_ascii_key_code_to_key(self, key_code):
         map = {
             0: Keys.NULL,
@@ -753,7 +763,7 @@ class Selenium2Library(object):
             filename = filename.replace('/', os.sep)
         logdir = self._get_log_dir()
         path = os.path.join(logdir, filename)
-        link = utils.get_link_path(path, logdir)
+        link = robot.utils.get_link_path(path, logdir)
         return path, link
 
     def _run_on_failure(self):
@@ -885,7 +895,7 @@ class Selenium2Library(object):
                    % (element_name, locator))
 
     def _is_text_present(self, text):
-        locator = "xpath=//*[contains(., %s)]" % self._xpath_criteria_escape(text);
+        locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text);
         return self._is_element_present(locator)
 
     def _page_contains(self, text):
@@ -914,14 +924,6 @@ class Selenium2Library(object):
         found = self._is_text_present(text)
         browser.switch_to_default_content()
         return found
-
-    def _xpath_criteria_escape(self, str):
-        if '"' in str and '\'' in str:
-            parts_wo_apos = str.split('\'')
-            return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
-        if '\'' in str:
-            return "\"%s\"" % str
-        return "'%s'" % str
 
     def _get_checkbox(self, locator):
         return self._element_find(locator, True, True, tag='input')
