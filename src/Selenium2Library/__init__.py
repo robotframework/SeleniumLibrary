@@ -1,7 +1,8 @@
 import os
-_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-
 import sys
+import time
+
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.8.1", "py"))
 
 import inspect
@@ -166,8 +167,6 @@ class Selenium2Library(object):
     def set_selenium_timeout(self, seconds):
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = robot.utils.timestr_to_secs(seconds)
-        for browser in self._cache.get_open_browsers():
-            browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
 
     def checkbox_should_be_selected(self, locator):
@@ -787,6 +786,31 @@ class Selenium2Library(object):
         if expected not in content:
             self.log_source(loglevel)
             raise AssertionError(message)
+
+    def wait_for_condition(self, condition, timeout=None, error=None):
+        if not error:
+            error = "Condition '%s' did not become true in <TIMEOUT>" % condition
+        self._wait_until(timeout, error,
+                         lambda: self._current_browser().execute_script(condition) == True)
+
+    def wait_until_page_contains(self, text, timeout=None, error=None):
+        if not error:
+            error = "Text '%s' did not appear in <TIMEOUT>" % text
+        self._wait_until(timeout, error, self._is_text_present, text)
+
+    def wait_until_page_contains_element(self, locator, timeout=None, error=None):
+        if not error:
+            error = "Element '%s' did not appear in <TIMEOUT>" % locator
+        self._wait_until(timeout, error, self._is_element_present, locator)
+
+    def _wait_until(self, timeout, error, function, *args):
+        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        error = error.replace('<TIMEOUT>', robot.utils.secs_to_timestr(timeout))
+        maxtime = time.time() + timeout
+        while not function(*args):
+            if time.time() > maxtime:
+                raise AssertionError(error)
+            time.sleep(0.2)
 
     def _map_ascii_key_code_to_key(self, key_code):
         map = {

@@ -5,8 +5,8 @@ Resource        ../resource.txt
 *** Test Cases ***
 Wait For Condition
     Title Should Be  Original
-    Wait For Condition  window.document.title == "Changed"
-    Run Keyword And Expect Error  Condition 'window.document.title == "Invalid"' did not become true in 100 milliseconds  Wait For Condition  window.document.title == "Invalid"  ${0.1}
+    Wait For Condition  return window.document.title == "Changed"
+    Run Keyword And Expect Error  Condition 'return window.document.title == "Invalid"' did not become true in 100 milliseconds  Wait For Condition  return window.document.title == "Invalid"  ${0.1}
 
 Wait Until Page Contains
     Wait Until Page Contains  New Content  2 s
