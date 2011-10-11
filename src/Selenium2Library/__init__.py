@@ -6,19 +6,10 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(_THIS_DIR, "lib", "selenium-2.8.1", "py"))
 sys.path.append(os.path.join(_THIS_DIR, "lib", "decorator-3.3.2"))
 
-import inspect
-try:
-    from decorator import decorator
-except SyntaxError: # decorator module requires Python/Jython 2.4+
-    decorator = None
-if sys.platform == 'cli':
-    decorator = None # decorator module doesn't work with IronPython 2.6
-
 import robot
 from robot.variables import GLOBAL_VARIABLES
 from robot.errors import DataError
 from robot.api import logger
-from robot.libraries import BuiltIn
 
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
@@ -30,7 +21,8 @@ import webdrivermonkeypatches
 import utils
 from utils import *
 from locators import *
-    
+from keywords import *
+
 FIREFOX_PROFILE_DIR = os.path.join(_THIS_DIR, 'resources', 'firefoxprofile')
 BROWSER_NAMES = {'ff': '*firefox',
                  'firefox': '*firefox',
@@ -40,31 +32,14 @@ BROWSER_NAMES = {'ff': '*firefox',
                  'gc': '*googlechrome',
                  'chrome': '*googlechrome'
                 }
-BUILTIN = BuiltIn.BuiltIn()
 
-def _run_keyword_on_failure_decorator(method, *args, **kwargs):
-    try:
-        return method(*args, **kwargs)
-    except Exception, err:
-        self = args[0]
-        self._run_on_failure()
-        raise
-
-class Selenium2LibraryType(type):
-    def __new__(cls, clsname, bases, dict):
-        if decorator:
-            for name, method in dict.items():
-                if not name.startswith('_') and inspect.isroutine(method):
-                    dict[name] = decorator(_run_keyword_on_failure_decorator, method)
-        return type.__new__(cls, clsname, bases, dict)
-
-class Selenium2Library(object):
-    __metaclass__ = Selenium2LibraryType
-
+class Selenium2Library(_RunOnFailureKeywords):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = 0.5
 
     def __init__(self):
+        _RunOnFailureKeywords.__init__(self)
+
         self._cache = BrowserCache()
         self._element_finder = ElementFinder()
         self._table_element_finder = TableElementFinder(self._element_finder)
@@ -72,7 +47,6 @@ class Selenium2Library(object):
         self._speed_in_secs = float(0)
         self._timeout_in_secs = float(5)
         self._cancel_on_next_confirmation = False
-        self._run_on_failure_keyword = None
         self._screenshot_index = 0
 
     def open_browser(self, url, browser='firefox', alias=None):
@@ -685,18 +659,6 @@ class Selenium2Library(object):
     def log_url(self):
         self._info(self.get_url())
 
-    def register_keyword_to_run_on_failure(self, keyword):
-        old_keyword = self._run_on_failure_keyword
-        old_keyword_text = old_keyword if old_keyword is not None else "No keyword"
-
-        new_keyword = keyword if keyword.strip().lower() != "nothing" else None
-        new_keyword_text = new_keyword if new_keyword is not None else "No keyword"
-
-        self._run_on_failure_keyword = new_keyword
-        self._info('%s will be run on failure.' % new_keyword_text)
-
-        return old_keyword_text
-
     def capture_page_screenshot(self, filename=None):
         path, link = self._get_screenshot_paths(filename)
         self._current_browser().save_screenshot(path)
@@ -852,10 +814,6 @@ class Selenium2Library(object):
         path = os.path.join(logdir, filename)
         link = robot.utils.get_link_path(path, logdir)
         return path, link
-
-    def _run_on_failure(self):
-        if self._run_on_failure_keyword is not None:
-            BUILTIN.run_keyword(self._run_on_failure_keyword)
 
     def _is_multiselect_list(self, select):
         multiple_value = select.get_attribute('multiple')
