@@ -1,7 +1,4 @@
-from robot import utils
-from types import *
-
-import sys
+import utils
 
 class ElementFinder(object):
 
@@ -75,7 +72,7 @@ class ElementFinder(object):
         if tag is not None:
             key_attrs = self._key_attrs.get(tag, key_attrs)
 
-        xpath_criteria = self._xpath_criteria_escape(criteria)
+        xpath_criteria = utils.escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
         xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
@@ -145,7 +142,7 @@ class ElementFinder(object):
             if attr in key_attrs:
                 if url is None or xpath_url is None:
                     url = self._get_base_url(browser) + "/" + criteria
-                    xpath_url = self._xpath_criteria_escape(url)
+                    xpath_url = utils.escape_xpath_value(url)
                 attrs.append("%s=%s" % (attr, xpath_url))
         return attrs
 
@@ -164,11 +161,3 @@ class ElementFinder(object):
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
         return (prefix, criteria)
-
-    def _xpath_criteria_escape(self, str):
-        if '"' in str and '\'' in str:
-            parts_wo_apos = str.split('\'')
-            return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
-        if '\'' in str:
-            return "\"%s\"" % str
-        return "'%s'" % str
