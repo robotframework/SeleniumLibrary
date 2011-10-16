@@ -1,7 +1,8 @@
 import os
 from selenium.common.exceptions import WebDriverException
+from keywordgroup import KeywordGroup
 
-class _JavaScriptKeywords(object):
+class _JavaScriptKeywords(KeywordGroup):
 
     def __init__(self):
         self._cancel_on_next_confirmation = False

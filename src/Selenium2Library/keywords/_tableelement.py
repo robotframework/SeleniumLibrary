@@ -3,8 +3,9 @@ import sys
 from robot.variables import GLOBAL_VARIABLES
 from robot.api import logger
 from Selenium2Library.locators import TableElementFinder
+from keywordgroup import KeywordGroup
 
-class _TableElementKeywords(object):
+class _TableElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._table_element_finder = TableElementFinder()

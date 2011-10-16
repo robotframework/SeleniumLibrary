@@ -1,7 +1,8 @@
 import os
 import robot
+from keywordgroup import KeywordGroup
 
-class _ScreenshotKeywords(object):
+class _ScreenshotKeywords(KeywordGroup):
 
     def __init__(self):
         self._screenshot_index = 0

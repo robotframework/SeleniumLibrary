@@ -2,8 +2,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
+from keywordgroup import KeywordGroup
 
-class _ElementKeywords(object):
+class _ElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._element_finder = ElementFinder()

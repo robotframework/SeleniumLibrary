@@ -1,7 +1,8 @@
 import time
 import robot
+from keywordgroup import KeywordGroup
 
-class _WaitingKeywords(object):
+class _WaitingKeywords(KeywordGroup):
 
     # Public
 

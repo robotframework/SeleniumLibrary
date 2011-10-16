@@ -2,8 +2,9 @@ import os
 import sys
 from robot.variables import GLOBAL_VARIABLES
 from robot.api import logger
+from keywordgroup import KeywordGroup
 
-class _LoggingKeywords(object):
+class _LoggingKeywords(KeywordGroup):
 
     # Private
 

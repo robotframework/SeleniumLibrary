@@ -1,6 +1,7 @@
 from selenium.webdriver.remote.webelement import WebElement
+from keywordgroup import KeywordGroup
 
-class _SelectElementKeywords(object):
+class _SelectElementKeywords(KeywordGroup):
 
     # Public
 

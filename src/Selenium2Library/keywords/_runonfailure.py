@@ -1,33 +1,9 @@
-import sys
-import inspect
-try:
-    from decorator import decorator
-except SyntaxError: # decorator module requires Python/Jython 2.4+
-    decorator = None
-if sys.platform == 'cli':
-    decorator = None # decorator module doesn't work with IronPython 2.6
 from robot.libraries import BuiltIn
+from keywordgroup import KeywordGroup
 
 BUILTIN = BuiltIn.BuiltIn()
 
-def _run_keyword_on_failure_decorator(method, *args, **kwargs):
-    try:
-        return method(*args, **kwargs)
-    except Exception, err:
-        self = args[0]
-        self._run_on_failure()
-        raise
-
-class _RunOnFailureType(type):
-    def __new__(cls, clsname, bases, dict):
-        if decorator:
-            for name, method in dict.items():
-                if not name.startswith('_') and inspect.isroutine(method):
-                    dict[name] = decorator(_run_keyword_on_failure_decorator, method)
-        return type.__new__(cls, clsname, bases, dict)
-
-class _RunOnFailureKeywords(object):
-    __metaclass__ = _RunOnFailureType
+class _RunOnFailureKeywords(KeywordGroup):
 
     def __init__(self):
         self._run_on_failure_keyword = None

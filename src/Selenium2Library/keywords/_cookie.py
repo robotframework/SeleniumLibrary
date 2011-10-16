@@ -1,4 +1,6 @@
-class _CookieKeywords(object):
+from keywordgroup import KeywordGroup
+
+class _CookieKeywords(KeywordGroup):
 
     def delete_all_cookies(self):
         self._current_browser().delete_all_cookies()

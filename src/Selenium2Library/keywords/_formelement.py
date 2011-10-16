@@ -1,6 +1,7 @@
 import os
+from keywordgroup import KeywordGroup
 
-class _FormElementKeywords(object):
+class _FormElementKeywords(KeywordGroup):
 
     # Public, form
 

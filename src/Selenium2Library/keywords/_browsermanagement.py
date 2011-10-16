@@ -5,6 +5,7 @@ from selenium import webdriver
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
+from keywordgroup import KeywordGroup
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
@@ -17,7 +18,7 @@ BROWSER_NAMES = {'ff': '*firefox',
                  'chrome': '*googlechrome'
                 }
 
-class _BrowserManagementKeywords(object):
+class _BrowserManagementKeywords(KeywordGroup):
 
     def __init__(self):
         self._cache = BrowserCache()
