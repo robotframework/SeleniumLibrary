@@ -56,6 +56,11 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, attributes
 
+    def assign_id_to_element(self, locator, id):
+        self._info("Assigning temporary id '%s' to element '%s'" % (id, locator))
+        element = self._element_find(locator, True, True)
+        self._current_browser().execute_script("arguments[0].id = '%s';" % id, element)
+
     def element_should_be_disabled(self, locator):
         if self._is_enabled(locator):
             raise AssertionError("Element '%s' is enabled." % (locator))
