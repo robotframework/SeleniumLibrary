@@ -6,8 +6,9 @@ import unittest
 import glob
 
 def run_unit_tests(modules_to_run=[]):
-    test_module_files = [ test_module_path[len(env.UNIT_TEST_DIR)+1:]
-        for test_module_path in glob.glob(os.path.join(env.UNIT_TEST_DIR, "*", "test_*.py")) ]
+    test_module_files = [ test_file_path[len(env.UNIT_TEST_DIR)+1:]
+        for test_file_path in glob.glob(os.path.join(env.UNIT_TEST_DIR, "*", "test_*.py"))
+        if os.path.exists(os.path.join(os.path.dirname(test_file_path), "__init__.py")) ]
     test_module_names = [ os.path.splitext(test_module_file)[0].replace(os.sep, '.')
         for test_module_file in test_module_files ]
 
