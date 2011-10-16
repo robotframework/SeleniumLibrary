@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import env
 import os
 import sys
 from subprocess import Popen, call
@@ -7,33 +8,25 @@ from tempfile import TemporaryFile
 
 from run_unit_tests import run_unit_tests
 
-ROOT = os.path.dirname(__file__)
-TESTDATADIR = os.path.join(ROOT, 'acceptance')
-RESOURCEDIR = os.path.join(ROOT, 'resources')
-SRCDIR = os.path.join(ROOT, '..', 'src')
-UTESTDIR = os.path.join(ROOT, 'unit')
-RESULTDIR = os.path.join(ROOT, 'results')
-HTPPSERVER = os.path.join(RESOURCEDIR, 'testserver', 'testserver.py')
 ROBOT_ARGS = [
-'--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
-'--outputdir', '%(outdir)s',
-'--variable', 'browser:%(browser)s',
-'--escape', 'space:SP',
-'--report', 'none',
-'--log', 'none',
-#'--suite', 'Acceptance.Open And Close',
-'--loglevel', 'DEBUG',
-'--pythonpath', '%(pythonpath)s',
+    '--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
+    '--outputdir', '%(outdir)s',
+    '--variable', 'browser:%(browser)s',
+    '--escape', 'space:SP',
+    '--report', 'none',
+    '--log', 'none',
+    #'--suite', 'Acceptance.Open And Close',
+    '--loglevel', 'DEBUG',
+    '--pythonpath', '%(pythonpath)s',
 ]
 REBOT_ARGS = [
-'--outputdir', '%(outdir)s',
-'--name', '%(browser)sSPAcceptanceSPTests',
-'--escape', 'space:SP',
-'--critical', 'regression',
-'--noncritical', 'inprogress',
+    '--outputdir', '%(outdir)s',
+    '--name', '%(browser)sSPAcceptanceSPTests',
+    '--escape', 'space:SP',
+    '--critical', 'regression',
+    '--noncritical', 'inprogress',
 ]
-ARG_VALUES = {'outdir': RESULTDIR, 'pythonpath': SRCDIR}
-
+ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': env.SRC_DIR}
 
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
@@ -41,31 +34,31 @@ def acceptance_tests(interpreter, browser, args):
     runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':
         runner += '.bat'
-    execute_tests(runner)
+    execute_tests(runner, args)
     stop_http_server()
     return process_output()
 
 def start_http_server():
     server_output = TemporaryFile()
-    Popen(['python', HTPPSERVER ,'start'],
+    Popen(['python', env.HTTP_SERVER_FILE ,'start'],
           stdout=server_output, stderr=server_output)
 
-def execute_tests(runner):
-    if not os.path.exists(RESULTDIR):
-        os.mkdir(RESULTDIR)
-    command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [TESTDATADIR]
+def execute_tests(runner, args):
+    if not os.path.exists(env.RESULTS_DIR):
+        os.mkdir(env.RESULTS_DIR)
+    command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [env.ACCEPTANCE_TEST_DIR]
     print ''
     print 'Starting test execution with command:\n' + ' '.join(command)
-    syslog = os.path.join(RESULTDIR, 'syslog.txt')
+    syslog = os.path.join(env.RESULTS_DIR, 'syslog.txt')
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
-    call(['python', HTPPSERVER, 'stop'])
+    call(['python', env.HTTP_SERVER_FILE, 'stop'])
 
 def process_output():
     print
-    call(['python', os.path.join(RESOURCEDIR, 'statuschecker.py'),
-         os.path.join(RESULTDIR, 'output.xml')])
+    call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
+         os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]

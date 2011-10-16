@@ -1,6 +1,6 @@
-from elementfinder import ElementFinder
-from .. import utils
 from selenium.common.exceptions import NoSuchElementException
+from Selenium2Library import utils
+from elementfinder import ElementFinder
 
 class TableElementFinder(object):
 

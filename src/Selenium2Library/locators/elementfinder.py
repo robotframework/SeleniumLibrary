@@ -1,4 +1,4 @@
-from .. import utils
+from Selenium2Library import utils
 
 class ElementFinder(object):
 

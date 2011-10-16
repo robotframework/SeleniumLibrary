@@ -1,5 +1,5 @@
-from robot import utils
 from types import *
+from robot import utils
 from selenium.common.exceptions import NoSuchWindowException
 
 class WindowManager(object):
