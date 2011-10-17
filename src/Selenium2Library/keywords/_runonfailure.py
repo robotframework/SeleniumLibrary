@@ -26,4 +26,8 @@ class _RunOnFailureKeywords(KeywordGroup):
 
     def _run_on_failure(self):
         if self._run_on_failure_keyword is not None:
-            BUILTIN.run_keyword(self._run_on_failure_keyword)
+            try:
+                BUILTIN.run_keyword(self._run_on_failure_keyword)
+            except Exception, err:
+                raise Exception("Keyword '%s' could not be run on failure. %s" % 
+                    (self._run_on_failure_keyword, err))
