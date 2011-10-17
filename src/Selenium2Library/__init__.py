@@ -6,6 +6,9 @@ sys.path.append(os.path.join(ROOT_DIR, "lib", "selenium-2.8.1", "py"))
 sys.path.append(os.path.join(ROOT_DIR, "lib", "decorator-3.3.2"))
 
 from keywords import *
+from version import VERSION
+
+__version__ = VERSION
 
 class Selenium2Library(
     _LoggingKeywords, 
@@ -21,7 +24,7 @@ class Selenium2Library(
     _WaitingKeywords
 ):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
-    ROBOT_LIBRARY_VERSION = 0.5
+    ROBOT_LIBRARY_VERSION = VERSION
 
     def __init__(self, timeout=5.0, run_on_failure='Capture Page Screenshot'):
         for base in Selenium2Library.__bases__:
