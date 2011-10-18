@@ -22,6 +22,8 @@ import shutil
 import re
 import base64
 from cStringIO import StringIO
+import random
+import string
 
 WEBDRIVER_EXT = "webdriver.xpi"
 EXTENSION_NAME = "fxdriver@googlecode.com"
@@ -80,27 +82,29 @@ class FirefoxProfile(object):
         }
 
     def __init__(self,profile_directory=None):
-        """ Initialises a new instance of a Firefox Profile
-            args:
-                profile_directory: Directory of profile that you want to use.
-                                This defaults to None and will create a new
-                                directory when object is created.
+        """
+        Initialises a new instance of a Firefox Profile
+
+        :args:
+         - profile_directory: Directory of profile that you want to use. 
+           This defaults to None and will create a new
+           directory when object is created.
         """
         self.default_preferences = copy.deepcopy(FirefoxProfile.DEFAULT_PREFERENCES)
-        self.profile_dir = profile_directory
-        if self.profile_dir is None:
-            self.profile_dir = self._create_tempfolder()
+        self.profile_dir = _new_temp_folder_path()
+        if profile_directory is None:
+            os.mkdir(self.profile_dir)
         else:
-            newprof = os.path.join(tempfile.mkdtemp(), "webdriver-py-profilecopy")
-            shutil.copytree(self.profile_dir, newprof)
-            self.profile_dir = newprof
+            shutil.copytree(profile_directory, self.profile_dir)
             self._read_existing_userjs()
         self.extensionsDir = os.path.join(self.profile_dir, "extensions")
         self.userPrefs = os.path.join(self.profile_dir, "user.js")
 
     #Public Methods
     def set_preference(self, key, value):
-        """ sets the preference that we want in the profile."""
+        """
+        sets the preference that we want in the profile.
+        """
         clean_value = ''
         if value is True:
             clean_value = 'true'
@@ -121,17 +125,23 @@ class FirefoxProfile(object):
 
     @property
     def path(self):
-        """ Gets the profile directory that is currently being used"""
+        """
+        Gets the profile directory that is currently being used
+        """
         return self.profile_dir
 
     @property
     def port(self):
-        """ Gets the port that WebDriver is working on"""
+        """
+        Gets the port that WebDriver is working on
+        """
         return self._port
 
     @port.setter
     def port(self, port):
-        """ Sets the port that WebDriver will be running on """
+        """
+        Sets the port that WebDriver will be running on
+        """
         self._port = port
         self.default_preferences["webdriver_firefox_port"] =  str(self._port)
 
@@ -171,11 +181,15 @@ class FirefoxProfile(object):
     #Private Methods
 
     def _create_tempfolder(self):
-        """ Creates a temp folder to store User.js and the extension """
+        """
+        Creates a temp folder to store User.js and the extension
+        """
         return tempfile.mkdtemp()
 
     def _write_user_prefs(self, user_prefs):
-        """ writes the current user prefs dictionary to disk """
+        """
+        writes the current user prefs dictionary to disk
+        """
         f = open(self.userPrefs, "w")
         for pref in user_prefs.keys():
             f.write('user_pref("%s", %s);\n' % (pref, user_prefs[pref]))
@@ -236,3 +250,19 @@ class FirefoxProfile(object):
         for i in installrdf.all_nodes():
             if re.search(".*@.*\..*", i):
                 return i.decode()
+
+_root_temp_folder_created = False
+def _new_temp_folder_path():
+    global _root_temp_folder_created
+    root_temp_folder_path = os.path.join(tempfile.gettempdir(), "webdriver-py-profiles")
+    if not _root_temp_folder_created:
+        if os.path.exists(root_temp_folder_path):
+            shutil.rmtree(root_temp_folder_path)
+        os.mkdir(root_temp_folder_path)
+        _root_temp_folder_created = True
+    temp_folder_path = None
+    while temp_folder_path is None or os.path.exists(temp_folder_path):
+        temp_folder_path = os.path.join(
+            root_temp_folder_path,
+            'tmp' + ''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(6)))
+    return temp_folder_path
