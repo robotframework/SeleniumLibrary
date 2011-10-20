@@ -1,18 +1,11 @@
 import env
-import re
-import os
-import sys
+import os, sys
 import unittest
-import glob
+from Selenium2Library import utils
 
 def run_unit_tests(modules_to_run=[]):
-    test_file_paths = glob.glob(os.path.join(env.UNIT_TEST_DIR, "*", "test*.py"))
-    test_module_file_paths = [ test_file_path for test_file_path in test_file_paths
-        if os.path.exists(os.path.join(os.path.dirname(test_file_path), "__init__.py")) ]
-    test_module_files = [ test_module_file_path[len(env.UNIT_TEST_DIR)+1:]
-        for test_module_file_path in test_module_file_paths ]
-    test_module_names = [ os.path.splitext(test_module_file)[0].replace(os.sep, '.')
-        for test_module_file in test_module_files ]
+    (test_module_names, test_modules) = utils.import_modules_under(
+        env.UNIT_TEST_DIR, include_root_package_name = False, pattern="test*.py")
 
     bad_modules_to_run = [module_to_run for module_to_run in modules_to_run
         if module_to_run not in test_module_names]
@@ -22,8 +15,6 @@ def run_unit_tests(modules_to_run=[]):
             ', '.join(bad_modules_to_run))
         return -1
 
-    test_modules = [__import__(test_module_name, globals(), locals(), ['*'], -1)
-        for test_module_name in test_module_names]
     tests = [unittest.defaultTestLoader.loadTestsFromModule(test_module) 
         for test_module in test_modules]
 

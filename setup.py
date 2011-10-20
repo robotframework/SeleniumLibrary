@@ -1,33 +1,25 @@
 #!/usr/bin/env python
 
+import os, sys
+
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(THIS_DIR, "src", "Selenium2Library"))
+
 from distutils.core import setup
+import metadata
 
-from os.path import abspath, dirname, join
-execfile(join(dirname(abspath(__file__)), 'src', 'Selenium2Library', 'version.py'))
-
-DESCRIPTION = """
-Selenium2Library is a web testing library for Robot Framework
-that leverage the Selenium 2 (WebDriver) libraries.
-"""[1:-1]
-
-setup(name         = 'robotframework-selenium2library',
-      version      = VERSION,
-      description  = 'Web testing library for Robot Framework',
-      long_description = DESCRIPTION,
-      author       = 'Robot Framework Developers',
-      author_email = 'robotframework@gmail.com',
-      license      = 'Apache License 2.0',
-      keywords     = 'robotframework testing testautomation selenium selenium2 webdriver web',
-      platforms    = 'any',
-      classifiers  = [
-                        "Development Status :: 4 - Beta",
-                        #"Development Status :: 5 - Production/Stable",
-                        "License :: OSI Approved :: Apache Software License",
-                        "Operating System :: OS Independent",
-                        "Programming Language :: Python",
-                        "Topic :: Software Development :: Testing"
-                     ],
-      package_dir  = {'' : 'src'},
-      packages     = ['Selenium2Library'],
-      package_data = {'Selenium2Library': ['resources/firefoxprofile/*.*']},
-      )
+setup(
+    name         = metadata.NAME,
+    version      = metadata.VERSION,
+    description  = metadata.SHORT_DESCRIPTION,
+    long_description = metadata.LONG_DESCRIPTION,
+    author       = metadata.AUTHOR,
+    author_email = metadata.AUTHOR_EMAIL,
+    license      = metadata.LICENSE,
+    keywords     = metadata.KEYWORDS,
+    platforms    = metadata.PLATFORMS,
+    classifiers  = metadata.TROVE_CLASSIFIERS,
+    package_dir  = {'' : 'src'},
+    packages     = metadata.get_all_packages(),
+    package_data = metadata.get_all_package_data(),
+)
