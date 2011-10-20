@@ -15,6 +15,7 @@ setup(
     long_description = metadata.LONG_DESCRIPTION,
     author       = metadata.AUTHOR,
     author_email = metadata.AUTHOR_EMAIL,
+    url          = metadata.PROJECT_URL,
     license      = metadata.LICENSE,
     keywords     = metadata.KEYWORDS,
     platforms    = metadata.PLATFORMS,
