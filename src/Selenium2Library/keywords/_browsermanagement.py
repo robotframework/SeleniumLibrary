@@ -64,6 +64,9 @@ class _BrowserManagementKeywords(KeywordGroup):
     def get_window_identifiers(self):
         return self._window_manager.get_window_handles(self._current_browser())
 
+    def maximize_browser_window(self):
+        self._current_browser().execute_script("if (window.screen) { window.moveTo(0, 0); window.resizeTo(window.screen.availWidth, window.screen.availHeight); }")
+
     def select_frame(self, locator):
         self._info("Selecting frame '%s'." % locator)
         element = self._element_find(locator, True, True, tag='frame')
