@@ -3,12 +3,17 @@
 Documentation  A resource file containing the application specific keywords
 ...            that create our own domain specific language. This resource
 ...            implements keywords for testing HTML version of the test
-...            application. Keywords for Flex version are in flex_resource.txt
-...            and common_resource.txt is used to select which one to use.
+...            application.
+Library        Selenium2Library
 
 
 *** Variables ***
 
+${SERVER}        localhost:7272
+${BROWSER}       firefox
+${DELAY}         0
+${VALID USER}    demo
+${VALID PASSWD}  mode
 ${LOGIN URL}     http://${SERVER}/html/
 ${WELCOME URL}   http://${SERVER}/html/welcome.html
 ${ERROR URL}     http://${SERVER}/html/error.html
