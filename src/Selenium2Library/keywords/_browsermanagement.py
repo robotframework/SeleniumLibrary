@@ -119,37 +119,77 @@ class _BrowserManagementKeywords(KeywordGroup):
     # Public, window management
 
     def close_window(self):
+        """Closes currently opened pop-up window."""
         self._current_browser().close()
 
     def get_window_identifiers(self):
+        """Returns handle identifiers for all windows known to the browser."""
         return self._window_manager.get_window_handles(self._current_browser())
 
     def maximize_browser_window(self):
-        self._current_browser().execute_script("if (window.screen) { window.moveTo(0, 0); window.resizeTo(window.screen.availWidth, window.screen.availHeight); }")
+        """Maximizes current browser window."""
+        self._current_browser().execute_script(
+            "if (window.screen) { window.moveTo(0, 0); window.resizeTo(window.screen.availWidth, window.screen.availHeight); }")
 
     def select_frame(self, locator):
+        """Sets frame identified by `locator` as current frame.
+
+        Key attributes for frames are `id` and `name.` See `introduction` for
+        details about locating elements.
+        """
         self._info("Selecting frame '%s'." % locator)
         element = self._element_find(locator, True, True, tag='frame')
         self._current_browser().switch_to_frame(element)
 
     def select_window(self, locator=None):
+        """Selects the window found with `locator` as the context of actions.
+
+        If the window is found, all subsequent commands use that window, until
+        this keyword is used again. If the window is not found, this keyword fails.
+        
+        By default, when a locator value is provided,
+        it is matched against the title of the window and the
+        handle/identifier of the window. If multiple windows with
+        same identifier are found, the first one is selected.
+
+        Special locator `main` (default) can be used to select the main window.
+
+        It is also possible to specify the approach Selenium2Library should take
+        to find a window by specifying a locator strategy:
+
+        | *Strategy* | *Example*                               | *Description*                        |
+        | title      | Select Window `|` title=My Document     | Matches by window title              |
+        | name       | Select Window `|` name=${id}            | Matches by window handle/identifier, see `Get Window Identifiers` |
+        | url        | Select Window `|` url=http://google.com | Matches by window's current URL      |
+
+        Example:
+        | Click Link | popup_link | # opens new window |
+        | Select Window | popupName |
+        | Title Should Be | Popup Title |
+        | Select Window |  | | # Chooses the main window again |
+        """
         self._window_manager.select(self._current_browser(), locator)
 
     def unselect_frame(self):
+        """Sets the top frame as the current frame."""
         self._current_browser().switch_to_default_content()
 
     # Public, browser/current page properties
 
     def get_source(self):
+        """Returns the entire html source of the current page or frame."""
         return self._current_browser().get_page_source()
 
     def get_title(self):
+        """Returns title of current page."""
         return self._current_browser().get_title()
 
     def get_url(self):
+        """Returns URL of current page."""
         return self._current_browser().get_current_url()
 
     def location_should_be(self, url):
+        """Verifies that current URL is exactly `url`."""
         actual = self.get_url()
         if  actual != url:
             raise AssertionError("Location should have been '%s' but was '%s'"
@@ -157,6 +197,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._info("Current location is '%s'." % url)
 
     def location_should_contain(self, expected):
+        """Verifies that current URL contains `expected`."""
         actual = self.get_url()
         if not expected in actual:
             raise AssertionError("Location should have contained '%s' "
@@ -164,17 +205,29 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._info("Current location contains '%s'." % expected)
 
     def log_source(self, loglevel='INFO'):
+        """Logs and returns the entire html source of the current page or frame.
+
+        The `loglevel` argument defines the used log level. Valid log levels are
+        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
+        """
         source = self.get_source()
         self._log(source, loglevel.upper())
         return source
 
     def log_title(self):
-        self._info(self.get_title())
+        """Logs and returns the title of current page."""
+        title = self.get_title()
+        self._info(title)
+        return title
 
     def log_url(self):
-        self._info(self.get_url())
+        """Logs and returns the URL of current page."""
+        url = self.get_url()
+        self._info(url)
+        return url
 
     def title_should_be(self, title):
+        """Verifies that current page title equals `title`."""
         actual = self.get_title()
         if actual != title:
             raise AssertionError("Title should have been '%s' but was '%s'"
@@ -184,24 +237,42 @@ class _BrowserManagementKeywords(KeywordGroup):
     # Public, navigation
 
     def go_back(self):
+        """Simulates the user clicking the "back" button on their browser."""
         self._current_browser().back()
 
     def go_to(self, url):
+        """Navigates the active browser instance to the provided URL."""
         self._info("Opening url '%s'" % url)
         self._current_browser().get(url)
 
     def reload_page(self):
+        """Simulates user reloading page."""
         self._current_browser().refresh()
 
     # Public, execution properties
 
     def get_selenium_speed(self):
+        """Gets the delay in seconds that is waited after each Selenium command.
+
+        See `Set Selenium Speed` for an explanation."""
         return robot.utils.secs_to_timestr(self._speed_in_secs)
 
     def get_selenium_timeout(self):
+        """Gets the timeout in seconds that is used by various keywords.
+
+        See `Set Selenium Timeout` for an explanation."""
         return robot.utils.secs_to_timestr(self._timeout_in_secs)
 
     def set_selenium_speed(self, seconds):
+        """Sets the delay in seconds that is waited after each Selenium command.
+
+        This is useful mainly in slowing down the test execution to be able to
+        view the execution. `seconds` may be given in Robot Framework time
+        format. Returns the previous speed value.
+
+        Example:
+        | Set Selenium Speed | .5 seconds |
+        """
         old_speed = self.get_selenium_speed()
         self._speed_in_secs = robot.utils.timestr_to_secs(seconds)
         for browser in self._cache.browsers:
@@ -209,6 +280,22 @@ class _BrowserManagementKeywords(KeywordGroup):
         return old_speed
 
     def set_selenium_timeout(self, seconds):
+        """Sets the timeout in seconds used by various keywords.
+
+        There are several `Wait ...` keywords that take timeout as an
+        argument. All of these timeout arguments are optional. The timeout
+        used by all of them can be set globally using this keyword.
+        See `introduction` for more information about timeouts.
+
+        The previous timeout value is returned by this keyword and can
+        be used to set the old value back later. The default timeout
+        is 5 seconds, but it can be altered in `importing`.
+
+        Example:
+        | ${orig timeout} = | Set Selenium Timeout | 15 seconds |
+        | Open page that loads slowly |
+        | Set Selenium Timeout | ${orig timeout} |
+        """
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = robot.utils.timestr_to_secs(seconds)
         return old_timeout
