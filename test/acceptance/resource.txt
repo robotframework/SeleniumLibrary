@@ -1,5 +1,5 @@
 *Setting*
-Library  Selenium2Library
+Library  Selenium2Library  run_on_failure=Nothing
 Library  Collections
 Library  OperatingSystem
 
