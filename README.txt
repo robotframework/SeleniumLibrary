@@ -1,38 +1,30 @@
-Selenium test library for Robot Framework
-=========================================
+Selenium 2 (WebDriver) library for Robot Framework
+==================================================
+
 
 Introduction
 ------------
 
-SeleniumLibrary is a test library for Robot Framework that enables testing
-of web applications. As the name suggests, it uses Selenium_ via Selenium-RC_
-internally. Currently, not all features of Selenium are implemented in 
-SeleniumLibrary, but most of them are quite trivial to implement when someone 
-needs them.
+Selenium2Library is a web testing library for Robot Framework
+that leverage the `Selenium 2 (WebDriver)`_ libraries from the
+Selenium_ project.
+
+It is modeled after (and forked from) the SeleniumLibrary_ library, 
+but re-implemented to use Selenium 2 and WebDriver technologies.
 
 
 Usage
 -----
 
-To run tests with Robot Framework and SeleniumLibrary following things 
-must be done
-
-- SeleniumLibrary must be taken into use in Robot test data.
-  See `Robot Framework user guide`__ for more information.
-- Selenium server must be started with command 
-  ``java -jar [path_to_server]/selenium_server.jar``, 
-  where [path_to_server] depends on platform. On Windows it will be 
-  '[PythonDir]\\Lib\\site-packages\\SeleniumLibrary\\lib' and on Linux it is 
-  '/usr/lib/python[version]/site-packages/SeleniumLibrary/lib' 
-
-
-__ http://code.google.com/p/robotframework/wiki/UserGuide
+To write tests with Robot Framework and Selenium2Library, 
+Selenium2Library must be imported into your Robot test suite.
+See `Robot Framework User Guide`_ for more information.
 
 
 Installation
 ------------
 
-See INSTALLATION.txt for installation and uninstallation instructions.
+See INSTALL.txt for installation and uninstallation instructions.
 
 
 Directory Layout
@@ -48,9 +40,10 @@ src/
     Python source code.
 
 test/
-    Acceptance tests for keywords using Robot Framework.
+    Unit tests and acceptance tests for Selenium2Library source code.
 
-
+	
 .. _Selenium: http://selenium.openqa.org
-.. _Selenium-RC: http://selenium-rc.openqa.org
-
+.. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
+.. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
+.. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
