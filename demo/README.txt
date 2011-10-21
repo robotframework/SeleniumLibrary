@@ -1,8 +1,6 @@
-Robot Framework SeleniumLibrary Demo
-------------------------------------
+Robot Framework Selenium2Library Demo
+=====================================
 
 This directory contains an easily executable demo for Robot Framework
-using SeleniumLibrary. The tests can be executed using the `rundemo.py`
-script. Full usage instructions are available online at
-http://code.google.com/p/robotframework-seleniumlibrary/wiki/Demo
-
+using Selenium2Library. The tests can be executed using the `rundemo.py`
+script.
