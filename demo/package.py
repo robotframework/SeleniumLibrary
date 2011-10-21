@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 
-import os
+import os, sys
 from time import localtime
 from zipfile import ZipFile, ZIP_DEFLATED
+
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(THIS_DIR, "..", "src", "Selenium2Library"))
+
+import metadata
 
 FILES = {
     '': ['rundemo.py', 'README.txt'],
@@ -12,20 +17,27 @@ FILES = {
 }
 
 def main():
-    name = 'robotframework-selenium2library-demo'
-    root = os.path.dirname(__file__)
-    timestamp = '%d%02d%02d' % localtime()[:3]
-    zippath = os.path.join(root, '..', 'dist', '%s-%s.zip' % (name, timestamp))
-    if os.path.exists(zippath):
-        os.remove(zippath)
-    zipfile = ZipFile(zippath, 'w', ZIP_DEFLATED)
-    for dirname in FILES:
-        for filename in FILES[dirname]:
-            path = os.path.join(root, dirname.replace('/', os.sep), filename)
-            print 'Adding:  ', os.path.normpath(path)
-            zipfile.write(path, os.path.join(name, path))
-    zipfile.close()
-    print 'Created: ', os.path.normpath(zippath)
+    cwd = os.getcwd()
+    try:
+        os.chdir(THIS_DIR)
+        name = 'robotframework-selenium2library-%s-demo' % metadata.VERSION
+        zipname = '%s.zip' % name
+        if os.path.exists(zipname):
+            os.remove(zipname)
+        zipfile = ZipFile(zipname, 'w', ZIP_DEFLATED)
+        for dirname in FILES:
+            for filename in FILES[dirname]:
+                path = os.path.join('.', dirname.replace('/', os.sep), filename)
+                print 'Adding:  ', os.path.normpath(path)
+                zipfile.write(path, os.path.join(name, path))
+        zipfile.close()
+        target_path = os.path.join('..', 'dist', zipname)
+        if os.path.exists(target_path):
+            os.remove(target_path)
+        os.rename(zipname, target_path)
+        print 'Created: ', os.path.abspath(target_path)
+    finally:
+        os.chdir(cwd)
 
 
 if __name__ == '__main__':
