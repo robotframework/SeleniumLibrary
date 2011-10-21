@@ -304,7 +304,7 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Get Source" title="">Get&nbsp;Source</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Table Cell" title="">Get&nbsp;Table&nbsp;Cell</a>
+<a href="#Get Table Cell" title="Returns the content from a table cell.">Get&nbsp;Table&nbsp;Cell</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Title" title="">Get&nbsp;Title</a>
 &nbsp;&middot;&nbsp;
@@ -422,17 +422,17 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Cell Should Contain" title="">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Cell Should Contain" title="Verifies that a certain cell in a table contains `expected`.">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Column Should Contain" title="">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Column Should Contain" title="Verifies that a specific column contains `expected`.">Table&nbsp;Column&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Footer Should Contain" title="">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Footer Should Contain" title="Verifies that the table footer contains `expected`.">Table&nbsp;Footer&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Header Should Contain" title="">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Header Should Contain" title="Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains `expected`.">Table&nbsp;Header&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Row Should Contain" title="">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Row Should Contain" title="Verifies that a specific table row contains `expected`.">Table&nbsp;Row&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
-<a href="#Table Should Contain" title="">Table&nbsp;Should&nbsp;Contain</a>
+<a href="#Table Should Contain" title="Verifies that `expected` can be found somewhere in the table.">Table&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Textfield Should Contain" title="Verifies text field identified by `locator` contains text `expected`.">Textfield&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
@@ -864,7 +864,9 @@ Select list keywords work on both lists and combo boxes. Key attributes for sele
 <tr>
   <td class="kw"><a name="Get Table Cell"></a>Get Table Cell</td>
   <td class="arg">table_locator, row, column, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Returns the content from a table cell.
+
+Row and column number start from 1. Header and footer rows are included in the count. This means that also cell content from header or footer rows can be obtained with this keyword. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Title"></a>Get Title</td>
@@ -1470,32 +1472,75 @@ Above example expects that there was no other open browsers when opening the fir
 <tr>
   <td class="kw"><a name="Table Cell Should Contain"></a>Table Cell Should Contain</td>
   <td class="arg">table_locator, row, column, expected, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies that a certain cell in a table contains <span class="name">expected</span>.
+
+Row and column number start from 1. This keyword passes if the specified cell contains the given content. If you want to test that the cell content matches exactly, or that it e.g. starts with some text, use <a href="#Get Table Cell" class="name">Get Table Cell</a> keyword in combination with built-in keywords such as <span class="name">Should Be Equal</span> or <span class="name">Should Start With</span>.
+
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Column Should Contain"></a>Table Column Should Contain</td>
   <td class="arg">table_locator, col, expected, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies that a specific column contains <span class="name">expected</span>.
+
+The first leftmost column is column number 1. If the table contains cells that span multiple columns, those merged cells count as a single column. For example both tests below work, if in one row columns A and B are merged with colspan="2", and the logical third column contains "C".
+
+Example:
+<table border="1" class="doc">
+<tr>
+<td>Table Column Should Contain</td>
+<td>tableId</td>
+<td>3</td>
+<td>C</td>
+</tr>
+<tr>
+<td>Table Column Should Contain</td>
+<td>tableId</td>
+<td>2</td>
+<td>C</td>
+</tr>
+</table>
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Footer Should Contain"></a>Table Footer Should Contain</td>
   <td class="arg">table_locator, expected, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies that the table footer contains <span class="name">expected</span>.
+
+With table footer can be described as any &lt;td&gt;-element that is child of a &lt;tfoot&gt;-element.  To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Header Should Contain"></a>Table Header Should Contain</td>
   <td class="arg">table_locator, expected, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies that the table header, i.e. any &lt;th&gt;...&lt;/th&gt; element, contains <span class="name">expected</span>.
+
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Row Should Contain"></a>Table Row Should Contain</td>
   <td class="arg">table_locator, row, expected, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies that a specific table row contains <span class="name">expected</span>.
+
+The uppermost row is row number 1. For tables that are structured with thead, tbody and tfoot, only the tbody section is searched. Please use <a href="#Table Header Should Contain" class="name">Table Header Should Contain</a> or <a href="#Table Footer Should Contain" class="name">Table Footer Should Contain</a> for tests against the header or footer content.
+
+If the table contains cells that span multiple rows, a match only occurs for the uppermost row of those merged cells. To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Should Contain"></a>Table Should Contain</td>
   <td class="arg">table_locator, expected, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies that <span class="name">expected</span> can be found somewhere in the table.
+
+To understand how tables are identified, please take a look at the <a href="#introduction" class="name">introduction</a>.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">loglevel</span> argument.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Textfield Should Contain"></a>Textfield Should Contain</td>
@@ -1567,7 +1612,7 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 <p id="footer">
 Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-10-21 14:20:06.
+on 2011-10-21 14:23:59.
 </p>
 </body>
 </html>
