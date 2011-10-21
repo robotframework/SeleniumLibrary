@@ -286,17 +286,17 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Get Horizontal Position" title="Returns horizontal position of element identified by `locator`.">Get&nbsp;Horizontal&nbsp;Position</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get List Items" title="">Get&nbsp;List&nbsp;Items</a>
+<a href="#Get List Items" title="Returns the values in the select list identified by `locator`.">Get&nbsp;List&nbsp;Items</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Matching Xpath Count" title="Returns number of elements matching `xpath`">Get&nbsp;Matching&nbsp;Xpath&nbsp;Count</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Selected List Label" title="">Get&nbsp;Selected&nbsp;List&nbsp;Label</a>
+<a href="#Get Selected List Label" title="Returns the visible label of the selected element from the select list identified by `locator`.">Get&nbsp;Selected&nbsp;List&nbsp;Label</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Selected List Labels" title="">Get&nbsp;Selected&nbsp;List&nbsp;Labels</a>
+<a href="#Get Selected List Labels" title="Returns the visible labels of selected elements (as a list) from the select list identified by `locator`.">Get&nbsp;Selected&nbsp;List&nbsp;Labels</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Selected List Value" title="">Get&nbsp;Selected&nbsp;List&nbsp;Value</a>
+<a href="#Get Selected List Value" title="Returns the value of the selected element from the select list identified by `locator`.">Get&nbsp;Selected&nbsp;List&nbsp;Value</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Selected List Values" title="">Get&nbsp;Selected&nbsp;List&nbsp;Values</a>
+<a href="#Get Selected List Values" title="Returns the values of selected elements (as a list) from the select list identified by `locator`.">Get&nbsp;Selected&nbsp;List&nbsp;Values</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Selenium Speed" title="">Get&nbsp;Selenium&nbsp;Speed</a>
 &nbsp;&middot;&nbsp;
@@ -324,9 +324,9 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Input Text" title="Types the given `text` into text field identified by `locator`.">Input&nbsp;Text</a>
 &nbsp;&middot;&nbsp;
-<a href="#List Selection Should Be" title="">List&nbsp;Selection&nbsp;Should&nbsp;Be</a>
+<a href="#List Selection Should Be" title="Verifies the selection of select list identified by `locator` is exactly `*items`.">List&nbsp;Selection&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
-<a href="#List Should Have No Selections" title="">List&nbsp;Should&nbsp;Have&nbsp;No&nbsp;Selections</a>
+<a href="#List Should Have No Selections" title="Verifies select list identified by `locator` has no selections.">List&nbsp;Should&nbsp;Have&nbsp;No&nbsp;Selections</a>
 &nbsp;&middot;&nbsp;
 <a href="#Location Should Be" title="">Location&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
@@ -368,7 +368,7 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Page Should Contain Link" title="Verifies link identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Link</a>
 &nbsp;&middot;&nbsp;
-<a href="#Page Should Contain List" title="">Page&nbsp;Should&nbsp;Contain&nbsp;List</a>
+<a href="#Page Should Contain List" title="Verifies select list identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;List</a>
 &nbsp;&middot;&nbsp;
 <a href="#Page Should Contain Radio Button" title="Verifies radio button identified by `locator` is found from current page.">Page&nbsp;Should&nbsp;Contain&nbsp;Radio&nbsp;Button</a>
 &nbsp;&middot;&nbsp;
@@ -386,7 +386,7 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Page Should Not Contain Link" title="Verifies image identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Link</a>
 &nbsp;&middot;&nbsp;
-<a href="#Page Should Not Contain List" title="">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;List</a>
+<a href="#Page Should Not Contain List" title="Verifies select list identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;List</a>
 &nbsp;&middot;&nbsp;
 <a href="#Page Should Not Contain Radio Button" title="Verifies radio button identified by `locator` is not found from current page.">Page&nbsp;Should&nbsp;Not&nbsp;Contain&nbsp;Radio&nbsp;Button</a>
 &nbsp;&middot;&nbsp;
@@ -402,13 +402,13 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Reload Page" title="">Reload&nbsp;Page</a>
 &nbsp;&middot;&nbsp;
-<a href="#Select All From List" title="">Select&nbsp;All&nbsp;From&nbsp;List</a>
+<a href="#Select All From List" title="Selects all values from multi-select list identified by `id`.">Select&nbsp;All&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select Checkbox" title="Selects checkbox identified by `locator`.">Select&nbsp;Checkbox</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select Frame" title="">Select&nbsp;Frame</a>
 &nbsp;&middot;&nbsp;
-<a href="#Select From List" title="">Select&nbsp;From&nbsp;List</a>
+<a href="#Select From List" title="Selects `*items` from list identified by `locator`">Select&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select Radio Button" title="Sets selection of radio button group identified by `group_name` to `value`.">Select&nbsp;Radio&nbsp;Button</a>
 &nbsp;&middot;&nbsp;
@@ -444,7 +444,7 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Unselect Frame" title="">Unselect&nbsp;Frame</a>
 &nbsp;&middot;&nbsp;
-<a href="#Unselect From List" title="">Unselect&nbsp;From&nbsp;List</a>
+<a href="#Unselect From List" title="Unselects given values from select list identified by locator.">Unselect&nbsp;From&nbsp;List</a>
 &nbsp;&middot;&nbsp;
 <a href="#Wait For Condition" title="">Wait&nbsp;For&nbsp;Condition</a>
 &nbsp;&middot;&nbsp;
@@ -799,7 +799,9 @@ See also <a href="#Get Vertical Position" class="name">Get Vertical Position</a>
 <tr>
   <td class="kw"><a name="Get List Items"></a>Get List Items</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Returns the values in the select list identified by <span class="name">locator</span>.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Matching Xpath Count"></a>Get Matching Xpath Count</td>
@@ -811,22 +813,38 @@ If you wish to assert the number of matching elements, use <a href="#Xpath Shoul
 <tr>
   <td class="kw"><a name="Get Selected List Label"></a>Get Selected List Label</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Returns the visible label of the selected element from the select list identified by <span class="name">locator</span>.
+
+Fails if there are zero or more than one selection.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Selected List Labels"></a>Get Selected List Labels</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Returns the visible labels of selected elements (as a list) from the select list identified by <span class="name">locator</span>.
+
+Fails if there is no selection.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Selected List Value"></a>Get Selected List Value</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Returns the value of the selected element from the select list identified by <span class="name">locator</span>.
+
+Return value is read from <span class="name">value</span> attribute of the selected element. Fails if there are zero or more than one selection.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Selected List Values"></a>Get Selected List Values</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Returns the values of selected elements (as a list) from the select list identified by <span class="name">locator</span>.
+
+Fails if there is no selection.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Selenium Speed"></a>Get Selenium Speed</td>
@@ -906,12 +924,18 @@ See <a href="#introduction" class="name">introduction</a> for details about loca
 <tr>
   <td class="kw"><a name="List Selection Should Be"></a>List Selection Should Be</td>
   <td class="arg">locator, *items</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies the selection of select list identified by <span class="name">locator</span> is exactly <span class="name">*items</span>.
+
+If you want to test that no option is selected, simply give no <span class="name">items</span>.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="List Should Have No Selections"></a>List Should Have No Selections</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies select list identified by <span class="name">locator</span> has no selections.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Location Should Be"></a>Location Should Be</td>
@@ -1096,7 +1120,11 @@ Key attributes for links are <span class="name">id</span>, <span class="name">na
 <tr>
   <td class="kw"><a name="Page Should Contain List"></a>Page Should Contain List</td>
   <td class="arg">locator, message=, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies select list identified by <span class="name">locator</span> is found from current page.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.
+
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Page Should Contain Radio Button"></a>Page Should Contain Radio Button</td>
@@ -1175,7 +1203,11 @@ Key attributes for images are <span class="name">id</span>, <span class="name">s
 <tr>
   <td class="kw"><a name="Page Should Not Contain List"></a>Page Should Not Contain List</td>
   <td class="arg">locator, message=, loglevel=INFO</td>
-  <td class="doc"></td>
+  <td class="doc">Verifies select list identified by <span class="name">locator</span> is not found from current page.
+
+See <a href="#Page Should Contain Element" class="name">Page Should Contain Element</a> for explanation about <span class="name">message</span> and <span class="name">loglevel</span> arguments.
+
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Page Should Not Contain Radio Button"></a>Page Should Not Contain Radio Button</td>
@@ -1274,7 +1306,9 @@ This run-on-failure functionality only works when running tests on Python/Jython
 <tr>
   <td class="kw"><a name="Select All From List"></a>Select All From List</td>
   <td class="arg">locator</td>
-  <td class="doc"></td>
+  <td class="doc">Selects all values from multi-select list identified by <span class="name">id</span>.
+
+Key attributes for lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select Checkbox"></a>Select Checkbox</td>
@@ -1291,7 +1325,11 @@ Does nothing if checkbox is already selected. Key attributes for checkboxes are 
 <tr>
   <td class="kw"><a name="Select From List"></a>Select From List</td>
   <td class="arg">locator, *items</td>
-  <td class="doc"></td>
+  <td class="doc">Selects <span class="name">*items</span> from list identified by <span class="name">locator</span>
+
+If more than one value is given for a single-selection list, the last value will be selected. If the target list is a multi-selection list, and <span class="name">*items</span> is an empty list, all values of the list will be selected.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Select Radio Button"></a>Select Radio Button</td>
@@ -1497,7 +1535,11 @@ Does nothing if the checkbox is not checked. Key attributes for checkboxes are <
 <tr>
   <td class="kw"><a name="Unselect From List"></a>Unselect From List</td>
   <td class="arg">locator, *items</td>
-  <td class="doc"></td>
+  <td class="doc">Unselects given values from select list identified by locator.
+
+As a special case, giving empty list as <span class="name">*items</span> will remove all selections.
+
+Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Wait For Condition"></a>Wait For Condition</td>
@@ -1525,7 +1567,7 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 <p id="footer">
 Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-10-21 14:09:18.
+on 2011-10-21 14:20:06.
 </p>
 </body>
 </html>
