@@ -95,7 +95,94 @@ a {
 supported
 
 <h2 id="introduction">Introduction</h2>
-<div class="libdoc">Documentation for test library <span class="name">Selenium2Library</span>.</div>
+<div class="libdoc">Selenium2Library is a web testing library for Robot Framework.
+
+It uses the Selenium 2 (WebDriver) libraries internally to control a web browser. See <a href="http://seleniumhq.org/docs/03_webdriver.html">http://seleniumhq.org/docs/03_webdriver.html</a> for more information on Selenium 2 and WebDriver.
+
+Selenium2Library runs tests in a real browser instance. It should work in most modern browsers and can be used with both Python and Jython interpreters.
+
+<b>Before running tests</b>
+
+Prior to running test cases using Selenium2Library, Selenium2Library must be imported into your Robot test suite (see <a href="#importing" class="name">importing</a> section), and the <a href="#Open Browser" class="name">Open Browser</a> keyword must be used to open a browser to the desired location.
+
+<b>Locating elements</b>
+
+All keywords in Selenium2Library that need to find an element on the page take an argument, <span class="name">locator</span>. By default, when a locator value is provided, it is matched against the key attributes of the particular element type. For example, <span class="name">id</span> and <span class="name">name</span> are key attributes to all elements, and locating elements is easy using just the <span class="name">id</span> as a <span class="name">locator</span>. For example::
+
+Click Element  my_element
+
+It is also possible to specify the approach Selenium2Library should take to find an element by specifying a lookup strategy with a locator prefix. Supported strategies are:
+
+<table border="1" class="doc">
+<tr>
+<td><b>Strategy</b></td>
+<td><b>Example</b></td>
+<td><b>Description</b></td>
+</tr>
+<tr>
+<td>identifier</td>
+<td>Click Element  identifier=my_element</td>
+<td>Matches by @id or @name attribute</td>
+</tr>
+<tr>
+<td>id</td>
+<td>Click Element  id=my_element</td>
+<td>Matches by @id attribute</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Click Element  name=my_element</td>
+<td>Matches by @name attribute</td>
+</tr>
+<tr>
+<td>xpath</td>
+<td>Click Element  xpath=//div[@id='my_element']</td>
+<td>Matches with arbitrary XPath expression</td>
+</tr>
+<tr>
+<td>link</td>
+<td>Click Element  link=My Link</td>
+<td>Matches anchor elements by their link text</td>
+</tr>
+<tr>
+<td>css</td>
+<td>Click Element  css=div.my_class</td>
+<td>Matches by CSS selector</td>
+</tr>
+<tr>
+<td>tag</td>
+<td>Click Element  tag=div</td>
+<td>Matches by HTML tag name</td>
+</tr>
+</table>
+Table related keywords, such as <a href="#Table Should Contain" class="name">Table Should Contain</a>, work differently. By default, when a table locator value is provided, it will search for a table with the specified <span class="name">id</span> attribute. For example:
+
+Table Should Contain  my_table  text
+
+More complex table lookup strategies are also supported:
+
+<table border="1" class="doc">
+<tr>
+<td><b>Strategy</b></td>
+<td><b>Example</b></td>
+<td><b>Description</b></td>
+</tr>
+<tr>
+<td>css</td>
+<td>Table Should Contain  css=table.my_class  text</td>
+<td>Matches by @id or @name attribute</td>
+</tr>
+<tr>
+<td>xpath</td>
+<td>Table Should Contain  xpath=//table/[@name="my_table"]  text</td>
+<td>Matches by @id or @name attribute</td>
+</tr>
+</table>
+<b>Timeouts</b>
+
+There are several <span class="name">Wait ...</span> keywords that take timeout as an argument. All of these timeout arguments are optional. The timeout used by all of them can be set globally using the <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a> keyword.
+
+All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42) or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s'). For more information about the time syntax see: <a href="http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format">http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format</a>.</div>
 
 <h2 id="importing">Importing</h2>
 <table border="1" class="keywords libdoc">
@@ -105,7 +192,27 @@ supported
 </tr>
 <tr>
   <td class="arg">timeout=5.0, run_on_failure=Capture Page Screenshot</td>
-  <td class="doc"></td>
+  <td class="doc">Selenium2Library can be imported with optional arguments.
+
+<span class="name">timeout</span> is the default timeout used to wait for all waiting actions. It can be later set with <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a>.
+
+<span class="name">run_on_failure</span> specifies the name of a keyword (from any available libraries) to execute when a Selenium2Library keyword fails. By default <a href="#Capture Page Screenshot" class="name">Capture Page Screenshot</a> will be used to take a screenshot of the current page. Using the value "Nothing" will disable this feature altogether. See <a href="#Register Keyword To Run On Failure" class="name">Register Keyword To Run On Failure</a> keyword for more information about this functionality.
+
+Examples:
+<table border="1" class="doc">
+<tr>
+<td>Library  Selenium2Library  15</td>
+<td># Sets default timeout to 15 seconds</td>
+</tr>
+<tr>
+<td>Library  Selenium2Library  5  Log Source</td>
+<td># Sets default timeout to 5 seconds and runs <a href="#Log Source" class="name">Log Source</a> on failure</td>
+</tr>
+<tr>
+<td>Library  Selenium2Library  timeout=10  run_on_failure=Nothing</td>
+<td># Sets default timeout to 10 seconds and does nothing on failure</td>
+</tr>
+</table></td>
 </tr>
 </table>
 
@@ -949,7 +1056,7 @@ supported
 <p id="footer">
 Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-10-21 11:54:53.
+on 2011-10-21 13:02:35.
 </p>
 </body>
 </html>
