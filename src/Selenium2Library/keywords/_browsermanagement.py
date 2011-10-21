@@ -29,16 +29,52 @@ class _BrowserManagementKeywords(KeywordGroup):
     # Public, open and close
 
     def close_all_browsers(self):
+        """Closes all open browsers and resets the browser cache.
+
+        After this keyword new indexes returned from `Open Browser` keyword
+        are reset to 1.
+
+        This keyword should be used in test or suite teardown to make sure
+        all browsers are closed.
+        """
         self._debug('Closing all browsers')
         self._cache.close_all()
 
     def close_browser(self):
+        """Closes the current browser."""
         if self._cache.current:
             self._debug('Closing browser with session id %s'
                         % self._cache.current.session_id)
             self._cache.close()
 
     def open_browser(self, url, browser='firefox', alias=None):
+        """Opens a new browser instance to given URL.
+
+        Returns the index of this browser instance which can be used later to
+        switch back to it. Index starts from 1 and is reset back to it when
+        `Close All Browsers` keyword is used. See `Switch Browser` for
+        example.
+
+        Optional alias is an alias for the browser instance and it can be used
+        for switching between browsers (just as index can be used). See `Switch
+        Browser` for more details.
+
+        Possible values for `browser` are as follows:
+
+        | firefox          | FireFox   |
+        | ff               | FireFox   |
+        | internetexplorer | Internet Explorer |
+        | ie               | Internet Explorer |
+        | googlechrome     | Google Chrome |
+        | gc               | Google Chrome |
+        | chrome           | Google Chrome |
+
+        Note, that you will encounter strange behavior, if you open
+        multiple Internet Explorer browser instances. That is also why
+        `Switch Browser` only works with one IE browser at most.
+        For more information see:
+        http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
+        """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
         browser = self._make_browser(browser_name)
@@ -48,6 +84,30 @@ class _BrowserManagementKeywords(KeywordGroup):
         return self._cache.register(browser, alias)
 
     def switch_browser(self, index_or_alias):
+        """Switches between active browsers using index or alias.
+
+        Index is returned from `Open Browser` and alias can be given to it.
+
+        Example:
+        | Open Browser        | http://google.com | ff       |
+        | Location Should Be  | http://google.com |          |
+        | Open Browser        | http://yahoo.com  | ie       | 2nd conn |
+        | Location Should Be  | http://yahoo.com  |          |
+        | Switch Browser      | 1                 | # index  |
+        | Page Should Contain | I'm feeling lucky |          |
+        | Switch Browser      | 2nd conn          | # alias  |
+        | Page Should Contain | More Yahoo!       |          |
+        | Close All Browsers  |                   |          |
+
+        Above example expects that there was no other open browsers when
+        opening the first one because it used index '1' when switching to it
+        later. If you aren't sure about that you can store the index into
+        a variable as below.
+
+        | ${id} =            | Open Browser  | http://google.com | *firefox |
+        | # Do something ... |
+        | Switch Browser     | ${id}         |                   |          |
+        """
         try:
             self._cache.switch(index_or_alias)
             self._debug('Switched to browser with Selenium session id %s'

@@ -52,14 +52,14 @@ class Selenium2Library(
     to find an element by specifying a lookup strategy with a locator
     prefix. Supported strategies are:
 
-    | *Strategy* | *Example*                            | *Description*                                   |
-    | identifier | Click Element  identifier=my_element | Matches by @id or @name attribute               |
-    | id         | Click Element  id=my_element         | Matches by @id attribute                        |
-    | name       | Click Element  name=my_element       | Matches by @name attribute                      |
-    | xpath      | Click Element  xpath=//div[@id='my_element'] | Matches with arbitrary XPath expression |
-    | link       | Click Element  link=My Link          | Matches anchor elements by their link text      |
-    | css        | Click Element  css=div.my_class      | Matches by CSS selector                         |
-    | tag        | Click Element  tag=div               | Matches by HTML tag name                        |
+    | *Strategy* | *Example*                               | *Description*                                   |
+    | identifier | Click Element `|` identifier=my_element | Matches by @id or @name attribute               |
+    | id         | Click Element `|` id=my_element         | Matches by @id attribute                        |
+    | name       | Click Element `|` name=my_element       | Matches by @name attribute                      |
+    | xpath      | Click Element `|` xpath=//div[@id='my_element'] | Matches with arbitrary XPath expression |
+    | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
+    | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
+    | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
 
     Table related keywords, such as `Table Should Contain`, work differently.
     By default, when a table locator value is provided, it will search for
@@ -69,9 +69,9 @@ class Selenium2Library(
 
     More complex table lookup strategies are also supported:
 
-    | *Strategy* | *Example*                                      | *Description*                     |
-    | css        | Table Should Contain  css=table.my_class  text | Matches by @id or @name attribute |
-    | xpath      | Table Should Contain  xpath=//table/[@name="my_table"]  text | Matches by @id or @name attribute |
+    | *Strategy* | *Example*                                                          | *Description*                     |
+    | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
+    | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
 
     *Timeouts*
 
@@ -103,9 +103,9 @@ class Selenium2Library(
         functionality.
 
         Examples:
-        | Library  Selenium2Library  15                                  | # Sets default timeout to 15 seconds                                  |
-        | Library  Selenium2Library  5  Log Source                       | # Sets default timeout to 5 seconds and runs `Log Source` on failure  |
-        | Library  Selenium2Library  timeout=10  run_on_failure=Nothing  | # Sets default timeout to 10 seconds and does nothing on failure      |
+        | Library `|` Selenium2Library `|` 15                                     | # Sets default timeout to 15 seconds                                  |
+        | Library `|` Selenium2Library `|` 5 `|` Log Source                       | # Sets default timeout to 5 seconds and runs `Log Source` on failure  |
+        | Library `|` Selenium2Library `|` timeout=10 `|` run_on_failure=Nothing  | # Sets default timeout to 10 seconds and does nothing on failure      |
         """
         for base in Selenium2Library.__bases__:
             base.__init__(self)

@@ -121,37 +121,37 @@ It is also possible to specify the approach Selenium2Library should take to find
 </tr>
 <tr>
 <td>identifier</td>
-<td>Click Element  identifier=my_element</td>
+<td>Click Element <span class="name">|</span> identifier=my_element</td>
 <td>Matches by @id or @name attribute</td>
 </tr>
 <tr>
 <td>id</td>
-<td>Click Element  id=my_element</td>
+<td>Click Element <span class="name">|</span> id=my_element</td>
 <td>Matches by @id attribute</td>
 </tr>
 <tr>
 <td>name</td>
-<td>Click Element  name=my_element</td>
+<td>Click Element <span class="name">|</span> name=my_element</td>
 <td>Matches by @name attribute</td>
 </tr>
 <tr>
 <td>xpath</td>
-<td>Click Element  xpath=//div[@id='my_element']</td>
+<td>Click Element <span class="name">|</span> xpath=//div[@id='my_element']</td>
 <td>Matches with arbitrary XPath expression</td>
 </tr>
 <tr>
 <td>link</td>
-<td>Click Element  link=My Link</td>
+<td>Click Element <span class="name">|</span> link=My Link</td>
 <td>Matches anchor elements by their link text</td>
 </tr>
 <tr>
 <td>css</td>
-<td>Click Element  css=div.my_class</td>
+<td>Click Element <span class="name">|</span> css=div.my_class</td>
 <td>Matches by CSS selector</td>
 </tr>
 <tr>
 <td>tag</td>
-<td>Click Element  tag=div</td>
+<td>Click Element <span class="name">|</span> tag=div</td>
 <td>Matches by HTML tag name</td>
 </tr>
 </table>
@@ -169,12 +169,12 @@ More complex table lookup strategies are also supported:
 </tr>
 <tr>
 <td>css</td>
-<td>Table Should Contain  css=table.my_class  text</td>
+<td>Table Should Contain <span class="name">|</span> css=table.my_class <span class="name">|</span> text</td>
 <td>Matches by @id or @name attribute</td>
 </tr>
 <tr>
 <td>xpath</td>
-<td>Table Should Contain  xpath=//table/[@name="my_table"]  text</td>
+<td>Table Should Contain <span class="name">|</span> xpath=//table/[@name="my_table"] <span class="name">|</span> text</td>
 <td>Matches by @id or @name attribute</td>
 </tr>
 </table>
@@ -201,15 +201,15 @@ All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42) or in R
 Examples:
 <table border="1" class="doc">
 <tr>
-<td>Library  Selenium2Library  15</td>
+<td>Library <span class="name">|</span> Selenium2Library <span class="name">|</span> 15</td>
 <td># Sets default timeout to 15 seconds</td>
 </tr>
 <tr>
-<td>Library  Selenium2Library  5  Log Source</td>
+<td>Library <span class="name">|</span> Selenium2Library <span class="name">|</span> 5 <span class="name">|</span> Log Source</td>
 <td># Sets default timeout to 5 seconds and runs <a href="#Log Source" class="name">Log Source</a> on failure</td>
 </tr>
 <tr>
-<td>Library  Selenium2Library  timeout=10  run_on_failure=Nothing</td>
+<td>Library <span class="name">|</span> Selenium2Library <span class="name">|</span> timeout=10 <span class="name">|</span> run_on_failure=Nothing</td>
 <td># Sets default timeout to 10 seconds and does nothing on failure</td>
 </tr>
 </table></td>
@@ -242,9 +242,9 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Click Link" title="">Click&nbsp;Link</a>
 &nbsp;&middot;&nbsp;
-<a href="#Close All Browsers" title="">Close&nbsp;All&nbsp;Browsers</a>
+<a href="#Close All Browsers" title="Closes all open browsers and resets the browser cache.">Close&nbsp;All&nbsp;Browsers</a>
 &nbsp;&middot;&nbsp;
-<a href="#Close Browser" title="">Close&nbsp;Browser</a>
+<a href="#Close Browser" title="Closes the current browser.">Close&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
 <a href="#Close Window" title="">Close&nbsp;Window</a>
 &nbsp;&middot;&nbsp;
@@ -352,7 +352,7 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Mouse Up" title="">Mouse&nbsp;Up</a>
 &nbsp;&middot;&nbsp;
-<a href="#Open Browser" title="">Open&nbsp;Browser</a>
+<a href="#Open Browser" title="Opens a new browser instance to given URL.">Open&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
 <a href="#Open Context Menu" title="">Open&nbsp;Context&nbsp;Menu</a>
 &nbsp;&middot;&nbsp;
@@ -420,7 +420,7 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Submit Form" title="">Submit&nbsp;Form</a>
 &nbsp;&middot;&nbsp;
-<a href="#Switch Browser" title="">Switch&nbsp;Browser</a>
+<a href="#Switch Browser" title="Switches between active browsers using index or alias.">Switch&nbsp;Browser</a>
 &nbsp;&middot;&nbsp;
 <a href="#Table Cell Should Contain" title="">Table&nbsp;Cell&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
@@ -525,12 +525,16 @@ Examples:
 <tr>
   <td class="kw"><a name="Close All Browsers"></a>Close All Browsers</td>
   <td class="arg"></td>
-  <td class="doc"></td>
+  <td class="doc">Closes all open browsers and resets the browser cache.
+
+After this keyword new indexes returned from <a href="#Open Browser" class="name">Open Browser</a> keyword are reset to 1.
+
+This keyword should be used in test or suite teardown to make sure all browsers are closed.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Close Browser"></a>Close Browser</td>
   <td class="arg"></td>
-  <td class="doc"></td>
+  <td class="doc">Closes the current browser.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Close Window"></a>Close Window</td>
@@ -800,7 +804,45 @@ Examples:
 <tr>
   <td class="kw"><a name="Open Browser"></a>Open Browser</td>
   <td class="arg">url, browser=firefox, alias=None</td>
-  <td class="doc"></td>
+  <td class="doc">Opens a new browser instance to given URL.
+
+Returns the index of this browser instance which can be used later to switch back to it. Index starts from 1 and is reset back to it when <a href="#Close All Browsers" class="name">Close All Browsers</a> keyword is used. See <a href="#Switch Browser" class="name">Switch Browser</a> for example.
+
+Optional alias is an alias for the browser instance and it can be used for switching between browsers (just as index can be used). See <a href="#Switch Browser" class="name">Switch Browser</a> for more details.
+
+Possible values for <span class="name">browser</span> are as follows:
+
+<table border="1" class="doc">
+<tr>
+<td>firefox</td>
+<td>FireFox</td>
+</tr>
+<tr>
+<td>ff</td>
+<td>FireFox</td>
+</tr>
+<tr>
+<td>internetexplorer</td>
+<td>Internet Explorer</td>
+</tr>
+<tr>
+<td>ie</td>
+<td>Internet Explorer</td>
+</tr>
+<tr>
+<td>googlechrome</td>
+<td>Google Chrome</td>
+</tr>
+<tr>
+<td>gc</td>
+<td>Google Chrome</td>
+</tr>
+<tr>
+<td>chrome</td>
+<td>Google Chrome</td>
+</tr>
+</table>
+Note, that you will encounter strange behavior, if you open multiple Internet Explorer browser instances. That is also why <a href="#Switch Browser" class="name">Switch Browser</a> only works with one IE browser at most. For more information see: <a href="http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine">http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine</a></td>
 </tr>
 <tr>
   <td class="kw"><a name="Open Context Menu"></a>Open Context Menu</td>
@@ -970,7 +1012,89 @@ Examples:
 <tr>
   <td class="kw"><a name="Switch Browser"></a>Switch Browser</td>
   <td class="arg">index_or_alias</td>
-  <td class="doc"></td>
+  <td class="doc">Switches between active browsers using index or alias.
+
+Index is returned from <a href="#Open Browser" class="name">Open Browser</a> and alias can be given to it.
+
+Example:
+<table border="1" class="doc">
+<tr>
+<td>Open Browser</td>
+<td><a href="http://google.com">http://google.com</a></td>
+<td>ff</td>
+<td></td>
+</tr>
+<tr>
+<td>Location Should Be</td>
+<td><a href="http://google.com">http://google.com</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Open Browser</td>
+<td><a href="http://yahoo.com">http://yahoo.com</a></td>
+<td>ie</td>
+<td>2nd conn</td>
+</tr>
+<tr>
+<td>Location Should Be</td>
+<td><a href="http://yahoo.com">http://yahoo.com</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Switch Browser</td>
+<td>1</td>
+<td># index</td>
+<td></td>
+</tr>
+<tr>
+<td>Page Should Contain</td>
+<td>I'm feeling lucky</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Switch Browser</td>
+<td>2nd conn</td>
+<td># alias</td>
+<td></td>
+</tr>
+<tr>
+<td>Page Should Contain</td>
+<td>More Yahoo!</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Close All Browsers</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+Above example expects that there was no other open browsers when opening the first one because it used index '1' when switching to it later. If you aren't sure about that you can store the index into a variable as below.
+
+<table border="1" class="doc">
+<tr>
+<td>${id} =</td>
+<td>Open Browser</td>
+<td><a href="http://google.com">http://google.com</a></td>
+<td>*firefox</td>
+</tr>
+<tr>
+<td># Do something ...</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Switch Browser</td>
+<td>${id}</td>
+<td></td>
+<td></td>
+</tr>
+</table></td>
 </tr>
 <tr>
   <td class="kw"><a name="Table Cell Should Contain"></a>Table Cell Should Contain</td>
@@ -1056,7 +1180,7 @@ Examples:
 <p id="footer">
 Altogether 118 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-10-21 13:02:35.
+on 2011-10-21 13:20:24.
 </p>
 </body>
 </html>
