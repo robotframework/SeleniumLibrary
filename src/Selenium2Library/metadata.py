@@ -16,7 +16,7 @@ that leverage the Selenium 2 (WebDriver) libraries.
 
 AUTHOR = "Robot Framework Developers"
 AUTHOR_EMAIL = "robotframework@gmail.com"
-PROJECT_URL = "http://www.google.com"
+PROJECT_URL = "https://github.com/rtomac/robotframework-selenium2library"
 
 LICENSE = "Apache License 2.0"
 KEYWORDS = "robotframework testing testautomation selenium selenium2 webdriver web"
