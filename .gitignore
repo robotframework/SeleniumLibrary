@@ -1,4 +1,3 @@
-syntax:glob
 .project
 .pydevproject
 test/results
