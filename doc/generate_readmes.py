@@ -12,6 +12,7 @@ LIB_DIR = os.path.join(SRC_DIR, "Selenium2Library")
 README_FILES = [
     "README.rest",
     "INSTALL.rest",
+    "demo/README.rest",
     "test/README.rest"
 ]
 

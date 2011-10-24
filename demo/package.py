@@ -10,7 +10,7 @@ sys.path.append(os.path.join(THIS_DIR, "..", "src", "Selenium2Library"))
 import metadata
 
 FILES = {
-    '': ['rundemo.py', 'README.txt'],
+    '': ['rundemo.py', 'README.rest'],
     'login_tests': ['valid_login.txt', 'invalid_login.txt', 'resource.txt'],
     'demoapp': ['server.py'],
     'demoapp/html': ['index.html', 'welcome.html', 'error.html', 'demo.css']
