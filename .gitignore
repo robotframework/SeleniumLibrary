@@ -4,6 +4,7 @@ test/results
 *.pyc
 *.orig
 MANIFEST
+doc/*.html
 
 dist
 build

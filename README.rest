@@ -24,7 +24,7 @@ See `Robot Framework User Guide`_ for more information.
 Installation
 ------------
 
-See INSTALL.txt for installation and uninstallation instructions.
+See INSTALL.rest for installation and uninstallation instructions.
 
 
 Directory Layout
