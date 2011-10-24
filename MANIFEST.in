@@ -1,6 +1,8 @@
 include MANIFEST.in
 include *.txt
+include *.rest
 exclude */*.txt # limit previous command to include *.txt files in root folder
+exclude */*.rest # limit previous command to include *.rest files in root folder
 include selenium.bmp
 
 recursive-include demo *.txt *.py *.sh *.bat *.html *.css *.js
