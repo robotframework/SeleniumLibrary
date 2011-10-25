@@ -329,6 +329,27 @@ class _ElementKeywords(KeywordGroup):
         element = self._element_find(locator, True, True)
         ActionChains(self._current_browser()).context_click(element).perform()
 
+    def simulate(self, locator, event):
+        """Simulates `event` on element identified by `locator`.
+
+        This keyword is useful if element has OnEvent handler that needs to be
+        explicitly invoked.
+
+        See `introduction` for details about locating elements.
+        """
+        element = self._element_find(locator, True, True)
+        script = """
+element = arguments[0];
+eventName = arguments[1];
+if (document.createEventObject) { // IE
+    return element.fireEvent('on' + eventName, document.createEventObject());
+}
+var evt = document.createEvent("HTMLEvents");
+evt.initEvent(eventName, true, true);
+return !element.dispatchEvent(evt);
+        """
+        self._current_browser().execute_script(script, element, event)
+
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
 

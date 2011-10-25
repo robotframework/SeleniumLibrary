@@ -26,3 +26,7 @@ Mouse Up
 Focus
     Focus  el_for_focus
     Textfield Value Should Be  el_for_focus  focus el_for_focus
+
+Simulate
+    Simulate  el_for_blur  blur
+    Textfield Value Should Be  el_for_blur  blur el_for_blur
