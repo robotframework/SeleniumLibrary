@@ -128,7 +128,7 @@ Next, pull the keyword documentation you generated in the master branch and comm
 	git add .
 	git commit
 
-Then, push it to the remote:
+Then, push it to the remote::
 
 	git push origin gh-pages
 
