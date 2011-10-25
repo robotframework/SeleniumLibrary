@@ -124,7 +124,7 @@ First, switch to the `gh-pages` branch::
 
 Next, pull the keyword documentation you generated in the master branch and commit it::
 
-	git checkout doc/Selenium2Library.html
+	git checkout master doc/Selenium2Library.html
 	git add .
 	git commit
 
