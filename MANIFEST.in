@@ -10,7 +10,7 @@ prune demo/reports
 prune demo/selenium_log.txt
 prune demo/output.xml
 
-recursive-include doc Selenium2Library.html
+include doc/Selenium2Library.html
 
 recursive-include src/Selenium2Library *.py
 graft src/Selenium2Library/lib
