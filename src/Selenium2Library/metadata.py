@@ -4,7 +4,7 @@ import utils
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIRS = [ 'lib', 'resources' ]
 
-VERSION = '0.5.1'
+VERSION = '0.5.2'
 NAME = "robotframework-selenium2library"
 PACKAGE_NAME = "Selenium2Library"
 
