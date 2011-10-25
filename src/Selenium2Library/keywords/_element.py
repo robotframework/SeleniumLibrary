@@ -263,6 +263,11 @@ class _ElementKeywords(KeywordGroup):
         element = self._element_find(locator, True, True)
         ActionChains(self._current_browser()).double_click(element).perform()
 
+    def focus(self, locator):
+        """Sets focus to element identified by `locator`."""
+        element = self._element_find(locator, True, True)
+        self._current_browser().execute_script("arguments[0].focus();", element)
+
     def mouse_down(self, locator):
         """Simulates pressing the left mouse button on the element specified by `locator`.
 
