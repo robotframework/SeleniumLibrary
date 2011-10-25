@@ -3,13 +3,11 @@
 		<title>Mouse Keyword Testbed</title>
 	</head>
 	<body>
-		<input type="text" id="test_element" 
-			onmouseover="setText(this, 'mouseover')"
-			onmouseout="setText(this, 'mouseout')"
-			onmousedown="setText(this, 'mousedown')"
-			onmouseup="setText(this, 'mouseup')"
-		/><br />
-		<input type="text" id="secondary_element" />
+		<input type="text" id="el_for_mouseover" onmouseover="setText(this, 'mouseover')" /><br />
+		<input type="text" id="el_for_mouseout" onmouseout="setText(this, 'mouseout')" /><br />
+		<input type="text" id="el_for_mousedown" onmousedown="setText(this, 'mousedown')" /><br />
+		<input type="text" id="el_for_mouseup" onmouseup="setText(this, 'mouseup')" /><br />
+		<input type="text" id="el_for_focus" onfocus="setText(this, 'focus')" /><br />
 		<script type="text/javascript">
 		<!--
 			function setText(element, event) {
