@@ -176,6 +176,10 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     # Public, browser/current page properties
 
+    def get_location(self):
+        """Returns the current location."""
+        return self._current_browser().get_current_url()
+
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
         return self._current_browser().get_page_source()
@@ -184,13 +188,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Returns title of current page."""
         return self._current_browser().get_title()
 
-    def get_url(self):
-        """Returns URL of current page."""
-        return self._current_browser().get_current_url()
-
     def location_should_be(self, url):
         """Verifies that current URL is exactly `url`."""
-        actual = self.get_url()
+        actual = self.get_location()
         if  actual != url:
             raise AssertionError("Location should have been '%s' but was '%s'"
                                  % (url, actual))
@@ -198,11 +198,17 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def location_should_contain(self, expected):
         """Verifies that current URL contains `expected`."""
-        actual = self.get_url()
+        actual = self.get_location()
         if not expected in actual:
             raise AssertionError("Location should have contained '%s' "
                                  "but it was '%s'." % (expected, actual))
         self._info("Current location contains '%s'." % expected)
+
+    def log_location(self):
+        """Logs and returns the current location."""
+        url = self.get_location()
+        self._info(url)
+        return url
 
     def log_source(self, loglevel='INFO'):
         """Logs and returns the entire html source of the current page or frame.
@@ -219,12 +225,6 @@ class _BrowserManagementKeywords(KeywordGroup):
         title = self.get_title()
         self._info(title)
         return title
-
-    def log_url(self):
-        """Logs and returns the URL of current page."""
-        url = self.get_url()
-        self._info(url)
-        return url
 
     def title_should_be(self, title):
         """Verifies that current page title equals `title`."""
