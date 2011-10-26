@@ -89,7 +89,7 @@ a {
 </head>
 <body>
 <h1>Selenium2Library</h1>
-<b>Version:</b> 0.5.1<br>
+<b>Version:</b> 0.5.2<br>
 <b>Scope:</b> global<br>
 <b>Named arguments: </b>
 supported
@@ -138,6 +138,11 @@ It is also possible to specify the approach Selenium2Library should take to find
 <td>xpath</td>
 <td>Click Element <span class="name">|</span> xpath=//div[@id='my_element']</td>
 <td>Matches with arbitrary XPath expression</td>
+</tr>
+<tr>
+<td>dom</td>
+<td>Click Element <span class="name">|</span> dom=document.images[56]</td>
+<td>Matches with arbitrary DOM express</td>
 </tr>
 <tr>
 <td>link</td>
@@ -272,6 +277,8 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Execute Javascript" title="Executes the given JavaScript code.">Execute&nbsp;Javascript</a>
 &nbsp;&middot;&nbsp;
+<a href="#Focus" title="Sets focus to element identified by `locator`.">Focus</a>
+&nbsp;&middot;&nbsp;
 <a href="#Frame Should Contain" title="Verifies frame identified by `locator` contains `text`.">Frame&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Alert Message" title="Returns the text of current JavaScript alert.">Get&nbsp;Alert&nbsp;Message</a>
@@ -287,6 +294,8 @@ Examples:
 <a href="#Get Horizontal Position" title="Returns horizontal position of element identified by `locator`.">Get&nbsp;Horizontal&nbsp;Position</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get List Items" title="Returns the values in the select list identified by `locator`.">Get&nbsp;List&nbsp;Items</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Location" title="Returns the current location.">Get&nbsp;Location</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Matching Xpath Count" title="Returns number of elements matching `xpath`">Get&nbsp;Matching&nbsp;Xpath&nbsp;Count</a>
 &nbsp;&middot;&nbsp;
@@ -308,13 +317,15 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Get Title" title="Returns title of current page.">Get&nbsp;Title</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Url" title="Returns URL of current page.">Get&nbsp;Url</a>
-&nbsp;&middot;&nbsp;
 <a href="#Get Value" title="Returns the value attribute of element identified by `locator`.">Get&nbsp;Value</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Vertical Position" title="Returns vertical position of element identified by `locator`.">Get&nbsp;Vertical&nbsp;Position</a>
 &nbsp;&middot;&nbsp;
-<a href="#Get Window Identifiers" title="Returns handle identifiers for all windows known to the browser.">Get&nbsp;Window&nbsp;Identifiers</a>
+<a href="#Get Window Identifiers" title="Returns and logs id attributes of all windows known to the browser.">Get&nbsp;Window&nbsp;Identifiers</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Window Names" title="Returns and logs names of all windows known to the browser.">Get&nbsp;Window&nbsp;Names</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Window Titles" title="Returns and logs titles of all windows known to the browser.">Get&nbsp;Window&nbsp;Titles</a>
 &nbsp;&middot;&nbsp;
 <a href="#Go Back" title="Simulates the user clicking the &quot;back&quot; button on their browser.">Go&nbsp;Back</a>
 &nbsp;&middot;&nbsp;
@@ -332,11 +343,11 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Location Should Contain" title="Verifies that current URL contains `expected`.">Location&nbsp;Should&nbsp;Contain</a>
 &nbsp;&middot;&nbsp;
+<a href="#Log Location" title="Logs and returns the current location.">Log&nbsp;Location</a>
+&nbsp;&middot;&nbsp;
 <a href="#Log Source" title="Logs and returns the entire html source of the current page or frame.">Log&nbsp;Source</a>
 &nbsp;&middot;&nbsp;
 <a href="#Log Title" title="Logs and returns the title of current page.">Log&nbsp;Title</a>
-&nbsp;&middot;&nbsp;
-<a href="#Log Url" title="Logs and returns the URL of current page.">Log&nbsp;Url</a>
 &nbsp;&middot;&nbsp;
 <a href="#Maximize Browser Window" title="Maximizes current browser window.">Maximize&nbsp;Browser&nbsp;Window</a>
 &nbsp;&middot;&nbsp;
@@ -417,6 +428,8 @@ Examples:
 <a href="#Set Selenium Speed" title="Sets the delay in seconds that is waited after each Selenium command.">Set&nbsp;Selenium&nbsp;Speed</a>
 &nbsp;&middot;&nbsp;
 <a href="#Set Selenium Timeout" title="Sets the timeout in seconds used by various keywords.">Set&nbsp;Selenium&nbsp;Timeout</a>
+&nbsp;&middot;&nbsp;
+<a href="#Simulate" title="Simulates `event` on element identified by `locator`.">Simulate</a>
 &nbsp;&middot;&nbsp;
 <a href="#Submit Form" title="Submits a form identified by `locator`.">Submit&nbsp;Form</a>
 &nbsp;&middot;&nbsp;
@@ -746,6 +759,11 @@ Example:
 </table></td>
 </tr>
 <tr>
+  <td class="kw"><a name="Focus"></a>Focus</td>
+  <td class="arg">locator</td>
+  <td class="doc">Sets focus to element identified by <span class="name">locator</span>.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Frame Should Contain"></a>Frame Should Contain</td>
   <td class="arg">locator, text, loglevel=INFO</td>
   <td class="doc">Verifies frame identified by <span class="name">locator</span> contains <span class="name">text</span>.
@@ -802,6 +820,11 @@ See also <a href="#Get Vertical Position" class="name">Get Vertical Position</a>
   <td class="doc">Returns the values in the select list identified by <span class="name">locator</span>.
 
 Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Get Location"></a>Get Location</td>
+  <td class="arg"></td>
+  <td class="doc">Returns the current location.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Matching Xpath Count"></a>Get Matching Xpath Count</td>
@@ -878,11 +901,6 @@ Row and column number start from 1. Header and footer rows are included in the c
   <td class="doc">Returns title of current page.</td>
 </tr>
 <tr>
-  <td class="kw"><a name="Get Url"></a>Get Url</td>
-  <td class="arg"></td>
-  <td class="doc">Returns URL of current page.</td>
-</tr>
-<tr>
   <td class="kw"><a name="Get Value"></a>Get Value</td>
   <td class="arg">locator</td>
   <td class="doc">Returns the value attribute of element identified by <span class="name">locator</span>.
@@ -901,7 +919,17 @@ See also <a href="#Get Horizontal Position" class="name">Get Horizontal Position
 <tr>
   <td class="kw"><a name="Get Window Identifiers"></a>Get Window Identifiers</td>
   <td class="arg"></td>
-  <td class="doc">Returns handle identifiers for all windows known to the browser.</td>
+  <td class="doc">Returns and logs id attributes of all windows known to the browser.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Get Window Names"></a>Get Window Names</td>
+  <td class="arg"></td>
+  <td class="doc">Returns and logs names of all windows known to the browser.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Get Window Titles"></a>Get Window Titles</td>
+  <td class="arg"></td>
+  <td class="doc">Returns and logs titles of all windows known to the browser.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Go Back"></a>Go Back</td>
@@ -954,6 +982,11 @@ Select list keywords work on both lists and combo boxes. Key attributes for sele
   <td class="doc">Verifies that current URL contains <span class="name">expected</span>.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Log Location"></a>Log Location</td>
+  <td class="arg"></td>
+  <td class="doc">Logs and returns the current location.</td>
+</tr>
+<tr>
   <td class="kw"><a name="Log Source"></a>Log Source</td>
   <td class="arg">loglevel=INFO</td>
   <td class="doc">Logs and returns the entire html source of the current page or frame.
@@ -964,11 +997,6 @@ The <span class="name">loglevel</span> argument defines the used log level. Vali
   <td class="kw"><a name="Log Title"></a>Log Title</td>
   <td class="arg"></td>
   <td class="doc">Logs and returns the title of current page.</td>
-</tr>
-<tr>
-  <td class="kw"><a name="Log Url"></a>Log Url</td>
-  <td class="arg"></td>
-  <td class="doc">Logs and returns the URL of current page.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Maximize Browser Window"></a>Maximize Browser Window</td>
@@ -1375,7 +1403,7 @@ Examples:
 
 If the window is found, all subsequent commands use that window, until this keyword is used again. If the window is not found, this keyword fails.
 
-By default, when a locator value is provided, it is matched against the title of the window and the handle/identifier of the window. If multiple windows with same identifier are found, the first one is selected.
+By default, when a locator value is provided, it is matched against the title of the window and the javascript name of the window. If multiple windows with same identifier are found, the first one is selected.
 
 Special locator <span class="name">main</span> (default) can be used to select the main window.
 
@@ -1394,8 +1422,8 @@ It is also possible to specify the approach Selenium2Library should take to find
 </tr>
 <tr>
 <td>name</td>
-<td>Select Window <span class="name">|</span> name=${id}</td>
-<td>Matches by window handle/identifier, see <a href="#Get Window Identifiers" class="name">Get Window Identifiers</a></td>
+<td>Select Window <span class="name">|</span> name=${name}</td>
+<td>Matches by window javascript name</td>
 </tr>
 <tr>
 <td>url</td>
@@ -1473,6 +1501,15 @@ Example:
 <td></td>
 </tr>
 </table></td>
+</tr>
+<tr>
+  <td class="kw"><a name="Simulate"></a>Simulate</td>
+  <td class="arg">locator, event</td>
+  <td class="doc">Simulates <span class="name">event</span> on element identified by <span class="name">locator</span>.
+
+This keyword is useful if element has OnEvent handler that needs to be explicitly invoked.
+
+See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Submit Form"></a>Submit Form</td>
@@ -1731,9 +1768,9 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 </tr>
 </table>
 <p id="footer">
-Altogether 118 keywords.<br />
+Altogether 122 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-10-24 23:22:57.
+on 2011-10-26 16:47:19.
 </p>
 </body>
 </html>
