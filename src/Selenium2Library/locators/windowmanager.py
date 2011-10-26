@@ -71,6 +71,8 @@ class WindowManager(object):
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
+        if criteria is not None and criteria.lower() == 'main':
+            criteria = ''
         return (prefix, criteria)
 
     def _select_matching(self, browser, matcher, error):

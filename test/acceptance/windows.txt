@@ -32,7 +32,7 @@ Open Popup Window, Select It And Verify
 
 Select Main Window And Verify
   Close Window
-  Select Window
+  Select Window  main
   Title Should Be  Click link to show a popup window
 
 Do Action In Popup Window And Verify
