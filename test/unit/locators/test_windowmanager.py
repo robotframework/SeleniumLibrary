@@ -179,6 +179,18 @@ class WindowManagerTests(unittest.TestCase):
         manager.select(browser, "")
         self.assertEqual(browser.current_window.name, 'win1')
 
+    def test_select_with_main_constant_locator(self):
+        manager = WindowManager()
+        browser = self._make_mock_browser(
+            { 'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html' },
+            { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
+            { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
+
+        manager.select(browser, "name=win2")
+        self.assertEqual(browser.current_window.name, 'win2')
+        manager.select(browser, "main")
+        self.assertEqual(browser.current_window.name, 'win1')
+
     def test_select_by_default_with_name(self):
         manager = WindowManager()
         browser = self._make_mock_browser(
