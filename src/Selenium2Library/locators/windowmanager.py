@@ -13,8 +13,14 @@ class WindowManager(object):
             None: self._select_by_default
         }
 
+    def get_window_ids(self, browser):
+        return [ window_info[1] for window_info in self._get_window_infos(browser) ]
+
     def get_window_names(self, browser):
         return [ window_info[2] for window_info in self._get_window_infos(browser) ]
+
+    def get_window_titles(self, browser):
+        return [ window_info[3] for window_info in self._get_window_infos(browser) ]
 
     def select(self, browser, locator):
         assert browser is not None

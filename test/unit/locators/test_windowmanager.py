@@ -235,6 +235,39 @@ class WindowManagerTests(unittest.TestCase):
         manager.select(browser, " name  =win2")
         self.assertEqual(browser.current_window.name, 'win2')
 
+    def test_get_window_ids(self):
+        manager = WindowManager()
+        browser = self._make_mock_browser(
+            { 'id': 'win1', 'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html' },
+            { 'id': 'win2', 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
+            { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
+
+        self.assertEqual(
+            manager.get_window_ids(browser),
+            [ 'win1', 'win2', 'undefined' ])
+
+    def test_get_window_names(self):
+        manager = WindowManager()
+        browser = self._make_mock_browser(
+            { 'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html' },
+            { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
+            { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
+
+        self.assertEqual(
+            manager.get_window_names(browser),
+            [ 'win1', 'win2', 'win3' ])
+
+    def test_get_window_titles(self):
+        manager = WindowManager()
+        browser = self._make_mock_browser(
+            { 'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html' },
+            { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
+            { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
+
+        self.assertEqual(
+            manager.get_window_titles(browser),
+            [ 'Title 1', 'Title 2', 'Title 3' ])
+
     def _make_mock_browser(self, *window_specs):
         browser = mock()
 
@@ -244,6 +277,9 @@ class WindowManagerTests(unittest.TestCase):
         for window_spec in window_specs:
             window = mock()
             window.handle = uuid.uuid4().hex
+            window.id = window_spec.get('id')
+            if window.id is None:
+                window.id = 'undefined'
             window.name = window_spec['name']
             window.title = window_spec['title']
             window.url = window_spec['url']
@@ -271,7 +307,7 @@ class WindowManagerTests(unittest.TestCase):
         browser.get_window_handles = lambda: window_handles
         browser.switch_to_window = switch_to_window
         browser.get_current_window_info = lambda: (
-            browser.current_window.handle, 'undefined', browser.current_window.name,
+            browser.current_window.handle, browser.current_window.id, browser.current_window.name,
             browser.current_window.title, browser.current_window.url)
 
         return browser

@@ -122,6 +122,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Closes currently opened pop-up window."""
         self._current_browser().close()
 
+    def get_window_identifiers(self):
+        """Returns and logs id attributes of all windows known to the browser."""
+        return self._log_list(self._window_manager.get_window_ids(self._current_browser()))
+
     def get_window_names(self):
         """Returns and logs names of all windows known to the browser."""
         values = self._window_manager.get_window_names(self._current_browser())
@@ -131,8 +135,11 @@ class _BrowserManagementKeywords(KeywordGroup):
         if len(values) and values[0] == 'undefined':
             values[0] = 'selenium_main_app_window'
 
-        self._log_list(values)
-        return values
+        return self._log_list(values)
+
+    def get_window_titles(self):
+        """Returns and logs titles of all windows known to the browser."""
+        return self._log_list(self._window_manager.get_window_titles(self._current_browser()))
 
     def maximize_browser_window(self):
         """Maximizes current browser window."""
