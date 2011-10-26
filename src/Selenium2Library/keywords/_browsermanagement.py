@@ -122,9 +122,17 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Closes currently opened pop-up window."""
         self._current_browser().close()
 
-    def get_window_identifiers(self):
-        """Returns handle identifiers for all windows known to the browser."""
-        return self._window_manager.get_window_handles(self._current_browser())
+    def get_window_names(self):
+        """Returns and logs names of all windows known to the browser."""
+        values = self._window_manager.get_window_names(self._current_browser())
+
+        # for backward compatibility, since Selenium 1 would always
+        # return this constant value for the main window
+        if len(values) and values[0] == 'undefined':
+            values[0] = 'selenium_main_app_window'
+
+        self._log_list(values)
+        return values
 
     def maximize_browser_window(self):
         """Maximizes current browser window."""
@@ -149,7 +157,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         
         By default, when a locator value is provided,
         it is matched against the title of the window and the
-        handle/identifier of the window. If multiple windows with
+        javascript name of the window. If multiple windows with
         same identifier are found, the first one is selected.
 
         Special locator `main` (default) can be used to select the main window.
@@ -159,7 +167,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         | *Strategy* | *Example*                               | *Description*                        |
         | title      | Select Window `|` title=My Document     | Matches by window title              |
-        | name       | Select Window `|` name=${id}            | Matches by window handle/identifier, see `Get Window Identifiers` |
+        | name       | Select Window `|` name=${name}          | Matches by window javascript name    |
         | url        | Select Window `|` url=http://google.com | Matches by window's current URL      |
 
         Example:
