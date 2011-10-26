@@ -218,6 +218,17 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "xpath=//*[(@test='1')]", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
 
+    def test_find_by_dom(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).execute_script("return document.getElementsByTagName('a');").thenReturn(
+            [elements[1], elements[3]])
+
+        result = finder.find(browser, "dom=document.getElementsByTagName('a')")
+        self.assertEqual(result, [elements[1], elements[3]])
+
     def test_find_by_link_text(self):
         finder = ElementFinder()
         browser = mock()

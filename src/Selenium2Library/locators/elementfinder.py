@@ -8,6 +8,7 @@ class ElementFinder(object):
             'id': self._find_by_id,
             'name': self._find_by_name,
             'xpath': self._find_by_xpath,
+            'dom': self._find_by_dom,
             'link': self._find_by_link_text,
             'css': self._find_by_css_selector,
             'tag': self._find_by_tag_name,
@@ -46,6 +47,14 @@ class ElementFinder(object):
         return self._filter_elements(
             browser.find_elements_by_xpath(criteria),
             tag, constraints)
+
+    def _find_by_dom(self, browser, criteria, tag, constraints):
+        result = browser.execute_script("return %s;" % criteria)
+        if result is None:
+            return []
+        if not isinstance(result, list):
+            result = [result]
+        return self._filter_elements(result, tag, constraints)
 
     def _find_by_link_text(self, browser, criteria, tag, constraints):
         return self._filter_elements(

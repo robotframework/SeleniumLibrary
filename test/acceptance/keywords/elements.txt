@@ -14,6 +14,8 @@ Assign Id To Element
 Get Element Attribute
     ${id}=  Get Element Attribute  link=Link with id@id
     Should Be Equal  ${id}  some_id
+    ${id}=  Get Element Attribute  dom=document.getElementsByTagName('a')[3]@id
+    Should Be Equal  ${id}  some_id
     ${class}=  Get Element Attribute  second_div@class
     Should Be Equal  ${class}  Second Class
 
