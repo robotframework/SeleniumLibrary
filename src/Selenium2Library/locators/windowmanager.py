@@ -1,5 +1,6 @@
 from types import *
 from robot import utils
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
 class WindowManager(object):
@@ -12,8 +13,8 @@ class WindowManager(object):
             None: self._select_by_default
         }
 
-    def get_window_handles(self, browser):
-        return browser.get_window_handles()
+    def get_window_names(self, browser):
+        return [ window_info[2] for window_info in self._get_window_infos(browser) ]
 
     def select(self, browser, locator):
         assert browser is not None
@@ -29,19 +30,19 @@ class WindowManager(object):
     def _select_by_title(self, browser, criteria):
         self._select_matching(
             browser,
-            lambda browser: browser.get_title().strip().lower() == criteria.lower(),
+            lambda window_info: window_info[3].strip().lower() == criteria.lower(),
             "Unable to locate window with title '" + criteria + "'")
 
     def _select_by_name(self, browser, criteria):
-        try:
-            browser.switch_to_window(criteria)
-        except NoSuchWindowException:
-            raise ValueError("Unable to locate window with name '" + criteria + "'")
+        self._select_matching(
+            browser,
+            lambda window_info: window_info[2].strip().lower() == criteria.lower(),
+            "Unable to locate window with name '" + criteria + "'")
 
     def _select_by_url(self, browser, criteria):
         self._select_matching(
             browser,
-            lambda browser: browser.get_current_url().strip().lower() == criteria.lower(),
+            lambda window_info: window_info[4].strip().lower() == criteria.lower(),
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
@@ -71,15 +72,27 @@ class WindowManager(object):
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
-        if criteria is not None and criteria.lower() == 'main':
-            criteria = ''
+        if prefix is None or prefix == 'name':
+            if criteria is None or criteria.lower() == 'main':
+                criteria = ''
         return (prefix, criteria)
+
+    def _get_window_infos(self, browser):
+        window_infos = []
+        starting_handle = browser.get_current_window_handle()
+        try:
+            for handle in browser.get_window_handles():
+                browser.switch_to_window(handle)
+                window_infos.append(browser.get_current_window_info())
+        finally:
+            browser.switch_to_window(starting_handle)
+        return window_infos
 
     def _select_matching(self, browser, matcher, error):
         starting_handle = browser.get_current_window_handle()
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
-            if matcher(browser):
+            if matcher(browser.get_current_window_info()):
                 return
         browser.switch_to_window(starting_handle)
         raise ValueError(error)

@@ -12,6 +12,7 @@ Capture page screenshot to default location
   ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-*.png
   Should Be Equal As Integers  ${count}  1
   Click Link  Relative
+  Wait Until Page Contains Element  tag=body
   Capture Page Screenshot
   ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-*.png
   Should Be Equal As Integers  ${count}  2

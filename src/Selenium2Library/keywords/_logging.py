@@ -30,5 +30,12 @@ class _LoggingKeywords(KeywordGroup):
         elif (level == 'WARN'): self._warn(message)
         elif (level == 'HTML'): self._html(message)
 
+    def _log_list(self, items, what='item'):
+        msg = ['Altogether %d %s%s.' % (len(items), what, ['s',''][len(items)==1])]
+        for index, item in enumerate(items):
+            msg.append('%d: %s' % (index+1, item))
+        self._info('\n'.join(msg))
+        return items
+
     def _warn(self, message):
         logger.warn(message)
