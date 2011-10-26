@@ -57,6 +57,7 @@ class Selenium2Library(
     | id         | Click Element `|` id=my_element         | Matches by @id attribute                        |
     | name       | Click Element `|` name=my_element       | Matches by @name attribute                      |
     | xpath      | Click Element `|` xpath=//div[@id='my_element'] | Matches with arbitrary XPath expression |
+    | dom        | Click Element `|` dom=document.images[56] | Matches with arbitrary DOM express            |
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
