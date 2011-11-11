@@ -9,8 +9,9 @@ that it depends on.
 Preconditions
 -------------
 
-Selenium2Library itself supports all Python and Jython interpreters that are
-supported by Robot Framework.
+Selenium2Library supports all Python and Jython interpreters support by the
+Robot Framework and the `Selenium Python Bindings`_. The Selenium Python Bindings
+are more restrictive, and as of now require Python 2.6 or Python 2.7.
 
 
 Installing from source
@@ -37,3 +38,6 @@ enough to double-click the installer and follow the instructions.
 
 Selenium2Library can be uninstalled using the Programs and Features utility from
 Control Panel (Add/Remove Programs on older versions of Windows).
+
+
+.. _Selenium Python Bindings: http://code.google.com/p/selenium/wiki/PythonBindings
