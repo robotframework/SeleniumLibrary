@@ -90,11 +90,15 @@ class Selenium2Library(
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = VERSION
 
-    def __init__(self, timeout=5.0, run_on_failure='Capture Page Screenshot'):
+    def __init__(self, timeout=5.0, implicit_wait=5.0, run_on_failure='Capture Page Screenshot'):
         """Selenium2Library can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for all waiting actions.
         It can be later set with `Set Selenium Timeout`.
+
+        'implicit_wait' is the implicit timeout that Selenium waits when
+        looking for elements.
+        It can be later set with 'Set Selenium Implicit Wait'.
 
         `run_on_failure` specifies the name of a keyword (from any available
         libraries) to execute when a Selenium2Library keyword fails. By default
@@ -111,4 +115,5 @@ class Selenium2Library(
         for base in Selenium2Library.__bases__:
             base.__init__(self)
         self.set_selenium_timeout(timeout)
+        self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
