@@ -31,5 +31,5 @@ setup(name         = 'robotframework-selenium2library',
                           'selenium', ],
       package_dir  = {'' : 'src'},
       packages     = ['Selenium2Library'],
-      package_data = {'Selenium2Library': ['resources/firefoxprofile/*.*']},
+      include_package_data = True,
       )
