@@ -1,10 +1,3 @@
-import os
-import sys
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(ROOT_DIR, "lib", "selenium-2.8.1", "py"))
-sys.path.insert(0, os.path.join(ROOT_DIR, "lib", "decorator-3.3.2"))
-
 from keywords import *
 from metadata import VERSION
 
