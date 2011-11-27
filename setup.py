@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 VERSION = '0.5.3'
 
@@ -30,6 +30,6 @@ setup(name         = 'robotframework-selenium2library',
       install_requires = ['decorator',
                           'selenium', ],
       package_dir  = {'' : 'src'},
-      packages     = ['Selenium2Library'],
+      packages     = find_packages('src', exclude=['ez_setup']),
       include_package_data = True,
       )
