@@ -25,6 +25,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._window_manager = WindowManager()
         self._speed_in_secs = float(0)
         self._timeout_in_secs = float(5)
+        self._implicit_wait_in_secs = float(5)
 
     # Public, open and close
 
@@ -278,6 +279,12 @@ class _BrowserManagementKeywords(KeywordGroup):
         See `Set Selenium Timeout` for an explanation."""
         return robot.utils.secs_to_timestr(self._timeout_in_secs)
 
+    def get_selenium_implicit_wait(self):
+        """Gets the wait in seconds that is waited by Selenium.
+
+        See `Set Selenium Implicit Wait` for an explanation."""
+        return robot.utils.secs_to_timestr(self._implicit_wait_in_secs)
+
     def set_selenium_speed(self, seconds):
         """Sets the delay in seconds that is waited after each Selenium command.
 
@@ -314,6 +321,23 @@ class _BrowserManagementKeywords(KeywordGroup):
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = robot.utils.timestr_to_secs(seconds)
         return old_timeout
+
+    def set_selenium_implicit_wait(self, seconds):
+        """Sets Selenium 2's implicit wait in seconds.
+
+        From selenium 2 function 'Sets a sticky timeout to implicitly 
+            wait for an element to be found, or a command to complete.
+            This method only needs to be called one time per session.'
+
+        Example:
+        | ${orig wait} = | Set Selenium Implicit Wait | 10 seconds |
+        | Perform AJAX call that is slow |
+        | Set Selenium Implicit Wait | ${orig wait} | 
+        """
+        old_wait = self._implicit_wait_in_secs
+        for browser in self._cache.browsers:
+            browser.implicitly_wait(self._implicit_wait_in_secs)
+        return old_wait
 
     # Private
 
