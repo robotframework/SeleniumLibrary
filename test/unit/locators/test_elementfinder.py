@@ -14,20 +14,20 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_null_browser(self):
         finder = ElementFinder()
-        with self.assertRaises(AssertionError):
-            finder.find(None, "id=test1")
+        self.assertRaises(AssertionError,
+            finder.find, None, "id=test1")
 
     def test_find_with_null_locator(self):
         finder = ElementFinder()
         browser = mock()
-        with self.assertRaises(AssertionError):
-            finder.find(browser, None)
+        self.assertRaises(AssertionError,
+            finder.find, browser, None)
 
     def test_find_with_empty_locator(self):
         finder = ElementFinder()
         browser = mock()
-        with self.assertRaises(AssertionError):
-            finder.find(browser, "")
+        self.assertRaises(AssertionError,
+            finder.find, browser, "")
 
     def test_find_with_no_tag(self):
         finder = ElementFinder()
