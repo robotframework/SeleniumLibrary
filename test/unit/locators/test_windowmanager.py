@@ -16,8 +16,8 @@ class WindowManagerTests(unittest.TestCase):
 
     def test_select_with_null_browser(self):
         manager = WindowManager()
-        with self.assertRaises(AssertionError):
-            manager.select(None, "name=test1")
+        self.assertRaises(AssertionError,
+            manager.select, None, "name=test1")
 
     def test_select_by_title(self):
         manager = WindowManager()
