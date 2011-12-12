@@ -10,14 +10,15 @@ class WindowManagerTests(unittest.TestCase):
     def test_select_with_invalid_prefix(self):
         manager = WindowManager()
         browser = mock()
-        with self.assertRaises(ValueError) as context:
-            manager.select(browser, "something=test1")
-        self.assertEqual(context.exception.message, "Window locator with prefix 'something' is not supported")
+        try:
+            self.assertRaises(ValueError, manager.select, browser, "something=test1")
+        except ValueError as e:
+            self.assertEqual(e.message, "Window locator with prefix 'something' is not supported")
 
     def test_select_with_null_browser(self):
         manager = WindowManager()
-        with self.assertRaises(AssertionError):
-            manager.select(None, "name=test1")
+        self.assertRaises(AssertionError,
+            manager.select, None, "name=test1")
 
     def test_select_by_title(self):
         manager = WindowManager()
@@ -56,9 +57,10 @@ class WindowManagerTests(unittest.TestCase):
             { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
-        with self.assertRaises(ValueError) as context:
-            manager.select(browser, "title=Title -1")
-        self.assertEqual(context.exception.message, "Unable to locate window with title 'Title -1'")
+        try:
+            self.assertRaises(ValueError, manager.select, browser, "title=Title -1")
+        except ValueError as e:
+            self.assertEqual(e.message, "Unable to locate window with title 'Title -1'")
 
     def test_select_by_name(self):
         manager = WindowManager()
@@ -97,9 +99,10 @@ class WindowManagerTests(unittest.TestCase):
             { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
-        with self.assertRaises(ValueError) as context:
-            manager.select(browser, "name=win-1")
-        self.assertEqual(context.exception.message, "Unable to locate window with name 'win-1'")
+        try:
+            self.assertRaises(ValueError, manager.select, browser, "name=win-1")
+        except ValueError as e:
+            self.assertEqual(e.message, "Unable to locate window with name 'win-1'")
 
     def test_select_by_url(self):
         manager = WindowManager()
@@ -138,9 +141,10 @@ class WindowManagerTests(unittest.TestCase):
             { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
-        with self.assertRaises(ValueError) as context:
-            manager.select(browser, "url=http://localhost/page-1.html")
-        self.assertEqual(context.exception.message, "Unable to locate window with URL 'http://localhost/page-1.html'")
+        try:
+            self.assertRaises(ValueError, manager.select, browser, "url=http://localhost/page-1.html")
+        except ValueError as e:
+            self.assertEqual(e.message, "Unable to locate window with URL 'http://localhost/page-1.html'")
 
     def test_select_with_null_locator(self):
         manager = WindowManager()
@@ -217,9 +221,10 @@ class WindowManagerTests(unittest.TestCase):
             { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
 
-        with self.assertRaises(ValueError) as context:
-            manager.select(browser, "win-1")
-        self.assertEqual(context.exception.message, "Unable to locate window with name or title 'win-1'")
+        try:
+            self.assertRaises(ValueError, manager.select, browser, "win-1")
+        except ValueError as e:
+            self.assertEqual(context.exception.message, "Unable to locate window with name or title 'win-1'")
 
     def test_select_with_sloppy_prefix(self):
         manager = WindowManager()
