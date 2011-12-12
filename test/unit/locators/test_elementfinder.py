@@ -8,26 +8,27 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_invalid_prefix(self):
         finder = ElementFinder()
         browser = mock()
-        with self.assertRaises(ValueError) as context:
-            finder.find(browser, "something=test1")
-        self.assertEqual(context.exception.message, "Element locator with prefix 'something' is not supported")
+        try:
+            self.assertRaises(ValueError, finder.find, browser, "something=test1")
+        except ValueError as e:
+            self.assertEqual(e.message, "Element locator with prefix 'something' is not supported")
 
     def test_find_with_null_browser(self):
         finder = ElementFinder()
-        with self.assertRaises(AssertionError):
-            finder.find(None, "id=test1")
+        self.assertRaises(AssertionError,
+            finder.find, None, "id=test1")
 
     def test_find_with_null_locator(self):
         finder = ElementFinder()
         browser = mock()
-        with self.assertRaises(AssertionError):
-            finder.find(browser, None)
+        self.assertRaises(AssertionError,
+            finder.find, browser, None)
 
     def test_find_with_empty_locator(self):
         finder = ElementFinder()
         browser = mock()
-        with self.assertRaises(AssertionError):
-            finder.find(browser, "")
+        self.assertRaises(AssertionError,
+            finder.find, browser, "")
 
     def test_find_with_no_tag(self):
         finder = ElementFinder()
