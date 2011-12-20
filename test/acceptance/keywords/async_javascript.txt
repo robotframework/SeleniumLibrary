@@ -64,7 +64,6 @@ Should Not Timeout If Script Callsback Inside A Zero Timeout
 
 Should Timeout If Script Does Not Invoke Callback With Long Timeout
     Set Selenium Timeout  0.5 seconds
-    Execute Async Javascript  var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 1500);
     Run Keyword And Expect Error  TimeoutException: Message: ''\ \
     ...  Execute Async Javascript  var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 1500);
 

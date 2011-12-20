@@ -339,6 +339,8 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = robot.utils.timestr_to_secs(seconds)
+        for browser in self._cache.browsers:
+            browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
 
     def set_selenium_implicit_wait(self, seconds):
