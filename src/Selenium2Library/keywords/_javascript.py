@@ -91,6 +91,32 @@ class _JavaScriptKeywords(KeywordGroup):
         self._info("Executing JavaScript:\n%s" % js)
         return self._current_browser().execute_script(js)
 
+    def execute_async_javascript(self, *code):
+        """Executes asynchronous JavaScript code.
+
+        `code` may contain multiple lines of code but must contain a 
+        return statement (with the value to be returned) at the end.
+
+        `code` may be divided into multiple cells in the test data. In that
+        case, the parts are catenated together without adding spaces.
+
+        If `code` is an absolute path to an existing file, the JavaScript
+        to execute will be read from that file. Forward slashes work as
+        a path separator on all operating systems.
+
+        Note that, by default, the code will be executed in the context of the
+        Selenium object itself, so `this` will refer to the Selenium object.
+        Use `window` to refer to the window of your application, e.g.
+        `window.document.getElementById('foo')`.
+
+        Example:
+        | Execute Async JavaScript | window.my_js_function('arg1', 'arg2') |
+        | Execute Async JavaScript | ${CURDIR}/js_to_execute.js |
+        """
+        js = self._get_javascript_to_execute(''.join(code))
+        self._info("Executing Asynchronous JavaScript:\n%s" % js)
+        return self._current_browser().execute_async_script(js)
+
     def get_alert_message(self):
         """Returns the text of current JavaScript alert.
 
