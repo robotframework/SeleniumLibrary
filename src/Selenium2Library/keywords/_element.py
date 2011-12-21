@@ -228,14 +228,7 @@ class _ElementKeywords(KeywordGroup):
         See `introduction` for details about locating elements.
         """
         return self._get_value(locator)
-        
-    def get_text(self, locator):
-        """Returns the text value of element identified by `locator`.
 
-        See `introduction` for details about locating elements.
-        """
-        return self._get_text(locator)
-        
     def get_vertical_position(self, locator):
         """Returns vertical position of element identified by `locator`.
 
@@ -514,7 +507,10 @@ return !element.dispatchEvent(evt);
 
     def _frame_contains(self, locator, text):
         browser = self._current_browser()
-        element = self._element_find(locator, True, True, 'frame')
+        try:
+            element = self._element_find(locator, True, True, tag='iframe')
+        except ValueError:
+            element = self._element_find(locator, True, True, tag='frame')
         browser.switch_to_frame(element)
         self._info("Searching for text from frame '%s'." % locator)
         found = self._is_text_present(text)
@@ -595,7 +591,10 @@ return !element.dispatchEvent(evt);
         if self._is_text_present(text):
             return True
 
-        subframes = self._element_find("tag=frame", False, False, 'frame')
+        try:
+            subframes = self._element_find("tag=iframe", False, False, 'iframe')
+        except ValueError:
+            subframes = self._element_find("tag=frame", False, False, 'frame')
         self._debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
@@ -626,4 +625,3 @@ return !element.dispatchEvent(evt);
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
-
