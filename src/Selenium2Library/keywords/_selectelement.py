@@ -262,8 +262,10 @@ class _SelectElementKeywords(KeywordGroup):
             options[index].click()
 
     def _select_option_from_single_select_list(self, select, options, index):
-        select.click()
-        options[index].click()
+        #select.click()
+        #options[index].click()
+        self._current_browser().execute_script("arguments[0].selectedIndex = %d;" % (index),select)
+
 
     def _unselect_all_options_from_multi_select_list(self, select):
         self._current_browser().execute_script("arguments[0].selectedIndex = -1;", select)

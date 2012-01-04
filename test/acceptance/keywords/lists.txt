@@ -66,7 +66,9 @@ Select From Single Selection List
     Select And verify selection  preferred_channel  Email  Email
     Select And verify selection  preferred_channel  Email  Email
     Select And verify selection  preferred_channel  directmail  Direct mail
-    Select From List  preferred_channel  email  Telephone
+    Select From List  preferred_channel  Telephone
+    #do something else... anything
+    Unselect from List  possible_channels
     List Selection Should Be  preferred_channel  Telephone
     Select From List  preferred_channel
     List Selection Should Be  preferred_channel  Direct mail

@@ -25,7 +25,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._window_manager = WindowManager()
         self._speed_in_secs = float(0)
         self._timeout_in_secs = float(5)
-        self._implicit_wait_in_secs = float(5)
+        self._implicit_wait_in_secs = float(0)
 
     # Public, open and close
 
@@ -48,7 +48,7 @@ class _BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None):
+    def open_browser(self, url, browser='firefox', alias=None,implicit_wait=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -59,6 +59,12 @@ class _BrowserManagementKeywords(KeywordGroup):
         Optional alias is an alias for the browser instance and it can be used
         for switching between browsers (just as index can be used). See `Switch
         Browser` for more details.
+
+        Optional `implicit_wait` is used to overwrite the default implict_wait setting used
+        when Selenium2Library is initially created for the current browser that is to be
+        opened.  Note that get_selenium_implicit_wait will always return the implict_wait
+        set when the Selenium2Library was initially created, the `implicit_wait` parameter
+        here is specifically for a one off override
 
         Possible values for `browser` are as follows:
 
@@ -78,7 +84,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name)
+        browser = self._make_browser(browser_name,implicit_wait)
         browser.get(url)
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
@@ -334,8 +340,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Perform AJAX call that is slow |
         | Set Selenium Implicit Wait | ${orig wait} | 
         """
-        old_wait = self._implicit_wait_in_secs
-        for browser in self._cache.browsers:
+        old_wait = self.get_selenium_implicit_wait()
+        self._implicit_wait_in_secs = robot.utils.timestr_to_secs(seconds)
+        for browser in self._cache.get_open_browsers():
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
 
@@ -349,7 +356,7 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _get_browser_token(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
-    def _make_browser(self, browser_name):
+    def _make_browser(self, browser_name,implicit_wait=None):
         browser_token = self._get_browser_token(browser_name)
         browser = None
         if browser_token == '*firefox':
@@ -362,8 +369,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         if browser is None:
             raise ValueError(browser_name + " is not a supported browser.")
 
+        i_wait = self._implicit_wait_in_secs if implicit_wait == None else implicit_wait
         browser.set_speed(self._speed_in_secs)
         browser.set_script_timeout(self._timeout_in_secs)
+        browser.implicitly_wait(i_wait)
 
         return browser
 
