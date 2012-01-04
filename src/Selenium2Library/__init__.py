@@ -83,7 +83,7 @@ class Selenium2Library(
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = VERSION
 
-    def __init__(self, timeout=5.0, implicit_wait=1.0, run_on_failure='Capture Page Screenshot'):
+    def __init__(self, timeout=5.0, implicit_wait=0.0, run_on_failure='Capture Page Screenshot'):
         """Selenium2Library can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for all waiting actions.
