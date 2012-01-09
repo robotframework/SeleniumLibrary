@@ -1,4 +1,5 @@
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.select import Select
 from keywordgroup import KeywordGroup
 
 class _SelectElementKeywords(KeywordGroup):
@@ -262,8 +263,7 @@ class _SelectElementKeywords(KeywordGroup):
             options[index].click()
 
     def _select_option_from_single_select_list(self, select, options, index):
-        select.click()
-        options[index].click()
+        Select(select).select_by_index(index)
 
     def _unselect_all_options_from_multi_select_list(self, select):
         self._current_browser().execute_script("arguments[0].selectedIndex = -1;", select)
