@@ -571,7 +571,7 @@ return !element.dispatchEvent(evt);
         return key
 
     def _parse_attribute_locator(self, attribute_locator):
-        parts = attribute_locator.partition('@')
+        parts = attribute_locator.rpartition('@')
         if len(parts[0]) == 0:
             raise ValueError("Attribute locator '%s' does not contain an element locator." % (locator))
         if len(parts[2]) == 0:
