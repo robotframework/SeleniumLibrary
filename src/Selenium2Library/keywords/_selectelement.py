@@ -149,9 +149,8 @@ class _SelectElementKeywords(KeywordGroup):
         if not self._is_multiselect_list(select):
             raise RuntimeError("Keyword 'Select all from list' works only for multiselect lists.")
 
-        select, options = self._get_select_list_options(select)
-        for i in range(len(options)):
-            self._select_option_from_multi_select_list(select, options, i)
+        for i in range(len(select.options)):
+            Select(select).select_by_index(i)
 
     def select_from_list(self, locator, *items):
         """Selects `*items` from list identified by `locator`
@@ -168,24 +167,18 @@ class _SelectElementKeywords(KeywordGroup):
         self._info("Selecting %s from list '%s'." % (items_str, locator))
         items = list(items)
 
-        select, options = self._get_select_list_options(locator)
-        is_multi_select = self._is_multiselect_list(select)
-        select_func = self._select_option_from_multi_select_list if is_multi_select else self._select_option_from_single_select_list
+        select = self._get_select_list(locator)
 
         if not items:
-            for i in range(len(options)):
-                select_func(select, options, i)
+            for i in range(len(select.options)):
+                Select(select).select_by_index(i)
             return
 
-        option_values = self._get_values_for_options(options)
-        option_labels = self._get_labels_for_options(options)
         for item in items:
-            option_index = None
-            try: option_index = option_values.index(item)
+            try: Select(select).select_by_value(item)
             except:
-                try: option_index = option_labels.index(item)
+                try: Select(select).select_by_visible_text(item)
                 except: continue
-            select_func(select, options, option_index)
 
     def unselect_from_list(self, locator, *items):
         """Unselects given values from select list identified by locator.
@@ -257,13 +250,6 @@ class _SelectElementKeywords(KeywordGroup):
         if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
             return True
         return False
-
-    def _select_option_from_multi_select_list(self, select, options, index):
-        if not options[index].is_selected():
-            options[index].click()
-
-    def _select_option_from_single_select_list(self, select, options, index):
-        Select(select).select_by_index(index)
 
     def _unselect_all_options_from_multi_select_list(self, select):
         self._current_browser().execute_script("arguments[0].selectedIndex = -1;", select)
