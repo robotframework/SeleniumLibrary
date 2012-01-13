@@ -48,7 +48,7 @@ class _BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None,implicit_wait=None):
+    def open_browser(self, url, browser='firefox', alias=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -84,7 +84,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,implicit_wait)
+        browser = self._make_browser(browser_name)
         browser.get(url)
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
@@ -329,7 +329,8 @@ class _BrowserManagementKeywords(KeywordGroup):
         return old_timeout
 
     def set_selenium_implicit_wait(self, seconds):
-        """Sets Selenium 2's implicit wait in seconds.
+        """Sets Selenium 2's default implicit wait in seconds and
+        sets the implicit wait for all open browsers.
 
         From selenium 2 function 'Sets a sticky timeout to implicitly 
             wait for an element to be found, or a command to complete.
@@ -345,6 +346,22 @@ class _BrowserManagementKeywords(KeywordGroup):
         for browser in self._cache.get_open_browsers():
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
+    
+
+    def set_browser_implicit_wait(self, seconds):
+        """Sets current browser's implicit wait in seconds.
+
+        From selenium 2 function 'Sets a sticky timeout to implicitly 
+            wait for an element to be found, or a command to complete.
+            This method only needs to be called one time per session.'
+
+        Example:
+        | Set Browser Implicit Wait | 10 seconds |
+
+        See also `Set Selenium Implicit Wait`.
+        """
+        implicit_wait_in_secs = robot.utils.timestr_to_secs(seconds)
+        self._current_browser().implicitly_wait(implicit_wait_in_secs)
 
     # Private
 
@@ -356,7 +373,7 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _get_browser_token(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
-    def _make_browser(self, browser_name,implicit_wait=None):
+    def _make_browser(self, browser_name):
         browser_token = self._get_browser_token(browser_name)
         browser = None
         if browser_token == '*firefox':
@@ -369,10 +386,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         if browser is None:
             raise ValueError(browser_name + " is not a supported browser.")
 
-        i_wait = self._implicit_wait_in_secs if implicit_wait == None else implicit_wait
         browser.set_speed(self._speed_in_secs)
         browser.set_script_timeout(self._timeout_in_secs)
-        browser.implicitly_wait(i_wait)
+        browser.implicitly_wait(self._implicit_wait_in_secs)
 
         return browser
 
