@@ -67,7 +67,7 @@ Select From Single Selection List
     Select And verify selection  preferred_channel  Email  Email
     Select And verify selection  preferred_channel  directmail  Direct mail
     Select From List  preferred_channel  Telephone
-    #do something else... anything
+    #do something else... anything to ensure the list is really set as the next keyword will pass if list item is highlighted but not selected
     Unselect from List  possible_channels
     List Selection Should Be  preferred_channel  Telephone
     Select From List  preferred_channel
