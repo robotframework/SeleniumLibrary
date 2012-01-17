@@ -243,7 +243,7 @@ class _FormElementKeywords(KeywordGroup):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        element = self._element_find(locator, True, False, 'text field')
+        element = self._element_find(locator, True, False, 'input')
         if element is None: element = self._element_find(locator, True, False, 'file upload')
         actual = element.get_attribute('value') if element is not None else None
         if actual != expected:
