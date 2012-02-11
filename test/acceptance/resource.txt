@@ -5,8 +5,9 @@ Library  OperatingSystem
 
 
 *Variable*
-${SERVER}  localhost:7272
+${SERVER}  localhost:7000
 ${BROWSER}  *firefox
+${REMOTE_URL}   ${NONE}
 ${ROOT}  http://${SERVER}/html
 ${FRONT PAGE}  ${ROOT}/
 ${SPEED}  0
@@ -21,7 +22,7 @@ Open Browser To Start Page
   Should Be Equal  ${default timeout}  5 seconds
 
 Open Browser To Start Page Without Testing Default Options
-  Open Browser  ${FRONT PAGE}  ${BROWSER}
+  Open Browser  ${FRONT PAGE}  ${BROWSER}  remote=${REMOTE_URL}
   ${orig speed} =  Set Selenium Speed  ${SPEED}
   ${orig timeout} =  Set Selenium Timeout  10 seconds
   [Return]  ${orig speed}  5 seconds
@@ -30,12 +31,12 @@ Open Browser To Start Page And Test Implicit Wait
     [DOCUMENTATION]  This keyword tests that 'Set Selenium Implicit Wait' and 'Get Selenium Implicit Wait' work as expected
     [ARGUMENTS]     ${implicit_wait}
     Should Not Be Equal  0  ${implicit_wait}    Please do not pass in a value of 0 for the implicit wait argument for this function
-    ${old_wait}=    Set Selenium Implicit Wait  0
-    Open Browser    ${FRONT PAGE}  ${BROWSER}  ${implicit_wait}
+    ${old_wait}=    Set Selenium Implicit Wait  ${implicit_wait}
+    Open Browser    ${FRONT PAGE}  ${BROWSER}  remote=${REMOTE_URL}
     ${default_implicit_wait} =  Get Selenium Implicit Wait
-    Should Be Equal  0 seconds   ${default_implicit_wait}
+    Should Be Equal  ${implicit_wait} seconds   ${default_implicit_wait}
     #be sure to revert the implicit wait to whatever it was before so as to not effect other tests
-    Set Selenium Implicit Wait  0
+    Set Selenium Implicit Wait  ${old_wait}
 
 Cannot Be Executed In IE
   ${runsInIE}=  Set Variable If  "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']  ${TRUE}

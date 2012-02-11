@@ -12,7 +12,7 @@ It Should Be Possible To Switch Between Browsers Using Indexes
     Verify Location Is ""
 
 It Should Be Give An Alias To New Browser Instance
-    Open Browser  ${ROOT}/forms/prefilled_email_form.html  ${BROWSER}  Third Browser
+    Open Browser  ${ROOT}/forms/prefilled_email_form.html  ${BROWSER}  Third Browser  remote=${REMOTE_URL}
     Verify Location Is "forms/prefilled_email_form.html"
     Switch Browser  ${BROWSER1}
     Verify Location Is ""
@@ -20,12 +20,12 @@ It Should Be Give An Alias To New Browser Instance
     Verify Location Is "forms/prefilled_email_form.html"
 
 It Should Be Possible Close A Browser
-    Open Browser  ${ROOT}/forms/prefilled_email_form.html  ${BROWSER}  Third
+    Open Browser  ${ROOT}/forms/prefilled_email_form.html  ${BROWSER}  Third   remote=${REMOTE_URL}
     Switch Browser  ${BROWSER2}
     Close Browser
     Switch Browser  Third
     Close Browser
-    ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}
+    ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}   remote=${REMOTE_URL}
 
 Correct Error Message Should Be Given When Trying To Switch To Non-Existing Browser
     Run Keyword And Expect Error  No browser with index or alias 'non-existing' found.  Switch Browser  non-existing
@@ -33,8 +33,8 @@ Correct Error Message Should Be Given When Trying To Switch To Non-Existing Brow
 *** Keywords ***
 Open Two Browsers And Register Indexes
     Cannot Be Executed in IE
-    ${BROWSER1} =  Open Browser  ${FRONT PAGE}  ${BROWSER}
-    ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}
+    ${BROWSER1} =  Open Browser  ${FRONT PAGE}  ${BROWSER}   remote=${REMOTE_URL}
+    ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}   remote=${REMOTE_URL}
     Set Suite Variable  $BROWSER1
     Set Suite Variable  $BROWSER2
 
