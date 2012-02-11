@@ -15,7 +15,8 @@ BROWSER_NAMES = {'ff': '*firefox',
                  'internetexplorer': '*iexplore',
                  'googlechrome': '*googlechrome',
                  'gc': '*googlechrome',
-                 'chrome': '*googlechrome'
+                 'chrome': '*googlechrome',
+                 'opera' : '*opera'
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -48,7 +49,8 @@ class _BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None):
+    def open_browser(self, url, browser='firefox', alias=None,remote=False,
+                desired_capabilities=None,profile=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -60,12 +62,6 @@ class _BrowserManagementKeywords(KeywordGroup):
         for switching between browsers (just as index can be used). See `Switch
         Browser` for more details.
 
-        Optional `implicit_wait` is used to overwrite the default implict_wait setting used
-        when Selenium2Library is initially created for the current browser that is to be
-        opened.  Note that get_selenium_implicit_wait will always return the implict_wait
-        set when the Selenium2Library was initially created, the `implicit_wait` parameter
-        here is specifically for a one off override
-
         Possible values for `browser` are as follows:
 
         | firefox          | FireFox   |
@@ -75,6 +71,8 @@ class _BrowserManagementKeywords(KeywordGroup):
         | googlechrome     | Google Chrome |
         | gc               | Google Chrome |
         | chrome           | Google Chrome |
+        | opera            | Opera         |
+        
 
         Note, that you will encounter strange behavior, if you open
         multiple Internet Explorer browser instances. That is also why
@@ -84,7 +82,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name)
+        browser = self._make_browser(browser_name,desired_capabilities,profile,remote)
         browser.get(url)
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
@@ -373,15 +371,34 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _get_browser_token(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
-    def _make_browser(self, browser_name):
+    def _make_browser(self,browser_name,desired_capabilities=None,profile_dir=None,
+                        remote=None):
         browser_token = self._get_browser_token(browser_name)
         browser = None
         if browser_token == '*firefox':
-            browser = webdriver.Firefox(webdriver.FirefoxProfile(FIREFOX_PROFILE_DIR))
+            if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
+            browser = webdriver.Firefox(webdriver.FirefoxProfile(profile_dir))
+            if remote : desired_cap = webdriver.DesiredCapabilities.FIREFOX  
         elif browser_token == '*googlechrome':
             browser = webdriver.Chrome()
+            if remote : desired_cap = webdriver.DesiredCapabilities.CHROME
         elif browser_token == '*iexplore':
             browser = webdriver.Ie()
+            if remote : desired_cap = webdriver.DesiredCapabilities.INTERNETEXPLORER
+        elif browser_token == '*opera':
+            browser = webdriver.Opera()
+            if remote : desired_cap = webdriver.DesiredCapabilities.OPERA
+        
+        if remote :
+            if len(desired_capabilities) % 2 != 0:
+                raise ValueError("desired_capabilities must be a list with even number of arguments (key / value pairs)")
+            for cap in self._chuncker(desired_capabilities,2):
+                desired_cap[desired_capabilities[0]] = desired_capabilities[1]
+            browser = webdriver.Remote(desired_capabilities=desired_cap,
+                    command_executor=remote)
+
+                                   
+        
 
         if browser is None:
             raise ValueError(browser_name + " is not a supported browser.")
@@ -392,3 +409,6 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         return browser
 
+    def _chunker(self,seq, size):
+        '''iterate through list 'size' items at a time'''
+        return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
