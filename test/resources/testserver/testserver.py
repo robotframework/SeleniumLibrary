@@ -80,13 +80,13 @@ class StoppableHttpServer(BaseHTTPServer.HTTPServer):
         while not self.stop:
             self.handle_request()
 
-def stop_server(port=7272):
+def stop_server(port=7000):
     """send QUIT request to http server running on localhost:<port>"""
     conn = httplib.HTTPConnection("localhost:%d" % port)
     conn.request("QUIT", "/")
     conn.getresponse()
 
-def start_server(port=7272):
+def start_server(port=7000):
     import os
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), '..'))
     server = StoppableHttpServer(('', port), StoppableHttpRequestHandler)

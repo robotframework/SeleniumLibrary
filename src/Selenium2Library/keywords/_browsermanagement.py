@@ -377,25 +377,27 @@ class _BrowserManagementKeywords(KeywordGroup):
         browser = None
         if browser_token == '*firefox':
             if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
-            browser = webdriver.Firefox(webdriver.FirefoxProfile(profile_dir))
-            if remote : desired_cap = webdriver.DesiredCapabilities.FIREFOX  
+            if not remote: browser = webdriver.Firefox(webdriver.FirefoxProfile(profile_dir))
+            desired_cap = webdriver.DesiredCapabilities.FIREFOX  
         elif browser_token == '*googlechrome':
-            browser = webdriver.Chrome()
-            if remote : desired_cap = webdriver.DesiredCapabilities.CHROME
+            if not remote: browser = webdriver.Chrome()
+            desired_cap = webdriver.DesiredCapabilities.CHROME
         elif browser_token == '*iexplore':
-            browser = webdriver.Ie()
-            if remote : desired_cap = webdriver.DesiredCapabilities.INTERNETEXPLORER
+            if not remote: browser = webdriver.Ie()
+            desired_cap = webdriver.DesiredCapabilities.INTERNETEXPLORER
         elif browser_token == '*opera':
-            browser = webdriver.Opera()
-            if remote : desired_cap = webdriver.DesiredCapabilities.OPERA
+            if not remote: browser = webdriver.Opera()
+            desired_cap = webdriver.DesiredCapabilities.OPERA
         
         if remote :
-            if len(desired_capabilities) % 2 != 0:
-                raise ValueError("desired_capabilities must be a list with even number of arguments (key / value pairs)")
-            for cap in self._chuncker(desired_capabilities,2):
-                desired_cap[desired_capabilities[0]] = desired_capabilities[1]
+            #if len(desired_capabilities) % 2 != 0:
+            #    raise ValueError("desired_capabilities must be a list with even number of arguments (key / value pairs)")
+            if desired_capabilities:
+                for cap in self._chuncker(desired_capabilities,2):
+                    desired_cap[desired_capabilities[0]] = desired_capabilities[1]
+            
             browser = webdriver.Remote(desired_capabilities=desired_cap,
-                    command_executor=remote)
+                    command_executor=str(remote))
 
                                    
         
