@@ -9,14 +9,14 @@ from keywordgroup import KeywordGroup
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
-BROWSER_NAMES = {'ff': '*firefox',
-                 'firefox': '*firefox',
-                 'ie': '*iexplore',
-                 'internetexplorer': '*iexplore',
-                 'googlechrome': '*googlechrome',
-                 'gc': '*googlechrome',
-                 'chrome': '*googlechrome',
-                 'opera' : '*opera'
+BROWSER_NAMES = {'ff': "_make_ff",
+                 'firefox': "_make_ff",
+                 'ie': "_make_ie",
+                 'internetexplorer': "_make_ie",
+                 'googlechrome': "_make_chrome",
+                 'gc': "_make_chrome",
+                 'chrome': "_make_chrome",
+                 'opera' : "_make_opera"
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -49,8 +49,8 @@ class _BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None,remote=False,
-                desired_capabilities=None,profile=None):
+    def open_browser(self, url, browser='firefox', alias=None,remote_url=False,
+                desired_capabilities=None,ff_profile_dir=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -79,10 +79,25 @@ class _BrowserManagementKeywords(KeywordGroup):
         `Switch Browser` only works with one IE browser at most.
         For more information see:
         http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
+
+        Optional 'remote_url' is the url for a remote selenium server for example
+        http://127.0.0.1/wd/hub.  If you specify a value for remote you can
+        also specify 'desired_capabilities' which is a string in the form
+        key1:val1,key2:val2 that will be used to specify desired_capabilities
+        to the remote server.  This is useful for doing things like specify a
+        proxy server for internet explorer or for specify browser and os if your
+        using saucelabs.com.
+
+        Optional 'ff_profile_dir' is the path to the firefox profile dir if you
+        wish to overwrite the default.
         """
-        self._info("Opening browser '%s' to base url '%s'" % (browser, url))
+        if remote_url:
+            self._info("Opening broser '%s' to base url '%s' through remote server at '%s'"
+                    % (browser, url, remote_url))
+        else:
+            self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,desired_capabilities,profile,remote)
+        browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
         browser.get(url)
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
@@ -371,36 +386,15 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _get_browser_token(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
-    def _make_browser(self,browser_name,desired_capabilities=None,profile_dir=None,
-                        remote=None):
-        browser_token = self._get_browser_token(browser_name)
-        browser = None
-        if browser_token == '*firefox':
-            if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
-            if not remote: browser = webdriver.Firefox(webdriver.FirefoxProfile(profile_dir))
-            desired_cap = webdriver.DesiredCapabilities.FIREFOX  
-        elif browser_token == '*googlechrome':
-            if not remote: browser = webdriver.Chrome()
-            desired_cap = webdriver.DesiredCapabilities.CHROME
-        elif browser_token == '*iexplore':
-            if not remote: browser = webdriver.Ie()
-            desired_cap = webdriver.DesiredCapabilities.INTERNETEXPLORER
-        elif browser_token == '*opera':
-            if not remote: browser = webdriver.Opera()
-            desired_cap = webdriver.DesiredCapabilities.OPERA
-        
-        if remote :
-            #if len(desired_capabilities) % 2 != 0:
-            #    raise ValueError("desired_capabilities must be a list with even number of arguments (key / value pairs)")
-            if desired_capabilities:
-                for cap in self._chuncker(desired_capabilities,2):
-                    desired_cap[desired_capabilities[0]] = desired_capabilities[1]
-            
-            browser = webdriver.Remote(desired_capabilities=desired_cap,
-                    command_executor=str(remote))
 
-                                   
-        
+    def _get_browser_creation_function(self,browser_name):
+        return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
+
+    def _make_browser(self , browser_name , desired_capabilities=None , profile_dir=None,
+                    remote=None):
+
+        creation_func = self._get_browser_creation_function(browser_name)
+        browser = getattr(self,creation_func)(remote , desired_capabilities , profile_dir)
 
         if browser is None:
             raise ValueError(browser_name + " is not a supported browser.")
@@ -411,6 +405,53 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         return browser
 
-    def _chunker(self,seq, size):
-        '''iterate through list 'size' items at a time'''
-        return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+
+    def _make_ff(self , remote , desired_capabilites , profile_dir):
+        
+        if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
+        profile = webdriver.FirefoxProfile(profile_dir)
+        if remote:
+            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  , 
+                        remote , desired_capabilites , profile)
+        else:
+            browser = webdriver.Firefox(firefox_profile=profile)
+        return browser
+    
+    def _make_ie(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Ie, 
+                webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
+
+    def _make_chrome(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Chrome, 
+                webdriver.DesiredCapabilities.CHROME, remote, desired_capabilities)
+
+    def _make_opera(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Opera, 
+                webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
+
+    
+    def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
+        '''most of the make browser functions just call this function which creates the 
+        appropriate web-driver'''
+        if not remote_url: 
+            browser = webdriver_type()
+        else:
+            browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
+        return browser
+    
+
+    def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
+        '''parses the string based desired_capabilities which should be in the form
+        key1:val1,key2:val2 and creates the associated remote web driver'''
+        desired_cap = self._create_desired_capabilities(capabilities_type , desired_capabilities)
+        return webdriver.Remote(desired_capabilities=desired_cap , command_executor=str(remote_url) ,                                       browser_profile=profile)
+
+
+    def _create_desired_capabilities(self, capabilities_type, capabilities_string):
+        desired_capabilities = capabilities_type
+        if capabilities_string:
+            for cap in capabilities_string.split(","):
+                (key, value) = cap.split(":")
+                desired_capabilities[key.strip()] = value.strip()
+        return desired_capabilities
+    
