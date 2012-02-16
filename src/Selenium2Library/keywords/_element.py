@@ -362,9 +362,10 @@ return !element.dispatchEvent(evt);
         """
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
-        if len(key) > 1:
-            raise ValueError("Key value '%s' is invalid.", key)
+        #if len(key) > 1:
+        #    raise ValueError("Key value '%s' is invalid.", key)
         element = self._element_find(locator, True, True)
+        #select it
         element.send_keys(key)
 
     # Public, links

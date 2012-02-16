@@ -15,7 +15,7 @@ ROBOT_ARGS = [
     '--escape', 'space:SP',
     '--report', 'none',
     '--log', 'none',
-    '--suite', 'Acceptance.Keywords.Textfields',
+    #'--suite', 'Acceptance.Keywords.Textfields',
     '--loglevel', 'DEBUG',
     '--pythonpath', '%(pythonpath)s',
 ]

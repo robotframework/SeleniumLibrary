@@ -30,5 +30,4 @@ Press Key
   Press Key  password_field  f
   Press Key  password_field   \\9
   Press Key  login_button  \\13
-  Sleep  15
   Verify Location Is "forms/submit.html"
