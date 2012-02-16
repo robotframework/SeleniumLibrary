@@ -25,6 +25,7 @@ Get Alert Message
     Run Keyword And Expect Error  There were no alerts  Get Alert Message
 
 Mouse Down On Link
+    [TAGS]  Known Issue - Firefox
     [Setup]  Go To Page "javascript/mouse_events.html"
     Mouse Down On Image  image_mousedown
     Text Field Should Contain  textfield  onmousedown
@@ -56,6 +57,7 @@ Execute Javascript from File
     Page Should Contain  Inserted via file
 
 Open Context Menu
+    [TAGS]  Known Issue - Firefox
     Go To Page "javascript/context_menu.html"
     Open Context Menu  myDiv
 
