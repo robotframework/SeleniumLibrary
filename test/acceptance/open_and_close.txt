@@ -1,5 +1,6 @@
 *** Settings ***
 Resource        resource.txt
+Suite Teardown  Close All Browsers
 
 *** Test Cases ***
 Browser Should Open And Close
