@@ -17,7 +17,7 @@ Installing from PyPI
 --------------------
 
 Selenium2Library is available in the Python Package Index (PyPI_). To install,
-you need to have easy_install_ installed. Then run::
+you need to have `easy_install`_ installed. Then run::
 
 	easy_install robotframework-selenium2library
 
@@ -50,4 +50,4 @@ Control Panel (Add/Remove Programs on older versions of Windows).
 
 .. _Selenium Python Bindings: http://code.google.com/p/selenium/wiki/PythonBindings
 .. _PyPI: http://code.google.com/p/selenium/wiki/PythonBindings
-.. _easy_install http://pypi.python.org/pypi/setuptools
+.. _easy_install: http://pypi.python.org/pypi/setuptools

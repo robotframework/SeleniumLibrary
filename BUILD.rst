@@ -91,7 +91,7 @@ but if you need to generate it apart from a distribution build, run::
 Building Readme Files
 ---------------------
 
-The readme files get distributed in reStructuredText format (.rest),
+The readme files get distributed in reStructuredText format (.rst),
 so there isn't any reason to build them except to verify how they
 are parsed by the reStructuredText parser. To build them, run::
 
