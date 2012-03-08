@@ -10,9 +10,9 @@ SRC_DIR = os.path.join(ROOT_DIR, "src")
 LIB_DIR = os.path.join(SRC_DIR, "Selenium2Library")
 
 README_FILES = [
-    "README.rest",
-    "INSTALL.rest",
-    "BUILD.rest"
+    "README.rst",
+    "INSTALL.rst",
+    "BUILD.rst"
 ]
 
 def main():

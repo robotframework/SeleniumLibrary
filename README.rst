@@ -13,8 +13,8 @@ It is modeled after (and forked from) the SeleniumLibrary_ library,
 but re-implemented to use Selenium 2 and WebDriver technologies.
 
 - More information about this library can be found on the Wiki_ and in the `Keyword Documentation`_.
-- Installation information is found in the `INSTALL.rest` file.
-- Developer information is found in `BUILD.rest` file.
+- Installation information is found in the `INSTALL.rst` file.
+- Developer information is found in `BUILD.rst` file.
 
 
 Directory Layout
