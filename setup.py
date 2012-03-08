@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
+from ez_setup import use_setuptools
+use_setuptools()
+
 from setuptools import setup, find_packages
 
 VERSION = '0.5.3'
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework
-that leverage the Selenium 2 (WebDriver) libraries.
+that leverages the Selenium 2 (WebDriver) libraries.
 """[1:-1]
 
 setup(name         = 'robotframework-selenium2library',
@@ -27,8 +30,11 @@ setup(name         = 'robotframework-selenium2library',
                         "Programming Language :: Python",
                         "Topic :: Software Development :: Testing"
                      ],
-      install_requires = ['decorator >= 3.3.2',
-                          'selenium  >= 2.8.1', ],
+      install_requires = [
+							'decorator >= 3.3.2',
+							'selenium >= 2.8.1',
+							'robotframework >= 2.6.3'
+						 ],
       package_dir  = {'' : 'src'},
       packages     = find_packages('src', exclude=['ez_setup']),
       include_package_data = True,

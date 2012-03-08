@@ -6,7 +6,7 @@ Introduction
 ------------
 
 Selenium2Library is a web testing library for Robot Framework
-that leverage the `Selenium 2 (WebDriver)`_ libraries from the
+that leverages the `Selenium 2 (WebDriver)`_ libraries from the
 Selenium_ project.
 
 It is modeled after (and forked from) the SeleniumLibrary_ library, 
@@ -42,10 +42,14 @@ Running the Demo
 ----------------
 
 The demo directory contains an easily executable demo for Robot Framework
-using Selenium2Library. The tests can be executed by running::
+using Selenium2Library. To run the demo, run::
 
     python demo/rundemo.py
 
+E.g.::
+
+	python demo/rundemo.py demo/login_tests
+	
 
 .. _Selenium: http://selenium.openqa.org
 .. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html

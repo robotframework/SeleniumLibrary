@@ -9,7 +9,7 @@ MANIFEST.in
 	File that controls what gets included in a distribution
 
 setup.py
-	distutils setup script
+	Setup script (uses setuptools)
 
 demo/
     Demo web app, acceptance tests, and scripts
@@ -19,10 +19,6 @@ doc/
 
 src/
     Library source code
-
-src/Selenium2Library/metadata.py
-	All metadata about the library (e.g. version), used by setup
-	script and library code
 
 test/
     Unit and acceptance tests for Selenium2Library
