@@ -33,7 +33,7 @@ setup(name         = 'robotframework-selenium2library',
       install_requires = [
 							'decorator >= 3.3.2',
 							'selenium >= 2.8.1',
-							'robotframework >= 2.6.3',
+							'robotframework == 2.6.3',
 							'docutils >= 0.8.1'
 						 ],
       package_dir  = {'' : 'src'},
