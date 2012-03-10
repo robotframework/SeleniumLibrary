@@ -5,9 +5,7 @@ from time import localtime
 from zipfile import ZipFile, ZIP_DEFLATED
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(THIS_DIR, "..", "src", "Selenium2Library"))
-
-import metadata
+execfile(os.path.join(THIS_DIR, '..', 'version.py'))
 
 FILES = {
     '': ['rundemo.py'],
@@ -20,7 +18,7 @@ def main():
     cwd = os.getcwd()
     try:
         os.chdir(THIS_DIR)
-        name = 'robotframework-selenium2library-%s-demo' % metadata.VERSION
+        name = 'robotframework-selenium2library-%s-demo' % VERSION
         zipname = '%s.zip' % name
         if os.path.exists(zipname):
             os.remove(zipname)

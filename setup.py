@@ -2,10 +2,9 @@
 
 from ez_setup import use_setuptools
 use_setuptools()
-
 from setuptools import setup, find_packages
 
-VERSION = '1.0.0'
+from version import VERSION
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework
