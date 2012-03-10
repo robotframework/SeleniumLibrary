@@ -13,6 +13,5 @@ prune demo/output.xml
 include doc/Selenium2Library.html
 
 recursive-include src/Selenium2Library *.py
-graft src/Selenium2Library/lib
 graft src/Selenium2Library/resources
 recursive-exclude src *.pyc
