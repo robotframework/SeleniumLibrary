@@ -2,7 +2,7 @@ import os
 from keywords import *
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-execfile(os.path.join(THIS_DIR, '..', '..', 'version.py'))
+execfile(os.path.join(THIS_DIR, 'version.py'))
 
 __version__ = VERSION
 
