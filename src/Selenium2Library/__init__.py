@@ -1,5 +1,8 @@
+import os
 from keywords import *
-VERSION = '1.0.0'
+
+THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+execfile(os.path.join(THIS_DIR, '..', '..', 'version.py'))
 
 __version__ = VERSION
 

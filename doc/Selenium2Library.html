@@ -89,7 +89,7 @@ a {
 </head>
 <body>
 <h1>Selenium2Library</h1>
-<b>Version:</b> 0.5.2<br>
+<b>Version:</b> 1.0.0<br>
 <b>Scope:</b> global<br>
 <b>Named arguments: </b>
 supported
@@ -196,10 +196,12 @@ All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42) or in R
   <th class="doc">Documentation</th>
 </tr>
 <tr>
-  <td class="arg">timeout=5.0, run_on_failure=Capture Page Screenshot</td>
+  <td class="arg">timeout=5.0, implicit_wait=0.0, run_on_failure=Capture Page Screenshot</td>
   <td class="doc">Selenium2Library can be imported with optional arguments.
 
 <span class="name">timeout</span> is the default timeout used to wait for all waiting actions. It can be later set with <a href="#Set Selenium Timeout" class="name">Set Selenium Timeout</a>.
+
+'implicit_wait' is the implicit timeout that Selenium waits when looking for elements. It can be later set with 'Set Selenium Implicit Wait'.
 
 <span class="name">run_on_failure</span> specifies the name of a keyword (from any available libraries) to execute when a Selenium2Library keyword fails. By default <a href="#Capture Page Screenshot" class="name">Capture Page Screenshot</a> will be used to take a screenshot of the current page. Using the value "Nothing" will disable this feature altogether. See <a href="#Register Keyword To Run On Failure" class="name">Register Keyword To Run On Failure</a> keyword for more information about this functionality.
 
@@ -275,6 +277,8 @@ Examples:
 &nbsp;&middot;&nbsp;
 <a href="#Element Text Should Be" title="Verifies element identified by `locator` exactly contains text `expected`.">Element&nbsp;Text&nbsp;Should&nbsp;Be</a>
 &nbsp;&middot;&nbsp;
+<a href="#Execute Async Javascript" title="Executes asynchronous JavaScript code.">Execute&nbsp;Async&nbsp;Javascript</a>
+&nbsp;&middot;&nbsp;
 <a href="#Execute Javascript" title="Executes the given JavaScript code.">Execute&nbsp;Javascript</a>
 &nbsp;&middot;&nbsp;
 <a href="#Focus" title="Sets focus to element identified by `locator`.">Focus</a>
@@ -306,6 +310,8 @@ Examples:
 <a href="#Get Selected List Value" title="Returns the value of the selected element from the select list identified by `locator`.">Get&nbsp;Selected&nbsp;List&nbsp;Value</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Selected List Values" title="Returns the values of selected elements (as a list) from the select list identified by `locator`.">Get&nbsp;Selected&nbsp;List&nbsp;Values</a>
+&nbsp;&middot;&nbsp;
+<a href="#Get Selenium Implicit Wait" title="Gets the wait in seconds that is waited by Selenium.">Get&nbsp;Selenium&nbsp;Implicit&nbsp;Wait</a>
 &nbsp;&middot;&nbsp;
 <a href="#Get Selenium Speed" title="Gets the delay in seconds that is waited after each Selenium command.">Get&nbsp;Selenium&nbsp;Speed</a>
 &nbsp;&middot;&nbsp;
@@ -424,6 +430,10 @@ Examples:
 <a href="#Select Radio Button" title="Sets selection of radio button group identified by `group_name` to `value`.">Select&nbsp;Radio&nbsp;Button</a>
 &nbsp;&middot;&nbsp;
 <a href="#Select Window" title="Selects the window found with `locator` as the context of actions.">Select&nbsp;Window</a>
+&nbsp;&middot;&nbsp;
+<a href="#Set Browser Implicit Wait" title="Sets current browser's implicit wait in seconds.">Set&nbsp;Browser&nbsp;Implicit&nbsp;Wait</a>
+&nbsp;&middot;&nbsp;
+<a href="#Set Selenium Implicit Wait" title="Sets Selenium 2's default implicit wait in seconds and">Set&nbsp;Selenium&nbsp;Implicit&nbsp;Wait</a>
 &nbsp;&middot;&nbsp;
 <a href="#Set Selenium Speed" title="Sets the delay in seconds that is waited after each Selenium command.">Set&nbsp;Selenium&nbsp;Speed</a>
 &nbsp;&middot;&nbsp;
@@ -734,6 +744,31 @@ In contrast to <a href="#Element Should Contain" class="name">Element Should Con
 Key attributes for arbitrary elements are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
 </tr>
 <tr>
+  <td class="kw"><a name="Execute Async Javascript"></a>Execute Async Javascript</td>
+  <td class="arg">*code</td>
+  <td class="doc">Executes asynchronous JavaScript code.
+
+<span class="name">code</span> may contain multiple lines of code but must contain a return statement (with the value to be returned) at the end.
+
+<span class="name">code</span> may be divided into multiple cells in the test data. In that case, the parts are catenated together without adding spaces.
+
+If <span class="name">code</span> is an absolute path to an existing file, the JavaScript to execute will be read from that file. Forward slashes work as a path separator on all operating systems.
+
+Note that, by default, the code will be executed in the context of the Selenium object itself, so <span class="name">this</span> will refer to the Selenium object. Use <span class="name">window</span> to refer to the window of your application, e.g. <span class="name">window.document.getElementById('foo')</span>.
+
+Example:
+<table border="1" class="doc">
+<tr>
+<td>Execute Async JavaScript</td>
+<td>window.my_js_function('arg1', 'arg2')</td>
+</tr>
+<tr>
+<td>Execute Async JavaScript</td>
+<td>${CURDIR}/js_to_execute.js</td>
+</tr>
+</table></td>
+</tr>
+<tr>
   <td class="kw"><a name="Execute Javascript"></a>Execute Javascript</td>
   <td class="arg">*code</td>
   <td class="doc">Executes the given JavaScript code.
@@ -868,6 +903,13 @@ Select list keywords work on both lists and combo boxes. Key attributes for sele
 Fails if there is no selection.
 
 Select list keywords work on both lists and combo boxes. Key attributes for select lists are <span class="name">id</span> and <span class="name">name</span>. See <a href="#introduction" class="name">introduction</a> for details about locating elements.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Get Selenium Implicit Wait"></a>Get Selenium Implicit Wait</td>
+  <td class="arg"></td>
+  <td class="doc">Gets the wait in seconds that is waited by Selenium.
+
+See <a href="#Set Selenium Implicit Wait" class="name">Set Selenium Implicit Wait</a> for an explanation.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Get Selenium Speed"></a>Get Selenium Speed</td>
@@ -1051,7 +1093,7 @@ Key attributes for arbitrary elements are <span class="name">id</span> and <span
 </tr>
 <tr>
   <td class="kw"><a name="Open Browser"></a>Open Browser</td>
-  <td class="arg">url, browser=firefox, alias=None</td>
+  <td class="arg">url, browser=firefox, alias=None, remote_url=False, desired_capabilities=None, ff_profile_dir=None</td>
   <td class="doc">Opens a new browser instance to given URL.
 
 Returns the index of this browser instance which can be used later to switch back to it. Index starts from 1 and is reset back to it when <a href="#Close All Browsers" class="name">Close All Browsers</a> keyword is used. See <a href="#Switch Browser" class="name">Switch Browser</a> for example.
@@ -1089,8 +1131,16 @@ Possible values for <span class="name">browser</span> are as follows:
 <td>chrome</td>
 <td>Google Chrome</td>
 </tr>
+<tr>
+<td>opera</td>
+<td>Opera</td>
+</tr>
 </table>
-Note, that you will encounter strange behavior, if you open multiple Internet Explorer browser instances. That is also why <a href="#Switch Browser" class="name">Switch Browser</a> only works with one IE browser at most. For more information see: <a href="http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine">http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine</a></td>
+Note, that you will encounter strange behavior, if you open multiple Internet Explorer browser instances. That is also why <a href="#Switch Browser" class="name">Switch Browser</a> only works with one IE browser at most. For more information see: <a href="http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine">http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine</a>
+
+Optional 'remote_url' is the url for a remote selenium server for example <a href="http://127.0.0.1/wd/hub">http://127.0.0.1/wd/hub</a>.  If you specify a value for remote you can also specify 'desired_capabilities' which is a string in the form key1:val1,key2:val2 that will be used to specify desired_capabilities to the remote server.  This is useful for doing things like specify a proxy server for internet explorer or for specify browser and os if your using saucelabs.com.
+
+Optional 'ff_profile_dir' is the path to the firefox profile dir if you wish to overwrite the default.</td>
 </tr>
 <tr>
   <td class="kw"><a name="Open Context Menu"></a>Open Context Menu</td>
@@ -1460,6 +1510,48 @@ Example:
 </table></td>
 </tr>
 <tr>
+  <td class="kw"><a name="Set Browser Implicit Wait"></a>Set Browser Implicit Wait</td>
+  <td class="arg">seconds</td>
+  <td class="doc">Sets current browser's implicit wait in seconds.
+
+From selenium 2 function 'Sets a sticky timeout to implicitly wait for an element to be found, or a command to complete. This method only needs to be called one time per session.'
+
+Example:
+<table border="1" class="doc">
+<tr>
+<td>Set Browser Implicit Wait</td>
+<td>10 seconds</td>
+</tr>
+</table>
+See also <a href="#Set Selenium Implicit Wait" class="name">Set Selenium Implicit Wait</a>.</td>
+</tr>
+<tr>
+  <td class="kw"><a name="Set Selenium Implicit Wait"></a>Set Selenium Implicit Wait</td>
+  <td class="arg">seconds</td>
+  <td class="doc">Sets Selenium 2's default implicit wait in seconds and sets the implicit wait for all open browsers.
+
+From selenium 2 function 'Sets a sticky timeout to implicitly wait for an element to be found, or a command to complete. This method only needs to be called one time per session.'
+
+Example:
+<table border="1" class="doc">
+<tr>
+<td>${orig wait} =</td>
+<td>Set Selenium Implicit Wait</td>
+<td>10 seconds</td>
+</tr>
+<tr>
+<td>Perform AJAX call that is slow</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Set Selenium Implicit Wait</td>
+<td>${orig wait}</td>
+<td></td>
+</tr>
+</table></td>
+</tr>
+<tr>
   <td class="kw"><a name="Set Selenium Speed"></a>Set Selenium Speed</td>
   <td class="arg">seconds</td>
   <td class="doc">Sets the delay in seconds that is waited after each Selenium command.
@@ -1768,9 +1860,9 @@ See <a href="#Page Should Contain Element" class="name">Page Should Contain Elem
 </tr>
 </table>
 <p id="footer">
-Altogether 122 keywords.<br />
+Altogether 126 keywords.<br />
 Generated by <a href="http://code.google.com/p/robotframework/wiki/LibraryDocumentationTool">libdoc.py</a>
-on 2011-10-26 16:47:19.
+on 2012-03-09 22:02:58.
 </p>
 </body>
 </html>

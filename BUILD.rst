@@ -54,10 +54,10 @@ To run only a subset of test cases, Robot command line arguments
 
 Examples::
 
-  # Run all tests with Python and Firefox
-  test/run_tests.py python ff
-  # Run only test suite `javascript` with Jython and Internet Explorer
-  test/run_tests.py jython ie -s javascript
+	# Run all tests with Python and Firefox
+	python test/run_tests.py python ff
+	# Run only test suite `javascript` with Jython and Internet Explorer
+	python test/run_tests.py jython ie -s javascript
 
 To run just the unit tests, run::
 
