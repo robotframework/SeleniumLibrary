@@ -1,10 +1,17 @@
 #!/usr/bin/env python
 
-from ez_setup import use_setuptools
-use_setuptools()
-from setuptools import setup, find_packages
+try:
+    from ez_setup import use_setuptools
+    use_setuptools()
+except ImportError:
+    pass
 
-from version import VERSION
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+from os.path import join, dirname
+execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework
@@ -22,8 +29,8 @@ setup(name         = 'robotframework-selenium2library',
       keywords     = 'robotframework testing testautomation selenium selenium2 webdriver web',
       platforms    = 'any',
       classifiers  = [
-                        "Development Status :: 4 - Beta",
-                        #"Development Status :: 5 - Production/Stable",
+                        #"Development Status :: 4 - Beta",
+                        "Development Status :: 5 - Production/Stable",
                         "License :: OSI Approved :: Apache Software License",
                         "Operating System :: OS Independent",
                         "Programming Language :: Python",
@@ -35,7 +42,9 @@ setup(name         = 'robotframework-selenium2library',
 							'robotframework == 2.6.3',
 							'docutils >= 0.8.1'
 						 ],
+      py_modules=['ez_setup'],
       package_dir  = {'' : 'src'},
-      packages     = find_packages('src', exclude=['ez_setup']),
+      packages     = ['Selenium2Library','Selenium2Library.keywords','Selenium2Library.locators',
+                      'Selenium2Library.utils'],
       include_package_data = True,
       )
