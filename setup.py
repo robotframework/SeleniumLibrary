@@ -10,6 +10,7 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+
 from os.path import join, dirname
 execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
 
