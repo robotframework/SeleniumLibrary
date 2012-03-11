@@ -79,6 +79,27 @@ This script will:
 - Re-generate keyword documentation in doc folder
 
 
+Publishing to PyPi
+-----------------------
+
+To publish to PyPi use the following steps.
+
+1.  Update the version number in src/Selenium2Library/version.py is updated
+2.  Run the following commands to create the source and egg distributables::
+    
+    python2.6 setup.py bdist_egg upload --sign
+    python2.7 setup.py bdist_egg upload --sign
+    python2.7 setup.py sdist upload --sign
+
+3.  Also from windows it is advisible to publish the windows binaries run::
+
+    C:\python2.6 setup.py bdist_wininst --taget-version=2.6 register upload
+    C:\python2.7 setup.py bdist_wininst --target-version=2.7 register upload
+    
+The above 2 commands can also include the --sign option if you have gnupgp setup
+on your windows system.
+
+
 Building Keyword Documentation
 ------------------------------
 
@@ -131,3 +152,5 @@ Then, push it to the remote::
 Last, you probably want to switch back to the master branch::
 
 	git checkout master
+
+
