@@ -10,6 +10,10 @@ Frame Should Contain
   Frame Should contain  right  You're looking at right.
   Frame Should Contain  left  Links
 
+iFrame Should Contain
+    Select Frame    right
+    Frame Should contain    iframe_right    You're looking at iframe right.
+
 Select And Unselect Frame
   [Documentation]  LOG 1 Selecting frame 'left'.
   Select Frame  left
@@ -17,3 +21,4 @@ Select And Unselect Frame
   Unselect Frame
   Select Frame  right
   Current Frame Contains  You're looking at foo.
+

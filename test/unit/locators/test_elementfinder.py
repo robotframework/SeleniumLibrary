@@ -207,6 +207,24 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "name=test1", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
 
+
+    def test_find_by_name_filter_on_multiple_tags(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_name("test1").thenReturn(elements)
+
+        result = finder.find(browser, "name=test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "name=test1", tag=['div','span'])
+        self.assertEqual(result, [elements[0], elements[2]])
+        result = finder.find(browser, "name=test1", tag=['div','span','a'])
+        self.assertEqual(result, elements)
+        
+
+
+
     def test_find_by_xpath(self):
         finder = ElementFinder()
         browser = mock()

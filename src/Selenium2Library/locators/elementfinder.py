@@ -76,23 +76,36 @@ class ElementFinder(object):
             return self._find_by_xpath(browser, criteria, tag, constraints)
         return self._find_by_key_attrs(browser, criteria, tag, constraints)
 
-    def _find_by_key_attrs(self, browser, criteria, tag, constraints):
+    def _find_by_key_attrs(self, browser, criteria, tags, constraints):
         key_attrs = self._key_attrs.get(None)
-        if tag is not None:
-            key_attrs = self._key_attrs.get(tag, key_attrs)
+        if tags is not None and not isinstance(tags, (list, tuple)):
+            key_attrs = self._key_attrs.get(tags, key_attrs)
 
         xpath_criteria = utils.escape_xpath_value(criteria)
-        xpath_tag = tag if tag is not None else '*'
-        xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
-        xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
-        xpath_searchers.extend(
-            self._get_attrs_with_url(key_attrs, criteria, browser))
-        xpath = "//%s[%s(%s)]" % (
-            xpath_tag,
-            ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
-            ' or '.join(xpath_searchers))
+        #if not tag:
+        #    xpath_tag = '*'
+        #elif tag and not isinstance(tag,(list,tuple)):
+        #    xpath_tag = tag
+        #elif isinstance(tag,(list,tuple)):
+        #    xpath_tag = ' or '.join(t for t in tag)
+        if not isinstance(tags,(list,tuple)): tags =[tags]
 
-        return browser.find_elements_by_xpath(xpath)
+        full_xpath = ""
+        for tag in tags:
+            xpath_tag = tag if tag is not None else '*'
+            xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
+            xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
+            xpath_searchers.extend(
+                self._get_attrs_with_url(key_attrs, criteria, browser))
+            xpath = "//%s[%s(%s)]" % (
+                xpath_tag,
+                ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
+                ' or '.join(xpath_searchers))
+            if len(full_xpath) > 1:
+                full_xpath = "%s | %s" % (full_xpath,xpath)
+            else:
+                full_xpath = xpath
+        return browser.find_elements_by_xpath(full_xpath)
 
     # Private
 
@@ -106,6 +119,8 @@ class ElementFinder(object):
 
     def _get_tag_and_constraints(self, tag):
         if tag is None: return None, {}
+        #we want to allow a list of tags as well
+        if isinstance(tag, (list,tuple)): return tag, {}
 
         tag = tag.lower()
         constraints = {}
@@ -130,7 +145,7 @@ class ElementFinder(object):
         return tag, constraints
 
     def _element_matches(self, element, tag, constraints):
-        if not element.tag_name.lower() == tag:
+        if not element.tag_name.lower() in tag:
             return False
         for name in constraints:
             if not element.get_attribute(name) == constraints[name]:
