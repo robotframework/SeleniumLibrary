@@ -148,8 +148,7 @@ class _SelectElementKeywords(KeywordGroup):
         if not select.is_multiple:
             raise RuntimeError("Keyword 'Select all from list' works only for multiselect lists.")
 
-        select, options = self._get_select_list_options(select)
-        for i in range(len(options)):
+        for i in range(len(select.options)):
             select.select_by_index(i)
 
     def select_from_list(self, locator, *items):
@@ -167,25 +166,21 @@ class _SelectElementKeywords(KeywordGroup):
         self._info("Selecting %s from list '%s'." % (items_str, locator))
         items = list(items)
 
-        select, options = self._get_select_list_options(locator)
+        select = self._get_select_list(locator)
         #is_multi_select = select.is_multiple
         #if len(options)>1 and not is_multi_select:
         #    self._warn("Trying to select multiple options while list '%s' is single select list." % (locator))
 
         if not items:
-            for i in range(len(options)):
+            for i in range(len(select.options)):
                 select.select_by_index(i)
             return
 
-        option_values = self._get_values_for_options(options)
-        option_labels = self._get_labels_for_options(options)
         for item in items:
-            option_index = None
-            try: option_index = option_values.index(item)
+            try: select.select_by_value(item)
             except:
-                try: option_index = option_labels.index(item)
+                try: select.select_by_visible_text(item)
                 except: continue
-            select.select_by_index(option_index)
 
     def unselect_from_list(self, locator, *items):
         """Unselects given values from select list identified by locator.
