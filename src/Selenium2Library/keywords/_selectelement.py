@@ -1,4 +1,3 @@
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
 from keywordgroup import KeywordGroup
 
@@ -146,12 +145,12 @@ class _SelectElementKeywords(KeywordGroup):
         self._info("Selecting all options from list '%s'." % locator)
 
         select = self._get_select_list(locator)
-        if not self._is_multiselect_list(select):
+        if not select.is_multiple:
             raise RuntimeError("Keyword 'Select all from list' works only for multiselect lists.")
 
         select, options = self._get_select_list_options(select)
         for i in range(len(options)):
-            self._select_option_from_multi_select_list(select, options, i)
+            select.select_by_index(i)
 
     def select_from_list(self, locator, *items):
         """Selects `*items` from list identified by `locator`
@@ -169,12 +168,13 @@ class _SelectElementKeywords(KeywordGroup):
         items = list(items)
 
         select, options = self._get_select_list_options(locator)
-        is_multi_select = self._is_multiselect_list(select)
-        select_func = self._select_option_from_multi_select_list if is_multi_select else self._select_option_from_single_select_list
+        #is_multi_select = select.is_multiple
+        #if len(options)>1 and not is_multi_select:
+        #    self._warn("Trying to select multiple options while list '%s' is single select list." % (locator))
 
         if not items:
             for i in range(len(options)):
-                select_func(select, options, i)
+                select.select_by_index(i)
             return
 
         option_values = self._get_values_for_options(options)
@@ -185,7 +185,7 @@ class _SelectElementKeywords(KeywordGroup):
             except:
                 try: option_index = option_labels.index(item)
                 except: continue
-            select_func(select, options, option_index)
+            select.select_by_index(option_index)
 
     def unselect_from_list(self, locator, *items):
         """Unselects given values from select list identified by locator.
@@ -202,11 +202,11 @@ class _SelectElementKeywords(KeywordGroup):
         items = list(items)
 
         select = self._get_select_list(locator)
-        if not self._is_multiselect_list(select):
+        if not select.is_multiple:
             raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
 
         if not items:
-            self._unselect_all_options_from_multi_select_list(select)
+            select.deselect_all()
             return
 
         select, options = self._get_select_list_options(select)
@@ -218,7 +218,7 @@ class _SelectElementKeywords(KeywordGroup):
             except:
                 try: option_index = option_labels.index(item)
                 except: continue
-            self._unselect_option_from_multi_select_list(select, options, option_index)
+            select.deselect_by_index(option_index)
 
     # Private
     
@@ -229,22 +229,20 @@ class _SelectElementKeywords(KeywordGroup):
         return labels
 
     def _get_select_list(self, locator):
-        return self._element_find(locator, True, True, 'select')
+        el = self._element_find(locator, True, True, 'select')
+        return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):
-        if isinstance(select_list_or_locator, WebElement):
+        if isinstance(select_list_or_locator, Select):
             select = select_list_or_locator
         else:
             select = self._get_select_list(select_list_or_locator)
-        return select, select.find_elements_by_tag_name('option')
+        return select, select.options
 
-    def _get_select_list_options_selected(self, select_list_or_locator):
-        select, options = self._get_select_list_options(select_list_or_locator)
-        selected = []
-        for option in options:
-            if option.is_selected():
-                selected.append(option)
-        return select, selected
+    def _get_select_list_options_selected(self, locator):
+        select = self._get_select_list(locator)
+        # TODO: Handle possible exception thrown by all_selected_options
+        return select, select.all_selected_options
     
     def _get_values_for_options(self, options):
         values = []
@@ -257,15 +255,6 @@ class _SelectElementKeywords(KeywordGroup):
         if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
             return True
         return False
-
-    def _select_option_from_multi_select_list(self, select, options, index):
-        if not options[index].is_selected():
-            options[index].click()
-
-    def _select_option_from_single_select_list(self, select, options, index):
-        sel = Select(select)
-        sel.select_by_index(index)
-
 
     def _unselect_all_options_from_multi_select_list(self, select):
         self._current_browser().execute_script("arguments[0].selectedIndex = -1;", select)
