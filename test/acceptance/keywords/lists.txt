@@ -35,7 +35,7 @@ Get Selected List Labels
     Should Be Equal   ${selected}   ${expected}
 
 List Selection Should Be
-    [Documentation]  LOG 1 Verifying list 'interests' has no options selected. LOG 4 Verifying list 'possible_channels' has option(s) [ email | Telephone ] selected.
+    [Documentation]  LOG 2 Verifying list 'interests' has no options selected. LOG 5 Verifying list 'possible_channels' has option(s) [ email | Telephone ] selected.
     List Selection Should Be  interests
     List Selection Should Be  preferred_channel  Telephone
     List Selection Should Be  preferred_channel  phone
@@ -49,7 +49,7 @@ List Selection Should Be When List Does Not Exist
     Run Keyword And Expect Error  Page should have contained list 'nonexisting' but did not  List Selection Should Be  nonexisting  whatever
 
 UnSelect Single Value From List
-    [Documentation]  LOG 1.1 Unselecting option(s) 'Email' from list 'possible_channels'.
+    [Documentation]  LOG 2.1 Unselecting option(s) 'Email' from list 'possible_channels'.
     Unselect and Verify Selection  possible_channels  Email  phone
     Comment  unselecting already unselected option has no effect
     Unselect and Verify Selection  possible_channels  Email  phone
@@ -57,12 +57,12 @@ UnSelect Single Value From List
     Run Keyword And Expect Error  Keyword 'Unselect from list' works only for multiselect lists.  Unselect From List  preferred_channel
 
 UnSelect All From List
-    [Documentation]  LOG 1 Unselecting all options from list 'possible_channels'.
+    [Documentation]  LOG 2 Unselecting all options from list 'possible_channels'.
     Unselect From List  possible_channels
     List Selection Should Be  possible_channels
 
 Select From Single Selection List
-    [Documentation]  LOG 1.1 Selecting option(s) 'Email' from list 'preferred_channel'.
+    [Documentation]  LOG 2.1 Selecting option(s) 'Email' from list 'preferred_channel'.
     Select And verify selection  preferred_channel  Email  Email
     Select And verify selection  preferred_channel  Email  Email
     Select And verify selection  preferred_channel  directmail  Direct mail
@@ -74,7 +74,7 @@ Select From Single Selection List
     List Selection Should Be  preferred_channel  Direct mail
 
 Select From Multiselect List
-    [Documentation]  LOG 4 Selecting option(s) 'Direct mail, phone' from list 'possible_channels'.
+    [Documentation]  LOG 5 Selecting option(s) 'Direct mail, phone' from list 'possible_channels'.
     Select And verify selection  possible_channels  email  email  Telephone
     Select And verify selection  possible_channels  Direct mail  Direct mail  email  Telephone
     Unselect from List  possible_channels
@@ -82,13 +82,13 @@ Select From Multiselect List
     List Selection Should Be  possible_channels  Telephone  directmail
 
 Select All From List
-    [Documentation]  LOG 1 Selecting all options from list 'interests'.
+    [Documentation]  LOG 2 Selecting all options from list 'interests'.
     Select All From List  interests
     List Selection Should Be  interests  Males  Females  Others
     Run Keyword And Expect Error  Keyword 'Select all from list' works only for multiselect lists.  Select All From List  preferred_channel
 
 List Should Have No Selections
-    [Documentation]  LOG 1 Verifying list 'interests' has no selection.
+    [Documentation]  LOG 2 Verifying list 'interests' has no selection.
     List Should Have No Selections  interests
     Select All From List  interests
     Run Keyword And Expect Error  List 'interests' should have had no selection (selection was [ Males | Females | Others ])  List Should Have No Selections  interests
