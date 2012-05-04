@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os, shutil
-from libdoc import LibraryDoc, create_html_doc
 from buildhtml import Builder
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
