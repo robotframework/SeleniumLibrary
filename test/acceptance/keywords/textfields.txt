@@ -16,7 +16,7 @@ Input Unicode In Text Field
   Should Be Equal  ${text}  ${unic_text}
 
 Input Password
-  [Documentation]  LOG 2 Typing password into text field 'password_field'
+  [Documentation]  LOG 3 Typing password into text field 'password_field'
   [Setup]  Go To Page "forms/login.html"
   Input Text  username_field  username
   Input Password  password_field  password
