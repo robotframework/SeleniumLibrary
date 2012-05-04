@@ -18,7 +18,7 @@ Go Back
     Title Should Be  ${LINKS TITLE}
 
 Click Link
-    [Documentation]  LOG 1 Clicking link 'Relative'.
+    [Documentation]  LOG 2 Clicking link 'Relative'.
     Click Link  Relative
     Verify Location Is "index.html"
     Title Should Be  ${INDEX TITLE}
@@ -56,7 +56,7 @@ Click Link With Unicode
     Verify Location Is "index.html"
 
 Click Image
-    [Documentation]  LOG 1 Clicking image 'image.jpg'.
+    [Documentation]  LOG 2 Clicking image 'image.jpg'.
     Click Image  image.jpg
     Verify Location Is "index.html"
 

@@ -5,7 +5,7 @@ from time import localtime
 from zipfile import ZipFile, ZIP_DEFLATED
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-execfile(os.path.join(THIS_DIR, '..', 'version.py'))
+execfile(os.path.join(THIS_DIR, '..', 'src', 'Selenium2Library', 'version.py'))
 
 FILES = {
     '': ['rundemo.py'],
