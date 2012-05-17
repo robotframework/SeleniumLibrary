@@ -35,3 +35,6 @@ Get Vertical Position
     Should Be True  ${pos} > ${0}
     Run Keyword And Expect Error  Could not determine position for 'non-existent'  Get Horizontal Position  non-existent
 
+Elements Should and Should Not Contain
+    Element Should Contain  id=div_id  Text and image
+    Element Should Not Contain  id=div_id  Foo Bar Baz
