@@ -1,8 +1,8 @@
 include MANIFEST.in
 include *.txt
 include *.rst
-exclude */*.txt # limit previous command to include *.txt files in root folder
-exclude */*.rst # limit previous command to include *.rst files in root folder
+exclude */*.txt # limit previous command to include only *.txt files in root folder
+exclude */*.rst # limit previous command to include only *.rst files in root folder
 include selenium.bmp
 
 recursive-include demo *.txt *.rst *.py *.sh *.bat *.html *.css *.js
@@ -12,6 +12,6 @@ prune demo/output.xml
 
 include doc/Selenium2Library.html
 
-recursive-include src/Selenium2Library *.py
+recursive-include src *.py
 graft src/Selenium2Library/resources
 recursive-exclude src *.pyc
