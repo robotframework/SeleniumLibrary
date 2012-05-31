@@ -57,9 +57,9 @@ def stop_http_server():
 
 def process_output():
     print
-    _check_robot_27()
-    call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
-         os.path.join(env.RESULTS_DIR, 'output.xml')])
+    if _has_robot_27():
+        call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
+             os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
@@ -70,12 +70,12 @@ def process_output():
         print '%d critical test%s failed' % (rc, 's' if rc != 1 else '')
     return rc
 
-def _check_robot_27():
+def _has_robot_27():
     try:
         from robot.result import ExecutionResult
     except:
-        print "Analyzing the test results requires Robot Framework 2.7.0 or later."
-        _exit(255)
+        return False
+    return True
 
 def _exit(rc):
     sys.exit(rc)
