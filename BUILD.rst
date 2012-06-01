@@ -113,11 +113,26 @@ After building and releasing to PyPI:
 
 - Upload dist packages to the `downloads section on GitHub`_ (all dist packages except the eggs)
 - Publish the keyword documentation (see `Pushing Keyword Documentation`_)
+- Tag the release (see `Tagging a Release`_)
 
 Note: To publish a release, you will need to:
 
 - Register an account on PyPI_ and be given rights to the package by a package owner
 - Setup your `.pypirc file`_ (goes in the root of your home directory)
+
+
+Tagging a Release
+-----------------
+
+It's our policy to tag each release. To do so, run::
+
+	git tag -a v<ver> -m "<ver> release"
+	git push --tags
+	
+E.g.::
+
+	git tag -a v1.0.0 -m "1.0.0 release"
+	git push --tags
 
 
 Pushing Keyword Documentation
