@@ -11,7 +11,8 @@ LIB_DIR = os.path.join(SRC_DIR, "Selenium2Library")
 README_FILES = [
     "README.rst",
     "INSTALL.rst",
-    "BUILD.rst"
+    "BUILD.rst",
+    "CHANGES.rst"
 ]
 
 def main():
