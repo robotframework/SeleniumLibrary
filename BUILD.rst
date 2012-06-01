@@ -111,7 +111,8 @@ In addition to building the distribution, this will:
 
 After building and releasing to PyPI:
 
-- Upload dist packages to the `downloads section on GitHub`_
+- Upload dist packages to the `downloads section on GitHub`_ (all dist
+packages except the eggs)
 - Publish the keyword documentation (see `Pushing Keyword Documentation`_)
 
 Note: To publish a release, you will need to:
@@ -130,10 +131,15 @@ First, switch to the `gh-pages` branch::
 
 	git checkout gh-pages
 
+If you get an error like "pathspec 'gh-pages' did not match any file(s) known to git",
+run the following to setup the upstream configuration for the gh-pages branch::
+
+	git checkout -t origin/gh-pages
+
 Next, pull the keyword documentation you generated in the master branch and commit it::
 
 	git checkout master doc/Selenium2Library.html
-	git add .
+	git add doc/Selenium2Library.html
 	git commit
 
 Then, push it to the remote::
