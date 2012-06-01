@@ -111,8 +111,7 @@ In addition to building the distribution, this will:
 
 After building and releasing to PyPI:
 
-- Upload dist packages to the `downloads section on GitHub`_ (all dist
-packages except the eggs)
+- Upload dist packages to the `downloads section on GitHub`_ (all dist packages except the eggs)
 - Publish the keyword documentation (see `Pushing Keyword Documentation`_)
 
 Note: To publish a release, you will need to:
