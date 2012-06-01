@@ -85,9 +85,16 @@ This script will:
 
 - Generate source distribution packages in .tar.gz and .zip formats
 - Generate Python eggs for Python 2.6 and 2.7
-- Generate binary installers for Windows x86 and x64
+- Generate binary installers for Windows x86 and x64 (if run on Windows)
 - Generate a demo distribution package in .zip format.
 - Re-generate keyword documentation in doc folder
+
+Note: The Windows installers will only be built if the script is run on
+a Windows machine. If the rest of the distribution has been built on
+a non-Windows machine and you want to build just the Windows installers,
+use the --winonly flag::
+
+	python build_dist.py --winonly <python 2.6 path> <python 2.7 path>
 
 
 Publishing a New Release

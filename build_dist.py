@@ -13,7 +13,12 @@ def main():
     parser.add_argument('py_26_path', action='store', help='Python 2.6 executbale file path')
     parser.add_argument('py_27_path', action='store', help='Python 2.7 executbale file path')
     parser.add_argument('--release', action='store_true')
+    parser.add_argument('--winonly', action='store_true')
     args = parser.parse_args()
+    
+    if args.winonly:
+        run_builds(args)
+        return
     
     clear_dist_folder()
     run_register(args)
@@ -37,11 +42,16 @@ def run_register(args):
 
 def run_builds(args):
     print
-    _run_setup(args.py_27_path, "sdist", [ "--formats=gztar,zip" ], args.release)
-    _run_setup(args.py_26_path, "bdist_egg", [], args.release)
-    _run_setup(args.py_27_path, "bdist_egg", [], args.release)
-    _run_setup(args.py_27_path, "bdist_wininst", [ "--plat-name=win32" ], args.release)
-    _run_setup(args.py_27_path, "bdist_wininst", [ "--plat-name=win-amd64" ], args.release)
+    if not args.winonly:
+        _run_setup(args.py_27_path, "sdist", [ "--formats=gztar,zip" ], args.release)
+        _run_setup(args.py_26_path, "bdist_egg", [], args.release)
+        _run_setup(args.py_27_path, "bdist_egg", [], args.release)
+    if os.name == 'nt':
+        _run_setup(args.py_27_path, "bdist_msi", [ "--plat-name=win32" ], args.release)
+        _run_setup(args.py_27_path, "bdist_msi", [ "--plat-name=win-amd64" ], args.release)
+    else:
+        print    
+        print("Windows binary installers cannot be built on this platform!")    
 
 def run_demo_packaging():
     import package
