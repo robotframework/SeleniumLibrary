@@ -47,8 +47,8 @@ def run_builds(args):
         _run_setup(args.py_26_path, "bdist_egg", [], args.release)
         _run_setup(args.py_27_path, "bdist_egg", [], args.release)
     if os.name == 'nt':
-        _run_setup(args.py_27_path, "bdist_msi", [ "--plat-name=win32" ], args.release)
-        _run_setup(args.py_27_path, "bdist_msi", [ "--plat-name=win-amd64" ], args.release)
+        _run_setup(args.py_27_path, "bdist_wininst", [ "--plat-name=win32" ], args.release)
+        _run_setup(args.py_27_path, "bdist_wininst", [ "--plat-name=win-amd64" ], args.release)
     else:
         print    
         print("Windows binary installers cannot be built on this platform!")    
