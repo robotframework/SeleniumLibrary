@@ -64,61 +64,6 @@ To run just the unit tests, run::
 	python test/run_unit_tests.py
 
 
-Building a Distribution
------------------------
-
-To build a distribution, run::
-
-	python build_dist.py
-
-This script will:
-
-- Generate source distribution packages in .tar.gz and .zip formats
-- Generate build distribution packages for Windows x86 and x64
-- Generate a demo distribution package in .zip format.
-- Re-generate keyword documentation in doc folder
-
-
-Publishing to PyPi
------------------------
-
-To publish to PyPi use the following steps.
-
-1.  Update the version number in src/Selenium2Library/version.py is updated
-2.  Run the following commands to create the source and egg distributables::
-    
-    python2.6 setup.py bdist_egg upload --sign
-    python2.7 setup.py bdist_egg upload --sign
-    python2.7 setup.py sdist upload --sign
-
-3.  Also from windows it is advisible to publish the windows binaries run::
-
-    C:\python2.6 setup.py bdist_wininst --taget-version=2.6 register upload
-    C:\python2.7 setup.py bdist_wininst --target-version=2.7 register upload
-    
-The above 2 commands can also include the --sign option if you have gnupgp setup
-on your windows system.
-
-
-Building Keyword Documentation
-------------------------------
-
-The keyword documentation will get built automatically by build_dist.py,
-but if you need to generate it apart from a distribution build, run::
-
-	python doc/generate.py
-
-
-Building Readme Files
----------------------
-
-The readme files get distributed in reStructuredText format (.rst),
-so there isn't any reason to build them except to verify how they
-are parsed by the reStructuredText parser. To build them, run::
-
-	python doc/generate_readmes.py
-
-
 Pushing Code to GitHub
 ----------------------
 
@@ -127,6 +72,45 @@ setup and named `origin` automatically if you cloned the existing
 GitHub repo), run::
 
 	git push origin master
+
+
+Building a Distribution
+-----------------------
+
+To build a distribution, run::
+
+	python build_dist.py <python 2.6 path> <python 2.7 path>
+
+This script will:
+
+- Generate source distribution packages in .tar.gz and .zip formats
+- Generate Python eggs for Python 2.6 and 2.7
+- Generate binary installers for Windows x86 and x64
+- Generate a demo distribution package in .zip format.
+- Re-generate keyword documentation in doc folder
+
+
+Publishing a New Release
+------------------------
+
+Build the distribution, this time with the --release flag::
+
+	python build_dist.py --release <python 2.6 path> <python 2.7 path>
+
+In addition to building the distribution, this will:
+
+- Register the release/version with PyPI
+- Upload the binaries to PyPI for the new release/version
+
+After building and releasing to PyPI:
+
+- Upload dist packages to the `downloads section on GitHub`_
+- Publish the keyword documentation (see `Pushing Keyword Documentation`_)
+
+Note: To publish a release, you will need to:
+
+- Register an account on PyPI_ and be given rights to the package by a package owner
+- Setup your `.pypirc file`_ (goes in the root of your home directory)
 
 
 Pushing Keyword Documentation
@@ -154,3 +138,25 @@ Last, you probably want to switch back to the master branch::
 	git checkout master
 
 
+Building Keyword Documentation
+------------------------------
+
+The keyword documentation will get built automatically by build_dist.py,
+but if you need to generate it apart from a distribution build, run::
+
+	python doc/generate.py
+
+
+Building Readme Files
+---------------------
+
+The readme files get distributed in reStructuredText format (.rst),
+so there isn't any reason to build them except to verify how they
+are parsed by the reStructuredText parser. To build them, run::
+
+	python doc/generate_readmes.py
+
+
+.. _downloads section on GitHub: https://github.com/rtomac/robotframework-selenium2library/downloads
+.. _PyPI: http://pypi.python.org
+.. _.pypirc file: http://docs.python.org/distutils/packageindex.html#the-pypirc-file

@@ -9,10 +9,10 @@ Selenium2Library supports all Python and Jython interpreters supported by the
 Robot Framework and the `Selenium Python Bindings`_. The Selenium Python Bindings
 are the most restrictive, and as of now require Python 2.6 or Python 2.7.
 
-Selenium2Library depends on a handful of other Python libraries, including
+Selenium2Library depends on a few other Python libraries, including
 of course Robot Framework and Selenium. All dependencies are declared
-in setup.py. If you use pip or easy_install to install this library, these
-dependencies will be installed for you.
+in setup.py. If you use pip or easy_install to install this library, the
+dependencies will be installed for you (this is recommended).
 
 
 Installing from PyPI (recommended)
@@ -37,7 +37,7 @@ newer. Install by running::
 
     python setup.py install
 
-Or, to automatically install all dependencies, run::
+Or, if you'd like to automatically install dependencies, run::
 
     python setup.py develop
 
