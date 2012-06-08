@@ -508,7 +508,10 @@ return !element.dispatchEvent(evt);
 
     def _frame_contains(self, locator, text):
         browser = self._current_browser()
-        element = self._element_find(locator, True, True, 'frame')
+        try:
+            element = self._element_find(locator, True, True, 'iframe')
+        except ValueError:
+            element = self._element_find(locator, True, True, 'frame')
         browser.switch_to_frame(element)
         self._info("Searching for text from frame '%s'." % locator)
         found = self._is_text_present(text)
@@ -588,8 +591,10 @@ return !element.dispatchEvent(evt);
 
         if self._is_text_present(text):
             return True
-
-        subframes = self._element_find("tag=frame", False, False, 'frame')
+        try:
+            subframes = self._element_find("tag=iframe", False, False, 'iframe')
+        except ValueError:
+            subframes = self._element_find("tag=frame", False, False, 'frame')
         self._debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
