@@ -591,10 +591,8 @@ return !element.dispatchEvent(evt);
 
         if self._is_text_present(text):
             return True
-        try:
-            subframes = self._element_find("tag=iframe", False, False, 'iframe')
-        except ValueError:
-            subframes = self._element_find("tag=frame", False, False, 'frame')
+        subframes = self._element_find("tag=iframe", False, False, 'iframe') + \
+                    self._element_find("tag=frame", False, False, 'frame')
         self._debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
