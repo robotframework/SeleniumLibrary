@@ -10,8 +10,23 @@ Frame Should Contain
   Frame Should contain  right  You're looking at right.
   Frame Should Contain  left  Links
 
+Frame Should Contain should also work with iframes
+  [setup]  Go To Page "frames/iframes.html"
+  Frame Should contain  right  You're looking at right.
+  Frame Should Contain  left  Links
+
+
 Select And Unselect Frame
   [Documentation]  LOG 2 Selecting frame 'left'.
+  Select Frame  left
+  Click Link  foo
+  Unselect Frame
+  Select Frame  right
+  Current Frame Contains  You're looking at foo.
+
+Select And Unselect Frame should also work with iframes
+  [Documentation]  LOG 2 Selecting frame 'leftiframe'.
+  [setup]  Go To Page "frames/iframes.html"
   Select Frame  left
   Click Link  foo
   Unselect Frame

@@ -40,6 +40,10 @@ Page Should Contain With Frames
     [Setup]  Go To Page "frames/frameset.html"
     Page Should Contain  You're looking at right.
 
+Page Should Contain With IFrames
+    [Setup]  Go To Page "frames/iframes.html"
+    Page Should Contain  You're looking at right.
+
 Page Should Not Contain
     [Documentation]  LOG 2:5 Current page does not contain text 'non existing text'. LOG 3.1:4 REGEXP: (?i)<html .*</html>
     Page Should Not Contain  non existing text

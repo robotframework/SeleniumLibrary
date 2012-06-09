@@ -173,7 +173,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         details about locating elements.
         """
         self._info("Selecting frame '%s'." % locator)
-        element = self._element_find(locator, True, True, tag='frame')
+        try:
+            element = self._element_find(locator, True, True, tag='iframe')
+        except ValueError:
+            element = self._element_find(locator, True, True, tag='frame')
         self._current_browser().switch_to_frame(element)
 
     def select_window(self, locator=None):
@@ -181,7 +184,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
-        
+
         By default, when a locator value is provided,
         it is matched against the title of the window and the
         javascript name of the window. If multiple windows with
