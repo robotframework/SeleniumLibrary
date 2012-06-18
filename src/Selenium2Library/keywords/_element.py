@@ -11,7 +11,7 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, element lookups
 
-    def current_frame_contains(self, text, logLevel='INFO'):
+    def current_frame_contains(self, text, loglevel='INFO'):
         """Verifies that current frame contains `text`.
 
         See `Page Should Contain ` for explanation about `loglevel` argument.
@@ -581,9 +581,9 @@ return !element.dispatchEvent(evt);
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
         if len(parts[0]) == 0:
-            raise ValueError("Attribute locator '%s' does not contain an element locator." % (locator))
+            raise ValueError("Attribute locator '%s' does not contain an element locator." % (attribute_locator))
         if len(parts[2]) == 0:
-            raise ValueError("Attribute locator '%s' does not contain an attribute name." % (locator))
+            raise ValueError("Attribute locator '%s' does not contain an attribute name." % (attribute_locator))
         return (parts[0], parts[2])
 
     def _is_element_present(self, locator, tag=None):
