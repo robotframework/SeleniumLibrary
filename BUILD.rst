@@ -64,40 +64,105 @@ To run just the unit tests, run::
 	python test/run_unit_tests.py
 
 
+Pushing Code to GitHub
+----------------------
+
+Assuming the remote has been setup and named `origin` (it is 
+setup and named `origin` automatically if you cloned the existing
+GitHub repo), run::
+
+	git push origin master
+
+
 Building a Distribution
 -----------------------
 
 To build a distribution, run::
 
-	python build_dist.py
+	python build_dist.py <python 2.6 path> <python 2.7 path>
 
 This script will:
 
 - Generate source distribution packages in .tar.gz and .zip formats
-- Generate build distribution packages for Windows x86 and x64
+- Generate Python eggs for Python 2.6 and 2.7
+- Generate binary installers for Windows x86 and x64 (if run on Windows)
 - Generate a demo distribution package in .zip format.
 - Re-generate keyword documentation in doc folder
 
+Note: The Windows installers will only be built if the script is run on
+a Windows machine. If the rest of the distribution has been built on
+a non-Windows machine and you want to build just the Windows installers,
+use the --winonly flag::
 
-Publishing to PyPi
------------------------
+	python build_dist.py --winonly <python 2.6 path> <python 2.7 path>
 
-To publish to PyPi use the following steps.
 
-1.  Update the version number in src/Selenium2Library/version.py is updated
-2.  Run the following commands to create the source and egg distributables::
-    
-    python2.6 setup.py bdist_egg upload --sign
-    python2.7 setup.py bdist_egg upload --sign
-    python2.7 setup.py sdist upload --sign
+Publishing a New Release
+------------------------
 
-3.  Also from windows it is advisible to publish the windows binaries run::
+Build the distribution, this time with the --release flag::
 
-    C:\python2.6 setup.py bdist_wininst --taget-version=2.6 register upload
-    C:\python2.7 setup.py bdist_wininst --target-version=2.7 register upload
-    
-The above 2 commands can also include the --sign option if you have gnupgp setup
-on your windows system.
+	python build_dist.py --release <python 2.6 path> <python 2.7 path>
+
+In addition to building the distribution, this will:
+
+- Register the release/version with PyPI
+- Upload the binaries to PyPI for the new release/version
+
+After building and releasing to PyPI:
+
+- Upload dist packages to the `downloads section on GitHub`_ (all dist packages except the eggs)
+- Publish the keyword documentation (see `Pushing Keyword Documentation`_)
+- Tag the release (see `Tagging a Release`_)
+
+Note: To publish a release, you will need to:
+
+- Register an account on PyPI_ and be given rights to the package by a package owner
+- Setup your `.pypirc file`_ (goes in the root of your home directory)
+
+
+Tagging a Release
+-----------------
+
+It's our policy to tag each release. To do so, run::
+
+	git tag -a v<ver> -m "<ver> release"
+	git push --tags
+	
+E.g.::
+
+	git tag -a v1.0.0 -m "1.0.0 release"
+	git push --tags
+
+
+Pushing Keyword Documentation
+-----------------------------
+
+The keyword documentation is hosted using GitHub Pages. There is a branch
+in the repo called `gh-pages` that contains nothing but the keyword documentation.
+
+First, switch to the `gh-pages` branch::
+
+	git checkout gh-pages
+
+If you get an error like "pathspec 'gh-pages' did not match any file(s) known to git",
+run the following to setup the upstream configuration for the gh-pages branch::
+
+	git checkout -t origin/gh-pages
+
+Next, pull the keyword documentation you generated in the master branch and commit it::
+
+	git checkout master doc/Selenium2Library.html
+	git add doc/Selenium2Library.html
+	git commit
+
+Then, push it to the remote::
+
+	git push origin gh-pages
+
+Last, you probably want to switch back to the master branch::
+
+	git checkout master
 
 
 Building Keyword Documentation
@@ -119,38 +184,6 @@ are parsed by the reStructuredText parser. To build them, run::
 	python doc/generate_readmes.py
 
 
-Pushing Code to GitHub
-----------------------
-
-Assuming the remote has been setup and named `origin` (it is 
-setup and named `origin` automatically if you cloned the existing
-GitHub repo), run::
-
-	git push origin master
-
-
-Pushing Keyword Documentation
------------------------------
-
-The keyword documentation is hosted using GitHub Pages. There is a branch
-in the repo called `gh-pages` that contains nothing but the keyword documentation.
-
-First, switch to the `gh-pages` branch::
-
-	git checkout gh-pages
-
-Next, pull the keyword documentation you generated in the master branch and commit it::
-
-	git checkout master doc/Selenium2Library.html
-	git add .
-	git commit
-
-Then, push it to the remote::
-
-	git push origin gh-pages
-
-Last, you probably want to switch back to the master branch::
-
-	git checkout master
-
-
+.. _downloads section on GitHub: https://github.com/rtomac/robotframework-selenium2library/downloads
+.. _PyPI: http://pypi.python.org
+.. _.pypirc file: http://docs.python.org/distutils/packageindex.html#the-pypirc-file

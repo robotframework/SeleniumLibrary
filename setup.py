@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 
-try:
-    from ez_setup import use_setuptools
-    use_setuptools()
-except ImportError:
-    pass
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-
+import sys
 from os.path import join, dirname
+
+sys.path.append(join(dirname(__file__), 'src'))
+from ez_setup import use_setuptools
+use_setuptools()
+from setuptools import setup
+
 execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
 
 DESCRIPTION = """
@@ -39,7 +35,7 @@ setup(name         = 'robotframework-selenium2library',
       install_requires = [
 							'decorator >= 3.3.2',
 							'selenium >= 2.8.1',
-							'robotframework == 2.6.3',
+							'robotframework >= 2.6.0',
 							'docutils >= 0.8.1'
 						 ],
       py_modules=['ez_setup'],
