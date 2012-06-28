@@ -173,7 +173,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         details about locating elements.
         """
         self._info("Selecting frame '%s'." % locator)
-        element = self._element_find(locator, True, True, tag='frame')
+        element = self._element_find(locator, True, True)
         self._current_browser().switch_to_frame(element)
 
     def select_window(self, locator=None):
