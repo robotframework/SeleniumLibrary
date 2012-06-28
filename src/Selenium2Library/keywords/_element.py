@@ -508,7 +508,7 @@ return !element.dispatchEvent(evt);
 
     def _frame_contains(self, locator, text):
         browser = self._current_browser()
-        element = self._element_find(locator, True, True, 'frame')
+        element = self._element_find(locator, True, True)
         browser.switch_to_frame(element)
         self._info("Searching for text from frame '%s'." % locator)
         found = self._is_text_present(text)
@@ -590,6 +590,7 @@ return !element.dispatchEvent(evt);
             return True
 
         subframes = self._element_find("tag=frame", False, False, 'frame')
+        #subframes = self._element_find("xpath=//frame|//iframe", False, False)
         self._debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
