@@ -35,7 +35,7 @@ Select And Unselect Frame
   Current Frame Contains  You're looking at foo.
 
 Select And Unselect Frame should also work with iframes
-  [Documentation]  LOG 2 Selecting frame 'leftiframe'.
+  [Documentation]   Selecting frame leftiframe
   [setup]  Go To Page "frames/iframes.html"
   Select Frame  left
   Click Link  foo
@@ -44,7 +44,7 @@ Select And Unselect Frame should also work with iframes
   Current Frame Contains  You're looking at foo.
 
 Select Frame with non-unique name attribute
-  [Documentation]  LOG 2 Descerning frame 'left' from link 'left'.
+  [Documentation]  Descerning frame 'left' from link 'left'.
   [setup]  Go To Page "frames/poorlynamedframe.html"
   Run Keyword And Expect Error  NoSuchFrameException*  Select Frame  left
   Select Frame  xpath=//frame[@name='left']|//iframe[@name='left']
