@@ -16,7 +16,9 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'googlechrome': "_make_chrome",
                  'gc': "_make_chrome",
                  'chrome': "_make_chrome",
-                 'opera' : "_make_opera"
+                 'opera' : "_make_opera",
+                 'htmlunit' : "_make_htmlunit",
+                 'htmlunitwithjs' : "_make_htmlunitwithjs"
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -72,6 +74,8 @@ class _BrowserManagementKeywords(KeywordGroup):
         | gc               | Google Chrome |
         | chrome           | Google Chrome |
         | opera            | Opera         |
+        | htmlunit         | HTMLUnit      |
+        | htmlunitwithjs   | HTMLUnit with Javascipt support |
         
 
         Note, that you will encounter strange behavior, if you open
@@ -92,7 +96,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         wish to overwrite the default.
         """
         if remote_url:
-            self._info("Opening broser '%s' to base url '%s' through remote server at '%s'"
+            self._info("Opening browser '%s' to base url '%s' through remote server at '%s'"
                     % (browser, url, remote_url))
         else:
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
@@ -430,6 +434,14 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _make_opera(self , remote , desired_capabilities , profile_dir):
         return self._generic_make_browser(webdriver.Opera, 
                 webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
+
+    def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Remote, 
+                webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
+
+    def _make_htmlunitwithjs(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Remote, 
+                webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
 
     
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
