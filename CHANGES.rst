@@ -10,6 +10,10 @@ Release Notes
   Selenium Library.
   [jouk0]
 
+- Added drag and drop support with two functions `drag and drop  source
+  target` and `drag and drop by offset  source  xoffset  yoffset`
+  [mamathanag] and [j1z0]
+
 1.0.1
 -----
 - Support for Robot Framework 2.7

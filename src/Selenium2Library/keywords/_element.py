@@ -228,7 +228,7 @@ class _ElementKeywords(KeywordGroup):
         See `introduction` for details about locating elements.
         """
         return self._get_value(locator)
-        
+
     def get_text(self, locator):
         """Returns the text value of element identified by `locator`.
 
@@ -281,6 +281,35 @@ class _ElementKeywords(KeywordGroup):
         """Sets focus to element identified by `locator`."""
         element = self._element_find(locator, True, True)
         self._current_browser().execute_script("arguments[0].focus();", element)
+
+    def drag_and_drop(self, source, target):
+        """Drags element identified with `source` which is a locator.
+
+        Element can be moved on top of another element with `target`
+        argument.
+
+        `target` is a locator of the element where the dragged object is
+        dropped.
+
+        Examples:
+        | Drag And Drop | elem1 | elem2 | # Move elem1 over elem2. |
+        """
+        src_elem = self._element_find(source,True,True)
+        trg_elem =  self._element_find(target,True,True)
+        ActionChains(self._current_browser()).drag_and_drop(src_elem, trg_elem).perform()
+
+
+    def drag_and_drop_by_offset(self, source, xoffset, yoffset):
+        """Drags element identified with `source` which is a locator.
+
+        Element will be moved by xoffset and yoffset.  each of which is a
+        negative or positive number specify the offset.
+
+        Examples:
+        | Drag And Drop | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
+        """
+        src_elem = self._element_find(source, True, True)
+        ActionChains(self._current_browser()).drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
 
     def mouse_down(self, locator):
         """Simulates pressing the left mouse button on the element specified by `locator`.
