@@ -86,6 +86,10 @@ Element Text Should Be
     Element Text Should Be  some_id  This text is inside an identified element
     Run Keyword And Expect Error  The text of element 'some_id' should have been 'inside' but in fact it was 'This text is inside an identified element'.  Element Text Should Be  some_id  inside
 
+Get Text
+    ${str} =  Get Text  some_id
+    Should Match  ${str}  This text is inside an identified element
+
 Element Should Be Visible
     [Setup]  Go To Page "visibility.html"
     Element Should Be Visible  i_am_visible

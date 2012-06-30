@@ -6,6 +6,10 @@ Release Notes
 - Added iframe support by removing strict filtering for only <frame> elements.
   [emanlove]
 
+- Added the 'get text' keyword to be backwards compatible with the original
+  Selenium Library.
+  [jouk0]
+
 1.0.1
 -----
 - Support for Robot Framework 2.7
