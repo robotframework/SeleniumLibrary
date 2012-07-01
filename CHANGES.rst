@@ -14,6 +14,10 @@ Release Notes
   target` and `drag and drop by offset  source  xoffset  yoffset`
   [mamathanag] and [j1z0]
 
+- Added HTMLUnit and HTMLUnitWithJS support.  Just use a line like:
+ `Open Browser    [initial page url]    remote_url=[the selenium-server url]    browser=htmlunit`
+  [SoCalLongboard]
+
 1.0.1
 -----
 - Support for Robot Framework 2.7
