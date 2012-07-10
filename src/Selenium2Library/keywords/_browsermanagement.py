@@ -409,9 +409,37 @@ class _BrowserManagementKeywords(KeywordGroup):
 
 
     def _make_ff(self , remote , desired_capabilites , profile_dir):
-        
+         
         if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
+        extension_dir=False
+        if extension_dir:
+            debug=True
+            try:
+                profile.add_extension(extension=EXTENSION_DIR + "/firebug-1.10.0b1.xpi")
+                profile.add_extension(extension=EXTENSION_DIR + "/fireStarter-0.1a6.xpi")
+                profile.add_extension(extension=EXTENSION_DIR + "/netExport-0.8.xpi")
+            except:
+                print "Extension load failed"
+                raise
+                
+            profile.set_preference("extensions.firebug.currentVersion", "1.10.0b1")
+            profile.set_preference("extensions.firebug.allPagesActivation", "on")
+            profile.set_preference("extensions.firebug.addonBarOpened", True)
+            profile.set_preference("extensions.firebug.DBG_NETEXPORT", False)
+            profile.set_preference("extensions.firebug.onByDefault", True)
+            profile.set_preference("extensions.firebug.defaultPanelName", "net")
+            profile.set_preference("extensions.firebug.net.enableSites", True)
+            profile.set_preference("extensions.firebug.net.persistent", True)
+            profile.set_preference("extensions.firebug.netexport.alwaysEnableAutoExport", True)
+            if debug: profile.set_preference("extensions.firebug.netexport.autoExportToFile", True)
+            profile.set_preference("extensions.firebug.netexport.autoExportToServer", False)
+            profile.set_preference("extensions.firebug.netexport.defaultLogDir", '/tmp')
+            profile.set_preference("extensions.firebug.netexport.showPreview", False)
+            profile.set_preference("extensions.firebug.netexport.sendToConfirmation", False)
+            profile.set_preference("extensions.firebug.netexport.pageLoadedTimeout", 1500)
+            profile.set_preference("extensions.firebug.netexport.Automation", True)
+        
         if remote:
             browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  , 
                         remote , desired_capabilites , profile)
