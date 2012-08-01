@@ -228,6 +228,27 @@ class _ElementKeywords(KeywordGroup):
         See `introduction` for details about locating elements.
         """
         return self._get_value(locator)
+        
+    def get_text(self, locator):
+        """Returns the text value of element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._get_text(locator)
+
+    def get_text(self, locator):
+        """Returns the text value of element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._get_text(locator)
+
+    def get_text(self, locator):
+        """Returns the text of element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._get_text(locator)
 
     def get_text(self, locator):
         """Returns the text value of element identified by `locator`.
