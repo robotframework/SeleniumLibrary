@@ -2,6 +2,7 @@ import os
 from selenium.common.exceptions import WebDriverException
 from keywordgroup import KeywordGroup
 
+
 class _JavaScriptKeywords(KeywordGroup):
 
     def __init__(self):
@@ -34,10 +35,10 @@ class _JavaScriptKeywords(KeywordGroup):
         return true, as if the user had manually clicked OK, so you shouldn't
         need to use this command unless for some reason you need to change
         your mind prior to the next confirmation. After any confirmation, Selenium will resume using the
-        default behavior for future confirmations, automatically returning 
+        default behavior for future confirmations, automatically returning
         true (OK) unless/until you explicitly use `Choose Cancel On Next Confirmation` for each
         confirmation.
-        
+
         Note that every time a confirmation comes up, you must
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
@@ -68,7 +69,7 @@ class _JavaScriptKeywords(KeywordGroup):
     def execute_javascript(self, *code):
         """Executes the given JavaScript code.
 
-        `code` may contain multiple lines of code but must contain a 
+        `code` may contain multiple lines of code but must contain a
         return statement (with the value to be returned) at the end.
 
         `code` may be divided into multiple cells in the test data. In that
@@ -94,7 +95,7 @@ class _JavaScriptKeywords(KeywordGroup):
     def execute_async_javascript(self, *code):
         """Executes asynchronous JavaScript code.
 
-        `code` may contain multiple lines of code but must contain a 
+        `code` may contain multiple lines of code but must contain a
         return statement (with the value to be returned) at the end.
 
         `code` may be divided into multiple cells in the test data. In that
@@ -132,9 +133,11 @@ class _JavaScriptKeywords(KeywordGroup):
         alert = None
         try:
             alert = self._current_browser().switch_to_alert()
-            text = ' '.join(alert.text.splitlines()) # collapse new lines chars
-            if not confirm: alert.dismiss()
-            else: alert.accept()
+            text = ' '.join(alert.text.splitlines())  # collapse new lines chars
+            if not confirm:
+                alert.dismiss()
+            else:
+                alert.accept()
             return text
         except WebDriverException:
             raise RuntimeError('There were no alerts')

@@ -4,6 +4,7 @@ from robot.variables import GLOBAL_VARIABLES
 from robot.api import logger
 from keywordgroup import KeywordGroup
 
+
 class _LoggingKeywords(KeywordGroup):
 
     # Private
@@ -25,15 +26,19 @@ class _LoggingKeywords(KeywordGroup):
 
     def _log(self, message, level='INFO'):
         level = level.upper()
-        if (level == 'INFO'): self._info(message)
-        elif (level == 'DEBUG'): self._debug(message)
-        elif (level == 'WARN'): self._warn(message)
-        elif (level == 'HTML'): self._html(message)
+        if (level == 'INFO'):
+            self._info(message)
+        elif (level == 'DEBUG'):
+            self._debug(message)
+        elif (level == 'WARN'):
+            self._warn(message)
+        elif (level == 'HTML'):
+            self._html(message)
 
     def _log_list(self, items, what='item'):
-        msg = ['Altogether %d %s%s.' % (len(items), what, ['s',''][len(items)==1])]
+        msg = ['Altogether %d %s%s.' % (len(items), what, ['s', ''][len(items) == 1])]
         for index, item in enumerate(items):
-            msg.append('%d: %s' % (index+1, item))
+            msg.append('%d: %s' % (index + 1, item))
         self._info('\n'.join(msg))
         return items
 

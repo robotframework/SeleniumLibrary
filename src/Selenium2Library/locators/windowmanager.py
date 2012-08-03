@@ -3,6 +3,7 @@ from robot import utils
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
+
 class WindowManager(object):
 
     def __init__(self):
@@ -14,13 +15,13 @@ class WindowManager(object):
         }
 
     def get_window_ids(self, browser):
-        return [ window_info[1] for window_info in self._get_window_infos(browser) ]
+        return [window_info[1] for window_info in self._get_window_infos(browser)]
 
     def get_window_names(self, browser):
-        return [ window_info[2] for window_info in self._get_window_infos(browser) ]
+        return [window_info[2] for window_info in self._get_window_infos(browser)]
 
     def get_window_titles(self, browser):
-        return [ window_info[3] for window_info in self._get_window_infos(browser) ]
+        return [window_info[3] for window_info in self._get_window_infos(browser)]
 
     def select(self, browser, locator):
         assert browser is not None
@@ -59,12 +60,14 @@ class WindowManager(object):
         try:
             self._select_by_name(browser, criteria)
             return
-        except ValueError: pass
+        except ValueError:
+            pass
 
         try:
             self._select_by_title(browser, criteria)
             return
-        except ValueError: pass
+        except ValueError:
+            pass
 
         raise ValueError("Unable to locate window with name or title '" + criteria + "'")
 
@@ -74,7 +77,7 @@ class WindowManager(object):
         prefix = None
         criteria = locator
         if locator is not None and len(locator) > 0:
-            locator_parts = locator.partition('=')        
+            locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
