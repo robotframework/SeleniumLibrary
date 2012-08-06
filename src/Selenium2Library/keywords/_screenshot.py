@@ -2,6 +2,7 @@ import os
 import robot
 from keywordgroup import KeywordGroup
 
+
 class _ScreenshotKeywords(KeywordGroup):
 
     def __init__(self):

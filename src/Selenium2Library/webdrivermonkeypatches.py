@@ -3,6 +3,7 @@ from robot import utils
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from locators import WindowManager
 
+
 class WebDriverMonkeyPatches:
 
     RemoteWebDriver._base_execute = RemoteWebDriver.execute
@@ -22,8 +23,8 @@ class WebDriverMonkeyPatches:
 
     def get_current_window_info(self):
         atts = self.execute_script("return [ window.id, window.name, document.title, document.location ];")
-        atts = [ att if att is not None and len(att) else 'undefined'
-            for att in atts ]
+        atts = [att if att is not None and len(att) else 'undefined'
+            for att in atts]
         return (self.current_window_handle, atts[0], atts[1], atts[2], atts[3])
 
     def get_page_source(self):
@@ -36,7 +37,7 @@ class WebDriverMonkeyPatches:
         return self.window_handles
 
     def current_window_is_main(self):
-        return self.current_window_handle == self.window_handles[0];
+        return self.current_window_handle == self.window_handles[0]
 
     def set_speed(self, seconds):
         self._speed = seconds

@@ -6,11 +6,12 @@ execfile(os.path.join(THIS_DIR, 'version.py'))
 
 __version__ = VERSION
 
+
 class Selenium2Library(
-    _LoggingKeywords, 
-    _RunOnFailureKeywords, 
-    _BrowserManagementKeywords, 
-    _ElementKeywords, 
+    _LoggingKeywords,
+    _RunOnFailureKeywords,
+    _BrowserManagementKeywords,
+    _ElementKeywords,
     _TableElementKeywords,
     _FormElementKeywords,
     _SelectElementKeywords,
@@ -31,7 +32,7 @@ class Selenium2Library(
     *Before running tests*
 
     Prior to running test cases using Selenium2Library, Selenium2Library must be
-    imported into your Robot test suite (see `importing` section), and the 
+    imported into your Robot test suite (see `importing` section), and the
     `Open Browser` keyword must be used to open a browser to the desired location.
 
     *Locating elements*

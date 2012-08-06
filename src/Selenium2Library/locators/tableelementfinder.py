@@ -2,6 +2,7 @@ from selenium.common.exceptions import NoSuchElementException
 from Selenium2Library import utils
 from elementfinder import ElementFinder
 
+
 class TableElementFinder(object):
 
     def __init__(self, element_finder=None):
@@ -23,7 +24,7 @@ class TableElementFinder(object):
             ('xpath', 'footer'): ['//tfoot//td'],
             ('xpath', 'row'): ['//tr[%s]//*'],
             ('xpath', 'col'): ['//tr//*[self::td or self::th][%s]']
-        };
+        }
 
     def find(self, browser, table_locator):
         locators = self._parse_table_locator(table_locator, 'default')
@@ -69,7 +70,8 @@ class TableElementFinder(object):
         for locator in locators:
             elements = self._element_finder.find(browser, locator)
             for element in elements:
-                if content is None: return element
+                if content is None:
+                    return element
                 element_text = element.text
                 if element_text and content in element_text:
                     return element

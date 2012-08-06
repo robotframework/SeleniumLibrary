@@ -1,6 +1,7 @@
 import os
 from keywordgroup import KeywordGroup
 
+
 class _FormElementKeywords(KeywordGroup):
 
     # Public, form
@@ -168,7 +169,7 @@ class _FormElementKeywords(KeywordGroup):
         """Inputs the `file_path` into file input field found by `identifier`.
 
         This keyword is most often used to input files into upload forms.
-        The file specified with `file_path` must be available on the same host 
+        The file specified with `file_path` must be available on the same host
         where the Selenium Server is running.
 
         Example:
@@ -244,7 +245,8 @@ class _FormElementKeywords(KeywordGroup):
         for details about locating elements.
         """
         element = self._element_find(locator, True, False, 'text field')
-        if element is None: element = self._element_find(locator, True, False, 'file upload')
+        if element is None:
+            element = self._element_find(locator, True, False, 'file upload')
         actual = element.get_attribute('value') if element is not None else None
         if actual != expected:
             if not message:

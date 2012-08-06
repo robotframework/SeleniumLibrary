@@ -2,6 +2,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
 from keywordgroup import KeywordGroup
 
+
 class _SelectElementKeywords(KeywordGroup):
 
     # Public
@@ -181,10 +182,13 @@ class _SelectElementKeywords(KeywordGroup):
         option_labels = self._get_labels_for_options(options)
         for item in items:
             option_index = None
-            try: option_index = option_values.index(item)
+            try:
+                option_index = option_values.index(item)
             except:
-                try: option_index = option_labels.index(item)
-                except: continue
+                try:
+                    option_index = option_labels.index(item)
+                except:
+                    continue
             select_func(select, options, option_index)
 
     def unselect_from_list(self, locator, *items):
@@ -214,14 +218,17 @@ class _SelectElementKeywords(KeywordGroup):
         option_labels = self._get_labels_for_options(options)
         for item in items:
             option_index = None
-            try: option_index = option_values.index(item)
+            try:
+                option_index = option_values.index(item)
             except:
-                try: option_index = option_labels.index(item)
-                except: continue
+                try:
+                    option_index = option_labels.index(item)
+                except:
+                    continue
             self._unselect_option_from_multi_select_list(select, options, option_index)
 
     # Private
-    
+
     def _get_labels_for_options(self, options):
         labels = []
         for option in options:
@@ -245,11 +252,11 @@ class _SelectElementKeywords(KeywordGroup):
             if option.is_selected():
                 selected.append(option)
         return select, selected
-    
+
     def _get_values_for_options(self, options):
         values = []
         for option in options:
-             values.append(option.get_attribute('value'))
+            values.append(option.get_attribute('value'))
         return values
 
     def _is_multiselect_list(self, select):
@@ -265,7 +272,6 @@ class _SelectElementKeywords(KeywordGroup):
     def _select_option_from_single_select_list(self, select, options, index):
         sel = Select(select)
         sel.select_by_index(index)
-
 
     def _unselect_all_options_from_multi_select_list(self, select):
         self._current_browser().execute_script("arguments[0].selectedIndex = -1;", select)

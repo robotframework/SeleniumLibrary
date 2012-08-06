@@ -4,6 +4,7 @@ from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
 from keywordgroup import KeywordGroup
 
+
 class _ElementKeywords(KeywordGroup):
 
     def __init__(self):
@@ -287,10 +288,9 @@ class _ElementKeywords(KeywordGroup):
         Examples:
         | Drag And Drop | elem1 | elem2 | # Move elem1 over elem2. |
         """
-        src_elem = self._element_find(source,True,True)
-        trg_elem =  self._element_find(target,True,True)
+        src_elem = self._element_find(source, True, True)
+        trg_elem = self._element_find(target, True, True)
         ActionChains(self._current_browser()).drag_and_drop(src_elem, trg_elem).perform()
-
 
     def drag_and_drop_by_offset(self, source, xoffset, yoffset):
         """Drags element identified with `source` which is a locator.
@@ -524,7 +524,7 @@ return !element.dispatchEvent(evt);
         if int(actual_xpath_count) != int(expected_xpath_count):
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
-                            %(xpath, expected_xpath_count, actual_xpath_count)
+                            % (xpath, expected_xpath_count, actual_xpath_count)
             self.log_source(loglevel)
             raise AssertionError(message)
         self._info("Current page contains %s elements matching '%s'."
@@ -538,7 +538,8 @@ return !element.dispatchEvent(evt);
         if required and len(elements) == 0:
             raise ValueError("Element locator '" + locator + "' did not match any elements.")
         if first_only:
-            if len(elements) == 0: return None
+            if len(elements) == 0:
+                return None
             return elements[0]
         return elements
 
@@ -573,7 +574,7 @@ return !element.dispatchEvent(evt);
         return True
 
     def _is_text_present(self, text):
-        locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text);
+        locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text)
         return self._is_element_present(locator)
 
     def _is_visible(self, locator):
@@ -656,4 +657,3 @@ return !element.dispatchEvent(evt);
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
-
