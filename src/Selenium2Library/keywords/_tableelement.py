@@ -5,6 +5,7 @@ from robot.api import logger
 from Selenium2Library.locators import TableElementFinder
 from keywordgroup import KeywordGroup
 
+
 class _TableElementKeywords(KeywordGroup):
 
     def __init__(self):
@@ -28,11 +29,14 @@ class _TableElementKeywords(KeywordGroup):
         table = self._table_element_finder.find(self._current_browser(), table_locator)
         if table is not None:
             rows = table.find_elements_by_xpath("./thead/tr")
-            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
-            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index >= len(rows):
+                rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows):
+                rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
             if row_index < len(rows):
                 columns = rows[row_index].find_elements_by_tag_name('th')
-                if column_index >= len(columns): columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                if column_index >= len(columns):
+                    columns.extend(rows[row_index].find_elements_by_tag_name('td'))
                 if column_index < len(columns):
                     return columns[column_index].text
         self.log_source(loglevel)

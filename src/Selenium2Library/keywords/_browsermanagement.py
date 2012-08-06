@@ -16,10 +16,11 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'googlechrome': "_make_chrome",
                  'gc': "_make_chrome",
                  'chrome': "_make_chrome",
-                 'opera' : "_make_opera",
-                 'htmlunit' : "_make_htmlunit",
-                 'htmlunitwithjs' : "_make_htmlunitwithjs"
+                 'opera': "_make_opera",
+                 'htmlunit': "_make_htmlunit",
+                 'htmlunitwithjs': "_make_htmlunitwithjs"
                 }
+
 
 class _BrowserManagementKeywords(KeywordGroup):
 
@@ -51,8 +52,8 @@ class _BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None,remote_url=False,
-                desired_capabilities=None,ff_profile_dir=None):
+    def open_browser(self, url, browser='firefox', alias=None, remote_url=False,
+                desired_capabilities=None, ff_profile_dir=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -76,7 +77,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | opera            | Opera         |
         | htmlunit         | HTMLUnit      |
         | htmlunitwithjs   | HTMLUnit with Javascipt support |
-        
+
 
         Note, that you will encounter strange behavior, if you open
         multiple Internet Explorer browser instances. That is also why
@@ -101,7 +102,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         else:
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
+        browser = self._make_browser(browser_name, desired_capabilities, ff_profile_dir, remote_url)
         browser.get(url)
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
@@ -185,7 +186,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
-        
+
         By default, when a locator value is provided,
         it is matched against the title of the window and the
         javascript name of the window. If multiple windows with
@@ -351,26 +352,25 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Sets Selenium 2's default implicit wait in seconds and
         sets the implicit wait for all open browsers.
 
-        From selenium 2 function 'Sets a sticky timeout to implicitly 
+        From selenium 2 function 'Sets a sticky timeout to implicitly
             wait for an element to be found, or a command to complete.
             This method only needs to be called one time per session.'
 
         Example:
         | ${orig wait} = | Set Selenium Implicit Wait | 10 seconds |
         | Perform AJAX call that is slow |
-        | Set Selenium Implicit Wait | ${orig wait} | 
+        | Set Selenium Implicit Wait | ${orig wait} |
         """
         old_wait = self.get_selenium_implicit_wait()
         self._implicit_wait_in_secs = robot.utils.timestr_to_secs(seconds)
         for browser in self._cache.get_open_browsers():
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
-    
 
     def set_browser_implicit_wait(self, seconds):
         """Sets current browser's implicit wait in seconds.
 
-        From selenium 2 function 'Sets a sticky timeout to implicitly 
+        From selenium 2 function 'Sets a sticky timeout to implicitly
             wait for an element to be found, or a command to complete.
             This method only needs to be called one time per session.'
 
@@ -392,15 +392,14 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _get_browser_token(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
-
-    def _get_browser_creation_function(self,browser_name):
+    def _get_browser_creation_function(self, browser_name):
         return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
 
-    def _make_browser(self , browser_name , desired_capabilities=None , profile_dir=None,
+    def _make_browser(self, browser_name, desired_capabilities=None, profile_dir=None,
                     remote=None):
 
         creation_func = self._get_browser_creation_function(browser_name)
-        browser = getattr(self,creation_func)(remote , desired_capabilities , profile_dir)
+        browser = getattr(self, creation_func)(remote, desired_capabilities, profile_dir)
 
         if browser is None:
             raise ValueError(browser_name + " is not a supported browser.")
@@ -411,55 +410,51 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         return browser
 
-
-    def _make_ff(self , remote , desired_capabilites , profile_dir):
-        
-        if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
+    def _make_ff(self, remote, desired_capabilites, profile_dir):
+        if not profile_dir:
+            profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
         if remote:
-            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  , 
-                        remote , desired_capabilites , profile)
+            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX,
+                        remote, desired_capabilites, profile)
         else:
             browser = webdriver.Firefox(firefox_profile=profile)
         return browser
-    
-    def _make_ie(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Ie, 
+
+    def _make_ie(self, remote, desired_capabilities, profile_dir):
+        return self._generic_make_browser(webdriver.Ie,
                 webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
 
-    def _make_chrome(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Chrome, 
+    def _make_chrome(self, remote, desired_capabilities, profile_dir):
+        return self._generic_make_browser(webdriver.Chrome,
                 webdriver.DesiredCapabilities.CHROME, remote, desired_capabilities)
 
-    def _make_opera(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Opera, 
+    def _make_opera(self, remote, desired_capabilities, profile_dir):
+        return self._generic_make_browser(webdriver.Opera,
                 webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
 
-    def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Remote, 
+    def _make_htmlunit(self, remote, desired_capabilities, profile_dir):
+        return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
 
-    def _make_htmlunitwithjs(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Remote, 
+    def _make_htmlunitwithjs(self, remote, desired_capabilities, profile_dir):
+        return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
 
-    
-    def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
-        '''most of the make browser functions just call this function which creates the 
+    def _generic_make_browser(self, webdriver_type, desired_cap_type, remote_url, desired_caps):
+        '''most of the make browser functions just call this function which creates the
         appropriate web-driver'''
-        if not remote_url: 
+        if not remote_url:
             browser = webdriver_type()
         else:
-            browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
+            browser = self._create_remote_web_driver(desired_cap_type, remote_url, desired_caps)
         return browser
-    
 
-    def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
+    def _create_remote_web_driver(self, capabilities_type, remote_url, desired_capabilities=None, profile=None):
         '''parses the string based desired_capabilities which should be in the form
         key1:val1,key2:val2 and creates the associated remote web driver'''
-        desired_cap = self._create_desired_capabilities(capabilities_type , desired_capabilities)
-        return webdriver.Remote(desired_capabilities=desired_cap , command_executor=str(remote_url) ,                                       browser_profile=profile)
-
+        desired_cap = self._create_desired_capabilities(capabilities_type, desired_capabilities)
+        return webdriver.Remote(desired_capabilities=desired_cap, command_executor=str(remote_url), browser_profile=profile)
 
     def _create_desired_capabilities(self, capabilities_type, capabilities_string):
         desired_capabilities = capabilities_type
@@ -468,4 +463,3 @@ class _BrowserManagementKeywords(KeywordGroup):
                 (key, value) = cap.split(":")
                 desired_capabilities[key.strip()] = value.strip()
         return desired_capabilities
-    

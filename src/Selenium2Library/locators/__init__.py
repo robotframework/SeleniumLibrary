@@ -3,7 +3,7 @@ from tableelementfinder import TableElementFinder
 from windowmanager import WindowManager
 
 __all__ = [
-    "ElementFinder", 
-    "TableElementFinder", 
+    "ElementFinder",
+    "TableElementFinder",
     "WindowManager"
 ]

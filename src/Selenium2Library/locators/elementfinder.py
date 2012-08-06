@@ -1,5 +1,6 @@
 from Selenium2Library import utils
 
+
 class ElementFinder(object):
 
     def __init__(self):
@@ -105,7 +106,8 @@ class ElementFinder(object):
     }
 
     def _get_tag_and_constraints(self, tag):
-        if tag is None: return None, {}
+        if tag is None:
+            return None, {}
 
         tag = tag.lower()
         constraints = {}
@@ -138,7 +140,8 @@ class ElementFinder(object):
         return True
 
     def _filter_elements(self, elements, tag, constraints):
-        if tag is None: return elements
+        if tag is None:
+            return elements
         return filter(
             lambda element: self._element_matches(element, tag, constraints),
             elements)
