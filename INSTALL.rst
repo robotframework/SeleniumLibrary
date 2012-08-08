@@ -65,7 +65,9 @@ Using Windows installer
 -----------------------
 
 Currently, Windows installer is the only available binary installer. Just
-double-click the installer and follow the instructions.
+double-click the installer and follow the instructions. The installer is missing 
+decorator module. It must be installed either via pip or easy install, or from
+http://pypi.python.org/pypi/decorator/
 
 Selenium2Library can be uninstalled using the Programs and Features utility from
 Control Panel (Add/Remove Programs on older versions of Windows).
