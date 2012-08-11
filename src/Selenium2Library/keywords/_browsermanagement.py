@@ -465,7 +465,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         desired_capabilities = capabilities_type
         if capabilities_string:
             for cap in capabilities_string.split(","):
-                (key, value) = cap.split(":")
+                (key, value) = cap.split(":",1)
                 desired_capabilities[key.strip()] = value.strip()
         return desired_capabilities
     
