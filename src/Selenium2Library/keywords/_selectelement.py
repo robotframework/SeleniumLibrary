@@ -187,7 +187,7 @@ class _SelectElementKeywords(KeywordGroup):
                 except: continue
             select_func(select, options, option_index)
         if not option_index:
-            return False
+            raise ValueError("%s doesn't exist in list '%s'." % (items_str, locator))
 
     def unselect_from_list(self, locator, *items):
         """Unselects given values from select list identified by locator.
@@ -222,7 +222,7 @@ class _SelectElementKeywords(KeywordGroup):
                 except: continue
             self._unselect_option_from_multi_select_list(select, options, option_index)
         if not option_index:
-            return False
+            raise ValueError("%s doesn't exist in list '%s'." % (items_str, locator))
 
     # Private
     
