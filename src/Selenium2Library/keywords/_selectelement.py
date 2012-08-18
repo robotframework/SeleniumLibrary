@@ -186,7 +186,7 @@ class _SelectElementKeywords(KeywordGroup):
                 try: option_index = option_labels.index(item)
                 except: continue
             select_func(select, options, option_index)
-        if not option_index:
+        if option_index is None:
             raise ValueError("%s doesn't exist in list '%s'." % (items_str, locator))
 
     def unselect_from_list(self, locator, *items):
@@ -221,7 +221,7 @@ class _SelectElementKeywords(KeywordGroup):
                 try: option_index = option_labels.index(item)
                 except: continue
             self._unselect_option_from_multi_select_list(select, options, option_index)
-        if not option_index:
+        if option_index is None:
             raise ValueError("%s doesn't exist in list '%s'." % (items_str, locator))
 
     # Private
