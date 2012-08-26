@@ -22,6 +22,18 @@ class _ElementKeywords(KeywordGroup):
                                  "but did not" % text)
         self._info("Current page contains text '%s'." % text)
 
+
+    def current_frame_should_not_contain(self, text, loglevel='INFO'):
+        """Verifies that current frame contains `text`.
+
+        See `Page Should Contain ` for explanation about `loglevel` argument.
+        """
+        if self._is_text_present(text):
+            self.log_source(loglevel)
+            raise AssertionError("Page should not have contained text '%s' "
+                                 "but it did" % text)
+        self._info("Current page should not contain text '%s'." % text)
+
     def element_should_contain(self, locator, expected, message=''):
         """Verifies element identified by `locator` contains text `expected`.
 
