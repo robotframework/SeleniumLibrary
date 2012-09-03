@@ -21,7 +21,7 @@ class WebDriverMonkeyPatches:
         return self.current_window_handle
 
     def get_current_window_info(self):
-        atts = self.execute_script("return [ window.id, window.name, document.title, document.location ];")
+        atts = self.execute_script("return [ window.id, window.name, document.title, document.url ];")
         atts = [ att if att is not None and len(att) else 'undefined'
             for att in atts ]
         return (self.current_window_handle, atts[0], atts[1], atts[2], atts[3])

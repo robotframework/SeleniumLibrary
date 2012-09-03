@@ -3,6 +3,11 @@ Release Notes
 
 1.1 (unreleased)
 ----------------
+- Fixed issue with select window under IE. Also addresses issue with Firefox
+  when using selenum 2.25.0
+  (see http://code.google.com/p/selenium/issues/detail?id=4375).
+  [adwu73]
+
 - Added iframe support by removing strict filtering for only <frame> elements.
   [emanlove]
 
