@@ -24,6 +24,10 @@ test/
     Unit and acceptance tests for Selenium2Library
 
 
+Using virtualenv
+----------------
+Background information about what virtualenv is, why one should be using virtualenv and how to use it
+
 Unit and Acceptance Tests
 -------------------------
 
@@ -62,6 +66,103 @@ Examples::
 To run just the unit tests, run::
 
 	python test/run_unit_tests.py
+
+Debugging Selenium2Library
+--------------------------
+
+Testing Third-Party Packages
+----------------------------
+
+Sometimes in the process of developing and testing Selenium2Library
+one needs to determine whether or not an issue is within Selenium2Library
+or if it lies within a third-party package like Selenium or Robot Framework.
+Here are some hints for writing quick, short unit tests against Selenium
+and Robot Framework.
+
+Testing Selenium
+~~~~~~~~~~~~~~~~
+First create a test directory and create an isolated Python environment
+using virtualenv::
+
+	~$ mkdir se-bug
+	~$ cd se-bug
+	~/se-bug$ virtualenv -p /usr/bin/python2.6 --no-site-packages clean-python26-env
+
+Activate the virtual environment::
+
+	 ~/se-bug$ source clean-python26-env/bin/activate
+
+Install the version of Selenium for which you wish to test. In the following
+case we are going to check Selenium version 2.25.0.
+
+	(clean-python26-env) ~/se-bug$ easy_install selenium==2.25.0
+
+Create a test file, in this case ~/se-bug/testExeJS.py::
+
+	import unittest
+	from selenium import webdriver
+	
+	class ExecuteJavascriptTestCase(unittest.TestCase):
+	
+	    def setUp(self):
+	        self.driver = webdriver.Firefox()
+	
+	    def test_exe_javascript(self):
+	        driver = self.driver
+	        driver.get("http://www.google.com")
+	        url = driver.execute_script("return [ document.location ];")
+	        print('Finished')
+		self.assertEqual(url[0]['href'], u"http://www.google.com/")
+	
+	    def tearDown(self):
+	        self.driver.close()
+	    
+	if __name__ == "__main__":
+	    unittest.main()
+
+Breaking down this example test case we see in the setUp and tearDown
+methods we initiate and close the Firefox webdriver, respectively.
+In the one test, text_exe_javascript, we perform steps to verify or
+disprove the issue we are experiencing is with Selenium only. (In
+`this case`_ the browser was hanging after the execute_script call and
+not returning; thus I printed 'Finished' to help show where the test
+progressed to.)
+
+An important part of the above test case, and all unit tests, is the
+line "self.assertEqual(...". This is one example of the method's
+available to check for errors or failures. For example, you can check
+for trueness or falseness of a stament by using assertTrue() and
+assertFalse(). Or you can for inclusiveness and exclussiveness by using
+assertIn() and assertNotIn(), respectively. For more information about
+unittest see `Python's unittest documentation`_. The last two lines
+allow this test to be run from the command line.
+
+To run the unittest type::
+
+    	(clean-python26-env) ~/se-bug$ python testExeJS.py
+
+In this example I removed the troubled selenium version and reinstalled a
+previous version, re-running the test case to verfiy selenium was the
+problem and not Selenium2Library::
+
+	(clean-python26-env) ~/se-bug$ rm -Rf clean-python26-env/lib/python2.6/site-packages/selenium-2.25.0-py2.6.egg
+	(clean-python26-env) ~/se-bug$ easy_install selenium==2.24.0
+	(clean-python26-env) ~/se-bug$ python testExeJS.py
+	Finished
+	.
+	----------------------------------------------------------------------
+	Ran 1 test in 6.198s
+	
+	OK
+	(clean-python26-env) ~/se-bug$
+
+If you discover an issue with Selenium it is helpful to `report it`_ to
+the Selenium developers.
+
+
+Profiling
+---------
+information on how to profile Selenium2Library code
 
 
 Pushing Code to GitHub
@@ -187,3 +288,6 @@ are parsed by the reStructuredText parser. To build them, run::
 .. _downloads section on GitHub: https://github.com/rtomac/robotframework-selenium2library/downloads
 .. _PyPI: http://pypi.python.org
 .. _.pypirc file: http://docs.python.org/distutils/packageindex.html#the-pypirc-file
+.. _this case: http://code.google.com/p/selenium/issues/detail?id=4375
+.. _report it: http://code.google.com/p/selenium/issues/list
+.. _Python's unittest documentation: http://docs.python.org/library/unittest.html
