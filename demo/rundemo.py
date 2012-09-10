@@ -34,7 +34,8 @@ try:
     import Selenium2Library
 except ImportError, e:
     print 'Importing Selenium2Library module failed (%s).' % e
-    print 'Please make sure you have SeleniumLibrary installed.'
+    print 'Please make sure you have Selenium2Library properly installed.'
+    print 'See INSTALL.rst for troubleshooting information.'
     sys.exit(1)
 
 
