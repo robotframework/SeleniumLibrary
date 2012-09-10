@@ -534,6 +534,14 @@ return !element.dispatchEvent(evt);
 
     def _element_find(self, locator, first_only, required, tag=None):
         browser = self._current_browser()
+        import time
+        _timeout = 10
+        for t in range(_timeout):
+            try:
+                if not self._current_browser().execute_script("return window.jQuery.active == 0;"):
+                    time.sleep(1)
+            except Exception, e:
+                self._log(e)
         elements = self._element_finder.find(browser, locator, tag)
         if required and len(elements) == 0:
             raise ValueError("Element locator '" + locator + "' did not match any elements.")
