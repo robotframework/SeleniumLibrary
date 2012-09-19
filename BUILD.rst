@@ -24,10 +24,6 @@ test/
     Unit and acceptance tests for Selenium2Library
 
 
-Using virtualenv
-----------------
-Background information about what virtualenv is, why one should be using virtualenv and how to use it
-
 Unit and Acceptance Tests
 -------------------------
 
@@ -67,8 +63,6 @@ To run just the unit tests, run::
 
 	python test/run_unit_tests.py
 
-Debugging Selenium2Library
---------------------------
 
 Testing Third-Party Packages
 ----------------------------
@@ -158,11 +152,6 @@ problem and not Selenium2Library::
 
 If you discover an issue with Selenium it is helpful to `report it`_ to
 the Selenium developers.
-
-
-Profiling
----------
-information on how to profile Selenium2Library code
 
 
 Pushing Code to GitHub
