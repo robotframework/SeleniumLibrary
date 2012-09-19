@@ -13,17 +13,14 @@ Selenium2Library depends on a few other Python libraries, including
 of course Robot Framework and Selenium. All dependencies are declared
 in setup.py.
 
-Installing on Windows
----------------------
-or (because easy_install under Windows doesn't install dependencies)
-Installing using pip (recommended)
---------------------
-but not (because pip does not necessarily install from pypi)
-Installing from PyPI (recommended)
-----------------------------------
 
-Selenium2Library is available in the Python Package Index (PyPI_). To install,
-you need to have `pip`_ installed. Then run::
+Installing using pip (recommended) or easy_install
+--------------------------------------------------
+
+Selenium2Library is available in the Python Package Index (PyPI_). It is
+recommended that you use `pip`_ to install. Using pip will ensure that
+both Selenium2Library **and** it's dependiences are installed.
+To install using pip, run::
 
 	pip install robotframework-selenium2library
 
@@ -31,11 +28,18 @@ Or alternately, if you only have `easy_install`_,::
 
 	easy_install robotframework-selenium2library
 
-Installing on Linux
--------------------
-Installing on Mac OSX
----------------------
-if we use `Installing on Windows`_ then we need sections for other OSes
+If you install Selenium2Library under Windows **and** you use easy_install, 
+you will need to install Selenium2Library's dependencies seperately.
+To install the dependencies, run::
+
+	easy_install robotframework
+        easy_install selenium
+        easy_install decorator
+        easy_install docutils
+
+Once installation is completed, you should verify proper installation of
+Selenium2Library and it's dependencies. See `Verifying Installation` section
+below.
 
 Installing from source
 ----------------------
@@ -92,15 +96,6 @@ indicates that you are missing the Robot Framework package.  To correct this pro
 	  easy_install robotframework
 
 Similarly if you receive "No module named ..." error message then you have another missing dependency.  To correct, use easy_install to install the missing package.
-
-Different Flavors of Python
----------------------------
-CPython, PyPy, Iron Python, ActivePython, 32 bit, 64 bit. Not all flavors of Python are the same. Explain the differences and some expected roadblocks with various versions.
-
-Python Packaging Tools
-----------------------
-The in's and out's of easy_setup, pip, etc. Explain how to upgrade a package using pip.
-
 
 
 .. _Selenium Python Bindings: http://code.google.com/p/selenium/wiki/PythonBindings
