@@ -5,7 +5,9 @@ python:
 install:
   - pip install pep8 --use-mirrors
 before_script:
-  - "pep8 --exclude=migrations --ignore=E501,E225 src"
+  # Ignore pep8 issues for now.
+  # pep8 - http://www.python.org/dev/peps/pep-0008/
+  #- "pep8 --exclude=migrations --ignore=E501,E225 src"
   - pyflakes -x W src
 script:
   - python src/test/run_tests.py python FF
