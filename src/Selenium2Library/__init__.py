@@ -94,7 +94,11 @@ class Selenium2Library(
 
         'implicit_wait' is the implicit timeout that Selenium waits when
         looking for elements.
-        It can be later set with 'Set Selenium Implicit Wait'.
+        It can be later set with `Set Selenium Implicit Wait`.
+        See `WebDriver: Advanced Usage`__ section of the SeleniumHQ documentation
+        for more information about WebDriver's implicit wait functionality.
+
+        __ http://seleniumhq.org/docs/04_webdriver_advanced.html#explicit-and-implicit-waits
 
         `run_on_failure` specifies the name of a keyword (from any available
         libraries) to execute when a Selenium2Library keyword fails. By default
@@ -104,9 +108,11 @@ class Selenium2Library(
         functionality.
 
         Examples:
-        | Library `|` Selenium2Library `|` 15                                     | # Sets default timeout to 15 seconds                                  |
-        | Library `|` Selenium2Library `|` 5 `|` Log Source                       | # Sets default timeout to 5 seconds and runs `Log Source` on failure  |
-        | Library `|` Selenium2Library `|` timeout=10 `|` run_on_failure=Nothing  | # Sets default timeout to 10 seconds and does nothing on failure      |
+        | Library `|` Selenium2Library `|` 15                                            | # Sets default timeout to 15 seconds                                       |
+        | Library `|` Selenium2Library `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
+        | Library `|` Selenium2Library `|` 5 `|` run_on_failure=Log Source               | # Sets default timeout to 5 seconds and runs `Log Source` on failure       |
+        | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
+        | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
         for base in Selenium2Library.__bases__:
             base.__init__(self)
