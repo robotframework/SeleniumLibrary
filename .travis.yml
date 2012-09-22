@@ -5,5 +5,9 @@ python:
 install:
   - pip install pep8 --use-mirrors
   - pip install pyflakes --use-mirrors
+  - pip install robotframework
+  - pip install selenium
+  - pip install decorator
+  - pip install docutils
 script:
   - python test/run_tests.py python FF
