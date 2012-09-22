@@ -6,4 +6,4 @@ install:
   - pip install pep8 --use-mirrors
   - pip install pyflakes --use-mirrors
 script:
-  - python src/test/run_tests.py python FF
+  - python test/run_tests.py python FF
