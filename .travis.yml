@@ -9,5 +9,8 @@ install:
   - pip install selenium
   - pip install decorator
   - pip install docutils
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 script:
   - python test/run_tests.py python FF
