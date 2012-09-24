@@ -1,5 +1,5 @@
 *Setting*
-Library  Selenium2Library  timeout=0  run_on_failure=Nothing   implicit_wait=2
+Library  Selenium2Library  run_on_failure=Nothing   implicit_wait=0
 Library  Collections
 Library  OperatingSystem
 
