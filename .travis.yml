@@ -15,3 +15,4 @@ before_script:
 script:
   #- python test/run_tests.py python FF
   -  python test/run_tests.py python FF -s acceptance.keywords.javascript
+  -  cat test/results/output.xml
