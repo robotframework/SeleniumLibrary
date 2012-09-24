@@ -13,6 +13,5 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  #- python test/run_tests.py python FF
-  -  python test/run_tests.py python FF -s acceptance.keywords
+  - python test/run_tests.py python FF
   #-  cat test/results/output.xml
