@@ -3,6 +3,10 @@ Release Notes
 
 1.1 (unreleased)
 ----------------
+- Verify element is found under 'Get Text' and 'Element Should Contain'
+  keywords before returning text or verifing element contains specified text.
+  [emanlove]
+
 - Added iframe support by removing strict filtering for only <frame> elements.
   [emanlove]
 
