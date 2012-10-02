@@ -3,6 +3,10 @@ Release Notes
 
 1.1 (unreleased)
 ----------------
+- Verify element is found under 'Get Text' and 'Element Should Contain'
+  keywords before returning text or verifing element contains specified text.
+  [emanlove]
+
 - Fixed capture page screenshot for RemoteWebDriver.
   [korda]
 
