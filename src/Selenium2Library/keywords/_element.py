@@ -523,7 +523,7 @@ return !element.dispatchEvent(evt);
         return found
 
     def _get_text(self, locator):
-        element = self._element_find(locator, True, False)
+        element = self._element_find(locator, True, True)
         if element is not None:
             return element.text
         return None
