@@ -3,6 +3,10 @@ Release Notes
 
 1.1 (unreleased)
 ----------------
+- Use Selenium's Select class within Selenium2Library's "Select *" keywords.
+  Optimization of certain "Select *" keywords to increase performance. 
+  [emanlove] [schminitz]
+
 - Replace maximize current browser window from JS to webdriver.
   [jollychang]
 
