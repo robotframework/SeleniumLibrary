@@ -1,4 +1,3 @@
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
 from keywordgroup import KeywordGroup
 
@@ -19,16 +18,12 @@ class _SelectElementKeywords(KeywordGroup):
     def get_selected_list_label(self, locator):
         """Returns the visible label of the selected element from the select list identified by `locator`.
 
-        Fails if there are zero or more than one selection.
-
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
-        labels = self.get_selected_list_labels(locator)
-        if len(labels) != 1:
-            raise ValueError("Select list with locator '%s' does not have a single selected value")
-        return labels[0]
+        select = self._get_select_list(locator)
+        return select.first_selected_option.get_attribute('label')
 
     def get_selected_list_labels(self, locator):
         """Returns the visible labels of selected elements (as a list) from the select list identified by `locator`.
@@ -48,16 +43,13 @@ class _SelectElementKeywords(KeywordGroup):
         """Returns the value of the selected element from the select list identified by `locator`.
 
         Return value is read from `value` attribute of the selected element.
-        Fails if there are zero or more than one selection.
 
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
-        values = self.get_selected_list_values(locator)
-        if len(values) != 1:
-            raise ValueError("Select list with locator '%s' does not have a single selected value")
-        return values[0]
+        select = self._get_select_list(locator)
+        return select.first_selected_option.get_attribute('value')
 
     def get_selected_list_values(self, locator):
         """Returns the values of selected elements (as a list) from the select list identified by `locator`.
@@ -146,12 +138,11 @@ class _SelectElementKeywords(KeywordGroup):
         self._info("Selecting all options from list '%s'." % locator)
 
         select = self._get_select_list(locator)
-        if not self._is_multiselect_list(select):
+        if not select.is_multiple:
             raise RuntimeError("Keyword 'Select all from list' works only for multiselect lists.")
 
-        select, options = self._get_select_list_options(select)
-        for i in range(len(options)):
-            self._select_option_from_multi_select_list(select, options, i)
+        for i in range(len(select.options)):
+            select.select_by_index(i)
 
     def select_from_list(self, locator, *items):
         """Selects `*items` from list identified by `locator`
@@ -160,32 +151,77 @@ class _SelectElementKeywords(KeywordGroup):
         value will be selected. If the target list is a multi-selection list,
         and `*items` is an empty list, all values of the list will be selected.
 
+        *items try to select by value then by label.
+
+        It's faster to use 'by index/value/label' functions.
+
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
         items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
         self._info("Selecting %s from list '%s'." % (items_str, locator))
-        items = list(items)
 
-        select, options = self._get_select_list_options(locator)
-        is_multi_select = self._is_multiselect_list(select)
-        select_func = self._select_option_from_multi_select_list if is_multi_select else self._select_option_from_single_select_list
+        select = self._get_select_list(locator)
 
         if not items:
-            for i in range(len(options)):
-                select_func(select, options, i)
+            for i in range(len(select.options)):
+                select.select_by_index(i)
             return
 
-        option_values = self._get_values_for_options(options)
-        option_labels = self._get_labels_for_options(options)
         for item in items:
-            option_index = None
-            try: option_index = option_values.index(item)
+            try: select.select_by_value(item)
             except:
-                try: option_index = option_labels.index(item)
+                try: select.select_by_visible_text(item)
                 except: continue
-            select_func(select, options, option_index)
+
+    def select_from_list_by_index(self, locator, *indexes):
+        """Selects `*indexes` from list identified by `locator`
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        if not indexes:
+            raise ValueError("No index given.")
+        items_str = "index(es) '%s'" % ", ".join(indexes)
+        self._info("Selecting %s from list '%s'." % (items_str, locator))
+
+        select = self._get_select_list(locator)
+        for index in indexes:
+            select.select_by_index(int(index))
+
+    def select_from_list_by_value(self, locator, *values):
+        """Selects `*values` from list identified by `locator`
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        if not values:
+            raise ValueError("No value given.")
+        items_str = "value(s) '%s'" % ", ".join(values)
+        self._info("Selecting %s from list '%s'." % (items_str, locator))
+
+        select = self._get_select_list(locator)
+        for value in values:
+            select.select_by_value(value)
+
+    def select_from_list_by_label(self, locator, *labels):
+        """Selects `*labels` from list identified by `locator`
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        if not labels:
+            raise ValueError("No value given.")
+        items_str = "label(s) '%s'" % ", ".join(labels)
+        self._info("Selecting %s from list '%s'." % (items_str, locator))
+
+        select = self._get_select_list(locator)
+        for label in labels:
+            select.select_by_visible_text(label)
 
     def unselect_from_list(self, locator, *items):
         """Unselects given values from select list identified by locator.
@@ -193,35 +229,90 @@ class _SelectElementKeywords(KeywordGroup):
         As a special case, giving empty list as `*items` will remove all
         selections.
 
+        *items try to unselect by value AND by label.
+
+        It's faster to use 'by index/value/label' functions.
+
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
         items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
         self._info("Unselecting %s from list '%s'." % (items_str, locator))
-        items = list(items)
 
         select = self._get_select_list(locator)
-        if not self._is_multiselect_list(select):
+        if not select.is_multiple:
             raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
 
         if not items:
-            self._unselect_all_options_from_multi_select_list(select)
+            select.deselect_all()
             return
 
         select, options = self._get_select_list_options(select)
-        option_values = self._get_values_for_options(options)
-        option_labels = self._get_labels_for_options(options)
         for item in items:
-            option_index = None
-            try: option_index = option_values.index(item)
-            except:
-                try: option_index = option_labels.index(item)
-                except: continue
-            self._unselect_option_from_multi_select_list(select, options, option_index)
+            select.deselect_by_value(item)
+            select.deselect_by_visible_text(item)
+
+    def unselect_from_list_by_index(self, locator, *indexes):
+        """Unselects `*indexes` from list identified by `locator`
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        if not indexes:
+            raise ValueError("No index given.")
+
+        items_str = "index(es) '%s'" % ", ".join(indexes)
+        self._info("Unselecting %s from list '%s'." % (items_str, locator))
+
+        select = self._get_select_list(locator)
+        if not select.is_multiple:
+            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
+
+        for index in indexes:
+            select.deselect_by_index(int(index))
+
+    def unselect_from_list_by_value(self, locator, *values):
+        """Unselects `*values` from list identified by `locator`
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        if not values:
+            raise ValueError("No value given.")
+        items_str = "value(s) '%s'" % ", ".join(values)
+        self._info("Unselecting %s from list '%s'." % (items_str, locator))
+
+        select = self._get_select_list(locator)
+        if not select.is_multiple:
+            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
+
+        for value in values:
+            select.deselect_by_value(value)
+
+    def unselect_from_list_by_label(self, locator, *labels):
+        """Unselects `*labels` from list identified by `locator`
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        if not labels:
+            raise ValueError("No value given.")
+        items_str = "label(s) '%s'" % ", ".join(labels)
+        self._info("Unselecting %s from list '%s'." % (items_str, locator))
+
+        select = self._get_select_list(locator)
+        if not select.is_multiple:
+            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
+
+        for label in labels:
+            select.deselect_by_visible_text(label)
 
     # Private
-    
+
     def _get_labels_for_options(self, options):
         labels = []
         for option in options:
@@ -229,23 +320,21 @@ class _SelectElementKeywords(KeywordGroup):
         return labels
 
     def _get_select_list(self, locator):
-        return self._element_find(locator, True, True, 'select')
+        el = self._element_find(locator, True, True, 'select')
+        return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):
-        if isinstance(select_list_or_locator, WebElement):
+        if isinstance(select_list_or_locator, Select):
             select = select_list_or_locator
         else:
             select = self._get_select_list(select_list_or_locator)
-        return select, select.find_elements_by_tag_name('option')
+        return select, select.options
 
-    def _get_select_list_options_selected(self, select_list_or_locator):
-        select, options = self._get_select_list_options(select_list_or_locator)
-        selected = []
-        for option in options:
-            if option.is_selected():
-                selected.append(option)
-        return select, selected
-    
+    def _get_select_list_options_selected(self, locator):
+        select = self._get_select_list(locator)
+        # TODO: Handle possible exception thrown by all_selected_options
+        return select, select.all_selected_options
+
     def _get_values_for_options(self, options):
         values = []
         for option in options:
@@ -257,15 +346,6 @@ class _SelectElementKeywords(KeywordGroup):
         if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
             return True
         return False
-
-    def _select_option_from_multi_select_list(self, select, options, index):
-        if not options[index].is_selected():
-            options[index].click()
-
-    def _select_option_from_single_select_list(self, select, options, index):
-        sel = Select(select)
-        sel.select_by_index(index)
-
 
     def _unselect_all_options_from_multi_select_list(self, select):
         self._current_browser().execute_script("arguments[0].selectedIndex = -1;", select)
