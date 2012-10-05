@@ -167,8 +167,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def maximize_browser_window(self):
         """Maximizes current browser window."""
-        self._current_browser().execute_script(
-            "if (window.screen) { window.moveTo(0, 0); window.resizeTo(window.screen.availWidth, window.screen.availHeight); }")
+        self._current_browser().maximize_window()
 
     def select_frame(self, locator):
         """Sets frame identified by `locator` as current frame.
