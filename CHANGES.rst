@@ -3,6 +3,9 @@ Release Notes
 
 1.1 (unreleased)
 ----------------
+- Replace maximize current browser window from JS to webdriver.
+  [jollychang]
+
 - Verify element is found under 'Get Text' and 'Element Should Contain'
   keywords before returning text or verifing element contains specified text.
   [emanlove]
