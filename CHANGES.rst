@@ -1,8 +1,13 @@
 Release Notes
 =============
 
-1.1 (unreleased)
+1.1
 ----------------
+- Increased minimum version requirement for Selenium to 2.12.0 within
+  setup.py.  This is required due to the change towards using Selenium's
+  Select class which was introduced starting in version 2.12.
+  [emanlove]
+
 - Use Selenium's Select class within Selenium2Library's "Select *" keywords.
   Optimization of certain "Select *" keywords to increase performance. 
   [emanlove] [schminitz]
