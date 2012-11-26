@@ -17,6 +17,14 @@ but re-implemented to use Selenium 2 and WebDriver technologies.
 - Developer information is found in `BUILD.rst` file.
 
 
+Installation
+------------
+
+You can install Selenium2Library using pip, with the following command
+
+    pip install robotframework-selenium2library
+
+
 Directory Layout
 ----------------
 

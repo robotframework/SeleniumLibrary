@@ -1,8 +1,27 @@
 Release Notes
 =============
 
-1.1 (unreleased)
+1.1
 ----------------
+- Increased minimum version requirement for Selenium to 2.12.0 within
+  setup.py.  This is required due to the change towards using Selenium's
+  Select class which was introduced starting in version 2.12.
+  [emanlove]
+
+- Use Selenium's Select class within Selenium2Library's "Select *" keywords.
+  Optimization of certain "Select *" keywords to increase performance. 
+  [emanlove] [schminitz]
+
+- Replace maximize current browser window from JS to webdriver.
+  [jollychang]
+
+- Verify element is found under 'Get Text' and 'Element Should Contain'
+  keywords before returning text or verifing element contains specified text.
+  [emanlove]
+
+- Fixed capture page screenshot for RemoteWebDriver.
+  [korda]
+
 - Fixed issue with select window under IE. Also addresses issue with Firefox
   when using selenum 2.25.0
   (see http://code.google.com/p/selenium/issues/detail?id=4375).

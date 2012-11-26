@@ -24,7 +24,11 @@ class _ScreenshotKeywords(KeywordGroup):
         background leaking when the page layout is somehow broken.
         """
         path, link = self._get_screenshot_paths(filename)
-        self._current_browser().save_screenshot(path)
+
+        if hasattr(self._current_browser(), 'get_screenshot_as_file'):
+          self._current_browser().get_screenshot_as_file(path)
+        else:
+          self._current_browser().save_screenshot(path)
 
         # Image is shown on its own row and thus prev row is closed on purpose
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'
