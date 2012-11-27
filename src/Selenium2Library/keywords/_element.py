@@ -659,18 +659,10 @@ return !element.dispatchEvent(evt);
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
 
-    def _ajax_active_check(self, ajax_wait_framework):
+    def _ajax_active_check(self, js_framework):
         #TODO :dojo, Prototype, YUI, 
-        if ajax_wait_framework.lower() in ['jquery']:
-            _cmd = ''
-            if ajax_wait_framework.lower() == 'jquery':
-                _cmd = "return window.jQuery.active == 0;"
-            import time
+        js_condition_dict = {"jquery": "return window.jQuery.active == 0;",}
+        if js_framework in js_condition_dict:
+            self._info("waiting for %s finish ajax active" %js_framework )
             _timeout = int(self._implicit_wait_in_secs) if self._implicit_wait_in_secs else 10
-            for t in range(_timeout):
-                try:
-                    if not self._current_browser().execute_script(_cmd):
-                        time.sleep(1)
-                except Exception, e:
-                    self._log(e)
-        self._info(" Ajax Condition handling for %s" % ajax_wait_framework)
+            self.wait_for_condition(condition=js_condition_dict[js_framework], timeout=_timeout, error='ajax wait timeout')

@@ -116,4 +116,4 @@ class Selenium2Library(
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
-        self.ajax_wait_framework = ajax_wait_framework
+        self.ajax_wait_framework = ajax_wait_framework.lower()
