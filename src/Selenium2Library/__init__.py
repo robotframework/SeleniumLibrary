@@ -106,9 +106,9 @@ class Selenium2Library(
         `ajax_wait_framework`  waiting for an element by Java Script Framework, it support 'jquery'
 
         Examples:
-        | Library `|` Selenium2Library `|` 15                                                   | # Sets default timeout to 15 seconds                                      |
-        | Library `|` Selenium2Library `|` 5 `|` Log Source                                     | # Sets default timeout to 5 seconds and runs `Log Source` on failure      |
-        | Library `|` Selenium2Library `|` timeout=10 `|` run_on_failure=Nothing                | # Sets default timeout to 10 seconds and does nothing on failure          |
+        | Library `|` Selenium2Library `|` 15                                                             | # Sets default timeout to 15 seconds                                      |
+        | Library `|` Selenium2Library `|` 5 `|` Log Source                                               | # Sets default timeout to 5 seconds and runs `Log Source` on failure      |
+        | Library `|` Selenium2Library `|` timeout=10 `|` run_on_failure=Nothing                          | # Sets default timeout to 10 seconds and does nothing on failure          |
         | Library `|` Selenium2Library `|` timeout=10 `|` implicit_wait=5 `|` ajax_wait_framework=jquery  | # Sets default timeout to 10 seconds, implicit_wait 5 seconds for jquery  |
         """
         for base in Selenium2Library.__bases__:
@@ -116,4 +116,5 @@ class Selenium2Library(
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
-        self.ajax_wait_framework = ajax_wait_framework.lower()
+        self.ajax_wait_framework = ajax_wait_framework 
+            
