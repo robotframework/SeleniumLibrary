@@ -316,6 +316,15 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "id=test1", tag='file upload')
         self.assertEqual(result, [elements[7]])
 
+    def test_webdriver_find_returns_none(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        for locator in ("identifier=it", "id=it", "name=it", "xpath=//div", "dom=document.images[1]", "link=it", "css=div.it",
+                        "tag=div", "default"):
+            result = finder.find(browser, locator)
+            self.assertEqual(result, [])
+
     def _make_mock_elements(self, *tags):
         elements = []
         for tag in tags:
