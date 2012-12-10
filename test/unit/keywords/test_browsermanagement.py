@@ -1,6 +1,7 @@
 import unittest
 from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywords
 from selenium import webdriver
+from mockito import *
 
 class BrowserManagementTests(unittest.TestCase): 
 
@@ -53,6 +54,21 @@ class BrowserManagementTests(unittest.TestCase):
         expected_caps = "key1:val1,key2:val2"
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)
+
+    def test_set_selenium_timeout_only_affects_open_browsers(self):
+        bm = _BrowserManagementKeywords()
+        first_browser, second_browser = mock(), mock()
+        bm._cache.register(first_browser)
+        bm._cache.close()
+        verify(first_browser).quit()
+        bm._cache.register(second_browser)
+        bm.set_selenium_timeout("10 seconds")
+        verify(second_browser).set_script_timeout(10.0)
+        bm._cache.close_all()
+        verify(second_browser).quit()
+        bm.set_selenium_timeout("20 seconds")
+        verifyNoMoreInteractions(first_browser)
+        verifyNoMoreInteractions(second_browser)
 
 
     def verify_browser(self , webdriver_type , browser_name, **kw):
