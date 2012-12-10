@@ -29,8 +29,8 @@ class ElementFinder(object):
     # Strategy routines, private
 
     def _find_by_identifier(self, browser, criteria, tag, constraints):
-        elements = browser.find_elements_by_id(criteria)
-        elements.extend(browser.find_elements_by_name(criteria))
+        elements = browser.find_elements_by_id(criteria) or []
+        elements.extend(browser.find_elements_by_name(criteria) or [])
         return self._filter_elements(elements, tag, constraints)
 
     def _find_by_id(self, browser, criteria, tag, constraints):
@@ -92,7 +92,7 @@ class ElementFinder(object):
             ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
             ' or '.join(xpath_searchers))
 
-        return browser.find_elements_by_xpath(xpath)
+        return browser.find_elements_by_xpath(xpath) or []
 
     # Private
 
@@ -138,6 +138,7 @@ class ElementFinder(object):
         return True
 
     def _filter_elements(self, elements, tag, constraints):
+        if elements is None: elements = []
         if tag is None: return elements
         return filter(
             lambda element: self._element_matches(element, tag, constraints),
