@@ -54,6 +54,14 @@ class BrowserManagementTests(unittest.TestCase):
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)
 
+    def test_bad_browser_name(self):
+        bm = _BrowserManagementKeywords()
+        try:
+            bm._make_browser("fireox")
+            self.fail("Exception not raised")
+        except ValueError, e:
+            self.assertEquals("fireox is not a supported browser.", e.message)
+
 
     def verify_browser(self , webdriver_type , browser_name, **kw):
         #todo try lambda *x: was_called = true
