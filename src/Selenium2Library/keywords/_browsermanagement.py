@@ -388,22 +388,18 @@ class _BrowserManagementKeywords(KeywordGroup):
             raise RuntimeError('No browser is open')
         return self._cache.current
 
-    def _get_browser_token(self, browser_name):
-        return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
+    def _get_browser_creation_function(self, browser_name):
+        func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))
+        return getattr(self, func_name) if func_name else None
 
-
-    def _get_browser_creation_function(self,browser_name):
-        return BROWSER_NAMES.get(browser_name.lower().replace(' ', ''), browser_name)
-
-    def _make_browser(self , browser_name , desired_capabilities=None , profile_dir=None,
-                    remote=None):
-
+    def _make_browser(self, browser_name, desired_capabilities=None,
+                      profile_dir=None, remote=None):
         creation_func = self._get_browser_creation_function(browser_name)
-        browser = getattr(self,creation_func)(remote , desired_capabilities , profile_dir)
 
-        if browser is None:
+        if not creation_func:
             raise ValueError(browser_name + " is not a supported browser.")
 
+        browser = creation_func(remote, desired_capabilities, profile_dir)
         browser.set_speed(self._speed_in_secs)
         browser.set_script_timeout(self._timeout_in_secs)
         browser.implicitly_wait(self._implicit_wait_in_secs)
