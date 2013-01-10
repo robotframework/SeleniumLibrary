@@ -17,6 +17,20 @@ class TableElementFinder(object):
             ('css', 'row'): [' tr:nth-child(%s)'],
             ('css', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
 
+            ('jquery', 'default'): [''],
+            ('jquery', 'content'): [''],
+            ('jquery', 'header'): [' th'],
+            ('jquery', 'footer'): [' tfoot td'],
+            ('jquery', 'row'): [' tr:nth-child(%s)'],
+            ('jquery', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
+
+            ('sizzle', 'default'): [''],
+            ('sizzle', 'content'): [''],
+            ('sizzle', 'header'): [' th'],
+            ('sizzle', 'footer'): [' tfoot td'],
+            ('sizzle', 'row'): [' tr:nth-child(%s)'],
+            ('sizzle', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
+
             ('xpath', 'default'): [''],
             ('xpath', 'content'): ['//*'],
             ('xpath', 'header'): ['//th'],
