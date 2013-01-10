@@ -31,6 +31,7 @@ import SimpleHTTPServer
 
 
 DEFAULT_PORT = 7272
+DEFAULT_HOST = 'localhost'
 
 
 class StoppableHttpServer(BaseHTTPServer.HTTPServer):
@@ -58,16 +59,16 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.do_GET()
 
 
-def start_server(port=DEFAULT_PORT):
+def start_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
     print "Demo application starting on port %s" % port
     root  = os.path.dirname(os.path.abspath(__file__))
     os.chdir(root)
-    server = StoppableHttpServer(('localhost', int(port)), StoppableHttpRequestHandler)
+    server = StoppableHttpServer((host, int(port)), StoppableHttpRequestHandler)
     server.serve_forever()
 
-def stop_server(port=DEFAULT_PORT):
+def stop_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
     print "Demo application on port %s stopping" % port
-    conn = httplib.HTTPConnection("localhost:%s" % port)
+    conn = httplib.HTTPConnection("%s:%s" % (host, port))
     conn.request("QUIT", "/")
     conn.getresponse()
 
