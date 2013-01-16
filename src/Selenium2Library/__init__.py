@@ -86,7 +86,7 @@ class Selenium2Library(
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = VERSION
 
-    def __init__(self, timeout=5.0, implicit_wait=0.0, run_on_failure='Capture Page Screenshot'):
+    def __init__(self, timeout=5.0, implicit_wait=0.0, run_on_failure='Capture Page Screenshot', ajax_wait_framework=None):
         """Selenium2Library can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for all waiting actions.
@@ -94,11 +94,7 @@ class Selenium2Library(
 
         'implicit_wait' is the implicit timeout that Selenium waits when
         looking for elements.
-        It can be later set with `Set Selenium Implicit Wait`.
-        See `WebDriver: Advanced Usage`__ section of the SeleniumHQ documentation
-        for more information about WebDriver's implicit wait functionality.
-
-        __ http://seleniumhq.org/docs/04_webdriver_advanced.html#explicit-and-implicit-waits
+        It can be later set with 'Set Selenium Implicit Wait'.
 
         `run_on_failure` specifies the name of a keyword (from any available
         libraries) to execute when a Selenium2Library keyword fails. By default
@@ -107,15 +103,18 @@ class Selenium2Library(
         `Register Keyword To Run On Failure` keyword for more information about this
         functionality.
 
+        `ajax_wait_framework`  waiting for an element by Java Script Framework, it support 'jquery'
+
         Examples:
-        | Library `|` Selenium2Library `|` 15                                            | # Sets default timeout to 15 seconds                                       |
-        | Library `|` Selenium2Library `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
-        | Library `|` Selenium2Library `|` 5 `|` run_on_failure=Log Source               | # Sets default timeout to 5 seconds and runs `Log Source` on failure       |
-        | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
-        | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
+        | Library `|` Selenium2Library `|` 15                                                             | # Sets default timeout to 15 seconds                                      |
+        | Library `|` Selenium2Library `|` 5 `|` Log Source                                               | # Sets default timeout to 5 seconds and runs `Log Source` on failure      |
+        | Library `|` Selenium2Library `|` timeout=10 `|` run_on_failure=Nothing                          | # Sets default timeout to 10 seconds and does nothing on failure          |
+        | Library `|` Selenium2Library `|` timeout=10 `|` implicit_wait=5 `|` ajax_wait_framework=jquery  | # Sets default timeout to 10 seconds, implicit_wait 5 seconds for jquery  |
         """
         for base in Selenium2Library.__bases__:
             base.__init__(self)
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
+        self.ajax_wait_framework = ajax_wait_framework 
+            

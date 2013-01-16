@@ -534,6 +534,8 @@ return !element.dispatchEvent(evt);
 
     def _element_find(self, locator, first_only, required, tag=None):
         browser = self._current_browser()
+        if self.ajax_wait_framework:
+            self._ajax_active_check(self.ajax_wait_framework.lower()) 
         elements = self._element_finder.find(browser, locator, tag)
         if required and len(elements) == 0:
             raise ValueError("Element locator '" + locator + "' did not match any elements.")
@@ -657,3 +659,10 @@ return !element.dispatchEvent(evt);
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
 
+    def _ajax_active_check(self, js_framework):
+        #TODO :dojo, Prototype, YUI, 
+        js_condition_dict = {"jquery": "return window.jQuery.active == 0;",}
+        if js_framework in js_condition_dict:
+            self._info("waiting for %s finish ajax active" %js_framework )
+            _timeout = int(self._implicit_wait_in_secs) if self._implicit_wait_in_secs else 10
+            self.wait_for_condition(condition=js_condition_dict[js_framework], timeout=_timeout, error='ajax wait timeout')
