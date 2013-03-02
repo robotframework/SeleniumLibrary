@@ -322,6 +322,7 @@ class _FormElementKeywords(KeywordGroup):
     def _input_text_into_text_field(self, locator, text):
         element = self._element_find(locator, True, True)
         element.clear()
+        element = self._element_find(locator, True, True)
         element.send_keys(text)
 
     def _is_form_element(self, element):
