@@ -11,7 +11,7 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, element lookups
 
-    def current_frame_contains(self, text, logLevel='INFO'):
+    def current_frame_contains(self, text, loglevel='INFO'):
         """Verifies that current frame contains `text`.
 
         See `Page Should Contain ` for explanation about `loglevel` argument.
@@ -229,6 +229,13 @@ class _ElementKeywords(KeywordGroup):
         """
         return self._get_value(locator)
 
+    def get_text(self, locator):
+        """Returns the text value of element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._get_text(locator)
+
     def get_vertical_position(self, locator):
         """Returns vertical position of element identified by `locator`.
 
@@ -267,6 +274,35 @@ class _ElementKeywords(KeywordGroup):
         """Sets focus to element identified by `locator`."""
         element = self._element_find(locator, True, True)
         self._current_browser().execute_script("arguments[0].focus();", element)
+
+    def drag_and_drop(self, source, target):
+        """Drags element identified with `source` which is a locator.
+
+        Element can be moved on top of another element with `target`
+        argument.
+
+        `target` is a locator of the element where the dragged object is
+        dropped.
+
+        Examples:
+        | Drag And Drop | elem1 | elem2 | # Move elem1 over elem2. |
+        """
+        src_elem = self._element_find(source,True,True)
+        trg_elem =  self._element_find(target,True,True)
+        ActionChains(self._current_browser()).drag_and_drop(src_elem, trg_elem).perform()
+
+
+    def drag_and_drop_by_offset(self, source, xoffset, yoffset):
+        """Drags element identified with `source` which is a locator.
+
+        Element will be moved by xoffset and yoffset.  each of which is a
+        negative or positive number specify the offset.
+
+        Examples:
+        | Drag And Drop | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
+        """
+        src_elem = self._element_find(source, True, True)
+        ActionChains(self._current_browser()).drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
 
     def mouse_down(self, locator):
         """Simulates pressing the left mouse button on the element specified by `locator`.
@@ -508,7 +544,7 @@ return !element.dispatchEvent(evt);
 
     def _frame_contains(self, locator, text):
         browser = self._current_browser()
-        element = self._element_find(locator, True, True, 'frame')
+        element = self._element_find(locator, True, True)
         browser.switch_to_frame(element)
         self._info("Searching for text from frame '%s'." % locator)
         found = self._is_text_present(text)
@@ -516,7 +552,7 @@ return !element.dispatchEvent(evt);
         return found
 
     def _get_text(self, locator):
-        element = self._element_find(locator, True, False)
+        element = self._element_find(locator, True, True)
         if element is not None:
             return element.text
         return None
@@ -574,9 +610,9 @@ return !element.dispatchEvent(evt);
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
         if len(parts[0]) == 0:
-            raise ValueError("Attribute locator '%s' does not contain an element locator." % (locator))
+            raise ValueError("Attribute locator '%s' does not contain an element locator." % (attribute_locator))
         if len(parts[2]) == 0:
-            raise ValueError("Attribute locator '%s' does not contain an attribute name." % (locator))
+            raise ValueError("Attribute locator '%s' does not contain an attribute name." % (attribute_locator))
         return (parts[0], parts[2])
 
     def _is_element_present(self, locator, tag=None):
@@ -589,7 +625,7 @@ return !element.dispatchEvent(evt);
         if self._is_text_present(text):
             return True
 
-        subframes = self._element_find("tag=frame", False, False, 'frame')
+        subframes = self._element_find("xpath=//frame|//iframe", False, False)
         self._debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
