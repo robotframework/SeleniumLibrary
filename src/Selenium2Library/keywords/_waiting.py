@@ -86,20 +86,17 @@ class _WaitingKeywords(KeywordGroup):
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
             else:
                 return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
-        self._wait_until_ext(timeout, check_visibility)
+        self._wait_until_no_error(timeout, check_visibility)
 
     # Private
 
     def _wait_until(self, timeout, error, function, *args):
-        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
-        error = error.replace('<TIMEOUT>', robot.utils.secs_to_timestr(timeout))
-        maxtime = time.time() + timeout
-        while not function(*args):
-            if time.time() > maxtime:
-                raise AssertionError(error)
-            time.sleep(0.2)
+        error = error.replace('<TIMEOUT>', self._format_timeout(timeout))
+        def wait_func():
+            return None if function(*args) else error
+        self._wait_until_no_error(timeout, wait_func)
 
-    def _wait_until_ext(self, timeout, wait_func, *args):
+    def _wait_until_no_error(self, timeout, wait_func, *args):
         timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
         maxtime = time.time() + timeout
         while True:
