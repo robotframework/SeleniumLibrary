@@ -12,6 +12,8 @@ class ElementFinder(object):
             'link': self._find_by_link_text,
             'css': self._find_by_css_selector,
             'tag': self._find_by_tag_name,
+            'src': self._find_by_default,
+            'alt': self._find_by_default,
             None: self._find_by_default
         }
 
