@@ -32,6 +32,12 @@ Get Window Identifiers
   ${ids}=  Get Window Identifiers
   Should Be Equal  ${ids}  ${exp_ids}
 
+Get and Set Window Size
+  ${win_size}=  Create Dictionary  width  ${600}  height  ${800}
+  Set Window Size  ${win_size}
+  ${returned_size}=  Get Window Size
+  Dictionaries Should Be Equal  ${returned_size}  ${win_size}
+
 *Keywords*
 Open Popup Window, Select It And Verify
   [Arguments]  ${window_id}

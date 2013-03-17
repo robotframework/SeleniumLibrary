@@ -169,6 +169,14 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Maximizes current browser window."""
         self._current_browser().maximize_window()
 
+    def get_window_size(self):
+        """Returns current window size."""
+        return self._current_browser().get_window_size()
+
+    def set_window_size(self, size):
+        """Sets the current window's size."""
+        return self._current_browser().set_window_size(size['width'], size['height'])
+
     def select_frame(self, locator):
         """Sets frame identified by `locator` as current frame.
 
