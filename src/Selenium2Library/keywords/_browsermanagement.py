@@ -171,11 +171,12 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def get_window_size(self):
         """Returns current window size."""
-        return self._current_browser().get_window_size()
+        size = self._current_browser().get_window_size()
+        return size['width'], size['height']
 
-    def set_window_size(self, size):
+    def set_window_size(self, width, height):
         """Sets the current window's size."""
-        return self._current_browser().set_window_size(size['width'], size['height'])
+        return self._current_browser().set_window_size(width, height)
 
     def select_frame(self, locator):
         """Sets frame identified by `locator` as current frame.
