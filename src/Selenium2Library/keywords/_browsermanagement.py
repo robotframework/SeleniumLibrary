@@ -170,25 +170,22 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._current_browser().maximize_window()
 
     def get_window_size(self):
-        """Returns current window size as 'width' then 'height'.
+        """Returns current window size as `width` then `height`.
 
         Example:
-        | Set Window Size | ${600} | ${800}       |
         | ${width} | ${height}= | Get Window Size |
-        | Should Be Equal | ${width}  | ${600}    |
-        | Should Be Equal | ${height} | ${800}    |
         """
         size = self._current_browser().get_window_size()
         return size['width'], size['height']
 
     def set_window_size(self, width, height):
-        """Sets the current window's size using 'width' and 'height'.
+        """Sets the `width` and `height` of the current window to the specified values.
 
         Example:
-        | Set Window Size | ${600} | ${800}       |
+        | Set Window Size | ${800} | ${600}       |
         | ${width} | ${height}= | Get Window Size |
-        | Should Be Equal | ${width}  | ${600}    |
-        | Should Be Equal | ${height} | ${800}    |
+        | Should Be Equal | ${width}  | ${800}    |
+        | Should Be Equal | ${height} | ${600}    |
         """
         return self._current_browser().set_window_size(width, height)
 
