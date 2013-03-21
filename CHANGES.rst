@@ -1,6 +1,12 @@
 Release Notes
 =============
 
+1.2 (unrealeased)
+-----------------
+- Added 'Get Window Size' and 'Set Window Size' keywords matching the
+  Selenium functionality.
+  [emanlove] [ombre42]
+
 1.1
 ----------------
 - Increased minimum version requirement for Selenium to 2.12.0 within
