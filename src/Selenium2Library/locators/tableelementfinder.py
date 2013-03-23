@@ -68,6 +68,8 @@ class TableElementFinder(object):
     def _parse_table_locator(self, table_locator, location_method):
         if table_locator.startswith('xpath='):
             table_locator_type = 'xpath'
+        elif table_locator.startswith('jquery=') or table_locator.startswith('sizzle='):
+            table_locator_type = 'sizzle'
         else:
             if not table_locator.startswith('css='):
                 table_locator = "css=table#%s" % table_locator

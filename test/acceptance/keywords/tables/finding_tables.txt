@@ -11,3 +11,13 @@ Should Identify Table By CSS
     Table Cell Should Contain  css=table#formattedTable  1  1  formattedTable_A1
     Table Cell Should Contain  css=table#formattedTable  2  4  äöü€&äöü€&
     Table Cell Should Contain  css=h2.someClass ~ table:last-child  2  4  äöü€&äöü€&
+
+Should Identify Table By Sizzle
+    Table Should Contain  jquery=table#simpleTable  simpleTable
+    Table Header Should Contain  jquery=table#tableWithTwoHeaders  tableWithTwoHeaders_C2
+    Table Footer Should Contain  jquery=table#withHeadAndFoot  withHeadAndFoot_AF1
+    Table Row Should Contain  jquery=table#mergedRows  1  mergedRows_D1
+    Table Column Should Contain  jquery=table#mergedCols  1  mergedCols_D1
+    Table Cell Should Contain  jquery=table#formattedTable  1  1  formattedTable_A1
+    Table Cell Should Contain  jquery=table#formattedTable  2  4  äöü€&äöü€&
+    Table Cell Should Contain  jquery=h2.someClass ~ table:last-child  2  4  äöü€&äöü€&
