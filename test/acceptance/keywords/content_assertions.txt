@@ -218,3 +218,7 @@ Xpath Should Match X Times
     Xpath Should Match X Times  //input[@type="text"]  ${1}
     Run Keyword And Expect Error  Xpath //input[@type="text"] should have matched 2 times but matched 1 times  Xpath Should Match X Times  //input[@type="text"]  2
 
+Non-breaking spaces should be treated as ususal spaces
+    [Setup]  Go To Page "non_ascii.html"
+    Page Should Contain  Non-breaking space
+
