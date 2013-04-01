@@ -17,6 +17,7 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'gc': "_make_chrome",
                  'chrome': "_make_chrome",
                  'opera' : "_make_opera",
+                 'phantomjs' : "_make_phantomjs",
                  'htmlunit' : "_make_htmlunit",
                  'htmlunitwithjs' : "_make_htmlunitwithjs"
                 }
@@ -74,6 +75,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | gc               | Google Chrome |
         | chrome           | Google Chrome |
         | opera            | Opera         |
+        | phantomjs        | PhantomJS     |
         | htmlunit         | HTMLUnit      |
         | htmlunitwithjs   | HTMLUnit with Javascipt support |
         
@@ -433,6 +435,10 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _make_opera(self , remote , desired_capabilities , profile_dir):
         return self._generic_make_browser(webdriver.Opera, 
                 webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
+
+    def _make_phantomjs(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.PhantomJS, 
+                webdriver.DesiredCapabilities.PHANTOMJS, remote, desired_capabilities)
 
     def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
         return self._generic_make_browser(webdriver.Remote, 
