@@ -32,6 +32,9 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_opera_browser(self):
         self.verify_browser(webdriver.Opera, "OPERA")
 
+    def test_create_phantomjs_browser(self):
+        self.verify_browser(webdriver.PhantomJS, "PHANTOMJS")
+
     def test_create_remote_browser(self):
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub")
 
