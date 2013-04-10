@@ -56,6 +56,8 @@ class Selenium2Library(
     | dom        | Click Element `|` dom=document.images[56] | Matches with arbitrary DOM express            |
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
+    | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
+    | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
 
     Table related keywords, such as `Table Should Contain`, work differently.

@@ -17,6 +17,20 @@ class TableElementFinder(object):
             ('css', 'row'): [' tr:nth-child(%s)'],
             ('css', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
 
+            ('jquery', 'default'): [''],
+            ('jquery', 'content'): [''],
+            ('jquery', 'header'): [' th'],
+            ('jquery', 'footer'): [' tfoot td'],
+            ('jquery', 'row'): [' tr:nth-child(%s)'],
+            ('jquery', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
+
+            ('sizzle', 'default'): [''],
+            ('sizzle', 'content'): [''],
+            ('sizzle', 'header'): [' th'],
+            ('sizzle', 'footer'): [' tfoot td'],
+            ('sizzle', 'row'): [' tr:nth-child(%s)'],
+            ('sizzle', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
+
             ('xpath', 'default'): [''],
             ('xpath', 'content'): ['//*'],
             ('xpath', 'header'): ['//th'],
@@ -54,6 +68,8 @@ class TableElementFinder(object):
     def _parse_table_locator(self, table_locator, location_method):
         if table_locator.startswith('xpath='):
             table_locator_type = 'xpath'
+        elif table_locator.startswith('jquery=') or table_locator.startswith('sizzle='):
+            table_locator_type = 'sizzle'
         else:
             if not table_locator.startswith('css='):
                 table_locator = "css=table#%s" % table_locator

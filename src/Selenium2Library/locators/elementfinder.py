@@ -11,6 +11,8 @@ class ElementFinder(object):
             'dom': self._find_by_dom,
             'link': self._find_by_link_text,
             'css': self._find_by_css_selector,
+            'jquery': self._find_by_sizzle_selector,
+            'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
             None: self._find_by_default
         }
@@ -55,6 +57,12 @@ class ElementFinder(object):
         if not isinstance(result, list):
             result = [result]
         return self._filter_elements(result, tag, constraints)
+
+    def _find_by_sizzle_selector(self, browser, criteria, tag, constraints):
+        js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
+        return self._filter_elements(
+            browser.execute_script(js),
+            tag, constraints)
 
     def _find_by_link_text(self, browser, criteria, tag, constraints):
         return self._filter_elements(
