@@ -1,0 +1,256 @@
+<html>
+  <head>
+    <title>(root)/links.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="div_id">
+      <a href="index.html">Relative</a><br/>
+      <a href="sub/index.html">Relative to sub-directory</a><br/>
+      <a href="http://www.google.com">Absolute external link</a><br/>
+      <a id="some_id" href="broken.html">Link with id</a><br/>
+      <a href="index.html"><img src="image.jpg" id="image_id"/></a><br/>
+      <a href="index.html"><img src="robot.png" alt="tooltip"/></a><br/>
+      <a href="index.html" id="foo"><img src="robot.png"/>Text and image</a><br/>
+      <a href="index.html">Link with double " quote</a><br/>
+      <a href="index.html">Link with &lt; &amp; &gt; \</a><br/>
+      <a href="index.html">Link with asterisk * and another *</a><br/>
+      <a href="index.html">Link with Unicode äöüÄÖÜß</a>
+    </div>
+    <div>
+      <a href="target/second.html">
+      	Link with whitespace
+      </a><br/>
+      <a href="target/third.html">
+      	Link with 
+      	whitespace   within
+      </a><br/>
+      <a href="target/first.html" id="bold_id"><b>Link with bolded text</b></a>
+    </div>
+    <div id="first_div">
+      <a href="target/first.html"><img src="robot.png" alt="Image"/></a>
+      <a href="target/first.html">Link</a>
+    </div>
+    <div id="second_div" class="Second Class">
+      <a href="target/second.html"><img src="robot.png" alt="Image"/></a>
+      <a href="target/second.html">Link</a>
+    </div>
+    <a href="index.html" target="_blank">Target opens in new window</a>
+    <h2>Simple Table</h2>
+    <table id="simpleTable" border="1">
+      <tr>
+        <td>simpleTable_A1</td>
+        <td>simpleTable_B1</td>
+        <td>simpleTable_C1</td>
+      </tr>
+      <tr>
+        <td>simpleTable_A2</td>
+        <td>simpleTable_B2</td>
+        <td>simpleTable_C2</td>
+      </tr>
+      <tr>
+        <td>simpleTable_A3</td>
+        <td>simpleTable_B3</td>
+        <td>simpleTable_C3</td>
+      </tr>
+    </table>
+    <h2>Simple Table by Name</h2>
+    <table name="simpleTableName" border="1">
+      <tr>
+        <td>simpleTableName_A1</td>
+        <td>simpleTableName_B1</td>
+        <td>simpleTableName_C1</td>
+      </tr>
+      <tr>
+        <td>simpleTableName_A2</td>
+        <td>simpleTableName_B2</td>
+        <td>simpleTableName_C2</td>
+      </tr>
+      <tr>
+        <td>simpleTableName_A3</td>
+        <td>simpleTableName_B3</td>
+        <td>simpleTableName_C3</td>
+      </tr>
+    </table>
+
+    <h2>Simple Table With Nested Table</h2>
+    <table id="simpleWithNested" border="1">
+      <tr>
+        <td>simpleWithNested_A1</td>
+        <td>simpleWithNested_B1</td>
+        <td>simpleWithNested_C1</td>
+      </tr>
+      <tr>
+        <td>simpleWithNested_A2</td>
+        <td><table id="nestedTable" border="1">
+      <tr>
+        <td>nestedTable_A1</td>
+        <td>nestedTable_B1</td>
+        <td>nestedTable_C1</td>
+      </tr>
+      <tr>
+        <td>nestedTable_A2</td>
+        <td>nestedTable_B2</td>
+        <td>nestedTable_C2</td>
+      </tr>
+      <tr>
+        <td>nestedTable_A3</td>
+        <td>nestedTable_B3</td>
+        <td>nestedTable_C3</td>
+      </tr>
+    </table></td>
+        <td>simpleWithNested_C2</td>
+      </tr>
+      <tr>
+        <td>simpleWithNested_A3</td>
+        <td>simpleWithNested_B3</td>
+        <td>simpleWithNested_C3</td>
+      </tr>
+    </table>
+
+    <h2>Simple Table With Header</h2>
+    <table id="tableWithSingleHeader" border="1">
+      <tr>
+        <th>tableWithSingleHeader_A1</th>
+        <th>tableWithSingleHeader_B1</th>
+        <th>tableWithSingleHeader_C1</th>
+      </tr>
+      <tr>
+        <td>tableWithSingleHeader_A2</td>
+        <td>tableWithSingleHeader_B2</td>
+        <td>tableWithSingleHeader_C2</td>
+      </tr>
+      <tr>
+        <td>tableWithSingleHeader_A3</td>
+        <td>tableWithSingleHeader_B3</td>
+        <td>tableWithSingleHeader_C3</td>
+      </tr>
+    </table>
+
+    <h2>Simple Table With Two Header Rows</h2>
+    <table id="tableWithTwoHeaders" border="1">
+      <tr>
+        <th>tableWithTwoHeaders_A1</th>
+        <th>tableWithTwoHeaders_B1</th>
+        <th>tableWithTwoHeaders_C1</th>
+      </tr>
+      <tr>
+        <th>tableWithTwoHeaders_A2</th>
+        <th>tableWithTwoHeaders_B2</th>
+        <th>tableWithTwoHeaders_C2</th>
+      </tr>
+      <tr>
+        <td>tableWithTwoHeaders_A3</td>
+        <td>tableWithTwoHeaders_B3</td>
+        <td>tableWithTwoHeaders_C3</td>
+      </tr>
+      <tr>
+        <td>tableWithTwoHeaders_A4</td>
+        <td>tableWithTwoHeaders_B4</td>
+        <td>tableWithTwoHeaders_C4</td>
+      </tr>
+    </table>
+
+    <h2>Table with thead, tfoot and tbody sections</h2>
+    <table id="withHeadAndFoot" border="1" rules="groups">
+      <thead>
+        <tr>
+          <th>withHeadAndFoot_AH1</th>
+          <th>withHeadAndFoot_BH1</th>
+          <th>withHeadAndFoot_CH1</th>
+        </tr>
+        <tr>
+          <th>withHeadAndFoot_AH2</th>
+          <th>withHeadAndFoot_BH2</th>
+          <th>withHeadAndFoot_CH2</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td>withHeadAndFoot_AF1</td>
+          <td>withHeadAndFoot_BF1</td>
+          <td>withHeadAndFoot_CF1</td>
+        </tr>
+        <tr>
+          <td>withHeadAndFoot_AF2</td>
+          <td>withHeadAndFoot_BF2</td>
+          <td>withHeadAndFoot_CF2</td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr>
+          <td>withHeadAndFoot_A1</td>
+          <td>withHeadAndFoot_B1</td>
+          <td>withHeadAndFoot_C1</td>
+        </tr>
+        <tr>
+          <td>withHeadAndFoot_A2</td>
+          <td>withHeadAndFoot_B2</td>
+          <td>withHeadAndFoot_C2</td>
+        </tr>
+        <tr>
+          <td>withHeadAndFoot_A3</td>
+          <td>withHeadAndFoot_B3</td>
+          <td>withHeadAndFoot_C3</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Table With Merged Cells In a Row</h2>
+    <table id="mergedRows" border="1">
+      <tr>
+        <td rowspan="2">mergedRows_A1</td>
+        <td>mergedRows_B1</td>
+        <td>mergedRows_C1</td>
+        <td rowspan="4">mergedRows_D1</td>
+      </tr>
+      <tr>
+        <td rowspan="2">mergedRows_B2</td>
+        <td>mergedRows_C2</td>
+      </tr>
+      <tr>
+    	<td>mergedRows_A3</td>
+        <td>mergedRows_C3</td>
+      </tr>
+    </table>
+
+    <h2>Table With Merged Cells In a Column</h2>
+    <table id="mergedCols" border="1">
+      <tr>
+        <td colspan="2">mergedCols_A1</td>
+        <td>mergedCols_C1</td>
+      </tr>
+      <tr>
+        <td>mergedCols_A2</td>
+        <td colspan="2">mergedCols_B2</td>
+      </tr>
+      <tr>
+        <td>mergedCols_A3</td>
+        <td>mergedCols_B3</td>
+        <td>mergedCols_C3</td>
+      </tr>
+      <tr>
+        <td colspan="4">mergedCols_D1</td>
+      </tr>
+    </table>
+
+    <h2 class="someClass">Table With Formatting and Unicode</h2>
+    <table><tr><td>dummy Table</td></tr></table>
+    <table><tr><td>dummy Table</td></tr></table>
+    <table id="formattedTable" border="1">
+      <tr>
+        <td><strong>formattedTable_A1</strong></td>
+        <td><b>formattedTable_B1</b></td>
+        <td><i>formattedTable_C1</i></td>
+        <td><strong>form<b>atted</b><i>Table_</i></strong>D1</td>
+      </tr>
+      <tr>
+        <td><h2>formattedTable_A2</h2></td>
+        <td><a href="../index.html">formattedTable_B2</a></td>
+        <td>formattedTable_ÄÖÜäöüß</td>
+        <td>&auml;&ouml;&uuml;&euro;&amp;äöü€&</td>
+      </tr>
+    </table>
+  </body>
+</html>
