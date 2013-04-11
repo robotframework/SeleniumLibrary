@@ -23,7 +23,7 @@ class _SelectElementKeywords(KeywordGroup):
         locating elements.
         """
         select = self._get_select_list(locator)
-        return select.first_selected_option.get_attribute('label')
+        return select.first_selected_option.text
 
     def get_selected_list_labels(self, locator):
         """Returns the visible labels of selected elements (as a list) from the select list identified by `locator`.
