@@ -1,6 +1,24 @@
 Release Notes
 =============
 
+1.2 (unreleased)
+----------------
+- Added PhantomJS as a supported browser type.
+  [bmannix]
+
+- Fixed 'Get Selected List Label' under IE7 or IE8.
+  [ombre42]
+
+- Added support for jQuery and sizzle selectors.
+  [Paul Hicks (tenwit)][peritus][j1z0]
+
+- Added new global variable DEFAULT_HOST to demo server for more easier
+  way to bind to other address than 'localhost'.
+  [IsNoGood]
+
+- Skip closed browsers when setting Selenium timeout. Fixes #93.
+  [ombre42]
+
 1.1
 ----------------
 - Increased minimum version requirement for Selenium to 2.12.0 within
