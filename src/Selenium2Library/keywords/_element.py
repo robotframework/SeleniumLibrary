@@ -260,6 +260,18 @@ class _ElementKeywords(KeywordGroup):
         self._info("Clicking element '%s'." % locator)
         self._element_find(locator, True, True).click()
 
+    def click_element_on_coordinates(self, locator, xoffset, yoffset):
+        """Click element identified by `locator` at given coordinates.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        """
+        self._info("Clicking element '%s' on coordinates: x: %d & y: %d" \
+                    % (locator, int(xoffset), int(yoffset)))
+        element = self._element_find(locator, True, True)
+        self._info("Element size : %s" % str(element.size))
+        ActionChains(self._current_browser()).move_to_element_with_offset(element, int(xoffset), int(yoffset)).click().perform()
+
     def double_click_element(self, locator):
         """Double click element identified by `locator`.
 
