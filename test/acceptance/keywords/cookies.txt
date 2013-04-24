@@ -1,6 +1,8 @@
 *Setting*
 Resource  ../resource.txt
-Suite Setup  Run Keywords  Delete All Cookies  Go To Page "index.html"
+#Suite Setup  Run Keywords  Delete All Cookies  Go To Page "cookie.html"
+Suite Setup  Go To Page "cookie.html"
+Suite Teardown  Delete All Cookies
 
 
 *Test Cases*
