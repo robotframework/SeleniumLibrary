@@ -1,3 +1,5 @@
+https://api.travis-ci.org/rtomac/robotframework-selenium2library.png
+
 Selenium 2 (WebDriver) library for Robot Framework
 ==================================================
 
