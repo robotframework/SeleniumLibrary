@@ -328,4 +328,4 @@ class _FormElementKeywords(KeywordGroup):
         if element is None:
             return False
         tag = element.tag_name.lower()
-        return tag == 'input' or tag == 'select' or tag == 'textarea' or tag == 'button'
+        return tag == 'input' or tag == 'select' or tag == 'textarea' or tag == 'button' or tag == 'option'
