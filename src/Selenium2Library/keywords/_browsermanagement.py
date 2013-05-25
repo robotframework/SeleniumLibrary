@@ -19,7 +19,9 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'opera' : "_make_opera",
                  'phantomjs' : "_make_phantomjs",
                  'htmlunit' : "_make_htmlunit",
-                 'htmlunitwithjs' : "_make_htmlunitwithjs"
+                 'htmlunitwithjs' : "_make_htmlunitwithjs",
+                 'android': "_make_android",
+                 'iphone': "_make_iphone"
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -78,7 +80,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         | phantomjs        | PhantomJS     |
         | htmlunit         | HTMLUnit      |
         | htmlunitwithjs   | HTMLUnit with Javascipt support |
-        
+        | android          | Android       |
+        | iphone           | Iphone        |
+
 
         Note, that you will encounter strange behavior, if you open
         multiple Internet Explorer browser instances. That is also why
@@ -448,7 +452,15 @@ class _BrowserManagementKeywords(KeywordGroup):
         return self._generic_make_browser(webdriver.Remote, 
                 webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
 
-    
+    def _make_android(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Remote,
+                webdriver.DesiredCapabilities.ANDROID, remote, desired_capabilities)
+
+    def _make_iphone(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Remote,
+                webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
+
+
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the 
         appropriate web-driver'''
@@ -457,7 +469,6 @@ class _BrowserManagementKeywords(KeywordGroup):
         else:
             browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
         return browser
-    
 
     def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
         '''parses the string based desired_capabilities which should be in the form
