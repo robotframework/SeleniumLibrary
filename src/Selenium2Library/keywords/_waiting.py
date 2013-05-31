@@ -23,7 +23,8 @@ class _WaitingKeywords(KeywordGroup):
         default value.
 
         See also `Wait Until Page Contains`, `Wait Until Page Contains
-        Element` and BuiltIn keyword `Wait Until Keyword Succeeds`.
+        Element`, `Wait Until Element Is Visible` and BuiltIn keyword
+        `Wait Until Keyword Succeeds`.
         """
         if not error:
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
@@ -39,8 +40,9 @@ class _WaitingKeywords(KeywordGroup):
 
         `error` can be used to override the default error message.
 
-        See also `Wait Until Page Contains Element`, `Wait For Condition` and
-        BuiltIn keyword `Wait Until Keyword Succeeds`.
+        See also `Wait Until Page Contains Element`, `Wait For Condition`,
+        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
+        Keyword Succeeds`.
         """
         if not error:
             error = "Text '%s' did not appear in <TIMEOUT>" % text
@@ -55,20 +57,55 @@ class _WaitingKeywords(KeywordGroup):
 
         `error` can be used to override the default error message.
 
-        See also `Wait Until Page Contains`, `Wait For Condition` and
-        BuiltIn keyword `Wait Until Keyword Succeeds`.
+        See also `Wait Until Page Contains`, `Wait For Condition`,
+        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
+        Keyword Succeeds`.
         """
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, self._is_element_present, locator)
 
+    def wait_until_element_is_visible(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` is visible.
+
+        Fails if `timeout` expires before the element is visible. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains 
+        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
+        Succeeds`.
+        """
+        def check_visibility():
+            visible = self._is_visible(locator)
+            if visible:
+                return
+            elif visible is None:
+                return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
+            else:
+                return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
+        self._wait_until_no_error(timeout, check_visibility)
+
     # Private
 
     def _wait_until(self, timeout, error, function, *args):
+        error = error.replace('<TIMEOUT>', self._format_timeout(timeout))
+        def wait_func():
+            return None if function(*args) else error
+        self._wait_until_no_error(timeout, wait_func)
+
+    def _wait_until_no_error(self, timeout, wait_func, *args):
         timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
-        error = error.replace('<TIMEOUT>', robot.utils.secs_to_timestr(timeout))
         maxtime = time.time() + timeout
-        while not function(*args):
+        while True:
+            timeout_error = wait_func(*args)
+            if not timeout_error: return
             if time.time() > maxtime:
-                raise AssertionError(error)
+                raise AssertionError(timeout_error)
             time.sleep(0.2)
+
+    def _format_timeout(self, timeout):
+        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        return robot.utils.secs_to_timestr(timeout)
