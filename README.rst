@@ -60,6 +60,13 @@ E.g.::
 
 	python demo/rundemo.py demo/login_tests
 	
+Getting Help
+------------
+The `user group for Robot Framework`_ is the best place to get help. Consider including in the post:
+
+- Full description of what you are trying to do and expected outcome
+- Version number of Selenium2Library, Robot Framework, and Selenium
+- Traceback or other debug output containing error information
 
 .. _Selenium: http://selenium.openqa.org
 .. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
@@ -67,3 +74,4 @@ E.g.::
 .. _Wiki: https://github.com/rtomac/robotframework-selenium2library/wiki
 .. _Keyword Documentation: http://rtomac.github.com/robotframework-selenium2library/doc/Selenium2Library.html
 .. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
+.. _user group for Robot Framework: http://groups.google.com/group/robotframework-users
