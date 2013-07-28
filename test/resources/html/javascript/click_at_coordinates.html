@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function resizeImg (img)
+      {
+        var resize = 150; // resize amount in percentage
+        var origH  = 200;  // original image height
+        var origW  = 200; // original image width
+        var mouseX = event.x;
+        var mouseY = event.y;
+        var newH   = origH * (resize / 100);
+        var newW   = origW * (resize / 100);
+
+        // Set the new width and height
+        img.style.height = newH;
+        img.style.width  = newW;
+
+        var c = img.parentNode;
+
+        // Work out the new center
+        c.scrollLeft = (mouseX * (resize / 100)) - (newW / 2) / 2;
+        c.scrollTop  = (mouseY * (resize / 100)) - (newH / 2) / 2;
+        
+        // Calculate mouse position from the center of the image
+        var fromCenterX = mouseX - 108;
+        var fromCenterY = mouseY - 108;
+
+        // Change Initial output to coordinates that are clicked
+        document.getElementById("outputX").innerHTML=fromCenterX;
+        document.getElementById("outputY").innerHTML=fromCenterY;
+        //position:relative;
+      }
+    </script>
+    <style type="text/css">
+      #Container {
+        position:relative;
+        width:200px;
+        height:200px;
+        overflow:hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="Container">
+      <img alt="Click to zoom" onclick="resizeImg(this)" 
+        src="click_at_coordinates.png" />
+    </div>
+    <h1>Clicking at coordinates</h1>
+    <p id="info">Watch the output below</p>
+    <p id="outputX">initial outputX</p>
+    <p id="outputY">initial outputY</p>
+  </body>
+</html>
