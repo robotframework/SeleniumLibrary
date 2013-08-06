@@ -22,7 +22,10 @@ class BrowserCache(ConnectionCache):
             browser = self.current
             browser.quit()
             self.current = self._no_current
-            self.current_index = None
+            cls_attr = getattr(type(self), 'current_index', None)
+            if isinstance(cls_attr, property) and cls_attr.fset is not None:
+              self.current_index = None
+            
             self._closed.add(browser)
 
     def close_all(self):
