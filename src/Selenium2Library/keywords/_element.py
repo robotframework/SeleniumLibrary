@@ -285,10 +285,10 @@ class _ElementKeywords(KeywordGroup):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        xoffset = int(xoffset)
-        yoffset = int(yoffset)
         self._info("Click clicking element '%s' in coordinates '%s', '%s'." % (locator, xoffset, yoffset))
         element = self._element_find(locator, True, True)
+        #self._element_find(locator, True, True).click()
+        #ActionChains(self._current_browser()).move_to_element_with_offset(element, xoffset, yoffset).click().perform()
         ActionChains(self._current_browser()).move_to_element(element).move_by_offset(xoffset, yoffset).click().perform()
 
     def double_click_element(self, locator):

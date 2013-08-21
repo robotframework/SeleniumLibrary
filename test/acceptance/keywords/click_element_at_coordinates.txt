@@ -5,8 +5,8 @@ Resource          ../resource.txt
 
 *** Test Cases ***
 Click Element At Coordinates
-    [Documentation]    LOG 2 Click clicking element 'Container' in coordinates '10', '20'. 
-    Click Element At Coordinates    Container    10    20
+    [Documentation]    LOG 2 Click clicking element 'Clickable' in coordinates '10', '20'. 
+    Click Element At Coordinates    Clickable    ${10}   ${20}
     Element Text Should Be    outputX    10
     Element Text Should Be    outputY    20
 

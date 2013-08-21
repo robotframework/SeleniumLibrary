@@ -1,13 +1,13 @@
 <html>
   <head>
     <script type="text/javascript">
-      function resizeImg (img)
+      function resizeImg (img, event)
       {
         var resize = 150; // resize amount in percentage
         var origH  = 200;  // original image height
         var origW  = 200; // original image width
-        var mouseX = event.x;
-        var mouseY = event.y;
+        var mouseX = event.clientX;
+        var mouseY = event.clientY;
         var newH   = origH * (resize / 100);
         var newW   = origW * (resize / 100);
 
@@ -26,9 +26,31 @@
         var fromCenterY = mouseY - 108;
 
         // Change Initial output to coordinates that are clicked
-        document.getElementById("outputX").innerHTML=fromCenterX;
-        document.getElementById("outputY").innerHTML=fromCenterY;
+        document.getElementById("outputX").innerHTML=mouseX //fromCenterX;
+        document.getElementById("outputY").innerHTML=mouseY //fromCenterY;
         //position:relative;
+      }
+      function getClickCoords(currentElement, event)
+      {
+        var totalOffsetX = 0;
+        var totalOffsetY = 0;
+        var canvasX = 0;
+        var canvasY = 0;
+        
+        do{
+            totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+            totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+        }
+        while(currentElement = currentElement.offsetParent)
+        
+        canvasX = event.pageX - totalOffsetX;
+        canvasY = event.pageY - totalOffsetY;
+        
+        // Change Initial output to coordinates that are clicked
+        document.getElementById("outputX").innerHTML=canvasX; //totalOffsetX; //mouseX //fromCenterX;
+        document.getElementById("outputY").innerHTML=canvasY; //totalOffsetY; mouseY //fromCenterY;
+
+        //return {x:canvasX, y:canvasY}
       }
     </script>
     <style type="text/css">
@@ -42,7 +64,8 @@
   </head>
   <body>
     <div id="Container">
-      <img alt="Click to zoom" onclick="resizeImg(this)" 
+      <img id="Clickable" alt="Click on image"
+	onclick="getClickCoords(this, event)" 
         src="click_at_coordinates.png" />
     </div>
     <h1>Clicking at coordinates</h1>
