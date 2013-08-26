@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-1.4 (unrealeased)
+1.4 (unreleased)
 -----------------
 - Added 'Get Window Size' and 'Set Window Size' keywords matching the
   Selenium functionality.
