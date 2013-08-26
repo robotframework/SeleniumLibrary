@@ -1,14 +1,68 @@
 Release Notes
 =============
 
-1.2 (unrealeased)
+1.4 (unrealeased)
 -----------------
 - Added 'Get Window Size' and 'Set Window Size' keywords matching the
   Selenium functionality.
   [emanlove] [ombre42]
 
+1.3
+---
+- Updated expected error messages with async javascript tests.
+  [emanlove]
+
+- Beautified README.rst.
+  [j1z0][emanlove]
+  
+- Changed press key test to use Line Feed (\10) instead of
+  Carriage Return (\13).
+  [emanlove]
+ 
+- Added new keyword 'Click Element At Coordinates'.
+  [aaltat][pierreroth64][ombre42][emanlove]
+
+- Added a "Getting Help" section to README.rst.
+  [ombre42][emanlove]
+
+- Added keyword 'Wait Until Element Visible'
+  [ombre42]
+
+- Perform check on return value when finding elements. Fixes Issue 65.
+  [ombre42]
+
+- Support checking enabled/disabled state of option elements.
+  [ekantola]
+
+- Allow desired_capabilities= to be a dictionary.
+  [peritus]
+
+- Added Android and iPhone browsers.
+  [maddabini]
+
+- Added keyword 'Current Frame Should Not Contain'.
+  [adwu73]
+
+1.2
+---
+- Added PhantomJS as a supported browser type.
+  [bmannix]
+
+- Fixed 'Get Selected List Label' under IE7 or IE8.
+  [ombre42]
+
+- Added support for jQuery and sizzle selectors.
+  [Paul Hicks (tenwit)][peritus][j1z0]
+
+- Added new global variable DEFAULT_HOST to demo server for more easier
+  way to bind to other address than 'localhost'.
+  [IsNoGood]
+
+- Skip closed browsers when setting Selenium timeout. Fixes #93.
+  [ombre42]
+
 1.1
-----------------
+---
 - Increased minimum version requirement for Selenium to 2.12.0 within
   setup.py.  This is required due to the change towards using Selenium's
   Select class which was introduced starting in version 2.12.

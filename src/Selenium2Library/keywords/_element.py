@@ -22,6 +22,18 @@ class _ElementKeywords(KeywordGroup):
                                  "but did not" % text)
         self._info("Current page contains text '%s'." % text)
 
+
+    def current_frame_should_not_contain(self, text, loglevel='INFO'):
+        """Verifies that current frame contains `text`.
+
+        See `Page Should Contain ` for explanation about `loglevel` argument.
+        """
+        if self._is_text_present(text):
+            self.log_source(loglevel)
+            raise AssertionError("Page should not have contained text '%s' "
+                                 "but it did" % text)
+        self._info("Current page should not contain text '%s'." % text)
+
     def element_should_contain(self, locator, expected, message=''):
         """Verifies element identified by `locator` contains text `expected`.
 
@@ -259,6 +271,25 @@ class _ElementKeywords(KeywordGroup):
         """
         self._info("Clicking element '%s'." % locator)
         self._element_find(locator, True, True).click()
+
+    def click_element_at_coordinates(self, locator, xoffset, yoffset):
+        """Click element identified by `locator` at x/y coordinates of the element.
+        Cursor is moved and the center of the element and x/y coordinates are 
+        calculted from that point.
+
+        It must be noted that there is an issue with Firefox and
+        Click Element At Coordinates does not currently work at Firefox.
+        If keyword is used in Firefox it will behave in same manner
+        as the Click Element keyword
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        """
+        self._info("Click clicking element '%s' in coordinates '%s', '%s'." % (locator, xoffset, yoffset))
+        element = self._element_find(locator, True, True)
+        #self._element_find(locator, True, True).click()
+        #ActionChains(self._current_browser()).move_to_element_with_offset(element, xoffset, yoffset).click().perform()
+        ActionChains(self._current_browser()).move_to_element(element).move_by_offset(xoffset, yoffset).click().perform()
 
     def double_click_element(self, locator):
         """Double click element identified by `locator`.

@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      function getClickCoords(currentElement, event)
+      {
+        // The following algortihm, derived from [1], is intended to handle
+        // scrolling through testing shows some issues. For the simple check
+        // of verify click coordinates without scrolling this test is correct.
+        //
+        // [1] http://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
+        //
+        var totalOffsetX = 0;
+        var totalOffsetY = 0;
+        var canvasX = 0;
+        var canvasY = 0;
+        
+        do{
+            totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+            totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+        }
+        while(currentElement = currentElement.offsetParent)
+        
+        canvasX = event.pageX - totalOffsetX;
+        canvasY = event.pageY - totalOffsetY;
+        
+        // Change Initial output to coordinates that are clicked
+        document.getElementById("outputX").innerHTML=canvasX;
+        document.getElementById("outputY").innerHTML=canvasY;
+      }
+    </script>
+    <style type="text/css">
+      #Container {
+        position:relative;
+        width:200px;
+        height:200px;
+        overflow:hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="Container">
+      <img id="Clickable" alt="Click on image"
+	onclick="getClickCoords(this, event)" 
+        src="click_at_coordinates.png" />
+    </div>
+    <h1>Clicking at coordinates</h1>
+    <p id="info">Watch the output below</p>
+    <p id="outputX">initial outputX</p>
+    <p id="outputY">initial outputY</p>
+  </body>
+</html>

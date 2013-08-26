@@ -26,6 +26,10 @@ Button
     Should Be Enabled Not Disabled  enabled_button
     Should Be Disabled Not Enabled  disabled_button
 
+Option
+    Should Be Enabled Not Disabled  enabled_option
+    Should Be Disabled Not Enabled  disabled_option
+
 Disabled with different syntaxes
     Should Be Disabled Not Enabled  disabled_only
     Should Be Disabled Not Enabled  disabled_with_equals_sign

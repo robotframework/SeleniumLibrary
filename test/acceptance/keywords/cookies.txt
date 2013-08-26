@@ -1,6 +1,7 @@
 *Setting*
 Resource  ../resource.txt
-Suite Setup  Run Keywords  Delete All Cookies  Go To Page "index.html"
+Suite Setup  Run Keywords  Add Cookies  Go To Page "index.html"
+Suite Teardown  Delete All Cookies
 
 
 *Test Cases*
@@ -17,3 +18,11 @@ Delete Cookie
   Delete Cookie  test
   ${cookies} =  Get Cookies
   Should Be Equal  ${cookies}  another=value
+
+*Keyword*
+
+Add Cookies
+    Delete All Cookies
+    Add Cookie  test    seleniumlibrary
+    Add Cookie  another     value
+

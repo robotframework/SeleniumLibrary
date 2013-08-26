@@ -32,6 +32,9 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_opera_browser(self):
         self.verify_browser(webdriver.Opera, "OPERA")
 
+    def test_create_phantomjs_browser(self):
+        self.verify_browser(webdriver.PhantomJS, "PHANTOMJS")
+
     def test_create_remote_browser(self):
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub")
 
@@ -41,16 +44,20 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_htmlunitwihtjs_browser(self):
         self.verify_browser(webdriver.Remote, "htmlunitwithjs")
 
-    def test_create_desired_capabilities(self):
+    def test_parse_capabilities_string(self):
         bm = _BrowserManagementKeywords()
         expected_caps = "key1:val1,key2:val2"
-        capabilities = bm._create_desired_capabilities(webdriver.DesiredCapabilities.CHROME, expected_caps)
-        self.assertTrue(type(capabilities), webdriver.DesiredCapabilities.CHROME)
+        capabilities = bm._parse_capabilities_string(expected_caps)
         self.assertTrue("val1", capabilities["key1"])
         self.assertTrue("val2", capabilities["key2"])
         self.assertTrue(2, len(capabilities))
 
     def test_create_remote_browser_with_desired_prefs(self):
+        expected_caps = {"key1":"val1","key2":"val2"}
+        self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
+            desired_capabilities=expected_caps)
+
+    def test_create_remote_browser_with_string_desired_prefs(self):
         expected_caps = "key1:val1,key2:val2"
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)

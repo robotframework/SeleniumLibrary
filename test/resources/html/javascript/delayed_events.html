@@ -6,6 +6,7 @@
         setTimeout('addElement()', 1000)
         setTimeout('changeContent()', 1000)
         setTimeout('changeTitle()', 1000)
+        setTimeout('unhideContent()', 1000)
     }
     
     function addElement() {
@@ -23,11 +24,16 @@
     function changeContent() {
         document.getElementById("content").firstChild.nodeValue = "New Content"
     }
+
+    function unhideContent() {
+        document.getElementById("hidden").style.display = "block"
+    }
     </script>
     </head>
     
     <body onload="modifyAfterDelay()">
     <div id="content">This is content</div>
     <div id="container"></div>
+    <div id="hidden" style="display:none;">Inititally hidden content</div>
     </body>
 </html>

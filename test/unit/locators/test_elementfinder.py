@@ -316,6 +316,23 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "id=test1", tag='file upload')
         self.assertEqual(result, [elements[7]])
 
+    def test_find_returns_bad_values(self):
+        finder = ElementFinder()
+        browser = mock()
+        # selenium.webdriver.ie.webdriver.WebDriver sometimes returns these
+        for bad_value in (None, {'': None}):
+            for func_name in ('find_elements_by_id', 'find_elements_by_name',
+                              'find_elements_by_xpath', 'find_elements_by_link_text',
+                              'find_elements_by_css_selector', 'find_elements_by_tag_name'):
+                when_find_func = getattr(when(browser), func_name)
+                when_find_func(any()).thenReturn(bad_value)
+            for locator in ("identifier=it", "id=it", "name=it", "xpath=//div",
+                            "link=it", "css=div.it", "tag=div", "default"):
+                result = finder.find(browser, locator)
+                self.assertEqual(result, [])
+                result = finder.find(browser, locator, tag='div')
+                self.assertEqual(result, [])
+
     def _make_mock_elements(self, *tags):
         elements = []
         for tag in tags:

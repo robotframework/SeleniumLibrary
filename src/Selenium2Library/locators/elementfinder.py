@@ -1,4 +1,5 @@
 from Selenium2Library import utils
+from robot.api import logger
 
 class ElementFinder(object):
 
@@ -11,6 +12,8 @@ class ElementFinder(object):
             'dom': self._find_by_dom,
             'link': self._find_by_link_text,
             'css': self._find_by_css_selector,
+            'jquery': self._find_by_sizzle_selector,
+            'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
             None: self._find_by_default
         }
@@ -29,8 +32,8 @@ class ElementFinder(object):
     # Strategy routines, private
 
     def _find_by_identifier(self, browser, criteria, tag, constraints):
-        elements = browser.find_elements_by_id(criteria)
-        elements.extend(browser.find_elements_by_name(criteria))
+        elements = self._normalize_result(browser.find_elements_by_id(criteria))
+        elements.extend(self._normalize_result(browser.find_elements_by_name(criteria)))
         return self._filter_elements(elements, tag, constraints)
 
     def _find_by_id(self, browser, criteria, tag, constraints):
@@ -55,6 +58,12 @@ class ElementFinder(object):
         if not isinstance(result, list):
             result = [result]
         return self._filter_elements(result, tag, constraints)
+
+    def _find_by_sizzle_selector(self, browser, criteria, tag, constraints):
+        js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
+        return self._filter_elements(
+            browser.execute_script(js),
+            tag, constraints)
 
     def _find_by_link_text(self, browser, criteria, tag, constraints):
         return self._filter_elements(
@@ -92,7 +101,7 @@ class ElementFinder(object):
             ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
             ' or '.join(xpath_searchers))
 
-        return browser.find_elements_by_xpath(xpath)
+        return self._normalize_result(browser.find_elements_by_xpath(xpath))
 
     # Private
 
@@ -138,6 +147,7 @@ class ElementFinder(object):
         return True
 
     def _filter_elements(self, elements, tag, constraints):
+        elements = self._normalize_result(elements)
         if tag is None: return elements
         return filter(
             lambda element: self._element_matches(element, tag, constraints),
@@ -170,3 +180,9 @@ class ElementFinder(object):
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
         return (prefix, criteria)
+
+    def _normalize_result(self, elements):
+        if not isinstance(elements, list):
+            logger.debug("WebDriver find returned %s" % elements)
+            return []
+        return elements

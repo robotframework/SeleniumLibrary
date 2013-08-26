@@ -17,8 +17,11 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'gc': "_make_chrome",
                  'chrome': "_make_chrome",
                  'opera' : "_make_opera",
+                 'phantomjs' : "_make_phantomjs",
                  'htmlunit' : "_make_htmlunit",
-                 'htmlunitwithjs' : "_make_htmlunitwithjs"
+                 'htmlunitwithjs' : "_make_htmlunitwithjs",
+                 'android': "_make_android",
+                 'iphone': "_make_iphone"
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -74,9 +77,12 @@ class _BrowserManagementKeywords(KeywordGroup):
         | gc               | Google Chrome |
         | chrome           | Google Chrome |
         | opera            | Opera         |
+        | phantomjs        | PhantomJS     |
         | htmlunit         | HTMLUnit      |
         | htmlunitwithjs   | HTMLUnit with Javascipt support |
-        
+        | android          | Android       |
+        | iphone           | Iphone        |
+
 
         Note, that you will encounter strange behavior, if you open
         multiple Internet Explorer browser instances. That is also why
@@ -88,9 +94,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         http://127.0.0.1/wd/hub.  If you specify a value for remote you can
         also specify 'desired_capabilities' which is a string in the form
         key1:val1,key2:val2 that will be used to specify desired_capabilities
-        to the remote server.  This is useful for doing things like specify a
+        to the remote server. This is useful for doing things like specify a
         proxy server for internet explorer or for specify browser and os if your
-        using saucelabs.com.
+        using saucelabs.com. 'desired_capabilities' can also be a dictonary
+        (created with 'Create Dictionary') to allow for more complex configurations.
 
         Optional 'ff_profile_dir' is the path to the firefox profile dir if you
         wish to overwrite the default.
@@ -454,6 +461,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         return self._generic_make_browser(webdriver.Opera, 
                 webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
 
+    def _make_phantomjs(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.PhantomJS, 
+                webdriver.DesiredCapabilities.PHANTOMJS, remote, desired_capabilities)
+
     def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
         return self._generic_make_browser(webdriver.Remote, 
                 webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
@@ -462,7 +473,15 @@ class _BrowserManagementKeywords(KeywordGroup):
         return self._generic_make_browser(webdriver.Remote, 
                 webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
 
-    
+    def _make_android(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Remote,
+                webdriver.DesiredCapabilities.ANDROID, remote, desired_capabilities)
+
+    def _make_iphone(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Remote,
+                webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
+
+
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the 
         appropriate web-driver'''
@@ -471,20 +490,33 @@ class _BrowserManagementKeywords(KeywordGroup):
         else:
             browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
         return browser
-    
 
     def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
+        '''parses the string based desired_capabilities if neccessary and
+        creates the associated remote web driver'''
+
+        desired_capabilities_object = capabilities_type
+
+        if type(desired_capabilities) in (str, unicode):
+            desired_capabilities = self._parse_capabilities_string(desired_capabilities)
+
+        desired_capabilities_object.update(desired_capabilities or {})
+
+        return webdriver.Remote(desired_capabilities=desired_capabilities_object,
+                command_executor=str(remote_url), browser_profile=profile)
+
+    def _parse_capabilities_string(self, capabilities_string):
         '''parses the string based desired_capabilities which should be in the form
-        key1:val1,key2:val2 and creates the associated remote web driver'''
-        desired_cap = self._create_desired_capabilities(capabilities_type , desired_capabilities)
-        return webdriver.Remote(desired_capabilities=desired_cap , command_executor=str(remote_url) ,                                       browser_profile=profile)
+        key1:val1,key2:val2
+        '''
+        desired_capabilities = {}
 
+        if not capabilities_string:
+            return desired_capabilities
 
-    def _create_desired_capabilities(self, capabilities_type, capabilities_string):
-        desired_capabilities = capabilities_type
-        if capabilities_string:
-            for cap in capabilities_string.split(","):
-                (key, value) = cap.split(":")
-                desired_capabilities[key.strip()] = value.strip()
+        for cap in capabilities_string.split(","):
+            (key, value) = cap.split(":")
+            desired_capabilities[key.strip()] = value.strip()
+
         return desired_capabilities
     

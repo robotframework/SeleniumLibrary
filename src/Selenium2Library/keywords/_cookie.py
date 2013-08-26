@@ -29,3 +29,17 @@ class _CookieKeywords(KeywordGroup):
         if cookie is not None:
             return cookie['value']
         raise ValueError("Cookie with name %s not found." % name)
+
+    def add_cookie(self,name, value, path=None, domain=None, secure=None,
+            expiry=None):
+        """Adds a cookie to your current session.
+        "name" and "value" are required, "path", "domain" and "secure" are
+        optional"""
+        new_cookie = {'name'    : name,
+                      'value'   : value}
+        if path: new_cookie['path'] = path
+        if domain: new_cookie['domain'] = domain
+        #secure should be True or False so check explicitly for None
+        if not secure is None: new_cookie['secure'] = secure
+
+        self._current_browser().add_cookie(new_cookie)
