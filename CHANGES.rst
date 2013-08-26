@@ -1,6 +1,12 @@
 Release Notes
 =============
 
+1.4 (unreleased)
+-----------------
+- Added 'Get Window Size' and 'Set Window Size' keywords matching the
+  Selenium functionality.
+  [emanlove] [ombre42]
+
 1.3
 ---
 - Updated expected error messages with async javascript tests.
