@@ -75,8 +75,12 @@ Select From Single Selection List
 
 Select Non-Existing Item From Single Selection List
     [Tags]  OnlyThisOne
-    Select From List  preferred_channel  Tin Can Phone  Smoke Signals
-    Select From List  preferred_channel  Tin Can Phone  Smoke Signals  Email
+    Run Keyword And Expect Error
+    ...  ValueError: Tin Can Phone, Smoke Signals not in list 'preferred_channel'.
+    ...  Select From List  preferred_channel  Tin Can Phone  Smoke Signals
+    Run Keyword And Expect Error
+    ...  ValueError: Tin Can Phone, Smoke Signals not in list 'preferred_channel'.
+    ...  Select From List  preferred_channel  Tin Can Phone  Smoke Signals  Email
     Run Keyword And Expect Error  
     ...  NoSuchElementException: Message: u'Could not locate element with visible text: Tin Can Phone'\ \
     ...  Select From List By Label  preferred_channel  Tin Can Phone
