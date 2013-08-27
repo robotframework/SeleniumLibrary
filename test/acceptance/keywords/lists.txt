@@ -73,6 +73,14 @@ Select From Single Selection List
     Select From List  preferred_channel
     List Selection Should Be  preferred_channel  Direct mail
 
+Select Non-Existing Item From Single Selection List
+    [Tags]  OnlyThisOne
+    Select From List  preferred_channel  Tin Can Phone  Smoke Signals
+    Select From List  preferred_channel  Tin Can Phone  Smoke Signals  Email
+    Run Keyword And Expect Error  
+    ...  NoSuchElementException: Message: u'Could not locate element with visible text: Tin Can Phone'\ \
+    ...  Select From List By Label  preferred_channel  Tin Can Phone
+
 Select From Multiselect List
     [Documentation]  LOG 5 Selecting option(s) 'Direct mail, phone' from list 'possible_channels'.
     Select And verify selection  possible_channels  email  email  Telephone
