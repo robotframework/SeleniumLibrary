@@ -3,9 +3,14 @@ Release Notes
 
 1.4 (unreleased)
 -----------------
+- Raise exception in selecting non-existing item in list. Error handling varies
+  between single-select and multi-select lists. See keyword documentation for
+  more information.
+  [adwu73][emanlove] 
+
 - Added 'Get Window Size' and 'Set Window Size' keywords matching the
   Selenium functionality.
-  [emanlove] [ombre42]
+  [emanlove][ombre42]
 
 1.3
 ---
