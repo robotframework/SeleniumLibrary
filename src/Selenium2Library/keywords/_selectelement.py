@@ -155,6 +155,11 @@ class _SelectElementKeywords(KeywordGroup):
 
         It's faster to use 'by index/value/label' functions.
 
+        An exception is raised for a single-selection list if the last
+        value does not exist in the list and a warning for all other non-
+        existing items. For a multi-selection list, an exception is raised
+        for any and all non-existing values.
+
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
