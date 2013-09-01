@@ -155,10 +155,17 @@ class _SelectElementKeywords(KeywordGroup):
 
         It's faster to use 'by index/value/label' functions.
 
+        An exception is raised for a single-selection list if the last
+        value does not exist in the list and a warning for all other non-
+        existing items. For a multi-selection list, an exception is raised
+        for any and all non-existing values.
+
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
+        non_existing_items = []
+
         items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
         self._info("Selecting %s from list '%s'." % (items_str, locator))
 
@@ -170,10 +177,24 @@ class _SelectElementKeywords(KeywordGroup):
             return
 
         for item in items:
-            try: select.select_by_value(item)
+            try:
+                select.select_by_value(item)
             except:
-                try: select.select_by_visible_text(item)
-                except: continue
+                try:
+                    select.select_by_visible_text(item)
+                except:
+                    non_existing_items = non_existing_items + [item]
+                    continue
+
+        if any(non_existing_items):
+            if select.is_multiple:
+                raise ValueError("Options '%s' not in list '%s'." % (", ".join(non_existing_items), locator))
+            else:
+                if any (non_existing_items[:-1]):
+                    items_str = non_existing_items[:-1] and "Option(s) '%s'" % ", ".join(non_existing_items[:-1])
+                    self._warn("%s not found within list '%s'." % (items_str, locator))
+                if items and items[-1] in non_existing_items:
+                    raise ValueError("Option '%s' not in list '%s'." % (items[-1], locator))
 
     def select_from_list_by_index(self, locator, *indexes):
         """Selects `*indexes` from list identified by `locator`
