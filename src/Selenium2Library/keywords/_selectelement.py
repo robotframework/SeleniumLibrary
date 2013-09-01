@@ -159,8 +159,6 @@ class _SelectElementKeywords(KeywordGroup):
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
-        #import pdb,sys; pdb.Pdb(stdout=sys.__stdout__).set_trace()
-        #non_existing_item = True
         non_existing_items = []
 
         items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
@@ -176,20 +174,22 @@ class _SelectElementKeywords(KeywordGroup):
         for item in items:
             try:
                 select.select_by_value(item)
-                #non_existing_item = False
             except:
                 try:
                     select.select_by_visible_text(item)
-                    #non_existing_item = False
                 except:
                     non_existing_items = non_existing_items + [item]
                     continue
 
-        #if non_existing_item:
-        #    raise ValueError("No index given.")
         if any(non_existing_items):
-            #raise ValueError("%s not in list '%s'." % (non_existing_items, locator))
-            raise ValueError("%s not in list '%s'." % (", ".join(non_existing_items), locator))
+            if select.is_multiple:
+                raise ValueError("Options '%s' not in list '%s'." % (", ".join(non_existing_items), locator))
+            else:
+                if any (non_existing_items[:-1]):
+                    items_str = non_existing_items[:-1] and "Option(s) '%s'" % ", ".join(non_existing_items[:-1])
+                    self._warn("%s not found within list '%s'." % (items_str, locator))
+                if items and items[-1] in non_existing_items:
+                    raise ValueError("Option '%s' not in list '%s'." % (items[-1], locator))
 
     def select_from_list_by_index(self, locator, *indexes):
         """Selects `*indexes` from list identified by `locator`
