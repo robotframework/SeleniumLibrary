@@ -3,6 +3,9 @@ Release Notes
 
 1.4 (unreleased)
 -----------------
+- Fixed bad browser name raising AttributeError.
+  [ombre42]
+
 - Raise exception in selecting non-existing item in list. Error handling varies
   between single-select and multi-select lists. See keyword documentation for
   more information.
