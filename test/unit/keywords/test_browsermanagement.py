@@ -77,6 +77,13 @@ class BrowserManagementTests(unittest.TestCase):
         verifyNoMoreInteractions(first_browser)
         verifyNoMoreInteractions(second_browser)
 
+    def test_bad_browser_name(self):
+        bm = _BrowserManagementKeywords()
+        try:
+            bm._make_browser("fireox")
+            self.fail("Exception not raised")
+        except ValueError, e:
+            self.assertEquals("fireox is not a supported browser.", e.message)
 
     def verify_browser(self , webdriver_type , browser_name, **kw):
         #todo try lambda *x: was_called = true
