@@ -253,6 +253,44 @@ class _FormElementKeywords(KeywordGroup):
             raise AssertionError(message)
         self._info("Content of text field '%s' is '%s'." % (locator, expected))
 
+    def textarea_should_contain(self, locator, expected, message=''):
+        """Verifies text area identified by `locator` contains text `expected`.
+
+        `message` can be used to override default error message.
+
+        Key attributes for text areas are `id` and `name`. See `introduction`
+        for details about locating elements.
+        """
+        actual = self._get_value(locator, 'text area')
+        if actual is not None:
+            if not expected in actual:
+                if not message:
+                    message = "Text field '%s' should have contained text '%s' "\
+                              "but it contained '%s'" % (locator, expected, actual)
+                raise AssertionError(message)
+        else:
+            raise ValueError("Element locator '" + locator + "' did not match any elements.")
+        self._info("Text area '%s' contains text '%s'." % (locator, expected))
+        
+    def textarea_value_should_be(self, locator, expected, message=''):
+        """Verifies the value in text area identified by `locator` is exactly `expected`.
+
+        `message` can be used to override default error message.
+
+        Key attributes for text areas are `id` and `name`. See `introduction`
+        for details about locating elements.
+        """
+        actual = self._get_value(locator, 'text area')
+        if actual is not None:
+            if expected!=actual:
+                if not message:
+                    message = "Text field '%s' should have contained text '%s' "\
+                              "but it contained '%s'" % (locator, expected, actual)
+                raise AssertionError(message)
+        else:
+            raise ValueError("Element locator '" + locator + "' did not match any elements.")
+        self._info("Content of text area '%s' is '%s'." % (locator, expected))
+        
     # Public, buttons
 
     def click_button(self, locator):
