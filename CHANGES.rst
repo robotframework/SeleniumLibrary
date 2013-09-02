@@ -3,6 +3,9 @@ Release Notes
 
 1.4 (unreleased)
 -----------------
+- Added keywords for verifying text entered into textarea elements.
+  [stevejefferies][emanlove]
+
 - Fixed bad browser name raising AttributeError.
   [ombre42]
 
