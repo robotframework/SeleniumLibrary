@@ -277,11 +277,6 @@ class _ElementKeywords(KeywordGroup):
         Cursor is moved and the center of the element and x/y coordinates are 
         calculted from that point.
 
-        It must be noted that there is an issue with Firefox and
-        Click Element At Coordinates does not currently work at Firefox.
-        If keyword is used in Firefox it will behave in same manner
-        as the Click Element keyword
-
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
