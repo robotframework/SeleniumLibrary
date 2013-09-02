@@ -15,6 +15,8 @@ class ElementFinder(object):
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
+            'src': self._find_by_default,
+            'alt': self._find_by_default,
             None: self._find_by_default
         }
 
