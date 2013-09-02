@@ -184,6 +184,22 @@ TextField Value Should Be
     textfield Value Should Be  name  my name
     Run Keyword And Expect Error  Value of text field 'name' should have been 'non-existing' but was 'my name'  textfield Value Should Be  name  non-existing
 
+TextArea Should Contain
+    [Setup]  Go To Page "forms/email_form.html"
+    TextArea Should Contain  comment  ${EMPTY}
+    Input Text  comment  This is a comment.
+    Run Keyword And Expect Error
+    ...  Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'
+    ...  TextArea Should Contain  comment  Hello World!
+
+TextArea Value Should Be
+    [Setup]  Go To Page "forms/email_form.html"
+    TextArea Value Should Be  comment  ${EMPTY}
+    Input Text  comment  This is a comment.
+    Run Keyword And Expect Error
+    ...  Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'
+    ...  TextArea Value Should Be  comment  Hello World!
+
 Page Should Contain Button
     [Setup]  Go To Page "forms/buttons.html"
     Page Should Contain Button  button
