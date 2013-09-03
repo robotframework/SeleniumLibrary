@@ -1,8 +1,8 @@
 Release Notes
 =============
 
-1.4 (unreleased)
------------------
+1.4
+---
 - Added keywords for verifying text entered into textarea elements.
   [stevejefferies][emanlove]
 
