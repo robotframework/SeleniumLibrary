@@ -99,7 +99,7 @@ Select Non-Existing Item From Multi-Selection List
     ...  Select From List  possible_channels  Tin Can Phone  Email  Smoke Signals
  
 Unselect Non-Existing Item From List
-    [Documentation]  LOG 5 Unselecting non-existing items will not throw an error.
+    [Documentation]  LOG 3 Unselecting option(s) 'Tin Can Phone, Smoke Signals, Email' from list 'possible_channels'.
     [Tags]  OnlyThisOne
     Unselect From List  possible_channels  Tin Can Phone  Smoke Signals
     Unselect From List  possible_channels  Tin Can Phone  Smoke Signals  Email
