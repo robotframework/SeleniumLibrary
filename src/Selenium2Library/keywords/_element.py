@@ -274,7 +274,7 @@ class _ElementKeywords(KeywordGroup):
 
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
         """Click element identified by `locator` at x/y coordinates of the element.
-        Cursor is moved and the center of the element and x/y coordinates are 
+        Cursor is moved and the center of the element and x/y coordinates are
         calculted from that point.
 
         Key attributes for arbitrary elements are `id` and `name`. See
@@ -384,7 +384,7 @@ class _ElementKeywords(KeywordGroup):
         element = self._element_find(locator, True, False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        ActionChains(self._current_browser()).click_and_hold(element).release(element).perform()
+        ActionChains(self._current_browser()).release(element).perform()
 
     def open_context_menu(self, locator):
         """Opens context menu on element identified by `locator`."""
