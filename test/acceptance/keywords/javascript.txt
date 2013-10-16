@@ -29,9 +29,11 @@ Mouse Down On Link
     [Setup]  Go To Page "javascript/mouse_events.html"
     Mouse Down On Image  image_mousedown
     Text Field Should Contain  textfield  onmousedown
+    Mouse Up  image_mousedown
     Input text  textfield  ${EMPTY}
-    Mouse Down On Link  onmousedown
+    Mouse Down On Link  link_mousedown
     Text Field Should Contain  textfield  onmousedown
+    Mouse Up  link_mousedown
 
 Confirm Action
     Click Button  Change the title
