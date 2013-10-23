@@ -114,6 +114,49 @@ class _BrowserManagementKeywords(KeywordGroup):
                     % browser.session_id)
         return self._cache.register(browser, alias)
 
+    def create_webdriver(self, driver_name, alias=None, *name_value_pairs):
+        """Creates an instance of a WebDriver.
+
+        Like `Open Browser`, but allows you to pass arguments to a WebDriver's
+        __init__. _Open Browser_ is preferred over _Create Webdriver_ when
+        feasible.
+
+        `driver_name` must be the exact name of a WebDriver in
+        _selenium.webdriver_ to use. WebDriver names include: Firefox, Chrome,
+        Ie, Opera, Safari, PhantomJS, and Remote.
+
+        `name_value_pairs` should be a list of parameter names and values.
+        Parameter names must be exact.  See the
+        [http://selenium.googlecode.com/git/docs/api/py/api.html|Selenium API Documentation]
+        for information about parameter names and appropriate values.
+
+        Examples:
+        | # use a proxy for PhantomJS |              |                                           |                         |                          |                       |
+        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888              |                         |                          |                       |
+        | Create Webdriver            | PhantomJS    | phantomjs                                 | service_args            | ${service args}          |                       |
+        | # use proxy for Firefox     |              |                                           |                         |                          |                       |
+        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |                          |                       |
+        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                         |                          |                       |
+        | Create Webdriver            | Firefox      | firefox                                   | proxy                   | ${proxy}                 |                       |
+        | # debug IE driver           |              |                                           |                         |                          |                       |
+        | ${driver args}=             | Create List  | log_level                                 | DEBUG                   | log_file                 | %{HOMEPATH}${/}ie.log |
+        | Create Webdriver            | Ie           | ie                                        | @{driver args}          |                          |                       |
+        """
+        if len(name_value_pairs) % 2 != 0:
+            raise RuntimeError("There should be an even number of parameter name-value pairs.")
+        kwargs = {}
+        for i in range(0, len(name_value_pairs), 2):
+            kwargs[name_value_pairs[i].strip()] = name_value_pairs[i+1]
+        driver_name = driver_name.strip()
+        try:
+            creation_func = getattr(webdriver, driver_name)
+        except AttributeError:
+            raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
+        self._info("Creating an instance of the %s WebDriver" % driver_name)
+        driver = creation_func(**kwargs)
+        self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+        return self._cache.register(driver, alias)
+
     def switch_browser(self, index_or_alias):
         """Switches between active browsers using index or alias.
 

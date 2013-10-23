@@ -1,0 +1,29 @@
+*Setting*
+Suite Teardown  Close All Browsers
+Resource  resource.txt
+
+
+*Test Cases*
+
+Create Webdriver Creates Functioning WebDriver
+  [Documentation]  LOG 1:1 INFO Creating an instance of the Firefox WebDriver LOG 1:3 DEBUG REGEXP: Created Firefox WebDriver instance with session id (\\w|-)+
+  ${index}=  Create Webdriver  Firefox  firefox
+  Go To  ${FRONT PAGE}
+  Page Should Contain  needle
+  ${index as int}=  Convert To Integer  ${index}
+  Should Be Equal  ${index}  ${index as int}
+  [Teardown]  Close Browser
+
+Create Webdriver With Missing Value
+  Run Keyword And Expect Error  There should be an even number of parameter name-value pairs.  Create Webdriver  Firefox  firefox  proxy
+
+Create Webdriver With WebDriver Argument
+  ${proxy}=  Evaluate  sys.modules['selenium.webdriver'].Proxy()  sys, selenium.webdriver
+  ${proxy.http_proxy}=  Set Variable  localhost:7777
+  Create Webdriver  Firefox  firefox  proxy  ${proxy}
+  Go To  ${FRONT PAGE}
+  Page Should Contain  The proxy server is refusing connections
+  [Teardown]  Close Browser
+
+Create Webdriver With Bad Driver Name
+  Run Keyword And Expect Error  'Fireox' is not a valid WebDriver name  Create Webdriver  Fireox
