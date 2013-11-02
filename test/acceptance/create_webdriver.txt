@@ -12,12 +12,21 @@ Create Webdriver Creates Functioning WebDriver
   Page Should Contain  needle
   ${index as int}=  Convert To Integer  ${index}
   Should Be Equal  ${index}  ${index as int}
+  Switch Browser  firefox
   [Teardown]  Close Browser
 
 Create Webdriver With Missing Value
-  Run Keyword And Expect Error  There should be an even number of parameter name-value pairs.  Create Webdriver  Firefox  firefox  proxy
+  Run Keyword And Expect Error  There should be an even number of argument name-value pairs.  Create Webdriver  Firefox  firefox  proxy
 
-Create Webdriver With WebDriver Argument
+Create Webdriver With Keyword Argument
+  ${proxy}=  Evaluate  sys.modules['selenium.webdriver'].Proxy()  sys, selenium.webdriver
+  ${proxy.http_proxy}=  Set Variable  localhost:7777
+  Create Webdriver  Firefox  proxy=${proxy}
+  Go To  ${FRONT PAGE}
+  Page Should Contain  The proxy server is refusing connections
+  [Teardown]  Close Browser
+
+Create Webdriver With List Argument
   ${proxy}=  Evaluate  sys.modules['selenium.webdriver'].Proxy()  sys, selenium.webdriver
   ${proxy.http_proxy}=  Set Variable  localhost:7777
   Create Webdriver  Firefox  firefox  proxy  ${proxy}
@@ -27,3 +36,8 @@ Create Webdriver With WebDriver Argument
 
 Create Webdriver With Bad Driver Name
   Run Keyword And Expect Error  'Fireox' is not a valid WebDriver name  Create Webdriver  Fireox
+
+Create Webdriver With Duplicate Arguments
+  Run Keyword And Expect Error  Got multiple values for argument 'arg'.  Create Webdriver  Firefox  firefox  arg  1  arg=2
+  Run Keyword And Expect Error  Got multiple values for argument 'arg'.  Create Webdriver  Firefox  firefox  arg  1  arg  2
+  

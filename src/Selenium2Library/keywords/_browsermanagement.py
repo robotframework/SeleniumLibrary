@@ -114,46 +114,57 @@ class _BrowserManagementKeywords(KeywordGroup):
                     % browser.session_id)
         return self._cache.register(browser, alias)
 
-    def create_webdriver(self, driver_name, alias=None, *name_value_pairs):
+    def create_webdriver(self, driver_name, alias=None, *name_value_pairs, **init_kwargs):
         """Creates an instance of a WebDriver.
 
-        Like `Open Browser`, but allows you to pass arguments to a WebDriver's
+        Like `Open Browser`, but allows passing arguments to a WebDriver's
         __init__. _Open Browser_ is preferred over _Create Webdriver_ when
         feasible.
+
+        Returns the index of this browser instance which can be used later to
+        switch back to it. Index starts from 1 and is reset back to it when
+        `Close All Browsers` keyword is used. See `Switch Browser` for
+        example.
 
         `driver_name` must be the exact name of a WebDriver in
         _selenium.webdriver_ to use. WebDriver names include: Firefox, Chrome,
         Ie, Opera, Safari, PhantomJS, and Remote.
 
-        `name_value_pairs` should be a list of parameter names and values.
-        Parameter names must be exact.  See the
+        Use keyword arguments to specify the arguments you want to pass to
+        the WebDriver's __init__. The values of the arguments are not
+        processed in any way before being passed on. For Robot Framework
+        < 2.8, which does not support keyword arguments, use a list of
+        argument names and value to specify the arguments instead . See the
         [http://selenium.googlecode.com/git/docs/api/py/api.html|Selenium API Documentation]
-        for information about parameter names and appropriate values.
+        for information about argument names and appropriate argument values.
 
         Examples:
-        | # use a proxy for PhantomJS |              |                                           |                         |                          |                       |
-        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888              |                         |                          |                       |
-        | Create Webdriver            | PhantomJS    | phantomjs                                 | service_args            | ${service args}          |                       |
-        | # use proxy for Firefox     |              |                                           |                         |                          |                       |
-        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |                          |                       |
-        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                         |                          |                       |
-        | Create Webdriver            | Firefox      | firefox                                   | proxy                   | ${proxy}                 |                       |
-        | # debug IE driver           |              |                                           |                         |                          |                       |
-        | ${driver args}=             | Create List  | log_level                                 | DEBUG                   | log_file                 | %{HOMEPATH}${/}ie.log |
-        | Create Webdriver            | Ie           | ie                                        | @{driver args}          |                          |                       |
+        | # use proxy for Firefox     |              |                                           |                                |
+        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver        |
+        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                                |
+        | Create Webdriver            | Firefox      | proxy=${proxy}                            |                                |
+        | # debug IE driver           |              |                                           |                                |
+        | Create Webdriver            | Ie           | log_level=DEBUG                           | log_file=%{HOMEPATH}${/}ie.log |
+        
+        Example for Robot Framework < 2.8:
+        | # use a proxy for PhantomJS |              |                              |              |                 |
+        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888 |              |                 |
+        | Create Webdriver            | PhantomJS    | phantomjs                    | service_args | ${service args} |
         """
         if len(name_value_pairs) % 2 != 0:
-            raise RuntimeError("There should be an even number of parameter name-value pairs.")
-        kwargs = {}
+            raise RuntimeError("There should be an even number of argument name-value pairs.")
         for i in range(0, len(name_value_pairs), 2):
-            kwargs[name_value_pairs[i].strip()] = name_value_pairs[i+1]
+            arg_name = name_value_pairs[i].strip()
+            if arg_name in init_kwargs:
+                raise RuntimeError("Got multiple values for argument '%s'." % arg_name)
+            init_kwargs[arg_name] = name_value_pairs[i+1]
         driver_name = driver_name.strip()
         try:
             creation_func = getattr(webdriver, driver_name)
         except AttributeError:
             raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
         self._info("Creating an instance of the %s WebDriver" % driver_name)
-        driver = creation_func(**kwargs)
+        driver = creation_func(**init_kwargs)
         self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
         return self._cache.register(driver, alias)
 
