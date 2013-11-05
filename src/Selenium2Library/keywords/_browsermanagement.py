@@ -21,7 +21,8 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'htmlunit' : "_make_htmlunit",
                  'htmlunitwithjs' : "_make_htmlunitwithjs",
                  'android': "_make_android",
-                 'iphone': "_make_iphone"
+                 'iphone': "_make_iphone",
+                 'safari': "_make_safari"
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -82,6 +83,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | htmlunitwithjs   | HTMLUnit with Javascipt support |
         | android          | Android       |
         | iphone           | Iphone        |
+        | safari           | Safari        |
 
 
         Note, that you will encounter strange behavior, if you open
@@ -477,6 +479,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
 
+    def _make_safari(self , remote , desired_capabilities , profile_dir):
+        return self._generic_make_browser(webdriver.Safari,
+                webdriver.DesiredCapabilities.SAFARI, remote, desired_capabilities)
 
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the 

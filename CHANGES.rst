@@ -1,6 +1,11 @@
 Release Notes
 =============
 
+1.5 (unreleased)
+----------------
+- Added Safari Browser.
+  [zmlpjuran]
+
 1.4
 ---
 - Added keywords for verifying text entered into textarea elements.
