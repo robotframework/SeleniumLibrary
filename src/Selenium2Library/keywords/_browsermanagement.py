@@ -114,7 +114,7 @@ class _BrowserManagementKeywords(KeywordGroup):
                     % browser.session_id)
         return self._cache.register(browser, alias)
 
-    def create_webdriver(self, driver_name, alias=None, *name_value_pairs, **init_kwargs):
+    def create_webdriver(self, driver_name, alias=None, kwargs={}, **init_kwargs):
         """Creates an instance of a WebDriver.
 
         Like `Open Browser`, but allows passing arguments to a WebDriver's
@@ -133,31 +133,31 @@ class _BrowserManagementKeywords(KeywordGroup):
         Use keyword arguments to specify the arguments you want to pass to
         the WebDriver's __init__. The values of the arguments are not
         processed in any way before being passed on. For Robot Framework
-        < 2.8, which does not support keyword arguments, use a list of
-        argument names and value to specify the arguments instead . See the
+        < 2.8, which does not support keyword arguments, create a keyword
+        dictionary and pass it in as argument `kwargs`. See the
         [http://selenium.googlecode.com/git/docs/api/py/api.html|Selenium API Documentation]
         for information about argument names and appropriate argument values.
 
         Examples:
-        | # use proxy for Firefox     |              |                                           |                                |
-        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver        |
-        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                                |
-        | Create Webdriver            | Firefox      | proxy=${proxy}                            |                                |
-        | # debug IE driver           |              |                                           |                                |
-        | Create Webdriver            | Ie           | log_level=DEBUG                           | log_file=%{HOMEPATH}${/}ie.log |
+        | # use proxy for Firefox     |              |                                           |                         |
+        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |
+        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                         |
+        | Create Webdriver            | Firefox      | proxy=${proxy}                            |                         |
+        | # use a proxy for PhantomJS |              |                                           |                         |
+        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888              |                         |
+        | Create Webdriver            | PhantomJS    | service_args=${service args}              |                         |
         
         Example for Robot Framework < 2.8:
-        | # use a proxy for PhantomJS |              |                              |              |                 |
-        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888 |              |                 |
-        | Create Webdriver            | PhantomJS    | phantomjs                    | service_args | ${service args} |
+        | # debug IE driver |                   |                  |       |          |                       |
+        | ${kwargs}=        | Create Dictionary | log_level        | DEBUG | log_file | %{HOMEPATH}${/}ie.log |
+        | Create Webdriver  | Ie                | kwargs=${kwargs} |       |          |                       |
         """
-        if len(name_value_pairs) % 2 != 0:
-            raise RuntimeError("There should be an even number of argument name-value pairs.")
-        for i in range(0, len(name_value_pairs), 2):
-            arg_name = name_value_pairs[i].strip()
+        if not isinstance(kwargs, dict):
+            raise RuntimeError("kwargs must be a dictionary.")
+        for arg_name in kwargs:
             if arg_name in init_kwargs:
                 raise RuntimeError("Got multiple values for argument '%s'." % arg_name)
-            init_kwargs[arg_name] = name_value_pairs[i+1]
+            init_kwargs[arg_name] = kwargs[arg_name]
         driver_name = driver_name.strip()
         try:
             creation_func = getattr(webdriver, driver_name)
