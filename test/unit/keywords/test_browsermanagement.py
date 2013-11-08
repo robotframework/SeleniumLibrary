@@ -95,10 +95,11 @@ class BrowserManagementTests(unittest.TestCase):
                 capt_data['webdriver'] = self
         webdriver.FakeWebDriver = FakeWebDriver
         try:
-            index = bm.create_webdriver('FakeWebDriver', some_arg=1)
+            index = bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
             self.assertEquals(capt_data['some_arg'], 1)
             self.assertEquals(capt_data['webdriver'], bm._current_browser())
             self.assertEquals(capt_data['webdriver'], bm._cache.get_connection(index))
+            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection('fake'))
             capt_data.clear()
             my_kwargs = {'some_arg':2}
             bm.create_webdriver('FakeWebDriver', kwargs=my_kwargs)
