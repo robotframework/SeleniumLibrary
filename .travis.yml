@@ -14,5 +14,10 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 script:
   - "firefox --version"
-  - python test/run_tests.py python FF
-
+  #- python test/run_tests.py python FF
+  - python test/run_tests.py python $BROWSER
+env:
+  matrix:
+  - BROWSER=firefox
+  - BROWSER=ie
+  - BROWSER=safari
