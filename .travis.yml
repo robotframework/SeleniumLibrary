@@ -9,7 +9,7 @@ install:
   - pip install selenium
   - pip install decorator
   - pip install docutils
-  - "if [[ ${BROWSER} != 'ie' ]]; then pip install ie_only_pkg; fi"
+  #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
