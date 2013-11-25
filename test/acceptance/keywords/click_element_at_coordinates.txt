@@ -6,9 +6,10 @@ Resource          ../resource.txt
 *** Test Cases ***
 Click Element At Coordinates
     [Documentation]    LOG 2 Click clicking element 'Clickable' in coordinates '10', '20'. 
+    [Tags]  known_firefox_issue  ignore_firefox_error
     Click Element At Coordinates    Clickable    ${10}   ${20}
-    Run Keyword And Ignore Error  Element Text Should Be    outputX    110
-    Run Keyword And Ignore Error  Element Text Should Be    outputY    120
+    Element Text Should Be    outputX    110
+    Element Text Should Be    outputY    120
 
 *** Keywords ***
 Initialize page
