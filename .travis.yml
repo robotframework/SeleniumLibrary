@@ -14,7 +14,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - python test/run_tests.py python $BROWSER --noncritical ignore_$BROWSER_error
+  - "python test/run_tests.py python $BROWSER --noncritical ignore_$BROWSER_error"
 env:
   matrix:
   - BROWSER=firefox
