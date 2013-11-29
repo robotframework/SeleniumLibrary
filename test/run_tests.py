@@ -36,7 +36,7 @@ def acceptance_tests(interpreter, browser, args):
         runner += '.bat'
     execute_tests(runner, args)
     stop_http_server()
-    return process_output()
+    return process_output(args)
 
 def start_http_server():
     server_output = TemporaryFile()
@@ -55,13 +55,13 @@ def execute_tests(runner, args):
 def stop_http_server():
     call(['python', env.HTTP_SERVER_FILE, 'stop'])
 
-def process_output():
+def process_output(args):
     print
     if _has_robot_27():
         call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
              os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
-    rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + \
+    rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
     rc = call(rebot_cmd, env=os.environ)
     if rc == 0:
