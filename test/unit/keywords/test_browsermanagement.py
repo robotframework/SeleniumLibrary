@@ -85,6 +85,28 @@ class BrowserManagementTests(unittest.TestCase):
         except ValueError, e:
             self.assertEquals("fireox is not a supported browser.", e.message)
 
+    def test_create_webdriver(self):
+        bm = _BrowserManagementWithLoggingStubs()
+        capt_data = {}
+        class FakeWebDriver(mock):
+            def __init__(self, some_arg=None):
+                mock.__init__(self)
+                capt_data['some_arg'] = some_arg
+                capt_data['webdriver'] = self
+        webdriver.FakeWebDriver = FakeWebDriver
+        try:
+            index = bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
+            self.assertEquals(capt_data['some_arg'], 1)
+            self.assertEquals(capt_data['webdriver'], bm._current_browser())
+            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection(index))
+            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection('fake'))
+            capt_data.clear()
+            my_kwargs = {'some_arg':2}
+            bm.create_webdriver('FakeWebDriver', kwargs=my_kwargs)
+            self.assertEquals(capt_data['some_arg'], 2)
+        finally:
+            del webdriver.FakeWebDriver
+
     def verify_browser(self , webdriver_type , browser_name, **kw):
         #todo try lambda *x: was_called = true
         bm = _BrowserManagementKeywords()
@@ -104,4 +126,11 @@ class BrowserManagementTests(unittest.TestCase):
         self.was_called = True
 
 
+class _BrowserManagementWithLoggingStubs(_BrowserManagementKeywords):
 
+    def __init__(self):
+        _BrowserManagementKeywords.__init__(self)
+        def mock_logging_method(self, *args, **kwargs):
+            pass
+        for name in ['_info', '_debug', '_warn', '_log', '_html']:
+            setattr(self, name, mock_logging_method)

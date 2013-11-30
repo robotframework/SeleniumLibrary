@@ -114,6 +114,60 @@ class _BrowserManagementKeywords(KeywordGroup):
                     % browser.session_id)
         return self._cache.register(browser, alias)
 
+    def create_webdriver(self, driver_name, alias=None, kwargs={}, **init_kwargs):
+        """Creates an instance of a WebDriver.
+
+        Like `Open Browser`, but allows passing arguments to a WebDriver's
+        __init__. _Open Browser_ is preferred over _Create Webdriver_ when
+        feasible.
+
+        Returns the index of this browser instance which can be used later to
+        switch back to it. Index starts from 1 and is reset back to it when
+        `Close All Browsers` keyword is used. See `Switch Browser` for
+        example.
+
+        `driver_name` must be the exact name of a WebDriver in
+        _selenium.webdriver_ to use. WebDriver names include: Firefox, Chrome,
+        Ie, Opera, Safari, PhantomJS, and Remote.
+
+        Use keyword arguments to specify the arguments you want to pass to
+        the WebDriver's __init__. The values of the arguments are not
+        processed in any way before being passed on. For Robot Framework
+        < 2.8, which does not support keyword arguments, create a keyword
+        dictionary and pass it in as argument `kwargs`. See the
+        [http://selenium.googlecode.com/git/docs/api/py/api.html|Selenium API Documentation]
+        for information about argument names and appropriate argument values.
+
+        Examples:
+        | # use proxy for Firefox     |              |                                           |                         |
+        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |
+        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                         |
+        | Create Webdriver            | Firefox      | proxy=${proxy}                            |                         |
+        | # use a proxy for PhantomJS |              |                                           |                         |
+        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888              |                         |
+        | Create Webdriver            | PhantomJS    | service_args=${service args}              |                         |
+        
+        Example for Robot Framework < 2.8:
+        | # debug IE driver |                   |                  |       |          |                       |
+        | ${kwargs}=        | Create Dictionary | log_level        | DEBUG | log_file | %{HOMEPATH}${/}ie.log |
+        | Create Webdriver  | Ie                | kwargs=${kwargs} |       |          |                       |
+        """
+        if not isinstance(kwargs, dict):
+            raise RuntimeError("kwargs must be a dictionary.")
+        for arg_name in kwargs:
+            if arg_name in init_kwargs:
+                raise RuntimeError("Got multiple values for argument '%s'." % arg_name)
+            init_kwargs[arg_name] = kwargs[arg_name]
+        driver_name = driver_name.strip()
+        try:
+            creation_func = getattr(webdriver, driver_name)
+        except AttributeError:
+            raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
+        self._info("Creating an instance of the %s WebDriver" % driver_name)
+        driver = creation_func(**init_kwargs)
+        self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+        return self._cache.register(driver, alias)
+
     def switch_browser(self, index_or_alias):
         """Switches between active browsers using index or alias.
 
