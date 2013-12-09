@@ -272,6 +272,21 @@ class _ElementKeywords(KeywordGroup):
         self._info("Clicking element '%s'." % locator)
         self._element_find(locator, True, True).click()
 
+    def shift_click_element(self, locator):
+        """Shift-Click element identified by `locator`. Simulates holding down
+        the Shift key while clicking an element.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        """
+        self._info("Shift-Clicking element '%s'." % locator)
+        element = self._element_find(locator, True, True)
+        # press the Shift key
+        ActionChains(self._current_browser()).key_down(Keys.SHIFT)
+        element.click()
+        # release the Shift key
+        ActionChains(self._current_browser()).key_up(Keys.SHIFT)
+
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
         """Click element identified by `locator` at x/y coordinates of the element.
         Cursor is moved and the center of the element and x/y coordinates are
