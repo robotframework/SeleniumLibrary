@@ -52,6 +52,14 @@ class BrowserManagementTests(unittest.TestCase):
         self.assertTrue("val2", capabilities["key2"])
         self.assertTrue(2, len(capabilities))
 
+    def test_parse_complex_capabilities_string(self):
+        bm = _BrowserManagementKeywords()
+        expected_caps = "proxyType:manual,httpProxy:IP:port"
+        capabilities = bm._parse_capabilities_string(expected_caps)
+        self.assertTrue("manual", capabilities["proxyType"])
+        self.assertTrue("IP:port", capabilities["httpProxy"])
+        self.assertTrue(2, len(capabilities))
+
     def test_create_remote_browser_with_desired_prefs(self):
         expected_caps = {"key1":"val1","key2":"val2"}
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
