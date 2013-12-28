@@ -3,8 +3,22 @@ Release Notes
 
 1.5 (unreleased)
 ----------------
-- Added Safari Browser.
+- Added support for Safari Browser.
   [zmlpjuran]
+
+- Added 'Create Webdriver' to allow greater control of local WebDrivers, such
+  as setting a proxy or using Chrome options.
+  [ombre42][pekkaklarck][emanlove][j1z0]
+
+- Fixed Mouse Up keyword attempting to click and hold one more time before
+  release.
+  [myaskevich][emanlove]
+
+- Refixed issue with parsing desired capabilities.
+  [emanlove]
+
+- Fixed compatibility with RobotFramework v2.8.1
+  [F1ashhimself][Ubuntu 12.04 Devel][emanlove]
 
 1.4
 ---
