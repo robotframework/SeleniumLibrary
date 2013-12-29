@@ -550,7 +550,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         '''parses the string based desired_capabilities if neccessary and
         creates the associated remote web driver'''
 
-        desired_capabilities_object = capabilities_type
+        desired_capabilities_object = capabilities_type.copy()
 
         if type(desired_capabilities) in (str, unicode):
             desired_capabilities = self._parse_capabilities_string(desired_capabilities)
