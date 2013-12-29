@@ -10,10 +10,8 @@ from setuptools import setup
 
 execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
 
-DESCRIPTION = """
-Selenium2Library is a web testing library for Robot Framework
-that leverages the Selenium 2 (WebDriver) libraries.
-"""[1:-1]
+with open(join(dirname(__file__), 'README.rst')) as f:
+    DESCRIPTION = f.read()
 
 setup(name         = 'robotframework-selenium2library',
       version      = VERSION,
