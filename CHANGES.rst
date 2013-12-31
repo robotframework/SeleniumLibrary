@@ -3,6 +3,10 @@ Release Notes
 
 1.5 (unreleased)
 ----------------
+- Copy Desired Capabilities before modifying to prevent affecting future
+  sesions.
+  [ombre42]
+
 - Added support for Safari Browser.
   [zmlpjuran]
 
@@ -15,10 +19,13 @@ Release Notes
   [myaskevich][emanlove]
 
 - Refixed issue with parsing desired capabilities.
-  [emanlove]
+  [cookie314][ymost][emanlove]
 
 - Fixed compatibility with RobotFramework v2.8.1
-  [F1ashhimself][Ubuntu 12.04 Devel][emanlove]
+  [F1ashhimself]
+
+- Modified how internal tests are run and ignore known browser issues.
+  [emanlove]
 
 1.4
 ---
