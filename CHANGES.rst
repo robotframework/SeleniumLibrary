@@ -1,8 +1,8 @@
 Release Notes
 =============
 
-1.5 (unreleased)
-----------------
+1.5
+---
 - Copy Desired Capabilities before modifying to prevent affecting future
   sesions.
   [ombre42]
