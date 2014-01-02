@@ -111,7 +111,11 @@ class _BrowserManagementKeywords(KeywordGroup):
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
         browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
-        browser.get(url)
+        try:
+            browser.get(url)
+        except:  
+            self._cache.register(browser, alias)
+            raise
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
         return self._cache.register(browser, alias)
