@@ -115,6 +115,8 @@ class _BrowserManagementKeywords(KeywordGroup):
             browser.get(url)
         except:  
             self._cache.register(browser, alias)
+            self._debug("Opened browser with session id %s but failed to open url '%s'"
+                        % (browser.session_id, url))
             raise
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
