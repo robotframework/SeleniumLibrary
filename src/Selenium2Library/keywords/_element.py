@@ -416,11 +416,11 @@ return !element.dispatchEvent(evt);
         """Simulates user pressing key on element identified by `locator`.
 
         `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\'.
+        lead by '\\\\'.
 
         Examples:
         | Press Key | text_field   | q |
-        | Press Key | login_button | \\13 | # ASCII code for enter key |
+        | Press Key | login_button | \\\\13 | # ASCII code for enter key |
         """
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
@@ -534,6 +534,13 @@ return !element.dispatchEvent(evt);
     def get_matching_xpath_count(self, xpath):
         """Returns number of elements matching `xpath`
 
+        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
+        
+        Correct:
+        | count = | Get Matching Xpath Count | //div[@id='sales-pop']
+        Incorrect:
+        | count = | Get Matching Xpath Count | xpath=//div[@id='sales-pop']
+
         If you wish to assert the number of matching elements, use
         `Xpath Should Match X Times`.
         """
@@ -542,6 +549,13 @@ return !element.dispatchEvent(evt);
 
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
+
+        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
+        
+        Correct:
+        | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
+        Incorrect:
+        | Xpath Should Match X Times | xpath=//div[@id='sales-pop'] | 1
 
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
