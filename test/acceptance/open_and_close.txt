@@ -17,3 +17,14 @@ There Should Be A Good Error Message If Browser Is Not Opened
 
 Close Browser Does Nothing When No Browser Is Opened
     Close Browser
+
+Browser Open With Not Well-Formed URL Should Close
+   [Documentation]  Verify after incomplete 'Open Browser' browser closes
+   ...  LOG 1.1:10   DEBUG STARTS: Opened browser with session id
+   ...  LOG 1.1:10   DEBUG REGEXP: .*but failed to open url.*
+   ...  LOG 2:2      DEBUG STARTS: DELETE
+   ...  LOG 2:3      DEBUG Finished Request
+   
+   Run Keyword And Expect Error  *
+   ...  Open Browser  bad.url.bad  ${BROWSER}
+   Close All Browsers
