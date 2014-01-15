@@ -1,10 +1,31 @@
 Release Notes
 =============
 
-1.5 (unreleased)
-----------------
-- Added Safari Browser.
+1.5
+---
+- Copy Desired Capabilities before modifying to prevent affecting future
+  sesions.
+  [ombre42]
+
+- Added support for Safari Browser.
   [zmlpjuran]
+
+- Added 'Create Webdriver' to allow greater control of local WebDrivers, such
+  as setting a proxy or using Chrome options.
+  [ombre42][pekkaklarck][emanlove][j1z0]
+
+- Fixed Mouse Up keyword attempting to click and hold one more time before
+  release.
+  [myaskevich][emanlove]
+
+- Refixed issue with parsing desired capabilities.
+  [cookie314][ymost][emanlove]
+
+- Fixed compatibility with RobotFramework v2.8.1
+  [F1ashhimself]
+
+- Modified how internal tests are run and ignore known browser issues.
+  [emanlove]
 
 1.4
 ---
