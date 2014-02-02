@@ -1,6 +1,15 @@
 Release Notes
 =============
 
+1.6 (unreleased)
+----------------
+- Added instructions to README.rst on how to manually install Selenium2Library.
+  [pekkaklarck]
+
+- Fixed issue where the browser failed to properly register if 'Open Browser'
+  did not complete.
+  [Mika Batsman][elizaleong][emanlove] 
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
