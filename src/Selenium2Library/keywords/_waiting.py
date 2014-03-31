@@ -87,6 +87,29 @@ class _WaitingKeywords(KeywordGroup):
             else:
                 return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_visibility)
+    
+    def wait_until_element_not_visible(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` is hidden.
+
+        Fails if `timeout` expires before the element is hidden. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains 
+        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
+        Succeeds`.
+        """
+        def check_hidden():
+            visible = self._is_visible(locator)
+            if !visible:
+                return
+            elif visible is None:
+                return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
+            else:
+                return error or "Element '%s' was not hidden in %s" % (locator, self._format_timeout(timeout))
+        self._wait_until_no_error(timeout, check_hidden)
 
     # Private
 
