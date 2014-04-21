@@ -45,7 +45,7 @@ Notice that using ``--upgrade`` above updates both the library and all
 its dependencies to the latest version. If you want, you can also install
 a specific version or upgrade only the Selenium tool used by the library::
 
-    pin install robotframework-selenium2library==1.4.1
+    pip install robotframework-selenium2library==1.4.1
     pip install --upgrade selenium
     pip install selenium==2.34
 
