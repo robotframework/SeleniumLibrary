@@ -268,6 +268,15 @@ class _ElementKeywords(KeywordGroup):
         """
         return self._get_text(locator)
 
+    def clear_text(self, locator):
+        """Clears the text value of text entry element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        element = self._element_find(locator, True, True)
+        if element is not None:
+            element.clear()
+
     def get_vertical_position(self, locator):
         """Returns vertical position of element identified by `locator`.
 
