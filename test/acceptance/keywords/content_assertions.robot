@@ -174,39 +174,39 @@ Page Should Not Contain Text Field
     Run Keyword And Expect Error  Page should not have contained text field 'name'  Page Should Not Contain Text Field  name
 
 TextField Should Contain
-    [Documentation]  LOG 2:7 Text field 'name' contains text ''.
-    [Setup]  Go To Page "forms/email_form.html"
+    [Documentation]    LOG 2:7 Text field 'name' contains text ''.
+    [Setup]    Go To Page "forms/email_form.html"
+    TextField Should contain    name    ${EMPTY}
+    Input Text    name    my name
+    TextField Should contain    name    my name
+    Run Keyword And Expect Error    Text field 'name' should have contained text 'non-existing' but it contained 'my name'    TextField Should contain    name    non-existing
+    Clear Text  name
     TextField Should contain  name  ${EMPTY}
-    Input Text  name  my name
-    TextField Should contain  name  my name
-    Run Keyword And Expect Error  Text field 'name' should have contained text 'non-existing' but it contained 'my name'  TextField Should contain  name  non-existing
 
 TextField Value Should Be
-    [Documentation]  LOG 2:7 Content of text field 'name' is ''.
-    [Setup]  Go To Page "forms/email_form.html"
-    textfield Value Should Be  name  ${EMPTY}
-    Input Text  name  my name
-    textfield Value Should Be  name  my name
-    Run Keyword And Expect Error  Value of text field 'name' should have been 'non-existing' but was 'my name'  textfield Value Should Be  name  non-existing
-    Clear Element Text  name
+    [Documentation]    LOG 2:7 Content of text field 'name' is ''.
+    [Setup]    Go To Page "forms/email_form.html"
+    textfield Value Should Be    name    ${EMPTY}
+    Input Text    name    my name
+    textfield Value Should Be    name    my name
+    Run Keyword And Expect Error    Value of text field 'name' should have been 'non-existing' but was 'my name'    textfield Value Should Be    name    non-existing
+    Clear Text  name
     Textfield Value Should Be  name  ${EMPTY}
 
 TextArea Should Contain
-    [Setup]  Go To Page "forms/email_form.html"
+    [Setup]    Go To Page "forms/email_form.html"
+    TextArea Should Contain    comment    ${EMPTY}
+    Input Text    comment    This is a comment.
+    Run Keyword And Expect Error    Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'    TextArea Should Contain    comment    Hello World!
+    Clear Text  comment
     TextArea Should Contain  comment  ${EMPTY}
-    Input Text  comment  This is a comment.
-    Run Keyword And Expect Error
-    ...  Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'
-    ...  TextArea Should Contain  comment  Hello World!
 
 TextArea Value Should Be
-    [Setup]  Go To Page "forms/email_form.html"
-    TextArea Value Should Be  comment  ${EMPTY}
-    Input Text  comment  This is a comment.
-    Run Keyword And Expect Error
-    ...  Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'
-    ...  TextArea Value Should Be  comment  Hello World!
-    Clear Element Text  comment
+    [Setup]    Go To Page "forms/email_form.html"
+    TextArea Value Should Be    comment    ${EMPTY}
+    Input Text    comment    This is a comment.
+    Run Keyword And Expect Error    Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'    TextArea Value Should Be    comment    Hello World!
+    Clear Text  comment
     TextArea Value Should Be  comment  ${EMPTY}
 
 Page Should Contain Button
