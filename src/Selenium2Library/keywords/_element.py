@@ -2,7 +2,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _ElementKeywords(KeywordGroup):
 
@@ -642,7 +642,7 @@ return !element.dispatchEvent(evt);
         return (parts[0], parts[2])
 
     def _is_element_present(self, locator, tag=None):
-        return (self._element_find(locator, True, False, tag=tag) != None)
+        return (self._element_find(locator, True, False, tag=tag) is not None)
 
     def _page_contains(self, text):
         browser = self._current_browser()

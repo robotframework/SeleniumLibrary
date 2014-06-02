@@ -1,9 +1,5 @@
-import os
-import sys
-from robot.variables import GLOBAL_VARIABLES
-from robot.api import logger
 from Selenium2Library.locators import TableElementFinder
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _TableElementKeywords(KeywordGroup):
 
@@ -57,7 +53,7 @@ class _TableElementKeywords(KeywordGroup):
                    % (table_locator, row, column, expected))
         try:
             content = self.get_table_cell(table_locator, row, column, loglevel='NONE')
-        except AssertionError, err:
+        except AssertionError as err:
             self._info(err)
             self.log_source(loglevel)
             raise AssertionError(message)

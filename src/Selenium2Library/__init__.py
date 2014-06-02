@@ -1,8 +1,8 @@
 import os
-from keywords import *
+from .keywords import *
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-execfile(os.path.join(THIS_DIR, 'version.py'))
+exec(open(os.path.join(THIS_DIR, 'version.py')).read())
 
 __version__ = VERSION
 

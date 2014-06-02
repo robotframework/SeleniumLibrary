@@ -1,6 +1,7 @@
 import os
+import sys
 from fnmatch import fnmatch
-from browsercache import BrowserCache
+from .browsercache import BrowserCache
 
 __all__ = [
     "get_child_packages_in",
@@ -9,6 +10,11 @@ __all__ = [
     "escape_xpath_value",
     "BrowserCache"
 ]
+
+PY3 = sys.version_info[0] == 3
+if PY3:
+    unicode = str
+
 
 # Public
 
