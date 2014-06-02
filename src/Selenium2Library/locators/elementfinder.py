@@ -151,9 +151,9 @@ class ElementFinder(object):
     def _filter_elements(self, elements, tag, constraints):
         elements = self._normalize_result(elements)
         if tag is None: return elements
-        return filter(
+        return list(filter(
             lambda element: self._element_matches(element, tag, constraints),
-            elements)
+            elements))
 
     def _get_attrs_with_url(self, key_attrs, criteria, browser):
         attrs = []
