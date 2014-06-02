@@ -1,7 +1,14 @@
-import env
-import os, sys
+from __future__ import print_function
+import os
+import sys
 import unittest
+
 from Selenium2Library import utils
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(SCRIPT_DIR))
+import env
+
 
 def run_unit_tests(modules_to_run=[]):
     (test_module_names, test_modules) = utils.import_modules_under(
@@ -10,9 +17,9 @@ def run_unit_tests(modules_to_run=[]):
     bad_modules_to_run = [module_to_run for module_to_run in modules_to_run
         if module_to_run not in test_module_names]
     if bad_modules_to_run:
-        print "Specified test module%s not exist: %s" % (
+        print("Specified test module%s not exist: %s" % (
             ' does' if len(bad_modules_to_run) == 1 else 's do',
-            ', '.join(bad_modules_to_run))
+            ', '.join(bad_modules_to_run)))
         return -1
 
     tests = [unittest.defaultTestLoader.loadTestsFromModule(test_module) 

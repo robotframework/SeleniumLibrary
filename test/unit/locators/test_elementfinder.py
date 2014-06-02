@@ -1,5 +1,4 @@
 import unittest
-import os
 from Selenium2Library.locators import ElementFinder
 from mockito import *
 
@@ -11,7 +10,7 @@ class ElementFinderTests(unittest.TestCase):
         try:
             self.assertRaises(ValueError, finder.find, browser, "something=test1")
         except ValueError as e:
-            self.assertEqual(e.message, "Element locator with prefix 'something' is not supported")
+            self.assertEqual(e.args[0], "Element locator with prefix 'something' is not supported")
 
     def test_find_with_null_browser(self):
         finder = ElementFinder()
