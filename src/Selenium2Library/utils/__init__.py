@@ -41,7 +41,7 @@ def get_module_names_under(root_dir, include_root_package_name=True, exclusions=
 
 def import_modules_under(root_dir, include_root_package_name=True, exclusions=None, pattern=None):
     module_names = get_module_names_under(root_dir, include_root_package_name, exclusions, pattern)
-    modules = [ __import__(module_name, globals(), locals(), ['*'], -1)
+    modules = [ __import__(module_name, globals(), locals(), ['*'], 0)
         for module_name in module_names ]
     return (module_names, modules)
 
