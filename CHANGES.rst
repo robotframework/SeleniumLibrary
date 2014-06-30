@@ -107,6 +107,9 @@
   space-insensitive.
   [ombre42]
 
+- Fixed issue where 'Select Window’ with url strategy fails to locate window
+  [laulaz]
+  
 A big thank you to [eweitz] and [HelioGuilherme66] for getting the
 continuous integration builds to go green by fixing internal tests.
 
