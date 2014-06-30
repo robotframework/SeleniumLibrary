@@ -121,6 +121,9 @@ continuous integration builds to go green by fixing internal tests.
   prefix 'partial link'.
   [lina1]
 
+- Fixed issue where 'Select Window’ with url strategy fails to locate window
+  [laulaz]
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
