@@ -91,6 +91,37 @@ class _JavaScriptKeywords(KeywordGroup):
         self._info("Executing JavaScript:\n%s" % js)
         return self._current_browser().execute_script(js)
 
+    def execute_javascript_on_element_with_args(self, code, locator, *args):
+        """Executes the given JavaScript code with first argument as
+        an element specified by `locator` and more optional arguments.
+
+        `code` may contain multiple lines of code but must contain a
+        return statement (with the value to be returned) at the end.
+
+        If `code` is an absolute path to an existing file, the JavaScript
+        to execute will be read from that file. Forward slashes work as
+        a path separator on all operating systems.
+
+        Note that, by default, the code will be executed in the context of the
+        Selenium object itself, so `this` will refer to the Selenium object.
+        Use `window` to refer to the window of your application, e.g.
+        `window.document.getElementById('foo')`.
+        You can use arguments[0] to refer to element identified by `locator` and
+        arguments[1], arguments[2], etc. to refer to any other arguments provided
+        after the `locator`.
+        See `introduction` for details about locating elements.
+
+        Example:
+        | Execute Javascript On Element With Args | window.my_js_function('arg1', 'arg2') |
+        | Execute Javascript On Element With Args | ${CURDIR}/js_to_execute.js |
+        | Execute Javascript On Element With Args | return arguments[0].getBoundingClientRect().top; | xpath=//*[@data-mipqa="categoriesList"]//*[@data-mipqa="category"]
+        | Execute Javascript On Element With Args | arguments[0].scrollTop = arguments[1]; | xpath=//*[@data-mipqa="categoriesList"]//*[@data-mipqa="category"] | 200
+        """
+        js = self._get_javascript_to_execute(code)
+        self._info("Executing JavaScript:\n%s" % js)
+        element = self._element_find(locator, True, True)
+        return self._current_browser().execute_script(js, element, args)
+
     def execute_async_javascript(self, *code):
         """Executes asynchronous JavaScript code.
 
