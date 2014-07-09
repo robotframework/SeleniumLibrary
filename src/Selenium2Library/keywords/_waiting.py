@@ -88,10 +88,10 @@ class _WaitingKeywords(KeywordGroup):
                 return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_visibility)
     
-    def wait_until_element_not_visible(self, locator, timeout=None, error=None):
-        """Waits until element specified with `locator` is hidden.
+    def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` is not visible.
 
-        Fails if `timeout` expires before the element is hidden. See
+        Fails if `timeout` expires before the element is not visible. See
         `introduction` for more information about `timeout` and its
         default value.
 
@@ -108,7 +108,7 @@ class _WaitingKeywords(KeywordGroup):
             elif visible is None:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
             else:
-                return error or "Element '%s' was not hidden in %s" % (locator, self._format_timeout(timeout))
+                return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_hidden)
 
     # Private
