@@ -547,7 +547,23 @@ class _BrowserManagementKeywords(KeywordGroup):
         '''most of the make browser functions just call this function which creates the 
         appropriate web-driver'''
         if not remote_url: 
-            browser = webdriver_type()
+#            from selenium.webdriver.common.desired_capabilities import DesiredCapabilities            
+#            caps = DesiredCapabilities.INTERNETEXPLORER
+#            caps['ignoreProtectedModeSettings'] = True
+#            driver = webdriver.Ie(capabilities=caps)
+#            _generic_make_browser(webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
+              
+            ###enhance to enable DesiredCapabilities for None remote mode###
+            desired_capabilities_object = desired_cap_type.copy()            
+            if type(desired_caps) in (str, unicode):
+                desired_caps = self._parse_capabilities_string(desired_caps)
+            desired_capabilities_object.update(desired_caps or {})  
+            self._debug(desired_capabilities_object)
+            if "selenium.webdriver.ie.webdriver.WebDriver" in str(webdriver_type):                     
+                browser = webdriver_type(capabilities=desired_capabilities_object)
+            else:
+                browser = webdriver_type(desired_capabilities=desired_capabilities_object)
+            
         else:
             browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
         return browser
@@ -580,4 +596,3 @@ class _BrowserManagementKeywords(KeywordGroup):
             desired_capabilities[key.strip()] = value.strip()
 
         return desired_capabilities
-    
