@@ -476,18 +476,17 @@ return !element.dispatchEvent(evt);
         """
         self._current_browser().execute_script(script, element, event)
 
- def press_key(self, locator, key):
+    def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
-        
-        `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\\\'.
 
-        Examples:
-        | Press Key | text_field   | q                |
-        | Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
-        | Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
-        """
-        
+`key` is either a single character, or a numerical ASCII code of the key
+lead by '\\\\'.
+
+Examples:
+| Press Key | text_field   | q                |                                               |
+| Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
+| Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
+"""
         if key.startswith('\\\\') and len(key) > 1:
             key = getattr(Keys,key[2:])
         elif key.startswith('\\') and len(key) > 1:
