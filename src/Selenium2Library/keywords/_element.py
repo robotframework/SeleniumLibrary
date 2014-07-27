@@ -611,15 +611,15 @@ return !element.dispatchEvent(evt);
         browser = self._current_browser()
         if isstr(locator):
             elements = self._element_finder.find(browser, locator, tag)
+            if required and len(elements) == 0:
+                raise ValueError("Element locator '" + locator + "' did not match any elements.")
+            if first_only:
+                if len(elements) == 0: return None
+                return elements[0]
         elif isinstance(locator, WebElement):
-            pass
+            elements = locator
         # do some other stuff here like deal with list of webelements
         # ... or raise locator/element specific error if required
-        if required and len(elements) == 0:
-            raise ValueError("Element locator '" + locator + "' did not match any elements.")
-        if first_only:
-            if len(elements) == 0: return None
-            return elements[0]
         return elements
 
     def _frame_contains(self, locator, text):
