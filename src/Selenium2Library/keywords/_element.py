@@ -9,6 +9,18 @@ class _ElementKeywords(KeywordGroup):
     def __init__(self):
         self._element_finder = ElementFinder()
 
+    # Public, get element(s)
+
+    def get_element():
+        pass
+
+    def get_elements(self, locator):
+        """Returns list of elements matching locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._element_find(locator, False, True)
+
     # Public, element lookups
 
     def current_frame_contains(self, text, loglevel='INFO'):
