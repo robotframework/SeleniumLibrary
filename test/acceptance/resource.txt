@@ -25,7 +25,7 @@ Open Browser To Start Page
 Open Browser To Start Page Without Testing Default Options
   Open Browser  ${FRONT PAGE}  ${BROWSER}  remote_url=${REMOTE_URL}   desired_capabilities=${DESIRED_CAPABILITIES}
   ${orig speed} =  Set Selenium Speed  ${SPEED}
-  ${orig timeout} =  Set Selenium Timeout  10 seconds
+  ${orig timeout} =  Set Selenium Timeout  30 seconds
   [Return]  ${orig speed}  5 seconds
 
 Open Browser To Start Page And Test Implicit Wait
