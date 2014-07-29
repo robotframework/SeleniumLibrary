@@ -177,8 +177,7 @@ class _FormElementKeywords(KeywordGroup):
         if not os.path.isfile(file_path):
             self._info("File '%s' does not exist on the local file system"
                         % file_path)
-        self._info("Typing filename '%s' into locator field '%s'" % (file_path, locator))
-        self._element_find(locator, True, True).send_keys(os.path.normpath(file_path))
+        self._element_find(locator, True, True).send_keys(file_path)
 
     def input_password(self, locator, text):
         """Types the given password into text field identified by `locator`.
