@@ -1,7 +1,7 @@
 *** Settings ***
 Test Setup        Go To Page "forms/named_submit_buttons.html"
 Force Tags        forms
-Resource          ../resource.txt
+Resource          ../resource.robot
 Library           OperatingSystem
 
 *** Variables ***

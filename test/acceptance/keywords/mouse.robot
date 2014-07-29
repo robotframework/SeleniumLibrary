@@ -1,7 +1,7 @@
 *** Settings ***
 Test Setup        Go To Page "mouse/index.html"
 Force Tags        mouse
-Resource          ../resource.txt
+Resource          ../resource.robot
 
 *** Test Cases ***
 Mouse Over

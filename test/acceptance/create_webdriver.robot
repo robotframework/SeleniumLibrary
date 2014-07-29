@@ -1,5 +1,5 @@
 *** Setting ***
-Resource          resource.txt
+Resource          resource.robot
 Library           Collections
 
 *** Test Cases ***

@@ -1,7 +1,12 @@
 *** Settings ***
+<<<<<<< HEAD:test/acceptance/open_and_close.robot
 Suite Teardown    Close All Browsers
 Force Tags        openclose
 Resource          resource.robot
+=======
+Resource        resource.robot
+Suite Teardown  Close All Browsers
+>>>>>>> Renaming of tests and resource to *.robot.:test/acceptance/open_and_close.robot
 
 *** Test Cases ***
 Browser Should Open And Close

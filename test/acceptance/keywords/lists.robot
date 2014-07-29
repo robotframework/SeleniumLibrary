@@ -1,6 +1,6 @@
 *** Settings ***
-Test Setup        Go To Page "forms/prefilled_email_form.html"
-Resource          ../resource.robot
+Test Setup      Go To Page "forms/prefilled_email_form.html"
+Resource        ../resource.robot
 
 *** Test Cases ***
 Get List Items From Single-Select List
