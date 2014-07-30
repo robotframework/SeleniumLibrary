@@ -1,6 +1,7 @@
 import os
 import robot
 from keywordgroup import KeywordGroup
+import uuid
 
 class _ScreenshotKeywords(KeywordGroup):
 
@@ -39,7 +40,7 @@ class _ScreenshotKeywords(KeywordGroup):
     def _get_screenshot_paths(self, filename):
         if not filename:
             self._screenshot_index += 1
-            filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+            filename = 'selenium-%s-%d.png' % (uuid.uuid4(), self._screenshot_index)
         else:
             filename = filename.replace('/', os.sep)
         logdir = self._get_log_dir()
