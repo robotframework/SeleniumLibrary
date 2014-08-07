@@ -4,10 +4,40 @@ import SimpleHTTPServer
 import BaseHTTPServer
 import httplib
 import os
-
+from time import sleep
 
 class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """http request handler with QUIT stopping the server"""
+
+    def do_GET(self):
+        """Response pages for Angular tests.
+
+        Added by Edward Manlove - June 5, 2014
+        """
+        if self.path=='/fastcall':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write('done')
+        elif self.path=='/slowcall':
+            sleep(2)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write('finally done')
+        elif self.path=='/fastTemplateUrl':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write('fast template contents')
+        elif self.path=='/slowTemplateUrl':
+            sleep(2)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write('slow template contents')
+        else:
+            SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
 
     def do_QUIT(self):
         """send 200 OK response, and set server.stop to True"""
