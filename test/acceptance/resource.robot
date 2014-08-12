@@ -20,10 +20,10 @@ Open Browser To Start Page
     Should Be Equal    ${default timeout}    5 seconds
 
 Open Browser To Start Page Without Testing Default Options
-  Open Browser  ${FRONT PAGE}  ${BROWSER}  remote_url=${REMOTE_URL}   desired_capabilities=${DESIRED_CAPABILITIES}
-  ${orig speed} =  Set Selenium Speed  ${SPEED}
-  ${orig timeout} =  Set Selenium Timeout  30 seconds
-  [Return]  ${orig speed}  5 seconds
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    ${orig speed} =    Set Selenium Speed    ${SPEED}
+    ${orig timeout} =    Set Selenium Timeout    30 seconds
+    [Return]    ${orig speed}    5 seconds
 
 Open Browser To Start Page And Test Implicit Wait
     [Arguments]    ${implicit_wait}
@@ -40,7 +40,7 @@ Cannot Be Executed In IE
     ${runsInIE}=    Set Variable If    "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']    ${TRUE}
     Run Keyword If    ${runsInIE}    Set Tags    ie-incompatible
     #Run Keyword If    ${runsInIE}    Fail And Set Non-Critical    This test does not work in Internet Explorer
-    Run Keyword If    ${runsInIE}    Pass Execution    This test does not work in Internet Explorer    -Regression
+    Run Keyword If    ${runsInIE}    Pass Execution    This test does not work in Internet Explorer
 
 Fail And Set Non-Critical
     [Arguments]    ${msg}
@@ -59,9 +59,3 @@ Set ${level} Loglevel
 
 Verify Location Is "${relative url}"
     Location Should Be    ${ROOT}/${relative url}
-
-Cannot Be Executed In Chrome
-    ${runsInChrome}=    Set Variable If    "${BROWSER}".replace(' ', '').lower() in ['gc', 'chrome', 'google-chrome']    ${TRUE}
-    Run Keyword If    ${runsInChrome}    Set Tags    chrome-incompatible
-    #Run Keyword If    ${runsInChrome}    Fail And Set Non-Critical    This test does not work in Google Chrome
-    Run Keyword If    ${runsInChrome}    Pass Execution    This test does not work in Google Chrome    -Regression
