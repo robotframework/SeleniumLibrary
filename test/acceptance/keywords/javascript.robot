@@ -61,11 +61,6 @@ Execute Javascript from File
     Execute Javascript    ${CURDIR}/executed_by_execute_javascript.js
     Page Should Contain    Inserted via file
 
-Open Context Menu
-    [Tags]    Known Issue - Firefox
-    Go To Page "javascript/context_menu.html"
-    Open Context Menu    myDiv
-
 Drag and Drop
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
@@ -79,3 +74,9 @@ Drag and Drop by Offset
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${100}    ${20}
     Element Text Should Be    id=droppable    Dropped!
+
+Open Context Menu
+    [Tags]    Known Issue - Firefox
+    [Setup]    Go To Page "javascript/context_menu.html"
+    Open Context Menu    myDiv
+    Click Link    Alert
