@@ -33,7 +33,6 @@ Page Should Contain With Disabling Source Logging
     [Documentation]    LOG 3:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error    Page should have contained text 'non existing text' but did not    Page Should Contain    non existing text    loglevel=NONE
-    [Teardown]    Set Log Level    DEBUG
 
 Page Should Contain With Frames
     [Setup]    Go To Page "frames/frameset.html"

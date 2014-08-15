@@ -33,7 +33,7 @@ Correct Error Message Should Be Given When Trying To Switch To Non-Existing Brow
 
 *** Keywords ***
 Open Two Browsers And Register Indexes
-    Cannot Be Executed in IE
+    #Cannot Be Executed in IE    #Runs OK in IE 11
     ${BROWSER1} =    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
     ${BROWSER2} =    Open Browser    ${ROOT}/links.html    ${BROWSER}    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
     Set Suite Variable    $BROWSER1
