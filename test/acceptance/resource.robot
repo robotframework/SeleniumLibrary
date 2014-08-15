@@ -40,7 +40,7 @@ Cannot Be Executed In IE
     ${runsInIE}=    Set Variable If    "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']    ${TRUE}
     Run Keyword If    ${runsInIE}    Set Tags    ie-incompatible
     #Run Keyword If    ${runsInIE}    Fail And Set Non-Critical    This test does not work in Internet Explorer
-    Run Keyword If    ${runsInIE}    Pass Execution    This test does not work in Internet Explorer
+    Run Keyword If    ${runsInIE}    Pass Execution    This test does not work in Internet Explorer    -Regression
 
 Fail And Set Non-Critical
     [Arguments]    ${msg}
