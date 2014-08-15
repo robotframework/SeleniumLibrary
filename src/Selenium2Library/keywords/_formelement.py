@@ -235,10 +235,12 @@ class _FormElementKeywords(KeywordGroup):
             raise AssertionError(message)
         self._info("Text field '%s' contains text '%s'." % (locator, expected))
 
-    def textfield_value_should_be(self, locator, expected, message=''):
+    def textfield_value_should_be(self, locator, expected, message='', casesense=True):
         """Verifies the value in text field identified by `locator` is exactly `expected`.
 
         `message` can be used to override default error message.
+        
+        `casesense` can be used to override default Case Sensitivity comparison. 
 
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
@@ -246,7 +248,11 @@ class _FormElementKeywords(KeywordGroup):
         element = self._element_find(locator, True, False, 'text field')
         if element is None: element = self._element_find(locator, True, False, 'file upload')
         actual = element.get_attribute('value') if element is not None else None
-        if actual != expected:
+        if not casesense:
+            compareresult = ( actual.lower() == expected.lower() )
+        else:
+            compareresult = ( actual == expected )
+        if not compareresult:
             if not message:
                 message = "Value of text field '%s' should have been '%s' "\
                           "but was '%s'" % (locator, expected, actual)
