@@ -63,6 +63,8 @@ def process_output(args):
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
+    print ''
+    print 'Starting output processing with command:\n' + ' '.join(rebot_cmd)
     rc = call(rebot_cmd, env=os.environ)
     if rc == 0:
         print 'All critical tests passed'
