@@ -51,7 +51,6 @@ Page Should Not Contain With Disabling Source Logging
     [Documentation]    LOG 3:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error    Page should not have contained text 'needle'    Page Should Not Contain    needle    loglevel=NONE
-    [Teardown]    Set Log Level    DEBUG
 
 Page Should Contain Element
     Page Should Contain Element    some_id
@@ -64,7 +63,6 @@ Page Should Contain Element With Disabling Source Logging
     [Documentation]    LOG 3:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error    Page should have contained element 'non-existent' but did not    Page Should Contain Element    non-existent    loglevel=NONE
-    [Teardown]    Set Log Level    DEBUG
 
 Page Should Not Contain Element
     Page Should Not Contain Element    non-existent
@@ -74,7 +72,6 @@ Page Should Not Contain Element With Disabling Source Logging
     [Documentation]    LOG 3:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error    Page should not have contained element 'some_id'    Page Should Not Contain Element    some_id    loglevel=NONE
-    [Teardown]    Set Log Level    DEBUG
 
 Element Should Contain
     Element Should Contain    some_id    This text is inside an identified element
