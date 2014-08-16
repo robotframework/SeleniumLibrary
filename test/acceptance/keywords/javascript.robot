@@ -78,5 +78,7 @@ Drag and Drop by Offset
 Open Context Menu
     [Tags]    Known Issue - Firefox
     [Setup]    Go To Page "javascript/context_menu.html"
+    Mouse Over    myDiv
     Open Context Menu    myDiv
     Click Link    Alert
+    Alert Should Be Present
