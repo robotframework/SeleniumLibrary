@@ -59,3 +59,9 @@ Set ${level} Loglevel
 
 Verify Location Is "${relative url}"
     Location Should Be    ${ROOT}/${relative url}
+
+Cannot Be Executed In Chrome
+    ${runsInChrome}=    Set Variable If    "${BROWSER}".replace(' ', '').lower() in ['gc', 'chrome', 'google-chrome']    ${TRUE}
+    Run Keyword If    ${runsInChrome}    Set Tags    chrome-incompatible
+    #Run Keyword If    ${runsInChrome}    Fail And Set Non-Critical    This test does not work in Google Chrome
+    Run Keyword If    ${runsInChrome}    Pass Execution    This test does not work in Google Chrome    -Regression
