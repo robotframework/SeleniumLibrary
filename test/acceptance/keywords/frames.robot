@@ -28,7 +28,9 @@ Page Should Contain Text Within Frames should also work with iframes
     Page Should Contain    Links
 
 Select And Unselect Frame
-    [Documentation]    LOG 2 Selecting frame 'left'.
+    [Documentation]    LOG 3:1 INFO Selecting frame 'left'.\
+    ...    LOG 6:1 INFO Selecting frame 'right'.\
+    ...    LOG 7:1 INFO Current page contains text 'You're looking at foo.'.
     Run Keyword If    '${BROWSER}'.lower() == 'ie' or '${BROWSER}'.lower().replace(' ', '') == 'internetexplorer'    Set Selenium Speed    0.2 seconds
     Select Frame    left
     Click Link    foo
