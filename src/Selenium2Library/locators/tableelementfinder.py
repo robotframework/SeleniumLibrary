@@ -98,17 +98,9 @@ class TableElementFinder(object):
     def _search_in_locators(self, browser, locators, content):
         for locator in locators:
             elements = self._element_finder.find(browser, locator)
-            print "content:"
-            print content
-            print "elements:"
-            print elements
-            print "locators:"
-            print locators
             for element in elements:
                 if content is None: return element
                 element_text = element.text
-                print "element_text: "
-                print element_text
                 if element_text and content in element_text:
                     return element
         return None
