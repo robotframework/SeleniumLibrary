@@ -16,23 +16,28 @@ class _TableElementKeywords(KeywordGroup):
         """Returns the content from a table cell.
 
         Row and column number start from 1. Header and footer rows are
-        included in the count. This means that also cell content from
-        header or footer rows can be obtained with this keyword. To
-        understand how tables are identified, please take a look at
-        the `introduction`.
+        included in the count. A negative row or column number can be used
+        to get rows counting from the end (end: -1). Cell content from header 
+        or footer rows can be obtained with this keyword. To understand how 
+        tables are identified, please take a look at the `introduction`.
         """
         row = int(row)
-        row_index = row - 1
+        row_index = row
+        if row > 0: row_index = row - 1
         column = int(column)
-        column_index = column - 1
+        column_index = column
+        if column > 0: column_index = column - 1
         table = self._table_element_finder.find(self._current_browser(), table_locator)
         if table is not None:
             rows = table.find_elements_by_xpath("./thead/tr")
-            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
-            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index >= len(rows) or row_index < 0: 
+                rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows) or row_index < 0: 
+                rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
             if row_index < len(rows):
                 columns = rows[row_index].find_elements_by_tag_name('th')
-                if column_index >= len(columns): columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                if column_index >= len(columns) or column_index < 0: 
+                    columns.extend(rows[row_index].find_elements_by_tag_name('td'))
                 if column_index < len(columns):
                     return columns[column_index].text
         self.log_source(loglevel)
@@ -69,8 +74,9 @@ class _TableElementKeywords(KeywordGroup):
     def table_column_should_contain(self, table_locator, col, expected, loglevel='INFO'):
         """Verifies that a specific column contains `expected`.
 
-        The first leftmost column is column number 1. If the table
-        contains cells that span multiple columns, those merged cells
+        The first leftmost column is column number 1. A negative column 
+        number can be used to get column counting from the end of the row (end: -1).
+        If the table contains cells that span multiple columns, those merged cells
         count as a single column. For example both tests below work,
         if in one row columns A and B are merged with colspan="2", and
         the logical third column contains "C".
@@ -126,10 +132,11 @@ class _TableElementKeywords(KeywordGroup):
     def table_row_should_contain(self, table_locator, row, expected, loglevel='INFO'):
         """Verifies that a specific table row contains `expected`.
 
-        The uppermost row is row number 1. For tables that are
-        structured with thead, tbody and tfoot, only the tbody section
-        is searched. Please use `Table Header Should Contain` or
-        `Table Footer Should Contain` for tests against the header or
+        The uppermost row is row number 1. A negative column 
+        number can be used to get column counting from the end of the row 
+        (end: -1). For tables that are structured with thead, tbody and tfoot, 
+        only the tbody section is searched. Please use `Table Header Should Contain` 
+        or `Table Footer Should Contain` for tests against the header or
         footer content.
 
         If the table contains cells that span multiple rows, a match
