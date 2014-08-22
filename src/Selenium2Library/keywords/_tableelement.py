@@ -19,8 +19,7 @@ class _TableElementKeywords(KeywordGroup):
         to get rows counting from the end (end: -1). Cell content from header
         or footer rows can be obtained with this keyword. To understand how
         tables are identified, please take a look at the `introduction`.
-
-        See `Page Should Contain` for explanation about `loglevel` argument.
+        QAR-48165: Added support for negative indexes in Robot keywords
         """
         row = int(row)
         row_index = row
