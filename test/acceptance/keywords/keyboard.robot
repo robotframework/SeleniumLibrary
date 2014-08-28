@@ -19,6 +19,11 @@ Press End
 
 Press Shift-a
     Press Keys    textarea    a    SHIFT
+    Press Keys    textarea    b    SHIFT
+    Press Keys    textarea    c    SHIFT
+    Sleep    5 seconds
+    ${value}=    Get Value    textarea
+    Capture Page Screenshot
 
 Press Invalid Keys
     Run Keyword And Expect Error    *    Press Keys    textarea    ${NONE}
