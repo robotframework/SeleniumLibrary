@@ -525,20 +525,24 @@ Reference: http://selenium-python.readthedocs.org/en/latest/search.html?q=shiftK
             key = getattr(Keys,key[2:])
         elif key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
+        if len(key) > 1 and special_key1 == None:
+            self.press_key(self, locator, key)
+            return
+
         if len(special_key1) > 1:
             try:
-                special_key1 = self._map_ascii_key_code_to_key(int(special_key1[1:]))
+                special_key1 = self._map_named_key_code_to_special_key(special_key1)
             except:
                 ValueError("Special_Key1 value '%s' is invalid.", special_key1)
-        self._info("Special Key is now '%s'." % special_key1)
+        #self._info("Special Key is now '%s'." % special_key1)
         if len(key) > 1 and special_key1 == None:
             self.press_key(self, locator, key)
             return
         element = self._element_find(locator, True, True)
         #select it
-        self.key_down(special_key1)
-        element.send_keys(key)
-        self.key_up(special_key1)
+        #ActionChains(driver).key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
+        ActionChains(self._current_browser()).key_down(special_key1, element).send_keys(key).key_up(special_key1, element).perform()
+
         
     # Public, links
 
@@ -795,13 +799,17 @@ Reference: http://selenium-python.readthedocs.org/en/latest/search.html?q=shiftK
         return key
 
     def _map_named_key_code_to_special_key(self, key_name):
-        try:
-           return getattr(Keys, key_name)
-        except:
-           message = "Unknown key named '%s'." % (key_name)
-           self._debug(message)
-           raise ValueError(message)
-        return Keys.NULL
+        map = {
+            'SHIFT': Keys.SHIFT,
+            'SPACE': Keys.SPACE,
+            'SUBTRACT': Keys.SUBTRACT,
+            'TAB': Keys.TAB,
+            'UP': Keys.UP
+        }
+        key = map.get(key_name)
+        #if key is None:
+        #    key = Keys.NULL
+        return key
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
