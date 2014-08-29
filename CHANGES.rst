@@ -10,6 +10,10 @@ Release Notes
   did not complete.
   [Mika Batsman][elizaleong][emanlove] 
 
+- Added support for negative indicies for rows and columns in table-related
+  keywords.
+  [eweitz]
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
