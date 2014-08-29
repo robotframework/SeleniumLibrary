@@ -9,9 +9,6 @@ class _WaitingKeywords(KeywordGroup):
     def wait_for_condition(self, condition, timeout=None, error=None):
         """Waits until the given `condition` is true or `timeout` expires.
 
-        `code` may contain multiple lines of code but must contain a 
-        return statement (with the value to be returned) at the end
-
         The `condition` can be arbitrary JavaScript expression but must contain a 
         return statement (with the value to be returned) at the end.
         See `Execute JavaScript` for information about accessing the
