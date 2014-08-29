@@ -378,7 +378,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Logs and returns the entire html source of the current page or frame.
 
         The `loglevel` argument defines the used log level. Valid log levels are
-        WARN, INFO (default), DEBUG, and NONE (no logging).
+        WARN, INFO (default), DEBUG, TRACE and NONE (no logging).
         """
         source = self.get_source()
         self._log(source, loglevel.upper())
