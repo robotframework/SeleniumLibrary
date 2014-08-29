@@ -1,27 +1,30 @@
 *** Setting ***
 Test Setup        Go To Page "forms/long_page.html"
 Force Tags
-Default Tags      keyboard
+Default Tags      keyboard    inprogress
 Variables         variables.py
 Resource          ../resource.robot
 
 *** Test Cases ***
 Press Page-Down
-    Element Should Be Visible    block2
-    Press Keys    block1    ${NONE}    PAGE_DOWN
+    #Focus    english_input
+    Press Keys    english_input    ${NONE}    PAGE_DOWN
 
 Press Home
-    Press Keys    block1    ${NONE}    HOME
+    #Focus    english_input
+    Press Keys    english_input    ${NONE}    HOME
 
 Press End
-    Press Keys    block1    ${NONE}    END
+    #Focus    english_input
+    Press Keys    english_input    ${NONE}    END
     Capture Page Screenshot    #We should have scrolled down the page
 
 Press Shift-a
+    [Documentation]    This test fails with Opera, because it types "abc" ignoring SHIFT key.
     Press Keys    textarea    a    SHIFT
     Press Keys    textarea    b    SHIFT
     Press Keys    textarea    c    SHIFT
-    Sleep    5 seconds
+    Sleep    2 seconds
     ${value}=    Get Value    textarea
     Should Be Equal    ${value}    ABC
     #Capture Page Screenshot
