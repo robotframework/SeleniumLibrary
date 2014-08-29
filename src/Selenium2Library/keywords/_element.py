@@ -73,7 +73,9 @@ class _ElementKeywords(KeywordGroup):
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional `loglevel` argument.
-        Giving `NONE` as level disables logging.
+        Valid log levels are DEBUG, INFO (default), WARN, and NONE. If the
+        log level is NONE or below the current active log level the source
+        will not be logged.
         """
         if not self._page_contains(text):
             self.log_source(loglevel)
