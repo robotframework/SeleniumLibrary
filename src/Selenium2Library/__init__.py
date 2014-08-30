@@ -33,8 +33,7 @@ class Selenium2Library(
     imported into your Robot test suite (see `importing` section), and the
     `Open Browser` keyword must be used to open a browser to the desired location.
 
-    **--- Note important change starting with Version 1.7.0 release ---**
-    = Locating or specifying elements =
+    = Locating elements =
 
     All keywords in Selenium2Library that need to find an element on the page
     take an argument, either a `locator` or now a `webelement`. `locator`
@@ -98,25 +97,6 @@ class Selenium2Library(
     | *Strategy* | *Example*                                                          | *Description*                     |
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
-
-    = Custom Locators =
-
-    If more complex lookups are required than what is provided through the default locators, custom lookup strategies can
-    be created. Using custom locators is a two part process. First, create a keyword that returns the WebElement
-    that should be acted on.
-
-    | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
-    |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
-    |   | [Return] | ${retVal} |
-
-    This keyword is a reimplementation of the basic functionality of the `id` locator where `${browser}` is a reference
-    to the WebDriver instance and `${criteria}` is the text of the locator (i.e. everything that comes after the = sign).
-    To use this locator it must first be registered with `Add Location Strategy`.
-
-    Add Location Strategy  custom  Custom Locator Strategy
-
-    The first argument of `Add Location Strategy` specifies the name of the lookup strategy (which must be unique). After
-    registration of the lookup strategy, the usage is the same as other locators. See `Add Location Strategy` for more details.
 
     = Timeouts =
 

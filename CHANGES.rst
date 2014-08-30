@@ -113,6 +113,10 @@ continuous integration builds to go green by fixing internal tests.
 A big thank you to [eweitz] and [HelioGuilherme66] for getting the
 continuous integration builds to go green by fixing internal tests.
 
+- Added support for negative indicies for rows and columns in table-related
+  keywords.
+  [eweitz]
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
