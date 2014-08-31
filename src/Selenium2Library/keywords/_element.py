@@ -20,9 +20,6 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, get element(s)
 
-    def get_element():
-        pass
-
     def get_elements(self, locator):
         """Returns list of elements matching locator.
 
