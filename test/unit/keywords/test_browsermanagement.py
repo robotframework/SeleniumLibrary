@@ -70,6 +70,12 @@ class BrowserManagementTests(unittest.TestCase):
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)
 
+    def test_capabilities_attribute_not_modified(self):
+        expected_caps = {"some_cap":"42"}
+        self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
+            desired_capabilities=expected_caps)
+        self.assertFalse("some_cap" in webdriver.DesiredCapabilities.CHROME)
+
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         bm = _BrowserManagementKeywords()
         first_browser, second_browser = mock(), mock()
