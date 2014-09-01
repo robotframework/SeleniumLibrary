@@ -95,6 +95,24 @@ class _ElementKeywords(KeywordGroup):
         """
         self._page_should_contain_element(locator, None, message, loglevel)
 
+    def locator_should_match_x_times(self, locator, expected_locator_count, message='', loglevel='INFO'):
+        """Verifies that the page contains the given number of elements located by the given `locator`.
+
+        See `introduction` for details about locating elements.
+
+        See `Page Should Contain Element` for explanation about `message` and
+        `loglevel` arguments.
+        """
+        actual_locator_count = len(self._element_find(locator, False, False))
+        if int(actual_locator_count) != int(expected_locator_count):
+            if not message:
+                message = "Locator %s should have matched %s times but matched %s times"\
+                            %(locator, expected_locator_count, actual_locator_count)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Current page contains %s elements matching '%s'."
+                   % (actual_locator_count, locator))
+
     def page_should_not_contain(self, text, loglevel='INFO'):
         """Verifies the current page does not contain `text`.
 
