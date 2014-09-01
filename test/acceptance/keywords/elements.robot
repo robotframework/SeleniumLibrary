@@ -25,10 +25,6 @@ Get Matching XPath Count
     ${count}=  Get Matching XPath Count  //div[@id="first_div"]/a
     Should Be Equal  ${count}  2
 
-Locator Should Match X Times
-    Locator Should Match X Times  link=Link  2
-    Locator Should Match X Times  link=Missing Link  0
-
 Get Horizontal Position
     ${pos}=  Get Horizontal Position  link=Link
     Should Be True  ${pos} > ${0}
