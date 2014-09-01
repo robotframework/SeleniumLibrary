@@ -20,8 +20,8 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, get element(s)
 
-    def get_elements(self, locator):
-        """Returns list of elements matching locator.
+    def get_webelements(self, locator):
+        """Returns list of WebElement objects matching locator.
 
         See `introduction` for details about locating elements.
         """
