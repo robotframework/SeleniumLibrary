@@ -268,7 +268,7 @@ class _ElementKeywords(KeywordGroup):
         """
         return self._get_text(locator)
 
-    def clear_text(self, locator):
+    def clear_element_text(self, locator):
         """Clears the text value of text entry element identified by `locator`.
 
         See `introduction` for details about locating elements.
