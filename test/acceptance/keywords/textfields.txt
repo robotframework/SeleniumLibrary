@@ -9,7 +9,7 @@ Test Setup  Go To Page "forms/prefilled_email_form.html"
 Get Value From Text Field
   ${text} =  Get Value  name
   Should Be Equal  ${text}  Prefilled Name
-  Clear Text  name
+  Clear Element Text  name
   ${text} =  Get Value  name
   Should Be Equal  ${text}  ${EMPTY}
   
@@ -36,5 +36,5 @@ Press Key
   Press Key  login_button  \\10
   Verify Location Is "forms/submit.html"
 
-Clear Text
-  Run Keyword And Expect Error  *  Clear Text  can_send_email
+Attempt Clear Element Text On Non-Editable Field
+  Run Keyword And Expect Error  *  Clear Element Text  can_send_email
