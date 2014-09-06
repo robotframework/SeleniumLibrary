@@ -68,20 +68,23 @@ class _JavaScriptKeywords(KeywordGroup):
     def execute_javascript(self, *code):
         """Executes the given JavaScript code.
 
-        `code` may contain multiple lines of code but must contain a 
-        return statement (with the value to be returned) at the end.
-
-        `code` may be divided into multiple cells in the test data. In that
-        case, the parts are catenated together without adding spaces.
+        `code` may contain multiple lines of code and may be divided into
+        multiple cells in the test data. In that case, the parts are
+        catenated together without adding spaces.
 
         If `code` is an absolute path to an existing file, the JavaScript
         to execute will be read from that file. Forward slashes work as
         a path separator on all operating systems.
 
-        Note that, by default, the code will be executed in the context of the
-        Selenium object itself, so `this` will refer to the Selenium object.
-        Use `window` to refer to the window of your application, e.g.
-        `window.document.getElementById('foo')`.
+        The JavaScript executes in the context of the currently selected
+        frame or window. Use _window_ to refer to the window of your
+        application and _document_ to refer to the document object
+        of the current frame or window, e.g.
+        _document.getElementById('foo')_.
+
+        This keyword returns None unless there is a return statement in the
+        JavaScript. Return values are converted to the appropriate type in
+        Python, including WebElements.
 
         Example:
         | Execute JavaScript | window.my_js_function('arg1', 'arg2') |
@@ -94,24 +97,17 @@ class _JavaScriptKeywords(KeywordGroup):
     def execute_async_javascript(self, *code):
         """Executes asynchronous JavaScript code.
 
-        `code` may contain multiple lines of code but must contain a 
-        return statement (with the value to be returned) at the end.
+        Similar to `Execute Javascript` except that scripts executed with
+        this keyword must explicitly signal they are finished by invoking the
+        provided callback. This callback is always injected into the executed
+        function as the last argument.
 
-        `code` may be divided into multiple cells in the test data. In that
-        case, the parts are catenated together without adding spaces.
-
-        If `code` is an absolute path to an existing file, the JavaScript
-        to execute will be read from that file. Forward slashes work as
-        a path separator on all operating systems.
-
-        Note that, by default, the code will be executed in the context of the
-        Selenium object itself, so `this` will refer to the Selenium object.
-        Use `window` to refer to the window of your application, e.g.
-        `window.document.getElementById('foo')`.
+        Scripts must complete within the script timeout or this keyword will
+        fail. See the `Timeouts` section for more information.
 
         Example:
-        | Execute Async JavaScript | window.my_js_function('arg1', 'arg2') |
-        | Execute Async JavaScript | ${CURDIR}/js_to_execute.js |
+        | Execute Async JavaScript | var callback = arguments[arguments.length - 1]; | window.setTimeout(callback, 2000); |
+        | Execute Async JavaScript | ${CURDIR}/async_js_to_execute.js | |
         """
         js = self._get_javascript_to_execute(''.join(code))
         self._info("Executing Asynchronous JavaScript:\n%s" % js)

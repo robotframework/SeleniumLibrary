@@ -37,6 +37,8 @@ tests with Robot Framework. This includes:
   `resources/testserver`
 - A collection of simple html files under 'resources/html' directory
 - Start-up scripts for executing the tests
+- A copy of statuschecker.py for checking logged messages after the
+  execution, which requires the tests to run with log level DEBUG
 
 To run unit and acceptance tests, run::
 
