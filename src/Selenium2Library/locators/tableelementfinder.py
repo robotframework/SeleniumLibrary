@@ -15,7 +15,9 @@ class TableElementFinder(object):
             ('css', 'header'): [' th'],
             ('css', 'footer'): [' tfoot td'],
             ('css', 'row'): [' tr:nth-child(%s)'],
+            ('css', 'last-row'): [' tr:nth-last-child(%s)'],
             ('css', 'col'): [' tr td:nth-child(%s)', ' tr th:nth-child(%s)'],
+            ('css', 'last-col'): [' tr td:nth-last-child(%s)', ' tr th:nth-last-child(%s)'],
 
             ('jquery', 'default'): [''],
             ('jquery', 'content'): [''],
@@ -36,7 +38,9 @@ class TableElementFinder(object):
             ('xpath', 'header'): ['//th'],
             ('xpath', 'footer'): ['//tfoot//td'],
             ('xpath', 'row'): ['//tr[%s]//*'],
-            ('xpath', 'col'): ['//tr//*[self::td or self::th][%s]']
+            ('xpath', 'last-row'): [' //tbody/tr[position()=last()-(%s-1)]'],
+            ('xpath', 'col'): ['//tr//*[self::td or self::th][%s]'],
+            ('xpath', 'last-col'): [' //tbody/tr/td[position()=last()-(%s-1)]', ' //tbody/tr/td[position()=last()-(%s-1)]']
         };
 
     def find(self, browser, table_locator):
@@ -55,13 +59,23 @@ class TableElementFinder(object):
         locators = self._parse_table_locator(table_locator, 'footer')
         return self._search_in_locators(browser, locators, content)
 
-    def find_by_row(self, browser, table_locator, col, content):
-        locators = self._parse_table_locator(table_locator, 'row')
-        locators = [locator % str(col) for locator in locators]
+    def find_by_row(self, browser, table_locator, row, content):
+        location_method = "row"
+        row = str(row)
+        if row[0] == "-":
+            row = row[1:]
+            location_method = "last-row"
+        locators = self._parse_table_locator(table_locator, location_method)
+        locators = [locator % str(row) for locator in locators]
         return self._search_in_locators(browser, locators, content)
 
     def find_by_col(self, browser, table_locator, col, content):
-        locators = self._parse_table_locator(table_locator, 'col')
+        location_method = "col"
+        col = str(col)
+        if col[0] == "-":
+            col = col[1:]
+            location_method = "last-col"
+        locators = self._parse_table_locator(table_locator, location_method)
         locators = [locator % str(col) for locator in locators]
         return self._search_in_locators(browser, locators, content)
 

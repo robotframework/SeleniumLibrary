@@ -28,13 +28,13 @@ class Selenium2Library(
     Selenium2Library runs tests in a real browser instance. It should work in
     most modern browsers and can be used with both Python and Jython interpreters.
 
-    *Before running tests*
+    = Before running tests =
 
     Prior to running test cases using Selenium2Library, Selenium2Library must be
     imported into your Robot test suite (see `importing` section), and the 
     `Open Browser` keyword must be used to open a browser to the desired location.
 
-    *Locating elements*
+    = Locating elements =
 
     All keywords in Selenium2Library that need to find an element on the page
     take an argument, `locator`. By default, when a locator value is provided,
@@ -72,12 +72,13 @@ class Selenium2Library(
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
 
-    *Timeouts*
+    = Timeouts =
 
     There are several `Wait ...` keywords that take timeout as an
     argument. All of these timeout arguments are optional. The timeout
     used by all of them can be set globally using the
-    `Set Selenium Timeout` keyword.
+    `Set Selenium Timeout` keyword. The same timeout also applies to
+    `Execute Async Javascript`.
 
     All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
     or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
