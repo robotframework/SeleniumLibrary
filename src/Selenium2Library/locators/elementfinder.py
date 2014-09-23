@@ -11,6 +11,7 @@ class ElementFinder(object):
             'xpath': self._find_by_xpath,
             'dom': self._find_by_dom,
             'link': self._find_by_link_text,
+            'partial link': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
@@ -70,6 +71,11 @@ class ElementFinder(object):
             browser.find_elements_by_link_text(criteria),
             tag, constraints)
 
+    def _find_by_partial_link_text(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
+            browser.find_elements_by_partial_link_text(criteria),
+            tag, constraints)
+
     def _find_by_css_selector(self, browser, criteria, tag, constraints):
         return self._filter_elements(
             browser.find_elements_by_css_selector(criteria),
@@ -119,6 +125,8 @@ class ElementFinder(object):
         tag = tag.lower()
         constraints = {}
         if tag == 'link':
+            tag = 'a'
+        if tag == 'partial link':
             tag = 'a'
         elif tag == 'image':
             tag = 'img'
