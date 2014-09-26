@@ -10,9 +10,13 @@ Release Notes
   did not complete.
   [Mika Batsman][elizaleong][emanlove] 
 
-- Added support for negative indicies for rows and columns in table-related
+- Added support for negative indices for rows and columns in table-related
   keywords.
   [eweitz]
+
+- Added strategy for locating elements by partial link text with locator
+  prefix 'partial link'.
+  [lina1]
 
 1.5
 ---
