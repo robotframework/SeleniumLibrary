@@ -113,9 +113,13 @@ continuous integration builds to go green by fixing internal tests.
 A big thank you to [eweitz] and [HelioGuilherme66] for getting the
 continuous integration builds to go green by fixing internal tests.
 
-- Added support for negative indicies for rows and columns in table-related
+- Added support for negative indices for rows and columns in table-related
   keywords.
   [eweitz]
+
+- Added strategy for locating elements by partial link text with locator
+  prefix 'partial link'.
+  [lina1]
 
 1.5
 ---
