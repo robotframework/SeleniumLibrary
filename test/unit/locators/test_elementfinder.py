@@ -285,6 +285,7 @@ class ElementFinderTests(unittest.TestCase):
 
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(browser).find_elements_by_id("test1").thenReturn(elements)
+        when(browser).find_elements_by_partial_link_text("test1").thenReturn(elements)
 
         result = finder.find(browser, "ID=test1")
         self.assertEqual(result, elements)
@@ -293,6 +294,10 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "id=test1")
         self.assertEqual(result, elements)
         result = finder.find(browser, "  id =test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "  partiallink =test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "  p art iallin k =test1")
         self.assertEqual(result, elements)
 
     def test_find_with_sloppy_criteria(self):

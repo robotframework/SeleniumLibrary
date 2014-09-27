@@ -4,14 +4,14 @@ from robot.api import logger
 class ElementFinder(object):
 
     def __init__(self):
-        self._strategies = {
+        self._strategies = {  # keys must be lower-case w/ no spaces
             'identifier': self._find_by_identifier,
             'id': self._find_by_id,
             'name': self._find_by_name,
             'xpath': self._find_by_xpath,
             'dom': self._find_by_dom,
             'link': self._find_by_link_text,
-            'partial link': self._find_by_partial_link_text,
+            'partiallink': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
@@ -187,7 +187,7 @@ class ElementFinder(object):
         if not locator.startswith('//'):
             locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0].strip().lower()
+                prefix = locator_parts[0].lower().replace(' ', '')
                 criteria = locator_parts[2].strip()
         return (prefix, criteria)
 
