@@ -70,7 +70,7 @@ Value Should Be Cancel
     Should Be Equal   ${value}   Cancel
 
 Navigate To File Upload Form And Create Temp File To Upload
-  Cannot Be Executed in IE
-  Go To Page "forms/file_upload_form.html"
-  Touch   ${CURDIR}/temp.txt
+    Cannot Be Executed in IE
+    Go To Page "forms/file_upload_form.html"
+    Touch   ${CURDIR}/temp.txt
 

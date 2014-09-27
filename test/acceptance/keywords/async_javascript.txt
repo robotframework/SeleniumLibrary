@@ -81,7 +81,7 @@ Should Catch Errors When Executing Initial Script
 #Should Be Able To Execute Asynchronous Scripts
 #    # To Do
 
-#TODO  EdManlove  Add support for arguement passing to selenium javascript calls
+#TODO  EdManlove  Add support for argument passing to selenium javascript calls
 #Should Be Able To Pass Multiple Arguments To Async Scripts
 #    ${result} =  Execute Async Javascript  arguments[arguments.length - 1](arguments[0] + arguments[1]);  1  2
 #    Should Be Equal  ${result}  ${3}

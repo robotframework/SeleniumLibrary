@@ -27,7 +27,6 @@ It Should Be Possible Close A Browser
     Close Browser
     ${BROWSER2} =  Open Browser  ${ROOT}/links.html  ${BROWSER}   remote_url=${REMOTE_URL}   desired_capabilities=${DESIRED_CAPABILITIES}
 
-
 Correct Error Message Should Be Given When Trying To Switch To Non-Existing Browser
     Run Keyword And Expect Error  No browser with index or alias 'non-existing' found.  Switch Browser  non-existing
 
