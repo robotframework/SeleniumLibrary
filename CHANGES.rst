@@ -21,6 +21,10 @@ Release Notes
 - Fixed issue where 'Select Window’ with url strategy fails to locate window
   [laulaz]
 
+- Allow using key attributes (default strategy) when the locator contains
+  a '='. Also make locator prefixes space-insensitive.
+  [ombre42]
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
