@@ -60,6 +60,7 @@ class Selenium2Library(
     | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
     | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
+    | default    | Click Link    `|` default=page?a=b      | Matches key attributes with value after first '=' |
 
     Table related keywords, such as `Table Should Contain`, work differently.
     By default, when a table locator value is provided, it will search for
