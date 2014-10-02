@@ -24,6 +24,9 @@ Release Notes
 - Fixed issue where a non-string assigned to window.id caused
   'Select Window' and 'Get Window *' keywords to fail.
 
+A big thank you to [eweitz] and [HelioGuilherme66] for getting the
+continuous integration builds to go green by fixing internal tests.
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
