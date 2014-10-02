@@ -9,14 +9,10 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_invalid_prefix(self):
         finder = ElementFinder()
         browser = mock()
-        try:
-            self.assertRaises(ValueError, finder.find, browser, "something=test1")
-        except ValueError as e:
-            self.assertEqual(e.message, "Element locator with prefix 'something' is not supported")
-        try:
-            self.assertRaises(ValueError, finder.find, browser, " by ID =test1")
-        except ValueError as e:
-            self.assertEqual(e.message, "Element locator with prefix ' by ID ' is not supported")
+        assert_raises_with_msg(ValueError, "Element locator with prefix 'something' is not supported",
+                               finder.find, browser, "something=test1")
+        assert_raises_with_msg(ValueError, "Element locator with prefix ' by ID ' is not supported",
+                               finder.find, browser, " by ID =test1")
 
     def test_find_with_null_browser(self):
         finder = ElementFinder()
