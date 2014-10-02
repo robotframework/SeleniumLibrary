@@ -25,6 +25,9 @@ Release Notes
   a '='. Also make locator prefixes space-insensitive.
   [ombre42]
 
+- Fixed issue where a non-string assigned to window.id caused
+  'Select Window' and 'Get Window *' keywords to fail.
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
