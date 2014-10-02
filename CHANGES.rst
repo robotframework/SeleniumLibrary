@@ -21,6 +21,9 @@ Release Notes
 - Fixed issue where 'Select Window’ with url strategy fails to locate window
   [laulaz]
 
+- Fixed issue where a non-string assigned to window.id caused
+  'Select Window' and 'Get Window *' keywords to fail.
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
