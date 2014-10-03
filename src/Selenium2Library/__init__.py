@@ -64,7 +64,7 @@ class Selenium2Library(
     * Explicitly specifying the default strategy is only necessary if locating
     elements by matching key attributes is desired and an attribute value
     contains a '='. The following would fail because it appears as if _page?a_
-    is the locator prefix:
+    is the specified lookup strategy:
     | Click Link    page?a=b
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
