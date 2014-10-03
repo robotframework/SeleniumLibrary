@@ -3,6 +3,10 @@ Release Notes
 
 1.6 (unreleased)
 ----------------
+
+- Added Python 3.4 support.
+  [vincentfretin]
+
 - Added instructions to README.rst on how to manually install Selenium2Library.
   [pekkaklarck]
 

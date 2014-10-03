@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from mockito import verify as verify_main
+from .mockito import verify as verify_main
 
 __author__ = "Serhiy Oplakanets <serhiy@oplakanets.com>"
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"

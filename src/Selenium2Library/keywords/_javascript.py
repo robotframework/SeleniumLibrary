@@ -1,6 +1,6 @@
 import os
 from selenium.common.exceptions import WebDriverException
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _JavaScriptKeywords(KeywordGroup):
 
@@ -141,7 +141,7 @@ class _JavaScriptKeywords(KeywordGroup):
             return code
         self._html('Reading JavaScript from file <a href="file://%s">%s</a>.'
                    % (codepath.replace(os.sep, '/'), codepath))
-        codefile = open(codepath)
+        codefile = open(codepath, 'rb')
         try:
             return codefile.read().strip()
         finally:

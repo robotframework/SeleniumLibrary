@@ -1,7 +1,8 @@
 import unittest
-import os
+
 from Selenium2Library.utils import BrowserCache
 from mockito import *
+
 
 class BrowserCacheTests(unittest.TestCase): 
 
@@ -10,7 +11,7 @@ class BrowserCacheTests(unittest.TestCase):
         try:
             self.assertRaises(RuntimeError, cache.current.anyMember())
         except RuntimeError as e:
-            self.assertEqual(e.message, "No current browser")
+            self.assertEqual(e.args[0], "No current browser")
 
     def test_browsers_property(self):
         cache = BrowserCache()

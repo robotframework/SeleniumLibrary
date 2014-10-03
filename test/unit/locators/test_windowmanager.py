@@ -1,9 +1,10 @@
 import unittest
-import os
-from Selenium2Library.locators import WindowManager
-from mockito import *
 import uuid
+
+from Selenium2Library.locators import WindowManager
 from selenium.common.exceptions import NoSuchWindowException
+from mockito import *
+
 
 class WindowManagerTests(unittest.TestCase):
 
@@ -13,7 +14,7 @@ class WindowManagerTests(unittest.TestCase):
         try:
             self.assertRaises(ValueError, manager.select, browser, "something=test1")
         except ValueError as e:
-            self.assertEqual(e.message, "Window locator with prefix 'something' is not supported")
+            self.assertEqual(e.args[0], "Window locator with prefix 'something' is not supported")
 
     def test_select_with_null_browser(self):
         manager = WindowManager()
@@ -60,7 +61,7 @@ class WindowManagerTests(unittest.TestCase):
         try:
             self.assertRaises(ValueError, manager.select, browser, "title=Title -1")
         except ValueError as e:
-            self.assertEqual(e.message, "Unable to locate window with title 'Title -1'")
+            self.assertEqual(e.args[0], "Unable to locate window with title 'Title -1'")
 
     def test_select_by_name(self):
         manager = WindowManager()
@@ -102,7 +103,7 @@ class WindowManagerTests(unittest.TestCase):
         try:
             self.assertRaises(ValueError, manager.select, browser, "name=win-1")
         except ValueError as e:
-            self.assertEqual(e.message, "Unable to locate window with name 'win-1'")
+            self.assertEqual(e.args[0], "Unable to locate window with name 'win-1'")
 
     def test_select_by_url(self):
         manager = WindowManager()
@@ -144,7 +145,7 @@ class WindowManagerTests(unittest.TestCase):
         try:
             self.assertRaises(ValueError, manager.select, browser, "url=http://localhost/page-1.html")
         except ValueError as e:
-            self.assertEqual(e.message, "Unable to locate window with URL 'http://localhost/page-1.html'")
+            self.assertEqual(e.args[0], "Unable to locate window with URL 'http://localhost/page-1.html'")
 
     def test_select_with_null_locator(self):
         manager = WindowManager()

@@ -3,12 +3,22 @@
 import sys
 from os.path import join, dirname
 
-sys.path.append(join(dirname(__file__), 'src'))
-from ez_setup import use_setuptools
-use_setuptools()
 from setuptools import setup
 
-execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
+PY3 = sys.version_info[0] == 3
+
+install_requires = [
+    'decorator >= 3.3.2',
+    'selenium >= 2.32.0',
+    'docutils >= 0.8.1'
+    ]
+
+if PY3:
+    install_requires.append('robotframework-python3 >= 2.6.0')
+else:
+    install_requires.append('robotframework >= 2.6.0')
+
+exec(open(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py')).read())
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework
@@ -30,15 +40,11 @@ setup(name         = 'robotframework-selenium2library',
                         "License :: OSI Approved :: Apache Software License",
                         "Operating System :: OS Independent",
                         "Programming Language :: Python",
+                        "Programming Language :: Python :: 2.7",
+                        "Programming Language :: Python :: 3.4",
                         "Topic :: Software Development :: Testing"
                      ],
-      install_requires = [
-							'decorator >= 3.3.2',
-							'selenium >= 2.32.0',
-							'robotframework >= 2.6.0',
-							'docutils >= 0.8.1'
-						 ],
-      py_modules=['ez_setup'],
+      install_requires = install_requires, 
       package_dir  = {'' : 'src'},
       packages     = ['Selenium2Library','Selenium2Library.keywords','Selenium2Library.locators',
                       'Selenium2Library.utils'],

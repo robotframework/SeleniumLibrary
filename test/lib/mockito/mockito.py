@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import verification
-from mocking import mock, TestDouble
-from mock_registry import mock_registry
-from verification import VerificationError
+from . import verification
+from .mocking import mock, TestDouble
+from .mock_registry import mock_registry
+from .verification import VerificationError
 
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"
 __license__ = "MIT"
@@ -15,7 +15,7 @@ class ArgumentError(Exception):
   pass
 
 def _multiple_arguments_in_use(*args):
-  return len(filter(lambda x: x, args)) > 1    
+  return len(list(filter(lambda x: x, args))) > 1    
 
 def _invalid_argument(value):
   return (value is not None and value < 1) or value == 0

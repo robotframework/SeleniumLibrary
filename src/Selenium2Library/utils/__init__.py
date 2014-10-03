@@ -1,6 +1,7 @@
 import os
+import sys
 from fnmatch import fnmatch
-from browsercache import BrowserCache
+from .browsercache import BrowserCache
 
 __all__ = [
     "get_child_packages_in",
@@ -9,6 +10,11 @@ __all__ = [
     "escape_xpath_value",
     "BrowserCache"
 ]
+
+PY3 = sys.version_info[0] == 3
+if PY3:
+    unicode = str
+
 
 # Public
 
@@ -35,7 +41,7 @@ def get_module_names_under(root_dir, include_root_package_name=True, exclusions=
 
 def import_modules_under(root_dir, include_root_package_name=True, exclusions=None, pattern=None):
     module_names = get_module_names_under(root_dir, include_root_package_name, exclusions, pattern)
-    modules = [ __import__(module_name, globals(), locals(), ['*'], -1)
+    modules = [ __import__(module_name, globals(), locals(), ['*'], 0)
         for module_name in module_names ]
     return (module_names, modules)
 

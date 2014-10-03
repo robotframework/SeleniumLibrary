@@ -1,5 +1,5 @@
 from selenium.webdriver.support.ui import Select
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _SelectElementKeywords(KeywordGroup):
 

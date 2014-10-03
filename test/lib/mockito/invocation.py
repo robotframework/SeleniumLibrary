@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import matchers
+from . import matchers
 
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"
 __license__ = "MIT"
@@ -54,7 +54,7 @@ class MatchingInvocation(Invocation):
       if not self.compare(p1, invocation.params[x]):
           return False
       
-    for x, p1 in self.named_params.iteritems():
+    for x, p1 in self.named_params.items():
       if not self.compare(p1, invocation.named_params[x]):
           return False
       

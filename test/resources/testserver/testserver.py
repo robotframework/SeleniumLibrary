@@ -1,5 +1,5 @@
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/336012
-
+from __future__ import print_function
 import SimpleHTTPServer
 import BaseHTTPServer
 import httplib
@@ -18,7 +18,7 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_POST(self):
         # We could also process paremeters here using something like below.
         # length = self.headers['Content-Length']
-        # print self.rfile.read(int(length))
+        # print(self.rfile.read(int(length)))
         self.do_GET()
 
     def send_head(self):
@@ -96,7 +96,7 @@ def start_server(port=7000):
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 2 or sys.argv[1] not in [ 'start', 'stop' ]:
-        print 'usage: %s start|stop' % sys.argv[0]
+        print('usage: %s start|stop' % sys.argv[0])
         sys.exit(1)
     if sys.argv[1] == 'start':
         start_server()

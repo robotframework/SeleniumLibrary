@@ -1,4 +1,4 @@
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _CookieKeywords(KeywordGroup):
 

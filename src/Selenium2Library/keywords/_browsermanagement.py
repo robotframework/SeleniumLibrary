@@ -5,7 +5,7 @@ from selenium import webdriver
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
@@ -24,6 +24,12 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'iphone': "_make_iphone",
                  'safari': "_make_safari"
                 }
+
+try:
+      basestring
+except NameError:  # Python3
+      basestring = str
+
 
 class _BrowserManagementKeywords(KeywordGroup):
 
@@ -558,7 +564,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         desired_capabilities_object = capabilities_type.copy()
 
-        if type(desired_capabilities) in (str, unicode):
+        if isinstance(desired_capabilities, basestring):
             desired_capabilities = self._parse_capabilities_string(desired_capabilities)
 
         desired_capabilities_object.update(desired_capabilities or {})

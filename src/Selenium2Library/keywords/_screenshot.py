@@ -1,6 +1,6 @@
 import os
 import robot
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _ScreenshotKeywords(KeywordGroup):
 
