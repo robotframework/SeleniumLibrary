@@ -310,8 +310,7 @@ class _ElementKeywords(KeywordGroup):
         See `introduction` for details about locating elements.
         """
         element = self._element_find(locator, True, True)
-        if element is not None:
-            element.clear()
+        element.clear()
 
     def get_vertical_position(self, locator):
         """Returns vertical position of element identified by `locator`.
