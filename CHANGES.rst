@@ -18,6 +18,10 @@ Release Notes
   prefix 'partial link'.
   [lina1]
 
+- Added new keyword 'Clear Element Text' for clearing the text of text entry 
+  elements.
+  [emanlove]
+
 - Fixed issue where 'Select Window’ with url strategy fails to locate window
   [laulaz]
 
