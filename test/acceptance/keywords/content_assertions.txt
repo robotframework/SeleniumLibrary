@@ -183,6 +183,8 @@ TextField Value Should Be
     Input Text  name  my name
     textfield Value Should Be  name  my name
     Run Keyword And Expect Error  Value of text field 'name' should have been 'non-existing' but was 'my name'  textfield Value Should Be  name  non-existing
+    Clear Element Text  name
+    Textfield Value Should Be  name  ${EMPTY}
 
 TextArea Should Contain
     [Setup]  Go To Page "forms/email_form.html"
@@ -199,6 +201,8 @@ TextArea Value Should Be
     Run Keyword And Expect Error
     ...  Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'
     ...  TextArea Value Should Be  comment  Hello World!
+    Clear Element Text  comment
+    TextArea Value Should Be  comment  ${EMPTY}
 
 Page Should Contain Button
     [Setup]  Go To Page "forms/buttons.html"
