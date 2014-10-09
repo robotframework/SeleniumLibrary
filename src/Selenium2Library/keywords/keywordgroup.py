@@ -8,7 +8,7 @@ if sys.platform == 'cli':
     decorator = None # decorator module doesn't work with IronPython 2.6
 
 def _run_on_failure_decorator(method, *args, **kwargs):
-self = args[0]
+    self = args[0]
     in_keyword = self._in_keyword # If False, we are in the outermost keyword (or in `run_keyword`, if it's a dynamic library)
     self._in_keyword = True # Set a flag on the instance so that as we call keywords inside this call and this gets run again, we know we're at least one level in.
     try:
