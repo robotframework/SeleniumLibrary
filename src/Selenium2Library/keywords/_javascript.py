@@ -77,9 +77,9 @@ class _JavaScriptKeywords(KeywordGroup):
         a path separator on all operating systems.
 
         The JavaScript executes in the context of the currently selected
-        frame or window. Use _window_ to refer to the window of your
-        application and _document_ to refer to the document object
-        of the current frame or window, e.g.
+        frame or window as the body of an anonymous function. Use _window_ to
+        refer to the window of your application and _document_ to refer to the
+        document object of the current frame or window, e.g.
         _document.getElementById('foo')_.
 
         This keyword returns None unless there is a return statement in the
@@ -107,9 +107,14 @@ class _JavaScriptKeywords(KeywordGroup):
         Scripts must complete within the script timeout or this keyword will
         fail. See the `Timeouts` section for more information.
 
-        Example:
+        Examples:
         | Execute Async JavaScript | var callback = arguments[arguments.length - 1]; | window.setTimeout(callback, 2000); |
-        | Execute Async JavaScript | ${CURDIR}/async_js_to_execute.js | |
+        | Execute Async JavaScript | ${CURDIR}/async_js_to_execute.js                |                                    |
+        | ${retval}=               | Execute Async JavaScript                        |                                    |
+        | ...                      | var callback = arguments[arguments.length - 1]; |                                    |
+        | ...                      | function answer(){callback("text");};           |                                    |
+        | ...                      | window.setTimeout(answer, 2000);                |                                    |
+        | Should Be Equal          | ${retval}                                       | text                               |
         """
         js = self._get_javascript_to_execute(''.join(code))
         self._info("Executing Asynchronous JavaScript:\n%s" % js)
