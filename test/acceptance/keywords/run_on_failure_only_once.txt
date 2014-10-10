@@ -1,0 +1,21 @@
+*** Settings ***
+Suite Setup     Run Keywords  Prefer Custom Keywords  Go To Front Page
+Test Teardown   Register Keyword to Run on Failure  Nothing
+Resource        ../resource.txt
+Library         CustomSeleniumKeywords
+
+*** Test Cases ***
+Run On Failure Keyword Only Called Once
+    Set Test Variable    ${ON FAIL COUNT}    ${0}
+    Register Keyword To Run On Failure    On Fail
+    Run Keyword And Ignore Error    Custom Selenium Keyword    id=missing
+    Should Be Equal    ${ON FAIL COUNT}    ${1}    On Failure Keyword called ${ON FAIL COUNT} times.
+    [Teardown]    Close Browser
+
+*** Keywords ***
+On Fail
+    ${count}=    Evaluate    ${ON FAIL COUNT} + 1
+    Set Test Variable    ${ON FAIL COUNT}    ${count}
+
+Prefer Custom Keywords
+    Set Library Search Order  CustomSeleniumKeywords
