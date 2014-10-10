@@ -8,7 +8,6 @@ class _RunOnFailureKeywords(KeywordGroup):
     def __init__(self):
         self._run_on_failure_keyword = None
         self._running_on_failure_routine = False
-        self._in_keyword = False
 
     # Public
 
