@@ -4,12 +4,12 @@ Resource        ../resource.txt
 
 *** Test Cases ***
 Get Elements
-    @{links}=  Get Elements  //div[@id="div_id"]/a
+    @{links}=  Get WebElements  //div[@id="div_id"]/a
     Length Should Be  ${links}  11
 
 More Get Elements
     [Setup]  Go To Page "forms/prefilled_email_form.html"
-    @{checkboxes}=  Get Elements  //input[@type="checkbox"]
+    @{checkboxes}=  Get WebElements  //input[@type="checkbox"]
     Length Should Be  ${checkboxes}  2
     :For   ${checkbox}  in  @{checkboxes}
     \  Unselect Checkbox  ${checkbox}
