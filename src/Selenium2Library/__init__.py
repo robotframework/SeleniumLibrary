@@ -37,14 +37,12 @@ class Selenium2Library(
     **--- Note important change starting with Version 1.7.0 release ---**
     *Locating or getting elements*
     *Locating or specifying elements*
-    *Locating or passing elements*
 
     All keywords in Selenium2Library that need to find an element on the page
     take an argument, either a `locator` or now a 'webelement'. 'locator'
-    specifies an attribute of the element you are trying to locate and is a
-    scalar variable with a string value. 'webelement' is a variable which
-    holds [a representation of the element][a Selenium instance of the
-    WebElement][a Selenium WebElement instance of the element].
+    is a string that describes how to locate an element using a syntax
+    specifying different location strategies. 'webelement' is a variable that
+    holds a WebElement instance, which is a representation of the element.
 
     Using 'locator'
     ---------------
@@ -82,7 +80,9 @@ class Selenium2Library(
 
     Using 'webelement'
     ------------------
-    Starting with version 1.6 of the Selenium2Library, one can ... For example:
+    Starting with version 1.6 of the Selenium2Library, one can pass an argument
+    that contains a WebElement instead of a string locator. To get a WebElement,
+    use the new `Get WebElements` keyword.  For example:
 
     | ${elem} =      | Get WebElements | id=my_element |
     | Click Element  | ${elem} |                       |
@@ -101,7 +101,16 @@ class Selenium2Library(
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
 
+<<<<<<< HEAD
     = Timeouts =
+=======
+    *Stale and Detached Elements*
+
+    To be written... a talk about stale/detached elements, the dreaded
+    StaleElementReferenceException and how to deal with these situations.
+
+    *Timeouts*
+>>>>>>> Updated documentation for locating objects using WebElements.
 
     There are several `Wait ...` keywords that take timeout as an
     argument. All of these timeout arguments are optional. The timeout
