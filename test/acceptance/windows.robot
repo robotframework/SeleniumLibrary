@@ -10,29 +10,31 @@ Resource          resource.robot
 
 *** Test Cases ***
 Popup Windows Created With Javascript
-    Cannot Be Executed in IE
+    #Cannot Be Executed in IE
     Cannot Be Executed In Chrome
     Open Popup Window, Select It And Verify    myName
     Do Action In Popup Window And Verify
     Select Main Window And Verify
 
 Get Window Titles
-    ${exp_titles}=    Create List    Click link to show a popup window    Original
+    @{exp_titles}=    Create List    Click link to show a popup window    Original
     Click Link    my popup
     ${titles}=    Get Window Titles
-    Should Be Equal    ${titles}    ${exp_titles}
+    :FOR    ${expected}    IN    @{exp_titles}
+    \    Should Contain    ${titles}    ${expected}
 
 Get Window Names
-    ${exp_names}=    Create List    selenium_main_app_window    myName
+    @{exp_names}=    Create List    selenium_main_app_window    myName
     Click Link    my popup
     ${names}=    Get Window Names
-    Should Be Equal    ${names}    ${exp_names}
+    :FOR    ${expected}    IN    @{exp_names}
+    \    Should Contain    ${names}    ${expected}
 
 Get Window Identifiers
-    ${exp_ids}=    Create List    undefined    undefined
+    @{exp_ids}=    Create List    undefined    undefined
     Click Link    my popup
     ${ids}=    Get Window Identifiers
-    Should Be Equal    ${ids}    ${exp_ids}
+    Should Contain    ${ids}    @{exp_ids}
 
 Get and Set Window Size
     ${win_width}=    Set Variable    ${600}

@@ -71,7 +71,7 @@ Should Timeout If Script Does Not Invoke Callback With Long Timeout
     Run Keyword And Expect Error    ${dep_browser}    Execute Async Javascript    var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 1500);
 
 Should Detect Page Loads While Waiting On An Async Script And Return An Error
-    Set Selenium Timeout    0.1 seconds
+    Run Keyword If    '${BROWSER}'.lower() == 'gc' or '${BROWSER}'.lower() == 'chrome'    Set Selenium Timeout    0.3 seconds    ELSE    Set Selenium Timeout    0.2 seconds
     ${dep_browser}=    Set Variable If    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'    WebDriverException: Message: u'Detected a page unload event; async script execution does not work across page loads' * \    '${BROWSER}'.lower() == 'gc' or '${BROWSER}'.lower() == 'chrome'    WebDriverException: Message: u'javascript error: document unloaded while waiting for result*    '${BROWSER}'.lower() == 'phantomjs'
     ...    WebDriverException: Message: u'{"errorMessage":"Detected a page unload event; asynchronous script execution does not work across page loads.*    '${BROWSER}'.lower() == 'ie' or '${BROWSER}'.lower().replace(' ', '') == 'internetexplorer'    WebDriverException: Message: u'Page reload detected during async script*
     Run Keyword And Expect Error    ${dep_browser}    Execute Async Javascript    window.location = 'javascript/dynamic';

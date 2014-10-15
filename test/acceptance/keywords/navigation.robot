@@ -81,7 +81,7 @@ Click Link With Text And Image
     Verify Location Is "index.html"
 
 Target Opens in New Window
-    Cannot Be Executed in IE
+    #Cannot Be Executed in IE
     Click Link    Target opens in new window
     Select Window    ${INDEX TITLE}
     Verify Location Is "index.html"
