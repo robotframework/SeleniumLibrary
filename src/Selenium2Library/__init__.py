@@ -55,10 +55,19 @@ class Selenium2Library(
     | xpath      | Click Element `|` xpath=//div[@id='my_element'] | Matches with arbitrary XPath expression |
     | dom        | Click Element `|` dom=document.images[56] | Matches with arbitrary DOM express            |
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
+    | partial link | Click Element `|` partial link=y Lin  | Matches anchor elements by their partial link text |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
     | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
     | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
+    | default*   | Click Link    `|` default=page?a=b      | Matches key attributes with value after first '=' |
+    * Explicitly specifying the default strategy is only necessary if locating
+    elements by matching key attributes is desired and an attribute value
+    contains a '='. The following would fail because it appears as if _page?a_
+    is the specified lookup strategy:
+    | Click Link    page?a=b
+    This can be fixed by changing the locator to:
+    | Click Link    default=page?a=b
 
     Table related keywords, such as `Table Should Contain`, work differently.
     By default, when a table locator value is provided, it will search for
