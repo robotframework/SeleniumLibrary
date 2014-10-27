@@ -1,5 +1,4 @@
 *** Setting ***
-Suite Setup       Set Selenium Speed    0.5 seconds
 Test Setup        Go To Page "forms/long_page.html"
 Force Tags
 Default Tags      keyboard    inprogress
