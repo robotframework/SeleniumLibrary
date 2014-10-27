@@ -1,4 +1,5 @@
 *** Setting ***
+Suite Setup       Set Selenium Speed    0.5 seconds
 Test Setup        Go To Page "forms/long_page.html"
 Force Tags
 Default Tags      keyboard    inprogress
@@ -17,17 +18,27 @@ Press Home
 Press End
     #Focus    english_input
     Press Keys    english_input    ${NONE}    END
-    Capture Page Screenshot    #We should have scrolled down the page
+    #Capture Page Screenshot    #We should have scrolled down the page
 
-Press Shift-a
+Press Keys a
+    Press Keys    textarea    a
+    ${value}=    Get Value    textarea
+    Should Be Equal    ${value}    a
+
+Press Shift-abc
     [Documentation]    This test fails with Opera, because it types "abc" ignoring SHIFT key.
     Press Keys    textarea    a    SHIFT
     Press Keys    textarea    b    SHIFT
     Press Keys    textarea    c    SHIFT
-    Sleep    2 seconds
     ${value}=    Get Value    textarea
     Should Be Equal    ${value}    ABC
-    Capture Page Screenshot
+    #Capture Page Screenshot
+
+Press Shift-def at Once
+    Press Keys    textarea    def    SHIFT
+    ${value}=    Get Value    textarea
+    Should Be Equal    ${value}    DEF
+    #Capture Page Screenshot
 
 Press Home, End, Arrows, Backspace and Delete
     Input Text    textarea    ABC
@@ -39,8 +50,34 @@ Press Home, End, Arrows, Backspace and Delete
     Press Keys    textarea    ${NONE}    DELETE
     ${value}=    Get Value    textarea
     Should Be Equal    ${value}    A
+    #Capture Page Screenshot
+
+Press Control, Shift, Arrow, Control C, Control V, Control Z
+    [Documentation]    Use directional keys to select text, copy and paste. (using double-click to attempt to select element text).
+    ...    Stange actions happens with Firefox if we use "block1" instead of "inside_text".
+    Double Click Element    inside_text
+    Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
+    Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
+    Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
+    Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
+    Press Keys    inside_text    c    CONTROL
+    Press Keys    textarea    v    CONTROL
+    ${value}=    Get Value    textarea
+    Double Click Element    english_input
+    Press Keys    english_input    a    CONTROL
+    Press Keys    english_input    c    CONTROL
+    Press Keys    textarea    \\\\CONTROL    SHIFT    END
+    Press Keys    textarea    v    CONTROL
+    Press Keys    textarea    z    CONTROL
+    Press Keys    textarea    ${None}    END
+    Press Keys    textarea    v    CONTROL
+    ${value2}=    Get Value    textarea
+    Log    Value1 is "${value}" Value2 is "${value2}"    INFO
+    #Should Be Equal    ${value}    A
     Capture Page Screenshot
 
 Press Invalid Keys
     Run Keyword And Expect Error    *    Press Keys    textarea    ${NONE}
     Run Keyword And Expect Error    *    Press Keys    textarea    a    WORNG_KEY
+    Run Keyword And Expect Error    *    Press Keys    textarea    a    ${NONE}    WORNG_KEY
+    Run Keyword And Expect Error    *    Press Keys    textarea    CONTROL    c
