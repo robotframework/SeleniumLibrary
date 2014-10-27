@@ -7,6 +7,7 @@
         setTimeout('changeContent()', 1000)
         setTimeout('changeTitle()', 1000)
         setTimeout('unhideContent()', 1000)
+        setTimeout('enableContent()', 1000)
     }
     
     function addElement() {
@@ -28,6 +29,9 @@
     function unhideContent() {
         document.getElementById("hidden").style.display = "block"
     }
+    function enableContent() {
+        document.getElementById("disabled").disabled = false;
+    }
     </script>
     </head>
     
@@ -35,5 +39,6 @@
     <div id="content">This is content</div>
     <div id="container"></div>
     <div id="hidden" style="display:none;">Inititally hidden content</div>
+    <button id="disabled" disabled>Inititally disabled content</button>
     </body>
 </html>
