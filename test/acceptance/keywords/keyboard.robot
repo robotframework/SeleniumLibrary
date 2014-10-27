@@ -1,8 +1,7 @@
 *** Setting ***
-Suite Setup       Set Selenium Speed    0.5 seconds
 Test Setup        Go To Page "forms/long_page.html"
 Force Tags
-Default Tags      keyboard    inprogress
+Default Tags      keyboard
 Variables         variables.py
 Resource          ../resource.robot
 
@@ -54,23 +53,24 @@ Press Home, End, Arrows, Backspace and Delete
 
 Press Control, Shift, Arrow, Control C, Control V, Control Z
     [Documentation]    Use directional keys to select text, copy and paste. (using double-click to attempt to select element text).
-    ...    Stange actions happens with Firefox if we use "block1" instead of "inside_text".
+    ...    Strange actions happens with Firefox if we use "block1" instead of "inside_text".
     Double Click Element    inside_text
     Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
     Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
     Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
     Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
-    Press Keys    inside_text    c    CONTROL
-    Press Keys    textarea    v    CONTROL
+    Press Keys    inside_text    C    CONTROL
+    Press Keys    textarea    V    CONTROL
     ${value}=    Get Value    textarea
     Double Click Element    english_input
+    #This block with Control+Shift+End makes firefox Navigation test fail by not reusing Tabbed windows
     Press Keys    english_input    a    CONTROL
     Press Keys    english_input    c    CONTROL
-    Press Keys    textarea    \\\\CONTROL    SHIFT    END
+    #Press Keys    textarea    \\\\CONTROL    SHIFT    END
     Press Keys    textarea    v    CONTROL
     Press Keys    textarea    z    CONTROL
     Press Keys    textarea    ${None}    END
-    Press Keys    textarea    v    CONTROL
+    Press Keys    textarea    V    CONTROL
     ${value2}=    Get Value    textarea
     Log    Value1 is "${value}" Value2 is "${value2}"    INFO
     #Should Be Equal    ${value}    A
