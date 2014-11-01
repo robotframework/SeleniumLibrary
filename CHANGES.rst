@@ -3,6 +3,10 @@ Release Notes
 
 1.6 (unreleased)
 ----------------
+- Added examples to 'Execute Javascript' and 'Execute Async Javascript'
+  keyword documentation.
+  [ombre42]
+
 - Added instructions to README.rst on how to manually install Selenium2Library.
   [pekkaklarck]
 
@@ -20,6 +24,10 @@ Release Notes
 
 - Added new keyword 'Clear Element Text' for clearing the text of text entry 
   elements.
+  [emanlove]
+
+- Added new keyword 'Locator Should Match X Times' for validating number of
+  times a given locator appears.
   [emanlove]
 
 - Fixed issue where 'Select Window’ with url strategy fails to locate window
