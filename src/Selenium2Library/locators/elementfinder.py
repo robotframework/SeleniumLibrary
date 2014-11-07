@@ -1,28 +1,33 @@
 from Selenium2Library import utils
 from robot.api import logger
+from robot.utils import NormalizedDict
+
 
 class ElementFinder(object):
 
     def __init__(self):
-        self._strategies = {
+        strategies = {
             'identifier': self._find_by_identifier,
             'id': self._find_by_id,
             'name': self._find_by_name,
             'xpath': self._find_by_xpath,
             'dom': self._find_by_dom,
             'link': self._find_by_link_text,
+            'partial link': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
-            None: self._find_by_default
+            'default': self._find_by_default
         }
+        self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
 
     def find(self, browser, locator, tag=None):
         assert browser is not None
         assert locator is not None and len(locator) > 0
 
         (prefix, criteria) = self._parse_locator(locator)
+        prefix = 'default' if prefix is None else prefix
         strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
@@ -68,6 +73,11 @@ class ElementFinder(object):
     def _find_by_link_text(self, browser, criteria, tag, constraints):
         return self._filter_elements(
             browser.find_elements_by_link_text(criteria),
+            tag, constraints)
+
+    def _find_by_partial_link_text(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
+            browser.find_elements_by_partial_link_text(criteria),
             tag, constraints)
 
     def _find_by_css_selector(self, browser, criteria, tag, constraints):
@@ -119,6 +129,8 @@ class ElementFinder(object):
         tag = tag.lower()
         constraints = {}
         if tag == 'link':
+            tag = 'a'
+        if tag == 'partial link':
             tag = 'a'
         elif tag == 'image':
             tag = 'img'
@@ -179,7 +191,7 @@ class ElementFinder(object):
         if not locator.startswith('//'):
             locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0].strip().lower()
+                prefix = locator_parts[0]
                 criteria = locator_parts[2].strip()
         return (prefix, criteria)
 

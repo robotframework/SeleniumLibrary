@@ -72,5 +72,5 @@ Value Should Be Cancel
 Navigate To File Upload Form And Create Temp File To Upload
   Cannot Be Executed in IE
   Go To Page "forms/file_upload_form.html"
-  Touch   ${CURDIR}/temp.txt
+  Touch   ${CURDIR}${/}temp.txt
 

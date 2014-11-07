@@ -73,7 +73,9 @@ class _ElementKeywords(KeywordGroup):
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional `loglevel` argument.
-        Giving `NONE` as level disables logging.
+        Valid log levels are DEBUG, INFO (default), WARN, and NONE. If the
+        log level is NONE or below the current active log level the source
+        will not be logged.
         """
         if not self._page_contains(text):
             self.log_source(loglevel)
@@ -92,6 +94,24 @@ class _ElementKeywords(KeywordGroup):
         `introduction` for details about locating elements.
         """
         self._page_should_contain_element(locator, None, message, loglevel)
+
+    def locator_should_match_x_times(self, locator, expected_locator_count, message='', loglevel='INFO'):
+        """Verifies that the page contains the given number of elements located by the given `locator`.
+
+        See `introduction` for details about locating elements.
+
+        See `Page Should Contain Element` for explanation about `message` and
+        `loglevel` arguments.
+        """
+        actual_locator_count = len(self._element_find(locator, False, False))
+        if int(actual_locator_count) != int(expected_locator_count):
+            if not message:
+                message = "Locator %s should have matched %s times but matched %s times"\
+                            %(locator, expected_locator_count, actual_locator_count)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Current page contains %s elements matching '%s'."
+                   % (actual_locator_count, locator))
 
     def page_should_not_contain(self, text, loglevel='INFO'):
         """Verifies the current page does not contain `text`.
@@ -247,6 +267,14 @@ class _ElementKeywords(KeywordGroup):
         See `introduction` for details about locating elements.
         """
         return self._get_text(locator)
+
+    def clear_element_text(self, locator):
+        """Clears the text value of text entry element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        element = self._element_find(locator, True, True)
+        element.clear()
 
     def get_vertical_position(self, locator):
         """Returns vertical position of element identified by `locator`.
@@ -416,11 +444,11 @@ return !element.dispatchEvent(evt);
         """Simulates user pressing key on element identified by `locator`.
 
         `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\'.
+        lead by '\\'. In test data, '\\' must be escaped, so use '\\\\'.
 
         Examples:
         | Press Key | text_field   | q |
-        | Press Key | login_button | \\13 | # ASCII code for enter key |
+        | Press Key | login_button | \\\\13 | # ASCII code for enter key |
         """
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))

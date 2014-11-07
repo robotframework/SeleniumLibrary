@@ -20,6 +20,8 @@ class _TableElementKeywords(KeywordGroup):
         to get rows counting from the end (end: -1). Cell content from header 
         or footer rows can be obtained with this keyword. To understand how 
         tables are identified, please take a look at the `introduction`.
+        
+        See `Page Should Contain` for explanation about `loglevel` argument.
         """
         row = int(row)
         row_index = row
@@ -56,6 +58,8 @@ class _TableElementKeywords(KeywordGroup):
 
         To understand how tables are identified, please take a look at
         the `introduction`.
+        
+        See `Page Should Contain` for explanation about `loglevel` argument.
         """
         message = ("Cell in table '%s' in row #%s and column #%s "
                    "should have contained text '%s'."
