@@ -1,14 +1,49 @@
 Release Notes
 =============
 
-1.6 (unreleased)
-----------------
+1.6
+---
+- Added examples to 'Execute Javascript' and 'Execute Async Javascript'
+  keyword documentation.
+  [ombre42]
+
 - Added instructions to README.rst on how to manually install Selenium2Library.
   [pekkaklarck]
 
 - Fixed issue where the browser failed to properly register if 'Open Browser'
   did not complete.
   [Mika Batsman][elizaleong][emanlove] 
+
+- Added support for negative indices for rows and columns in table-related
+  keywords.
+  [eweitz]
+
+- Added strategy for locating elements by partial link text with locator
+  prefix 'partial link'.
+  [lina1]
+
+- Added new keyword 'Clear Element Text' for clearing the text of text entry 
+  elements.
+  [emanlove]
+
+- Added new keyword 'Locator Should Match X Times' for validating number of
+  times a given locator appears.
+  [emanlove]
+
+- Fixed issue where 'Select Window’ with url strategy fails to locate window
+  [laulaz]
+
+- Fixed issue where a non-string assigned to window.id caused
+  'Select Window' and 'Get Window *' keywords to fail.
+  [ombre42]
+
+- Allow using key attributes (default strategy) when the locator contains
+  a '=' by using the prefix 'default='. Also make locator prefixes
+  space-insensitive.
+  [ombre42]
+
+A big thank you to [eweitz] and [HelioGuilherme66] for getting the
+continuous integration builds to go green by fixing internal tests.
 
 1.5
 ---

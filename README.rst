@@ -19,8 +19,8 @@ It is modeled after (and forked from) the SeleniumLibrary_ library,
 but re-implemented to use Selenium 2 and WebDriver technologies.
 
 - More information about this library can be found on the Wiki_ and in the `Keyword Documentation`_.
-- Installation information is found in the `INSTALL.rst` file.
-- Developer information is found in `BUILD.rst` file.
+- Installation information is found in the `INSTALL.rst`_ file.
+- Developer information is found in `BUILD.rst`_ file.
 
 
 Installation
@@ -141,5 +141,7 @@ The `user group for Robot Framework`_ is the best place to get help. Consider in
 .. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
 .. _Wiki: https://github.com/rtomac/robotframework-selenium2library/wiki
 .. _Keyword Documentation: http://rtomac.github.com/robotframework-selenium2library/doc/Selenium2Library.html
+.. _INSTALL.rst: https://github.com/rtomac/robotframework-selenium2library/blob/master/INSTALL.rst
+.. _BUILD.rst: https://github.com/rtomac/robotframework-selenium2library/blob/master/BUILD.rst
 .. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
 .. _user group for Robot Framework: http://groups.google.com/group/robotframework-users
