@@ -1,6 +1,6 @@
 *** Settings ***
-Suite Setup     Run Keywords  Prefer Custom Keywords  Go To Front Page
-Suite Teardown  Run Keywords  Set Debug Loglevel  Restore Old Search Order
+Suite Setup     Run Keywords  Prefer Custom Keywords  Open Browser To Front Page
+Suite Teardown  Run Keywords  Close Browser  Set Debug Loglevel  Restore Old Search Order
 Test Teardown   Register Keyword To Run On Failure  Nothing
 Resource        ../resource.txt
 Library         CustomSeleniumKeywords
