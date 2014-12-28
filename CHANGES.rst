@@ -1,6 +1,9 @@
 Release Notes
 =============
 
+1.7 (unreleased)
+----------------
+
 1.6
 ---
 - Added examples to 'Execute Javascript' and 'Execute Async Javascript'
