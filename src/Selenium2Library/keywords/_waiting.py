@@ -100,7 +100,7 @@ class _WaitingKeywords(KeywordGroup):
         """
         def check_hidden():
             visible = self._is_visible(locator)
-            if !visible:
+            if not visible:
                 return
             elif visible is None:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
