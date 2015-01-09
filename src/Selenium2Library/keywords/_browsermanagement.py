@@ -310,6 +310,10 @@ class _BrowserManagementKeywords(KeywordGroup):
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
         return self._current_browser().get_page_source()
+                 
+    def get_current_browser(self):
+        """Returns the current webdriver object"""
+        return self._current_browser()
 
     def get_title(self):
         """Returns title of current page."""
