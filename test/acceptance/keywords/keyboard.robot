@@ -53,7 +53,7 @@ Press Home, End, Arrows, Backspace and Delete
 
 Press Control, Shift, Arrow, Control C, Control V, Control Z
     [Documentation]    Use directional keys to select text, copy and paste. (using double-click to attempt to select element text).
-    ...    Stange actions happens with Firefox if we use "block1" instead of "inside_text".
+    ...    Strange actions happens with Firefox if we use "block1" instead of "inside_text".
     Double Click Element    inside_text
     Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
     Press Keys    inside_text    \\\\CONTROL    SHIFT    RIGHT
@@ -63,9 +63,10 @@ Press Control, Shift, Arrow, Control C, Control V, Control Z
     Press Keys    textarea    v    CONTROL
     ${value}=    Get Value    textarea
     Double Click Element    english_input
+    #This block with Control+Shift+End makes firefox Navigation test fail by not reusing Tabbed windows
     Press Keys    english_input    a    CONTROL
     Press Keys    english_input    c    CONTROL
-    Press Keys    textarea    \\\\CONTROL    SHIFT    END
+    #Press Keys    textarea    \\\\CONTROL    SHIFT    END
     Press Keys    textarea    v    CONTROL
     Press Keys    textarea    z    CONTROL
     Press Keys    textarea    ${None}    END
