@@ -64,9 +64,11 @@ Press Control, Shift, Arrow, Control C, Control V, Control Z
     ${value}=    Get Value    textarea
     Double Click Element    english_input
     #This block with Control+Shift+End makes firefox Navigation test fail by not reusing Tabbed windows
-    Press Keys    english_input    A    CONTROL
+    #Control-A causes showing plugins tab
+    #Press Keys    english_input    A    CONTROL
+    Press Keys    english_input    \\\\HOME
+    Press Keys    english_input    \\\\SHIFT    END
     Press Keys    english_input    C    CONTROL
-    #Press Keys    textarea    \\\\CONTROL    SHIFT    END
     Press Keys    textarea    V    CONTROL
     Press Keys    textarea    Z    CONTROL
     Press Keys    textarea    ${None}    END
