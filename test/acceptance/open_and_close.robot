@@ -19,8 +19,12 @@ Close Browser Does Nothing When No Browser Is Opened
     Close Browser
 
 Browser Open With Not Well-Formed URL Should Close
-    [Documentation]    Verify after incomplete 'Open Browser' browser closes
-    ...    LOG 1.1:1 REGEXP: Opening browser '\\w+' to base url 'bad.url.bad'
-    #If in DEBUG test log with: \\nLOG 1.1 DEBUG STARTS: Opened browser with session id\\nLOG 1.1 DEBUG REGEXP: .*but failed to open url.*\\nLOG 2:1 DEBUG STARTS: DELETE\\nLOG 2:2 DEBUG Finished Request
-    Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}
-    Close All Browsers
+   [Documentation]  Verify after incomplete 'Open Browser' browser closes
+   ...  LOG 1.1:10   DEBUG STARTS: Opened browser with session id
+   ...  LOG 1.1:10   DEBUG REGEXP: .*but failed to open url.*
+   ...  LOG 2:2      DEBUG STARTS: DELETE
+   ...  LOG 2:3      DEBUG Finished Request
+   
+   Run Keyword And Expect Error  *
+   ...  Open Browser  bad.url.bad  ${BROWSER}
+   Close All Browsers

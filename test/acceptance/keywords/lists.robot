@@ -83,7 +83,7 @@ Select Non-Existing Item From Single Selection List
     ...  ValueError: Option 'Tin Can Phone' not in list 'preferred_channel'.
     ...  Select From List  preferred_channel  Smoke Signals  Email  Tin Can Phone
     Run Keyword And Expect Error  
-    ...  NoSuchElementException: Message: u'Could not locate element with visible text: Tin Can Phone'\ \
+    ...  NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone
     ...  Select From List By Label  preferred_channel  Tin Can Phone
 
 Select Non-Existing Item From Multi-Selection List
