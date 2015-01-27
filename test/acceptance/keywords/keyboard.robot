@@ -63,7 +63,7 @@ Press Control, Shift, Arrow, Control C, Control V, Control Z
     Press Keys    english_input    \\\\CONTROL    SHIFT    END
     Press Keys    english_input    C    CONTROL
     Press Keys    textarea    V    CONTROL
-    Press Keys    textarea    Z    CONTROL
+    #Press Keys    textarea    Z    CONTROL
     Press Keys    textarea    Text is :
     Press Keys    textarea    ${None}    END
     Press Keys    textarea    V    CONTROL
