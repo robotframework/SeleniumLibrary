@@ -1,7 +1,9 @@
 *** Settings ***
-Suite Setup     Run Keywords  Go To Front Page  Set Info Loglevel
-Suite Teardown  Set Debug Loglevel
-Resource        ../resource.robot
+Suite Setup       Run Keywords    Go To Front Page    Set Info Loglevel
+Suite Teardown    Set Debug Loglevel
+Test Teardown     Register Keyword to Run on Failure    Nothing
+Force Tags        runonfail
+Resource          ../resource.robot
 
 *** Variables ***
 ${PAGE TITLE}  (root)/index.html
