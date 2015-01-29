@@ -4,7 +4,7 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Capture page screenshot to default location
-    [Documentation]    LOG 2:1 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
+    [Documentation]    LOG 2:3 INFO REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
     [Setup]    Remove Files    ${OUTPUTDIR}/selenium-screenshot-*.png
     Capture Page Screenshot
     ${count} =    Count Files In Directory    ${OUTPUTDIR}    selenium-screenshot-*.png
