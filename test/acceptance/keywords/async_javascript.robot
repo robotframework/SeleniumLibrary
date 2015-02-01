@@ -51,8 +51,8 @@ Should Be Able To Return Arrays Of Primitives From Async Scripts
     Length Should Be  ${result}  0
 
 Should Timeout If Script Does Not Invoke Callback
-    ${dep_browser}=    Set Variable If    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'    TimeoutException: Message: Timed out waiting for async script result after*    '${BROWSER}'.lower() == 'gc' or '${BROWSER}'.lower() == 'chrome'    TimeoutException: Message: asynchronous script timeout: result was not received in *    '${BROWSER}'.lower() == 'phantomjs'
-    ...    TimeoutException: Message: u'{"errorMessage":"Timed out waiting for asynchronous script result after *    '${BROWSER}'.lower() == 'ie' or '${BROWSER}'.lower().replace(' ', '') == 'internetexplorer'    TimeoutException: Message: u'Timeout expired waiting for async script*
+    ${dep_browser}=    Set Variable If    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'    TimeoutException: Message: Timed out waiting for async script result after*    '${BROWSER}'.lower() == 'gc' or '${BROWSER}'.lower() == 'chrome'    TimeoutException: Message: asynchronous script timeout: result was not received in*    '${BROWSER}'.lower() == 'phantomjs'
+    ...    TimeoutException: Message: {"errorMessage":"Timed out waiting for asynchronous script result after *    '${BROWSER}'.lower() == 'ie' or '${BROWSER}'.lower().replace(' ', '') == 'internetexplorer'    TimeoutException: Message: Timeout expired waiting for async script*
     Run Keyword And Expect Error    ${dep_browser}    Execute Async Javascript    return 1 + 2;
 
 Should Timeout If Script Does Not Invoke Callback With A Zero Timeout
