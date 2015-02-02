@@ -101,11 +101,6 @@ class Selenium2Library(
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
 
-    *Stale and Detached Elements*
-
-    To be written... a talk about stale/detached elements, the dreaded
-    StaleElementReferenceException and how to deal with these situations.
-
     *Timeouts*
 
     There are several `Wait ...` keywords that take timeout as an
