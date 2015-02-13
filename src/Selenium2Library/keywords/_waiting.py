@@ -105,7 +105,7 @@ class _WaitingKeywords(KeywordGroup):
             elif visible is None:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
             else:
-                return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
+                return error or "Element '%s' was still visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_hidden)
 
     # Private
