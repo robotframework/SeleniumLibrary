@@ -110,18 +110,13 @@ class ElementFinder(object):
         rows = []
         prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\\\:']
         for prefix in prefixes:
-            #import pdb,sys; pdb.Pdb(stdout=sys.__stdout__).set_trace()
             repeatElems=[]
             attr = prefix + 'repeat'
-            try:
-                repeatElems = browser.execute_script("""return document.querySelectorAll('[%s]');""" % attr)
-            except:
-                print attr
+            repeatElems = browser.execute_script("""return document.querySelectorAll('[%s]');""" % attr)
             attr = attr.replace('\\','')
             repeatElems = get_iterable(repeatElems)
             for elem in repeatElems:
                 val = elem.get_attribute(attr)
-                print val
                 if val and repeater_row_col['repeater'] in elem.get_attribute(attr):
                     rows.append(elem)
         multiRows = []
@@ -146,7 +141,6 @@ class ElementFinder(object):
 
         # if ...@row[index]...
         if repeater_row_col['row_index'] is not None:
-            #import pdb,sys; pdb.Pdb(stdout=sys.__stdout__).set_trace()
             if rows:
                 rows = get_iterable(rows[repeater_row_col['row_index']])
             if multiRows:
@@ -154,7 +148,6 @@ class ElementFinder(object):
 
         # if ...@col=binding... 
         if repeater_row_col['col_binding'] is not None:
-            #import pdb,sys; pdb.Pdb(stdout=sys.__stdout__).set_trace()
             from selenium.common.exceptions import NoSuchElementException
             bindings=[]
             for row in rows:
@@ -182,7 +175,6 @@ class ElementFinder(object):
                     matches.append(bind)
             return matches
         
-        #import pdb,sys; pdb.Pdb(stdout=sys.__stdout__).set_trace()
         matches = rows
         matches.extend(multiRows)
         return matches
@@ -332,10 +324,9 @@ class ElementFinder(object):
                     rlocator = _startswith(row,'=')
                     if array is not None:
                         extractElem['row_index'] = array
-                        print array
                     elif rlocator:
                         # row should be an list index and not binding locator
-                        print rlocator
+                        raise ValueError("AngularJS ng-repeat locator with row as binding is not supported")
                     else:
                         # stray @ not releated to row/column seperator
                         rrc[-1] = rrc[-1] + '@' + index
@@ -344,10 +335,9 @@ class ElementFinder(object):
                     clocator = _startswith(column,'=')
                     if array is not None:
                         # col should be an binding locator and not list index
-                        print array
+                        raise ValueError("AngularJS ng-repeat locator with column as index is not supported")
                     elif clocator:
                         extractElem['col_binding'] = clocator
-                        print clocator
                     else:
                         # stray @ not releated to row/column seperator
                         rrc[-1] = rrc[-1] + '@' + index
