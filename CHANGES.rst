@@ -3,6 +3,18 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+- Corrected error message in new keyword 'Wait Until Element Is Not
+  Visible' to reflect element being visible instead of not visible.
+  [joepurdy]
+
+- Stop using private browsing with default Firefox profile.
+  [ombre42]
+
+- Added new keyword 'Wait Until Element Is Not Visible'.
+  [deiga]
+
+- Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
+  [IlfirinPL]
 
 1.6
 ---
