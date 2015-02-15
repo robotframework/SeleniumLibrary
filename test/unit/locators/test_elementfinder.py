@@ -2,16 +2,17 @@ import unittest
 import os
 from Selenium2Library.locators import ElementFinder
 from mockito import *
+from robot.utils.asserts import assert_raises_with_msg
 
 class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_invalid_prefix(self):
         finder = ElementFinder()
         browser = mock()
-        try:
-            self.assertRaises(ValueError, finder.find, browser, "something=test1")
-        except ValueError as e:
-            self.assertEqual(e.message, "Element locator with prefix 'something' is not supported")
+        assert_raises_with_msg(ValueError, "Element locator with prefix 'something' is not supported",
+                               finder.find, browser, "something=test1")
+        assert_raises_with_msg(ValueError, "Element locator with prefix ' by ID ' is not supported",
+                               finder.find, browser, " by ID =test1")
 
     def test_find_with_null_browser(self):
         finder = ElementFinder()
@@ -35,6 +36,22 @@ class ElementFinderTests(unittest.TestCase):
         browser = mock()
         finder.find(browser, "test1")
         verify(browser).find_elements_by_xpath("//*[(@id='test1' or @name='test1')]")
+
+    def test_find_with_explicit_default_strategy(self):
+        finder = ElementFinder()
+        browser = mock()
+        finder.find(browser, "default=test1")
+        verify(browser).find_elements_by_xpath("//*[(@id='test1' or @name='test1')]")
+
+    def test_find_with_explicit_default_strategy_and_equals(self):
+        finder = ElementFinder()
+        browser = mock()
+        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        finder.find(browser, "default=page.do?foo=bar", tag='a')
+        verify(browser).find_elements_by_xpath(
+            "//a[(@id='page.do?foo=bar' or @name='page.do?foo=bar' or @href='page.do?foo=bar' or " +
+            "normalize-space(descendant-or-self::text())='page.do?foo=bar' or " +
+            "@href='http://localhost/page.do?foo=bar')]")
 
     def test_find_with_tag(self):
         finder = ElementFinder()
@@ -241,6 +258,19 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, elements)
         result = finder.find(browser, "link=my link", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
+        
+    def test_find_by_partial_link_text(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_partial_link_text("my link").thenReturn(elements)
+
+        result = finder.find(browser, "partial link=my link")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "partial link=my link", tag='a')
+        self.assertEqual(result, [elements[1], elements[3]])
+        
 
     def test_find_by_css_selector(self):
         finder = ElementFinder()
@@ -272,6 +302,7 @@ class ElementFinderTests(unittest.TestCase):
 
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(browser).find_elements_by_id("test1").thenReturn(elements)
+        when(browser).find_elements_by_partial_link_text("test1").thenReturn(elements)
 
         result = finder.find(browser, "ID=test1")
         self.assertEqual(result, elements)
@@ -280,6 +311,10 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "id=test1")
         self.assertEqual(result, elements)
         result = finder.find(browser, "  id =test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "  partiallink =test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "  p art iallin k =test1")
         self.assertEqual(result, elements)
 
     def test_find_with_sloppy_criteria(self):

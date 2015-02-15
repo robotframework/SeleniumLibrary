@@ -28,13 +28,13 @@ class Selenium2Library(
     Selenium2Library runs tests in a real browser instance. It should work in
     most modern browsers and can be used with both Python and Jython interpreters.
 
-    *Before running tests*
+    = Before running tests =
 
     Prior to running test cases using Selenium2Library, Selenium2Library must be
     imported into your Robot test suite (see `importing` section), and the 
     `Open Browser` keyword must be used to open a browser to the desired location.
 
-    *Locating elements*
+    = Locating elements =
 
     All keywords in Selenium2Library that need to find an element on the page
     take an argument, `locator`. By default, when a locator value is provided,
@@ -55,10 +55,19 @@ class Selenium2Library(
     | xpath      | Click Element `|` xpath=//div[@id='my_element'] | Matches with arbitrary XPath expression |
     | dom        | Click Element `|` dom=document.images[56] | Matches with arbitrary DOM express            |
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
+    | partial link | Click Element `|` partial link=y Lin  | Matches anchor elements by their partial link text |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
     | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
     | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
+    | default*   | Click Link    `|` default=page?a=b      | Matches key attributes with value after first '=' |
+    * Explicitly specifying the default strategy is only necessary if locating
+    elements by matching key attributes is desired and an attribute value
+    contains a '='. The following would fail because it appears as if _page?a_
+    is the specified lookup strategy:
+    | Click Link    page?a=b
+    This can be fixed by changing the locator to:
+    | Click Link    default=page?a=b
 
     Table related keywords, such as `Table Should Contain`, work differently.
     By default, when a table locator value is provided, it will search for
@@ -72,12 +81,13 @@ class Selenium2Library(
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
 
-    *Timeouts*
+    = Timeouts =
 
     There are several `Wait ...` keywords that take timeout as an
     argument. All of these timeout arguments are optional. The timeout
     used by all of them can be set globally using the
-    `Set Selenium Timeout` keyword.
+    `Set Selenium Timeout` keyword. The same timeout also applies to
+    `Execute Async Javascript`.
 
     All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
     or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').

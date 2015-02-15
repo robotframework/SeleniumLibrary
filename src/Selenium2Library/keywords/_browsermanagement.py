@@ -341,7 +341,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Logs and returns the entire html source of the current page or frame.
 
         The `loglevel` argument defines the used log level. Valid log levels are
-        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
+        WARN, INFO (default), DEBUG, and NONE (no logging).
         """
         source = self.get_source()
         self._log(source, loglevel.upper())
@@ -418,7 +418,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         There are several `Wait ...` keywords that take timeout as an
         argument. All of these timeout arguments are optional. The timeout
         used by all of them can be set globally using this keyword.
-        See `introduction` for more information about timeouts.
+        See `Timeouts` for more information about timeouts.
 
         The previous timeout value is returned by this keyword and can
         be used to set the old value back later. The default timeout

@@ -9,9 +9,6 @@ class _WaitingKeywords(KeywordGroup):
     def wait_for_condition(self, condition, timeout=None, error=None):
         """Waits until the given `condition` is true or `timeout` expires.
 
-        `code` may contain multiple lines of code but must contain a 
-        return statement (with the value to be returned) at the end
-
         The `condition` can be arbitrary JavaScript expression but must contain a 
         return statement (with the value to be returned) at the end.
         See `Execute JavaScript` for information about accessing the
@@ -87,6 +84,29 @@ class _WaitingKeywords(KeywordGroup):
             else:
                 return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_visibility)
+    
+    def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` is not visible.
+
+        Fails if `timeout` expires before the element is not visible. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains 
+        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
+        Succeeds`.
+        """
+        def check_hidden():
+            visible = self._is_visible(locator)
+            if not visible:
+                return
+            elif visible is None:
+                return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
+            else:
+                return error or "Element '%s' was still visible in %s" % (locator, self._format_timeout(timeout))
+        self._wait_until_no_error(timeout, check_hidden)
 
     def wait_for_angular(self, timeout=None, error=None):
         """
