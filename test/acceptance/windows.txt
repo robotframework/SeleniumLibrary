@@ -40,6 +40,16 @@ Get and Set Window Size
   Should Be Equal  ${returned_width}  ${win_width}
   Should Be Equal  ${returned_height}  ${win_height}
 
+
+Get and Set Window Position
+  ${position_x}=  Set Variable  ${100}
+  ${position_y}=  Set Variable  ${100}
+  Set Window Position  ${position_x}  ${position_y}
+  ${returned_x}  ${returned_y}=  Get Window Position
+  Should Be Equal  ${position_x}  ${returned_x}
+  Should Be Equal  ${position_y}  ${returned_y}
+
+
 *Keywords*
 Open Popup Window, Select It And Verify
   [Arguments]  ${window_id}

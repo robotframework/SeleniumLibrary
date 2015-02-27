@@ -16,6 +16,10 @@ Release Notes
 - Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
   [IlfirinPL]
 
+- Added 'Get Window Position' and 'Set Window Position' keywords matching the
+  Selenium functionality.
+  [ktarasz]
+
 1.6
 ---
 - Added examples to 'Execute Javascript' and 'Execute Async Javascript'
