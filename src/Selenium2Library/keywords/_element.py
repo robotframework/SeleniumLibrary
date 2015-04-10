@@ -67,7 +67,7 @@ class _ElementKeywords(KeywordGroup):
         actual = self._get_text(locator)
         if text in actual:
             if not message:
-                message = "Element '%s' should have not contained text '%s' but " \
+                message = "Element '%s' should not contain text '%s' but " \
                           "it did." % (locator, text)
             raise AssertionError(message)
 
