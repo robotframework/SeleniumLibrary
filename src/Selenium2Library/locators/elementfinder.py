@@ -175,6 +175,7 @@ class ElementFinder(object):
                     pass
             
             for row in multiRows:
+                row = get_iterable(row)
                 for elem in row:
                     if 'ng-binding' in elem.get_attribute("class"):
                         bindings.append(elem)
