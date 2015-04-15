@@ -28,6 +28,8 @@ REBOT_ARGS = [
     '--escape', 'space:SP',
     '--critical', 'regression',
     '--noncritical', 'inprogress',
+    '--noncritical', 'known_issue_-_%(pyVersion)s',
+    '--noncritical', 'known_issue_-_%(browser)s',
 ]
 ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': env.SRC_DIR}
 
