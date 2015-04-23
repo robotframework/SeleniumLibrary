@@ -15,6 +15,7 @@ Popup Windows Created With Javascript
   Select Main Window And Verify
 
 Get Window Titles
+  [Tags]  Known Issue - TravisCI
   ${exp_titles}=  Create List  Click link to show a popup window  Original
   Click Link  my popup
   ${titles}=  Get Window Titles
