@@ -175,7 +175,7 @@ class _FormElementKeywords(KeywordGroup):
         | Choose File | my_upload_field | /home/user/files/trades.csv |
         """
         if not os.path.isfile(file_path):
-            self._info("File '%s' does not exist on the local file system"
+            raise AssertionError("File '%s' does not exist on the local file system"
                         % file_path)
         self._element_find(locator, True, True).send_keys(file_path)
 
