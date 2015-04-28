@@ -20,7 +20,8 @@ Release Notes
   known browser and python version noncritical. Also added a noncritical case to the
   travis config for situations where testing is failing on travis for an unknown reason.
 - 'Capture Screenshot' now attempts to create its containing directory if the directory
-  specified in the filename does not exist. 
+  specified in the filename does not exist.
+- 'Choose File' now fails if the file doesn't exist
   [zephraph]
 
 - Added 'Get Window Position' and 'Set Window Position' keywords matching the
