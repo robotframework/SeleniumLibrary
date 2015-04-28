@@ -21,6 +21,10 @@ Release Notes
   travis config for situations where testing is failing on travis for an unknown reason.
   [zephraph]
 
+- Added 'Get Window Position' and 'Set Window Position' keywords matching the
+  Selenium functionality.
+  [ktarasz]
+
 1.6
 ---
 - Added examples to 'Execute Javascript' and 'Execute Async Javascript'
