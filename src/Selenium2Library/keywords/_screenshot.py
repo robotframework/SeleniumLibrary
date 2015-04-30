@@ -1,6 +1,7 @@
-import os
+import os, errno
 import robot
 from keywordgroup import KeywordGroup
+from robot.api import logger
 
 class _ScreenshotKeywords(KeywordGroup):
 
@@ -25,10 +26,21 @@ class _ScreenshotKeywords(KeywordGroup):
         """
         path, link = self._get_screenshot_paths(filename)
 
+        target_dir = os.path.dirname(path)
+        if not os.path.exists(target_dir):
+            try:
+                os.makedirs(target_dir)
+            except OSError as exc:
+                if exc.errno == errno.EEXIST and os.path.isdir(target_dir):
+                    pass
+                else: raise
+
         if hasattr(self._current_browser(), 'get_screenshot_as_file'):
-          self._current_browser().get_screenshot_as_file(path)
+          if not self._current_browser().get_screenshot_as_file(path):
+              raise RuntimeError('Failed to save screenshot ' + filename)
         else:
-          self._current_browser().save_screenshot(path)
+          if not self._current_browser().save_screenshot(path):
+            raise RuntimeError('Failed to save screenshot ' + filename)
 
         # Image is shown on its own row and thus prev row is closed on purpose
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'
