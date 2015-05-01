@@ -11,10 +11,10 @@ install:
   - pip install docutils
   #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
-  - "if [[ ${BROWSER} == 'firefox' ]]; then firefox.exe -version | more; fi"
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
+  - "firefox --version"
   - "python test/run_tests.py python $BROWSER --noncritical known_issue_-_travisci"
 env:
   matrix:
