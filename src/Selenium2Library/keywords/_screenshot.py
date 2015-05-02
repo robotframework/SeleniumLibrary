@@ -18,7 +18,8 @@ class _ScreenshotKeywords(KeywordGroup):
         `selenium-screenshot-<counter>.png` under the directory where
         the Robot Framework log file is written into. The `filename` is
         also considered relative to the same directory, if it is not
-        given in absolute format.
+        given in absolute format. If an absolute or relative path is given
+        but the path does not exist it will be created. 
 
         `css` can be used to modify how the screenshot is taken. By default
         the bakground color is changed to avoid possible problems with
