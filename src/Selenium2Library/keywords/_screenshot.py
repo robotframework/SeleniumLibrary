@@ -1,6 +1,7 @@
-import os
+import os, errno
 import robot
 from keywordgroup import KeywordGroup
+from robot.api import logger
 
 class _ScreenshotKeywords(KeywordGroup):
 
@@ -17,7 +18,8 @@ class _ScreenshotKeywords(KeywordGroup):
         `selenium-screenshot-<counter>.png` under the directory where
         the Robot Framework log file is written into. The `filename` is
         also considered relative to the same directory, if it is not
-        given in absolute format.
+        given in absolute format. If an absolute or relative path is given
+        but the path does not exist it will be created. 
 
         `css` can be used to modify how the screenshot is taken. By default
         the bakground color is changed to avoid possible problems with
@@ -25,10 +27,21 @@ class _ScreenshotKeywords(KeywordGroup):
         """
         path, link = self._get_screenshot_paths(filename)
 
+        target_dir = os.path.dirname(path)
+        if not os.path.exists(target_dir):
+            try:
+                os.makedirs(target_dir)
+            except OSError as exc:
+                if exc.errno == errno.EEXIST and os.path.isdir(target_dir):
+                    pass
+                else: raise
+
         if hasattr(self._current_browser(), 'get_screenshot_as_file'):
-          self._current_browser().get_screenshot_as_file(path)
+          if not self._current_browser().get_screenshot_as_file(path):
+              raise RuntimeError('Failed to save screenshot ' + filename)
         else:
-          self._current_browser().save_screenshot(path)
+          if not self._current_browser().save_screenshot(path):
+            raise RuntimeError('Failed to save screenshot ' + filename)
 
         # Image is shown on its own row and thus prev row is closed on purpose
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'

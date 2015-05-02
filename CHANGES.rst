@@ -19,6 +19,8 @@ Release Notes
 - Edited acceptance test scripts to automatically make known issues for the currently
   known browser and python version noncritical. Also added a noncritical case to the
   travis config for situations where testing is failing on travis for an unknown reason.
+- 'Capture Screenshot' now attempts to create its containing directory if the directory
+  specified in the filename does not exist. 
   [zephraph]
 
 - Added 'Get Window Position' and 'Set Window Position' keywords matching the
