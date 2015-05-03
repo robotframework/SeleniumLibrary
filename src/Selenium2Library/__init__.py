@@ -35,7 +35,6 @@ class Selenium2Library(
     `Open Browser` keyword must be used to open a browser to the desired location.
 
     **--- Note important change starting with Version 1.7.0 release ---**
-    *Locating or getting elements*
     *Locating or specifying elements*
 
     All keywords in Selenium2Library that need to find an element on the page
@@ -80,7 +79,7 @@ class Selenium2Library(
 
     Using 'webelement'
     ------------------
-    Starting with version 1.6 of the Selenium2Library, one can pass an argument
+    Starting with version 1.7 of the Selenium2Library, one can pass an argument
     that contains a WebElement instead of a string locator. To get a WebElement,
     use the new `Get WebElements` keyword.  For example:
 
