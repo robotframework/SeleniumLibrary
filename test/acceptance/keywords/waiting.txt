@@ -23,3 +23,9 @@ Wait Until Element Is Visible
     Run Keyword And Expect Error  Element locator 'invalid' did not match any elements after 100 milliseconds  Wait Until Element Is Visible  invalid  0.1
     Run Keyword And Expect Error  User error message  Wait Until Element Is Visible  invalid  0.1  User error message
 
+Wait Until Element Is Enabled
+    Run Keyword And Expect Error  Element 'id=disabled' was not enabled in 100 milliseconds  Wait Until Element Is Enabled  id=disabled  0.1
+    Wait Until Element Is Enabled  id=disabled  2 s
+    Run Keyword And Expect Error  Element locator 'id=invalid' did not match any elements after 100 milliseconds  Wait Until Element Is Enabled  id=invalid  0.1
+    Run Keyword And Expect Error  User error message  Wait Until Element Is Enabled  id=invalid  0.1  User error message
+

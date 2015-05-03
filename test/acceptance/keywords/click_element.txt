@@ -10,8 +10,8 @@ Click Element
     Element Text Should Be   output  single clicked
 
 Double Click Element
-    [Tags]  Known Issue - Firefox
 	[Documentation]  LOG 2 Double clicking element 'doubleClickButton'.
+    [Tags]  Known Issue - Firefox
     Double Click Element  doubleClickButton
     Element Text Should Be   output  double clicked
 
