@@ -165,10 +165,10 @@ class _FormElementKeywords(KeywordGroup):
     # Public, text fields
 
     def choose_file(self, locator, file_path):
-        """Inputs the `file_path` into file input field found by `identifier`.
+        """Inputs the `file_path` into file input field found by `locator`.
 
         This keyword is most often used to input files into upload forms.
-        The file specified with `file_path` must be available on the same host 
+        The file specified with `file_path` must be available on the same host
         where the Selenium Server is running.
 
         Example:
@@ -271,7 +271,7 @@ class _FormElementKeywords(KeywordGroup):
         else:
             raise ValueError("Element locator '" + locator + "' did not match any elements.")
         self._info("Text area '%s' contains text '%s'." % (locator, expected))
-        
+
     def textarea_value_should_be(self, locator, expected, message=''):
         """Verifies the value in text area identified by `locator` is exactly `expected`.
 
@@ -290,7 +290,7 @@ class _FormElementKeywords(KeywordGroup):
         else:
             raise ValueError("Element locator '" + locator + "' did not match any elements.")
         self._info("Content of text area '%s' is '%s'." % (locator, expected))
-        
+
     # Public, buttons
 
     def click_button(self, locator):
