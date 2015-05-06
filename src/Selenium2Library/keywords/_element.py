@@ -710,4 +710,22 @@ return !element.dispatchEvent(evt);
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
+        
+    def mouse_down_at(self, locator, coordx, coordy):
+        """ Simulate mouse down on element at a certain offset 
+        starting from top left corner
+        """
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % (locator))
+        ActionChains(self._current_browser()).move_to_element_with_offset(element, 0, 0).move_by_offset(coordx, coordy).click_and_hold().perform()
+
+    def mouse_up_at(self, locator, coordx, coordy):
+        """ Simulate mouse up from element at a certain offset 
+        starting from top left corner
+        """
+        element = self._element_find(locator, True, False)
+        if element is None:
+            raise AssertionError("ERROR: Element %s not found." % (locator))
+        ActionChains(self._current_browser()).move_to_element_with_offset(element, 0, 0).move_by_offset(coordx, coordy).release().perform()
 
