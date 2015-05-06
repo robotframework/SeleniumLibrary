@@ -62,7 +62,7 @@ class _WaitingKeywords(KeywordGroup):
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, self._is_element_present, locator)
 
-    def wait_until_page_not_contains_element(self, locator, timeout=None, error=None):
+    def wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` disappears from current page.
 
         Fails if `timeout` expires before the element disappears. See
