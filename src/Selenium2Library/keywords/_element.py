@@ -710,4 +710,17 @@ return !element.dispatchEvent(evt);
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
+                   
+    def highlight_element(self, locator):
+        """Highlights (blinks) an element identified by `locator`."""
+        element = self._element_find(locator, True, True)
+        script = """
+        element = arguments[0];
+        original_style = element.getAttribute('style');
+        element.setAttribute('style', original_style + "; background: yellow;");
+        setTimeout(function(){
+            element.setAttribute('style', original_style);
+        }, 300);
+        """
+        self._current_browser().execute_script(script, element)
 
