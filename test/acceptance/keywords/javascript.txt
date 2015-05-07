@@ -53,7 +53,7 @@ Execute Javascript
     Execute Javascript  window.add_content('button_target', 'Inserted directly')
     Page Should Contain  Inserted directly
 
-Execute Javascript With Array Arguments
+Execute Javascript With List Arguments
     @{args}=  Create List  Hello  World
     ${result}=  Execute Javascript  ${args}  return arguments[0] + ' ' + arguments[1];
     Should Be Equal As Strings  ${result}  Hello World

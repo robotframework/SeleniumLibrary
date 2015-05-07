@@ -1,8 +1,10 @@
 import os
 from selenium.common.exceptions import WebDriverException
 from keywordgroup import KeywordGroup
-
 from Selenium2Library.utils import isstr
+
+from robot.api import logger
+
 
 class _JavaScriptKeywords(KeywordGroup):
 
@@ -108,7 +110,8 @@ class _JavaScriptKeywords(KeywordGroup):
             code = args
             args = []
         elif isstr(args):
-            code = list(code).insert(0, args)
+            code = list(code)
+            code.insert(0, args)
             args = []
         elif not isinstance(args, list):
             args = [args]
@@ -141,7 +144,8 @@ class _JavaScriptKeywords(KeywordGroup):
             code = args
             args = []
         elif isstr(args):
-            code = list(code).insert(0, args)
+            code = list(code)
+            code.insert(0, args)
             args = []
         elif not isinstance(args, list):
             args = [args]
