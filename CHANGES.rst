@@ -13,6 +13,9 @@ Release Notes
 - Added new keyword 'Wait Until Element Is Not Visible'.
   [deiga]
 
+- Added new keyword 'Element Should Not Contain'.
+  [molsky]
+
 - Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
   [IlfirinPL]
 
