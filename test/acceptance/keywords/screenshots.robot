@@ -5,16 +5,16 @@ Resource          ../resource.robot
 *** Test Cases ***
 
 Capture page screenshot to default location
-    [Documentation]    LOG 2:1 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
-    [Setup]    Remove Files    ${OUTPUTDIR}/selenium-screenshot-*.png
-    Capture Page Screenshot
-    ${count} =    Count Files In Directory    ${OUTPUTDIR}    selenium-screenshot-*.png
-    Should Be Equal As Integers    ${count}    1
-    Click Link    Relative
-    Wait Until Page Contains Element    tag=body
-    Capture Page Screenshot
-    ${count} =    Count Files In Directory    ${OUTPUTDIR}    selenium-screenshot-*.png
-    Should Be Equal As Integers    ${count}    2
+  [Documentation]  LOG 2:3  REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
+  [Setup]  Remove Files  ${OUTPUTDIR}/selenium-screenshot-*.png
+  Capture Page Screenshot
+  ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-*.png
+  Should Be Equal As Integers  ${count}  1
+  Click Link  Relative
+  Wait Until Page Contains Element  tag=body
+  Capture Page Screenshot
+  ${count} =  Count Files In Directory  ${OUTPUTDIR}  selenium-screenshot-*.png
+  Should Be Equal As Integers  ${count}  2
 
 Capture page screenshot to custom file
   [Setup]  Remove Files  ${OUTPUTDIR}/custom-screenshot.png
