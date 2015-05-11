@@ -38,4 +38,4 @@ Wait Until Element Text Is
     Run Keyword And Expect Error  Text 'Text that doesn't exists in source code' did not appear in 100 milliseconds to element 'content' in fact it was 'This is content'.  Wait Until Element Text Is  content  Text that doesn't exists in source code  0.1
     Wait Until Element Text Is  content  New Content  2 s
     Run Keyword And Expect Error  User error message  Wait Until Element Text Is  content  Error  0.1  User error message
-    Run Keyword And Expect Error  ValueError: Element locator 'id=invalid' did not match any elements.  Wait Until Element Text Is  id=invalid  0.1
+    Run Keyword And Expect Error  ValueError: Element locator 'id=invalid' did not match any elements.  Wait Until Element Text Is  id=invalid  Another error  0.1
