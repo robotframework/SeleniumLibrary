@@ -18,7 +18,6 @@ user_pref("browser.migration.version", 1);
 user_pref("browser.places.importBookmarksHTML", false);
 user_pref("browser.places.smartBookmarksVersion", 2);
 user_pref("browser.preferences.advanced.selectedTabIndex", 3);
-user_pref("browser.privatebrowsing.autostart", true);
 user_pref("browser.safebrowsing.enabled", false);
 user_pref("browser.safebrowsing.malware.enabled", false);
 user_pref("browser.search.update", false);

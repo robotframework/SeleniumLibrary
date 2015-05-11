@@ -18,6 +18,7 @@ class ElementFinder(object):
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
+            'scLocator': self._find_by_sc_locator,
             'default': self._find_by_default
         }
         self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
@@ -89,6 +90,10 @@ class ElementFinder(object):
         return self._filter_elements(
             browser.find_elements_by_tag_name(criteria),
             tag, constraints)
+            
+    def _find_by_sc_locator(self, browser, criteria, tag, constraints):
+        js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
+        return self._filter_elements([browser.execute_script(js)], tag, constraints)
 
     def _find_by_default(self, browser, criteria, tag, constraints):
         if criteria.startswith('//'):

@@ -54,6 +54,23 @@ class _ElementKeywords(KeywordGroup):
                           "its text was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
+    def element_should_not_contain(self, locator, expected, message=''):
+        """Verifies element identified by `locator` does not contain text `expected`.
+
+        `message` can be used to override the default error message.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `Element Should Contain` for more details.
+        """
+        self._info("Verifying element '%s' does not contain text '%s'."
+                   % (locator, expected))
+        actual = self._get_text(locator)
+        if expected in actual:
+            if not message:
+                message = "Element '%s' should not contain text '%s' but " \
+                          "it did." % (locator, expected)
+            raise AssertionError(message)
+
     def frame_should_contain(self, locator, text, loglevel='INFO'):
         """Verifies frame identified by `locator` contains `text`.
 

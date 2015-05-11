@@ -70,8 +70,6 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         # print "DEBUG: Content-Length :%s" % str(fs[6]+fs[6]*0.20)
         self.send_header("Content-Length", str(fs[6]+fs[6]*0.20))
         self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
-        self.send_header("Set-Cookie", "test=seleniumlibrary;")
-        self.send_header("Set-Cookie", "another=value;")
         self.end_headers()
         return f
 
