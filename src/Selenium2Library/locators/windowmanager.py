@@ -52,21 +52,29 @@ class WindowManager(object):
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
+        if criteria.lower() == "current":
+            return
+        handles = browser.get_window_handles()
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            browser.switch_to_window('')
+            browser.switch_to_window(handles[0])
             return
-
-        try:
-            self._select_by_name(browser, criteria)
+        if criteria.lower() == "new" or criteria.lower() == "popup":
+            try:
+                start_handle = browser.get_current_window_handle()
+            except NoSuchWindowException:
+                 raise AssertionError("No current window. where are you to make a popup window?")
+            if len(handles) < 2 or handles[-1] == start_handle:
+               raise AssertionError("No new window found to switch to")
+            browser.switch_to_window(handles[-1])
             return
-        except ValueError: pass
-
-        try:
-            self._select_by_title(browser, criteria)
-            return
-        except ValueError: pass
-
-        raise ValueError("Unable to locate window with name or title '" + criteria + "'")
+        for handle in handles:
+            browser.switch_to_window(handle)
+            if criteria == handle:
+                return
+            for item in browser.get_current_window_info()[2:4]:
+                if item.strip().lower() == criteria.lower():
+                    return
+        raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
 
     # Private
 

@@ -290,6 +290,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def select_window(self, locator=None):
         """Selects the window found with `locator` as the context of actions.
+        Return value is ether current window handle before select action or None.
 
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
@@ -299,7 +300,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         javascript name of the window. If multiple windows with
         same identifier are found, the first one is selected.
 
-        Special locator `main` (default) can be used to select the main window.
+        Special locator `main` (default) used to select the main window and returns from-window handle.
+        Special locator `new` switches to new opened window and returns old window handle.
+        Special locator `current` does not switch window but return current window handle.
+        The returned window handle could be used as locator to switch back to that window.
 
         It is also possible to specify the approach Selenium2Library should take
         to find a window by specifying a locator strategy:
@@ -315,7 +319,11 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Title Should Be | Popup Title |
         | Select Window |  | | # Chooses the main window again |
         """
+        try:
+            from_handle = self._current_browser().get_current_window_handle()
+        except NoSuchWindowException: pass 
         self._window_manager.select(self._current_browser(), locator)
+        return from_handle if from_handle else None
 
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
