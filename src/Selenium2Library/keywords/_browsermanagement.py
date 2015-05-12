@@ -212,8 +212,15 @@ class _BrowserManagementKeywords(KeywordGroup):
     # Public, window management
 
     def close_window(self):
-        """Closes currently opened pop-up window."""
+        """Closes currently opened pop-up window and switch back to previous window.
+        It assumes the last opened window is in the last index of window list.
+        However, as opened windows are list-returned from tree-order in remote end,
+        please use 'Select Window' if automatic switching does not work as expected.
+        """
         self._current_browser().close()
+        handles = self._current_browser().get_window_handles()
+        if len(handles) >= 1:
+            self._current_browser().switch_to_window(handles[-1])
 
     def get_window_identifiers(self):
         """Returns and logs id attributes of all windows known to the browser."""
