@@ -55,6 +55,12 @@ class WindowManager(object):
         if criteria.lower() == "current":
             return
         handles = browser.get_window_handles()
+        if type(criteria) == list:
+            for handle in handles:
+                if handle not in criteria:
+                    browser.switch_to_window(handle)
+                    return
+            raise ValueError("Unable to locate new window")
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
             browser.switch_to_window(handles[0])
             return
@@ -81,6 +87,8 @@ class WindowManager(object):
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
+        if type(locator) == list:
+            return (prefix, criteria)
         if locator is not None and len(locator) > 0:
             locator_parts = locator.partition('=')        
             if len(locator_parts[1]) > 0:

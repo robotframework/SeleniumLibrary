@@ -290,8 +290,10 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def select_window(self, locator=None):
         """Selects the window found with `locator` as the context of actions.
-        Return value is ether current window handle before select action or None.
-
+        locator value may be name, title, special string or window handle(s).
+        return value is current window handle if it exists before select else None.
+        The returned window handle could be used as locator to switch back to that window.
+        
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
         
@@ -300,10 +302,13 @@ class _BrowserManagementKeywords(KeywordGroup):
         javascript name of the window. If multiple windows with
         same identifier are found, the first one is selected.
 
-        Special locator `main` (default) used to select the main window and returns from-window handle.
-        Special locator `new` switches to new opened window and returns old window handle.
-        Special locator `current` does not switch window but return current window handle.
-        The returned window handle could be used as locator to switch back to that window.
+        There are some special locators for searching target window:
+        string 'main' (default): select the main window;
+        string 'current': just return current window handle;
+        a single window handle: directly select window by handle;
+        string 'new': select new opened window assuming it is last-position indexed (no iframe)
+        a past list of window handles: select new window by excluding past window handle list
+        See 'Get Window Handles' to get the past list of window handles 
 
         It is also possible to specify the approach Selenium2Library should take
         to find a window by specifying a locator strategy:
@@ -324,6 +329,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         except NoSuchWindowException: pass 
         self._window_manager.select(self._current_browser(), locator)
         return from_handle if from_handle else None
+
+    def get_window_handles():
+        return self._current_browser().get_window_handles()
 
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
