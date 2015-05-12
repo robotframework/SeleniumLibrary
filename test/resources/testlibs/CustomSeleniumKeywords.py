@@ -6,8 +6,8 @@ class CustomSeleniumKeywords(Selenium2Library):
 
     def __init__(self, *args, **kwargs):
         """Share `Selenium2Library`'s cache of browsers, so that
-        we don't have to open a separate browser instance for the `Run On Failure Keyword Only Called Once`
-        test."""
+        we don't have to open a separate browser instance for the
+        `Run On Failure Keyword Only Called Once` test."""
         ret = super(CustomSeleniumKeywords, self).__init__(*args, **kwargs)
         self._cache = BuiltIn().get_library_instance("Selenium2Library")._cache
 
