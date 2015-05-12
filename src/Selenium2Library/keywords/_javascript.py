@@ -1,6 +1,10 @@
 import os
 from selenium.common.exceptions import WebDriverException
 from keywordgroup import KeywordGroup
+from Selenium2Library.utils import isstr
+
+from robot.api import logger
+
 
 class _JavaScriptKeywords(KeywordGroup):
 
@@ -34,10 +38,10 @@ class _JavaScriptKeywords(KeywordGroup):
         return true, as if the user had manually clicked OK, so you shouldn't
         need to use this command unless for some reason you need to change
         your mind prior to the next confirmation. After any confirmation, Selenium will resume using the
-        default behavior for future confirmations, automatically returning 
+        default behavior for future confirmations, automatically returning
         true (OK) unless/until you explicitly use `Choose Cancel On Next Confirmation` for each
         confirmation.
-        
+
         Note that every time a confirmation comes up, you must
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
@@ -65,7 +69,7 @@ class _JavaScriptKeywords(KeywordGroup):
         self._cancel_on_next_confirmation = False
         return text
 
-    def execute_javascript(self, *code):
+    def execute_javascript(self, args, *code):
         """Executes the given JavaScript code.
 
         `code` may contain multiple lines of code and may be divided into
@@ -82,6 +86,16 @@ class _JavaScriptKeywords(KeywordGroup):
         document object of the current frame or window, e.g.
         _document.getElementById('foo')_.
 
+        `args` is an optional way of specifying arguments to be passed to the context
+        of the executing javascript code. `args` must either be a list or any other
+        non-string type. Multiple arguments and strings must be added to a list to be used
+        from `args`. Arguments are accessed in the javascript function using the _arguments_
+        variable.
+
+        Example:
+        | @{arg list}        | Hello       | World                                    |
+        | Execute Javascript | ${arg list} | console.log(arguments[0], arguments[1]); |
+
         This keyword returns None unless there is a return statement in the
         JavaScript. Return values are converted to the appropriate type in
         Python, including WebElements.
@@ -92,11 +106,21 @@ class _JavaScriptKeywords(KeywordGroup):
         | ${sum}=            | Execute JavaScript                    | return 1 + 1; |
         | Should Be Equal    | ${sum}                                | ${2}          |
         """
+        if len(code) == 0:
+            code = args
+            args = []
+        elif isstr(args):
+            code = list(code)
+            code.insert(0, args)
+            args = []
+        elif not isinstance(args, list):
+            args = [args]
+
         js = self._get_javascript_to_execute(''.join(code))
         self._info("Executing JavaScript:\n%s" % js)
-        return self._current_browser().execute_script(js)
+        return self._current_browser().execute_script(js, *args)
 
-    def execute_async_javascript(self, *code):
+    def execute_async_javascript(self, args, *code):
         """Executes asynchronous JavaScript code.
 
         Similar to `Execute Javascript` except that scripts executed with
@@ -116,9 +140,19 @@ class _JavaScriptKeywords(KeywordGroup):
         | ...                      | window.setTimeout(answer, 2000);                |                                    |
         | Should Be Equal          | ${retval}                                       | text                               |
         """
+        if len(code) == 0:
+            code = args
+            args = []
+        elif isstr(args):
+            code = list(code)
+            code.insert(0, args)
+            args = []
+        elif not isinstance(args, list):
+            args = [args]
+
         js = self._get_javascript_to_execute(''.join(code))
         self._info("Executing Asynchronous JavaScript:\n%s" % js)
-        return self._current_browser().execute_async_script(js)
+        return self._current_browser().execute_async_script(js, *args)
 
     def get_alert_message(self):
         """Returns the text of current JavaScript alert.

@@ -53,6 +53,16 @@ Execute Javascript
     Execute Javascript  window.add_content('button_target', 'Inserted directly')
     Page Should Contain  Inserted directly
 
+Execute Javascript With List Arguments
+    @{args}=  Create List  Hello  World
+    ${result}=  Execute Javascript  ${args}  return arguments[0] + ' ' + arguments[1];
+    Should Be Equal As Strings  ${result}  Hello World
+
+Execute Javascript With Object Argument
+    ${target}=   Execute Javascript  return window.document.getElementById('target');
+    ${result}=   Execute Javascript  ${target}  return arguments[0].id
+    Should Be Equal As Strings  ${result}  target
+
 Execute Javascript from File
     [Documentation]  LOG 2:1 REGEXP: Reading JavaScript from file .* LOG 2:2 Executing JavaScript:\n window.add_content('button_target', 'Inserted via file')
     Execute Javascript  ${CURDIR}/executed_by_execute_javascript.js
@@ -76,5 +86,3 @@ Drag and Drop by Offset
     Element Text Should Be   id=droppable   Drop here
     Drag and Drop by Offset  id=draggable   ${100}  ${20}
     Element Text Should Be   id=droppable   Dropped!
-
-
