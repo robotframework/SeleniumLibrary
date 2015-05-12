@@ -20,6 +20,9 @@ Prefer Custom Keywords
 Restore Old Search Order
     Set Library Search Order  ${old order}
 
+Open Browser To Front Page
+    Open Browser  ${FRONT PAGE}
+
 *** Test Cases ***
 Run On Failure Keyword Only Called Once
     [Setup]  Prefer Custom Keywords

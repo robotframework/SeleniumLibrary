@@ -1,0 +1,30 @@
+*** Settings ***
+Suite Setup     Run Keywords  Prefer Custom Keywords  Open Browser To Front Page
+Suite Teardown  Run Keywords  Close Browser  Set Debug Loglevel  Restore Old Search Order
+Test Teardown   Register Keyword To Run On Failure  Nothing
+Resource        ../resource.txt
+Library         CustomSeleniumKeywords
+
+*** Test Cases ***
+Run On Failure Keyword Only Called Once
+    Set Test Variable    ${ON FAIL COUNT}    ${0}
+    Register Keyword To Run On Failure    On Fail
+    Run Keyword And Ignore Error    Custom Selenium Keyword
+    Should Be Equal    ${ON FAIL COUNT}    ${1}    On Failure Keyword called ${ON FAIL COUNT} times.
+
+*** Variables ***
+${old order}
+
+*** Keywords ***
+On Fail
+    ${count}=    Evaluate    ${ON FAIL COUNT} + 1
+    Set Test Variable    ${ON FAIL COUNT}    ${count}
+
+Prefer Custom Keywords
+    ${old order}=  Set Library Search Order  CustomSeleniumKeywords
+
+Restore Old Search Order
+    Set Library Search Order  ${old order}
+
+Open Browser To Front Page
+    Open Browser  ${FRONT PAGE}
