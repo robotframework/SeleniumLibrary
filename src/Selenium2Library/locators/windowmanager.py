@@ -68,7 +68,7 @@ class WindowManager(object):
             try:
                 start_handle = browser.get_current_window_handle()
             except NoSuchWindowException:
-                 raise AssertionError("No current window. where are you to make a popup window?")
+                 raise AssertionError("No current window. where are you making a popup window?")
             if len(handles) < 2 or handles[-1] == start_handle:
                raise AssertionError("No new window found to switch to")
             browser.switch_to_window(handles[-1])
@@ -111,10 +111,13 @@ class WindowManager(object):
         return window_infos
 
     def _select_matching(self, browser, matcher, error):
-        starting_handle = browser.get_current_window_handle()
+        try:
+            starting_handle = browser.get_current_window_handle()
+        except NoSuchWindowException: pass
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
             if matcher(browser.get_current_window_info()):
                 return
-        browser.switch_to_window(starting_handle)
+        if starting_handle:
+            browser.switch_to_window(starting_handle)
         raise ValueError(error)

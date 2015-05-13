@@ -6,6 +6,7 @@ from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
 from keywordgroup import KeywordGroup
+from selenium.common.exceptions import NoSuchWindowException
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
@@ -289,10 +290,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._current_browser().switch_to_frame(element)
 
     def select_window(self, locator=None):
-        """Selects the window found with `locator` as the context of actions.
-        locator value may be name, title, special string or window handle(s).
-        return value is current window handle if it exists before select else None.
-        The returned window handle could be used as locator to switch back to that window.
+        """Selects the window matching locator and return previous window handle.
+        
+        locator: any of name, title, url, window handle, excluded handle's list, or special words.
+        return: either current window handle before selecting, or None if no current window.
         
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
@@ -304,11 +305,10 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         There are some special locators for searching target window:
         string 'main' (default): select the main window;
-        string 'current': just return current window handle;
-        a single window handle: directly select window by handle;
+        string 'current': only return current window handle;
         string 'new': select new opened window assuming it is last-position indexed (no iframe)
-        a past list of window handles: select new window by excluding past window handle list
-        See 'Get Window Handles' to get the past list of window handles 
+        excluded handle's list: select the first window not in the list
+        See 'List Windows' to get window handle list 
 
         It is also possible to specify the approach Selenium2Library should take
         to find a window by specifying a locator strategy:
@@ -326,11 +326,20 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         try:
             from_handle = self._current_browser().get_current_window_handle()
-        except NoSuchWindowException: pass 
+        except NoSuchWindowException:
+            from_handle = None
         self._window_manager.select(self._current_browser(), locator)
-        return from_handle if from_handle else None
+        return from_handle
 
-    def get_window_handles():
+    def close_window_and_switch_to(self, locator=None):
+        """Closes current window and then switch to the window matching given locator.
+        See 'Select Window' keyword for same locator requirement
+        """
+        self._current_browser().close()
+        self.select_window(locator)
+
+    def list_windows():
+        """Return all current window handles as a list"""
         return self._current_browser().get_window_handles()
 
     def unselect_frame(self):
