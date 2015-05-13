@@ -52,7 +52,7 @@ class WindowManager(object):
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
-        if criteria.lower() == "current":
+        if criteria.lower() == "self":
             return
         handles = browser.get_window_handles()
         if type(criteria) == list:
@@ -101,19 +101,20 @@ class WindowManager(object):
 
     def _get_window_infos(self, browser):
         window_infos = []
-        starting_handle = browser.get_current_window_handle()
+        start_handle = browser.get_current_window_handle()
         try:
             for handle in browser.get_window_handles():
                 browser.switch_to_window(handle)
                 window_infos.append(browser.get_current_window_info())
         finally:
-            browser.switch_to_window(starting_handle)
+            browser.switch_to_window(start_handle)
         return window_infos
 
     def _select_matching(self, browser, matcher, error):
         try:
             starting_handle = browser.get_current_window_handle()
-        except NoSuchWindowException: pass
+        except NoSuchWindowException:
+            starting_handle = None
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
             if matcher(browser.get_current_window_info()):
