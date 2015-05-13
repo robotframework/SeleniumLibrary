@@ -1,6 +1,7 @@
 import os
 from keywords import *
 from version import VERSION
+from utils import LibraryListener
 
 __version__ = VERSION
 
@@ -79,6 +80,25 @@ class Selenium2Library(
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
 
+    = Custom Locators =
+
+    If more complex lookups are required than what is provided through the default locators, custom lookup strategies can
+    be created. Using custom locators is a two part process. First, create a keyword that returns the WebElement
+    that should be acted on.
+
+    | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
+    |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+    |   | [Return] | ${retVal} |
+
+    This keyword is a reimplementation of the basic functionality of the `id` locator where `${browser}` is a reference
+    to the WebDriver instance and `${criteria}` is the text of the locator (i.e. everything that comes after the = sign).
+    To use this locator it must first be registered with `Add Location Strategy`.
+
+    Add Location Strategy  custom  Custom Locator Strategy
+
+    The first argument of `Add Location Strategy` specifies the name of the lookup strategy (which must be unique). After
+    registration of the lookup strategy, the usage is the same as other locators. See `Add Location Strategy` for more details.
+
     = Timeouts =
 
     There are several `Wait ...` keywords that take timeout as an
@@ -129,3 +149,4 @@ class Selenium2Library(
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
+        self.ROBOT_LIBRARY_LISTENER = LibraryListener()

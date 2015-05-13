@@ -28,6 +28,7 @@ Release Notes
 - 'Capture Screenshot' now attempts to create its containing directory if the directory
   specified in the filename does not exist.
 - 'Choose File' now fails if the file doesn't exist
+- Added new keywords 'Add Location Strategy' and 'Remove Location Strategy'
   [zephraph]
 
 - Added 'Get Window Position' and 'Set Window Position' keywords matching the
