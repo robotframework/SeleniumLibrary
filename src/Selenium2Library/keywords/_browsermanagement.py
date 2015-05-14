@@ -338,7 +338,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._current_browser().close()
         self.select_window(locator)
 
-    def list_windows():
+    def list_windows(self):
         """Return all current window handles as a list"""
         return self._current_browser().get_window_handles()
 
