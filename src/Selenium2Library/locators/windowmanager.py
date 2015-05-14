@@ -52,28 +52,28 @@ class WindowManager(object):
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
-        if criteria.lower() == "self":
-            return
-        handles = browser.get_window_handles()
         if type(criteria) == list:
-            for handle in handles:
+            for handle in browser.get_window_handles():
                 if handle not in criteria:
                     browser.switch_to_window(handle)
                     return
             raise ValueError("Unable to locate new window")
+        if criteria.lower() == "self":
+            return
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            browser.switch_to_window(handles[0])
+            browser.switch_to_window(browser.get_window_handles()[0])
             return
         if criteria.lower() == "new" or criteria.lower() == "popup":
             try:
                 start_handle = browser.get_current_window_handle()
             except NoSuchWindowException:
                  raise AssertionError("No current window. where are you making a popup window?")
+            handles = browser.get_window_handles()
             if len(handles) < 2 or handles[-1] == start_handle:
-               raise AssertionError("No new window found to switch to")
+               raise AssertionError("No new window found to select")
             browser.switch_to_window(handles[-1])
             return
-        for handle in handles:
+        for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
             if criteria == handle:
                 return
@@ -101,24 +101,20 @@ class WindowManager(object):
 
     def _get_window_infos(self, browser):
         window_infos = []
-        start_handle = browser.get_current_window_handle()
+        starting_handle = browser.get_current_window_handle()
         try:
             for handle in browser.get_window_handles():
                 browser.switch_to_window(handle)
                 window_infos.append(browser.get_current_window_info())
         finally:
-            browser.switch_to_window(start_handle)
+            browser.switch_to_window(starting_handle)
         return window_infos
 
     def _select_matching(self, browser, matcher, error):
-        try:
-            starting_handle = browser.get_current_window_handle()
-        except NoSuchWindowException:
-            starting_handle = None
+        starting_handle = browser.get_current_window_handle()
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
             if matcher(browser.get_current_window_info()):
                 return
-        if starting_handle:
-            browser.switch_to_window(starting_handle)
+        browser.switch_to_window(starting_handle)
         raise ValueError(error)

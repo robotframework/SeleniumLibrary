@@ -305,9 +305,9 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         There are some special locators for searching target window:
         string 'main' (default): select the main window;
-        string 'current': only return current window handle;
-        string 'new': select new opened window assuming it is last-position indexed (no iframe)
-        excluded handle's list: select the first window not in the list
+        string 'self': only return current window handle;
+        string 'new': select the last-indexed window assuming it is the newest opened window
+        list of window handle: select the first window not in the list
         See 'List Windows' to get window handle list 
 
         It is also possible to specify the approach Selenium2Library should take
@@ -331,7 +331,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._window_manager.select(self._current_browser(), locator)
         return from_handle
 
-    def close_window_and_switch_to(self, locator=None):
+    def close_window_and_select(self, locator=None):
         """Closes current window and then switch to the window matching given locator.
         See 'Select Window' keyword for same locator requirement
         """
