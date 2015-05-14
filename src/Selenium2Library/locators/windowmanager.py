@@ -52,27 +52,43 @@ class WindowManager(object):
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
+        if type(criteria) == list:
+            for handle in browser.get_window_handles():
+                if handle not in criteria:
+                    browser.switch_to_window(handle)
+                    return
+            raise ValueError("Unable to locate new window")
+        if criteria.lower() == "self":
+            return
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            browser.switch_to_window('')
+            browser.switch_to_window(browser.get_window_handles()[0])
             return
-
-        try:
-            self._select_by_name(browser, criteria)
+        if criteria.lower() == "new" or criteria.lower() == "popup":
+            try:
+                start_handle = browser.get_current_window_handle()
+            except NoSuchWindowException:
+                 raise AssertionError("No current window. where are you making a popup window?")
+            handles = browser.get_window_handles()
+            if len(handles) < 2 or handles[-1] == start_handle:
+               raise AssertionError("No new window found to select")
+            browser.switch_to_window(handles[-1])
             return
-        except ValueError: pass
-
-        try:
-            self._select_by_title(browser, criteria)
-            return
-        except ValueError: pass
-
-        raise ValueError("Unable to locate window with name or title '" + criteria + "'")
+        for handle in browser.get_window_handles():
+            browser.switch_to_window(handle)
+            if criteria == handle:
+                return
+            for item in browser.get_current_window_info()[2:4]:
+                if item.strip().lower() == criteria.lower():
+                    return
+        raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
 
     # Private
 
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
+        if type(locator) == list:
+            return (prefix, criteria)
         if locator is not None and len(locator) > 0:
             locator_parts = locator.partition('=')        
             if len(locator_parts[1]) > 0:
