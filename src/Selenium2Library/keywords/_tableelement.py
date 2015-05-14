@@ -46,6 +46,88 @@ class _TableElementKeywords(KeywordGroup):
         raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
             % (table_locator, str(row), str(column)))
 
+    def get_table_rows(self, table_locator, loglevel='INFO'):
+        """add by qitao016. 20131115
+        get_table_rows: return the rows of the table.
+        """
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            return len(rows)
+        self.log_source(loglevel)
+        raise AssertionError("Table %s could not be found." % table_locator)
+
+    def get_table_cols_at_row(self, table_locator, row, loglevel='INFO'):
+        """add by qitao016. 20131115
+        get_table_cols_at_row: return the cols of the table in one row.
+        """
+        row = int(row)
+        row_index = row - 1
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                return len(columns)
+        raise AssertionError("Cell in Table %s in row #%s could not be found." % (table_locator, str(row)))		
+
+    def get_index_in_table_column(self, table_locator, col, expected, loglevel='INFO'):
+        """add by Adam Wu CSS version. get content's index in a specific column contains `content`.
+
+        Row and column number start from 1. Header and footer rows are
+        included in the count. However, the header and footer content
+        will not be matched against 'expected'.
+
+        See `Page Should Contain Element` for explanation about `loglevel` argument.
+        """
+        has_head=0
+        element = self._table_element_finder.find_by_header(self._current_browser(), table_locator, None)
+        if element is not None:
+            has_head = 1
+        index = self._table_element_finder.find_in_col(self._current_browser(), table_locator, col, expected)
+        if index <= 0:
+            self.log_source(loglevel)
+            raise AssertionError("Column #%s in table identified by '%s' "
+                   "should have contained text '%s'."
+                   % (col, table_locator, expected))
+        return index+has_head
+
+    def get_index_in_table_row(self, table_locator, row, expected, loglevel='INFO'):
+        """added by Adam Wu. Get content's index in a specific table row contains `content`.
+
+        Row and column number start from 1. Header and footer rows are
+        included in the count. This means that also cell content from
+        header or footer rows can be obtained with this keyword. To
+        understand how tables are identified, please take a look at
+        the `introduction`.
+
+        See `Page Should Contain Element` for explanation about `loglevel` argument.
+        """
+        row = int(row)
+        row_index = row - 1
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                column_index = 0
+                for element in columns:
+                    column_index = column_index + 1
+                    element_text = element.text
+                    if element_text and expected in element_text:
+                        return column_index
+        self.log_source(loglevel)
+        raise AssertionError("%s could not be found in row #%s of table %s."
+            % (expected, str(row), table_locator))
+
     def table_cell_should_contain(self, table_locator, row, column, expected, loglevel='INFO'):
         """Verifies that a certain cell in a table contains `expected`.
 
