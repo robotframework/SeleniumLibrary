@@ -3,6 +3,14 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+- Added 'Close Window And Select' to simplify 'Close Window' + 'Select Window'.
+  Added 'List Windows' to return a list of all current handles.
+  Enhanced 'Select Window' to select new window by excluding a list of window handles
+  (the strict way), or by special locator 'new' (the simplified but less strict way)
+  Enhanced 'Select Window' to accept window handle as locator, and special locator
+  'self' to return current window handle.
+  [divfor]
+
 - Corrected error message in new keyword 'Wait Until Element Is Not
   Visible' to reflect element being visible instead of not visible.
   [joepurdy]
