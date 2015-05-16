@@ -4,9 +4,11 @@
     <script type="text/javascript">
     function modifyAfterDelay() {
         setTimeout('addElement()', 1000)
+        setTimeout('removeElement()', 1000)
         setTimeout('changeContent()', 1000)
         setTimeout('changeTitle()', 1000)
         setTimeout('unhideContent()', 1000)
+        setTimeout('enableContent()', 1000)
     }
     
     function addElement() {
@@ -15,7 +17,11 @@
       div.innerHTML = 'New Element'
       document.getElementById("container").appendChild(div)
     }
-    
+
+    function removeElement() {
+      document.getElementById("not_present").remove()
+    }
+
     function changeTitle() {
         document.title = "Changed"
         document.bgColor = '#FF00FF'
@@ -28,12 +34,17 @@
     function unhideContent() {
         document.getElementById("hidden").style.display = "block"
     }
+    function enableContent() {
+        document.getElementById("disabled").disabled = false;
+    }
     </script>
     </head>
     
     <body onload="modifyAfterDelay()">
     <div id="content">This is content</div>
     <div id="container"></div>
+    <div id="not_present">Element that should disappear</div>
     <div id="hidden" style="display:none;">Inititally hidden content</div>
+    <button id="disabled" disabled>Inititally disabled content</button>
     </body>
 </html>
