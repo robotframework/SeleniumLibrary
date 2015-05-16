@@ -41,7 +41,6 @@ Get and Set Window Size
   Should Be Equal  ${returned_width}  ${win_width}
   Should Be Equal  ${returned_height}  ${win_height}
 
-
 Get and Set Window Position
   ${position_x}=  Set Variable  ${100}
   ${position_y}=  Set Variable  ${100}
@@ -49,6 +48,39 @@ Get and Set Window Position
   ${returned_x}  ${returned_y}=  Get Window Position
   Should Be Equal  ${position_x}  ${returned_x}
   Should Be Equal  ${position_y}  ${returned_y}
+
+Select Window By Handle
+  Cannot Be Executed in IE
+  Click Link  my popup
+  ${parent}=  Select Window  Original
+  Title Should Be  Original
+  ${child}=  Select Window  ${parent}
+  Title Should Be  Click link to show a popup window
+  Select Window  ${child}
+  Close Window
+  ${FromWindow}=  Select Window  ${parent}
+  Title Should Be  Click link to show a popup window
+  Should Be True  ${FromWindow} == None
+
+Select Popup Window By Excluded List
+  Cannot Be Executed in IE
+  @{excluded_handle_list}=  List Windows
+  Click Link  my popup
+  ${parent}=  Select Window  ${excluded_handle_list}
+  Title Should Be  Original
+  Close Window
+  Select Window  ${parent}
+  Title Should Be  Click link to show a popup window
+
+Select Window By Special Locator
+  Cannot Be Executed in IE
+  ${start}=  Select Window  self
+  Click Link  my popup
+  ${parent}=  Select Window  new
+  Title Should Be  Original
+  Should Be True  '${start}' == '${parent}'
+  Close Window And Select  main
+  Title Should Be  Click link to show a popup window
 
 
 *Keywords*

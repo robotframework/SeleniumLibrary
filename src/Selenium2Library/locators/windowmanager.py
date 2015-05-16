@@ -52,7 +52,7 @@ class WindowManager(object):
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
-        if type(criteria) == list:
+        if isinstance(criteria, list):
             for handle in browser.get_window_handles():
                 if handle not in criteria:
                     browser.switch_to_window(handle)
@@ -67,7 +67,7 @@ class WindowManager(object):
             try:
                 start_handle = browser.get_current_window_handle()
             except NoSuchWindowException:
-                 raise AssertionError("No current window. where are you making a popup window?")
+                 raise AssertionError("Currently no window focus. where are you making a popup window?")
             handles = browser.get_window_handles()
             if len(handles) < 2 or handles[-1] == start_handle:
                raise AssertionError("No new window found to select")

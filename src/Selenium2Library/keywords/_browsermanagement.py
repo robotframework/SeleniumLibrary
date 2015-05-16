@@ -325,18 +325,18 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Select Window |  | | # Chooses the main window again |
         """
         try:
-            from_handle = self._current_browser().get_current_window_handle()
+            return self._current_browser().get_current_window_handle()
         except NoSuchWindowException:
-            from_handle = None
-        self._window_manager.select(self._current_browser(), locator)
-        return from_handle
+            pass
+        finally:
+            self._window_manager.select(self._current_browser(), locator)
 
     def close_window_and_select(self, locator=None):
         """Closes current window and then switch to the window matching given locator.
         See 'Select Window' keyword for same locator requirement
         """
         self._current_browser().close()
-        self.select_window(locator)
+        return self.select_window(locator)
 
     def list_windows(self):
         """Return all current window handles as a list"""
