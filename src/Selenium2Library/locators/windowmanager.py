@@ -87,7 +87,7 @@ class WindowManager(object):
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
-        if type(locator) == list:
+        if isinstance(locator, list):
             return (prefix, criteria)
         if locator is not None and len(locator) > 0:
             locator_parts = locator.partition('=')        
