@@ -10,7 +10,7 @@ Resource          resource.robot
 
 *** Test Cases ***
 Popup Windows Created With Javascript
-    Cannot Be Executed in IE
+    #Cannot Be Executed in IE
     Cannot Be Executed In Chrome
     Open Popup Window, Select It And Verify    myName
     Do Action In Popup Window And Verify
