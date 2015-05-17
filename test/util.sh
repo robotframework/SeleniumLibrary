@@ -20,7 +20,6 @@ do
 done
 
 #fix resource.robot library name
-
 RES_FILES=`grep -Rl "resource.$OLD_EXT" *`
 
 for f in $RES_FILES
