@@ -3,6 +3,11 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+- Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
+  will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
+  issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
+  [divfor]
+  
 - Corrected error message in new keyword 'Wait Until Element Is Not
   Visible' to reflect element being visible instead of not visible.
   [joepurdy]
@@ -13,6 +18,12 @@ Release Notes
 - Added new keyword 'Wait Until Element Is Not Visible'.
   [deiga]
 
+- Added new keyword 'Element Should Not Contain'.
+  [molsky]
+
+- Added new keyword 'Wait Until Page Does Not Contain Element'.
+  [molsky]
+
 - Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
   [IlfirinPL]
 
@@ -20,7 +31,9 @@ Release Notes
   known browser and python version noncritical. Also added a noncritical case to the
   travis config for situations where testing is failing on travis for an unknown reason.
 - 'Capture Screenshot' now attempts to create its containing directory if the directory
-  specified in the filename does not exist. 
+  specified in the filename does not exist.
+- 'Choose File' now fails if the file doesn't exist
+- Added new keywords 'Add Location Strategy' and 'Remove Location Strategy'
   [zephraph]
 
 - Added 'Get Window Position' and 'Set Window Position' keywords matching the
