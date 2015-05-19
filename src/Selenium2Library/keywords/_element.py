@@ -385,11 +385,11 @@ class _ElementKeywords(KeywordGroup):
     def drag_and_drop_by_offset(self, source, xoffset, yoffset):
         """Drags element identified with `source` which is a locator.
 
-        Element will be moved by xoffset and yoffset.  each of which is a
+        Element will be moved by xoffset and yoffset, each of which is a
         negative or positive number specify the offset.
 
         Examples:
-        | Drag And Drop | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
+        | Drag And Drop By Offset | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
         """
         src_elem = self._element_find(source, True, True)
         ActionChains(self._current_browser()).drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
