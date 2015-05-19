@@ -3,6 +3,42 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+- Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
+  will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
+  issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
+  [divfor]
+  
+- Corrected error message in new keyword 'Wait Until Element Is Not
+  Visible' to reflect element being visible instead of not visible.
+  [joepurdy]
+
+- Stop using private browsing with default Firefox profile.
+  [ombre42]
+
+- Added new keyword 'Wait Until Element Is Not Visible'.
+  [deiga]
+
+- Added new keyword 'Element Should Not Contain'.
+  [molsky]
+
+- Added new keyword 'Wait Until Page Does Not Contain Element'.
+  [molsky]
+
+- Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
+  [IlfirinPL]
+
+- Edited acceptance test scripts to automatically make known issues for the currently
+  known browser and python version noncritical. Also added a noncritical case to the
+  travis config for situations where testing is failing on travis for an unknown reason.
+- 'Capture Screenshot' now attempts to create its containing directory if the directory
+  specified in the filename does not exist.
+- 'Choose File' now fails if the file doesn't exist
+- Added new keywords 'Add Location Strategy' and 'Remove Location Strategy'
+  [zephraph]
+
+- Added 'Get Window Position' and 'Set Window Position' keywords matching the
+  Selenium functionality.
+  [ktarasz]
 
 1.6
 ---
@@ -15,7 +51,7 @@ Release Notes
 
 - Fixed issue where the browser failed to properly register if 'Open Browser'
   did not complete.
-  [Mika Batsman][elizaleong][emanlove] 
+  [Mika Batsman][elizaleong][emanlove]
 
 - Added support for negative indices for rows and columns in table-related
   keywords.
@@ -25,7 +61,7 @@ Release Notes
   prefix 'partial link'.
   [lina1]
 
-- Added new keyword 'Clear Element Text' for clearing the text of text entry 
+- Added new keyword 'Clear Element Text' for clearing the text of text entry
   elements.
   [emanlove]
 
@@ -85,7 +121,7 @@ continuous integration builds to go green by fixing internal tests.
 - Raise exception in selecting non-existing item in list. Error handling varies
   between single-select and multi-select lists. See keyword documentation for
   more information.
-  [adwu73][emanlove] 
+  [adwu73][emanlove]
 
 - Added 'Get Window Size' and 'Set Window Size' keywords matching the
   Selenium functionality.
@@ -98,11 +134,11 @@ continuous integration builds to go green by fixing internal tests.
 
 - Beautified README.rst.
   [j1z0][emanlove]
-  
+
 - Changed press key test to use Line Feed (\10) instead of
   Carriage Return (\13).
   [emanlove]
- 
+
 - Added new keyword 'Click Element At Coordinates'.
   [aaltat][pierreroth64][ombre42][emanlove]
 
@@ -153,7 +189,7 @@ continuous integration builds to go green by fixing internal tests.
   [emanlove]
 
 - Use Selenium's Select class within Selenium2Library's "Select *" keywords.
-  Optimization of certain "Select *" keywords to increase performance. 
+  Optimization of certain "Select *" keywords to increase performance.
   [emanlove] [schminitz]
 
 - Replace maximize current browser window from JS to webdriver.

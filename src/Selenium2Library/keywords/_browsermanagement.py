@@ -258,6 +258,26 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         return self._current_browser().set_window_size(width, height)
 
+    def get_window_position(self):
+        """Returns current window position as `x` then `y`.
+
+        Example:
+        | ${x} | ${y}= | Get Window Position |
+        """
+        position = self._current_browser().get_window_position()
+        return position['x'], position['y']
+
+    def set_window_position(self, x, y):
+        """Sets the position `x` and `y` of the current window to the specified values.
+
+        Example:
+        | Set Window Size | ${1000} | ${0}       |
+        | ${x} | ${y}= | Get Window Position |
+        | Should Be Equal | ${x}      | ${1000}   |
+        | Should Be Equal | ${y}      | ${0}      |
+        """
+        return self._current_browser().set_window_position(x, y)
+
     def select_frame(self, locator):
         """Sets frame identified by `locator` as current frame.
 

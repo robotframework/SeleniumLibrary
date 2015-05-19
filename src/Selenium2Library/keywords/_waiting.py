@@ -62,6 +62,27 @@ class _WaitingKeywords(KeywordGroup):
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, self._is_element_present, locator)
 
+    def wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` disappears from current page.
+
+        Fails if `timeout` expires before the element disappears. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait For Condition`,
+        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
+        Keyword Succeeds`.
+        """
+        def check_present():
+            present = self._is_element_present(locator)
+            if not present:
+                return
+            else:
+                return error or "Element '%s' did not disappear in %s" % (locator, self._format_timeout(timeout))
+        self._wait_until_no_error(timeout, check_present)
+
     def wait_until_element_is_visible(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is visible.
 
@@ -105,8 +126,34 @@ class _WaitingKeywords(KeywordGroup):
             elif visible is None:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
             else:
-                return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
+                return error or "Element '%s' was still visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_hidden)
+
+    def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
+        """Waits until element specified with `locator` is enabled.
+
+        Fails if `timeout` expires before the element is enabled. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains
+        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
+        Succeeds`.
+        """
+        def check_enabled():
+            element = self._element_find(locator, True, False)
+            if not element:
+                return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
+
+            enabled = not element.get_attribute("disabled")
+            if enabled:
+                return
+            else:
+                return error or "Element '%s' was not enabled in %s" % (locator, self._format_timeout(timeout))
+
+        self._wait_until_no_error(timeout, check_enabled)
 
     # Private
 

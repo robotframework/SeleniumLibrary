@@ -12,12 +12,15 @@ ROBOT_ARGS = [
     '--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
     '--outputdir', '%(outdir)s',
     '--variable', 'browser:%(browser)s',
+    '--variable', 'pyversion:%(pyVersion)s',
     '--escape', 'space:SP',
     '--report', 'none',
     '--log', 'none',
     #'--suite', 'Acceptance.Keywords.Textfields',
     '--loglevel', 'DEBUG',
     '--pythonpath', '%(pythonpath)s',
+    '--noncritical', 'known_issue_-_%(pyVersion)s',
+    '--noncritical', 'known_issue_-_%(browser)s',
 ]
 REBOT_ARGS = [
     '--outputdir', '%(outdir)s',
@@ -25,11 +28,14 @@ REBOT_ARGS = [
     '--escape', 'space:SP',
     '--critical', 'regression',
     '--noncritical', 'inprogress',
+    '--noncritical', 'known_issue_-_%(pyVersion)s',
+    '--noncritical', 'known_issue_-_%(browser)s',
 ]
-ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': env.SRC_DIR}
+ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': ':'.join((env.SRC_DIR, env.TEST_LIBS_DIR))}
 
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
+    ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
     start_http_server()
     runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':
