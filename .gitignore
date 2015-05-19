@@ -12,3 +12,4 @@ chromedriver.log
 
 dist
 build
+env
