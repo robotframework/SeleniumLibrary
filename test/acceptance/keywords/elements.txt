@@ -1,8 +1,25 @@
 *** Settings ***
-Suite Setup     Go To Page "links.html"
+Test Setup      Go To Page "links.html"
 Resource        ../resource.txt
 
 *** Test Cases ***
+Get Elements
+    @{links}=  Get WebElements  //div[@id="div_id"]/a
+    Length Should Be  ${links}  11
+
+More Get Elements
+    [Setup]  Go To Page "forms/prefilled_email_form.html"
+    @{checkboxes}=  Get WebElements  //input[@type="checkbox"]
+    Length Should Be  ${checkboxes}  2
+    :For   ${checkbox}  in  @{checkboxes}
+    \  Unselect Checkbox  ${checkbox}
+    :For   ${checkbox}  in  @{checkboxes}
+    \  Checkbox Should Not Be Selected  ${checkbox}
+    :For   ${checkbox}  in  @{checkboxes}
+    \  Select Checkbox  ${checkbox}
+    :For   ${checkbox}  in  @{checkboxes}
+    \  Checkbox Should Be Selected  ${checkbox}
+
 Assign Id To Element
     [Documentation]  Tests also Reload Page keyword.
     Page Should Not Contain Element  my id

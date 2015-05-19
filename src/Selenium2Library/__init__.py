@@ -33,13 +33,21 @@ class Selenium2Library(
     imported into your Robot test suite (see `importing` section), and the
     `Open Browser` keyword must be used to open a browser to the desired location.
 
-    = Locating elements =
+    **--- Note important change starting with Version 1.7.0 release ---**
+    = Locating or specifying elements =
 
     All keywords in Selenium2Library that need to find an element on the page
-    take an argument, `locator`. By default, when a locator value is provided,
-    it is matched against the key attributes of the particular element type.
-    For example, `id` and `name` are key attributes to all elements, and
-    locating elements is easy using just the `id` as a `locator`. For example::
+    take an argument, either a `locator` or now a `webelement`. `locator`
+    is a string that describes how to locate an element using a syntax
+    specifying different location strategies. `webelement` is a variable that
+    holds a WebElement instance, which is a representation of the element.
+
+    Using 'locator'
+    ---------------
+    By default, when a locator value is provided, it is matched against the
+    key attributes of the particular element type. For example, `id` and
+    `name` are key attributes to all elements, and locating elements is easy
+    using just the `id` as a `locator`. For example::
 
     Click Element  my_element
 
@@ -68,6 +76,17 @@ class Selenium2Library(
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
 
+    Using 'webelement'
+    ------------------
+    Starting with version 1.7 of the Selenium2Library, one can pass an argument
+    that contains a WebElement instead of a string locator. To get a WebElement,
+    use the new `Get WebElements` keyword.  For example:
+
+    | ${elem} =      | Get WebElements | id=my_element |
+    | Click Element  | ${elem} |                       |
+
+    Locating Tables, Table Rows, Columns, etc.
+    ------------------------------------------
     Table related keywords, such as `Table Should Contain`, work differently.
     By default, when a table locator value is provided, it will search for
     a table with the specified `id` attribute. For example:
