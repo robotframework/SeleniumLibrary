@@ -111,7 +111,13 @@ class _BrowserManagementKeywords(KeywordGroup):
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
         browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
-        browser.get(url)
+        try:
+            browser.get(url)
+        except:  
+            self._cache.register(browser, alias)
+            self._debug("Opened browser with session id %s but failed to open url '%s'"
+                        % (browser.session_id, url))
+            raise
         self._debug('Opened browser with session id %s'
                     % browser.session_id)
         return self._cache.register(browser, alias)
@@ -252,6 +258,26 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         return self._current_browser().set_window_size(width, height)
 
+    def get_window_position(self):
+        """Returns current window position as `x` then `y`.
+
+        Example:
+        | ${x} | ${y}= | Get Window Position |
+        """
+        position = self._current_browser().get_window_position()
+        return position['x'], position['y']
+
+    def set_window_position(self, x, y):
+        """Sets the position `x` and `y` of the current window to the specified values.
+
+        Example:
+        | Set Window Size | ${1000} | ${0}       |
+        | ${x} | ${y}= | Get Window Position |
+        | Should Be Equal | ${x}      | ${1000}   |
+        | Should Be Equal | ${y}      | ${0}      |
+        """
+        return self._current_browser().set_window_position(x, y)
+
     def select_frame(self, locator):
         """Sets frame identified by `locator` as current frame.
 
@@ -335,7 +361,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Logs and returns the entire html source of the current page or frame.
 
         The `loglevel` argument defines the used log level. Valid log levels are
-        `WARN`, `INFO` (default), `DEBUG`, `TRACE` and `NONE` (no logging).
+        WARN, INFO (default), DEBUG, and NONE (no logging).
         """
         source = self.get_source()
         self._log(source, loglevel.upper())
@@ -412,7 +438,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         There are several `Wait ...` keywords that take timeout as an
         argument. All of these timeout arguments are optional. The timeout
         used by all of them can be set globally using this keyword.
-        See `introduction` for more information about timeouts.
+        See `Timeouts` for more information about timeouts.
 
         The previous timeout value is returned by this keyword and can
         be used to set the old value back later. The default timeout

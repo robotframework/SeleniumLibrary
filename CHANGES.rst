@@ -1,6 +1,89 @@
 Release Notes
 =============
 
+1.7 (unreleased)
+----------------
+- Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
+  will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
+  issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
+  [divfor]
+  
+- Corrected error message in new keyword 'Wait Until Element Is Not
+  Visible' to reflect element being visible instead of not visible.
+  [joepurdy]
+
+- Stop using private browsing with default Firefox profile.
+  [ombre42]
+
+- Added new keyword 'Wait Until Element Is Not Visible'.
+  [deiga]
+
+- Added new keyword 'Element Should Not Contain'.
+  [molsky]
+
+- Added new keyword 'Wait Until Page Does Not Contain Element'.
+  [molsky]
+
+- Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
+  [IlfirinPL]
+
+- Edited acceptance test scripts to automatically make known issues for the currently
+  known browser and python version noncritical. Also added a noncritical case to the
+  travis config for situations where testing is failing on travis for an unknown reason.
+- 'Capture Screenshot' now attempts to create its containing directory if the directory
+  specified in the filename does not exist.
+- 'Choose File' now fails if the file doesn't exist
+- Added new keywords 'Add Location Strategy' and 'Remove Location Strategy'
+  [zephraph]
+
+- Added 'Get Window Position' and 'Set Window Position' keywords matching the
+  Selenium functionality.
+  [ktarasz]
+
+1.6
+---
+- Added examples to 'Execute Javascript' and 'Execute Async Javascript'
+  keyword documentation.
+  [ombre42]
+
+- Added instructions to README.rst on how to manually install Selenium2Library.
+  [pekkaklarck]
+
+- Fixed issue where the browser failed to properly register if 'Open Browser'
+  did not complete.
+  [Mika Batsman][elizaleong][emanlove]
+
+- Added support for negative indices for rows and columns in table-related
+  keywords.
+  [eweitz]
+
+- Added strategy for locating elements by partial link text with locator
+  prefix 'partial link'.
+  [lina1]
+
+- Added new keyword 'Clear Element Text' for clearing the text of text entry
+  elements.
+  [emanlove]
+
+- Added new keyword 'Locator Should Match X Times' for validating number of
+  times a given locator appears.
+  [emanlove]
+
+- Fixed issue where 'Select Window’ with url strategy fails to locate window
+  [laulaz]
+
+- Fixed issue where a non-string assigned to window.id caused
+  'Select Window' and 'Get Window *' keywords to fail.
+  [ombre42]
+
+- Allow using key attributes (default strategy) when the locator contains
+  a '=' by using the prefix 'default='. Also make locator prefixes
+  space-insensitive.
+  [ombre42]
+
+A big thank you to [eweitz] and [HelioGuilherme66] for getting the
+continuous integration builds to go green by fixing internal tests.
+
 1.5
 ---
 - Copy Desired Capabilities before modifying to prevent affecting future
@@ -38,7 +121,7 @@ Release Notes
 - Raise exception in selecting non-existing item in list. Error handling varies
   between single-select and multi-select lists. See keyword documentation for
   more information.
-  [adwu73][emanlove] 
+  [adwu73][emanlove]
 
 - Added 'Get Window Size' and 'Set Window Size' keywords matching the
   Selenium functionality.
@@ -51,11 +134,11 @@ Release Notes
 
 - Beautified README.rst.
   [j1z0][emanlove]
-  
+
 - Changed press key test to use Line Feed (\10) instead of
   Carriage Return (\13).
   [emanlove]
- 
+
 - Added new keyword 'Click Element At Coordinates'.
   [aaltat][pierreroth64][ombre42][emanlove]
 
@@ -106,7 +189,7 @@ Release Notes
   [emanlove]
 
 - Use Selenium's Select class within Selenium2Library's "Select *" keywords.
-  Optimization of certain "Select *" keywords to increase performance. 
+  Optimization of certain "Select *" keywords to increase performance.
   [emanlove] [schminitz]
 
 - Replace maximize current browser window from JS to webdriver.

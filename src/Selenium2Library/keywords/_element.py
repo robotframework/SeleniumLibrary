@@ -1,13 +1,32 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.remote.webelement import WebElement
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
+from Selenium2Library.locators import CustomLocator
 from keywordgroup import KeywordGroup
+
+try:
+    basestring  # attempt to evaluate basestring
+    def isstr(s):
+        return isinstance(s, basestring)
+except NameError:
+    def isstr(s):
+        return isinstance(s, str)
 
 class _ElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._element_finder = ElementFinder()
+
+    # Public, get element(s)
+
+    def get_webelements(self, locator):
+        """Returns list of WebElement objects matching locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._element_find(locator, False, True)
 
     # Public, element lookups
 
@@ -54,6 +73,23 @@ class _ElementKeywords(KeywordGroup):
                           "its text was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
+    def element_should_not_contain(self, locator, expected, message=''):
+        """Verifies element identified by `locator` does not contain text `expected`.
+
+        `message` can be used to override the default error message.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `Element Should Contain` for more details.
+        """
+        self._info("Verifying element '%s' does not contain text '%s'."
+                   % (locator, expected))
+        actual = self._get_text(locator)
+        if expected in actual:
+            if not message:
+                message = "Element '%s' should not contain text '%s' but " \
+                          "it did." % (locator, expected)
+            raise AssertionError(message)
+
     def frame_should_contain(self, locator, text, loglevel='INFO'):
         """Verifies frame identified by `locator` contains `text`.
 
@@ -73,7 +109,9 @@ class _ElementKeywords(KeywordGroup):
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional `loglevel` argument.
-        Giving `NONE` as level disables logging.
+        Valid log levels are DEBUG, INFO (default), WARN, and NONE. If the
+        log level is NONE or below the current active log level the source
+        will not be logged.
         """
         if not self._page_contains(text):
             self.log_source(loglevel)
@@ -92,6 +130,24 @@ class _ElementKeywords(KeywordGroup):
         `introduction` for details about locating elements.
         """
         self._page_should_contain_element(locator, None, message, loglevel)
+
+    def locator_should_match_x_times(self, locator, expected_locator_count, message='', loglevel='INFO'):
+        """Verifies that the page contains the given number of elements located by the given `locator`.
+
+        See `introduction` for details about locating elements.
+
+        See `Page Should Contain Element` for explanation about `message` and
+        `loglevel` arguments.
+        """
+        actual_locator_count = len(self._element_find(locator, False, False))
+        if int(actual_locator_count) != int(expected_locator_count):
+            if not message:
+                message = "Locator %s should have matched %s times but matched %s times"\
+                            %(locator, expected_locator_count, actual_locator_count)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Current page contains %s elements matching '%s'."
+                   % (actual_locator_count, locator))
 
     def page_should_not_contain(self, text, loglevel='INFO'):
         """Verifies the current page does not contain `text`.
@@ -247,6 +303,14 @@ class _ElementKeywords(KeywordGroup):
         See `introduction` for details about locating elements.
         """
         return self._get_text(locator)
+
+    def clear_element_text(self, locator):
+        """Clears the text value of text entry element identified by `locator`.
+
+        See `introduction` for details about locating elements.
+        """
+        element = self._element_find(locator, True, True)
+        element.clear()
 
     def get_vertical_position(self, locator):
         """Returns vertical position of element identified by `locator`.
@@ -570,16 +634,53 @@ return !element.dispatchEvent(evt);
         self._info("Current page contains %s elements matching '%s'."
                    % (actual_xpath_count, xpath))
 
+    # Public, custom
+    def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
+        """Adds a custom location strategy based on a user keyword. Location strategies are
+        automatically removed after leaving the current scope by default. Setting `persist`
+        to any non-empty string will cause the location strategy to stay registered throughout
+        the life of the test.
+
+        Trying to add a custom location strategy with the same name as one that already exists will
+        cause the keyword to fail.
+
+        Custom locator keyword example:
+        | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
+        |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+        |   | [Return] | ${retVal} |
+
+        Usage example:
+        | Add Location Strategy | custom | Custom Locator Strategy |
+        | Page Should Contain Element | custom=my_id |
+
+        See `Remove Location Strategy` for details about removing a custom location strategy.
+        """
+        strategy = CustomLocator(strategy_name, strategy_keyword)
+        self._element_finder.register(strategy, persist)
+
+    def remove_location_strategy(self, strategy_name):
+        """Removes a previously added custom location strategy.
+        Will fail if a default strategy is specified.
+
+        See `Add Location Strategy` for details about adding a custom location strategy.
+        """
+        self._element_finder.unregister(strategy_name)
+
     # Private
 
     def _element_find(self, locator, first_only, required, tag=None):
         browser = self._current_browser()
-        elements = self._element_finder.find(browser, locator, tag)
-        if required and len(elements) == 0:
-            raise ValueError("Element locator '" + locator + "' did not match any elements.")
-        if first_only:
-            if len(elements) == 0: return None
-            return elements[0]
+        if isstr(locator):
+            elements = self._element_finder.find(browser, locator, tag)
+            if required and len(elements) == 0:
+                raise ValueError("Element locator '" + locator + "' did not match any elements.")
+            if first_only:
+                if len(elements) == 0: return None
+                return elements[0]
+        elif isinstance(locator, WebElement):
+            elements = locator
+        # do some other stuff here like deal with list of webelements
+        # ... or raise locator/element specific error if required
         return elements
 
     def _frame_contains(self, locator, text):
@@ -696,4 +797,3 @@ return !element.dispatchEvent(evt);
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
-

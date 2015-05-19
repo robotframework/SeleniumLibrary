@@ -1,33 +1,65 @@
 from Selenium2Library import utils
 from robot.api import logger
+from robot.utils import NormalizedDict
+from robot.libraries.BuiltIn import BuiltIn
+
 
 class ElementFinder(object):
 
     def __init__(self):
-        self._strategies = {
+        strategies = {
             'identifier': self._find_by_identifier,
             'id': self._find_by_id,
             'name': self._find_by_name,
             'xpath': self._find_by_xpath,
             'dom': self._find_by_dom,
             'link': self._find_by_link_text,
+            'partial link': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
-            None: self._find_by_default
+            'scLocator': self._find_by_sc_locator,
+            'default': self._find_by_default
         }
+        self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
+        self._default_strategies = strategies.keys()
 
     def find(self, browser, locator, tag=None):
         assert browser is not None
         assert locator is not None and len(locator) > 0
 
         (prefix, criteria) = self._parse_locator(locator)
+        prefix = 'default' if prefix is None else prefix
         strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
         (tag, constraints) = self._get_tag_and_constraints(tag)
         return strategy(browser, criteria, tag, constraints)
+
+    def register(self, strategy, persist):
+        if strategy.name in self._strategies:
+            raise AttributeError("The custom locator '" + strategy.name +
+            "' cannot be registered. A locator of that name already exists.")
+        self._strategies[strategy.name] = strategy.find
+
+        if not persist:
+            # Unregister after current scope ends
+            suite = BuiltIn().get_variable_value('${SUITE NAME}')
+            test  = BuiltIn().get_variable_value('${TEST NAME}', '')
+            scope =  suite + '.' + test if test != '' else suite
+            utils.events.on('scope_end', scope, self.unregister, strategy.name)
+
+    def unregister(self, strategy_name):
+        if strategy_name in self._default_strategies:
+            raise AttributeError("Cannot unregister the default strategy '" + strategy_name + "'")
+        elif strategy_name not in self._strategies:
+            logger.info("Cannot unregister the non-registered strategy '" + strategy_name + "'")
+        else:
+            del self._strategies[strategy_name]
+
+    def has_strategy(self, strategy_name):
+        return strategy_name in self.strategies
 
     # Strategy routines, private
 
@@ -70,6 +102,11 @@ class ElementFinder(object):
             browser.find_elements_by_link_text(criteria),
             tag, constraints)
 
+    def _find_by_partial_link_text(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
+            browser.find_elements_by_partial_link_text(criteria),
+            tag, constraints)
+
     def _find_by_css_selector(self, browser, criteria, tag, constraints):
         return self._filter_elements(
             browser.find_elements_by_css_selector(criteria),
@@ -79,6 +116,10 @@ class ElementFinder(object):
         return self._filter_elements(
             browser.find_elements_by_tag_name(criteria),
             tag, constraints)
+
+    def _find_by_sc_locator(self, browser, criteria, tag, constraints):
+        js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
+        return self._filter_elements([browser.execute_script(js)], tag, constraints)
 
     def _find_by_default(self, browser, criteria, tag, constraints):
         if criteria.startswith('//'):
@@ -119,6 +160,8 @@ class ElementFinder(object):
         tag = tag.lower()
         constraints = {}
         if tag == 'link':
+            tag = 'a'
+        if tag == 'partial link':
             tag = 'a'
         elif tag == 'image':
             tag = 'img'
@@ -179,7 +222,7 @@ class ElementFinder(object):
         if not locator.startswith('//'):
             locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0].strip().lower()
+                prefix = locator_parts[0]
                 criteria = locator_parts[2].strip()
         return (prefix, criteria)
 

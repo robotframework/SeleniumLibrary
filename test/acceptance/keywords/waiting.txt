@@ -17,9 +17,20 @@ Wait Until Page Contains Element
     Wait Until Page Contains Element  new div  2 seconds
     Run Keyword And Expect Error  Element '%cnon-existent' did not appear in 100 milliseconds  Wait Until Page Contains Element  %cnon-existent  0.1 seconds
 
+Wait Until Page Does Not Contain Element
+    [Documentation]  Tests also that format characters (e.g. %c) are handled correctly in error messages
+    Wait Until Page Does Not Contain Element  not_present  2 seconds
+    Run Keyword And Expect Error  Element 'content' did not disappear in 100 milliseconds  Wait Until Page Does Not Contain Element  content  0.1 seconds
+
 Wait Until Element Is Visible
     Run Keyword And Expect Error  Element 'hidden' was not visible in 100 milliseconds  Wait Until Element Is Visible  hidden  0.1
     Wait Until Element Is Visible  hidden  2 s
     Run Keyword And Expect Error  Element locator 'invalid' did not match any elements after 100 milliseconds  Wait Until Element Is Visible  invalid  0.1
     Run Keyword And Expect Error  User error message  Wait Until Element Is Visible  invalid  0.1  User error message
+
+Wait Until Element Is Enabled
+    Run Keyword And Expect Error  Element 'id=disabled' was not enabled in 100 milliseconds  Wait Until Element Is Enabled  id=disabled  0.1
+    Wait Until Element Is Enabled  id=disabled  2 s
+    Run Keyword And Expect Error  Element locator 'id=invalid' did not match any elements after 100 milliseconds  Wait Until Element Is Enabled  id=invalid  0.1
+    Run Keyword And Expect Error  User error message  Wait Until Element Is Enabled  id=invalid  0.1  User error message
 
