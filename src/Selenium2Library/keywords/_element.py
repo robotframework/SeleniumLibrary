@@ -482,11 +482,11 @@ return !element.dispatchEvent(evt);
 `key` is either a single character, or a numerical ASCII code of the key
 lead by '\\\\'.
 
-Examples:
-| Press Key | text_field   | q                |                                               |
-| Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
-| Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
-"""
+        Examples:
+        | Press Key | text_field   | q                |                                               |
+        | Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
+        | Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
+        """
         if key.startswith('\\\\') and len(key) > 1:
             key = getattr(Keys,key[2:])
         elif key.startswith('\\') and len(key) > 1:
@@ -500,21 +500,21 @@ Examples:
     def press_keys(self, locator, key=None, special_key1=None, special_key2=None):
         """Simulates user pressing a key and one or two special_keys simultaneously on element identified by `locator`.
 
-`key` is either a single character, or a numerical ASCII code of the key
-lead by '\\\\'.
+        `key` is either a single character, or a numerical ASCII code of the key
+        lead by '\\\\'.
 
-`special_key1` and `special_key2` are special key names defined at selenium.webdriver.common.keys.
+        `special_key1` and `special_key2` are special key names defined at selenium.webdriver.common.keys.
 
-Examples:
-| Press Keys | textarea     | a                | SHIFT      |
-| Press Keys | textarea     | ${NONE}          | END        |
-| Press Keys | textarea     | a                | CONTROL    |
-| Press Keys | textarea     | x                | CONTROL    |
-| Press Keys | textarea     | z                | CONTROL    |
-| Press Keys | textarea     | \\\\\\\\SHIFT    | CONTROL    | ARROW_UP  |
+        Examples:
+        | Press Keys | textarea     | a                | SHIFT      |
+        | Press Keys | textarea     | ${NONE}          | END        |
+        | Press Keys | textarea     | a                | CONTROL    |
+        | Press Keys | textarea     | x                | CONTROL    |
+        | Press Keys | textarea     | z                | CONTROL    |
+        | Press Keys | textarea     | \\\\\\\\SHIFT    | CONTROL    | ARROW_UP  |
 
-Reference: http://selenium-python.readthedocs.org/en/latest/search.html?q=shiftKeyDown&check_keywords=yes&area=default#module-selenium.webdriver.common.keys
-"""
+        Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-selenium.webdriver.common.keys
+        """
         if key == None and special_key1 == None:
             raise ValueError("Key and Special_Key values; '%s', '%s' are invalid.", key, special_key1)
         if key == None and len(special_key1) > 1:
