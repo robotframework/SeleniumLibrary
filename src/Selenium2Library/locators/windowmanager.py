@@ -24,7 +24,14 @@ class WindowManager(object):
 
     def select(self, browser, locator):
         assert browser is not None
-
+        if isinstance(locator, list):
+            self._select_by_excludes(browser, locator)
+            return
+        if locator.lower() == "self" or locator.lower() == "current":
+            return
+        if locator.lower() == "new" or locator.lower() == "popup":
+            self._select_by_last_index(browser)
+            return
         (prefix, criteria) = self._parse_locator(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:
@@ -52,26 +59,8 @@ class WindowManager(object):
             "Unable to locate window with URL '" + criteria + "'")
 
     def _select_by_default(self, browser, criteria):
-        if isinstance(criteria, list):
-            for handle in browser.get_window_handles():
-                if handle not in criteria:
-                    browser.switch_to_window(handle)
-                    return
-            raise ValueError("Unable to locate new window")
-        if criteria.lower() == "self":
-            return
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
             browser.switch_to_window(browser.get_window_handles()[0])
-            return
-        if criteria.lower() == "new" or criteria.lower() == "popup":
-            try:
-                start_handle = browser.get_current_window_handle()
-            except NoSuchWindowException:
-                 raise AssertionError("Currently no window focus. where are you making a popup window?")
-            handles = browser.get_window_handles()
-            if len(handles) < 2 or handles[-1] == start_handle:
-               raise AssertionError("No new window found to select")
-            browser.switch_to_window(handles[-1])
             return
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
@@ -82,13 +71,29 @@ class WindowManager(object):
                     return
         raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
 
+    def _select_by_last_index(self, browser):
+        handles = browser.get_window_handles()
+        try:
+            if handles[-1] == browser.get_current_window_handle():
+                raise AssertionError("Unable to get new window from last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}'")
+        except IndexError:
+            raise AssertionError("No window found")
+        except NoSuchWindowException:
+            raise AssertionError("Currently no focus window. where are you making a popup window?")
+        browser.switch_to_window(handles[-1])
+
+    def _select_by_excludes(self, browser, excludes):
+        for handle in browser.get_window_handles():
+            if handle not in excludes:
+                browser.switch_to_window(handle)
+                return
+        raise ValueError("Unable to locate new window")
+
     # Private
 
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
-        if isinstance(locator, list):
-            return (prefix, criteria)
         if locator is not None and len(locator) > 0:
             locator_parts = locator.partition('=')        
             if len(locator_parts[1]) > 0:
