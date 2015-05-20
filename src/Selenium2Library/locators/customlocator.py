@@ -19,7 +19,7 @@ class CustomLocator(object):
         elif hasattr(self.finder, '__caller__'):
             element = self.finder(*args)
         else:
-            raise AttributeError('Invalid type provided as a Custom Locator')
+            raise AttributeError('Invalid type provided for Custom Locator %s' % self.name)
 
         # Always return an array
         if hasattr(element, '__len__') and (not isinstance(element, string_type)):
