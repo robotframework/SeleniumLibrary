@@ -289,8 +289,11 @@ class _BrowserManagementKeywords(KeywordGroup):
         self._current_browser().switch_to_frame(element)
 
     def select_window(self, locator=None):
-        """Selects the window found with `locator` as the context of actions.
-
+        """Selects the window matching locator and return previous window handle.
+        
+        locator: any of name, title, url, window handle, excluded handle's list, or special words.
+        return: either current window handle before selecting, or None if no current window.
+        
         If the window is found, all subsequent commands use that window, until
         this keyword is used again. If the window is not found, this keyword fails.
         
@@ -299,7 +302,11 @@ class _BrowserManagementKeywords(KeywordGroup):
         javascript name of the window. If multiple windows with
         same identifier are found, the first one is selected.
 
-        Special locator `main` (default) can be used to select the main window.
+        There are some special locators for searching target window:
+        string 'main' (default): select the main window;
+        string 'self': only return current window handle;
+        string 'new': select the last-indexed window assuming it is the newest opened window
+        window list: select the first window not in given list (See 'List Windows' to get the list)
 
         It is also possible to specify the approach Selenium2Library should take
         to find a window by specifying a locator strategy:
@@ -315,7 +322,23 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Title Should Be | Popup Title |
         | Select Window |  | | # Chooses the main window again |
         """
-        self._window_manager.select(self._current_browser(), locator)
+        try:
+            return self._current_browser().get_current_window_handle()
+        except NoSuchWindowException:
+            pass
+        finally:
+            self._window_manager.select(self._current_browser(), locator)
+
+    def list_windows(self):
+        """Return all current window handles as a list"""
+        return self._current_browser().get_window_handles()
+
+    def close_window_and_select(self, locator=None):
+        """Closes current window and then switch to the window matching given locator.
+        See 'Select Window' keyword for same locator requirement
+        """
+        self._current_browser().close()
+        return self.select_window(locator)
 
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
