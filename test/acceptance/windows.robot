@@ -52,6 +52,17 @@ Get and Set Window Position
   Should Be Equal  ${position_x}  ${returned_x}
   Should Be Equal  ${position_y}  ${returned_y}
 
+Select Window By Title After Close Window
+    Cannot Be Executed in IE
+    Open Popup Window, Select It And Verify    myName
+    Close Popup Window And Select Main Window By Title
+
+Get Window Titles After Close Window
+    [Tags]    Known Issue - TravisCI
+    Cannot Be Executed in IE
+    Open Popup Window, Select It And Verify    myName
+    Close Window
+    ${titles}=    Get Window Titles
 
 ***Keywords***
 Open Popup Window, Select It And Verify
@@ -68,3 +79,7 @@ Select Main Window And Verify
 Do Action In Popup Window And Verify
   Click Link  change title
   Title Should Be  Changed
+
+Close Popup Window And Select Main Window By Title
+    Close Window
+    Select Window    title=Click link to show a popup window

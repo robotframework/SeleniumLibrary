@@ -1,13 +1,17 @@
 import os
 from fnmatch import fnmatch
 from browsercache import BrowserCache
+from librarylistener import LibraryListener
+import events
 
 __all__ = [
     "get_child_packages_in",
     "get_module_names_under",
     "import_modules_under",
     "escape_xpath_value",
-    "BrowserCache"
+    "BrowserCache",
+    "LibraryListener",
+    "events"
 ]
 
 # Public
@@ -18,7 +22,7 @@ def get_child_packages_in(root_dir, include_root_package_name=True, exclusions=N
     _discover_child_package_dirs(
         root_dir,
         _clean_exclusions(exclusions),
-        lambda abs_path, relative_path, name: 
+        lambda abs_path, relative_path, name:
             packages.append(root_package_str + relative_path.replace(os.sep, '.')))
     return packages
 
@@ -29,7 +33,7 @@ def get_module_names_under(root_dir, include_root_package_name=True, exclusions=
         root_dir,
         _clean_exclusions(exclusions),
         pattern if pattern is not None else "*.*",
-        lambda abs_path, relative_path, name: 
+        lambda abs_path, relative_path, name:
             module_names.append(root_package_str + os.path.splitext(relative_path)[0].replace(os.sep, '.')))
     return module_names
 
@@ -65,7 +69,7 @@ def _discover_child_package_dirs(root_dir, exclusions, callback, relative_dir=No
         item_abs_path = os.path.join(root_dir, item_relative_path)
         if os.path.isdir(item_abs_path):
             if os.path.exists(os.path.join(item_abs_path, "__init__.py")):
-                exclusion_matches = [ exclusion for exclusion in exclusions 
+                exclusion_matches = [ exclusion for exclusion in exclusions
                     if os.sep + item_relative_path.lower() + os.sep == exclusion ]
                 if not exclusion_matches:
                     callback(item_abs_path, item_relative_path, item)
