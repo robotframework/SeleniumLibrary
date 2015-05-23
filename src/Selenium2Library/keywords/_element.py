@@ -515,7 +515,7 @@ Examples:
 Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-selenium.webdriver.common.keys
 """
         if key == None and special_key1 == None:
-            raise ValueError("Key and Special_Key values; '%s', '%s' are invalid.", key, special_key1)
+            raise ValueError("Key and Special_Key values; '%s', '%s' are invalid." % (key, special_key1))
         if key == None and len(special_key1) > 1:
             key = '\\\\' + special_key1
             special_key1 = special_key2
@@ -530,13 +530,13 @@ Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-sele
             try:
                 special_key1 = self._map_named_key_code_to_special_key(special_key1)
             except:
-                raise ValueError("Special_Key1 value '%s' is invalid.", special_key1)
+                raise ValueError("Special_Key1 value '%s' is invalid." % (special_key1))
         
         if special_key2 != None and len(special_key2) > 0:
             try:
                 special_key2 = self._map_named_key_code_to_special_key(special_key2)
             except:
-                raise ValueError("Special_Key2 value '%s' is invalid.", special_key2)
+                raise ValueError("Special_Key2 value '%s' is invalid." % (special_key2))
  
         #select it
         element = self._element_find(locator, True, True)
@@ -805,77 +805,13 @@ Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-sele
         return key
 
     def _map_named_key_code_to_special_key(self, key_name):
-        map = {
-            'ADD': Keys.ADD,
-            'ALT': Keys.ALT,
-            'ARROW_DOWN': Keys.ARROW_DOWN,
-            'ARROW_LEFT': Keys.ARROW_LEFT,
-            'ARROW_RIGHT': Keys.ARROW_RIGHT,
-            'ARROW_UP': Keys.ARROW_UP,
-            'BACKSPACE': Keys.BACKSPACE,
-            'BACK_SPACE': Keys.BACK_SPACE,
-            'CANCEL': Keys.CANCEL,
-            'CLEAR': Keys.CLEAR,
-            'COMMAND': Keys.COMMAND,
-            'CONTROL': Keys.CONTROL,
-            'DECIMAL': Keys.DECIMAL,
-            'DELETE': Keys.DELETE,
-            'DIVIDE': Keys.DIVIDE,
-            'DOWN': Keys.DOWN,
-            'END': Keys.END,
-            'ENTER': Keys.ENTER,
-            'EQUALS': Keys.EQUALS,
-            'ESCAPE': Keys.ESCAPE,
-            'F1': Keys.F1,
-            'F2': Keys.F2,
-            'F3': Keys.F3,
-            'F4': Keys.F4,
-            'F5': Keys.F5,
-            'F6': Keys.F6,
-            'F7': Keys.F7,
-            'F8': Keys.F8,
-            'F9': Keys.F9,
-            'F10': Keys.F10,
-            'F11': Keys.F11,
-            'F12': Keys.F12,
-            'HELP': Keys.HELP,
-            'HOME': Keys.HOME,
-            'INSERT': Keys.INSERT,
-            'LEFT': Keys.LEFT,
-            'LEFT_ALT': Keys.LEFT_ALT,
-            'LEFT_CONTROL': Keys.LEFT_CONTROL,
-            'LEFT_SHIFT': Keys.LEFT_SHIFT,
-            'META': Keys.META,
-            'MULTIPLY': Keys.MULTIPLY,
-            'NULL': Keys.NULL,
-            'NUMPAD0': Keys.NUMPAD0,
-            'NUMPAD1': Keys.NUMPAD1,
-            'NUMPAD2': Keys.NUMPAD2,
-            'NUMPAD3': Keys.NUMPAD3,
-            'NUMPAD4': Keys.NUMPAD4,
-            'NUMPAD5': Keys.NUMPAD5,
-            'NUMPAD6': Keys.NUMPAD6,
-            'NUMPAD7': Keys.NUMPAD7,
-            'NUMPAD8': Keys.NUMPAD8,
-            'NUMPAD9': Keys.NUMPAD9,
-            'PAGE_DOWN': Keys.PAGE_DOWN,
-            'PAGE_UP': Keys.PAGE_UP,
-            'PAUSE': Keys.PAUSE,
-            'RETURN': Keys.RETURN,
-            'RIGHT': Keys.RIGHT,
-            'SEMICOLON': Keys.SEMICOLON,
-            'SEPARATOR': Keys.SEPARATOR,
-            'SHIFT': Keys.SHIFT,
-            'SPACE': Keys.SPACE,
-            'SUBTRACT': Keys.SUBTRACT,
-            'TAB': Keys.TAB,
-            'UP': Keys.UP
-        }
-        key = map.get(key_name)
-        if key is None:
-           raise
-        #    key = Keys.NULL
-        return key
+        try:
+           return getattr(Keys, key_name)
+        except:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
+        return Keys.NULL
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
