@@ -27,11 +27,12 @@ class WindowManager(object):
         if isinstance(locator, list):
             self._select_by_excludes(browser, locator)
             return
-        if locator.lower() == "self" or locator.lower() == "current":
-            return
-        if locator.lower() == "new" or locator.lower() == "popup":
-            self._select_by_last_index(browser)
-            return
+        if locator is not None:
+            if locator.lower() == "self" or locator.lower() == "current":
+                return
+            if locator.lower() == "new" or locator.lower() == "popup":
+                self._select_by_last_index(browser)
+                return
         (prefix, criteria) = self._parse_locator(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:

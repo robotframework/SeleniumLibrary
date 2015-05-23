@@ -6,6 +6,7 @@ from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
 from keywordgroup import KeywordGroup
+from selenium.common.exceptions import NoSuchWindowException
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
