@@ -24,10 +24,10 @@ class WindowManager(object):
 
     def select(self, browser, locator):
         assert browser is not None
-        if isinstance(locator, list):
-            self._select_by_excludes(browser, locator)
-            return
         if locator is not None:
+            if isinstance(locator, list):
+                self._select_by_excludes(browser, locator)
+                return
             if locator.lower() == "self" or locator.lower() == "current":
                 return
             if locator.lower() == "new" or locator.lower() == "popup":
