@@ -92,7 +92,8 @@ Select Window By Special Locator
   ${parent}=  Select Window  new
   Title Should Be  Original
   Should Be True  '${start}' == '${parent}'
-  Close Window And Select  main
+  Close Window
+  Select Window  main
   Title Should Be  Click link to show a popup window
 
 *Keywords*
