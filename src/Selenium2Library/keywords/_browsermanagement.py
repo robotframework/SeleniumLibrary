@@ -334,13 +334,6 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Return all current window handles as a list"""
         return self._current_browser().get_window_handles()
 
-    def close_window_and_select(self, locator=None):
-        """Closes current window and then switch to the window matching given locator.
-        See 'Select Window' keyword for same locator requirement
-        """
-        self._current_browser().close()
-        return self.select_window(locator)
-
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
         self._current_browser().switch_to_default_content()
