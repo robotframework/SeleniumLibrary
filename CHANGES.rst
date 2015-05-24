@@ -3,10 +3,9 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
-- Added keyword 'Close Window And Select' to simplify 'Close Window' + 'Select Window'.
 - Added keyword 'List Windows' to return a list of all window handles.
-- Enhanced 'Select Window' to return window handle, accept window handle as locator, 
-  and select new window by excluding a list of window handles (the strict way), or 
+- Enabled 'Select Window' to return window handle as well as accept it as locator, and
+  select new popup window by excluding previous window handles (the strict way) or 
   by special locator 'new' (the simplified but less strict way)
   [divfor]
 
