@@ -155,6 +155,52 @@ class _WaitingKeywords(KeywordGroup):
 
         self._wait_until_no_error(timeout, check_enabled)
 
+    def wait_until_element_contains(self, locator, text, timeout=None, error=None):
+        """Waits until given element contains `text`.
+
+        Fails if `timeout` expires before the text appears on given element. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains Element`, `Wait For Condition`,
+        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
+        Keyword Succeeds`.
+        """
+        element = self._element_find(locator, True, True)
+        def check_text():
+            actual = element.text
+            if text in actual:
+                return
+            else:
+                return error or "Text '%s' did not appear in %s to element '%s'. " \
+                            "Its text was '%s'." % (text, self._format_timeout(timeout), locator, actual)
+        self._wait_until_no_error(timeout, check_text)
+
+
+    def wait_until_element_does_not_contain(self, locator, text, timeout=None, error=None):
+        """Waits until given element does not contain `text`.
+
+        Fails if `timeout` expires before the text disappears from given element. See
+        `introduction` for more information about `timeout` and its
+        default value.
+
+        `error` can be used to override the default error message.
+
+        See also `Wait Until Page Contains`, `Wait Until Page Contains Element`, `Wait For Condition`,
+        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
+        Keyword Succeeds`.
+        """
+        element = self._element_find(locator, True, True)
+        def check_text():
+            actual = element.text
+            if not text in actual:
+                return
+            else:
+                return error or "Text '%s' did not disappear in %s from element '%s'." % (text, self._format_timeout(timeout), locator)
+        self._wait_until_no_error(timeout, check_text)
+
     # Private
 
     def _wait_until(self, timeout, error, function, *args):

@@ -24,6 +24,9 @@ Release Notes
 - Added new keyword 'Wait Until Page Does Not Contain Element'.
   [molsky]
 
+- Added new keywords 'Wait Until Element Contains' and 'Wait Until Element Does Not Contain'
+  [molsky]
+
 - Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
   [IlfirinPL]
 
