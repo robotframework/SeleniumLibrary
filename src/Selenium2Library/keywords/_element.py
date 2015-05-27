@@ -1,13 +1,32 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.remote.webelement import WebElement
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
+from Selenium2Library.locators import CustomLocator
 from keywordgroup import KeywordGroup
+
+try:
+    basestring  # attempt to evaluate basestring
+    def isstr(s):
+        return isinstance(s, basestring)
+except NameError:
+    def isstr(s):
+        return isinstance(s, str)
 
 class _ElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._element_finder = ElementFinder()
+
+    # Public, get element(s)
+
+    def get_webelements(self, locator):
+        """Returns list of WebElement objects matching locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._element_find(locator, False, True)
 
     # Public, element lookups
 
@@ -366,11 +385,11 @@ class _ElementKeywords(KeywordGroup):
     def drag_and_drop_by_offset(self, source, xoffset, yoffset):
         """Drags element identified with `source` which is a locator.
 
-        Element will be moved by xoffset and yoffset.  each of which is a
+        Element will be moved by xoffset and yoffset, each of which is a
         negative or positive number specify the offset.
 
         Examples:
-        | Drag And Drop | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
+        | Drag And Drop By Offset | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
         """
         src_elem = self._element_find(source, True, True)
         ActionChains(self._current_browser()).drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
@@ -459,15 +478,14 @@ return !element.dispatchEvent(evt);
 
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
+        `key` is either a single character, or a numerical ASCII code of the key
+        lead by '\\\\'.
 
-`key` is either a single character, or a numerical ASCII code of the key
-lead by '\\\\'.
-
-Examples:
-| Press Key | text_field   | q                |                                               |
-| Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
-| Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
-"""
+        Examples:
+        | Press Key | text_field   | q                |                                               |
+        | Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
+        | Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
+        """
         if key.startswith('\\\\') and len(key) > 1:
             key = getattr(Keys,key[2:])
         elif key.startswith('\\') and len(key) > 1:
@@ -478,6 +496,60 @@ Examples:
         #select it
         element.send_keys(key)
 
+    def press_keys(self, locator, key=None, special_key1=None, special_key2=None):
+        """Simulates user pressing a key and one or two special_keys simultaneously on element identified by `locator`.
+
+        `key` is either a single character, or a numerical ASCII code of the key
+        lead by '\\\\'.
+
+        `special_key1` and `special_key2` are special key names defined at selenium.webdriver.common.keys.
+
+        Examples:
+        | Press Keys | textarea     | a                | SHIFT      |
+        | Press Keys | textarea     | ${NONE}          | END        |
+        | Press Keys | textarea     | a                | CONTROL    |
+        | Press Keys | textarea     | x                | CONTROL    |
+        | Press Keys | textarea     | z                | CONTROL    |
+        | Press Keys | textarea     | \\\\\\\\SHIFT    | CONTROL    | ARROW_UP  |
+
+        Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-selenium.webdriver.common.keys
+        """
+        if key == None and special_key1 == None:
+            raise ValueError("Key and Special_Key values; '%s', '%s' are invalid." % (key, special_key1))
+        if key == None and len(special_key1) > 1:
+            key = '\\\\' + special_key1
+            special_key1 = special_key2
+            special_key2 = None
+
+        if key.startswith('\\\\') and len(key) > 1:
+            key = getattr(Keys,key[2:])
+        elif key.startswith('\\') and len(key) > 1:
+            key = self._map_ascii_key_code_to_key(int(key[1:]))
+
+        if special_key1 != None and len(special_key1) > 0:
+            try:
+                special_key1 = self._map_named_key_code_to_special_key(special_key1)
+            except:
+                raise ValueError("Special_Key1 value '%s' is invalid." % (special_key1))
+        
+        if special_key2 != None and len(special_key2) > 0:
+            try:
+                special_key2 = self._map_named_key_code_to_special_key(special_key2)
+            except:
+                raise ValueError("Special_Key2 value '%s' is invalid." % (special_key2))
+ 
+        #select it
+        element = self._element_find(locator, True, True)
+
+        if len(key) > 0 and special_key1 == None and special_key2 == None:
+            element.send_keys(key)
+            return
+        if len(key) > 0 and len(special_key1) > 0 and special_key2 == None:
+            ActionChains(self._current_browser()).key_down(special_key1, element).send_keys(key).key_up(special_key1, element).perform()
+            return
+        if len(key) > 0 and len(special_key1) > 0 and len(special_key2) > 0:
+            ActionChains(self._current_browser()).key_down(special_key1, element).key_down(special_key2, element).send_keys(key).key_up(special_key2, element).key_up(special_key1, element).perform()
+        
     # Public, links
 
     def click_link(self, locator):
@@ -582,6 +654,13 @@ Examples:
     def get_matching_xpath_count(self, xpath):
         """Returns number of elements matching `xpath`
 
+        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
+        
+        Correct:
+        | count = | Get Matching Xpath Count | //div[@id='sales-pop']
+        Incorrect:
+        | count = | Get Matching Xpath Count | xpath=//div[@id='sales-pop']
+
         If you wish to assert the number of matching elements, use
         `Xpath Should Match X Times`.
         """
@@ -590,6 +669,13 @@ Examples:
 
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
+
+        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
+        
+        Correct:
+        | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
+        Incorrect:
+        | Xpath Should Match X Times | xpath=//div[@id='sales-pop'] | 1
 
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
@@ -604,16 +690,53 @@ Examples:
         self._info("Current page contains %s elements matching '%s'."
                    % (actual_xpath_count, xpath))
 
+    # Public, custom
+    def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
+        """Adds a custom location strategy based on a user keyword. Location strategies are
+        automatically removed after leaving the current scope by default. Setting `persist`
+        to any non-empty string will cause the location strategy to stay registered throughout
+        the life of the test.
+
+        Trying to add a custom location strategy with the same name as one that already exists will
+        cause the keyword to fail.
+
+        Custom locator keyword example:
+        | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
+        |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+        |   | [Return] | ${retVal} |
+
+        Usage example:
+        | Add Location Strategy | custom | Custom Locator Strategy |
+        | Page Should Contain Element | custom=my_id |
+
+        See `Remove Location Strategy` for details about removing a custom location strategy.
+        """
+        strategy = CustomLocator(strategy_name, strategy_keyword)
+        self._element_finder.register(strategy, persist)
+
+    def remove_location_strategy(self, strategy_name):
+        """Removes a previously added custom location strategy.
+        Will fail if a default strategy is specified.
+
+        See `Add Location Strategy` for details about adding a custom location strategy.
+        """
+        self._element_finder.unregister(strategy_name)
+
     # Private
 
     def _element_find(self, locator, first_only, required, tag=None):
         browser = self._current_browser()
-        elements = self._element_finder.find(browser, locator, tag)
-        if required and len(elements) == 0:
-            raise ValueError("Element locator '" + locator + "' did not match any elements.")
-        if first_only:
-            if len(elements) == 0: return None
-            return elements[0]
+        if isstr(locator):
+            elements = self._element_finder.find(browser, locator, tag)
+            if required and len(elements) == 0:
+                raise ValueError("Element locator '" + locator + "' did not match any elements.")
+            if first_only:
+                if len(elements) == 0: return None
+                return elements[0]
+        elif isinstance(locator, WebElement):
+            elements = locator
+        # do some other stuff here like deal with list of webelements
+        # ... or raise locator/element specific error if required
         return elements
 
     def _frame_contains(self, locator, text):
@@ -681,6 +804,15 @@ Examples:
             key = chr(key_code)
         return key
 
+    def _map_named_key_code_to_special_key(self, key_name):
+        try:
+           return getattr(Keys, key_name)
+        except:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
+        return Keys.NULL
+
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
         if len(parts[0]) == 0:
@@ -730,4 +862,3 @@ Examples:
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
-

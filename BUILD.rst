@@ -66,6 +66,17 @@ To run just the unit tests, run::
 	python test/run_unit_tests.py
 
 
+Debugging Selenium2Library
+--------------------------
+
+In the course of debugging the Selenium2Library one might need to set a
+breakpoint using `pdb`_. Since Robot Framework hijacks the console output
+one should use the folowing code to redirect output back to stdout for
+debugging purposes.
+
+        import pdb,sys; pdb.Pdb(stdout=sys.__stdout__).set_trace()
+
+
 Testing Third-Party Packages
 ----------------------------
 
@@ -276,6 +287,7 @@ are parsed by the reStructuredText parser. To build them, run::
 	python doc/generate_readmes.py
 
 
+.. _pdb: http://docs.python.org/2/library/pdb.html
 .. _downloads section on GitHub: https://github.com/rtomac/robotframework-selenium2library/downloads
 .. _PyPI: http://pypi.python.org
 .. _.pypirc file: http://docs.python.org/distutils/packageindex.html#the-pypirc-file
