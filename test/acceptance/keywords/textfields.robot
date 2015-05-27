@@ -24,7 +24,7 @@ Input Password
 
 Press Key
     [Setup]    Go To Page "forms/login.html"
-    #Cannot Be Executed in IE
+    Cannot Be Executed in IE
     Input Text    username_field    James Bond
     Press Key    password_field    f
     Press Key    password_field    \\9

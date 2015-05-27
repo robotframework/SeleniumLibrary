@@ -85,28 +85,20 @@ class WindowManager(object):
 
     def _get_window_infos(self, browser):
         window_infos = []
-        try:
-            starting_handle = browser.get_current_window_handle()
-        except NoSuchWindowException:
-            starting_handle = None
+        starting_handle = browser.get_current_window_handle()
         try:
             for handle in browser.get_window_handles():
                 browser.switch_to_window(handle)
                 window_infos.append(browser.get_current_window_info())
         finally:
-            if starting_handle:
-                browser.switch_to_window(starting_handle)
+            browser.switch_to_window(starting_handle)
         return window_infos
 
     def _select_matching(self, browser, matcher, error):
-        try:
-            starting_handle = browser.get_current_window_handle()
-        except NoSuchWindowException:
-            starting_handle = None
+        starting_handle = browser.get_current_window_handle()
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
             if matcher(browser.get_current_window_info()):
                 return
-        if starting_handle:
-            browser.switch_to_window(starting_handle)
+        browser.switch_to_window(starting_handle)
         raise ValueError(error)

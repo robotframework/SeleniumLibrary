@@ -31,7 +31,7 @@ REBOT_ARGS = [
     '--noncritical', 'known_issue_-_%(pyVersion)s',
     '--noncritical', 'known_issue_-_%(browser)s',
 ]
-ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': ':'.join((env.SRC_DIR, env.TEST_LIBS_DIR))}
+ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': env.SRC_DIR}
 
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')

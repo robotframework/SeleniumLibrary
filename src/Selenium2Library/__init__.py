@@ -1,7 +1,6 @@
 import os
 from keywords import *
 from version import VERSION
-from utils import LibraryListener
 
 __version__ = VERSION
 
@@ -33,21 +32,13 @@ class Selenium2Library(
     imported into your Robot test suite (see `importing` section), and the
     `Open Browser` keyword must be used to open a browser to the desired location.
 
-    **--- Note important change starting with Version 1.7.0 release ---**
-    = Locating or specifying elements =
+    = Locating elements =
 
     All keywords in Selenium2Library that need to find an element on the page
-    take an argument, either a `locator` or now a `webelement`. `locator`
-    is a string that describes how to locate an element using a syntax
-    specifying different location strategies. `webelement` is a variable that
-    holds a WebElement instance, which is a representation of the element.
-
-    Using 'locator'
-    ---------------
-    By default, when a locator value is provided, it is matched against the
-    key attributes of the particular element type. For example, `id` and
-    `name` are key attributes to all elements, and locating elements is easy
-    using just the `id` as a `locator`. For example::
+    take an argument, `locator`. By default, when a locator value is provided,
+    it is matched against the key attributes of the particular element type.
+    For example, `id` and `name` are key attributes to all elements, and
+    locating elements is easy using just the `id` as a `locator`. For example::
 
     Click Element  my_element
 
@@ -76,17 +67,6 @@ class Selenium2Library(
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
 
-    Using 'webelement'
-    ------------------
-    Starting with version 1.7 of the Selenium2Library, one can pass an argument
-    that contains a WebElement instead of a string locator. To get a WebElement,
-    use the new `Get WebElements` keyword.  For example:
-
-    | ${elem} =      | Get WebElements | id=my_element |
-    | Click Element  | ${elem} |                       |
-
-    Locating Tables, Table Rows, Columns, etc.
-    ------------------------------------------
     Table related keywords, such as `Table Should Contain`, work differently.
     By default, when a table locator value is provided, it will search for
     a table with the specified `id` attribute. For example:
@@ -98,25 +78,6 @@ class Selenium2Library(
     | *Strategy* | *Example*                                                          | *Description*                     |
     | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
     | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
-
-    = Custom Locators =
-
-    If more complex lookups are required than what is provided through the default locators, custom lookup strategies can
-    be created. Using custom locators is a two part process. First, create a keyword that returns the WebElement
-    that should be acted on.
-
-    | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
-    |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
-    |   | [Return] | ${retVal} |
-
-    This keyword is a reimplementation of the basic functionality of the `id` locator where `${browser}` is a reference
-    to the WebDriver instance and `${criteria}` is the text of the locator (i.e. everything that comes after the = sign).
-    To use this locator it must first be registered with `Add Location Strategy`.
-
-    Add Location Strategy  custom  Custom Locator Strategy
-
-    The first argument of `Add Location Strategy` specifies the name of the lookup strategy (which must be unique). After
-    registration of the lookup strategy, the usage is the same as other locators. See `Add Location Strategy` for more details.
 
     = Timeouts =
 
@@ -168,4 +129,3 @@ class Selenium2Library(
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
-        self.ROBOT_LIBRARY_LISTENER = LibraryListener()
