@@ -478,9 +478,8 @@ return !element.dispatchEvent(evt);
 
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
-
-`key` is either a single character, or a numerical ASCII code of the key
-lead by '\\\\'.
+        `key` is either a single character, or a numerical ASCII code of the key
+        lead by '\\\\'.
 
         Examples:
         | Press Key | text_field   | q                |                                               |
@@ -516,34 +515,41 @@ lead by '\\\\'.
         Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-selenium.webdriver.common.keys
         """
         if key == None and special_key1 == None:
-            raise ValueError("Key and Special_Key values; '%s', '%s' are invalid.", key, special_key1)
+            raise ValueError("Key and Special_Key values; '%s', '%s' are invalid." % (key, special_key1))
         if key == None and len(special_key1) > 1:
-            mod_key = '\\\\' + special_key1
-            self.press_key(locator, mod_key)
-            return
+            key = '\\\\' + special_key1
+            special_key1 = special_key2
+            special_key2 = None
+
         if key.startswith('\\\\') and len(key) > 1:
             key = getattr(Keys,key[2:])
         elif key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
-        if len(key) > 1 and special_key1 == None:
-            self.press_key(self, locator, key)
-            return
 
-        if len(special_key1) > 1:
+        if special_key1 != None and len(special_key1) > 0:
             try:
                 special_key1 = self._map_named_key_code_to_special_key(special_key1)
             except:
-                ValueError("Special_Key1 value '%s' is invalid.", special_key1)
-        #self._info("Special Key is now '%s'." % special_key1)
-        if len(key) > 1 and special_key1 == None:
-            self.press_key(self, locator, key)
-            return
-        element = self._element_find(locator, True, True)
-        #select it
-        #ActionChains(driver).key_down(Keys.CONTROL).send_keys('c').key_up(Keys.CONTROL).perform()
-        ActionChains(self._current_browser()).key_down(special_key1, element).send_keys(key).key_up(special_key1, element).perform()
-
+                raise ValueError("Special_Key1 value '%s' is invalid." % (special_key1))
         
+        if special_key2 != None and len(special_key2) > 0:
+            try:
+                special_key2 = self._map_named_key_code_to_special_key(special_key2)
+            except:
+                raise ValueError("Special_Key2 value '%s' is invalid." % (special_key2))
+ 
+        #select it
+        element = self._element_find(locator, True, True)
+
+        if len(key) > 0 and special_key1 == None and special_key2 == None:
+            element.send_keys(key)
+            return
+        if len(key) > 0 and len(special_key1) > 0 and special_key2 == None:
+            ActionChains(self._current_browser()).key_down(special_key1, element).send_keys(key).key_up(special_key1, element).perform()
+            return
+        if len(key) > 0 and len(special_key1) > 0 and len(special_key2) > 0:
+            ActionChains(self._current_browser()).key_down(special_key1, element).key_down(special_key2, element).send_keys(key).key_up(special_key2, element).key_up(special_key1, element).perform()
+      
     # Public, links
 
     def click_link(self, locator):
@@ -799,17 +805,13 @@ lead by '\\\\'.
         return key
 
     def _map_named_key_code_to_special_key(self, key_name):
-        map = {
-            'SHIFT': Keys.SHIFT,
-            'SPACE': Keys.SPACE,
-            'SUBTRACT': Keys.SUBTRACT,
-            'TAB': Keys.TAB,
-            'UP': Keys.UP
-        }
-        key = map.get(key_name)
-        #if key is None:
-        #    key = Keys.NULL
-        return key
+        try:
+           return getattr(Keys, key_name)
+        except:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
+        return Keys.NULL
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')

@@ -1,6 +1,6 @@
 *** Settings ***
-Suite Setup     Go To Page "links.html"
-Resource        ../resource.robot
+Test Setup      Go To Page "links.html"
+Resource        ../resource.txt
 
 *** Test Cases ***
 Get Elements

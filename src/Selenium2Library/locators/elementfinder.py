@@ -1,6 +1,7 @@
 from Selenium2Library import utils
 from robot.api import logger
 from robot.utils import NormalizedDict
+from robot.libraries.BuiltIn import BuiltIn
 
 
 class ElementFinder(object):
@@ -21,6 +22,7 @@ class ElementFinder(object):
             'default': self._find_by_default
         }
         self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
+        self._default_strategies = strategies.keys()
 
     def find(self, browser, locator, tag=None):
         assert browser is not None
