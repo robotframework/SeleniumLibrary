@@ -3,6 +3,9 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+- Added 'read_alert_message' and 'handle_alert' to enhance the handling of alert messages.
+  [KingWarin]
+
 - Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
   will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
   issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
