@@ -129,16 +129,52 @@ class _JavaScriptKeywords(KeywordGroup):
         """
         return self._close_alert()
 
+    def read_alert_message(self):
+        """ Returns the text of current JavaScript alert without closing it.
+
+        This keyword will fail if no alert is present. Note that
+        following keywords will fail unless the alert is
+        dismissed by this keyword or another like `Get Alert Message`.
+        """
+        return self._read_alert()
+
+    def handle_alert(self, confirm=False):
+        """ Returns true if alert was confirmed, false if it was dismissed
+
+        This keyword will fail if no alert is present. Note that
+        following keywords will fail unless the alert is
+        dismissed by this keyword or another like `Get Alert Message`.
+        """
+        return self._handle_alert(confirm)
+
     # Private
 
     def _close_alert(self, confirm=False):
+        try:
+            text = self._read_alert()
+            alert = self._handle_alert(confirm)
+            return text
+        except WebDriverException:
+            raise RuntimeError('There were no alerts')
+
+    def _read_alert(self):
         alert = None
         try:
             alert = self._current_browser().switch_to_alert()
             text = ' '.join(alert.text.splitlines()) # collapse new lines chars
-            if not confirm: alert.dismiss()
-            else: alert.accept()
             return text
+        except WebDriverException:
+            raise RuntimeError('There were no alerts')
+
+    def _handle_alert(self, confirm=False):
+        try:
+            alert = self._current_browser().switch_to_alert()
+            if not confirm:
+                alert.dismiss()
+                return False
+            else:
+                alert.accept()
+                return True
         except WebDriverException:
             raise RuntimeError('There were no alerts')
 
