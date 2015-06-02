@@ -3,11 +3,14 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+- Added new keyword 'Wait Until Page Does Not Contain'.
+  [deiga]
+
 - Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
   will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
   issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
   [divfor]
-  
+
 - Corrected error message in new keyword 'Wait Until Element Is Not
   Visible' to reflect element being visible instead of not visible.
   [joepurdy]
