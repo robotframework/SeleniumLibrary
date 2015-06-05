@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-1.7 (unreleased)
+1.7 
 ----------------
 - Added keyword 'List Windows' to return a list of all window handles.
   [divfor]
