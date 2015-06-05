@@ -5,15 +5,18 @@ Release Notes
 ----------------
 - Added keyword 'List Windows' to return a list of all window handles.
 - Enabled 'Select Window' to return window handle as well as accept it as locator, and
-  select new popup window by excluding previous window handles (the strict way) or 
+  select new popup window by excluding previous window handles (the strict way) or
   by special locator 'new' (the simplified but less strict way)
   [divfor]
+
+- Added new keyword 'Wait Until Page Does Not Contain'.
+  [deiga]
 
 - Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
   will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
   issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
   [divfor]
-  
+
 - Corrected error message in new keyword 'Wait Until Element Is Not
   Visible' to reflect element being visible instead of not visible.
   [joepurdy]
@@ -28,6 +31,9 @@ Release Notes
   [molsky]
 
 - Added new keyword 'Wait Until Page Does Not Contain Element'.
+  [molsky]
+
+- Added new keywords 'Wait Until Element Contains' and 'Wait Until Element Does Not Contain'
   [molsky]
 
 - Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
