@@ -64,6 +64,10 @@ class WindowManager(object):
             handles = browser.get_window_handles()
             browser.switch_to_window(handles[0])
             return
+        try:
+            starting_handle = browser.get_current_window_handle()
+        except NoSuchWindowException:
+            starting_handle = None
         for handle in browser.get_window_handles():
             browser.switch_to_window(handle)
             if criteria == handle:
@@ -71,6 +75,8 @@ class WindowManager(object):
             for item in browser.get_current_window_info()[2:4]:
                 if item.strip().lower() == criteria.lower():
                     return
+        if starting_handle:
+            browser.switch_to_window(starting_handle)
         raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
     
     def _select_by_last_index(self, browser):
