@@ -61,7 +61,7 @@ class WindowManager(object):
 
     def _select_by_default(self, browser, criteria):
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            handles = browser.get_window_handles()[0]
+            handles = browser.get_window_handles()
             browser.switch_to_window(handles[0])
             return
         for handle in browser.get_window_handles():
