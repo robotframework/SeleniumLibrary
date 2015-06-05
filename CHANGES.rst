@@ -3,6 +3,7 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
+<<<<<<< HEAD
 - Added keyword 'List Windows' to return a list of all window handles.
   [divfor]
 
@@ -11,6 +12,8 @@ Release Notes
   by special locator 'new' (the simplified but less strict way).
   [divfor]
 
+=======
+>>>>>>> master
 - Added new keyword 'Wait Until Page Does Not Contain'.
   [deiga]
 
