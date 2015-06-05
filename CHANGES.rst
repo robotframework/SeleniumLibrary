@@ -3,17 +3,14 @@ Release Notes
 
 1.7 (unreleased)
 ----------------
-<<<<<<< HEAD
 - Added keyword 'List Windows' to return a list of all window handles.
   [divfor]
 
 - Enabled 'Select Window' to return window handle as well as accept it as locator, and
-  select new popup window by excluding previous window handles (the strict way) or 
+  select new popup window by excluding previous window handles (the strict way) or
   by special locator 'new' (the simplified but less strict way).
   [divfor]
 
-=======
->>>>>>> master
 - Added new keyword 'Wait Until Page Does Not Contain'.
   [deiga]
 
