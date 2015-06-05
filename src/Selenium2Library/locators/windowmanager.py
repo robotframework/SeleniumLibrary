@@ -77,7 +77,7 @@ class WindowManager(object):
         handles = browser.get_window_handles()
         try:
             if handles[-1] == browser.get_current_window_handle():
-                raise AssertionError("Unable to get new window from last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}'")
+                raise AssertionError("No new window at last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}' to find it.")
         except IndexError:
             raise AssertionError("No window found")
         except NoSuchWindowException:
