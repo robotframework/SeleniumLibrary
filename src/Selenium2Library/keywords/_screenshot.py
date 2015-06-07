@@ -23,7 +23,7 @@ class _ScreenshotKeywords(KeywordGroup):
 
         `index` with index argument it is possible to define custom filename
         but each time get unique screen capture. Example if pabot is used
-        to run multiple test suites in paraler and correct screenshots should
+        to run multiple test suites in paraller and correct screenshots should
         be copied to log, then it is possible to use `filename` and
         `index` argument to gether to create unique name for each screenshot.
 
