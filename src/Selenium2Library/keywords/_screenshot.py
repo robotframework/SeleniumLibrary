@@ -10,7 +10,7 @@ class _ScreenshotKeywords(KeywordGroup):
 
     # Public
 
-    def capture_page_screenshot(self, filename=None):
+    def capture_page_screenshot(self, filename=None, index=False):
         """Takes a screenshot of the current page and embeds it into the log.
 
         `filename` argument specifies the name of the file to write the
@@ -19,14 +19,22 @@ class _ScreenshotKeywords(KeywordGroup):
         the Robot Framework log file is written into. The `filename` is
         also considered relative to the same directory, if it is not
         given in absolute format. If an absolute or relative path is given
-        but the path does not exist it will be created. 
+        but the path does not exist it will be created.
 
-        `css` can be used to modify how the screenshot is taken. By default
-        the bakground color is changed to avoid possible problems with
-        background leaking when the page layout is somehow broken.
+        `index` with index argument it is possible to define custom filename
+        but each time get unique screen capture. Example if pabot is used
+        to run multiple test suites in paraler and correct screenshots should
+        be copied to log, then it is possible to use `filename` and
+        `index` argument to gether to create unique name for each screenshot.
+
+        Example:
+        | Open Browser | www.someurl.com | browser=${BROWSER} |
+        | Screen Capture | filename=${BROWSER}- | index=True |
+        | Screen Capture | filename=${BROWSER}- | index=True |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-1.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-2.png |
         """
-        path, link = self._get_screenshot_paths(filename)
-
+        path, link = self._get_screenshot_paths(filename, index=index)
         target_dir = os.path.dirname(path)
         if not os.path.exists(target_dir):
             try:
@@ -49,10 +57,14 @@ class _ScreenshotKeywords(KeywordGroup):
 
     # Private
 
-    def _get_screenshot_paths(self, filename):
+    def _get_screenshot_paths(self, filename, index=False):
         if not filename:
             self._screenshot_index += 1
             filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+        elif filename and index:
+            self._screenshot_index += 1
+            filename = filename.replace('/', os.sep) + \
+                str(self._screenshot_index) + '.png'
         else:
             filename = filename.replace('/', os.sep)
         logdir = self._get_log_dir()
