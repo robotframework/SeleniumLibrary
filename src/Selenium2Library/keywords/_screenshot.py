@@ -10,31 +10,39 @@ class _ScreenshotKeywords(KeywordGroup):
 
     # Public
 
-    def capture_page_screenshot(self, filename=None, index=False):
+    def capture_page_screenshot(self, filename=None, overwrite=False):
         """Takes a screenshot of the current page and embeds it into the log.
 
         `filename` argument specifies the name of the file to write the
-        screenshot into. If no `filename` is given, the screenshot is saved into file
-        `selenium-screenshot-<counter>.png` under the directory where
-        the Robot Framework log file is written into. The `filename` is
+        screenshot into. If no `filename` is given, the screenshot is
+        saved into file `selenium-screenshot-<counter>.png` under the directory
+        where the Robot Framework log file is written into. The `filename` is
         also considered relative to the same directory, if it is not
         given in absolute format. If an absolute or relative path is given
         but the path does not exist it will be created.
 
-        `index` with index argument it is possible to define custom filename
-        but each time get unique screen capture. Example if pabot is used
-        to run multiple test suites in paraller and correct screenshots should
-        be copied to log, then it is possible to use `filename` and
-        `index` argument to gether to create unique name for each screenshot.
+        With `overwrite` it is possible to define what is done if file already
+        exist. By default filename is not overwritten but new one is created
+        by adding <counter> in the end. Example if capture.png exist and
+        this is the first overwrite, then new file is created with name
+        capture-1.png
 
         Example:
         | Open Browser | www.someurl.com | browser=${BROWSER} |
-        | Screen Capture | filename=${BROWSER}- | index=True |
-        | Screen Capture | filename=${BROWSER}- | index=True |
+        | Screen Capture | filename=${BROWSER} |
+        | Screen Capture | filename=${BROWSER} |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
         | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-1.png |
-        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-2.png |
+        | Screen Capture |
+        | Screen Capture |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-3.png |
+        | Screen Capture | filename=${BROWSER}.png | overwrite=${True} |
+        | Screen Capture | filename=${BROWSER}.png | overwrite=${True} |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
+        | File Should Not Exist | ${OUTPUTDIR}${/}overwrite-${BROWSER}-4.png |
         """
-        path, link = self._get_screenshot_paths(filename, index=index)
+        path, link = self._get_screenshot_paths(filename, overwrite=overwrite)
         target_dir = os.path.dirname(path)
         if not os.path.exists(target_dir):
             try:
@@ -57,17 +65,30 @@ class _ScreenshotKeywords(KeywordGroup):
 
     # Private
 
-    def _get_screenshot_paths(self, filename, index=False):
+    def _get_screenshot_paths(self, filename, overwrite=False):
         if not filename:
             self._screenshot_index += 1
             filename = 'selenium-screenshot-%d.png' % self._screenshot_index
-        elif filename and index:
-            self._screenshot_index += 1
-            filename = filename.replace('/', os.sep) + \
-                str(self._screenshot_index) + '.png'
+        elif filename and not overwrite:
+            filename = self._screenshot_existence(filename.replace('/',
+                                                                   os.sep))
         else:
             filename = filename.replace('/', os.sep)
-        logdir = self._get_log_dir()
-        path = os.path.join(logdir, filename)
+        path, logdir = self._get_logdir_path(filename)
         link = robot.utils.get_link_path(path, logdir)
         return path, link
+
+    def _screenshot_existence(self, filename):
+        if os.path.exists(self._get_logdir_path(filename)[0]):
+            self._screenshot_index += 1
+            try:
+                return '-%s.png'.join(filename.rsplit('.png', 1)) \
+                    % self._screenshot_index
+            except TypeError:
+                return filename + '-%s' % self._screenshot_index
+        else:
+            return filename
+
+    def _get_logdir_path(self, filename):
+        logdir = self._get_log_dir()
+        return os.path.join(logdir, filename), logdir
