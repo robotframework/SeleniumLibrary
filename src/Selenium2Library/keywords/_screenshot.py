@@ -6,7 +6,7 @@ from robot.api import logger
 class _ScreenshotKeywords(KeywordGroup):
 
     def __init__(self):
-        self._screenshot_index = 0
+        self._screenshot_index = {}
 
     # Public
 
@@ -41,6 +41,14 @@ class _ScreenshotKeywords(KeywordGroup):
         | Screen Capture | filename=${BROWSER}.png | overwrite=${True} |
         | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
         | File Should Not Exist | ${OUTPUTDIR}${/}overwrite-${BROWSER}-4.png |
+
+        *NOTE:* The `overwrite` is ignored if `filename` is not defined
+        Example:
+        | Open Browser | www.someurl.com | browser=${BROWSER} |
+        | Screen Capture | overwrite=${True} | # overwrite is ignored |
+        | Screen Capture | overwrite=${True} | # overwrite is ignored |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
         """
         path, link = self._get_screenshot_paths(filename, overwrite=overwrite)
         target_dir = os.path.dirname(path)
@@ -67,8 +75,8 @@ class _ScreenshotKeywords(KeywordGroup):
 
     def _get_screenshot_paths(self, filename, overwrite=False):
         if not filename:
-            self._screenshot_index += 1
-            filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+            index = self._get_new_index('selenium-screenshot')
+            filename = 'selenium-screenshot-%d.png' % index
         elif filename and not overwrite:
             filename = self._screenshot_existence(filename.replace('/',
                                                                    os.sep))
@@ -80,15 +88,23 @@ class _ScreenshotKeywords(KeywordGroup):
 
     def _screenshot_existence(self, filename):
         if os.path.exists(self._get_logdir_path(filename)[0]):
-            self._screenshot_index += 1
+            index = self._get_new_index(filename)
             try:
-                return '-%s.png'.join(filename.rsplit('.png', 1)) \
-                    % self._screenshot_index
+                return '-%s.png'.join(filename.rsplit('.png', 1)) % index
             except TypeError:
-                return filename + '-%s' % self._screenshot_index
+                return filename + '-%s' % index
         else:
             return filename
 
     def _get_logdir_path(self, filename):
         logdir = self._get_log_dir()
         return os.path.join(logdir, filename), logdir
+
+    def _get_new_index(self, filename):
+        try:
+            index = self._screenshot_index[filename] + 1
+            self._screenshot_index[filename] = index
+            return index
+        except KeyError:
+            self._screenshot_index[filename] = 1
+            return 1
