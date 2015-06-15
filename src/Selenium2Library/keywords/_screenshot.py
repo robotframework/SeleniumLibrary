@@ -39,10 +39,10 @@ class _ScreenshotKeywords(KeywordGroup):
         | Capture Page Screenshot |
         | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
         | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
-        | Capture Page Screenshot | filename=${BROWSER}.png | overwrite=${True} |
-        | Capture Page Screenshot | filename=${BROWSER}.png | overwrite=${True} |
-        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
-        | File Should Not Exist | ${OUTPUTDIR}${/}overwrite-${BROWSER}-4.png |
+        | Capture Page Screenshot | filename=DefaultName.png | overwrite=${True} |
+        | Capture Page Screenshot | filename=DefaultName.png | overwrite=${True} |
+        | File Should Exist  | ${OUTPUTDIR}${/}DefaultName.png |
+        | File Should Not Exist | ${OUTPUTDIR}${/}DefaultName-1.png |
 
         *NOTE:* The `overwrite` is ignored if `filename` is not defined
         Example:
