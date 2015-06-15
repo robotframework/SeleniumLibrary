@@ -29,24 +29,26 @@ class _ScreenshotKeywords(KeywordGroup):
 
         Example:
         | Open Browser | www.someurl.com | browser=${BROWSER} |
-        | Screen Capture | filename=${BROWSER} |
-        | Screen Capture | filename=${BROWSER} |
+        | Capture Page Screenshot | filename=${BROWSER} |
+        | Capture Page Screenshot | filename=${BROWSER} |
+        | Capture Page Screenshot | filename=${BROWSER} |
         | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
         | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-1.png |
-        | Screen Capture |
-        | Screen Capture |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-2.png |
+        | Capture Page Screenshot |
+        | Capture Page Screenshot |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
         | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
-        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-3.png |
-        | Screen Capture | filename=${BROWSER}.png | overwrite=${True} |
-        | Screen Capture | filename=${BROWSER}.png | overwrite=${True} |
+        | Capture Page Screenshot | filename=${BROWSER}.png | overwrite=${True} |
+        | Capture Page Screenshot | filename=${BROWSER}.png | overwrite=${True} |
         | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
         | File Should Not Exist | ${OUTPUTDIR}${/}overwrite-${BROWSER}-4.png |
 
         *NOTE:* The `overwrite` is ignored if `filename` is not defined
         Example:
         | Open Browser | www.someurl.com | browser=${BROWSER} |
-        | Screen Capture | overwrite=${True} | # overwrite is ignored |
-        | Screen Capture | overwrite=${True} | # overwrite is ignored |
+        | Capture Page Screenshot | overwrite=${True} | # overwrite is ignored |
+        | Capture Page Screenshot | overwrite=${True} | # overwrite is ignored |
         | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
         | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
         """
