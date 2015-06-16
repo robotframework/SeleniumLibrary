@@ -50,12 +50,19 @@ class _ScreenshotKeywords(KeywordGroup):
     # Private
 
     def _get_screenshot_paths(self, filename):
+        logdir = self._get_log_dir()
+
         if not filename:
-            self._screenshot_index += 1
-            filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+            while True:
+                # if filename is not specified, don't overwrite images
+                self._screenshot_index += 1
+                filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+                path = os.path.join(logdir, filename)
+                if not os.path.exists(path):
+                    break
         else:
             filename = filename.replace('/', os.sep)
-        logdir = self._get_log_dir()
-        path = os.path.join(logdir, filename)
+            path = os.path.join(logdir, filename)
+
         link = robot.utils.get_link_path(path, logdir)
         return path, link
