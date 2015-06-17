@@ -1,6 +1,6 @@
 import os
 import sys
-from robot.variables import GLOBAL_VARIABLES
+from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 from keywordgroup import KeywordGroup
 
@@ -12,10 +12,11 @@ class _LoggingKeywords(KeywordGroup):
         logger.debug(message)
 
     def _get_log_dir(self):
-        logfile = GLOBAL_VARIABLES['${LOG FILE}']
+        variables = BuiltIn().get_variables()
+        logfile = variables['${LOG FILE}']
         if logfile != 'NONE':
             return os.path.dirname(logfile)
-        return GLOBAL_VARIABLES['${OUTPUTDIR}']
+        return variables['${OUTPUTDIR}']
 
     def _html(self, message):
         logger.info(message, True, False)
