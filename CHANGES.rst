@@ -1,7 +1,11 @@
 ﻿Release Notes
 =============
 
-1.7 
+1.7.1 (hotfix)
+----------------
+- Remove references to GLOBAL_VARIABLES for RF 2.9 compatibility
+
+1.7
 ----------------
 - Added keyword 'List Windows' to return a list of all window handles.
   [divfor]
