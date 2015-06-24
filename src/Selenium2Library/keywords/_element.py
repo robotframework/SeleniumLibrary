@@ -291,9 +291,9 @@ class _ElementKeywords(KeywordGroup):
         return element.location['x']
 
     def get_element_height(self, locator):
-        """Returns hight of element identified by `locator`.
+        """Returns height of element identified by `locator`.
             
-        The position is returned in pixels,as an integer.
+        The height is returned in pixels,as an integer.
         Fails if a matching element is not found.
         
         See also `Get Element Width`.
@@ -306,7 +306,7 @@ class _ElementKeywords(KeywordGroup):
     def get_element_width(self, locator):
         """Returns width of element identified by `locator`.
             
-        The position is returned in pixels,as an integer.
+        The width is returned in pixels,as an integer.
         Fails if a matching element is not found.
             
         See also `Get Element Height`.
