@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup       Go To Page "forms/named_submit_buttons.html"
-Resource         ../resource.txt
+Resource         ../resource.robot
 Library          OperatingSystem
 
 

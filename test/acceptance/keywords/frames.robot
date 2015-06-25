@@ -1,5 +1,5 @@
 *Setting*
-Resource  ../resource.txt
+Resource  ../resource.robot
 Test Setup  Go To Page "frames/frameset.html"
 Test Teardown  UnSelect Frame
 

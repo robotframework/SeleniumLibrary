@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup      Go To Page "forms/prefilled_email_form.html"
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Checkbox Should Be Selected

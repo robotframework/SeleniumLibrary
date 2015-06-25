@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup      Go To Page "mouse/index.html"
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Mouse Over

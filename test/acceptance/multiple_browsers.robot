@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Setup     Open Two Browsers And Register Indexes
 Suite Teardown  Close All Browsers
-Resource        resource.txt
+Resource        resource.robot
 
 *** Test Cases ***
 Last Opened Browser Should Be Active

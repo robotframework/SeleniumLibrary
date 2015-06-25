@@ -1,5 +1,5 @@
 *** Setting ***
-Resource          resource.txt
+Resource          resource.robot
 Force Tags        Regression
 
 *** Variables ***

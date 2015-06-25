@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Setup       Go To Page "javascript/click_at_coordinates.html"
 Test Setup        Initialize Page
-Resource          ../resource.txt
+Resource          ../resource.robot
 
 *** Test Cases ***
 Click Element At Coordinates

@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup        Go To Page "jquery.html"
-Resource          ../resource.txt
+Resource          ../resource.robot
 
 *** Test Cases ***
 Find By Id

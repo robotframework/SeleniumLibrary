@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup      Go To Page "javascript/delayed_events.html"
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Wait For Condition

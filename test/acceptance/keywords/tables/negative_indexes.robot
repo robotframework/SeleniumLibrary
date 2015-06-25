@@ -1,5 +1,5 @@
 *** Settings ***
-Resource        table_resource.txt
+Resource        table_resource.robot
 Documentation  Tests negative indexes in Robot keywords
 
 *** Test Cases ***

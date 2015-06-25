@@ -1,7 +1,7 @@
 *** Settings ***
 Test Setup      Go To Page "javascript/dynamic_content.html"
 Suite Teardown  Set Selenium Timeout  5 seconds
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Should Not Timeout If Callback Invoked Immediately

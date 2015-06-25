@@ -1,5 +1,5 @@
 *** Settings ***
-Resource        table_resource.txt
+Resource        table_resource.robot
 
 *** Test Cases ***
 Should Retrieve Text From Cell

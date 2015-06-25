@@ -5,7 +5,7 @@ Documentation  These tests must open own browser because windows opened by
 Suite Setup  Open Browser To Start Page Without Testing Default Options
 Test Setup  Go To Page "javascript/popupwindow.html"
 Suite Teardown  Close All Browsers
-Resource  resource.txt
+Resource  resource.robot
 
 *Test Cases*
 Popup Windows Created With Javascript
