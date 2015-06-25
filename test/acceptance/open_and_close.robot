@@ -1,5 +1,5 @@
 *** Settings ***
-Resource        resource.txt
+Resource        resource.robot
 Suite Teardown  Close All Browsers
 
 *** Test Cases ***

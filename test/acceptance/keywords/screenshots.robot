@@ -1,5 +1,5 @@
 *** Settings ***
-Resource     ../resource.txt
+Resource     ../resource.robot
 Suite Setup  Go To Page "links.html"
 
 

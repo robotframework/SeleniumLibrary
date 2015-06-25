@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup      Go To Page "forms/enabled_disabled_fields_form.html"
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Input Text

@@ -1,7 +1,7 @@
 *** Settings ***
 Test Setup      Go To Front Page
 Default Tags    assertions
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 
 *** Test Cases ***

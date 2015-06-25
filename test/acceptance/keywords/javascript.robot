@@ -1,6 +1,6 @@
 *** Settings ***
 Test Setup      Go To Page "javascript/dynamic_content.html"
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Clicking Elements Should Activate Javascript

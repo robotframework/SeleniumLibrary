@@ -1,7 +1,7 @@
 *** Settings ***
 Suite Setup      Go To Page "javascript/click.html"
 Test Setup       Initialize Page
-Resource        ../resource.txt
+Resource        ../resource.robot
 
 *** Test Cases ***
 Click Element
