@@ -64,7 +64,41 @@ Get Window Titles After Close Window
     Close Window
     ${titles}=    Get Window Titles
 
-***Keywords***
+Select Window By Handle
+  Cannot Be Executed in IE
+  Click Link  my popup
+  ${parent}=  Select Window  Original
+  Title Should Be  Original
+  ${child}=  Select Window  ${parent}
+  Title Should Be  Click link to show a popup window
+  Select Window  ${child}
+  Close Window
+  ${FromWindow}=  Select Window  ${parent}
+  Title Should Be  Click link to show a popup window
+  Should Be True  ${FromWindow} == None
+
+Select Popup Window By Excluded List
+  Cannot Be Executed in IE
+  @{excluded_handle_list}=  List Windows
+  Click Link  my popup
+  ${parent}=  Select Window  ${excluded_handle_list}
+  Title Should Be  Original
+  Close Window
+  Select Window  ${parent}
+  Title Should Be  Click link to show a popup window
+
+Select Window By Special Locator
+  Cannot Be Executed in IE
+  ${start}=  Select Window  self
+  Click Link  my popup
+  ${parent}=  Select Window  new
+  Title Should Be  Original
+  Should Be True  '${start}' == '${parent}'
+  Close Window
+  Select Window  main
+  Title Should Be  Click link to show a popup window
+
+*Keywords*
 Open Popup Window, Select It And Verify
   [Arguments]  ${window_id}
   Click Link  my popup
