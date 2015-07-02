@@ -12,8 +12,6 @@ class CustomLocator(object):
         self.finder = finder
 
     def find(self, *args):
-        print 'finder', self.finder
-        print 'name', self.name
 
         # Allow custom locators to be keywords or normal methods
         if isinstance(self.finder, string_type):
