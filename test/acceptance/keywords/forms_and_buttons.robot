@@ -1,7 +1,14 @@
 *** Settings ***
+<<<<<<< HEAD:test/acceptance/keywords/forms_and_buttons.robot
 Test Setup        Go To Page "forms/named_submit_buttons.html"
 Resource          ../resource.robot
 Library           OperatingSystem
+=======
+Test Setup       Go To Page "forms/named_submit_buttons.html"
+Resource         ../resource.robot
+Library          OperatingSystem
+
+>>>>>>> 46b68799c4970b004982f8a5a751ec384ef07af1:test/acceptance/keywords/forms_and_buttons.robot
 
 *** Variables ***
 ${FORM SUBMITTED}  forms/submit.html

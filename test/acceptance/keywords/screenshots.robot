@@ -1,6 +1,12 @@
 *** Settings ***
+<<<<<<< HEAD:test/acceptance/keywords/screenshots.robot
 Suite Setup       Go To Page "links.html"
 Resource          ../resource.robot
+=======
+Resource     ../resource.robot
+Suite Setup  Go To Page "links.html"
+
+>>>>>>> 46b68799c4970b004982f8a5a751ec384ef07af1:test/acceptance/keywords/screenshots.robot
 
 *** Test Cases ***
 

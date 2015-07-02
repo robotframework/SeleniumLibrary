@@ -1,7 +1,12 @@
 *** Settings ***
+<<<<<<< HEAD:test/acceptance/open_and_close.robot
 Suite Teardown    Close All Browsers
 Force Tags        openclose
 Resource          resource.robot
+=======
+Resource        resource.robot
+Suite Teardown  Close All Browsers
+>>>>>>> 46b68799c4970b004982f8a5a751ec384ef07af1:test/acceptance/open_and_close.robot
 
 *** Test Cases ***
 Browser Should Open And Close
