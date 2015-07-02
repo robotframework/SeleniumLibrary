@@ -1,6 +1,14 @@
 Release Notes
 =============
 
+1.7.2
+----------------
+- Fixed an error where regular functions were not able to be used as a custom locator
+  [zephraph]
+
+- Changed all test files to have a '.robot' extension
+  [zephraph]
+
 1.7.1 (hotfix)
 ----------------
 - Remove references to GLOBAL_VARIABLES for RF 2.9 compatibility
