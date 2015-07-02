@@ -12,11 +12,13 @@ class CustomLocator(object):
         self.finder = finder
 
     def find(self, *args):
+        print 'finder', self.finder
+        print 'name', self.name
 
         # Allow custom locators to be keywords or normal methods
         if isinstance(self.finder, string_type):
             element = BuiltIn().run_keyword(self.finder, *args)
-        elif hasattr(self.finder, '__caller__'):
+        elif hasattr(self.finder, '__call__'):
             element = self.finder(*args)
         else:
             raise AttributeError('Invalid type provided for Custom Locator %s' % self.name)
