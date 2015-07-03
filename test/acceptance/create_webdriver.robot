@@ -1,15 +1,15 @@
-*Setting*
+*** Settings ***
 Resource  resource.robot
 Library  Collections
 
-*Test Cases*
+*** Test Cases ***
 Create Webdriver Creates Functioning WebDriver
-  [Documentation]  LOG 2:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver LOG 2:4 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+
-  [Setup]  Set Driver Variables
-  Create Webdriver  ${DRIVER_NAME}  kwargs=${KWARGS}
-  Go To  ${FRONT PAGE}
-  Page Should Contain  needle
-  [Teardown]  Close Browser
+    [Documentation]  LOG 2:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver LOG 2:4 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+
+    [Setup]    Set Driver Variables
+    Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
+    Go To    ${FRONT PAGE}
+    Page Should Contain    needle
+    [Teardown]    Close Browser
 
 Create Webdriver With Bad Driver Name
   Run Keyword And Expect Error  'Fireox' is not a valid WebDriver name  Create Webdriver  Fireox
@@ -21,7 +21,7 @@ Create Webdriver With Duplicate Arguments
 Create Webdriver With Bad Keyword Argument Dictionary
   Run Keyword And Expect Error  kwargs must be a dictionary.  Create Webdriver  Firefox  kwargs={'spam': 'eggs'}
 
-*Keywords*
+*** Keywords ***
 Set Driver Variables
   ${drivers}=  Create Dictionary  ff  Firefox  firefox  Firefox  ie  Ie  internetexplorer  Ie  googlechrome  Chrome  gc  Chrome  chrome  Chrome  opera  Opera  phantomjs  PhantomJS  safari  Safari
   ${name}=  Evaluate  "Remote" if "${REMOTE_URL}"!="None" else ${drivers}["${BROWSER.lower().replace(' ', '')}"]
