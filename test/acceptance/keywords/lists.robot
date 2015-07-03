@@ -1,11 +1,6 @@
 *** Settings ***
-<<<<<<< HEAD:test/acceptance/keywords/lists.robot
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
-=======
-Test Setup      Go To Page "forms/prefilled_email_form.html"
-Resource        ../resource.robot
->>>>>>> 5f4628bff964187aa6107f4ab9b85a3dc4e73f79:test/acceptance/keywords/lists.robot
 
 *** Test Cases ***
 Get List Items From Single-Select List
