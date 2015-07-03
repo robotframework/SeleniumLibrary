@@ -1,14 +1,7 @@
 *** Settings ***
-<<<<<<< HEAD:test/acceptance/keywords/content_assertions.robot
 Test Setup        Go To Front Page
 Default Tags      assertions
 Resource          ../resource.robot
-=======
-Test Setup      Go To Front Page
-Default Tags    assertions
-Resource        ../resource.robot
-
->>>>>>> 46b68799c4970b004982f8a5a751ec384ef07af1:test/acceptance/keywords/content_assertions.robot
 
 *** Test Cases ***
 Location Should Be

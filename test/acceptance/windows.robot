@@ -1,4 +1,3 @@
-<<<<<<< HEAD:test/acceptance/windows.robot
 *** Setting ***
 Documentation     These tests must open own browser because windows opened by
 ...               earlier tests would otherwise be visible to Get Window XXX keywords
@@ -10,18 +9,6 @@ Force Tags        windows
 Resource          resource.robot
 
 *** Test Cases ***
-=======
-*Setting*
-Documentation  These tests must open own browser because windows opened by
-...  earlier tests would otherwise be visible to Get Window XXX keywords
-...  even if those windows were closed.
-Suite Setup  Open Browser To Start Page Without Testing Default Options
-Test Setup  Go To Page "javascript/popupwindow.html"
-Suite Teardown  Close All Browsers
-Resource  resource.robot
-
-*Test Cases*
->>>>>>> 46b68799c4970b004982f8a5a751ec384ef07af1:test/acceptance/windows.robot
 Popup Windows Created With Javascript
     #Cannot Be Executed in IE
     Cannot Be Executed In Chrome
