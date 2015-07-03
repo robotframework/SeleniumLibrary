@@ -1,6 +1,6 @@
 *** Settings ***
 Suite Setup		  Go To Page "index.html"
-Resource		  ../resource.txt
+Resource		  ../resource.robot
 
 *** Keywords ***
 Setup Custom Locator
