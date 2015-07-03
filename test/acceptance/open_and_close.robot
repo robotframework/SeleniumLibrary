@@ -2,7 +2,6 @@
 Suite Teardown    Close All Browsers
 Force Tags        openclose
 Resource          resource.robot
-Suite Teardown  Close All Browsers
 
 *** Test Cases ***
 Browser Should Open And Close
