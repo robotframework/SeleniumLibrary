@@ -162,6 +162,9 @@ class Selenium2Library(
         `Register Keyword To Run On Failure` keyword for more information about this
         functionality.
 
+        `screenshot_root_directory` specifies the default root directory that screenshots should be
+        stored in. If not provided the default directory will be where robotframework places its logfile.
+
         Examples:
         | Library `|` Selenium2Library `|` 15                                            | # Sets default timeout to 15 seconds                                       |
         | Library `|` Selenium2Library `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
