@@ -12,7 +12,17 @@ class _LoggingKeywords(KeywordGroup):
         logger.debug(message)
 
     def _get_log_dir(self):
-        variables = BuiltIn().get_variables()
+        # Use screenshot root directory if set
+        if self.screenshot_root_directory is not None:
+            return self.screenshot_root_directory
+
+        # If robotframework isn't running use current directory
+        try:
+            variables = BuiltIn().get_variables()
+        except RobotNotRunningError:
+            return os.getcwd()
+
+        # Otherwise use the log directory provided by RF
         logfile = variables['${LOG FILE}']
         if logfile != 'NONE':
             return os.path.dirname(logfile)
