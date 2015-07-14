@@ -1,6 +1,6 @@
 import os
 import sys
-from robot.libraries.BuiltIn import BuiltIn
+from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 from robot.api import logger
 from keywordgroup import KeywordGroup
 
