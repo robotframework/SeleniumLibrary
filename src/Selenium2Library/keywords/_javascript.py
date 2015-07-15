@@ -120,32 +120,27 @@ class _JavaScriptKeywords(KeywordGroup):
         self._info("Executing Asynchronous JavaScript:\n%s" % js)
         return self._current_browser().execute_async_script(js)
 
-    def get_alert_message(self):
+    def get_alert_message(self, dismiss=True):
         """Returns the text of current JavaScript alert.
 
+        By default the current JavaScript alert will be dismissed.
         This keyword will fail if no alert is present. Note that
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Get Alert Message`.
         """
-        return self._close_alert()
+        if dismiss:
+            return self._close_alert()
+        else:
+            return self._read_alert()
 
-    def read_alert_message(self):
-        """ Returns the text of current JavaScript alert without closing it.
-
-        This keyword will fail if no alert is present. Note that
-        following keywords will fail unless the alert is
-        dismissed by this keyword or another like `Get Alert Message`.
-        """
-        return self._read_alert()
-
-    def handle_alert(self, confirm=False):
+    def dismiss_alert(self, accept=True):
         """ Returns true if alert was confirmed, false if it was dismissed
 
         This keyword will fail if no alert is present. Note that
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Get Alert Message`.
         """
-        return self._handle_alert(confirm)
+        return self._handle_alert(accept)
 
     # Private
 
