@@ -27,9 +27,9 @@ Get Alert Message
 Read Alert Message
     [Setup]  Go To Page "javascript/alert.html"
     Click Link  Click Me!
-    ${msg} =  Read Alert Message
+    ${msg} =  Get Alert Message  dismiss=False
     Should Be Equal  ${msg}  ALERT!
-    Alert Should Be Present
+    Dismiss Alert
     Run Keyword And Expect Error  There were no alerts  Get Alert Message
 
 Mouse Down On Link
