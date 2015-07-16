@@ -1,7 +1,6 @@
 import os, errno
 import robot
 from keywordgroup import KeywordGroup
-from robot.api import logger
 
 class _ScreenshotKeywords(KeywordGroup):
 
