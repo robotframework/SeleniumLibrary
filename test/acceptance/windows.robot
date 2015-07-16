@@ -17,23 +17,24 @@ Popup Windows Created With Javascript
     Select Main Window And Verify
 
 Get Window Titles
-  [Tags]  Known Issue - TravisCI
-  ${exp_titles}=  Create List  Click link to show a popup window  Original
-  Click Link  my popup
-  ${titles}=  Get Window Titles
-  Should Be Equal  ${titles}  ${exp_titles}
+    @{exp_titles}=    Create List    Click link to show a popup window    Original
+    Click Link    my popup
+    ${titles}=    Get Window Titles
+    :FOR    ${expected}    IN    @{exp_titles}
+    \    Should Contain    ${titles}    ${expected}
 
 Get Window Names
-  ${exp_names}=  Create List  selenium_main_app_window  myName
-  Click Link  my popup
-  ${names}=  Get Window Names
-  Should Be Equal  ${names}  ${exp_names}
+    @{exp_names}=    Create List    selenium_main_app_window    myName
+    Click Link    my popup
+    ${names}=    Get Window Names
+    :FOR    ${expected}    IN    @{exp_names}
+    \    Should Contain    ${names}    ${expected}
 
 Get Window Identifiers
-  ${exp_ids}=  Create List  undefined  undefined
-  Click Link  my popup
-  ${ids}=  Get Window Identifiers
-  Should Be Equal  ${ids}  ${exp_ids}
+    @{exp_ids}=    Create List    undefined    undefined
+    Click Link    my popup
+    ${ids}=    Get Window Identifiers
+    Should Contain    ${ids}    @{exp_ids}
 
 Get and Set Window Size
   ${win_width}=  Set Variable  ${600}
