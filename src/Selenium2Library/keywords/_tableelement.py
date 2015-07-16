@@ -1,6 +1,5 @@
 import os
 import sys
-from robot.api import logger
 from Selenium2Library.locators import TableElementFinder
 from keywordgroup import KeywordGroup
 
