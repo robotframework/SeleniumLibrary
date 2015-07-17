@@ -1,8 +1,8 @@
 import os
 import sys
-from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 from robot.api import logger
 from keywordgroup import KeywordGroup
+from robot.libraries.BuiltIn import BuiltIn
 
 class _LoggingKeywords(KeywordGroup):
 
@@ -12,17 +12,8 @@ class _LoggingKeywords(KeywordGroup):
         logger.debug(message)
 
     def _get_log_dir(self):
-        # Use screenshot root directory if set
-        if self.screenshot_root_directory is not None:
-            return self.screenshot_root_directory
+        variables = BuiltIn().get_variables()
 
-        # If robotframework isn't running use current directory
-        try:
-            variables = BuiltIn().get_variables()
-        except RobotNotRunningError:
-            return os.getcwd()
-
-        # Otherwise use the log directory provided by RF
         logfile = variables['${LOG FILE}']
         if logfile != 'NONE':
             return os.path.dirname(logfile)
