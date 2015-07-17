@@ -1,9 +1,9 @@
 import robot
 import os, errno
 
+from Selenium2Library import utils
 from keywordgroup import KeywordGroup
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
-from Selenium2Library import utils
 
 class _ScreenshotKeywords(KeywordGroup):
 
