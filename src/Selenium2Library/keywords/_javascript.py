@@ -144,7 +144,7 @@ class _JavaScriptKeywords(KeywordGroup):
 
     # Private
 
-    def _close_alert(self, confirm=False):
+    def _close_alert(self, confirm=True):
         try:
             text = self._read_alert()
             alert = self._handle_alert(confirm)
@@ -161,7 +161,7 @@ class _JavaScriptKeywords(KeywordGroup):
         except WebDriverException:
             raise RuntimeError('There were no alerts')
 
-    def _handle_alert(self, confirm=False):
+    def _handle_alert(self, confirm=True):
         try:
             alert = self._current_browser().switch_to_alert()
             if not confirm:
