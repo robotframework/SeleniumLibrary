@@ -2,7 +2,7 @@
 Suite Setup       Go To Page "cookies.html"
 Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
-Resource          ../resource.txt
+Resource          ../resource.robot
 
 *** Test Cases ***
 Get Cookies
