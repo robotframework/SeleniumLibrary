@@ -10,4 +10,4 @@ Verify Input Text into Prompt
   [Documentation]  Typing name into prompt
   Click Element  css=button
   Input Text Into Prompt  myname
-  Page Should Contain  myname
+  Get Alert Message
