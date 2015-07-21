@@ -1,11 +1,13 @@
 *Setting*
 Variables  variables.py
 Resource  ../resource.robot
-Test Setup  Go To Page "forms/login_alert.html"
+Test Setup  Go To Page "javascript/password_prompt.html"
 
 
 *Test Cases*
 
-Input Password into AlertPrompt
-  [Documentation]  LOG 3 Typing password into alertprompt 'password_field'
-  Input Text Into Prompt  password
+Verify Input Text into Prompt
+  [Documentation]  Typing name into prompt
+  Click Element  id=demo
+  Input Text Into Prompt  myname
+  Page Should Contain  myname
