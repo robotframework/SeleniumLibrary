@@ -1,6 +1,8 @@
 Release Notes
 =============
 
+- Added new keyword Input Text Into Prompt [boakley][ekasteel]
+
 1.7.2
 ----------------
 - Fixed an error where regular functions were not able to be used as a custom locator
