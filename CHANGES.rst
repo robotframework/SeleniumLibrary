@@ -4,9 +4,15 @@ Release Notes
 1.7.2 (Unreleased)
 ----------------
 - Added an argument called screenshot_root_directory that can be passed into S2L's
-  constructor to specify where to store screenshots. 
+  constructor to specify where to store screenshots.
   [zephraph]
-  
+
+- Added new keyword Input Text Into Prompt
+  [boakley][ekasteel]
+
+- Fixed issue that caused tests to fail when selenium > 2.26
+  [hgarus]
+
 - Fixed an error where regular functions were not able to be used as a custom locator
   [zephraph]
 
