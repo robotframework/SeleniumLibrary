@@ -135,7 +135,13 @@ class Selenium2Library(
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = VERSION
 
-    def __init__(self, timeout=5.0, implicit_wait=0.0, run_on_failure='Capture Page Screenshot'):
+    def __init__(self,
+                 timeout=5.0,
+                 implicit_wait=0.0,
+                 run_on_failure='Capture Page Screenshot',
+                 screenshot_root_directory=None
+    ):
+
         """Selenium2Library can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for all waiting actions.
@@ -156,6 +162,9 @@ class Selenium2Library(
         `Register Keyword To Run On Failure` keyword for more information about this
         functionality.
 
+        `screenshot_root_directory` specifies the default root directory that screenshots should be
+        stored in. If not provided the default directory will be where robotframework places its logfile.
+
         Examples:
         | Library `|` Selenium2Library `|` 15                                            | # Sets default timeout to 15 seconds                                       |
         | Library `|` Selenium2Library `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
@@ -165,6 +174,7 @@ class Selenium2Library(
         """
         for base in Selenium2Library.__bases__:
             base.__init__(self)
+        self.screenshot_root_directory = screenshot_root_directory
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)

@@ -1,8 +1,8 @@
 import os
 import sys
-from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 from keywordgroup import KeywordGroup
+from robot.libraries.BuiltIn import BuiltIn
 
 class _LoggingKeywords(KeywordGroup):
 
@@ -13,6 +13,7 @@ class _LoggingKeywords(KeywordGroup):
 
     def _get_log_dir(self):
         variables = BuiltIn().get_variables()
+
         logfile = variables['${LOG FILE}']
         if logfile != 'NONE':
             return os.path.dirname(logfile)

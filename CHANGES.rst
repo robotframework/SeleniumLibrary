@@ -3,13 +3,20 @@ Release Notes
 
 1.7.2 (Unreleased)
 ----------------
+- Added an argument called screenshot_root_directory that can be passed into S2L's
+  constructor to specify where to store screenshots.
+- Added new keyword 'set_screenshot_directory' which can be used to set the output
+  of screenshots.
+  [zephraph]
+
+- Added new keyword Input Text Into Prompt
 - Modified 'get_alert_message' to accept a parameter 'dismiss' (defaults to true) which can be
   used to prevent closing the alert message and instead will just return the alerts text.
   Also created new keyword 'dismiss_alert' to dismiss (default) or confirm the alert without
   reading the text of the alert.
   [KingWarin]
-  
-- Added new keyword Input Text Into Prompt 
+
+- Added new keyword Input Text Into Prompt
   [boakley][ekasteel]
 
 - Fixed issue that caused tests to fail when selenium > 2.26
