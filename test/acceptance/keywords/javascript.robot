@@ -32,6 +32,13 @@ Read Alert Message
     Dismiss Alert
     Run Keyword And Expect Error  There were no alerts  Get Alert Message
 
+Input Text Into Prompt
+  [Setup]  Go To Page "javascript/alert_prompt.html"
+  Click Element  css=button
+  Input Text Into Prompt  myname
+  Dismiss Alert
+  Page Should Contain  myname
+
 Mouse Down On Link
     [TAGS]  Known Issue - Firefox
     [Setup]  Go To Page "javascript/mouse_events.html"
@@ -84,5 +91,3 @@ Drag and Drop by Offset
     Element Text Should Be   id=droppable   Drop here
     Drag and Drop by Offset  id=draggable   ${100}  ${20}
     Element Text Should Be   id=droppable   Dropped!
-
-
