@@ -24,6 +24,14 @@ Get Alert Message
     Should Be Equal  ${msg}  ALERT!
     Run Keyword And Expect Error  There were no alerts  Get Alert Message
 
+Read Alert Message
+    [Setup]  Go To Page "javascript/alert.html"
+    Click Link  Click Me!
+    ${msg} =  Get Alert Message  ${FALSE}
+    Should Be Equal  ${msg}  ALERT!
+    Dismiss Alert
+    Run Keyword And Expect Error  There were no alerts  Get Alert Message
+
 Mouse Down On Link
     [TAGS]  Known Issue - Firefox
     [Setup]  Go To Page "javascript/mouse_events.html"
