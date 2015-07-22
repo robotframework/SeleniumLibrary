@@ -3,6 +3,12 @@ Release Notes
 
 1.7.2 (Unreleased)
 ----------------
+- Modified 'get_alert_message' to accept a parameter 'dismiss' (defaults to true) which can be
+  used to prevent closing the alert message and instead will just return the alerts text.
+  Also created new keyword 'dismiss_alert' to dismiss (default) or confirm the alert without
+  reading the text of the alert.
+  [KingWarin]
+  
 - Added new keyword Input Text Into Prompt 
   [boakley][ekasteel]
 
