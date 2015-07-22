@@ -1,7 +1,7 @@
 ﻿Release Notes
 =============
 
-1.7.2 (Unreleased)
+1.7.2
 ----------------
 - Modified 'get_alert_message' to accept a parameter 'dismiss' (defaults to true) which can be
   used to prevent closing the alert message and instead will just return the alerts text.
