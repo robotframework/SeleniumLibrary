@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-1.7.2
+1.7.2 (Unreleased)
 ----------------
 - Modified 'get_alert_message' to accept a parameter 'dismiss' (defaults to true) which can be
   used to prevent closing the alert message and instead will just return the alerts text.
@@ -9,6 +9,12 @@ Release Notes
   reading the text of the alert.
   [KingWarin]
   
+- Added new keyword Input Text Into Prompt 
+  [boakley][ekasteel]
+
+- Fixed issue that caused tests to fail when selenium > 2.26
+  [hgarus]
+
 - Fixed an error where regular functions were not able to be used as a custom locator
   [zephraph]
 
@@ -36,7 +42,7 @@ Release Notes
   will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
   issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
   [divfor]
-  
+
 - Corrected error message in new keyword 'Wait Until Element Is Not
   Visible' to reflect element being visible instead of not visible.
   [joepurdy]

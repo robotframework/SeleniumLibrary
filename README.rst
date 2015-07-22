@@ -2,10 +2,20 @@ Selenium 2 (WebDriver) library for Robot Framework
 ==================================================
 
 .. image:: https://api.travis-ci.org/rtomac/robotframework-selenium2library.png
-     :target: http://travis-ci.org/rtomac/robotframework-selenium2library
+    :target: http://travis-ci.org/rtomac/robotframework-selenium2library
 
-.. image:: https://pypip.in/v/robotframework-selenium2library/badge.png
-     :target: https://crate.io/packages/robotframework-selenium2library
+.. image:: https://img.shields.io/pypi/v/robotframework-selenium2library.svg
+    :target: https://pypi.python.org/pypi/robotframework-selenium2library
+
+.. image:: https://img.shields.io/pypi/dm/robotframework-selenium2library.svg
+    :target: https://pypi.python.org/pypi/robotframework-selenium2library
+
+.. image:: https://img.shields.io/pypi/l/robotframework-selenium2library.svg
+    :target: http://www.apache.org/licenses/LICENSE-2.0
+
+.. image:: https://robotframework-slack.herokuapp.com/badge.svg
+	:target: https://robotframework-slack.herokuapp.com
+	:alt: Slack channel
 
 
 Introduction
