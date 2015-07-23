@@ -3,34 +3,8 @@
 
 1.7.2 (Unreleased)
 ----------------
-- Added new keyword Input Text Into Prompt 
-  [boakley][ekasteel]
-
-- Fixed issue that caused tests to fail when selenium > 2.26
-  [hgarus]
-
-- Fixed an error where regular functions were not able to be used as a custom locator
-  [zephraph]
-
-- Changed all test files to have a '.robot' extension
-  [zephraph]
-
-1.7.1 (hotfix)
-----------------
-- Remove references to GLOBAL_VARIABLES for RF 2.9 compatibility
-
-1.7
-----------------
-- Added keyword 'List Windows' to return a list of all window handles.
-  [divfor]
-
-- Enabled 'Select Window' to return window handle as well as accept it as locator, and
-  select new popup window by excluding previous window handles (the strict way) or
-  by special locator 'new' (the simplified but less strict way).
-  [divfor]
-
-- Added new keyword 'Wait Until Page Does Not Contain'.
-  [deiga]
+- Added 'read_alert_message' and 'handle_alert' to enhance the handling of alert messages.
+  [KingWarin]
 
 - Fixed ‘NoSuchWindowException' issue. Running keyword 'Select Window' after 'Close Window'
   will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
