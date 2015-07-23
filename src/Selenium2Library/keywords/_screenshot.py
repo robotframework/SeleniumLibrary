@@ -2,14 +2,15 @@ import robot
 import os, errno
 
 from keywordgroup import KeywordGroup
-from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
-from Selenium2Library import utils
+from robot.libraries.BuiltIn import RobotNotRunningError
+
 
 class _ScreenshotKeywords(KeywordGroup):
 
     def __init__(self):
         self._screenshot_index = 0
         self._screenshot_path_stack = []
+        self.screenshot_root_directory = None
 
     # Public
 
@@ -68,7 +69,8 @@ class _ScreenshotKeywords(KeywordGroup):
             except OSError as exc:
                 if exc.errno == errno.EEXIST and os.path.isdir(target_dir):
                     pass
-                else: raise
+                else:
+                    raise
 
     def _get_screenshot_directory(self):
 
