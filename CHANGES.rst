@@ -1,7 +1,9 @@
 ﻿Release Notes
 =============
 
-1.7.2 (Unreleased)
+- Added new keyword Input Text Into Prompt [boakley][ekasteel]
+
+1.7.2
 ----------------
 - Added an argument called screenshot_root_directory that can be passed into S2L's
   constructor to specify where to store screenshots. 
