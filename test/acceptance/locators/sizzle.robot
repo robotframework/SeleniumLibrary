@@ -8,14 +8,14 @@ ${SIZZLE_URL}     ${EMPTY}
 
 *** Test Cases ***
 Find By Id
-    Cannot Be Executed In Chrome
+    #Cannot Be Executed In Chrome
     Page Should Contain Element    jquery=#div_id
     Element Should Contain    jquery=#foo    Text and image
     Click Link    sizzle=#some_id
     Title Should Be    (root)/broken.html
 
 Find In Table
-    Cannot Be Executed In Chrome
+    #Cannot Be Executed In Chrome
     Table Should Contain    jquery=table#simpleTable    simpleTable
     Table Header Should Contain    jquery=table#tableWithTwoHeaders    tableWithTwoHeaders_C2
     Table Footer Should Contain    jquery=table#withHeadAndFoot    withHeadAndFoot_AF1
@@ -26,7 +26,7 @@ Find In Table
     Table Cell Should Contain    jquery=h2.someClass ~ table:last-child    2    4    äöü€&äöü€&
 
 Find By Everything Else
-    Cannot Be Executed In Chrome
+    #Cannot Be Executed In Chrome
     Page Should Contain Element    jquery=[href="index.html"]
     Element Should Contain    jquery=[target="_blank"]    Target opens in new window
     Click Link    sizzle=:has(img[alt="tooltip"])
@@ -35,7 +35,7 @@ Find By Everything Else
 *** Keywords ***
 Remote Or Local
     [Documentation]    If there is no access to http://code.jquery.com/jquery-1.11.1.min.js uses locally javascript/jquery-1.11.1.min.js.
-    Cannot Be Executed In Chrome    #Even if we use jQuery local we get this error: WebDriverException: Message: u'unknown error: jQuery is not defined\n \ (Session info: chrome=36.0.1985.143)\n \ (Driver info: chromedriver=2.10.267521,platform=Windows NT 6.1 SP1 x86_64)'
+    #Cannot Be Executed In Chrome    #Even if we use jQuery local we get this error: WebDriverException: Message: u'unknown error: jQuery is not defined\n \ (Session info: chrome=36.0.1985.143)\n \ (Driver info: chromedriver=2.10.267521,platform=Windows NT 6.1 SP1 x86_64)'
     ${oldloglevel}=    BuiltIn.Set Log Level    NONE
     ${oldspeed}=    Set Selenium Speed    0 seconds
     ${oldtimeout}=    Set Selenium Timeout    5 seconds
