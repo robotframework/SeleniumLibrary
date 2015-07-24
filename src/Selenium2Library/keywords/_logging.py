@@ -3,6 +3,7 @@ import sys
 from robot.api import logger
 from keywordgroup import KeywordGroup
 from robot.libraries.BuiltIn import BuiltIn
+from robot.libraries.BuiltIn import RobotNotRunningError
 
 class _LoggingKeywords(KeywordGroup):
 
@@ -12,12 +13,16 @@ class _LoggingKeywords(KeywordGroup):
         logger.debug(message)
 
     def _get_log_dir(self):
-        variables = BuiltIn().get_variables()
+        try:
+            variables = BuiltIn().get_variables()
 
-        logfile = variables['${LOG FILE}']
-        if logfile != 'NONE':
-            return os.path.dirname(logfile)
-        return variables['${OUTPUTDIR}']
+            logfile = variables['${LOG FILE}']
+            if logfile != 'NONE':
+                return os.path.dirname(logfile)
+            return variables['${OUTPUTDIR}']
+
+        except RobotNotRunningError:
+            return os.getcwd()
 
     def _html(self, message):
         logger.info(message, True, False)
