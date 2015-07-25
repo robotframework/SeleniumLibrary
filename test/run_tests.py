@@ -13,6 +13,8 @@ ROBOT_ARGS = [
     '--outputdir', '%(outdir)s',
     '--variable', 'browser:%(browser)s',
     '--variable', 'pyversion:%(pyVersion)s',
+    '--variable', 'SAUCE_USER_NAME:%(sauceUserName)s',
+    '--variable', 'SAUCE_ACCESS_KEY:%(sauceAccessKey)s',
     '--escape', 'space:SP',
     '--report', 'none',
     '--log', 'none',
@@ -36,6 +38,12 @@ ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': ':'.join((env.SRC_DIR, en
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
+    ARG_VALUES['sauceUserName'] = env.SAUCE_USER_NAME
+    ARG_VALUES['sauceAccessKey'] = env.SAUCE_ACCESS_KEY
+    if env.TRAVIS:
+        args = ['--noncritical known_issue_-_travisci'] +
+               ['--variable REMOTE_URL:http://%s:%s@ondemand.saucelabs.com:80/wd/hub' % (env.SAUCE_USER_NAME, env.SAUCE_ACCESS_KEY)] +
+                args
     start_http_server()
     runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':

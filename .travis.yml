@@ -16,7 +16,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 script:
   - "firefox --version"
-  - "python test/run_tests.py python $BROWSER --noncritical known_issue_-_travisci"
+  - "python test/run_tests.py python $BROWSER"
 env:
   matrix:
   - BROWSER=firefox
