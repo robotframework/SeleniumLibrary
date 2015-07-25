@@ -25,6 +25,21 @@ Get Alert Message
     Should Be Equal    ${msg}    ALERT!
     Run Keyword And Expect Error    There were no alerts    Get Alert Message
 
+Read Alert Message
+    [Setup]  Go To Page "javascript/alert.html"
+    Click Link  Click Me!
+    ${msg} =  Get Alert Message  ${FALSE}
+    Should Be Equal  ${msg}  ALERT!
+    Dismiss Alert
+    Run Keyword And Expect Error  There were no alerts  Get Alert Message
+
+Input Text Into Prompt
+  [Setup]  Go To Page "javascript/alert_prompt.html"
+  Click Element  css=button
+  Input Text Into Prompt  myname
+  Dismiss Alert
+  Page Should Contain  myname
+
 Mouse Down On Link
     [Tags]    Known Issue - Firefox
     [Setup]    Go To Page "javascript/mouse_events.html"
@@ -61,6 +76,11 @@ Execute Javascript from File
     Execute Javascript    ${CURDIR}/executed_by_execute_javascript.js
     Page Should Contain    Inserted via file
 
+Open Context Menu
+    [TAGS]  Known Issue - Firefox
+    Go To Page "javascript/context_menu.html"
+    Open Context Menu  myDiv
+
 Drag and Drop
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
@@ -68,17 +88,9 @@ Drag and Drop
     Element Text Should Be    id=droppable    Dropped!
 
 Drag and Drop by Offset
-    [Setup]    Go To Page "javascript/drag_and_drop.html"
-    Element Text Should Be    id=droppable    Drop here
-    Drag and Drop by Offset    id=draggable    ${1}    ${1}
-    Element Text Should Be    id=droppable    Drop here
-    Drag and Drop by Offset    id=draggable    ${100}    ${20}
-    Element Text Should Be    id=droppable    Dropped!
-
-Open Context Menu
-    [Tags]    Known Issue - Firefox
-    [Setup]    Go To Page "javascript/context_menu.html"
-    Mouse Over    myDiv
-    Open Context Menu    myDiv
-    Click Link    Alert
-    Alert Should Be Present
+    [Setup]  Go To Page "javascript/drag_and_drop.html"
+    Element Text Should Be   id=droppable   Drop here
+    Drag and Drop by Offset   id=draggable  ${1}  ${1}
+    Element Text Should Be   id=droppable   Drop here
+    Drag and Drop by Offset  id=draggable   ${100}  ${20}
+    Element Text Should Be   id=droppable   Dropped!

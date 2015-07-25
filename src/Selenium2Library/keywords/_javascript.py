@@ -120,25 +120,56 @@ class _JavaScriptKeywords(KeywordGroup):
         self._info("Executing Asynchronous JavaScript:\n%s" % js)
         return self._current_browser().execute_async_script(js)
 
-    def get_alert_message(self):
+    def get_alert_message(self, dismiss=True):
         """Returns the text of current JavaScript alert.
+
+        By default the current JavaScript alert will be dismissed.
+        This keyword will fail if no alert is present. Note that
+        following keywords will fail unless the alert is
+        dismissed by this keyword or another like `Get Alert Message`.
+        """
+        if dismiss:
+            return self._close_alert()
+        else:
+            return self._read_alert()
+
+    def dismiss_alert(self, accept=True):
+        """ Returns true if alert was confirmed, false if it was dismissed
 
         This keyword will fail if no alert is present. Note that
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Get Alert Message`.
         """
-        return self._close_alert()
+        return self._handle_alert(accept)
 
     # Private
 
-    def _close_alert(self, confirm=False):
+    def _close_alert(self, confirm=True):
+        try:
+            text = self._read_alert()
+            alert = self._handle_alert(confirm)
+            return text
+        except WebDriverException:
+            raise RuntimeError('There were no alerts')
+
+    def _read_alert(self):
         alert = None
         try:
             alert = self._current_browser().switch_to_alert()
             text = ' '.join(alert.text.splitlines()) # collapse new lines chars
-            if not confirm: alert.dismiss()
-            else: alert.accept()
             return text
+        except WebDriverException:
+            raise RuntimeError('There were no alerts')
+
+    def _handle_alert(self, confirm=True):
+        try:
+            alert = self._current_browser().switch_to_alert()
+            if not confirm:
+                alert.dismiss()
+                return False
+            else:
+                alert.accept()
+                return True
         except WebDriverException:
             raise RuntimeError('There were no alerts')
 

@@ -30,3 +30,14 @@ Capture page screenshot to non-existing directory
   [Setup]  Remove Directory  ${OUTPUTDIR}/screenshot  recursive
   Capture Page Screenshot  screenshot/test-screenshot.png
   File Should Exist  ${OUTPUTDIR}/screenshot/test-screenshot.png
+
+Capture page screenshot to custom root directory
+  [Setup]  Remove Directory  ${OUTPUTDIR}/custom-root  recursive
+  Set Screenshot Directory  ${OUTPUTDIR}/custom-root
+  Capture Page Screenshot  custom-root-screenshot.png
+  File Should Exist  ${OUTPUTDIR}/custom-root/custom-root-screenshot.png
+
+Ensure screenshot captures revert to default root directory
+  [Setup]  Remove Files  ${OUTPUTDIR}/default-root-screenshot.png
+  Capture Page Screenshot  default-root-screenshot.png
+  File Should Exist  ${OUTPUTDIR}/default-root-screenshot.png
