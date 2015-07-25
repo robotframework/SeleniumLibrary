@@ -3,7 +3,12 @@ import sys
 from robot.api import logger
 from keywordgroup import KeywordGroup
 from robot.libraries.BuiltIn import BuiltIn
-from robot.libraries.BuiltIn import RobotNotRunningError
+
+try:
+    from robot.libraries.BuiltIn import RobotNotRunningError
+except ImportError:
+    RobotNotRunningError = AttributeError
+
 
 class _LoggingKeywords(KeywordGroup):
 
