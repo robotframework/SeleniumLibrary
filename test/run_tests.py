@@ -41,8 +41,8 @@ def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['sauceUserName'] = env.SAUCE_USER_NAME
     ARG_VALUES['sauceAccessKey'] = env.SAUCE_ACCESS_KEY
     if env.TRAVIS:
-        ROBOT_ARGS += ['--noncritical known_issue_-_travisci']
-        ROBOT_ARGS += ['--variable REMOTE_URL:http://%(sauceUserName)s:%(sauceAccessName)s@ondemand.saucelabs.com:80/wd/hub']
+        ROBOT_ARGS.extend(['--noncritical', 'known_issue_-_travisci'])
+        ROBOT_ARGS.extend(['--variable', 'REMOTE_URL:http://%(sauceUserName)s:%(sauceAccessKey)s@ondemand.saucelabs.com:80/wd/hub'])
     start_http_server()
     runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':
