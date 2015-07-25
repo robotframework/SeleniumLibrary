@@ -20,5 +20,10 @@ script:
 env:
   matrix:
   - BROWSER=firefox
-  #- BROWSER=ie # will be added when we have completed SauceLabs CI
-  #- BROWSER=safari # will be added after #247 merged
+  - BROWSER=ie # will be added when we have completed SauceLabs CI
+  - BROWSER=safari # will be added after #247 merged
+  global:
+    - secure: JL3yH6vGVspkmKmXXmKLFXElam1SM3MBKD92CohdJA31WERVWjIJex1veOUKCPVqEBI+H+tXa93LQ8qy+/Ewm/p9XNUc+XUwuLArlgxKlG4k9pFPJr1uUUF8F9CYsP7m7PcPFO4hkn/Kzpq5wxFFMfLM7vXwaqpQSzxJqNxBEQE=
+    - secure: Ko4lJSVDhkoS9mjIp4TgQnExTCoW+56/6EgYzxx1fwFgmMMVkxIH09Q0bJRgZhA2xbF/xP9jMAKZXGIaKbbxjagkqYc9AhuaCiF7vUohqZV6I6bpZmtKWIuWgC8Gnx6hwVn5bU7t444y789TmLp0cZlGCNiVfBwriveNGNvBxw0=
+addons:
+  sauce_connect: true
