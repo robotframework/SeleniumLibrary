@@ -1,8 +1,8 @@
 import robot
 import os, errno
 
+from Selenium2Library import utils
 from keywordgroup import KeywordGroup
-from robot.libraries.BuiltIn import RobotNotRunningError
 
 
 class _ScreenshotKeywords(KeywordGroup):
@@ -17,12 +17,13 @@ class _ScreenshotKeywords(KeywordGroup):
     def set_screenshot_directory(self, path, persist=False):
         """Sets the root output directory for captured screenshots.
 
-        ``path`` argument specifies the location to where the screenshots should
+        ``path`` argument specifies the absolute path where the screenshots should
         be written to. If the specified ``path`` does not exist, it will be created.
         Setting ``persist`` specifies that the given ``path`` should
         be used for the rest of the test execution, otherwise the path will be restored
         at the end of the currently executing scope.
         """
+        path = os.path.abspath(path)
         self._create_directory(path)
         if persist is False:
             self._screenshot_path_stack.append(self.screenshot_root_directory)
@@ -79,12 +80,7 @@ class _ScreenshotKeywords(KeywordGroup):
             return self.screenshot_root_directory
 
         # Otherwise use RF's log directory
-        try:
-            return self._get_log_dir()
-
-        # Unless robotframework isn't running, then use working directory
-        except RobotNotRunningError:
-            return os.getcwd()
+        return self._get_log_dir()
 
     # should only be called by set_screenshot_directory
     def _restore_screenshot_directory(self):
@@ -96,7 +92,9 @@ class _ScreenshotKeywords(KeywordGroup):
             filename = 'selenium-screenshot-%d.png' % self._screenshot_index
         else:
             filename = filename.replace('/', os.sep)
+
         screenshotDir = self._get_screenshot_directory()
+        logDir = self._get_log_dir()
         path = os.path.join(screenshotDir, filename)
-        link = robot.utils.get_link_path(path, screenshotDir)
+        link = robot.utils.get_link_path(path, logDir)
         return path, link
