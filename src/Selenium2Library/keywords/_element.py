@@ -478,22 +478,78 @@ return !element.dispatchEvent(evt);
 
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
-
         `key` is either a single character, or a numerical ASCII code of the key
         lead by '\\\\'.
 
         Examples:
-        | Press Key | text_field   | q |
-        | Press Key | login_button | \\\\13 | # ASCII code for enter key |
+        | Press Key | text_field   | q                |                                               |
+        | Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
+        | Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
         """
-        if key.startswith('\\') and len(key) > 1:
+        if key.startswith('\\\\') and len(key) > 1:
+            key = getattr(Keys,key[2:])
+        elif key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
         #if len(key) > 1:
-        #    raise ValueError("Key value '%s' is invalid.", key)
+        # raise ValueError("Key value '%s' is invalid.", key)
         element = self._element_find(locator, True, True)
         #select it
         element.send_keys(key)
 
+    def press_keys(self, locator, key=None, special_key1=None, special_key2=None):
+        """Simulates user pressing a key and one or two special_keys simultaneously on element identified by `locator`.
+
+        `key` is either a single character, or a numerical ASCII code of the key
+        lead by '\\\\'.
+
+        `special_key1` and `special_key2` are special key names defined at selenium.webdriver.common.keys.
+
+        Examples:
+        | Press Keys | textarea     | a                | SHIFT      |
+        | Press Keys | textarea     | ${NONE}          | END        |
+        | Press Keys | textarea     | a                | CONTROL    |
+        | Press Keys | textarea     | x                | CONTROL    |
+        | Press Keys | textarea     | z                | CONTROL    |
+        | Press Keys | textarea     | \\\\\\\\SHIFT    | CONTROL    | ARROW_UP  |
+
+        Reference: http://selenium-python.readthedocs.org/en/latest/api.html#module-selenium.webdriver.common.keys
+        """
+        if key == None and special_key1 == None:
+            raise ValueError("Key and Special_Key values; '%s', '%s' are invalid." % (key, special_key1))
+        if key == None and len(special_key1) > 1:
+            key = '\\\\' + special_key1
+            special_key1 = special_key2
+            special_key2 = None
+
+        if key.startswith('\\\\') and len(key) > 1:
+            key = getattr(Keys,key[2:])
+        elif key.startswith('\\') and len(key) > 1:
+            key = self._map_ascii_key_code_to_key(int(key[1:]))
+
+        if special_key1 != None and len(special_key1) > 0:
+            try:
+                special_key1 = self._map_named_key_code_to_special_key(special_key1)
+            except:
+                raise ValueError("Special_Key1 value '%s' is invalid." % (special_key1))
+        
+        if special_key2 != None and len(special_key2) > 0:
+            try:
+                special_key2 = self._map_named_key_code_to_special_key(special_key2)
+            except:
+                raise ValueError("Special_Key2 value '%s' is invalid." % (special_key2))
+ 
+        #select it
+        element = self._element_find(locator, True, True)
+
+        if len(key) > 0 and special_key1 == None and special_key2 == None:
+            element.send_keys(key)
+            return
+        if len(key) > 0 and len(special_key1) > 0 and special_key2 == None:
+            ActionChains(self._current_browser()).key_down(special_key1, element).send_keys(key).key_up(special_key1, element).perform()
+            return
+        if len(key) > 0 and len(special_key1) > 0 and len(special_key2) > 0:
+            ActionChains(self._current_browser()).key_down(special_key1, element).key_down(special_key2, element).send_keys(key).key_up(special_key2, element).key_up(special_key1, element).perform()
+      
     # Public, links
 
     def click_link(self, locator):
@@ -747,6 +803,15 @@ return !element.dispatchEvent(evt);
         if key is None:
             key = chr(key_code)
         return key
+
+    def _map_named_key_code_to_special_key(self, key_name):
+        try:
+           return getattr(Keys, key_name)
+        except:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
+        return Keys.NULL
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')

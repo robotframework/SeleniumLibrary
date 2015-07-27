@@ -1,4 +1,4 @@
-Release Notes
+﻿Release Notes
 =============
 
 1.7.2
@@ -49,7 +49,7 @@ Release Notes
   will trigger this issue if locator has prefix 'name=','title=' or 'url='. Also fixed same
   issue for keywords 'Get Window Ids', 'Get Window Titles' and 'Get Window Names'.
   [divfor]
-
+  
 - Corrected error message in new keyword 'Wait Until Element Is Not
   Visible' to reflect element being visible instead of not visible.
   [joepurdy]
@@ -64,9 +64,6 @@ Release Notes
   [molsky]
 
 - Added new keyword 'Wait Until Page Does Not Contain Element'.
-  [molsky]
-
-- Added new keywords 'Wait Until Element Contains' and 'Wait Until Element Does Not Contain'
   [molsky]
 
 - Added new locator strategy, scLocator, for finding SmartClient and SmartGWT elements.
@@ -128,6 +125,27 @@ Release Notes
 
 A big thank you to [eweitz] and [HelioGuilherme66] for getting the
 continuous integration builds to go green by fixing internal tests.
+
+A big thank you to [eweitz] and [HelioGuilherme66] for getting the
+continuous integration builds to go green by fixing internal tests.
+
+- Added support for negative indices for rows and columns in table-related
+  keywords.
+  [eweitz]
+
+- Added strategy for locating elements by partial link text with locator
+  prefix 'partial link'.
+  [lina1]
+
+- Fixed issue where 'Select Window’ with url strategy fails to locate window
+  [laulaz]
+
+- Allow using key attributes (default strategy) when the locator contains
+  a '='. Also make locator prefixes space-insensitive.
+  [ombre42]
+
+- Fixed issue where a non-string assigned to window.id caused
+  'Select Window' and 'Get Window *' keywords to fail.
 
 1.5
 ---

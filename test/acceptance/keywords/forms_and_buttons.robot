@@ -1,8 +1,7 @@
 *** Settings ***
-Test Setup       Go To Page "forms/named_submit_buttons.html"
-Resource         ../resource.robot
-Library          OperatingSystem
-
+Test Setup        Go To Page "forms/named_submit_buttons.html"
+Resource          ../resource.robot
+Library           OperatingSystem
 
 *** Variables ***
 ${FORM SUBMITTED}  forms/submit.html
@@ -52,11 +51,15 @@ Click button created with <button> by tag content
     Verify Location Is "${FORM SUBMITTED}"
 
 Choose File
+    [Tags]    file
     [Setup]    Navigate To File Upload Form And Create Temp File To Upload
-    Choose File    file_to_upload    ${CURDIR}${/}temp.txt
-    ${dep_browser}=    Set Variable If    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'    temp.txt    C:\\fakepath\\temp.txt    #Needs to be checked in Windows and OS X
-    Textfield Value Should Be    name= file_to_upload    ${dep_browser}
-    [Teardown]    Remove File    ${CURDIR}${/}temp.txt
+    ${temp_file}=    Set Variable    ${TEMPDIR}${/}temp.txt
+    Choose File    file_to_upload    ${temp_file}
+    ${dep_browser}=    Set Variable If    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'    temp.txt    '${BROWSER}'.lower() == 'ie' or '${BROWSER}'.lower().replace(' ', '') == 'internetexplorer'    ${temp_file}    C:\\fakepath\\temp.txt
+    ...    #Needs to be checked in Windows and OS X
+    Textfield Value Should Be    name= file_to_upload    ${dep_browser}    casesense=${False}
+    Run Keyword If    '${BROWSER}'.lower() == 'ie' or '${BROWSER}'.lower().replace(' ', '') == 'internetexplorer'    Run Keyword And Expect Error    *    Textfield Value Should Be    name= file_to_upload    ${dep_browser}
+    [Teardown]    Remove File    ${TEMPDIR}${/}temp.txt
 
 Click Image With Submit Type Images
     [Setup]   Go To Page "forms/form_with_image_submit.html"
@@ -70,6 +73,6 @@ Value Should Be Cancel
     Should Be Equal   ${value}   Cancel
 
 Navigate To File Upload Form And Create Temp File To Upload
-  Cannot Be Executed in IE
-  Go To Page "forms/file_upload_form.html"
-  Touch   ${CURDIR}${/}temp.txt
+    #Cannot Be Executed in IE
+    Touch    ${TEMPDIR}${/}temp.txt
+    Go To Page "forms/file_upload_form.html"

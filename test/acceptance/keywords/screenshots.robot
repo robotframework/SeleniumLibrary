@@ -1,7 +1,6 @@
 *** Settings ***
-Resource     ../resource.robot
-Suite Setup  Go To Page "links.html"
-
+Suite Setup       Go To Page "links.html"
+Resource          ../resource.robot
 
 *** Test Cases ***
 

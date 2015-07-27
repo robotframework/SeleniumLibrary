@@ -15,8 +15,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - "firefox --version"
-  - "python test/run_tests.py python $BROWSER --noncritical known_issue_-_travisci"
+  - "python test/run_tests.py python $BROWSER --noncritical ignore_${BROWSER}_error --noncritical Regression"
 env:
   matrix:
   - BROWSER=firefox

@@ -1,37 +1,40 @@
-*Setting*
-Documentation  These tests must open own browser because windows opened by
-...  earlier tests would otherwise be visible to Get Window XXX keywords
-...  even if those windows were closed.
-Suite Setup  Open Browser To Start Page Without Testing Default Options
-Test Setup  Go To Page "javascript/popupwindow.html"
-Suite Teardown  Close All Browsers
-Resource  resource.robot
+*** Setting ***
+Documentation     These tests must open own browser because windows opened by
+...               earlier tests would otherwise be visible to Get Window XXX keywords
+...               even if those windows were closed.
+Suite Setup       Open Browser To Start Page Without Testing Default Options
+Suite Teardown    Close All Browsers
+Test Setup        Go To Page "javascript/popupwindow.html"
+Force Tags        windows
+Resource          resource.robot
 
-*Test Cases*
+*** Test Cases ***
 Popup Windows Created With Javascript
-  Cannot Be Executed in IE
-  Open Popup Window, Select It And Verify  myName
-  Do Action In Popup Window And Verify
-  Select Main Window And Verify
+    #Cannot Be Executed in IE
+    #Cannot Be Executed In Chrome
+    Open Popup Window, Select It And Verify    myName
+    Do Action In Popup Window And Verify
+    Select Main Window And Verify
 
 Get Window Titles
-  [Tags]  Known Issue - TravisCI
-  ${exp_titles}=  Create List  Click link to show a popup window  Original
-  Click Link  my popup
-  ${titles}=  Get Window Titles
-  Should Be Equal  ${titles}  ${exp_titles}
+    @{exp_titles}=    Create List    Click link to show a popup window    Original
+    Click Link    my popup
+    ${titles}=    Get Window Titles
+    :FOR    ${expected}    IN    @{exp_titles}
+    \    Should Contain    ${titles}    ${expected}
 
 Get Window Names
-  ${exp_names}=  Create List  selenium_main_app_window  myName
-  Click Link  my popup
-  ${names}=  Get Window Names
-  Should Be Equal  ${names}  ${exp_names}
+    @{exp_names}=    Create List    selenium_main_app_window    myName
+    Click Link    my popup
+    ${names}=    Get Window Names
+    :FOR    ${expected}    IN    @{exp_names}
+    \    Should Contain    ${names}    ${expected}
 
 Get Window Identifiers
-  ${exp_ids}=  Create List  undefined  undefined
-  Click Link  my popup
-  ${ids}=  Get Window Identifiers
-  Should Be Equal  ${ids}  ${exp_ids}
+    @{exp_ids}=    Create List    undefined    undefined
+    Click Link    my popup
+    ${ids}=    Get Window Identifiers
+    Should Contain    ${ids}    @{exp_ids}
 
 Get and Set Window Size
   ${win_width}=  Set Variable  ${600}
@@ -62,41 +65,7 @@ Get Window Titles After Close Window
     Close Window
     ${titles}=    Get Window Titles
 
-Select Window By Handle
-  Cannot Be Executed in IE
-  Click Link  my popup
-  ${parent}=  Select Window  Original
-  Title Should Be  Original
-  ${child}=  Select Window  ${parent}
-  Title Should Be  Click link to show a popup window
-  Select Window  ${child}
-  Close Window
-  ${FromWindow}=  Select Window  ${parent}
-  Title Should Be  Click link to show a popup window
-  Should Be True  ${FromWindow} == None
-
-Select Popup Window By Excluded List
-  Cannot Be Executed in IE
-  @{excluded_handle_list}=  List Windows
-  Click Link  my popup
-  ${parent}=  Select Window  ${excluded_handle_list}
-  Title Should Be  Original
-  Close Window
-  Select Window  ${parent}
-  Title Should Be  Click link to show a popup window
-
-Select Window By Special Locator
-  Cannot Be Executed in IE
-  ${start}=  Select Window  self
-  Click Link  my popup
-  ${parent}=  Select Window  new
-  Title Should Be  Original
-  Should Be True  '${start}' == '${parent}'
-  Close Window
-  Select Window  main
-  Title Should Be  Click link to show a popup window
-
-*Keywords*
+***Keywords***
 Open Popup Window, Select It And Verify
   [Arguments]  ${window_id}
   Click Link  my popup

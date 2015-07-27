@@ -1,8 +1,7 @@
 *** Settings ***
-Test Setup      Go To Front Page
-Default Tags    assertions
-Resource        ../resource.robot
-
+Test Setup        Go To Front Page
+Default Tags      assertions
+Resource          ../resource.robot
 
 *** Test Cases ***
 Location Should Be
