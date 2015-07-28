@@ -483,10 +483,13 @@ return !element.dispatchEvent(evt);
         lead by '\\\\'.
 
         Examples:
-        | Press Key | text_field   | q |
-        | Press Key | login_button | \\\\13 | # ASCII code for enter key |
+        | Press Key | text_field   | q                |                                               |
+        | Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
+        | Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
         """
-        if key.startswith('\\') and len(key) > 1:
+        if key.startswith('\\\\') and len(key) > 1:
+            key = getattr(Keys,key[2:])
+        elif key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
         #if len(key) > 1:
         #    raise ValueError("Key value '%s' is invalid.", key)
