@@ -7,6 +7,13 @@ Get Elements
     @{links}=  Get WebElements  //div[@id="div_id"]/a
     Length Should Be  ${links}  11
 
+Get First Matching Element
+    @{links}=  Get WebElements  //div[@id="div_id"]/a
+    ${link}=  Get WebElement  //div[@id="div_id"]/a
+    LOG  @{links}[0]
+    LOG  ${link}
+    Should Be Equal  @{links}[0]  ${link}
+
 More Get Elements
     [Setup]  Go To Page "forms/prefilled_email_form.html"
     @{checkboxes}=  Get WebElements  //input[@type="checkbox"]
@@ -51,4 +58,3 @@ Get Vertical Position
     ${pos}=  Get Vertical Position  link=Link
     Should Be True  ${pos} > ${0}
     Run Keyword And Expect Error  Could not determine position for 'non-existent'  Get Horizontal Position  non-existent
-

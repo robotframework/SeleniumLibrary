@@ -21,6 +21,13 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, get element(s)
 
+    def get_webelement(self, locator):
+        """Returns the first WebElement matching the given locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self.get_webelements(locator)[0]
+
     def get_webelements(self, locator):
         """Returns list of WebElement objects matching locator.
 
@@ -599,7 +606,7 @@ return !element.dispatchEvent(evt);
         """Returns number of elements matching `xpath`
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-        
+
         Correct:
         | count = | Get Matching Xpath Count | //div[@id='sales-pop']
         Incorrect:
@@ -615,7 +622,7 @@ return !element.dispatchEvent(evt);
         """Verifies that the page contains the given number of elements located by the given `xpath`.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-        
+
         Correct:
         | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
         Incorrect:
