@@ -30,19 +30,21 @@ Press Key
     [Setup]    Go To Page "forms/login.html"
     #Cannot Be Executed in IE
     Input Text    username_field    James Bond
-    Press Key    username_field    \\\\HOME
-    Press Key    username_field    \\\\END
-    Press Key    username_field    \\\\ARROW_LEFT
-    Press Key    username_field    \\\\ARROW_LEFT
-    Press Key    username_field    \\\\ARROW_LEFT
-    Press Key    username_field    \\\\ARROW_LEFT
-    Press Key    username_field    \\\\ARROW_RIGHT
-    Press Key    username_field    \\108    #This is the 'l' char
+    Press Key    username_field    HOME
+    Press Key    username_field    END
+    Press Key    username_field    ARROW_LEFT
+    Press Key    username_field    ARROW_LEFT
+    Press Key    username_field    ARROW_LEFT
+    Press Key    username_field    DELETE
+    Press Key    username_field    ARROW_LEFT
+    Press Key    username_field    ARROW_RIGHT
+    Press Key    username_field    \\108    #This is the 'l' char (deprecated style)
+    Press Key    username_field    111    #This is the 'o' char
     ${text} =    Get Value    username_field
     Should Be Equal    ${text}    James Blond
     Press Key    password_field    f
-    Press Key    password_field    \\9
-    Press Key    login_button    \\10
+    Press Key    password_field    9
+    Press Key    login_button    10
     Verify Location Is "forms/submit.html"
 
 Attempt Clear Element Text On Non-Editable Field

@@ -479,20 +479,27 @@ return !element.dispatchEvent(evt);
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
 
-        `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\\\'.
+        `key` is either a single character, a numerical ASCII code of the key,\
+         or a NAMED KEY as described at https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html
 
         Examples:
-        | Press Key | text_field   | q                |                                               |
-        | Press Key | login_button | \\\\13           | # ASCII code for enter key                    |
-        | Press Key | nav_console  | \\\\\\\\ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
+        | Press Key | text_field   | q        |                                               |
+        | Press Key | login_button | \\\\13   | # ASCII code for Enter key (DEPRECATED)       |
+        | Press Key | login_button | 10       | # ASCII code for Return key                   |
+        | Press Key | nav_console  | ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
+        
+        NAMED KEY value is new in Selenium2Library 1.7.3.
         """
-        if key.startswith('\\\\') and len(key) > 1:
-            key = getattr(Keys,key[2:])
-        elif key.startswith('\\') and len(key) > 1:
-            key = self._map_ascii_key_code_to_key(int(key[1:]))
-        #if len(key) > 1:
-        #    raise ValueError("Key value '%s' is invalid.", key)
+        if len(key) > 1:
+            if key.startswith('\\'):
+                self._warn("Press Key: Escaped ASCII codes are deprecated. Use plain numeric value: '%s'" % (key[1:]))
+                key = self._map_ascii_key_code_to_key(int(key[1:]))
+            else:
+                try:
+                    key = (key.isdecimal() and self._map_ascii_key_code_to_key(int(key))) or\
+                          ((not key.isdecimal()) and self._map_named_key_code_to_special_key(key))
+                except:
+                    raise ValueError("Key value '%s' is invalid." % (key))
         element = self._element_find(locator, True, True)
         #select it
         element.send_keys(key)
@@ -750,6 +757,15 @@ return !element.dispatchEvent(evt);
         if key is None:
             key = chr(key_code)
         return key
+
+    def _map_named_key_code_to_special_key(self, key_name):
+        try:
+           return getattr(Keys, key_name)
+        except:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
+        return Keys.NULL
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
