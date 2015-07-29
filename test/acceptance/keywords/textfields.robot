@@ -11,7 +11,7 @@ Get Value From Text Field
     Clear Element Text    name
     ${text} =    Get Value    name
     Should Be Equal    ${text}    ${EMPTY}
-  
+
 
 Input Unicode In Text Field
     Input Text    name    ${unic_text}
@@ -38,13 +38,13 @@ Press Key
     Press Key    username_field    DELETE
     Press Key    username_field    ARROW_LEFT
     Press Key    username_field    ARROW_RIGHT
-    Press Key    username_field    \\108    #This is the 'l' char (deprecated style)
-    Press Key    username_field    111    #This is the 'o' char
+    Press Key    username_field    \\108    #This is the 'l' char
+    Press Key    username_field    o
     ${text} =    Get Value    username_field
     Should Be Equal    ${text}    James Blond
     Press Key    password_field    f
     Press Key    password_field    9
-    Press Key    login_button    10
+    Press Key    login_button    ENTER
     Verify Location Is "forms/submit.html"
 
 Attempt Clear Element Text On Non-Editable Field

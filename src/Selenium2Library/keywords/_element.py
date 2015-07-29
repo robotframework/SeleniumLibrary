@@ -486,29 +486,23 @@ return !element.dispatchEvent(evt);
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
 
-        `key` is either a single character, a numerical ASCII code of the key,\
+        `key` is either a single character, a numerical ASCII code of the key lead by '\\\\',
          or a NAMED KEY as described at https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html
 
         Examples:
-        | Press Key | text_field   | q        |                                               |
-        | Press Key | login_button | \\\\13   | # ASCII code for Enter key (DEPRECATED)       |
-        | Press Key | login_button | 10       | # ASCII code for Return key                   |
+        | Press Key | text_field   | q        | # The letter 'q'                              |
+        | Press Key | login_button | \\\\13   | # ASCII code for Enter key                    |
         | Press Key | nav_console  | ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
-        
+
         NAMED KEY value is new in Selenium2Library 1.7.3.
         """
         if len(key) > 1:
             if key.startswith('\\'):
-                self._warn("Press Key: Escaped ASCII codes are deprecated. Use plain numeric value: '%s'" % (key[1:]))
                 key = self._map_ascii_key_code_to_key(int(key[1:]))
             else:
-                try:
-                    key = (key.isdecimal() and self._map_ascii_key_code_to_key(int(key))) or\
-                          ((not key.isdecimal()) and self._map_named_key_code_to_special_key(key))
-                except:
-                    raise ValueError("Key value '%s' is invalid." % (key))
+                key = self._map_named_key_code_to_special_key(key)
         element = self._element_find(locator, True, True)
-        #select it
+        # select it
         element.send_keys(key)
 
     # Public, links
@@ -768,7 +762,7 @@ return !element.dispatchEvent(evt);
     def _map_named_key_code_to_special_key(self, key_name):
         try:
            return getattr(Keys, key_name)
-        except:
+        except AttributeError:
            message = "Unknown key named '%s'." % (key_name)
            self._debug(message)
            raise ValueError(message)
