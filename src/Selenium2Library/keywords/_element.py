@@ -480,12 +480,14 @@ return !element.dispatchEvent(evt);
         """Simulates user pressing key on element identified by `locator`.
 
         `key` is either a single character, a numerical ASCII code of the key lead by '\\\\',
-         or a NAMED KEY as described at https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html
+         or a NAMED KEY as described in the [https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium docs].
 
         Examples:
         | Press Key | text_field   | q        | # The letter 'q'                              |
+        | Press Key | nav_console  | ARROW_UP | # Named ARROW_UP key                          |
         | Press Key | login_button | \\\\13   | # ASCII code for Enter key                    |
-        | Press Key | nav_console  | ARROW_UP | # selenium.webdriver.common.keys ARROW_UP KEY |
+
+        It's recommended to use named keys over ascii escapes (.i.e ``ENTER`` over ``\\\\13``)
 
         NAMED KEY value is new in Selenium2Library 1.7.3.
         """
@@ -759,7 +761,6 @@ return !element.dispatchEvent(evt);
            message = "Unknown key named '%s'." % (key_name)
            self._debug(message)
            raise ValueError(message)
-        return Keys.NULL
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
