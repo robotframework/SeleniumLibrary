@@ -1,6 +1,5 @@
 *** Setting ***
 Test Setup        Go To Page "forms/prefilled_email_form.html"
-Force Tags        txtfields
 Variables         variables.py
 Resource          ../resource.robot
 
