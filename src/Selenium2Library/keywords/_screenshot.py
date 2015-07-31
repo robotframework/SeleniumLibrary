@@ -63,15 +63,14 @@ class _ScreenshotKeywords(KeywordGroup):
 
     def capture_screenshot_only_on_failure(self,keyword,*args):
         """Takes a screenshot of the current page and embeds it into the log
-        only when a specific keyword fails. If a keyword can run miltiple times
+        when the given ``keyword``  fails. If the given ``keyword`` can run miltiple times
         prior to timing out, the screenshot will only be captured on the very
         last failure.
 
         Example:
         |  Capture Screenshot Only On Failure  |  Wait Until Keyword Succeeds  |  5 min  1 sec  | On Page  |  ${page name}  | """
 
-        nothing = lambda *args: None
-        old_keyword = self.register_keyword_to_run_on_failure(nothing)
+        old_keyword = self.register_keyword_to_run_on_failure('nothing')
         status, value = BuiltIn().run_keyword_and_ignore_error(keyword,*args)
         self.register_keyword_to_run_on_failure(old_keyword)
         if (status=='FAIL'):
