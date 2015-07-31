@@ -63,7 +63,7 @@ class _ScreenshotKeywords(KeywordGroup):
 
     def capture_screenshot_only_on_failure(self,keyword,*args):
         """Takes a screenshot of the current page and embeds it into the log
-        when the given ``keyword``  fails. If the given ``keyword`` can run miltiple times
+        when the given ``keyword``  fails. If the given ``keyword`` can run multiple times
         prior to timing out, the screenshot will only be captured on the very
         last failure.
 
