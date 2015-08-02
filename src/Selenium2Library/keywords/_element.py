@@ -26,7 +26,7 @@ class _ElementKeywords(KeywordGroup):
 
         See `introduction` for details about locating elements.
         """
-        return self.get_webelements(locator)[0]
+        return self._element_find(locator, True, True)
 
     def get_webelements(self, locator):
         """Returns list of WebElement objects matching locator.
