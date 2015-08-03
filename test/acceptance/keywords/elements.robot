@@ -10,8 +10,6 @@ Get Elements
 Get Web Element
     @{links}=  Get WebElements  //div[@id="div_id"]/a
     ${link}=  Get WebElement  //div[@id="div_id"]/a
-    LOG  @{links}[0]
-    LOG  ${link}
     Should Be Equal  @{links}[0]  ${link}
     Run Keyword and Expect Error  ValueError: Element locator 'id=non_existing_elem' did not match any elements.
     ...  Get WebElement  id=non_existing_elem
