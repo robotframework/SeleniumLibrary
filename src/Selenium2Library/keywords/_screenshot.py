@@ -8,7 +8,7 @@ from keywordgroup import KeywordGroup
 class _ScreenshotKeywords(KeywordGroup):
 
     def __init__(self):
-        self._screenshot_index = 0
+        self._screenshot_index = {}
         self._screenshot_path_stack = []
         self.screenshot_root_directory = None
 
@@ -32,30 +32,57 @@ class _ScreenshotKeywords(KeywordGroup):
 
         self.screenshot_root_directory = path
 
-    def capture_page_screenshot(self, filename=None):
+    def capture_page_screenshot(self, filename=None, overwrite=False):
         """Takes a screenshot of the current page and embeds it into the log.
 
         `filename` argument specifies the name of the file to write the
-        screenshot into. If no `filename` is given, the screenshot is saved into file
-        `selenium-screenshot-<counter>.png` under the directory where
-        the Robot Framework log file is written into. The `filename` is
+        screenshot into. If no `filename` is given, the screenshot is
+        saved into file `selenium-screenshot-<counter>.png` under the directory
+        where the Robot Framework log file is written into. The `filename` is
         also considered relative to the same directory, if it is not
         given in absolute format. If an absolute or relative path is given
         but the path does not exist it will be created.
 
-        `css` can be used to modify how the screenshot is taken. By default
-        the bakground color is changed to avoid possible problems with
-        background leaking when the page layout is somehow broken.
-        """
-        path, link = self._get_screenshot_paths(filename)
-        self._create_directory(path)
+        With `overwrite` it is possible to define what is done if file already
+        exist. By default filename is not overwritten but new one is created
+        by adding <counter> in the end. Example if capture.png exist and
+        this is the first overwrite, then new file is created with name
+        capture-1.png
 
+        Example:
+        | Open Browser | www.someurl.com | browser=${BROWSER} |
+        | Capture Page Screenshot | filename=${BROWSER} |
+        | Capture Page Screenshot | filename=${BROWSER} |
+        | Capture Page Screenshot | filename=${BROWSER} |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-1.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}${BROWSER}-2.png |
+        | Capture Page Screenshot |
+        | Capture Page Screenshot |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
+        | Capture Page Screenshot | filename=DefaultName.png | overwrite=${True} |
+        | Capture Page Screenshot | filename=DefaultName.png | overwrite=${True} |
+        | File Should Exist  | ${OUTPUTDIR}${/}DefaultName.png |
+        | File Should Not Exist | ${OUTPUTDIR}${/}DefaultName-1.png |
+
+        *NOTE:* The `overwrite` is ignored if `filename` is not defined
+        Example:
+        | Open Browser | www.someurl.com | browser=${BROWSER} |
+        | Capture Page Screenshot | overwrite=${True} | # overwrite is ignored |
+        | Capture Page Screenshot | overwrite=${True} | # overwrite is ignored |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
+        | File Should Exist  | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
+        """
+
+        path, link = self._get_screenshot_paths(filename, overwrite=overwrite)
+        self._create_directory(path)
         if hasattr(self._current_browser(), 'get_screenshot_as_file'):
-          if not self._current_browser().get_screenshot_as_file(path):
-              raise RuntimeError('Failed to save screenshot ' + filename)
+            if not self._current_browser().get_screenshot_as_file(path):
+                raise RuntimeError('Failed to save screenshot ' + filename)
         else:
-          if not self._current_browser().save_screenshot(path):
-            raise RuntimeError('Failed to save screenshot ' + filename)
+            if not self._current_browser().save_screenshot(path):
+                raise RuntimeError('Failed to save screenshot ' + filename)
 
         # Image is shown on its own row and thus prev row is closed on purpose
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'
@@ -86,15 +113,41 @@ class _ScreenshotKeywords(KeywordGroup):
     def _restore_screenshot_directory(self):
         self.screenshot_root_directory = self._screenshot_path_stack.pop()
 
-    def _get_screenshot_paths(self, filename):
+    def _get_screenshot_paths(self, filename, overwrite=False):
         if not filename:
-            self._screenshot_index += 1
-            filename = 'selenium-screenshot-%d.png' % self._screenshot_index
+            index = self._get_new_index('selenium-screenshot')
+            filename = 'selenium-screenshot-%d.png' % index
+        elif filename and not overwrite:
+            filename = self._screenshot_existence(filename.replace('/',
+                                                                   os.sep))
         else:
             filename = filename.replace('/', os.sep)
 
-        screenshotDir = self._get_screenshot_directory()
-        logDir = self._get_log_dir()
-        path = os.path.join(screenshotDir, filename)
-        link = robot.utils.get_link_path(path, logDir)
+        screenshot_dir = self._get_screenshot_directory()
+        logdir = self._get_log_dir()
+        path = os.path.join(screenshot_dir, filename)
+        link = robot.utils.get_link_path(path, logdir)
         return path, link
+
+    def _screenshot_existence(self, filename):
+        if os.path.exists(self._get_logdir_path(filename)[0]):
+            index = self._get_new_index(filename)
+            try:
+                return '-%s.png'.join(filename.rsplit('.png', 1)) % index
+            except TypeError:
+                return filename + '-%s' % index
+        else:
+            return filename
+
+    def _get_logdir_path(self, filename):
+        logdir = self._get_log_dir()
+        return os.path.join(logdir, filename), logdir
+
+    def _get_new_index(self, filename):
+        try:
+            index = self._screenshot_index[filename] + 1
+            self._screenshot_index[filename] = index
+            return index
+        except KeyError:
+            self._screenshot_index[filename] = 1
+            return 1

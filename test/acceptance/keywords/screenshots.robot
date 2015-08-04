@@ -42,3 +42,30 @@ Ensure screenshot captures revert to default root directory
   [Setup]  Remove Files  ${OUTPUTDIR}/default-root-screenshot.png
   Capture Page Screenshot  default-root-screenshot.png
   File Should Exist  ${OUTPUTDIR}/default-root-screenshot.png
+
+Capture page screenshot to with overwrite false and custom name
+  [Setup]  Remove Directory  ${OUTPUTDIR}/screenshot-overwrite  recursive
+  Capture Page Screenshot  screenshot-overwrite/some-name.png
+  File Should Exist  ${OUTPUTDIR}/screenshot-overwrite/some-name.png
+  Capture Page Screenshot  screenshot-overwrite/some-name.png
+  File Should Exist  ${OUTPUTDIR}/screenshot-overwrite/some-name-1.png
+
+Capture page screenshot to with overwrite true
+  Capture Page Screenshot  overwrite=True
+  Capture Page Screenshot  overwrite=True
+  File Should Exist  ${OUTPUTDIR}/selenium-screenshot-3.png
+  File Should Exist  ${OUTPUTDIR}/selenium-screenshot-4.png
+  Capture Page Screenshot  overwrite-filename.png  overwrite=True
+  Capture Page Screenshot  overwrite-filename.png  overwrite=True
+  File Should Exist  ${OUTPUTDIR}/overwrite-filename.png
+  File Should Not Exist  ${OUTPUTDIR}/overwrite-filename-1.png
+
+Capture page screenshot with complex names
+  Capture Page Screenshot  many.png.and.dots.png
+  Capture Page Screenshot  many.png.and.dots.png
+  File Should Exist  ${OUTPUTDIR}/many.png.and.dots.png
+  File Should Exist  ${OUTPUTDIR}/many.png.and.dots-1.png
+  Capture Page Screenshot  no-png-in-end
+  Capture Page Screenshot  no-png-in-end
+  File Should Exist  ${OUTPUTDIR}/no-png-in-end
+  File Should Exist  ${OUTPUTDIR}/no-png-in-end-1
