@@ -21,6 +21,13 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, get element(s)
 
+    def get_webelement(self, locator):
+        """Returns the first WebElement matching the given locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._element_find(locator, True, True)
+
     def get_webelements(self, locator):
         """Returns list of WebElement objects matching locator.
 
