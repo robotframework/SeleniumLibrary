@@ -5,7 +5,6 @@ test/results
 *.pyc
 *.orig
 MANIFEST
-doc/*.html
 *.egg-info
 *.egg
 chromedriver.log
