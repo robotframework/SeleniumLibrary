@@ -1,6 +1,10 @@
 ﻿Release Notes
 =============
 
+1.7.3 (unreleased)
+-------------------
+- Added 'Get WebElement' [zephraph][emanlove]
+
 1.7.2
 ----------------
 - Added an argument called screenshot_root_directory that can be passed into S2L's
