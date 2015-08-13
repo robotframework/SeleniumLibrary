@@ -51,7 +51,7 @@ Page Should Contain With Frames
 
 Page Should Not Contain
     [Documentation]    LOG 2:8 Current page does not contain text 'non existing text'.
-    ... LOG 3.1:7 REGEXP: (?i)<html .*</html>
+    ...    LOG 3.1:7 REGEXP: (?i)<html .*</html>
     Page Should Not Contain    non existing text
     Run Keyword And Expect Error    Page should not have contained text 'needle'
     ...    Page Should Not Contain    needle
