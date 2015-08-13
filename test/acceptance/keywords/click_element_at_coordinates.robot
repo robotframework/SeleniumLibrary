@@ -1,4 +1,5 @@
 *** Settings ***
+Documentation     Clicks element at coordinates
 Suite Setup       Go To Page "javascript/click_at_coordinates.html"
 Test Setup        Initialize Page
 Resource          ../resource.robot
@@ -7,12 +8,13 @@ Resource          ../resource.robot
 Click Element At Coordinates
     [Documentation]    LOG 2 Click clicking element 'Clickable' in coordinates '10', '20'.
     [Tags]    Known Issue - Firefox
-    Click Element At Coordinates    Clickable    ${10}   ${20}
+    Click Element At Coordinates    Clickable    ${10}    ${20}
     Element Text Should Be    outputX    110
     Element Text Should Be    outputY    120
 
 *** Keywords ***
 Initialize page
+    [Documentation]    Initialize page
     Reload Page
     Element Text Should Be    outputX    initial outputX
     Element Text Should Be    outputY    initial outputY
