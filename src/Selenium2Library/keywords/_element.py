@@ -21,6 +21,13 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, get element(s)
 
+    def get_webelement(self, locator):
+        """Returns the first WebElement matching the given locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._element_find(locator, True, True)
+
     def get_webelements(self, locator):
         """Returns list of WebElement objects matching locator.
 
@@ -479,19 +486,25 @@ return !element.dispatchEvent(evt);
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
 
-        `key` is either a single character, or a numerical ASCII code of the key
-        lead by '\\\\'.
+        `key` is either a single character, a numerical ASCII code of the key lead by '\\\\',
+         or a NAMED KEY as described in the [https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium docs].
 
         Examples:
-        | Press Key | text_field   | q |
-        | Press Key | login_button | \\\\13 | # ASCII code for enter key |
+        | Press Key | text_field   | q        | # The letter 'q'                              |
+        | Press Key | nav_console  | ARROW_UP | # Named ARROW_UP key                          |
+        | Press Key | login_button | \\\\13   | # ASCII code for Enter key                    |
+
+        It's recommended to use named keys over ascii escapes (.i.e ``ENTER`` over ``\\\\13``)
+
+        NAMED KEY value is new in Selenium2Library 1.7.3.
         """
-        if key.startswith('\\') and len(key) > 1:
-            key = self._map_ascii_key_code_to_key(int(key[1:]))
-        #if len(key) > 1:
-        #    raise ValueError("Key value '%s' is invalid.", key)
+        if len(key) > 1:
+            if key.startswith('\\'):
+                key = self._map_ascii_key_code_to_key(int(key[1:]))
+            else:
+                key = self._map_named_key_code_to_special_key(key)
         element = self._element_find(locator, True, True)
-        #select it
+        # select it
         element.send_keys(key)
 
     # Public, links
@@ -599,7 +612,7 @@ return !element.dispatchEvent(evt);
         """Returns number of elements matching `xpath`
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-        
+
         Correct:
         | count = | Get Matching Xpath Count | //div[@id='sales-pop']
         Incorrect:
@@ -615,7 +628,7 @@ return !element.dispatchEvent(evt);
         """Verifies that the page contains the given number of elements located by the given `xpath`.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-        
+
         Correct:
         | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
         Incorrect:
@@ -747,6 +760,14 @@ return !element.dispatchEvent(evt);
         if key is None:
             key = chr(key_code)
         return key
+
+    def _map_named_key_code_to_special_key(self, key_name):
+        try:
+           return getattr(Keys, key_name)
+        except AttributeError:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')

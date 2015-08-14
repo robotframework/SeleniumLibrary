@@ -1,6 +1,18 @@
 Release Notes
 =============
 
+1.7.3
+-------------------
+- Added 'Get WebElement' [zephraph][emanlove]
+
+- Added named keys to 'Press Key' [helioguilherme66]
+
+- Fix an import error that caused a dependence on RF >= 2.8.5
+  [zephraph]
+
+- Fixed an issue that caused screenshots to be improperly linked in the logs
+  [zephraph]
+
 1.7.2
 ----------------
 - Added an argument called screenshot_root_directory that can be passed into S2L's
