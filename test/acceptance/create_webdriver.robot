@@ -20,7 +20,7 @@ Create Webdriver With Bad Driver Name
 
 Create Webdriver With Duplicate Arguments
     [Documentation]    Invalid values in arguments
-    ${kwargs}=    Create Dictionary    arg    1
+    ${kwargs}=    Create Dictionary    arg=1
     Run Keyword And Expect Error    Got multiple values for argument 'arg'.
     ...    Create Webdriver    Firefox    kwargs=${kwargs}    arg=2
 
@@ -32,17 +32,16 @@ Create Webdriver With Bad Keyword Argument Dictionary
 *** Keywords ***
 Set Driver Variables
     [Documentation]    Selects proper driver
-    ${drivers}=    Create Dictionary    ff    Firefox    firefox    Firefox    ie
-    ...    Ie    internetexplorer    Ie    googlechrome    Chrome    gc
-    ...    Chrome    chrome    Chrome    opera    Opera    phantomjs
-    ...    PhantomJS    safari    Safari
+    ${drivers}=    Create Dictionary    ff=Firefox    firefox=Firefox    ie=Ie
+    ...    internetexplorer=Ie    googlechrome=Chrome    gc=Chrome
+    ...    chrome=Chrome    opera=Opera    phantomjs=PhantomJS safari=Safari
     ${name}=    Evaluate    "Remote" if "${REMOTE_URL}"!="None" else ${drivers}["${BROWSER.lower().replace(' ', '')}"]
     Set Test Variable    ${DRIVER_NAME}    ${name}
-    ${dc names}=    Create Dictionary    ff    FIREFOX    firefox    FIREFOX    ie
-    ...    INTERNETEXPLORER    internetexplorer    INTERNETEXPLORER    googlechrome    CHROME    gc
-    ...    CHROME    chrome    CHROME    opera    OPERA    phantomjs
-    ...    PHANTOMJS    htmlunit    HTMLUNIT    htmlunitwithjs    HTMLUNITWITHJS    android
-    ...    ANDROID    iphone    IPHONE    safari    SAFARI
+    ${dc names}=    Create Dictionary    ff=FIREFOX    firefox=FIREFOX    ie=INTERNETEXPLORER
+    ...    internetexplorer=INTERNETEXPLORER    googlechrome=CHROME    gc=CHROME
+    ...    chrome=CHROME    opera=OPERA    phantomjs=PHANTOMJS    htmlunit=HTMLUNIT
+    ...    htmlunitwithjs=HTMLUNITWITHJS    android=ANDROID    iphone=IPHONE
+    ...    safari=SAFARI
     ${dc name}=    Get From Dictionary    ${dc names}    ${BROWSER.lower().replace(' ', '')}
     ${caps}=    Evaluate    sys.modules['selenium.webdriver'].DesiredCapabilities.${dc name}
     ...    selenium.webdriver,sys
