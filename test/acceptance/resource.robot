@@ -7,7 +7,8 @@ Library           OperatingSystem
 ${SERVER}         localhost:7000
 ${BROWSER}        firefox
 ${REMOTE_URL}     ${NONE}
-${DESIRED_CAPABILITIES}    ${NONE}
+${TUNNEL_IDENTIFIER}    ${NONE}
+${DESIRED_CAPABILITIES}    tunnel-identifier=${TUNNEL_IDENTIFIER}
 ${ROOT}           http://${SERVER}/html
 ${FRONT PAGE}     ${ROOT}/
 ${SPEED}          0
