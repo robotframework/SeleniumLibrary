@@ -11,7 +11,7 @@ RESULTS_DIR = os.path.join(ROOT_DIR, "results")
 HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, 'testserver', 'testserver.py')
 SRC_DIR = os.path.join(ROOT_DIR, "..", "src")
 TRAVIS = os.environ.get('TRAVIS')
-SAUCE_USER_NAME = os.environ.get('SAUCE_USER_NAME')
+SAUCE_USERNAME = os.environ.get('SAUCE_USERNAME')
 SAUCE_ACCESS_KEY = os.environ.get('SAUCE_ACCESS_KEY')
 
 sys.path.insert(0, SRC_DIR)

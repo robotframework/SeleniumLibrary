@@ -38,7 +38,7 @@ ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': ':'.join((env.SRC_DIR, en
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
-    ARG_VALUES['sauceUserName'] = env.SAUCE_USER_NAME
+    ARG_VALUES['sauceUserName'] = env.SAUCE_USERNAME
     ARG_VALUES['sauceAccessKey'] = env.SAUCE_ACCESS_KEY
     if env.TRAVIS:
         ROBOT_ARGS.extend(['--noncritical', 'known_issue_-_travisci'])
