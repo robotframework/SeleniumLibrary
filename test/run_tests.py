@@ -13,7 +13,7 @@ ROBOT_ARGS = [
     '--outputdir', '%(outdir)s',
     '--variable', 'browser:%(browser)s',
     '--variable', 'pyversion:%(pyVersion)s',
-    '--variable', 'SAUCE_USER_NAME:%(sauceUserName)s',
+    '--variable', 'SAUCE_USERNAME:%(sauceUserName)s',
     '--variable', 'SAUCE_ACCESS_KEY:%(sauceAccessKey)s',
     '--escape', 'space:SP',
     '--report', 'none',
