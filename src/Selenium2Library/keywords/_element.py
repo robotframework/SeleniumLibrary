@@ -490,9 +490,10 @@ return !element.dispatchEvent(evt);
          or a NAMED KEY as described in the [https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium docs].
 
         Examples:
-        | Press Key | text_field   | q        | # The letter 'q'                              |
-        | Press Key | nav_console  | ARROW_UP | # Named ARROW_UP key                          |
-        | Press Key | login_button | \\\\13   | # ASCII code for Enter key                    |
+        | Press Key | text_field   | q        | # The letter 'q'                                |
+        | Press Key | nav_console  | ARROW_UP | # Named ARROW_UP key                            |
+        | Press Key | login_button | \\\\13   | # ASCII code for Enter key                      |
+        | Press Key | custom_input | mystring | # String to be entered different from named key |
 
         It's recommended to use named keys over ascii escapes (.i.e ``ENTER`` over ``\\\\13``)
 
@@ -767,7 +768,7 @@ return !element.dispatchEvent(evt);
         except AttributeError:
            message = "Unknown key named '%s'." % (key_name)
            self._debug(message)
-           raise ValueError(message)
+           return(key_name)  # raise ValueError(message)
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
