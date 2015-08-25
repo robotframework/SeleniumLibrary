@@ -485,26 +485,16 @@ return !element.dispatchEvent(evt);
 
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
-
-        `key` is either a single character, a numerical ASCII code of the key lead by '\\\\',
-         or a NAMED KEY as described in the [https://selenium.googlecode.com/git/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium docs].
-
+        `key` is either a single character, or a numerical ASCII code of the key
+        lead by '\\\\'.
         Examples:
-        | Press Key | text_field   | q        | # The letter 'q'                              |
-        | Press Key | nav_console  | ARROW_UP | # Named ARROW_UP key                          |
-        | Press Key | login_button | \\\\13   | # ASCII code for Enter key                    |
-
-        It's recommended to use named keys over ascii escapes (.i.e ``ENTER`` over ``\\\\13``)
-
-        NAMED KEY value is new in Selenium2Library 1.7.3.
+        | Press Key | text_field   | q |
+        | Press Key | login_button | \\\\13 | # ASCII code for enter key |
         """
-        if len(key) > 1:
-            if key.startswith('\\'):
-                key = self._map_ascii_key_code_to_key(int(key[1:]))
-            else:
-                key = self._map_named_key_code_to_special_key(key)
+        if key.startswith('\\') and len(key) > 1:
+            key = self._map_ascii_key_code_to_key(int(key[1:]))
         element = self._element_find(locator, True, True)
-        # select it
+        #select it
         element.send_keys(key)
 
     # Public, links
