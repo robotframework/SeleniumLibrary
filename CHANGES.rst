@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+1.7.4
+-------------------
+- Reverted 'Press Keys' because of backwards incompatible changes [zephraph]
+
 1.7.3
 -------------------
 - Added 'Get WebElement' [zephraph][emanlove]
