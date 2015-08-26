@@ -30,10 +30,11 @@ Input Password
 Press Key
   [Setup]  Go To Page "forms/login.html"
   Cannot Be Executed in IE
-  Input Text  username_field  James Bond
-  Press Key  password_field  f
-  Press Key  password_field   \\9
-  Press Key  login_button  \\10
+  Press Key    username_field    James Bon
+  Press Key    username_field    \\100
+  Textfield Value Should Be    username_field    James Bond
+  Press Key    password_field    f
+  Press Key    login_button    \\10
   Verify Location Is "forms/submit.html"
 
 Attempt Clear Element Text On Non-Editable Field
