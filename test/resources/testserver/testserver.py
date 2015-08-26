@@ -17,8 +17,8 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         
     def do_POST(self):
         # We could also process paremeters here using something like below.
-        # length = self.headers['Content-Length']
-        # print self.rfile.read(int(length))
+        length = self.headers['Content-Length']
+        print self.rfile.read(int(length))
         self.do_GET()
 
     def send_head(self):
@@ -63,7 +63,12 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", ctype)
         fs = os.fstat(f.fileno())
-        self.send_header("Content-Length", str(fs[6]))
+        # Apparently this bug regressed in Chrome 36-37 in Windows 7:
+        # https://codereview.chromium.org/8496016
+        # The workaround is to fake increased size of the content, and so
+        # Chrome does not timeout. 
+        # print "DEBUG: Content-Length :%s" % str(fs[6]+fs[6]*0.20)
+        self.send_header("Content-Length", str(fs[6]+fs[6]*0.20))
         self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
         self.end_headers()
         return f

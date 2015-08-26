@@ -1,4 +1,4 @@
-Release Notes
+﻿Release Notes
 =============
 
 1.7.4
@@ -141,6 +141,9 @@ Release Notes
   a '=' by using the prefix 'default='. Also make locator prefixes
   space-insensitive.
   [ombre42]
+
+A big thank you to [eweitz] and [HelioGuilherme66] for getting the
+continuous integration builds to go green by fixing internal tests.
 
 A big thank you to [eweitz] and [HelioGuilherme66] for getting the
 continuous integration builds to go green by fixing internal tests.

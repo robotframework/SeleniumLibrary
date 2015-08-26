@@ -64,7 +64,7 @@ def stop_http_server():
 def process_output(args):
     print
     if _has_robot_27():
-        call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
+        call(['python', os.path.join(env.RESOURCES_DIR, 'robotstatuschecker.py'),
              os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
