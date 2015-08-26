@@ -12,6 +12,8 @@ Selenium 2 (WebDriver) library for Robot Framework
 
 .. image:: https://img.shields.io/pypi/l/robotframework-selenium2library.svg
     :target: http://www.apache.org/licenses/LICENSE-2.0
+    
+.. image:: https://coveralls.io/repos/rtomac/robotframework-selenium2library/badge.svg?branch=master&service=github 	:target: https://coveralls.io/github/rtomac/robotframework-selenium2library?branch=master
 
 .. image:: https://robotframework-slack.herokuapp.com/badge.svg
 	:target: https://robotframework-slack.herokuapp.com
