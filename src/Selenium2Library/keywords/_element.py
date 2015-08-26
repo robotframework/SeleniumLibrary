@@ -485,10 +485,11 @@ return !element.dispatchEvent(evt);
 
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
-        `key` is either a single character, or a numerical ASCII code of the key
+        `key` is either a single character, a string, or a numerical ASCII code of the key
         lead by '\\\\'.
         Examples:
         | Press Key | text_field   | q |
+        | Press Key | text_field   | abcde |
         | Press Key | login_button | \\\\13 | # ASCII code for enter key |
         """
         if key.startswith('\\') and len(key) > 1:
