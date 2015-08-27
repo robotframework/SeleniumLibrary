@@ -499,57 +499,57 @@ return !element.dispatchEvent(evt);
         element.send_keys(key)
 
     def press_keys(self, locator, keys):
-		"""Simulates user pressing one or more KEY(s) or SPECIAL KEY(s) simultaniuosly or in sequence
-		on element identified by `locator` while HOLDING DOWN one or more MODIFICATION KEY(s).
-		
-		`KEY`:					0-9, aA-zZ, -+*/% etc.
-		`SPECIAL KEY`:			F1-F12, DEL, TAB, ARROW_UP/_DOWN/_LEFT/_RIGHT etc.
-		`MODIFICATION KEY`:		ALT, ALT_GR, CTRL, R_CTRL, SHIFT, ALT_SHIFT, ALT_GR_SHIFT etc.
-		
-		`KEY` is either a single character, (TODO: or a numerical ASCII code of the key lead by '\\\\'),
-		or a sequence of single characters.
-		`SPECIAL KEY` and `MODIFICATION KEY` are special key names defined at selenium.webdriver.common.keys.
-		
-		Examples:	 # locator	 # key sequence				# usage example
-		| Press Keys | <locator> | CONTROL + a				| # select
-		| Press Keys | <locator> | CONTROL + A				| # select
-		| Press Keys | <locator> | CONTROL + C				| # copy
-		| Press Keys | <locator> | CONTROL + V				| # paste
-		| Press Keys | <locator> | CONTROL + ABC			| # custom
-		| Press Keys | <locator> | CONTROL + SHIFT + A		| # e.g. opens Firefox's Add-ons-Manager
-		| Press Keys | <locator> | CONTROL + ALT + DELETE	| # e.g. shows lock screen on Windows
-		| Press Keys | <locator> | CONTROL + ARROW_UP	 	| # and so on
-		"""
-		
-		keys =  keys.split(' + ')
-		
-		i = 0
-		named_keys = []
-		named_key_sequence = []
-		unnamed = ''
-		for key in keys:
-			try:
-				named_key = getattr(Keys, keys[i])
-				print "%s. named key is %s." % (i + 1, key)
-				named_keys.append(keys[i])
-				i = i + 1
-			except:
-				print "The rest '%s' is unnamed." % key
-				unnamed = str(key).lower()
-				i = i + 1
-		print "NAMED KEY(s):", named_keys
-		for key in named_keys:
-				named_key_sequence.append('Keys.%s' % key)
-				named_key_seq_as_string = ','.join(named_key_sequence)
-		print "NAMED KEY SEQUENCE:", named_key_sequence
-		print "NAMED KEY SEQUENCE as STRING:", named_key_seq_as_string
-		print "element.send_keys() call should look like this:"
-		print "element.send_keys(%s, '%s')" % (named_key_seq_as_string, unnamed)
-		
-		#select it
-		element = self._element_find(locator, True, True)
-		# execute 'press_keys' action
-		exec("element.send_keys(%s, '%s')" % (named_key_seq_as_string, unnamed))
+	"""Simulates user pressing one or more KEY(s) or SPECIAL KEY(s) simultaniuosly or in sequence
+	on element identified by `locator` while HOLDING DOWN one or more MODIFICATION KEY(s).
+
+	`KEY`:					0-9, aA-zZ, -+*/% etc.
+	`SPECIAL KEY`:			F1-F12, DEL, TAB, ARROW_UP/_DOWN/_LEFT/_RIGHT etc.
+	`MODIFICATION KEY`:		ALT, ALT_GR, CTRL, R_CTRL, SHIFT, ALT_SHIFT, ALT_GR_SHIFT etc.
+
+	`KEY` is either a single character, (TODO: or a numerical ASCII code of the key lead by '\\\\'),
+	or a sequence of single characters.
+	`SPECIAL KEY` and `MODIFICATION KEY` are special key names defined at selenium.webdriver.common.keys.
+
+	Examples:    # locator   # key sequence			# usage example
+	| Press Keys | <locator> | CONTROL + a			| # select
+	| Press Keys | <locator> | CONTROL + A			| # select
+	| Press Keys | <locator> | CONTROL + C			| # copy
+	| Press Keys | <locator> | CONTROL + V			| # paste
+	| Press Keys | <locator> | CONTROL + ABC		| # custom
+	| Press Keys | <locator> | CONTROL + SHIFT + A		| # e.g. opens Firefox's Add-ons-Manager
+	| Press Keys | <locator> | CONTROL + ALT + DELETE	| # e.g. shows lock screen on Windows
+	| Press Keys | <locator> | CONTROL + ARROW_UP	 	| # and so on
+	"""
+
+	keys =  keys.split(' + ')
+
+	i = 0
+	named_keys = []
+	named_key_sequence = []
+	unnamed = ''
+	for key in keys:
+		try:
+			named_key = getattr(Keys, keys[i])
+			print "%s. named key is %s." % (i + 1, key)
+			named_keys.append(keys[i])
+			i = i + 1
+		except:
+			print "The rest '%s' is unnamed." % key
+			unnamed = str(key).lower()
+			i = i + 1
+	print "NAMED KEY(s):", named_keys
+	for key in named_keys:
+			named_key_sequence.append('Keys.%s' % key)
+			named_key_seq_as_string = ','.join(named_key_sequence)
+	print "NAMED KEY SEQUENCE:", named_key_sequence
+	print "NAMED KEY SEQUENCE as STRING:", named_key_seq_as_string
+	print "element.send_keys() call should look like this:"
+	print "element.send_keys(%s, '%s')" % (named_key_seq_as_string, unnamed)
+	
+	#select it
+	element = self._element_find(locator, True, True)
+	# execute 'press_keys' action
+	exec("element.send_keys(%s, '%s')" % (named_key_seq_as_string, unnamed))
 
     # Public, links
 
