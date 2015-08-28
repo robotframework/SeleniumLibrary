@@ -530,26 +530,22 @@ return !element.dispatchEvent(evt);
 	for key in keys:
 		try:
 			named_key = getattr(Keys, keys[i])
-			print "%s. named key is %s." % (i + 1, key)
+			self._info("%s. named key is %s." % (i + 1, key))
 			named_keys.append(keys[i])
+			named_key_sequence.append('Keys.%s' % keys[i])
+			named_key_seq_as_string = ','.join(named_key_sequence)
 			i = i + 1
 		except:
-			print "The rest '%s' is unnamed." % key
+			self._info("The rest '%s' is unnamed." % key)
 			unnamed = str(key).lower()
 			i = i + 1
-	print "NAMED KEY(s):", named_keys
-	for key in named_keys:
-			named_key_sequence.append('Keys.%s' % key)
-			named_key_seq_as_string = ','.join(named_key_sequence)
-	print "NAMED KEY SEQUENCE:", named_key_sequence
-	print "NAMED KEY SEQUENCE as STRING:", named_key_seq_as_string
-	print "element.send_keys() call should look like this:"
-	print "element.send_keys(%s, '%s')" % (named_key_seq_as_string, unnamed)
-	
+
+	self._info("Performing 'send_keys(%s, '%s')' on:" % (named_key_seq_as_string, unnamed))
+	self._info("Element: %s" % locator)
+
 	#select it
 	element = self._element_find(locator, True, True)
-	# execute 'press_keys' action
-	exec("element.send_keys(%s, '%s')" % (named_key_seq_as_string, unnamed))
+	element.send_keys(named_key_seq_as_string, unnamed)
 
     # Public, links
 
