@@ -16,7 +16,8 @@ class Selenium2Library(
     _JavaScriptKeywords,
     _CookieKeywords,
     _ScreenshotKeywords,
-    _WaitingKeywords
+    _WaitingKeywords,
+    _AlertKeywords
 ):
     """Selenium2Library is a web testing library for Robot Framework.
 
