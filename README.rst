@@ -1,8 +1,8 @@
 Selenium 2 (WebDriver) library for Robot Framework
 ==================================================
 
-.. image:: https://api.travis-ci.org/rtomac/robotframework-selenium2library.png
-    :target: http://travis-ci.org/rtomac/robotframework-selenium2library
+.. image:: https://api.travis-ci.org/robotframework/Selenium2Library.png
+    :target: http://travis-ci.org/robotframework/Selenium2Library
 
 .. image:: https://img.shields.io/pypi/v/robotframework-selenium2library.svg
     :target: https://pypi.python.org/pypi/robotframework-selenium2library
@@ -13,8 +13,8 @@ Selenium 2 (WebDriver) library for Robot Framework
 .. image:: https://img.shields.io/pypi/l/robotframework-selenium2library.svg
     :target: http://www.apache.org/licenses/LICENSE-2.0
     
-.. image:: https://coveralls.io/repos/rtomac/robotframework-selenium2library/badge.svg?branch=master&service=github
-	:target: https://coveralls.io/github/rtomac/robotframework-selenium2library?branch=master
+.. image:: https://coveralls.io/repos/robotframework/Selenium2Library/badge.svg?branch=master&service=github
+	:target: https://coveralls.io/github/robotframework/Selenium2Library?branch=master
 
 .. image:: https://robotframework-slack.herokuapp.com/badge.svg
 	:target: https://robotframework-slack.herokuapp.com
@@ -152,9 +152,9 @@ The `user group for Robot Framework`_ is the best place to get help. Consider in
 .. _Selenium: http://selenium.openqa.org
 .. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
 .. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
-.. _Wiki: https://github.com/rtomac/robotframework-selenium2library/wiki
-.. _Keyword Documentation: http://rtomac.github.com/robotframework-selenium2library/doc/Selenium2Library.html
-.. _INSTALL.rst: https://github.com/rtomac/robotframework-selenium2library/blob/master/INSTALL.rst
-.. _BUILD.rst: https://github.com/rtomac/robotframework-selenium2library/blob/master/BUILD.rst
+.. _Wiki: https://github.com/robotframework/Selenium2Library/wiki
+.. _Keyword Documentation: http://http://robotframework.org/Selenium2Library/doc/Selenium2Library.html
+.. _INSTALL.rst: https://github.com/robotframework/Selenium2Library/blob/master/INSTALL.rst
+.. _BUILD.rst: https://github.com/robotframework/Selenium2Library/blob/master/BUILD.rst
 .. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
 .. _user group for Robot Framework: http://groups.google.com/group/robotframework-users
