@@ -153,7 +153,7 @@ The `user group for Robot Framework`_ is the best place to get help. Consider in
 .. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
 .. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
 .. _Wiki: https://github.com/robotframework/Selenium2Library/wiki
-.. _Keyword Documentation: http://http://robotframework.org/Selenium2Library/doc/Selenium2Library.html
+.. _Keyword Documentation: http://robotframework.org/Selenium2Library/doc/Selenium2Library.html
 .. _INSTALL.rst: https://github.com/robotframework/Selenium2Library/blob/master/INSTALL.rst
 .. _BUILD.rst: https://github.com/robotframework/Selenium2Library/blob/master/BUILD.rst
 .. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
