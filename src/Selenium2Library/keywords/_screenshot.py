@@ -61,6 +61,23 @@ class _ScreenshotKeywords(KeywordGroup):
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'
                    '<img src="%s" width="800px"></a>' % (link, link))
 
+    def capture_screenshot_only_on_failure(self,keyword,*args):
+        """Takes a screenshot of the current page and embeds it into the log
+        when the given ``keyword``  fails. If the given ``keyword`` can run multiple times
+        prior to timing out, the screenshot will only be captured on the very
+        last failure.
+
+        Example:
+        |  Capture Screenshot Only On Failure  |  Wait Until Keyword Succeeds  |  5 min  1 sec  | On Page  |  ${page name}  | """
+
+        old_keyword = self.register_keyword_to_run_on_failure('nothing')
+        status, value = BuiltIn().run_keyword_and_ignore_error(keyword,*args)
+        self.register_keyword_to_run_on_failure(old_keyword)
+        if (status=='FAIL'):
+            self.capture_page_screenshot()
+            BuiltIn().fail(msg=value)
+        return value
+
     # Private
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
