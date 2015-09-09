@@ -457,6 +457,26 @@ class _ElementKeywords(KeywordGroup):
             raise AssertionError("ERROR: Element %s not found." % (locator))
         ActionChains(self._current_browser()).release(element).perform()
 
+    def mouse_select(self, locator, xoffset, yoffset):
+        """Select content starting at element specified by `locator` and moving by
+        `xoffset`,`yoffset`.
+        """
+        xoffset = int(xoffset)
+        yoffset = int(yoffset)
+        source_element = self._element_find(locator, True, True)
+        browser = self._current_browser()
+        # Need to scroll element into view
+        # so that i can receive native events
+        browser.execute(
+            Command.GET_ELEMENT_LOCATION_ONCE_SCROLLED_INTO_VIEW,
+            {'id': source_element.id})
+        chain = ActionChains(browser)
+        chain.move_to_element_with_offset(source_element, 2, 2)
+        chain.click_and_hold()
+        chain.move_by_offset(xoffset, yoffset)
+        chain.release()
+        chain.perform()
+
     def open_context_menu(self, locator):
         """Opens context menu on element identified by `locator`."""
         element = self._element_find(locator, True, True)
