@@ -4,6 +4,7 @@ from robot.errors import DataError
 from selenium import webdriver
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
+from Selenium2Library.utils import AttrDict
 from Selenium2Library.locators import WindowManager
 from keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchWindowException
@@ -157,7 +158,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Create Webdriver            | PhantomJS    | service_args=${service args}              |                         |
 
         Example for Robot Framework < 2.8:
-        | # debug IE driver |                   |                  |                                | 
+        | # debug IE driver |                   |                  |                                |
         | ${kwargs}=        | Create Dictionary | log_level=DEBUG  | log_file=%{HOMEPATH}${/}ie.log |
         | Create Webdriver  | Ie                | kwargs=${kwargs} |                                |
         """
@@ -491,7 +492,6 @@ class _BrowserManagementKeywords(KeywordGroup):
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
 
-
     def set_browser_implicit_wait(self, seconds):
         """Sets current browser's implicit wait in seconds.
 
@@ -506,6 +506,35 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         implicit_wait_in_secs = robot.utils.timestr_to_secs(seconds)
         self._current_browser().implicitly_wait(implicit_wait_in_secs)
+
+    def get_browser_capabilities(self):
+        """Gets current browser capabilities from webdriver.
+
+        Returns a Dictionary with webdriver (browser) desired capabilities attributes.
+        You may also query keys providing a default value when those keys are nonexistent.
+
+        Examples of returned attributes are:
+        'rotatable','takesScreenshot', 'acceptSslCerts', 'cssSelectorsEnabled', 'javascriptEnabled',
+        'databaseEnabled', 'locationContextEnabled', 'platform', 'browserName', 'version',
+        'nativeEvents', 'applicationCacheEnabled', 'webStorageEnabled', 'handlesAlerts'
+
+        Examples:
+        | ${capabilities}= | Get Browser Capabilities                            |                           |
+        | Log              | ${capabilities.browserName} ${capabilities.version} | # Using attributes        |
+        | Log              | Capabilities = ${capabilities}                      |                           |
+        | Log              | ${capabilities['platform']}                         | # Using dictionary        |
+        | Log              | ${capabilities.get('may_not_exist', 'default')}     | # Gets 'default'          |
+        | Log              | ${capabilities['may_not_exist']}                    | # Produces KeyError       |
+        | Log              | ${capabilities.may_not_exist}                       | # Produces AttributeError |
+
+        References, see [http://selenium-python.readthedocs.org/en/latest/api.html?highlight=desired_capabilities#selenium.webdriver.remote.webdriver.WebDriver.desired_capabilities|Desired Capabilities] and [https://selenium.googlecode.com/svn/trunk/docs/api/py/webdriver/selenium.webdriver.common.desired_capabilities.html#module-selenium.webdriver.common.desired_capabilities|Common Desired Capabilities].
+
+        New in Selenium2Library 1.8.0.
+        """
+
+        capabilities = self._current_browser().capabilities
+
+        return AttrDict(capabilities)
 
     # Private
 
@@ -532,9 +561,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         return browser
 
-
     def _make_ff(self , remote , desired_capabilites , profile_dir):
-
         if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
         if remote:
@@ -590,7 +617,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         return browser
 
     def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
-        '''parses the string based desired_capabilities if neccessary and
+        '''parses the string based desired_capabilities if necessary and
         creates the associated remote web driver'''
 
         desired_capabilities_object = capabilities_type.copy()
@@ -617,3 +644,4 @@ class _BrowserManagementKeywords(KeywordGroup):
             desired_capabilities[key.strip()] = value.strip()
 
         return desired_capabilities
+
