@@ -61,16 +61,13 @@ Should Be Able To Return Arrays Of Primitives From Async Scripts
     Length Should Be    ${result}    0
 
 Should Timeout If Script Does Not Invoke Callback
-    [Documentation]     Should Timeout If Script Does Not Invoke Callback
-    Run Keyword And Expect Error
-    ...    TimeoutException: Message: Timed out waiting for async script result after *
-    ...    Execute Async Javascript    return 1 + 2;
+    [Documentation]    Should Timeout If Script Does Not Invoke Callback
+    Run Keyword And Expect Error    TimeoutException:*    Execute Async Javascript    return 1 + 2;
 
 Should Timeout If Script Does Not Invoke Callback With A Zero Timeout
-    [Documentation]     Should Timeout If Script Does Not Invoke Callback With A Zero Timeout
-    Run Keyword And Expect Error
-    ...    TimeoutException: Message: Timed out waiting for async script result after *
-    ...    Execute Async Javascript    window.setTimeout(function() {}, 0);
+    [Documentation]    Should Timeout If Script Does Not Invoke Callback With A Zero Timeout
+    Run Keyword And Expect Error    TimeoutException:*    Execute Async Javascript
+    ...    window.setTimeout(function() {}, 0);
 
 Should Not Timeout If Script Callsback Inside A Zero Timeout
     [Documentation]     Should Not Timeout If Script Callsback Inside A Zero Timeout
@@ -79,26 +76,22 @@ Should Not Timeout If Script Callsback Inside A Zero Timeout
     ...    window.setTimeout(function() { callback(123); }, 0)
 
 Should Timeout If Script Does Not Invoke Callback With Long Timeout
-    [Documentation]     Should Timeout If Script Does Not Invoke Callback With Long Timeout
+    [Documentation]    Should Timeout If Script Does Not Invoke Callback With Long Timeout
     Set Selenium Timeout    0.5 seconds
-    Run Keyword And Expect Error
-    ...    TimeoutException: Message: Timed out waiting for async script result after *
-    ...    Execute Async Javascript
-    ...    var callback = arguments[arguments.length - 1];
-    ...    window.setTimeout(callback, 1500);
+    Run Keyword And Expect Error    TimeoutException:*    Execute Async Javascript
+    ...    var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 1500);
 
 Should Detect Page Loads While Waiting On An Async Script And Return An Error
     [Documentation]     Should Detect Page Loads While Waiting On An Async Script
     ...    And Return An Error
-    Set Selenium Timeout    0.1 seconds
-    Run Keyword And Expect Error
-    ...    WebDriverException: Message: Detected a page unload event; async script execution does not work across page loads*
-    ...    Execute Async Javascript    window.location = 'javascript/dynamic';
+    Set Selenium Timeout    0.5 seconds
+    Run Keyword And Expect Error    WebDriverException:*    Execute Async Javascript
+    ...    window.location = 'javascript/dynamic';
 
 Should Catch Errors When Executing Initial Script
-    [Documentation]     Should Catch Errors When Executing Initial Script
-    Run Keyword And Expect Error    WebDriverException: Message: you should catch this!*
-    ...    Execute Async Javascript    throw Error('you should catch this!');
+    [Documentation]    Should Catch Errors When Executing Initial Script
+    Run Keyword And Expect Error    WebDriverException:*    Execute Async Javascript
+    ...    throw Error('you should catch this!');
     #TODO Implement Selenium asynchronous javascript test
     #Should Be Able To Execute Asynchronous Scripts
     #    # To Do
