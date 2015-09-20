@@ -531,9 +531,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         New in Selenium2Library 1.8.0.
         """
-
         capabilities = self._current_browser().capabilities
-
         return AttrDict(capabilities)
 
     # Private
