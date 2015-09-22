@@ -296,7 +296,21 @@ class _ElementKeywords(KeywordGroup):
         if element is None:
             raise AssertionError("Could not determine position for '%s'" % (locator))
         return element.location['x']
-
+ 
+    def get_element_size(self, locator):
+        """Returns width and height of element identified by `locator`.
+            
+        The height abd height and width is returned in pixels,as an integer.
+        Fails if a matching element is not found.
+        
+        """
+        element = self._element_find(locator, True, False)
+        if element is None:
+           raise AssertionError("Could not determine size for '%s'" % (locator))
+        width = element.size['width']
+        height = element.size['height']
+        return (width, height)
+    
     def get_value(self, locator):
         """Returns the value attribute of element identified by `locator`.
 
