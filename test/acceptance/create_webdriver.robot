@@ -33,16 +33,19 @@ Get Browser Capabilities Using Dictionary
     [Documentation]    Gets current browser capabilities from WebDriver
     [Setup]    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}
-    Go To    ${FRONT PAGE}    # If we don't do this then no version details
     ${capabilities}=    Get Browser Capabilities
     Log    Capabilities = ${capabilities}
-    Log    Browser is ${capabilities['browserName']}, version ${capabilities['version']}
+    Log    Common capabilities: 'takesScreenshot'=${capabilities['takesScreenshot']}, 'javascriptEnabled'=${capabilities['javascriptEnabled']},
+    Log    'cssSelectorsEnabled'=${capabilities['cssSelectorsEnabled']}, 'browserName'=${capabilities['browserName']},
+    Log    'platform'=${capabilities['platform']}, 'version'=${capabilities['version']}, 'nativeEvents'=${capabilities['nativeEvents']},
+    Log    'handlesAlerts'=${capabilities['handlesAlerts']}
     ${browser}=    Normalize Browser Name
     Should Match    ${capabilities['browserName']}    ${browser}
-    Run Keyword If    "${browser}" != "internet explorer"    Log    Rotatable = ${capabilities['rotatable']}
+    Run Keyword If    "${browser}" != "internet explorer"    Log
+    ...    Rotatable = ${capabilities['rotatable']}
     # Disabled next step to PASS in RF pre 2.9
     # Run Keyword If    "${browser}" == "internet explorer"    Run Keyword And Expect Error    *    Log
-    #     ...    Rotatable = ${capabilities['rotatable']}
+    #    ...    Rotatable = ${capabilities['rotatable']}
     Log    Platform = ${capabilities['platform']}
     [Teardown]    Close Browser
 
@@ -50,15 +53,18 @@ Get Browser Capabilities Using Attributes
     [Documentation]    Gets current browser capabilities from WebDriver
     [Setup]    Run Keywords    Cannot Run In RF Pre 2.9    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}
-    Go To    ${FRONT PAGE}    # If we don't do this then no version details
     &{capabilities}=    Get Browser Capabilities
     Log    Capabilities = &{capabilities}
-    Log    Browser is ${capabilities.browserName}, version ${capabilities.version}
+    Log    Common capabilities: 'takesScreenshot'=${capabilities.takesScreenshot}, 'javascriptEnabled'=${capabilities.javascriptEnabled},
+    Log    'cssSelectorsEnabled'=${capabilities.cssSelectorsEnabled}, 'browserName'=${capabilities.browserName},
+    Log    'platform'=${capabilities.platform}, 'version'=${capabilities.version}, 'nativeEvents'=${capabilities.nativeEvents},
+    Log    'handlesAlerts'=${capabilities.handlesAlerts}
     ${browser}=    Normalize Browser Name
     Should Match    ${capabilities.browserName}    ${browser}
-    Run Keyword If    "${browser}" != "internet explorer"    Log    Rotatable = ${capabilities.rotatable}
-    Run Keyword If    "${browser}" == "internet explorer"    Run Keyword And Expect Error    *    Log
-        ...    Rotatable = ${capabilities.rotatable}
+    Run Keyword If    "${browser}" != "internet explorer"    Log
+    ...    Rotatable = ${capabilities.rotatable}
+    Run Keyword If    "${browser}" == "internet explorer"    Run Keyword And Expect Error    *
+    ...    Log    Rotatable = ${capabilities.rotatable}
     Log    Platform = ${capabilities.platform}
     Log    Wearable = ${capabilities.get('wearable', 'What were you expecting? To wear a browser?')}
     [Teardown]    Close Browser
