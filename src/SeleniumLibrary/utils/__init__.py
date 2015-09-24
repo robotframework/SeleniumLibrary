@@ -22,6 +22,10 @@ from .seleniumversion import SELENIUM_VERSION
 from .types import is_falsy, is_noney, is_string, is_truthy
 from .webdrivercache import WebDriverCache
 
+try:
+    from robot.utils import DotDict
+except ImportError:  # When using robotframework < 2.9
+    from .attrdict import AttrDict as DotDict
 
 def escape_xpath_value(value):
     if '"' in value and '\'' in value:

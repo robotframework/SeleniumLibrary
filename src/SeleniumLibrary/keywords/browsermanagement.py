@@ -23,8 +23,9 @@ from selenium import webdriver
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import (is_falsy, is_truthy, secs_to_timestr,
-                                   timestr_to_secs, SELENIUM_VERSION)
+from SeleniumLibrary.utils import (DotDict, is_falsy, is_truthy,
+                                   secs_to_timestr, timestr_to_secs,
+                                   SELENIUM_VERSION)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -236,6 +237,36 @@ class BrowserManagementKeywords(LibraryComponent):
                                % index_or_alias)
         self.debug('Switched to browser with Selenium session id %s.'
                    % self.driver.session_id)
+
+    @keyword
+    def get_browser_capabilities(self):
+        """Gets current browser capabilities as dictionary.
+
+        Returns a Dictionary with webdriver (browser) desired capabilities attributes.
+        You may also query keys providing a default value when those keys are nonexistent.
+
+        Examples of returned attributes are (in *bold* the common ones):
+        'rotatable','takesScreenshot', 'acceptSslCerts', 'cssSelectorsEnabled', 'javascriptEnabled',
+        'databaseEnabled', 'locationContextEnabled', '*platform*', '*browserName*', '*version*',
+        'nativeEvents', 'applicationCacheEnabled', 'webStorageEnabled', 'handlesAlerts'
+        
+        Note: Firefox/Geckodriver is returning different names for '*platform*' and '*version*'.
+              It returns: '*platformName*' and '*browserVersion*'.
+        
+        Examples:
+        | ${capabilities}= | Get Browser Capabilities                            |                           |
+        | Log              | ${capabilities.browserName} ${capabilities.version} | # Using attributes        |
+        | Log              | Capabilities = ${capabilities}                      |                           |
+        | Log              | ${capabilities['platform']}                         | # Using dictionary        |
+        | Log              | ${capabilities.get('does_not_exist', 'default')}    | # Gets 'default'          |
+        | Log              | ${capabilities['does_not_exist']}                   | # Produces KeyError       |
+        | Log              | ${capabilities.does_not_exist}                      | # Produces AttributeError |
+
+        Reference, see [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.desired_capabilities.html|Common Desired Capabilities].
+
+        New in SeleniumLibrary 3.0.
+        """
+        return DotDict(self.driver.desired_capabilities)
 
     @keyword
     def get_source(self):
