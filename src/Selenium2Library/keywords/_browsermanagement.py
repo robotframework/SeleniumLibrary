@@ -94,7 +94,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
 
         Optional 'remote_url' is the url for a remote selenium server for example
-        http://127.0.0.1/wd/hub.  If you specify a value for remote you can
+        http://127.0.0.1:4444/wd/hub. If you specify a value for remote you can
         also specify 'desired_capabilities' which is a string in the form
         key1:val1,key2:val2 that will be used to specify desired_capabilities
         to the remote server. This is useful for doing things like specify a
