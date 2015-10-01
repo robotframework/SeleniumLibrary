@@ -10,6 +10,39 @@ class _TableElementKeywords(KeywordGroup):
 
     # Public
 
+    def get_table_rows(self, table_locator, loglevel='INFO'):
+        """Return the rows of the table.
+        
+        Header and footer rows are included in the count.
+        """
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            return len(rows)
+        self.log_source(loglevel)
+        raise AssertionError("Table %s could not be found." % table_locator)
+
+    def get_table_cols_at_row(self, table_locator, row, loglevel='INFO'):
+        """Return the columns of the table in one row.
+            
+        Row number start from 1. It will count the columns at one row, 
+        the argument 'row' is the row number which you should give it.
+        """
+        row = int(row)
+        row_index = row - 1
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                return len(columns)
+        raise AssertionError("Table %s in row #%s could not be found." % (table_locator, str(row)))
+
     def get_table_cell(self, table_locator, row, column, loglevel='INFO'):
         """Returns the content from a table cell.
 
