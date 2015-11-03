@@ -319,8 +319,12 @@ Xpath Should Match X Times
     [Setup]    Go To Page "forms/login.html"
     Xpath Should Match X Times    //input[@type="text"]    1
     Xpath Should Match X Times    //input[@type="text"]    ${1}
+    Xpath Should Match X Times    xpath=//input[@type="text"]    ${1}
     Run Keyword And Expect Error
-    ...    Xpath //input[@type="text"] should have matched 2 times but matched 1 times
+    ...    ValueError: Element locator must be xpath and start with xpath= or // 
+    ...    Xpath Should Match X Times    id=//input[@type="text"]    2
+    Run Keyword And Expect Error
+    ...    Xpath xpath=//input[@type="text"] should have matched 2 times but matched 1 times
     ...    Xpath Should Match X Times    //input[@type="text"]    2
 
 Locator Should Match X Times

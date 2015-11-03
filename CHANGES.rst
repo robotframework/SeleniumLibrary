@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+1.8 (unreleased)
+----------------
+- Allow xpath= locator strategy for mmatching xpath keywords [emanlove]
+
 1.7.4
 -------------------
 - Reverted 'Press Keys' because of backwards incompatible changes [zephraph]
