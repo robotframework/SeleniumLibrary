@@ -321,7 +321,7 @@ Xpath Should Match X Times
     Xpath Should Match X Times    //input[@type="text"]    ${1}
     Xpath Should Match X Times    xpath=//input[@type="text"]    ${1}
     Run Keyword And Expect Error
-    ...    ValueError: Element locator must be xpath and start with xpath= or // 
+    ...    InvalidSelectorException: Message: The given selector id=//input[@type="text"] is either invalid or does not result in a WebElement. *
     ...    Xpath Should Match X Times    id=//input[@type="text"]    2
     Run Keyword And Expect Error
     ...    Xpath xpath=//input[@type="text"] should have matched 2 times but matched 1 times

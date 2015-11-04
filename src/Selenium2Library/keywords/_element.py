@@ -599,7 +599,7 @@ return !element.dispatchEvent(evt);
 
     # Public, xpath
 
-    def get_matching_xpath_count(self, xpath):
+    def get_matching_xpath_count(self, xpath_):
         """Returns number of elements matching `xpath`
 
         As of release 1.8 `Get Matching Xpath Count` allows the
@@ -612,20 +612,17 @@ return !element.dispatchEvent(evt);
         If you wish to assert the number of matching elements, use
         `Xpath Should Match X Times`.
         """
-        if xpath.startswith('//'):
-            xpath = "xpath=" + xpath
+        if not xpath_.lower().lstrip().startswith('xpath='):
+            xpath_ = "xpath=" + xpath_
         
-        if xpath.startswith('xpath='):
-            count = len(self._element_find(xpath, False, False))
-            return str(count)
-        else:
-            raise ValueError("Element locator must be xpath and start with xpath= or //")
+        count = len(self._element_find(xpath_, False, False))
+        return str(count)
 
-    def xpath_should_match_x_times(self, locator, expected_xpath_count, message='', loglevel='INFO'):
-        """Verifies that the page contains the given number of elements located by the given `locator`.
+    def xpath_should_match_x_times(self, xpath_, expected_xpath_count, message='', loglevel='INFO'):
+        """Verifies that the page contains the given number of elements located by the given `xpath_`.
 
         As of release 1.8 `Xpath Should Match X Times` allows the
-        argument `locator` to start with the xpath= locator strategy.
+        argument `xpath_` to start with the xpath= locator strategy.
 
         Example:
         | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
@@ -634,22 +631,19 @@ return !element.dispatchEvent(evt);
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
         """
-        if locator.startswith('//'):
-            locator = "xpath=" + locator
-        
-        if locator.startswith('xpath='):
-            actual_xpath_count = len(self._element_find(locator, False, False))
-        else:
-            raise ValueError("Element locator must be xpath and start with xpath= or //")
+        if not xpath_.lower().lstrip().startswith('xpath='):
+            xpath_ = "xpath=" + xpath_
+            
+        actual_xpath_count = len(self._element_find(xpath_, False, False))
 
         if int(actual_xpath_count) != int(expected_xpath_count):
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
-                            %(locator, expected_xpath_count, actual_xpath_count)
+                            %(xpath_, expected_xpath_count, actual_xpath_count)
             self.log_source(loglevel)
             raise AssertionError(message)
         self._info("Current page contains %s elements matching '%s'."
-                   % (actual_xpath_count, locator))
+                   % (actual_xpath_count, xpath_))
 
     # Public, custom
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
