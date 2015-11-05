@@ -156,8 +156,14 @@ class _BrowserManagementKeywords(KeywordGroup):
         | ${service args}=            | Create List  | --proxy=192.168.132.104:8888              |                         |
         | Create Webdriver            | PhantomJS    | service_args=${service args}              |                         |
 
+        | # Change Chrome language    |              |                                                   |            |
+        | ${options} =                | Evaluate     | sys.modules['selenium.webdriver'].ChromeOptions() | sys        |
+        | Call Method                 | ${options}   | add_argument                                      | --lang\=de |
+        | Create WebDriver            | Chrome       | chrome_options=${options}                         |            |
+        | Go To                       | www.url.com  |                                                   |            |
+
         Example for Robot Framework < 2.8:
-        | # debug IE driver |                   |                  |                                | 
+        | # debug IE driver |                   |                  |                                |
         | ${kwargs}=        | Create Dictionary | log_level=DEBUG  | log_file=%{HOMEPATH}${/}ie.log |
         | Create Webdriver  | Ie                | kwargs=${kwargs} |                                |
         """
