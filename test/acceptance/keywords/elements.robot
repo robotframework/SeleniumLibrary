@@ -69,3 +69,14 @@ Get Vertical Position
     Should Be True    ${pos} > ${0}
     Run Keyword And Expect Error    Could not determine position for 'non-existent'
     ...    Get Horizontal Position    non-existent
+
+
+Get Element Size
+	${width}  ${height}=  Get Element Size  link=Link
+	Should be True  ${height} > ${0}
+	Should be True  ${width} > ${0}
+	Run Keyword And Expect Error  ValueError: Element locator 'non-existent' did not match any elements.  Get Element Size  non-existent
+
+Get Empty Element Size
+    ${width}  ${height}=  Get Element Size  id=emptyDiv
+  	Should be True  ${height} == 0
