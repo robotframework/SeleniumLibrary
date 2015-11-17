@@ -67,6 +67,10 @@ def process_output(args):
         call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
              os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
+    try:
+        args.remove('--dryrun')
+    except TypeError:
+        pass
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
     print('')
