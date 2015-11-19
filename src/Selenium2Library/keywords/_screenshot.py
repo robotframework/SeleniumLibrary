@@ -1,5 +1,6 @@
 import robot
 import os, errno
+from PIL import Image
 
 from Selenium2Library import utils
 from keywordgroup import KeywordGroup
@@ -97,6 +98,27 @@ class _ScreenshotKeywords(KeywordGroup):
         self._html('</td></tr><tr><td colspan="3"><a href="%s">'
                    '<img src="%s" width="800px"></a>' % (link, link))
         return path
+
+    def capture_element_screenshot(self, locator, file_name='element-screenshot-{index}.png'):
+        width, height =  self.get_element_size (locator)
+        y_coord = self.get_vertical_position(locator)
+        x_coord = self.get_horizontal_position(locator)
+
+        bounding_box = (
+            x_coord, # left
+            y_coord, # upper
+            (x_coord + width), # right
+            (y_coord  + height) # bottom
+        )
+        screenshotdir = self._get_screenshot_directory()
+        file_name = os.path.join(screenshotdir, file_name)
+        self.capture_page_screenshot(file_name)
+        base_image = Image.open(file_name)
+        cropped_image = base_image.crop(bounding_box)
+        base_image = base_image.resize(cropped_image.size)
+        base_image.paste(cropped_image, (0, 0))
+        base_image.save(file_name)
+
 
     # Private
     def _create_directory(self, path):
