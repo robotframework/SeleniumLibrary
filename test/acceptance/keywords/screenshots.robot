@@ -4,6 +4,11 @@ Suite Setup       Go To Page "links.html"
 Resource          ../resource.robot
 
 *** Test Cases ***
+Capture Element Screenshot by location
+    Capture Element Screenshot  xpath=//img[@src='robot.png']   #${OUTPUTDIR}${/}element_screenshot.png
+    File Should Exist  ${OUTPUTDIR}${/}element_screenshot.png
+
+
 Capture page screenshot to default location
     [Documentation]    LOG 2:3 REGEXP: </td></tr><tr><td colspan="3"><a href="selenium-screenshot-\\d.png"><img src="selenium-screenshot-\\d.png" width="800px"></a>
     [Setup]    Remove Files    ${OUTPUTDIR}/selenium-screenshot-*.png
