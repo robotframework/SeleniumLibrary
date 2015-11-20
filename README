@@ -51,9 +51,9 @@ E.g.::
 	python demo/rundemo.py demo/login_tests
 	
 
-.. _Selenium: http://selenium.openqa.org
-.. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
+.. _Selenium: http://docs.seleniumhq.org
+.. _Selenium 2 (WebDriver): http://docs.seleniumhq.org/docs/03_webdriver.jsp
 .. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
-.. _Wiki: https://github.com/rtomac/robotframework-selenium2library/wiki
-.. _Keyword Documentation: http://rtomac.github.com/robotframework-selenium2library/doc/Selenium2Library.html
+.. _Wiki: https://github.com/robotframework/Selenium2Library/wiki
+.. _Keyword Documentation: http://rtomac.github.io/robotframework-selenium2library/doc/Selenium2Library.html
 .. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
