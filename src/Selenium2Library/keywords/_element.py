@@ -649,7 +649,7 @@ return !element.dispatchEvent(evt);
                    % (actual_xpath_count, xpath))
 
     # Public, custom
-    def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
+    def add_location_strategy(self, strategy_name, strategy_keyword=None, location=None, persist=False):
         """Adds a custom location strategy based on a user keyword. Location strategies are
         automatically removed after leaving the current scope by default. Setting `persist`
         to any non-empty string will cause the location strategy to stay registered throughout
@@ -658,19 +658,54 @@ return !element.dispatchEvent(evt);
         Trying to add a custom location strategy with the same name as one that already exists will
         cause the keyword to fail.
 
-        Custom locator keyword example:
-        | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
-        |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
-        |   | [Return] | ${retVal} |
+        stragegy_name:
+            User defined short name as prefix of custom locator and used in format of
+            'Any Keyword | ${stragegy_name}=${criteria}'. 
 
-        Usage example:
-        | Add Location Strategy | custom | Custom Locator Strategy |
-        | Page Should Contain Element | custom=my_id |
+        strategy_keyword:
+            User defined keyword or method. Return web element if 'location' is None,
+            otherwise return locator string in legency S2L format(like 'css=xxx').
 
+        location:
+            Tells custom keywords where to read locator string by 'criteria', such as dict or database.
+        
+        
+        Custom location keyword examples - get web element by criteria as locator argurment of S2L keywords:
+        | Return Web Element By Javascript | [Arguments] | ${criteria} |
+        |   | ${element_object}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+        |   | [Return] | ${element_object} |
+        | Return Web Element By Element Prompt Text | [Arguments] | ${criteria} |
+        |   | ${element_object}= | Get Webelement | &${myPageDict}[${criteria}] |
+        |   | [Return] | ${element_object} |
+        | #***Usage examples:*** |
+        | Add Location Strategy | byjs | Return Web Element By Javascript |
+        | Add Location Strategy | bytxt | Return Web Element By Element Prompt Text |
+        | Page Should Contain Element | byjs=${an_element_id} |
+        | Page Should Contain Element | bytxt=User Name |
+        
+        
+        Custom location keyword examples - get locator string by location + criteria as locator argument of S2L keywords:
+        | Read Locator String From Dict | [Arguments] | ${location} | ${criteria} |
+        |   | ${locator_string}= | Set Variable | &${location}[${criteria}] |
+        |   | [Return] | ${locator_string} |
+        | Read Locator String From DB | [Arguments] | ${location} | ${criteria} |
+        |   | ${locator_string}= | Read From Your Database | ${location} | ${criteria} |
+        |   | [Return] | ${locator_string} |
+        | #***Usage examples:*** |
+        | Add Location Strategy | db1 | Read Locator String From DB | ${redis_server} | #Call keyword to read remote database |
+        | Add Location Strategy | page1 | Read Locator String From Dict | ${dict_page_login} | #Call keyword with dict as args |
+        | Add Location Strategy | page2 | | ${dict_page_main} | #Use dict[criteria] directly |
+        | Add Location Strategy | page3 | location=${dict_page_support} | | #Alternative use of dict[criteria] |
+        | Page Should Contain Element | db1=${an_element_index} |
+        | Page Should Contain Element | page1=User Name |
+        | Page Should Contain Element | page2=About Us |
+        | Page Should Contain Element | page3=Visit Us |
+        
         See `Remove Location Strategy` for details about removing a custom location strategy.
         """
         strategy = CustomLocator(strategy_name, strategy_keyword)
-        self._element_finder.register(strategy, persist)
+        self._element_finder.register(strategy, persist, location)
+
 
     def remove_location_strategy(self, strategy_name):
         """Removes a previously added custom location strategy.

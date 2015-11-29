@@ -1,5 +1,9 @@
 Release Notes
 =============
+1.7.5
+- Enhanced 'Add Location Strategy' to allow locator wrappers from dictionary
+  or remote data source.
+  [divfor]
 
 1.7.4
 -------------------
