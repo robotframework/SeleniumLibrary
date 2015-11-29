@@ -671,10 +671,10 @@ return !element.dispatchEvent(evt);
         
         
         Custom location keyword examples - get web element by criteria as locator argurment of S2L keywords:
-        | Return Web Element By Javascript | [Arguments] | ${criteria} |
+        | Return Web Element By Javascript | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
         |   | ${element_object}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
         |   | [Return] | ${element_object} |
-        | Return Web Element By Element Prompt Text | [Arguments] | ${criteria} |
+        | Return Web Element By Element Prompt Text | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
         |   | ${element_object}= | Get Webelement | &${myPageDict}[${criteria}] |
         |   | [Return] | ${element_object} |
         | #***Usage examples:*** |
