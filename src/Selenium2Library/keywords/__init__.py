@@ -9,6 +9,7 @@ from _javascript import _JavaScriptKeywords
 from _cookie import _CookieKeywords
 from _screenshot import _ScreenshotKeywords
 from _waiting import _WaitingKeywords
+from _alert import _AlertKeywords
 
 __all__ = [
     "_LoggingKeywords",
@@ -21,5 +22,6 @@ __all__ = [
     "_JavaScriptKeywords",
     "_CookieKeywords",
     "_ScreenshotKeywords",
-    "_WaitingKeywords"
+    "_WaitingKeywords",
+    "_AlertKeywords"
 ]

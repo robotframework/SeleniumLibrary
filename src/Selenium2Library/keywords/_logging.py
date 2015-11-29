@@ -1,8 +1,14 @@
 import os
 import sys
-from robot.variables import GLOBAL_VARIABLES
 from robot.api import logger
 from keywordgroup import KeywordGroup
+from robot.libraries.BuiltIn import BuiltIn
+
+try:
+    from robot.libraries.BuiltIn import RobotNotRunningError
+except ImportError:
+    RobotNotRunningError = AttributeError
+
 
 class _LoggingKeywords(KeywordGroup):
 
@@ -12,10 +18,16 @@ class _LoggingKeywords(KeywordGroup):
         logger.debug(message)
 
     def _get_log_dir(self):
-        logfile = GLOBAL_VARIABLES['${LOG FILE}']
-        if logfile != 'NONE':
-            return os.path.dirname(logfile)
-        return GLOBAL_VARIABLES['${OUTPUTDIR}']
+        try:
+            variables = BuiltIn().get_variables()
+
+            logfile = variables['${LOG FILE}']
+            if logfile != 'NONE':
+                return os.path.dirname(logfile)
+            return variables['${OUTPUTDIR}']
+
+        except RobotNotRunningError:
+            return os.getcwd()
 
     def _html(self, message):
         logger.info(message, True, False)

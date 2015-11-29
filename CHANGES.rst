@@ -1,7 +1,54 @@
 Release Notes
 =============
 
-1.7 
+1.7.4
+-------------------
+- Reverted 'Press Keys' because of backwards incompatible changes [zephraph]
+
+1.7.3
+-------------------
+- Added 'Get WebElement' [zephraph][emanlove]
+
+- Added named keys to 'Press Key' [helioguilherme66]
+
+- Fix an import error that caused a dependence on RF >= 2.8.5
+  [zephraph]
+
+- Fixed an issue that caused screenshots to be improperly linked in the logs
+  [zephraph]
+
+1.7.2
+----------------
+- Added an argument called screenshot_root_directory that can be passed into S2L's
+  constructor to specify where to store screenshots.
+- Added new keyword 'set_screenshot_directory' which can be used to set the output
+  of screenshots.
+  [zephraph]
+
+- Added new keyword Input Text Into Prompt
+- Modified 'get_alert_message' to accept a parameter 'dismiss' (defaults to true) which can be
+  used to prevent closing the alert message and instead will just return the alerts text.
+  Also created new keyword 'dismiss_alert' to dismiss (default) or confirm the alert without
+  reading the text of the alert.
+  [KingWarin]
+
+- Added new keyword Input Text Into Prompt
+  [boakley][ekasteel]
+
+- Fixed issue that caused tests to fail when selenium > 2.26
+  [hgarus]
+
+- Fixed an error where regular functions were not able to be used as a custom locator
+  [zephraph]
+
+- Changed all test files to have a '.robot' extension
+  [zephraph]
+
+1.7.1 (hotfix)
+----------------
+- Remove references to GLOBAL_VARIABLES for RF 2.9 compatibility
+
+1.7
 ----------------
 - Added keyword 'List Windows' to return a list of all window handles.
   [divfor]

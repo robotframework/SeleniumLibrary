@@ -1,7 +1,6 @@
 from Selenium2Library import utils
 from robot.api import logger
 from robot.utils import NormalizedDict
-from robot.libraries.BuiltIn import BuiltIn
 
 
 class ElementFinder(object):
@@ -45,10 +44,7 @@ class ElementFinder(object):
 
         if not persist:
             # Unregister after current scope ends
-            suite = BuiltIn().get_variable_value('${SUITE NAME}')
-            test  = BuiltIn().get_variable_value('${TEST NAME}', '')
-            scope =  suite + '.' + test if test != '' else suite
-            utils.events.on('scope_end', scope, self.unregister, strategy.name)
+            utils.events.on('scope_end', 'current', self.unregister, strategy.name)
 
     def unregister(self, strategy_name):
         if strategy_name in self._default_strategies:
