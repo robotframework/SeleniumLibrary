@@ -3,15 +3,15 @@ from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywo
 from selenium import webdriver
 from mockito import *
 
+
 class BrowserManagementTests(unittest.TestCase): 
 
-    
     def test_create_firefox_browser(self):
         test_browsers = ((webdriver.Firefox, "ff"), (webdriver.Firefox, "firEfOx"))
 
         for test_browser in test_browsers:
             self.verify_browser(*test_browser)
-    
+
     def mock_createProfile(self, profile_directory=None):
         self.ff_profile_dir = profile_directory
         return self.old_profile_init(profile_directory)
@@ -28,6 +28,9 @@ class BrowserManagementTests(unittest.TestCase):
 
         for test_browser in test_browsers:
             self.verify_browser(*test_browser)
+
+    def test_create_edge_browser(self):
+        self.verify_browser(webdriver.Edge, "edge")
 
     def test_create_opera_browser(self):
         self.verify_browser(webdriver.Opera, "OPERA")

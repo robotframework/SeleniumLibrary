@@ -10,21 +10,24 @@ from selenium.common.exceptions import NoSuchWindowException
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
-BROWSER_NAMES = {'ff': "_make_ff",
-                 'firefox': "_make_ff",
-                 'ie': "_make_ie",
-                 'internetexplorer': "_make_ie",
-                 'googlechrome': "_make_chrome",
-                 'gc': "_make_chrome",
-                 'chrome': "_make_chrome",
-                 'opera' : "_make_opera",
-                 'phantomjs' : "_make_phantomjs",
-                 'htmlunit' : "_make_htmlunit",
-                 'htmlunitwithjs' : "_make_htmlunitwithjs",
-                 'android': "_make_android",
-                 'iphone': "_make_iphone",
-                 'safari': "_make_safari"
-                }
+BROWSERS = {'ff': (webdriver.Firefox, webdriver.DesiredCapabilities.FIREFOX),
+            'firefox': (webdriver.Firefox, webdriver.DesiredCapabilities.FIREFOX),
+            'ie': (webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
+            'internetexplorer': (webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
+            'googlechrome': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
+            'gc': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
+            'chrome': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
+            'opera': (webdriver.Opera, webdriver.DesiredCapabilities.OPERA),
+            'phantomjs': (webdriver.PhantomJS, webdriver.DesiredCapabilities.PHANTOMJS),
+            'htmlunit': (webdriver.Remote, webdriver.DesiredCapabilities.HTMLUNIT),
+            'htmlunitwithjs': (webdriver.Remote, webdriver.DesiredCapabilities.HTMLUNITWITHJS),
+            'android': (webdriver.Remote, webdriver.DesiredCapabilities.ANDROID),
+            'iphone': (webdriver.Remote, webdriver.DesiredCapabilities.IPHONE),
+            'ipad': (webdriver.Remote, webdriver.DesiredCapabilities.IPAD),
+            'safari': (webdriver.Safari, webdriver.DesiredCapabilities.SAFARI),
+            'edge': (webdriver.Edge, webdriver.DesiredCapabilities.EDGE)
+            }
+
 
 class _BrowserManagementKeywords(KeywordGroup):
 
@@ -111,7 +114,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         else:
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
+        browser = self._make_browser(browser_name,
+                                     desired_capabilities,
+                                     ff_profile_dir,
+                                     remote_url)
         try:
             browser.get(url)
         except:
@@ -491,7 +497,6 @@ class _BrowserManagementKeywords(KeywordGroup):
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
 
-
     def set_browser_implicit_wait(self, seconds):
         """Sets current browser's implicit wait in seconds.
 
@@ -514,99 +519,63 @@ class _BrowserManagementKeywords(KeywordGroup):
             raise RuntimeError('No browser is open')
         return self._cache.current
 
-    def _get_browser_creation_function(self, browser_name):
-        func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))
-        return getattr(self, func_name) if func_name else None
-
     def _make_browser(self, browser_name, desired_capabilities=None,
-                      profile_dir=None, remote=None):
-        creation_func = self._get_browser_creation_function(browser_name)
+                      profile_dir=None, remote=False):
 
-        if not creation_func:
+        browser_name = browser_name.lower().replace(' ', '')
+
+        if browser_name not in BROWSERS.keys():
             raise ValueError(browser_name + " is not a supported browser.")
 
-        browser = creation_func(remote, desired_capabilities, profile_dir)
+        browser_name, browser_capabilities = BROWSERS.get(browser_name)
+        browser = self._generic_make_browser(browser_name,
+                                             browser_capabilities,
+                                             desired_capabilities,
+                                             remote,
+                                             profile_dir)
         browser.set_speed(self._speed_in_secs)
         browser.set_script_timeout(self._timeout_in_secs)
         browser.implicitly_wait(self._implicit_wait_in_secs)
 
         return browser
 
+    def _generic_make_browser(self, webdriver_type, desired_capabilities,
+                              custom_capabilities, remote_url, profile_dir):
+        """most of the make browser functions just call this
+        function which creates the appropriate web-driver
+        """
+        kwargs = {}
+        profile = None
+        desired_caps = desired_capabilities.copy()
 
-    def _make_ff(self , remote , desired_capabilites , profile_dir):
+        if isinstance(custom_capabilities, basestring):
+            custom_capabilities = self._parse_capabilities_string(custom_capabilities)
 
-        if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
-        profile = webdriver.FirefoxProfile(profile_dir)
-        if remote:
-            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
-                        remote , desired_capabilites , profile)
+        desired_caps.update(custom_capabilities or {})
+
+        if profile_dir is None and desired_caps["browserName"] == "firefox":
+            profile_dir = FIREFOX_PROFILE_DIR
+            profile = webdriver.FirefoxProfile(profile_dir)
+
+        if webdriver_type is webdriver.Firefox:
+            kwargs["firefox_profile"] = profile
+
+        if webdriver_type in (webdriver.Ie, webdriver.Edge, webdriver.Firefox):
+            kwargs["capabilities"] = desired_caps
         else:
-            browser = webdriver.Firefox(firefox_profile=profile)
-        return browser
+            kwargs["desired_capabilities"] = desired_caps
 
-    def _make_ie(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Ie,
-                webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
+        if remote_url:
+            webdriver_type = webdriver.Remote
+            kwargs["command_executor"] = str(remote_url)
+            kwargs["browser_profile"] = profile
 
-    def _make_chrome(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Chrome,
-                webdriver.DesiredCapabilities.CHROME, remote, desired_capabilities)
-
-    def _make_opera(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Opera,
-                webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
-
-    def _make_phantomjs(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.PhantomJS,
-                webdriver.DesiredCapabilities.PHANTOMJS, remote, desired_capabilities)
-
-    def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
-
-    def _make_htmlunitwithjs(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
-
-    def _make_android(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.ANDROID, remote, desired_capabilities)
-
-    def _make_iphone(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
-
-    def _make_safari(self , remote , desired_capabilities , profile_dir):
-        return self._generic_make_browser(webdriver.Safari,
-                webdriver.DesiredCapabilities.SAFARI, remote, desired_capabilities)
-
-    def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
-        '''most of the make browser functions just call this function which creates the
-        appropriate web-driver'''
-        if not remote_url:
-            browser = webdriver_type()
-        else:
-            browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
-        return browser
-
-    def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
-        '''parses the string based desired_capabilities if neccessary and
-        creates the associated remote web driver'''
-
-        desired_capabilities_object = capabilities_type.copy()
-
-        if type(desired_capabilities) in (str, unicode):
-            desired_capabilities = self._parse_capabilities_string(desired_capabilities)
-
-        desired_capabilities_object.update(desired_capabilities or {})
-
-        return webdriver.Remote(desired_capabilities=desired_capabilities_object,
-                command_executor=str(remote_url), browser_profile=profile)
+        return webdriver_type(**kwargs)
 
     def _parse_capabilities_string(self, capabilities_string):
-        '''parses the string based desired_capabilities which should be in the form
+        """parses the string based desired_capabilities which should be in the form
         key1:val1,key2:val2
-        '''
+        """
         desired_capabilities = {}
 
         if not capabilities_string:
