@@ -10,6 +10,8 @@ install:
   - pip install selenium
   - pip install decorator
   - pip install docutils
+  - pip install future
+  - pip install mockito
   #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
   - "export DISPLAY=:99.0"
