@@ -1,3 +1,4 @@
+from builtins import object
 from types import *
 from robot import utils
 from selenium.webdriver.remote.webdriver import WebDriver

@@ -65,11 +65,6 @@ class BrowserManagementTests(unittest.TestCase):
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)
 
-    def test_create_remote_browser_with_string_desired_prefs(self):
-        expected_caps = "key1:val1,key2:val2"
-        self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps)
-
     def test_capabilities_attribute_not_modified(self):
         expected_caps = {"some_cap":"42"}
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
@@ -96,8 +91,8 @@ class BrowserManagementTests(unittest.TestCase):
         try:
             bm._make_browser("fireox")
             self.fail("Exception not raised")
-        except ValueError, e:
-            self.assertEquals("fireox is not a supported browser.", e.message)
+        except ValueError as e:
+            self.assertEquals("fireox is not a supported browser.", "{}".format(e))
 
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()

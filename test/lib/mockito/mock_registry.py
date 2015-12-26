@@ -1,4 +1,5 @@
-class MockRegistry:
+from builtins import object
+class MockRegistry(object):
   """Registers mock()s, ensures that we only have one mock() per mocked_obj, and
   iterates over them to unstub each stubbed method. """
   
@@ -12,7 +13,7 @@ class MockRegistry:
     return self.mocks.get(cls, None)
   
   def unstub_all(self):
-    for mock in self.mocks.itervalues():    
+    for mock in self.mocks.values():    
       mock.unstub()
     self.mocks.clear()  
 

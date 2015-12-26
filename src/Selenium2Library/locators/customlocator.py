@@ -1,3 +1,5 @@
+from past.builtins import basestring
+from builtins import object
 from robot.libraries.BuiltIn import BuiltIn
 
 try:

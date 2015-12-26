@@ -1,3 +1,4 @@
+from past.builtins import execfile
 #!/usr/bin/env python
 
 import sys

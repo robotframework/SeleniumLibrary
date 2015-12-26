@@ -1,8 +1,15 @@
+from __future__ import absolute_import
+from builtins import str
 import os
 from fnmatch import fnmatch
-from browsercache import BrowserCache
-from librarylistener import LibraryListener
-import events
+from .browsercache import BrowserCache
+from .librarylistener import LibraryListener
+from . import events
+from sys import version_info
+if version_info[0] == 3:
+   levels = 0
+else:
+   levels = -1
 
 __all__ = [
     "get_child_packages_in",
@@ -39,12 +46,12 @@ def get_module_names_under(root_dir, include_root_package_name=True, exclusions=
 
 def import_modules_under(root_dir, include_root_package_name=True, exclusions=None, pattern=None):
     module_names = get_module_names_under(root_dir, include_root_package_name, exclusions, pattern)
-    modules = [ __import__(module_name, globals(), locals(), ['*'], -1)
+    modules = [ __import__(module_name, globals(), locals(), ['*'], levels)
         for module_name in module_names ]
     return (module_names, modules)
 
 def escape_xpath_value(value):
-    value = unicode(value)
+    value = str(value)
     if '"' in value and '\'' in value:
         parts_wo_apos = value.split('\'')
         return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
