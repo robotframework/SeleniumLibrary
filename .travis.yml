@@ -3,6 +3,7 @@ sudo: false
 python:
   - "2.6"
   - "2.7"
+  - "3.4"
 install:
   #- pip install pep8 --use-mirrors
   #- pip install pyflakes --use-mirrors
