@@ -1,10 +1,16 @@
+from __future__ import division
+from __future__ import absolute_import
+from builtins import str
+from builtins import chr
+from past.builtins import basestring
+from past.utils import old_div
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 try:
     basestring  # attempt to evaluate basestring
@@ -439,8 +445,8 @@ class _ElementKeywords(KeywordGroup):
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
         size = element.size
-        offsetx = (size['width'] / 2) + 1
-        offsety = (size['height'] / 2) + 1
+        offsetx = (old_div(size['width'], 2)) + 1
+        offsety = (old_div(size['height'], 2)) + 1
         ActionChains(self._current_browser()).move_to_element(element).move_by_offset(offsetx, offsety).perform()
 
     def mouse_over(self, locator):
