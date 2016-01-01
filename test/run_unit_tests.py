@@ -1,7 +1,8 @@
 from __future__ import print_function
 
 import env
-import os, sys
+import os
+import sys
 import unittest
 from Selenium2Library import utils
 

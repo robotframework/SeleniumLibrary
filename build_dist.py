@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-import os, sys, shutil, subprocess, argparse
+import os
+import sys
+import shutil
+import subprocess
+import argparse
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 DIST_DIR = os.path.join(THIS_DIR, "dist")

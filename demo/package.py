@@ -2,7 +2,8 @@
 
 from __future__ import print_function
 
-import os, sys
+import os
+import sys
 from time import localtime
 from zipfile import ZipFile, ZIP_DEFLATED
 

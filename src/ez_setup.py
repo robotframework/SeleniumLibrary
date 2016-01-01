@@ -65,7 +65,8 @@ md5_data = {
     'setuptools-0.6c9-py2.6.egg': 'ca37b1ff16fa2ede6e19383e7b59245a',
 }
 
-import sys, os
+import sys
+import os
 try: from hashlib import md5
 except ImportError: from md5 import md5
 
@@ -107,8 +108,8 @@ def use_setuptools(
     except pkg_resources.VersionConflict, e:
         if was_imported:
             print("The required version of setuptools (>={0}) is not available, and\n".format(version), file=sys.stderr)
-            print("can't be installed while this script is running. Please install\n")
-            print(" a more recent version first, using 'easy_install -U setuptools'.")
+            print("can't be installed while this script is running. Please install\n", file=sys.stderr)
+            print(" a more recent version first, using 'easy_install -U setuptools'.", file=sys.stderr)
             print("\n\n(Currently using {0})".format(e.args[0]), file=sys.stderr)
             sys.exit(2)
     except pkg_resources.DistributionNotFound:
@@ -128,7 +129,8 @@ def download_setuptools(
     with a '/'). `to_dir` is the directory where the egg will be downloaded.
     `delay` is the number of seconds to pause before an actual download attempt.
     """
-    import urllib2, shutil
+    import urllib2
+    import shutil
     egg_name = "setuptools-%s-py%s.egg" % (version,sys.version[:3])
     url = download_base + egg_name
     saveto = os.path.join(to_dir, egg_name)
