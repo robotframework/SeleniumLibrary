@@ -34,7 +34,7 @@ from subprocess import Popen, call, STDOUT
 
 try:
     import Selenium2Library
-except ImportError, e:
+except ImportError as e:
     print("Importing Selenium2Library module failed ({0})".format(e))
     print("Please make sure you have Selenium2Library properly installed.")
     print("See INSTALL.rst for troubleshooting information.")

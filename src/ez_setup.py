@@ -105,7 +105,7 @@ def use_setuptools(
         return do_download()       
     try:
         pkg_resources.require("setuptools>="+version); return
-    except pkg_resources.VersionConflict, e:
+    except pkg_resources.VersionConflict as e:
         if was_imported:
             print("The required version of setuptools (>={0}) is not available, and\n".format(version), file=sys.stderr)
             print("can't be installed while this script is running. Please install\n", file=sys.stderr)
