@@ -21,6 +21,13 @@ class _ElementKeywords(KeywordGroup):
 
     # Public, get element(s)
 
+    def get_webelement(self, locator):
+        """Returns the first WebElement matching the given locator.
+
+        See `introduction` for details about locating elements.
+        """
+        return self._element_find(locator, True, True)
+
     def get_webelements(self, locator):
         """Returns list of WebElement objects matching locator.
 
@@ -290,6 +297,16 @@ class _ElementKeywords(KeywordGroup):
             raise AssertionError("Could not determine position for '%s'" % (locator))
         return element.location['x']
 
+    def get_element_size(self, locator):
+        """Returns width and height of element identified by `locator`.
+
+        The element width and height is returned.
+        Fails if a matching element is not found.
+        """
+        element = self._element_find(locator, True, True)
+
+        return element.size['width'], element.size['height']
+
     def get_value(self, locator):
         """Returns the value attribute of element identified by `locator`.
 
@@ -478,18 +495,15 @@ return !element.dispatchEvent(evt);
 
     def press_key(self, locator, key):
         """Simulates user pressing key on element identified by `locator`.
-
-        `key` is either a single character, or a numerical ASCII code of the key
+        `key` is either a single character, a string, or a numerical ASCII code of the key
         lead by '\\\\'.
-
         Examples:
         | Press Key | text_field   | q |
+        | Press Key | text_field   | abcde |
         | Press Key | login_button | \\\\13 | # ASCII code for enter key |
         """
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
-        #if len(key) > 1:
-        #    raise ValueError("Key value '%s' is invalid.", key)
         element = self._element_find(locator, True, True)
         #select it
         element.send_keys(key)
@@ -599,7 +613,7 @@ return !element.dispatchEvent(evt);
         """Returns number of elements matching `xpath`
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-        
+
         Correct:
         | count = | Get Matching Xpath Count | //div[@id='sales-pop']
         Incorrect:
@@ -615,7 +629,7 @@ return !element.dispatchEvent(evt);
         """Verifies that the page contains the given number of elements located by the given `xpath`.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-        
+
         Correct:
         | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
         Incorrect:
@@ -748,6 +762,14 @@ return !element.dispatchEvent(evt);
             key = chr(key_code)
         return key
 
+    def _map_named_key_code_to_special_key(self, key_name):
+        try:
+           return getattr(Keys, key_name)
+        except AttributeError:
+           message = "Unknown key named '%s'." % (key_name)
+           self._debug(message)
+           raise ValueError(message)
+
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
         if len(parts[0]) == 0:
@@ -757,7 +779,7 @@ return !element.dispatchEvent(evt);
         return (parts[0], parts[2])
 
     def _is_element_present(self, locator, tag=None):
-        return (self._element_find(locator, True, False, tag=tag) != None)
+        return (self._element_find(locator, True, False, tag=tag) is not None)
 
     def _page_contains(self, text):
         browser = self._current_browser()

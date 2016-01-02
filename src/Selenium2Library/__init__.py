@@ -16,7 +16,8 @@ class Selenium2Library(
     _JavaScriptKeywords,
     _CookieKeywords,
     _ScreenshotKeywords,
-    _WaitingKeywords
+    _WaitingKeywords,
+    _AlertKeywords
 ):
     """Selenium2Library is a web testing library for Robot Framework.
 
@@ -33,7 +34,8 @@ class Selenium2Library(
     imported into your Robot test suite (see `importing` section), and the
     `Open Browser` keyword must be used to open a browser to the desired location.
 
-    **--- Note important change starting with Version 1.7.0 release ---**
+
+    *--- Note important change starting with Version 1.7.0 release ---*
     = Locating or specifying elements =
 
     All keywords in Selenium2Library that need to find an element on the page
@@ -42,14 +44,14 @@ class Selenium2Library(
     specifying different location strategies. `webelement` is a variable that
     holds a WebElement instance, which is a representation of the element.
 
-    Using 'locator'
+    *Using locators*
     ---------------
     By default, when a locator value is provided, it is matched against the
     key attributes of the particular element type. For example, `id` and
     `name` are key attributes to all elements, and locating elements is easy
-    using just the `id` as a `locator`. For example::
+    using just the `id` as a `locator`. For example:
 
-    Click Element  my_element
+    | Click Element    my_element
 
     It is also possible to specify the approach Selenium2Library should take
     to find an element by specifying a lookup strategy with a locator
@@ -76,14 +78,14 @@ class Selenium2Library(
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
 
-    Using 'webelement'
+    *Using webelements*
     ------------------
     Starting with version 1.7 of the Selenium2Library, one can pass an argument
     that contains a WebElement instead of a string locator. To get a WebElement,
     use the new `Get WebElements` keyword.  For example:
 
-    | ${elem} =      | Get WebElements | id=my_element |
-    | Click Element  | ${elem} |                       |
+    | ${elem} =      | Get WebElement | id=my_element |
+    | Click Element  | ${elem} |                      |
 
     Locating Tables, Table Rows, Columns, etc.
     ------------------------------------------
@@ -91,7 +93,7 @@ class Selenium2Library(
     By default, when a table locator value is provided, it will search for
     a table with the specified `id` attribute. For example:
 
-    Table Should Contain  my_table  text
+    | Table Should Contain    my_table    text
 
     More complex table lookup strategies are also supported:
 
@@ -113,7 +115,7 @@ class Selenium2Library(
     to the WebDriver instance and `${criteria}` is the text of the locator (i.e. everything that comes after the = sign).
     To use this locator it must first be registered with `Add Location Strategy`.
 
-    Add Location Strategy  custom  Custom Locator Strategy
+    | Add Location Strategy    custom    Custom Locator Strategy
 
     The first argument of `Add Location Strategy` specifies the name of the lookup strategy (which must be unique). After
     registration of the lookup strategy, the usage is the same as other locators. See `Add Location Strategy` for more details.
@@ -135,7 +137,13 @@ class Selenium2Library(
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = VERSION
 
-    def __init__(self, timeout=5.0, implicit_wait=0.0, run_on_failure='Capture Page Screenshot'):
+    def __init__(self,
+                 timeout=5.0,
+                 implicit_wait=0.0,
+                 run_on_failure='Capture Page Screenshot',
+                 screenshot_root_directory=None
+    ):
+
         """Selenium2Library can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for all waiting actions.
@@ -156,6 +164,9 @@ class Selenium2Library(
         `Register Keyword To Run On Failure` keyword for more information about this
         functionality.
 
+        `screenshot_root_directory` specifies the default root directory that screenshots should be
+        stored in. If not provided the default directory will be where robotframework places its logfile.
+
         Examples:
         | Library `|` Selenium2Library `|` 15                                            | # Sets default timeout to 15 seconds                                       |
         | Library `|` Selenium2Library `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
@@ -165,6 +176,7 @@ class Selenium2Library(
         """
         for base in Selenium2Library.__bases__:
             base.__init__(self)
+        self.screenshot_root_directory = screenshot_root_directory
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)

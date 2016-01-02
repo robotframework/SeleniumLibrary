@@ -1,8 +1,10 @@
 *** Settings ***
+Documentation     Tests finding
 Resource          table_resource.robot
 
 *** Test Cases ***
 Should Identify Table By CSS
+    [Documentation]    Should Identify Table By CSS
     Table Should Contain    css=table#simpleTable    simpleTable
     Table Header Should Contain    css=table#tableWithTwoHeaders    tableWithTwoHeaders_C2
     Table Footer Should Contain    css=table#withHeadAndFoot    withHeadAndFoot_AF1

@@ -1,5 +1,6 @@
 import os
 from keywordgroup import KeywordGroup
+from selenium.common.exceptions import WebDriverException
 
 class _FormElementKeywords(KeywordGroup):
 
@@ -196,15 +197,6 @@ class _FormElementKeywords(KeywordGroup):
         """
         self._info("Typing text '%s' into text field '%s'" % (text, locator))
         self._input_text_into_text_field(locator, text)
-
-    def input_text_into_prompt(self, text):
-        """Types the given `text` into alert box.  """
-        alert = None
-        try:
-            alert = self._current_browser().switch_to_alert()
-            alert.send_keys(text)
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
 
     def page_should_contain_textfield(self, locator, message='', loglevel='INFO'):
         """Verifies text field identified by `locator` is found from current page.
