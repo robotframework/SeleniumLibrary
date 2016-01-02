@@ -64,7 +64,7 @@ def stop_http_server():
     call(['python', env.HTTP_SERVER_FILE, 'stop'])
 
 def process_output(args):
-    print
+    print()
     if _has_robot_27():
         call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
              os.path.join(env.RESULTS_DIR, 'output.xml')])

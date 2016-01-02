@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from builtins import str
 import os
 import robot
 from robot.errors import DataError
@@ -5,7 +7,7 @@ from selenium import webdriver
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchWindowException
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -595,7 +597,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         desired_capabilities_object = capabilities_type.copy()
 
-        if type(desired_capabilities) in (str, unicode):
+        if type(desired_capabilities) in (str, str):
             desired_capabilities = self._parse_capabilities_string(desired_capabilities)
 
         desired_capabilities_object.update(desired_capabilities or {})

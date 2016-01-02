@@ -15,6 +15,8 @@
 #  limitations under the License.
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 
 """Simple HTTP server requiring only Python and no other preconditions.
 
@@ -27,16 +29,16 @@ number as when starting it.
 
 import os
 import sys
-import httplib
-import BaseHTTPServer
-import SimpleHTTPServer
+import http.client
+import http.server
+import http.server
 
 
 DEFAULT_PORT = 7272
 DEFAULT_HOST = 'localhost'
 
 
-class StoppableHttpServer(BaseHTTPServer.HTTPServer):
+class StoppableHttpServer(http.server.HTTPServer):
 
     def serve_forever(self):
         self.stop = False
@@ -47,7 +49,7 @@ class StoppableHttpServer(BaseHTTPServer.HTTPServer):
                 break
 
 
-class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_QUIT(self):
         self.send_response(200)
@@ -70,7 +72,7 @@ def start_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
 
 def stop_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
     print("Demo application on port {0} stopping".format(port))
-    conn = httplib.HTTPConnection("%s:%s" % (host, port))
+    conn = http.client.HTTPConnection("%s:%s" % (host, port))
     conn.request("QUIT", "/")
     conn.getresponse()
 

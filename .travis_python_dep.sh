@@ -6,15 +6,15 @@ if [ "${PYTHON_VERSION}" = "2.6" ]; then
     pip install selenium
     pip install decorator
     pip install docutils
-    # pip install future
-    # pip install mockito
+    pip install future
+    pip install mockito
 elif [ "${PYTHON_VERSION}" = "2.7" ]; then
     pip install robotframework
     pip install selenium
     pip install decorator
     pip install docutils
-    # pip install future
-    # pip install mockito
+    pip install future
+    pip install mockito
 elif [ "${PYTHON_VERSION}" = "3.4" ]; then
     pip install robotframework
     pip install selenium

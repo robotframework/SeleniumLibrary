@@ -3,7 +3,7 @@ sudo: false
 python:
   - "2.6"
   - "2.7"
-  #- "3.4"
+  - "3.4"
 before_install:
   - "./.travis_python_dep.sh"
 install: true

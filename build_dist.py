@@ -46,7 +46,7 @@ def run_register(args):
         _run_setup(args.py_27_path, "register", [], False)
 
 def run_builds(args):
-    print
+    print()
     if not args.winonly:
         _run_setup(args.py_27_path, "sdist", [ "--formats=gztar,zip" ], args.release)
         _run_setup(args.py_26_path, "bdist_egg", [], args.release)

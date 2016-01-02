@@ -5,6 +5,8 @@
 # Copyright: This module has been placed in the public domain.
 
 from __future__ import print_function
+from builtins import range
+from builtins import object
 """
 Generates .html from all the .txt files in a directory.
 
@@ -104,7 +106,7 @@ class OptionParser(frontend.OptionParser):
         return source, destination
 
 
-class Struct:
+class Struct(object):
 
     """Stores data attributes for dotted-attribute access."""
 
@@ -112,7 +114,7 @@ class Struct:
         self.__dict__.update(keywordargs)
 
 
-class Builder:
+class Builder(object):
 
     def __init__(self):
         self.publishers = {
@@ -142,7 +144,7 @@ class Builder:
         config file settings and command-line options by
         `self.get_settings()`.
         """
-        for name, publisher in self.publishers.items():
+        for name, publisher in list(self.publishers.items()):
             option_parser = OptionParser(
                 components=publisher.components, read_config_files=1,
                 usage=usage, description=description)

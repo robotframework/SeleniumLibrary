@@ -15,6 +15,8 @@
 #  limitations under the License.
 
 from __future__ import print_function
+from builtins import str
+from builtins import object
 
 """Robot Framework Test Status Checker
 
@@ -136,7 +138,7 @@ def _check_log_message(expected, test, kw, index):
     return False
 
 
-class _Expected:
+class _Expected(object):
 
     def __init__(self, doc):
         self.status, self.message = self._get_status_and_message(doc)
