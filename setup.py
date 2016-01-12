@@ -1,5 +1,8 @@
-from past.builtins import execfile
 #!/usr/bin/env python
+try:
+    from past.builtins import execfile
+except ImportError as e:
+    print("Please install 'future' first, i.e. 'pip install future'.\n{0}".format(e))
 
 import sys
 from os.path import join, dirname
@@ -34,11 +37,12 @@ setup(name         = 'robotframework-selenium2library',
                         "Topic :: Software Development :: Testing"
                      ],
       install_requires = [
-							'decorator >= 3.3.2',
-							'selenium >= 2.32.0',
-							'robotframework >= 2.6.0',
-							'docutils >= 0.8.1'
-						 ],
+                            'decorator >= 3.3.2',
+                            'selenium >= 2.32.0',
+                            'robotframework >= 2.6.0',
+                            'docutils >= 0.8.1',
+                            'future >= 0.15.2'
+                         ],
       py_modules=['ez_setup'],
       package_dir  = {'' : 'src'},
       packages     = ['Selenium2Library','Selenium2Library.keywords','Selenium2Library.locators',
