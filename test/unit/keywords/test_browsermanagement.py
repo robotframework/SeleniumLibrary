@@ -63,20 +63,87 @@ class BrowserManagementTests(unittest.TestCase):
         self.assertTrue("IP:port", capabilities["httpProxy"])
         self.assertTrue(2, len(capabilities))
 
+    def test_create_chrome_with_desired_prefs(self):
+        caps = {"key1": "val1", "key2": "val2"}
+        self.verify_browser(webdriver.Chrome, "chrome",
+                            desired_capabilities=caps)
+        expected_caps = {'platform': 'ANY',
+                         'browserName': 'chrome',
+                         'version': '',
+                         'key2': 'val2',
+                         'javascriptEnabled': True,
+                         'key1': 'val1'}
+        self.assertEqual(expected_caps,
+                         self.init_kwargs["desired_capabilities"])
+
+    def test_create_firefox_with_desired_prefs(self):
+        caps = {"key1": "val1", "key2": "val2"}
+        self.verify_browser(webdriver.Firefox, "ff",
+                            desired_capabilities=caps)
+        expected_caps = {'platform': 'ANY',
+                         'browserName': 'firefox',
+                         'version': '',
+                         'key2': 'val2',
+                         'marionette': False,
+                         'javascriptEnabled': True,
+                         'key1': 'val1'}
+        self.assertEqual(expected_caps,
+                         self.init_kwargs["capabilities"])
+        self.assertTrue(isinstance(self.init_kwargs["firefox_profile"],
+                                   webdriver.FirefoxProfile))
+
+    def test_create_ie_with_desired_prefs(self):
+        caps = {"key1": "val1", "key2": "val2"}
+        self.verify_browser(webdriver.Ie, "internet explorer",
+                            desired_capabilities=caps)
+        expected_caps = {'platform': 'WINDOWS',
+                         'browserName': 'internet explorer',
+                         'version': '',
+                         'key2': 'val2',
+                         'javascriptEnabled': True,
+                         'key1': 'val1'}
+        self.assertEqual(expected_caps,
+                         self.init_kwargs["capabilities"])
+
     def test_create_remote_browser_with_desired_prefs(self):
-        expected_caps = {"key1":"val1","key2":"val2"}
-        self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps)
+        caps = {"key1": "val1", "key2": "val2"}
+        self.verify_browser(webdriver.Remote, "chrome",
+                            remote="http://127.0.0.1/wd/hub",
+                            desired_capabilities=caps)
+        expected_caps = {'platform': 'ANY',
+                         'browserName': 'chrome',
+                         'version': '',
+                         'key2': 'val2',
+                         'javascriptEnabled': True,
+                         'key1': 'val1'}
+        self.assertEqual(expected_caps,
+                         self.init_kwargs["desired_capabilities"])
+        self.assertEqual("http://127.0.0.1/wd/hub",
+                         self.init_kwargs["command_executor"])
 
     def test_create_remote_browser_with_string_desired_prefs(self):
         expected_caps = "key1:val1,key2:val2"
-        self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps)
+        self.verify_browser(webdriver.Remote, "chrome",
+                            remote="http://127.0.0.1/wd/hub",
+                            desired_capabilities=expected_caps)
 
-    def test_capabilities_attribute_not_modified(self):
+    def test_local_browser_capabilities_attribute_not_modified(self):
+        expected_caps = {"key1":"val1","key2":"val2"}
+        browsers = ((webdriver.Chrome, "chrome"),
+                    (webdriver.Firefox, "ff"),
+                    (webdriver.Ie, "internetexplorer"))
+        caps = (webdriver.DesiredCapabilities.CHROME,
+                webdriver.DesiredCapabilities.FIREFOX,
+                webdriver.DesiredCapabilities.INTERNETEXPLORER)
+        for browser, cap in zip(browsers, caps):
+            self.verify_browser(*browser, desired_capabilities=expected_caps)
+            self.assertFalse("some_cap" in cap)
+
+    def test_remote_browser_capabilities_attribute_not_modified(self):
         expected_caps = {"some_cap":"42"}
-        self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps)
+        self.verify_browser(webdriver.Remote, "chrome",
+                            remote="http://127.0.0.1/wd/hub",
+                            desired_capabilities=expected_caps)
         self.assertFalse("some_cap" in webdriver.DesiredCapabilities.CHROME)
 
     def test_set_selenium_timeout_only_affects_open_browsers(self):
@@ -105,6 +172,7 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()
         capt_data = {}
+
         class FakeWebDriver(mock):
             def __init__(self, some_arg=None):
                 mock.__init__(self)
@@ -124,29 +192,32 @@ class BrowserManagementTests(unittest.TestCase):
         finally:
             del webdriver.FakeWebDriver
 
-    def verify_browser(self , webdriver_type , browser_name, **kw):
+    def verify_browser(self, webdriver_type, browser_name, **kwargs):
         #todo try lambda *x: was_called = true
         bm = _BrowserManagementKeywords()
         old_init = webdriver_type.__init__
         webdriver_type.__init__ = self.mock_init
-        
+
         try:
             self.was_called = False
-            bm._make_browser(browser_name, **kw)
+            self.init_kwargs = {}
+            bm._make_browser(browser_name, **kwargs)
         except AttributeError:
             pass #kinda dangerous but I'm too lazy to mock out all the set_timeout calls
         finally:
             webdriver_type.__init__ = old_init
             self.assertTrue(self.was_called)
-            
-    def mock_init(self, *args, **kw):
+
+    def mock_init(self, *args, **kwargs):
         self.was_called = True
+        self.init_kwargs = kwargs
 
 
 class _BrowserManagementWithLoggingStubs(_BrowserManagementKeywords):
 
     def __init__(self):
         _BrowserManagementKeywords.__init__(self)
+
         def mock_logging_method(self, *args, **kwargs):
             pass
         for name in ['_info', '_debug', '_warn', '_log', '_html']:
