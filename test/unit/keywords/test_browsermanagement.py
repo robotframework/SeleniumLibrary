@@ -128,7 +128,7 @@ class BrowserManagementTests(unittest.TestCase):
                             desired_capabilities=expected_caps)
 
     def test_local_browser_capabilities_attribute_not_modified(self):
-        expected_caps = {"key1":"val1","key2":"val2"}
+        expected_caps = {"some_cap":"42"}
         browsers = ((webdriver.Chrome, "chrome"),
                     (webdriver.Firefox, "ff"),
                     (webdriver.Ie, "internetexplorer"))
