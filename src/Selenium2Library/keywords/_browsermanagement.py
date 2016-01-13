@@ -87,7 +87,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         | htmlunitwithjs   | HTMLUnit with Javascipt support |
         | android          | Android       |
         | iphone           | Iphone        |
+        | ipad             | Ipad          |
         | safari           | Safari        |
+        | edge             | Edge          |
 
 
         Note, that you will encounter strange behavior, if you open
