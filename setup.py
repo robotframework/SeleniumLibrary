@@ -1,8 +1,4 @@
 #!/usr/bin/env python
-try:
-    from past.builtins import execfile
-except ImportError as e:
-    print("Please install 'future' first, i.e. 'pip install future'.\n{0}".format(e))
 
 import sys
 from os.path import join, dirname
@@ -12,7 +8,8 @@ from ez_setup import use_setuptools
 use_setuptools()
 from setuptools import setup
 
-execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
+version_file = join(dirname(__file__), 'src', 'Selenium2Library', 'version.py')
+exec(compile(open(version_file).read(), version_file, 'exec'))
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework
