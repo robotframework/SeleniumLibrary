@@ -3,12 +3,11 @@
 from __future__ import print_function
 from future import standard_library
 standard_library.install_aliases()
-from builtins import str
 
-import http.server
 import http.server
 import http.client
 import os
+import sys
 
 
 class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -56,12 +55,8 @@ class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 return self.list_directory(path)
         ctype = self.guess_type(path)
-        if ctype.startswith('text/'):
-            mode = 'r'
-        else:
-            mode = 'rb'
         try:
-            f = open(path, mode)
+            f = open(path, 'rb')
         except IOError:
             self.send_error(404, "File not found")
             return None
@@ -90,14 +85,12 @@ def stop_server(port=7000):
     conn.getresponse()
 
 def start_server(port=7000):
-    import os
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), '..'))
     server = StoppableHttpServer(('', port), StoppableHttpRequestHandler)
     server.serve_forever()
     
     
 if __name__ == '__main__':
-    import sys
     if len(sys.argv) != 2 or sys.argv[1] not in [ 'start', 'stop' ]:
         print("usage: {0} start|stop".format(sys.argv[0]))
         sys.exit(1)
