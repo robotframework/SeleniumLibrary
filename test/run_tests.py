@@ -39,7 +39,7 @@ def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
     start_http_server()
-    runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
+    runner = {'python': 'robot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':
         runner += '.bat'
     execute_tests(runner, args)
@@ -48,7 +48,8 @@ def acceptance_tests(interpreter, browser, args):
 
 def start_http_server():
     server_output = TemporaryFile()
-    Popen(['python', env.HTTP_SERVER_FILE ,'start'],
+    python_bin= 'python' + sys.version[:3]
+    Popen([python_bin, env.HTTP_SERVER_FILE ,'start'],
           stdout=server_output, stderr=server_output)
 
 def execute_tests(runner, args):
@@ -61,7 +62,8 @@ def execute_tests(runner, args):
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
-    call(['python', env.HTTP_SERVER_FILE, 'stop'])
+    python_bin= 'python' + sys.version[:3]
+    call([python_bin, env.HTTP_SERVER_FILE, 'stop'])
 
 def process_output(args):
     print()

@@ -51,10 +51,12 @@ def run_tests(args):
     stop_demo_application()
 
 def start_demo_application():
-    Popen(['python', DEMOAPP, 'start'], stdout=TemporaryFile(), stderr=STDOUT)
+    python_bin= 'python' + sys.version[:3]
+    Popen([python_bin, DEMOAPP, 'start'], stdout=TemporaryFile(), stderr=STDOUT)
 
 def stop_demo_application():
-    call(['python', DEMOAPP, 'stop'], stdout=TemporaryFile(), stderr=STDOUT)
+    python_bin= 'python' + sys.version[:3]
+    call([python_bin, DEMOAPP, 'stop'], stdout=TemporaryFile(), stderr=STDOUT)
 
 def print_help():
     print(__doc__)
