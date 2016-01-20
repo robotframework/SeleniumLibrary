@@ -70,14 +70,31 @@ Get Vertical Position
     Run Keyword And Expect Error    Could not determine position for 'non-existent'
     ...    Get Horizontal Position    non-existent
 
-
 Get Element Size
     ${width}  ${height}=  Get Element Size  link=Link
     Should be True  ${height} > ${0}
     Should be True  ${width} > ${0}
-    Run Keyword And Expect Error  ValueError: Element locator 'non-existent' did not match any elements.  Get Element Size  non-existent
+    Run Keyword And Expect Error
+    ...  ValueError: Element locator 'non-existent' did not match any elements.
+    ...  Get Element Size  non-existent
 
 Get Empty Element Size
     [Tags]  Known Issue Internet Explorer
     ${width}  ${height}=  Get Element Size  id=emptyDiv
-    Should be True  ${height} == 0
+    Should Be Equal As Integers  ${height}  0
+
+Element Attribute Should Be With One Pair
+    Element Attribute Should Be  css=body>div  id=div_id
+
+Element Attribute Should Be With Multiple Pairs
+    Element Attribute Should Be  css=div#second_div
+    ...  id=second_div  class=Second Class
+
+Element Attribute Should Be Should Raise Error If Attribute Incorrect
+    Run Keyword And Expect Error
+    ...  Attribute customattr does not match pattern key=value
+    ...  Element Attribute Should Be  css=body>div  customattr
+
+Element Attribute Should Be Should Raise Error If Attribute Value Does Not Match
+    Run Keyword And Expect Error
+    ...  Element Attribute Should Be  css=body>div  id=div_id1
