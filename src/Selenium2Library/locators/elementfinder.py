@@ -220,6 +220,12 @@ class ElementFinder(object):
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0]
                 criteria = locator_parts[2].strip()
+                # remove ' or '' if they are the first or last word
+                if len(criteria) > 2:
+                    if criteria.startswith('\"') and criteria.endswith('\"'):
+                        criteria = criteria[1:-1]
+                    if criteria.startswith('\'') and criteria.endswith('\''):
+                        criteria = criteria[1:-1]
         return (prefix, criteria)
 
     def _normalize_result(self, elements):
