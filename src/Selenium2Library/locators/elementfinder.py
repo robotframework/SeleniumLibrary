@@ -37,7 +37,7 @@ class ElementFinder(object):
         if location is not None:
             if hasattr(strategy, '__call__'):
                 locator = strategy(location, criteria)
-            elif isinstance(strategy, (basestring, str)) and len(strategy) > 0 and ('dict' not in strategy.lower()):
+            elif isinstance(strategy, (basestring, str)) and len(strategy) > 0:
                 locator = BuiltIn().run_keyword(strategy, location, criteria)
                 logger.debug("Locator from keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
             elif isinstance(location, dict):
