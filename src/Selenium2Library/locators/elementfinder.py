@@ -41,8 +41,13 @@ class ElementFinder(object):
                 locator = BuiltIn().run_keyword(strategy, location, criteria)
                 logger.debug("Locator from keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
             elif isinstance(location, dict):
-                locator = location.get(criteria)
-                logger.debug("Locator from dict: '" + criteria + "' -> '" + locator + "'")
+                try:
+                    locator = location[criteria]
+                except:
+                    locator = criteria
+                    logger.debug("Locator not in dictionary: '" + criteria + "'")
+                else:
+                    logger.debug("Locator from dictionary: '" + criteria + "' -> '" + locator + "'")
             else:
                 raise ValueError("Invaild strategy '" + strategy + "' with location '"+ location + "'")
             (prefix, criteria) = self._parse_locator(locator)
