@@ -73,6 +73,37 @@ class _TableElementKeywords(KeywordGroup):
             self.log_source(loglevel)
             raise AssertionError(message)
 
+    def table_cell_should_not_contain(self, table_locator, row, column, expected, loglevel='INFO'):
+        """
+        Verifies that a certain cell in a table does not contain `expected`.
+
+        Row and column number start from 1. This keyword passes if the
+        specified cell does not contain the given content. If you want
+        to test that the cell content does not match exactly, or that
+        it e.g. starts with some text, use `Get Table Cell` keyword in
+        combination with built-in keywords such as `Should Not Be Equal`
+        or `Should Not Start With`.
+
+        To understand how tables are identified, please take a look at
+        the `introduction`.
+
+        See `Page Should Contain` for explanation about `loglevel` argument.
+        """
+        message = ("Cell in table '%s' in row #%s and column #%s "
+                   "should not have contained text '%s'."
+                   % (table_locator, row, column, expected))
+        try:
+            content = self.get_table_cell(table_locator, row, column, loglevel='NONE')
+        except AssertionError, err:
+            self._info(err)
+            self.log_source(loglevel)
+            raise AssertionError(message)
+        self._info("Cell contains %s." % content)
+
+        if expected in content:
+            self.log_source(loglevel)
+            raise AssertionError(message)
+
     def table_column_should_contain(self, table_locator, col, expected, loglevel='INFO'):
         """Verifies that a specific column contains `expected`.
 
@@ -100,6 +131,33 @@ class _TableElementKeywords(KeywordGroup):
                    "should have contained text '%s'."
                    % (col, table_locator, expected))
 
+    def table_column_should_not_contain(self, table_locator, col, expected, loglevel='INFO'):
+        """Verifies that a specific column does not contain `expected`.
+
+        The first leftmost column is column number 1. A negative column
+        number can be used to get column counting from the end of the row (end: -1).
+        If the table contains cells that span multiple columns, those merged cells
+        count as a single column. For example both tests below work,
+        if in one row columns A and B are merged with colspan="2", and
+        the logical third column contains "C".
+
+        Example:
+        | Table Column Should Not Contain | tableId | 3 | C |
+        | Table Column Should Not Contain | tableId | 2 | C |
+
+        To understand how tables are identified, please take a look at
+        the `introduction`.
+
+        See `Page Should Contain Element` for explanation about
+        `loglevel` argument.
+        """
+        element = self._table_element_finder.find_by_col(self._current_browser(), table_locator, col, expected)
+        if element is not None:
+            self.log_source(loglevel)
+            raise AssertionError("Column #%s in table identified by '%s' "
+                                 "should not have contained text '%s'."
+                   % (col, table_locator, expected))
+
     def table_footer_should_contain(self, table_locator, expected, loglevel='INFO'):
         """Verifies that the table footer contains `expected`.
 
@@ -116,6 +174,22 @@ class _TableElementKeywords(KeywordGroup):
             raise AssertionError("Footer in table identified by '%s' should have contained "
                    "text '%s'." % (table_locator, expected))
 
+    def table_footer_should_not_contain(self, table_locator, expected, loglevel='INFO'):
+        """Verifies that the table footer does not contain `expected`.
+
+        With table footer can be described as any <td>-element that is
+        child of a <tfoot>-element.  To understand how tables are
+        identified, please take a look at the `introduction`.
+
+        See `Page Should Contain Element` for explanation about
+        `loglevel` argument.
+        """
+        element = self._table_element_finder.find_by_footer(self._current_browser(), table_locator, expected)
+        if element is not None:
+            self.log_source(loglevel)
+            raise AssertionError("Footer in table identified by '%s' should not have contained "
+                                 "text '%s'." % (table_locator, expected))
+
     def table_header_should_contain(self, table_locator, expected, loglevel='INFO'):
         """Verifies that the table header, i.e. any <th>...</th> element, contains `expected`.
 
@@ -130,6 +204,21 @@ class _TableElementKeywords(KeywordGroup):
             self.log_source(loglevel)
             raise AssertionError("Header in table identified by '%s' should have contained "
                "text '%s'." % (table_locator, expected))
+
+    def table_header_should_not_contain(self, table_locator, expected, loglevel='INFO'):
+        """Verifies that the table header, i.e. any <th>...</th> element, does not contain `expected`.
+
+        To understand how tables are identified, please take a look at
+        the `introduction`.
+
+        See `Page Should Contain Element` for explanation about
+        `loglevel` argument.
+        """
+        element = self._table_element_finder.find_by_header(self._current_browser(), table_locator, expected)
+        if element is not None:
+            self.log_source(loglevel)
+            raise AssertionError("Header in table identified by '%s' should not have contained "
+                                 "text '%s'." % (table_locator, expected))
 
     def table_row_should_contain(self, table_locator, row, expected, loglevel='INFO'):
         """Verifies that a specific table row contains `expected`.
@@ -154,6 +243,29 @@ class _TableElementKeywords(KeywordGroup):
             raise AssertionError("Row #%s in table identified by '%s' should have contained "
                    "text '%s'." % (row, table_locator, expected))
 
+    def table_row_should_not_contain(self, table_locator, row, expected, loglevel='INFO'):
+        """Verifies that a specific table row does not contain `expected`.
+
+        The uppermost row is row number 1. A negative column
+        number can be used to get column counting from the end of the row
+        (end: -1). For tables that are structured with thead, tbody and tfoot,
+        only the tbody section is searched. Please use `Table Header Should Contain`
+        or `Table Footer Should Contain` for tests against the header or
+        footer content.
+
+        If the table contains cells that span multiple rows, a match
+        only occurs for the uppermost row of those merged cells. To
+        understand how tables are identified, please take a look at
+        the `introduction`.
+
+        See `Page Should Contain Element` for explanation about `loglevel` argument.
+        """
+        element = self._table_element_finder.find_by_row(self._current_browser(), table_locator, row, expected)
+        if element is not None:
+            self.log_source(loglevel)
+            raise AssertionError("Row #%s in table identified by '%s' should have contained "
+                                 "text '%s'." % (row, table_locator, expected))
+
     def table_should_contain(self, table_locator, expected, loglevel='INFO'):
         """Verifies that `expected` can be found somewhere in the table.
 
@@ -167,4 +279,19 @@ class _TableElementKeywords(KeywordGroup):
         if element is None:
             self.log_source(loglevel)
             raise AssertionError("Table identified by '%s' should have contained text '%s'." \
+                % (table_locator, expected))
+
+    def table_should_not_contain(self, table_locator, expected, loglevel='INFO'):
+        """Verifies that `expected` should not be present anywhere in the table.
+
+        To understand how tables are identified, please take a look at
+        the `introduction`.
+
+        See `Page Should Contain Element` for explanation about
+        `loglevel` argument.
+        """
+        element = self._table_element_finder.find_by_content(self._current_browser(), table_locator, expected)
+        if element is not None:
+            self.log_source(loglevel)
+            raise AssertionError("Table identified by '%s' should not have contained text '%s'." \
                 % (table_locator, expected))
