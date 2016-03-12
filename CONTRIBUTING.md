@@ -14,7 +14,7 @@ Submitting issues
 -----------------
 
 Bugs and enhancements are tracked in the [Hélio's fork issue tracker]
-(https://github.com/robotframework/Selenium2Library/issues). If you are
+(https://github.com/HelioGuilherme66/robotframework-selenium2library/issues). If you are
 unsure if something is a bug or is a feature worth implementing, you can
 first ask on [robotframework-users]
 (https://groups.google.com/forum/#!forum/robotframework-users) list. This and
