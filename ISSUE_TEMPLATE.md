@@ -43,7 +43,7 @@ Libraries
 - Selenium version:
 - Selenium2Library ([x] Python or [ ] Jython) version:
 
-## Isolating and demostrating the problem
+## Isolating and demonstrating the problem
 
 - [ ] This bug happens when testing a public site: [example](http://example.org/)
 - [ ] The bug happens consistently across all tested browsers
