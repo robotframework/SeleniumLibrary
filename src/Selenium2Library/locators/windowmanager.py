@@ -62,21 +62,21 @@ class WindowManager(object):
     def _select_by_default(self, browser, criteria):
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
             handles = browser.get_window_handles()
-            browser.switch_to.window(handles[0])
+            browser.switch_to_window(handles[0])
             return
         try:
             starting_handle = browser.get_current_window_handle()
         except NoSuchWindowException:
             starting_handle = None
         for handle in browser.get_window_handles():
-            browser.switch_to.window(handle)
+            browser.switch_to_window(handle)
             if criteria == handle:
                 return
             for item in browser.get_current_window_info()[2:4]:
                 if item.strip().lower() == criteria.lower():
                     return
         if starting_handle:
-            browser.switch_to.window(starting_handle)
+            browser.switch_to_window(starting_handle)
         raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
     
     def _select_by_last_index(self, browser):
@@ -88,12 +88,12 @@ class WindowManager(object):
             raise AssertionError("No window found")
         except NoSuchWindowException:
             raise AssertionError("Currently no focus window. where are you making a popup window?")
-        browser.switch_to.window(handles[-1])
+        browser.switch_to_window(handles[-1])
 
     def _select_by_excludes(self, browser, excludes):
         for handle in browser.get_window_handles():
             if handle not in excludes:
-                browser.switch_to.window(handle)
+                browser.switch_to_window(handle)
                 return
         raise ValueError("Unable to locate new window")
     
@@ -120,11 +120,11 @@ class WindowManager(object):
             starting_handle = None
         try:
             for handle in browser.get_window_handles():
-                browser.switch_to.window(handle)
+                browser.switch_to_window(handle)
                 window_infos.append(browser.get_current_window_info())
         finally:
             if starting_handle:
-                browser.switch_to.window(starting_handle)
+                browser.switch_to_window(starting_handle)
         return window_infos
 
     def _select_matching(self, browser, matcher, error):
@@ -133,9 +133,9 @@ class WindowManager(object):
         except NoSuchWindowException:
             starting_handle = None
         for handle in browser.get_window_handles():
-            browser.switch_to.window(handle)
+            browser.switch_to_window(handle)
             if matcher(browser.get_current_window_info()):
                 return
         if starting_handle:
-            browser.switch_to.window(starting_handle)
+            browser.switch_to_window(starting_handle)
         raise ValueError(error)
