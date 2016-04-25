@@ -50,9 +50,10 @@ class ElementFinder(object):
                     logger.debug("Locator from dictionary: '" + criteria + "' -> '" + locator + "'")
             else:
                 raise ValueError("Invaild strategy '" + strategy + "' with location '"+ location + "'")
-            if isinstance(locator, basestring) and locator.find('${') >= 0:
-                locator = BuiltIn().run_keyword('Replace Variables', locator)
-                logger.debug("Built-in Replace Variables changes locator to: " + locator)
+            if isinstance(locator, basestring):
+                while locator.find('${') >= 0:
+                    locator = BuiltIn().run_keyword('Replace Variables', locator)
+                    logger.debug("Buitin Keyword 'Replace Variables' updated locator: " + locator)
             (prefix, criteria) = self._parse_locator(locator)
             prefix = 'default' if prefix is None else prefix
             strategy = self._strategies.get(prefix)
