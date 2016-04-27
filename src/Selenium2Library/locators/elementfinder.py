@@ -37,23 +37,18 @@ class ElementFinder(object):
         if location is not None:
             if hasattr(strategy, '__call__'):
                 locator = strategy(location, criteria)
-            elif isinstance(strategy, (basestring, str)) and len(strategy) > 0:
+            elif isinstance(strategy, basestring) and len(strategy) > 0:
                 locator = BuiltIn().run_keyword(strategy, location, criteria)
-                logger.debug("Locator from keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
+                logger.debug("Map locator by keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
             elif isinstance(location, dict):
-                try:
-                    locator = location[criteria]
-                except:
-                    locator = criteria
-                    logger.debug("Locator not in dictionary: '" + criteria + "'")
-                else:
-                    logger.debug("Locator from dictionary: '" + criteria + "' -> '" + locator + "'")
+                locator = location.get(criteria, criteria)
+                logger.debug("Map locator by dictionary: '" + criteria + "' -> '" + locator + "'")
             else:
-                raise ValueError("Invaild strategy '" + strategy + "' with location '"+ location + "'")
+                raise ValueError("Invaild strategy '" + str(strategy) + "' with location '"+ str(location) + "'")
             if isinstance(locator, basestring):
                 while locator.find('${') >= 0:
                     locator = BuiltIn().run_keyword('Replace Variables', locator)
-                    logger.debug("Buitin Keyword 'Replace Variables' updated locator: " + locator)
+                    logger.debug("Replaced variables to new locator: " + locator)
             (prefix, criteria) = self._parse_locator(locator)
             prefix = 'default' if prefix is None else prefix
             strategy = self._strategies.get(prefix)
