@@ -14,6 +14,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+
 """Simple HTTP server requiring only Python and no other preconditions.
 
 Server is started by running this script with argument 'start' and
@@ -25,16 +29,16 @@ number as when starting it.
 
 import os
 import sys
-import httplib
-import BaseHTTPServer
-import SimpleHTTPServer
+import http.client
+import http.server
+import http.server
 
 
 DEFAULT_PORT = 7272
 DEFAULT_HOST = 'localhost'
 
 
-class StoppableHttpServer(BaseHTTPServer.HTTPServer):
+class StoppableHttpServer(http.server.HTTPServer):
 
     def serve_forever(self):
         self.stop = False
@@ -45,7 +49,7 @@ class StoppableHttpServer(BaseHTTPServer.HTTPServer):
                 break
 
 
-class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_QUIT(self):
         self.send_response(200)
@@ -55,25 +59,25 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_POST(self):
         # We could also process paremeters here using something like below.
         # length = self.headers['Content-Length']
-        # print self.rfile.read(int(length))
+        # print(self.rfile.read(int(length)))
         self.do_GET()
 
 
 def start_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
-    print "Demo application starting on port %s" % port
+    print("Demo application starting on port {0}".format(port))
     root  = os.path.dirname(os.path.abspath(__file__))
     os.chdir(root)
     server = StoppableHttpServer((host, int(port)), StoppableHttpRequestHandler)
     server.serve_forever()
 
 def stop_server(host=DEFAULT_HOST, port=DEFAULT_PORT):
-    print "Demo application on port %s stopping" % port
-    conn = httplib.HTTPConnection("%s:%s" % (host, port))
+    print("Demo application on port {0} stopping".format(port))
+    conn = http.client.HTTPConnection("%s:%s" % (host, port))
     conn.request("QUIT", "/")
     conn.getresponse()
 
 def print_help():
-    print __doc__
+    print(__doc__)
 
 
 if __name__ == '__main__':
@@ -82,4 +86,4 @@ if __name__ == '__main__':
          'stop': stop_server,
          'help': print_help}[sys.argv[1]](*sys.argv[2:])
     except (IndexError, KeyError, TypeError):
-        print 'Usage: %s start|stop|help [port]' % os.path.basename(sys.argv[0])
+        print("Usage: {0} start|stop|help [port]".format(os.path.basename(sys.argv[0])))
