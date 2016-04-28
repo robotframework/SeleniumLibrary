@@ -1,3 +1,5 @@
+addons:
+  firefox: latest-esr
 language: python
 sudo: false
 python:
