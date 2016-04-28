@@ -39,16 +39,16 @@ class ElementFinder(object):
                 locator = strategy(location, criteria)
             elif isinstance(strategy, basestring) and len(strategy) > 0:
                 locator = BuiltIn().run_keyword(strategy, location, criteria)
-                logger.debug("Map locator by keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
+                logger.debug("Get locator via keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
             elif isinstance(location, dict):
                 locator = location.get(criteria, criteria)
-                logger.debug("Map locator by dictionary: '" + criteria + "' -> '" + locator + "'")
+                logger.debug("Get locator via dictionary: '" + criteria + "' -> '" + locator + "'")
             else:
                 raise ValueError("Invaild strategy '" + str(strategy) + "' with location '"+ str(location) + "'")
             if isinstance(locator, basestring):
                 while locator.find('${') >= 0:
                     locator = BuiltIn().run_keyword('Replace Variables', locator)
-                    logger.debug("Replaced variables to new locator: " + locator)
+                    logger.debug("Locator replaced variables: " + locator)
             (prefix, criteria) = self._parse_locator(locator)
             prefix = 'default' if prefix is None else prefix
             strategy = self._strategies.get(prefix)
