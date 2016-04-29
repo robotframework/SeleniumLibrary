@@ -274,8 +274,17 @@ class _SelectElementKeywords(KeywordGroup):
 
         select, options = self._get_select_list_options(select)
         for item in items:
-            select.deselect_by_value(item)
-            select.deselect_by_visible_text(item)
+            try:
+                select.deselect_by_value(item)
+                # Code for selenium <= 2.52.0
+                select.deselect_by_visible_text(item)
+            except:  # Code for selenium > 2.52.0
+                try:
+                    select.deselect_by_visible_text(item)
+                except:
+                    self._warn("Tried to unselect missing selection item, \
+'%s' from locator '%s'." % (item, locator))
+                    continue
 
     def unselect_from_list_by_index(self, locator, *indexes):
         """Unselects `*indexes` from list identified by `locator`
