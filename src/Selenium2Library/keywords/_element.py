@@ -688,23 +688,23 @@ return !element.dispatchEvent(evt);
         
         
         Examples ( ${location} is a python dictionary ):
-        # Step 1, define the dictionary:
-        all_blocks = '//form'
-        # ${index} to be defined in user keyword
-        login_block = '//${all_blocks}[@id="login"]/div[${index}]'
-        dict_users = { 
-            'User Name': 'id=input_0', 
-                'Password': 'id=input_1', 
-            'Add Button': '${login_block}/div/button[1]',
-            'Delete Button': '${login_block}/div/button[2]
-        }
+        | # Step 1, define the dictionary: |
+        | all_blocks = '//form' |
+        | # ${index} to be defined in user keyword |
+        | login_block = '//${all_blocks}[@id="login"]/div[${index}]' |
+        | dict_users = { |
+        | | 'User Name': 'id=input_0', |
+        | | 'Password': 'id=input_1', |
+        | | 'Add Button': '${login_block}/div/button[1]', |
+        | | 'Delete Button': '${login_block}/div/button[2] |
+        | | } }
         | # Step 2, register: |
         | Add Location Strategy | du |  | ${dict_users} |
         | # or alertatively, |
         | Add Location Strategy | du | location=${dict_users} |
         | # Step 3, use custom locators: |
         | Input Text | du=User Name |
-        | Input Password | du=Password
+        | Input Password | du=Password |
         | ${index} = | Set Variable | 2 |
         | Click Element | du=Add Button | # explicitly replace varaible ${index} |
         
