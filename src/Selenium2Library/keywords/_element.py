@@ -665,12 +665,18 @@ return !element.dispatchEvent(evt);
         strategy_keyword:
             User defined keyword resgistered for hook call by any keywords.
             If not defined, use location.get() when ${location} is a dictionary.
+            
             Arguments:
+            
                 ${location}: where to get locator by ${criteria}, such as a dictionary or a database.
+                
                 ${criteria}: meaningful text with good readability, such as element's GUI text.
+                
             Return: 
-                return web element(s) if ${location} is None, or
+            
+                return web element(s) if ${location} is None, or 
                 return legency locator string like 'xpath=xxx'.
+        
         
         Examples ( ${location} is None ):
         | #***Strategy Keyword examples*** |
@@ -686,28 +692,28 @@ return !element.dispatchEvent(evt);
         | Page Should Contain Element | byjs=${an_element_id} |
         | Page Should Contain Element | byui=User Name |
         
-        
         Examples ( ${location} is a python dictionary ):
-        | # Step 1, define the dictionary: |
-        | all_blocks = '//form' |
-        | # ${index} to be defined in user keyword |
-        | login_block = '//${all_blocks}[@id="login"]/div[${index}]' |
-        | dict_users = { |
-        | | 'User Name': 'id=input_0', |
-        | | 'Password': 'id=input_1', |
-        | | 'Add Button': '${login_block}/div/button[1]', |
-        | | 'Delete Button': '${login_block}/div/button[2] |
-        | | } }
-        | # Step 2, register: |
-        | Add Location Strategy | du |  | ${dict_users} |
-        | # or alertatively, |
-        | Add Location Strategy | du | location=${dict_users} |
-        | # Step 3, use custom locators: |
-        | Input Text | du=User Name |
-        | Input Password | du=Password |
-        | ${index} = | Set Variable | 2 |
-        | Click Element | du=Add Button | # explicitly replace varaible ${index} |
-        
+ 
+        # Step 1, define the dictionary:
+
+        all_blocks = '//form'
+
+        # ${index} to be defined in user keyword
+
+        login_block = '//${all_blocks}[@id="login"]/div[${index}]'
+
+        dict_users = {
+
+           'User Name': 'id=input_0',
+
+           'Password': 'id=input_1',
+
+            'Add Button': '${login_block}/div/button[1]',
+
+            'Delete Button': '${login_block}/div/button[2]
+
+        }
+
         
         Examples ( ${location} is a database ):
         | # Step 1, define strategy keyword: |
