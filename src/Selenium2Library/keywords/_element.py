@@ -663,44 +663,63 @@ return !element.dispatchEvent(evt);
             'Any Keyword | ${stragegy_name}=${criteria}'. 
 
         strategy_keyword:
-            User defined keyword or method. Return web element if 'location' is None,
-            otherwise return locator string in legency S2L format(like 'css=xxx').
-
-        location:
-            Tells custom keywords where to read locator string by 'criteria', such as dict or database.
+            User defined keyword resgistered for hook call by any keywords.
+            If not defined, use location.get() when ${location} is a dictionary.
+            Arguments:
+                ${location}: where to get locator by ${criteria}, such as a dictionary or a database.
+                ${criteria}: meaningful text with good readability, such as element's GUI text.
+            Return: 
+                return web element(s) if ${location} is None, or
+                return legency locator string like 'xpath=xxx'.
         
-        
-        Custom location keyword examples - get web element by criteria as locator argurment of S2L keywords:
+        Examples ( ${location} is None ):
+        | #***Strategy Keyword examples*** |
         | Return Web Element By Javascript | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
         |   | ${element_object}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
         |   | [Return] | ${element_object} |
         | Return Web Element By Element Prompt Text | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
         |   | ${element_object}= | Get Webelement | &${myPageDict}[${criteria}] |
         |   | [Return] | ${element_object} |
-        | #***Usage examples:*** |
+        | #***Register and Usage:*** |
         | Add Location Strategy | byjs | Return Web Element By Javascript |
-        | Add Location Strategy | bytxt | Return Web Element By Element Prompt Text |
+        | Add Location Strategy | byui | Return Web Element By Element Prompt Text |
         | Page Should Contain Element | byjs=${an_element_id} |
-        | Page Should Contain Element | bytxt=User Name |
+        | Page Should Contain Element | byui=User Name |
         
         
-        Custom location keyword examples - get locator string by location + criteria as locator argument of S2L keywords:
-        | Read Locator String From Dict | [Arguments] | ${location} | ${criteria} |
-        |   | ${locator_string}= | Set Variable | &${location}[${criteria}] |
-        |   | [Return] | ${locator_string} |
+        Examples ( ${location} is a python dictionary ):
+        # Step 1, define the dictionary:
+        all_blocks = '//form'
+        # ${index} to be defined in user keyword
+        login_block = '//${all_blocks}[@id="login"]/div[${index}]'
+        dict_users = { 
+            'User Name': 'id=input_0', 
+                'Password': 'id=input_1', 
+            'Add Button': '${login_block}/div/button[1]',
+            'Delete Button': '${login_block}/div/button[2]
+        }
+        | # Step 2, register: |
+        | Add Location Strategy | du |  | ${dict_users} |
+        | # or alertatively, |
+        | Add Location Strategy | du | location=${dict_users} |
+        | # Step 3, use custom locators: |
+        | Input Text | du=User Name |
+        | Input Password | du=Password
+        | ${index} = | Set Variable | 2 |
+        | Click Element | du=Add Button | # explicitly replace varaible ${index} |
+        
+        
+        Examples ( ${location} is a database ):
+        | # Step 1, define strategy keyword: |
         | Read Locator String From DB | [Arguments] | ${location} | ${criteria} |
         |   | ${locator_string}= | Read From Your Database | ${location} | ${criteria} |
         |   | [Return] | ${locator_string} |
-        | #***Usage examples:*** |
-        | Add Location Strategy | db1 | Read Locator String From DB | ${redis_server} | #Call keyword to read remote database |
-        | Add Location Strategy | page1 | Read Locator String From Dict | ${dict_page_login} | #Call keyword with dict as args |
-        | Add Location Strategy | page2 | | ${dict_page_main} | #Use dict[criteria] directly |
-        | Add Location Strategy | page3 | location=${dict_page_support} | | #Alternative use of dict[criteria] |
-        | Page Should Contain Element | db1=${an_element_index} |
-        | Page Should Contain Element | page1=User Name |
-        | Page Should Contain Element | page2=About Us |
-        | Page Should Contain Element | page3=Visit Us |
-        
+        | # Step 2, register: |
+        | ${location}= | Set Variable | ${certain_database} |
+        | Add Location Strategy | db | Read Locator String From DB | ${location} |
+        | # Step 3, use custom locators: |
+        | Page Should Contain Element | db=${an_element_index} |
+
         See `Remove Location Strategy` for details about removing a custom location strategy.
         """
         strategy = CustomLocator(strategy_name, strategy_keyword)
