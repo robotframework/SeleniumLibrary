@@ -2,9 +2,10 @@
 # coding: utf-8
 
 '''Spying on real objects.'''
+from __future__ import absolute_import
 
-from invocation import RememberedProxyInvocation, VerifiableInvocation
-from mocking import TestDouble
+from .invocation import RememberedProxyInvocation, VerifiableInvocation
+from .mocking import TestDouble
 
 __author__ = "Serhiy Oplakanets <serhiy@oplakanets.com>"
 __copyright__ = "Copyright 2009-2010, Mockito Contributors"

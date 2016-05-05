@@ -14,6 +14,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+from __future__ import print_function
+from builtins import str
+from builtins import object
+
 """Robot Framework Test Status Checker
 
 Usage:  statuschecker.py infile [outfile]
@@ -134,7 +138,7 @@ def _check_log_message(expected, test, kw, index):
     return False
 
 
-class _Expected:
+class _Expected(object):
 
     def __init__(self, doc):
         self.status, self.message = self._get_status_and_message(doc)
@@ -177,14 +181,14 @@ if __name__=='__main__':
     import os
 
     if not 2 <= len(sys.argv) <= 3 or '--help' in sys.argv:
-        print __doc__
+        print(__doc__)
         sys.exit(1)
     infile = sys.argv[1]
     outfile = sys.argv[2] if len(sys.argv) == 3 else None
-    print  "Checking %s" % os.path.abspath(infile)
+    print("Checking {0}".format(os.path.abspath(infile)))
     rc = process_output(infile, outfile)
     if outfile:
-        print "Output: %s" % os.path.abspath(outfile)
+        print("Output: {0}".format(os.path.abspath(outfile)))
     if rc > 255:
         rc = 255
     sys.exit(rc)
