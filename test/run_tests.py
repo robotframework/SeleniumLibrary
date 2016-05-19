@@ -13,6 +13,8 @@ ROBOT_ARGS = [
     '--outputdir', '%(outdir)s',
     '--variable', 'browser:%(browser)s',
     '--variable', 'pyversion:%(pyVersion)s',
+    '--variable', 'SAUCE_USERNAME:%(sauceUserName)s',
+    '--variable', 'SAUCE_ACCESS_KEY:%(sauceAccessKey)s',
     '--escape', 'space:SP',
     '--report', 'none',
     '--log', 'none',
@@ -36,6 +38,13 @@ ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': ':'.join((env.SRC_DIR, en
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
+    ARG_VALUES['sauceUserName'] = env.SAUCE_USERNAME
+    ARG_VALUES['sauceAccessKey'] = env.SAUCE_ACCESS_KEY
+    ARG_VALUES['travisJobNumber'] = env.TRAVIS_JOB_NUMBER
+    if env.TRAVIS:
+        ROBOT_ARGS.extend(['--noncritical', 'known_issue_-_travisci'])
+        ROBOT_ARGS.extend(['--variable', 'REMOTE_URL:http://%(sauceUserName)s:%(sauceAccessKey)s@ondemand.saucelabs.com:80/wd/hub'])
+        ROBOT_ARGS.extend(['--variable', 'TUNNEL_IDENTIFIER:%(travisJobNumber)s'])
     start_http_server()
     runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':

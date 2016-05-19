@@ -7,6 +7,7 @@ Library           OperatingSystem
 ${SERVER}         localhost:7000
 ${BROWSER}        firefox
 ${REMOTE_URL}     ${NONE}
+${TUNNEL_IDENTIFIER}    ${NONE}
 ${DESIRED_CAPABILITIES}    ${NONE}
 ${ROOT}           http://${SERVER}/html
 ${FRONT PAGE}     ${ROOT}/
@@ -22,6 +23,7 @@ Open Browser To Start Page
 
 Open Browser To Start Page Without Testing Default Options
     [Documentation]    Open Browser To Start Page Without Testing Default Options
+    Set Desired Capabilities
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}
     ${orig speed} =    Set Selenium Speed    ${SPEED}
@@ -32,6 +34,7 @@ Open Browser To Start Page And Test Implicit Wait
     [Arguments]    ${implicit_wait}
     [Documentation]    This keyword tests that 'Set Selenium Implicit Wait' and
     ...    'Get Selenium Implicit Wait' work as expected
+    Set Desired Capabilities
     Should Not Be Equal    0    ${implicit_wait}
     ...    Please do not pass in a value of 0 for the implicit wait argument for this function
     ${old_wait}=    Set Selenium Implicit Wait    ${implicit_wait}
@@ -70,3 +73,8 @@ Set ${level} Loglevel
 Verify Location Is "${relative url}"
     [Documentation]    Verifies location
     Location Should Be    ${ROOT}/${relative url}
+
+Set Desired Capabilities
+    [Documentation]    Builds the DESIRED_CAPABILITIES dictionary
+    ${capabilities}=    Create Dictionary    tunnel-identifier=${TUNNEL_IDENTIFIER}
+    Set Global Variable    ${DESIRED_CAPABILITIES}    ${capabilities}
