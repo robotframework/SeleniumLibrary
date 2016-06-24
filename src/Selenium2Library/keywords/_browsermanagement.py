@@ -12,7 +12,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
 BROWSERS = {'ff': (webdriver.Firefox, webdriver.DesiredCapabilities.FIREFOX),
             'firefox': (webdriver.Firefox, webdriver.DesiredCapabilities.FIREFOX),
-            'ie': (webdrivrer.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
+            'ie': (webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
             'internetexplorer': (webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
             'googlechrome': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
             'gc': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
