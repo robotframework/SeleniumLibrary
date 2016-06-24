@@ -12,7 +12,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
 BROWSERS = {'ff': (webdriver.Firefox, webdriver.DesiredCapabilities.FIREFOX),
             'firefox': (webdriver.Firefox, webdriver.DesiredCapabilities.FIREFOX),
-            'ie': (webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
+            'ie': (webdrivrer.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
             'internetexplorer': (webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER),
             'googlechrome': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
             'gc': (webdriver.Chrome, webdriver.DesiredCapabilities.CHROME),
@@ -526,7 +526,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         browser_name = browser_name.lower().replace(' ', '')
 
-        if browser_name not in BROWSERS.keys():
+        if browser_name not in BROWSERS:
             raise ValueError(browser_name + " is not a supported browser.")
 
         browser_name, browser_capabilities = BROWSERS.get(browser_name)
@@ -562,7 +562,9 @@ class _BrowserManagementKeywords(KeywordGroup):
         if webdriver_type is webdriver.Firefox:
             kwargs["firefox_profile"] = profile
 
-        if webdriver_type in (webdriver.Ie, webdriver.Edge, webdriver.Firefox):
+        if not remote_url and webdriver_type in (webdriver.Ie,
+                                                 webdriver.Edge,
+                                                 webdriver.Firefox):
             kwargs["capabilities"] = desired_caps
         else:
             kwargs["desired_capabilities"] = desired_caps
