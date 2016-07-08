@@ -67,7 +67,15 @@ Choose File
     Textfield Value Should Be    name= file_to_upload    ${dep_browser}
     [Teardown]    Remove File    ${CURDIR}${/}temp.txt
 
-Click Image With Submit Type Images
+Choose Multiple Files
+    [Documentation]    Choose Multiple Files
+    [Setup]    Navigate To Multiple File Upload Form And Create 2 Temp Files To Upload
+    Choose Multiple Files    id=files_list    ${BROWSER}    ${CURDIR}    temp_1.txt    temp_2.txt
+    Click Button  id=check_content
+    Check that input element contains the 2 files
+    [Teardown]    Remove All Files Generated for Multiple Upload
+
+Click Image With Submit Type ImagesV
     [Documentation]    Click Image With Submit Type Images
     [Setup]    Go To Page "forms/form_with_image_submit.html"
     Click Image    robot.bmp
@@ -84,3 +92,21 @@ Navigate To File Upload Form And Create Temp File To Upload
     Cannot Be Executed in IE
     Go To Page "forms/file_upload_form.html"
     Touch    ${CURDIR}${/}temp.txt
+
+Navigate To Multiple File Upload Form And Create 2 Temp Files To Upload
+    [Documentation]    Navigate To Multiple File Upload Form And Create Necessary files to upload
+    Cannot Be Executed in IE
+    Go To Page "forms/multiple_file_upload_form.html"
+    Touch    ${CURDIR}${/}temp_1.txt
+    Touch    ${CURDIR}${/}temp_2.txt
+
+Remove All Files Generated for Multiple Upload
+    Remove File    ${CURDIR}${/}temp_1.txt
+    Remove File    ${CURDIR}${/}temp_2.txt
+
+Check that input element contains the 2 files
+    ${file_listed}    Execute Javascript    return document.getElementById("result").querySelectorAll("li").length
+    Should Be Equal As Numbers    ${file_listed}    2
+    Page Should Contain    temp_1.txt
+    Page Should Contain    temp_2.txt
+
