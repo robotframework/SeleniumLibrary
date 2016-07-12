@@ -289,7 +289,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         """
         self._info("Selecting frame '%s'." % locator)
         element = self._element_find(locator, True, True)
-        self._current_browser().switch_to_frame(element)
+        self._current_browser().switch_to.frame(element)
 
     def select_window(self, locator=None):
         """Selects the window matching locator and return previous window handle.
@@ -338,7 +338,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
-        self._current_browser().switch_to_default_content()
+        self._current_browser().switch_to.default_content()
 
     # Public, browser/current page properties
 
