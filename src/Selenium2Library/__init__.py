@@ -1,5 +1,5 @@
 import os
-from keywords import *
+from Selenium2Library.keywords import *
 from version import VERSION
 from utils import LibraryListener
 

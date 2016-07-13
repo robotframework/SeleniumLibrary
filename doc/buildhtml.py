@@ -4,6 +4,7 @@
 # Author: David Goodger <goodger@python.org>
 # Copyright: This module has been placed in the public domain.
 
+from __future__ import print_function
 """
 Generates .html from all the .txt files in a directory.
 
@@ -29,7 +30,7 @@ from fnmatch import fnmatch
 import docutils
 from docutils import ApplicationError
 from docutils import core, frontend, utils
-from docutils.error_reporting import ErrorOutput, ErrorString
+from docutils.utils.error_reporting import ErrorOutput, ErrorString
 from docutils.parsers import rst
 from docutils.readers import standalone, pep
 from docutils.writers import html4css1, pep_html
@@ -197,13 +198,12 @@ class Builder:
         settings = self.get_settings('', directory)
         errout = ErrorOutput(encoding=settings.error_encoding)
         if settings.prune and (os.path.abspath(directory) in settings.prune):
-            print >>errout, ('/// ...Skipping directory (pruned): %s' %
-                              directory)
+            print("/// ...Skipping directory (pruned): {0}".format(directory), file=errout)
             sys.stderr.flush()
             names[:] = []
             return
         if not self.initial_settings.silent:
-            print >>errout, '/// Processing directory: %s' % directory
+            print("/// Processing directory: {0}".format(directory), file=errout)
             sys.stderr.flush()
         # settings.ignore grows many duplicate entries as we recurse
         # if we add patterns in config files or on the command line.
@@ -232,7 +232,7 @@ class Builder:
         settings._source = os.path.normpath(os.path.join(directory, name))
         settings._destination = settings._source[:-4]+'.html'
         if not self.initial_settings.silent:
-            print >>errout, '    ::: Processing: %s' % name
+            print("    ::: Processing: {0}".format(name), file=errout)
             sys.stderr.flush()
         try:
             if not settings.dry_run:
@@ -242,8 +242,8 @@ class Builder:
                               parser_name='restructuredtext',
                               writer_name=pub_struct.writer_name,
                               settings=settings)
-        except ApplicationError, error:
-            print >>errout, '        %s' % ErrorString(error)
+        except ApplicationError as error:
+            print("        {0}".format(ErrorString(error)), file=errout)
 
 
 if __name__ == "__main__":

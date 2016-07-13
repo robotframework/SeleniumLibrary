@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
-import os, sys
+from __future__ import print_function
+
+import os
+import sys
 from time import localtime
 from zipfile import ZipFile, ZIP_DEFLATED
 
@@ -26,14 +29,14 @@ def main():
         for dirname in FILES:
             for filename in FILES[dirname]:
                 path = os.path.join('.', dirname.replace('/', os.sep), filename)
-                print 'Adding:  ', os.path.normpath(path)
+                print("Adding:  {0}".format(os.path.normpath(path)))
                 zipfile.write(path, os.path.join(name, path))
         zipfile.close()
         target_path = os.path.join('..', 'dist', zipname)
         if os.path.exists(target_path):
             os.remove(target_path)
         os.rename(zipname, target_path)
-        print 'Created: ', os.path.abspath(target_path)
+        print("Created: {0}".format(os.path.abspath(target_path)))
     finally:
         os.chdir(cwd)
 
