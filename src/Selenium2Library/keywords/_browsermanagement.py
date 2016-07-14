@@ -25,7 +25,8 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'htmlunitwithjs' : "_make_htmlunitwithjs",
                  'android': "_make_android",
                  'iphone': "_make_iphone",
-                 'safari': "_make_safari"
+                 'safari': "_make_safari",
+                 'edge': "_make_edge"
                 }
 
 class _BrowserManagementKeywords(KeywordGroup):
@@ -87,6 +88,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | android          | Android       |
         | iphone           | Iphone        |
         | safari           | Safari        |
+        | edge             | Edge          |
 
 
         Note, that you will encounter strange behavior, if you open
@@ -159,7 +161,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Create Webdriver            | PhantomJS    | service_args=${service args}              |                         |
 
         Example for Robot Framework < 2.8:
-        | # debug IE driver |                   |                  |                                | 
+        | # debug IE driver |                   |                  |                                |
         | ${kwargs}=        | Create Dictionary | log_level=DEBUG  | log_file=%{HOMEPATH}${/}ie.log |
         | Create Webdriver  | Ie                | kwargs=${kwargs} |                                |
         """
@@ -581,6 +583,13 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _make_safari(self , remote , desired_capabilities , profile_dir):
         return self._generic_make_browser(webdriver.Safari,
                 webdriver.DesiredCapabilities.SAFARI, remote, desired_capabilities)
+
+    def _make_edge(self , remote , desired_capabilities , profile_dir):
+        if hasattr(webdriver, 'Edge'):
+            return self._generic_make_browser(webdriver.Edge,
+                webdriver.DesiredCapabilities.EDGE, remote, desired_capabilities)
+        else:
+            raise ValueError("Edge is not a supported browser with your version of Selenium python library. Please, upgrade to minimum required version 2.47.0.")
 
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the
