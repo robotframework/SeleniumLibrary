@@ -99,7 +99,8 @@ class _BrowserManagementKeywords(KeywordGroup):
         http://127.0.0.1:4444/wd/hub. If you specify a value for remote you can
         also specify 'desired_capabilities' which is a string in the form
         key1:val1,key2:val2 that will be used to specify desired_capabilities
-        to the remote server. This is useful for doing things like specify a
+        to the remote server. If value is not defined, for example key1:, the key
+        will be removed if present by default. This is useful for doing things like specify a
         proxy server for internet explorer or for specify browser and os if your
         using saucelabs.com. 'desired_capabilities' can also be a dictonary
         (created with 'Create Dictionary') to allow for more complex configurations.
@@ -537,8 +538,8 @@ class _BrowserManagementKeywords(KeywordGroup):
 
     def _make_ff(self , remote , desired_capabilites , profile_dir):
 
-        if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
-        profile = webdriver.FirefoxProfile(profile_dir)
+        if profile_dir:
+            profile = webdriver.FirefoxProfile(profile_dir)
         if remote:
             browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
                         remote , desired_capabilites , profile)
@@ -603,26 +604,29 @@ class _BrowserManagementKeywords(KeywordGroup):
         creates the associated remote web driver'''
 
         desired_capabilities_object = capabilities_type.copy()
-
+        
         if type(desired_capabilities) in (str, unicode):
-            desired_capabilities = self._parse_capabilities_string(desired_capabilities)
-
-        desired_capabilities_object.update(desired_capabilities or {})
+            desired_capabilities_object = self._parse_capabilities_string(desired_capabilities_object, desired_capabilities)
 
         return webdriver.Remote(desired_capabilities=desired_capabilities_object,
                 command_executor=str(remote_url), browser_profile=profile)
 
-    def _parse_capabilities_string(self, capabilities_string):
+    def _parse_capabilities_string(self, desired_capabilities_object, capabilities_string):
         '''parses the string based desired_capabilities which should be in the form
-        key1:val1,key2:val2
+        key1:val1,key2:val2. if value is not defined key will be removed altogether.
         '''
         desired_capabilities = {}
-
+        
         if not capabilities_string:
-            return desired_capabilities
+            return desired_capabilities_object
 
         for cap in capabilities_string.split(","):
             (key, value) = cap.split(":", 1)
-            desired_capabilities[key.strip()] = value.strip()
+            
+            if key.strip() in desired_capabilities_object:
+                if value.strip() == "":
+                        desired_capabilities_object.pop(key.strip(), None)
+                else:
+                    desired_capabilities[key.strip()] = value.strip()
 
-        return desired_capabilities
+        return desired_capabilities_object.update(desired_capabilities)
