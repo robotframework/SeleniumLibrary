@@ -623,10 +623,10 @@ class _BrowserManagementKeywords(KeywordGroup):
         for cap in capabilities_string.split(","):
             (key, value) = cap.split(":", 1)
             
-            if key.strip() in desired_capabilities_object:
-                if value.strip() == "":
-                        desired_capabilities_object.pop(key.strip(), None)
-                else:
-                    desired_capabilities[key.strip()] = value.strip()
+            if value.strip() == "":
+                if key.strip() in desired_capabilities_object:
+                    desired_capabilities_object.pop(key.strip(), None)
+            else:
+                desired_capabilities[key.strip()] = value.strip()
 
         return desired_capabilities_object.update(desired_capabilities)
