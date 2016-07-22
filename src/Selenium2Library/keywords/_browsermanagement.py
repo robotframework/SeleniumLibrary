@@ -539,7 +539,12 @@ class _BrowserManagementKeywords(KeywordGroup):
     def _make_ff(self , remote , desired_capabilites , profile_dir):
 
         if profile_dir:
+            if profile_dir != "":
             profile = webdriver.FirefoxProfile(profile_dir)
+        else:
+            profile_dir = FIREFOX_PROFILE_DIR
+            profile = webdriver.FirefoxProfile(profile_dir)
+
         if remote:
             browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
                         remote , desired_capabilites , profile)
