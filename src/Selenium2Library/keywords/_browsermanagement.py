@@ -628,5 +628,7 @@ class _BrowserManagementKeywords(KeywordGroup):
                     desired_capabilities_object.pop(key.strip(), None)
             else:
                 desired_capabilities[key.strip()] = value.strip()
-
-        return desired_capabilities_object.update(desired_capabilities)
+        
+        desired_capabilities_object.update(desired_capabilities)
+        
+        return desired_capabilities_object
