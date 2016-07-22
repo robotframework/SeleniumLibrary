@@ -540,10 +540,9 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         if profile_dir:
             if profile_dir != "":
-            profile = webdriver.FirefoxProfile(profile_dir)
+                profile = webdriver.FirefoxProfile(profile_dir)
         else:
-            profile_dir = FIREFOX_PROFILE_DIR
-            profile = webdriver.FirefoxProfile(profile_dir)
+            profile = webdriver.FirefoxProfile(FIREFOX_PROFILE_DIR)
 
         if remote:
             browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
