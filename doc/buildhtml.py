@@ -141,7 +141,7 @@ class Builder:
         config file settings and command-line options by
         `self.get_settings()`.
         """
-        for name, publisher in self.publishers.items():
+        for name, publisher in list(self.publishers.items()):
             option_parser = OptionParser(
                 components=publisher.components, read_config_files=1,
                 usage=usage, description=description)
