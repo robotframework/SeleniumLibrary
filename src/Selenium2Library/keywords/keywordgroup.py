@@ -13,7 +13,7 @@ def _run_on_failure_decorator(method, *args, **kwargs):
     self._already_in_keyword = True # Set a flag on the instance so that as we call keywords inside this call and this gets run again, we know we're at least one level in.
     try:
         return method(*args, **kwargs)
-    except Exception, err:
+    except Exception as err:
         if hasattr(self, '_run_on_failure') and not self._has_run_on_failure:
             # If we're in an inner keyword, track the fact that we've already run on failure once
             self._has_run_on_failure = True
