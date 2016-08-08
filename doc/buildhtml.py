@@ -26,13 +26,16 @@ import os
 import os.path
 import copy
 from fnmatch import fnmatch
-import docutils
-from docutils import ApplicationError
-from docutils import core, frontend, utils
-from docutils.error_reporting import ErrorOutput, ErrorString
-from docutils.parsers import rst
-from docutils.readers import standalone, pep
-from docutils.writers import html4css1, pep_html
+try:
+    import docutils
+    from docutils import ApplicationError
+    from docutils import core, frontend, utils
+    from docutils.error_reporting import ErrorOutput, ErrorString
+    from docutils.parsers import rst
+    from docutils.readers import standalone, pep
+    from docutils.writers import html4css1, pep_html
+except ImportError:
+  raise ImportError('Importing `docutils` failed. Install it with `pip install docutils`.')
 
 
 usage = '%prog [options] [<directory> ...]'
