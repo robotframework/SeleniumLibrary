@@ -107,19 +107,6 @@ certain projects, you can use them instead of source distributions.
 Just download 32bit or 64bit installer depending on your system,
 double-click it, and follow the instructions.
 
-Directory Layout
-----------------
-
-demo/
-    A simple demonstration, with an application running on localhost
-
-doc/
-    Keyword documentation
-
-src/
-    Python source code
-
-
 Usage
 -----
 
@@ -128,17 +115,12 @@ Selenium2Library must be imported into your Robot test suite.
 See `Robot Framework User Guide`_ for more information.
 
 
-Running the Demo
-----------------
+Demo project
+------------
+A demo project illustrating how to use this library can be found from: 
+https://bitbucket.org/robotframework/webdemo
 
-The demo directory contains an easily executable demo for Robot Framework
-using Selenium2Library. To run the demo, run::
-
-    python demo/rundemo.py
-
-E.g.::
-
-	python demo/rundemo.py demo/login_tests
+Please see the usage instructions from the demo project pages.
 
 Getting Help
 ------------
