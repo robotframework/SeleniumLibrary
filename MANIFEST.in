@@ -3,14 +3,8 @@ include *.txt
 include *.rst
 exclude */*.txt # limit previous command to include only *.txt files in root folder
 exclude */*.rst # limit previous command to include only *.rst files in root folder
-include selenium.bmp
 
-recursive-include demo *.txt *.rst *.py *.sh *.bat *.html *.css *.js
-prune demo/reports
-prune demo/selenium_log.txt
-prune demo/output.xml
-
-include doc/Selenium2Library.html
+include docs/Selenium2Library.html
 
 recursive-include src *.py
 graft src/Selenium2Library/resources
