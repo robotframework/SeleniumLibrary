@@ -649,7 +649,7 @@ return !element.dispatchEvent(evt);
                    % (actual_xpath_count, xpath))
 
     # Public, custom
-    def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
+    def add_location_strategy(self, strategy_name, strategy_keyword=None, location=None, persist=False):
         """Adds a custom location strategy based on a user keyword. Location strategies are
         automatically removed after leaving the current scope by default. Setting `persist`
         to any non-empty string will cause the location strategy to stay registered throughout
@@ -658,19 +658,79 @@ return !element.dispatchEvent(evt);
         Trying to add a custom location strategy with the same name as one that already exists will
         cause the keyword to fail.
 
-        Custom locator keyword example:
-        | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
-        |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
-        |   | [Return] | ${retVal} |
+        stragegy_name:
+            User defined short name as prefix of custom locator and used in format of
+            'Any Keyword | ${stragegy_name}=${criteria}'. 
 
-        Usage example:
-        | Add Location Strategy | custom | Custom Locator Strategy |
-        | Page Should Contain Element | custom=my_id |
+        strategy_keyword:
+            User defined keyword resgistered for hook call by any keywords.
+            If not defined, use location.get() when ${location} is a dictionary.
+            
+            Arguments:
+            
+                ${location}: where to get locator by ${criteria}, such as a dictionary or a database.
+                
+                ${criteria}: meaningful text with good readability, such as element's GUI text.
+                
+            Return: 
+            
+                return web element(s) if ${location} is None, or 
+                return legency locator string like 'xpath=xxx'.
+        
+        
+        Examples ( ${location} is None ):
+        | #***Strategy Keyword examples*** |
+        | Return Web Element By Javascript | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
+        |   | ${element_object}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+        |   | [Return] | ${element_object} |
+        | Return Web Element By Element Prompt Text | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
+        |   | ${element_object}= | Get Webelement | &${myPageDict}[${criteria}] |
+        |   | [Return] | ${element_object} |
+        | #***Register and Usage:*** |
+        | Add Location Strategy | byjs | Return Web Element By Javascript |
+        | Add Location Strategy | byui | Return Web Element By Element Prompt Text |
+        | Page Should Contain Element | byjs=${an_element_id} |
+        | Page Should Contain Element | byui=User Name |
+        
+        Examples ( ${location} is a python dictionary ):
+ 
+        # Step 1, define the dictionary:
+
+        all_blocks = '//form'
+
+        # ${index} to be defined in user keyword
+
+        login_block = '//${all_blocks}[@id="login"]/div[${index}]'
+
+        dict_users = {
+
+           'User Name': 'id=input_0',
+
+           'Password': 'id=input_1',
+
+            'Add Button': '${login_block}/div/button[1]',
+
+            'Delete Button': '${login_block}/div/button[2]
+
+        }
+
+        
+        Examples ( ${location} is a database ):
+        | # Step 1, define strategy keyword: |
+        | Read Locator String From DB | [Arguments] | ${location} | ${criteria} |
+        |   | ${locator_string}= | Read From Your Database | ${location} | ${criteria} |
+        |   | [Return] | ${locator_string} |
+        | # Step 2, register: |
+        | ${location}= | Set Variable | ${certain_database} |
+        | Add Location Strategy | db | Read Locator String From DB | ${location} |
+        | # Step 3, use custom locators: |
+        | Page Should Contain Element | db=${an_element_index} |
 
         See `Remove Location Strategy` for details about removing a custom location strategy.
         """
         strategy = CustomLocator(strategy_name, strategy_keyword)
-        self._element_finder.register(strategy, persist)
+        self._element_finder.register(strategy, persist, location)
+
 
     def remove_location_strategy(self, strategy_name):
         """Removes a previously added custom location strategy.

@@ -1,6 +1,11 @@
 Release Notes
 =============
 
+1.7.5 beta
+-------------------
+- Enhanced 'Add Location Strategy' to read locators stored in dictionary or remote database.
+  [divfor]
+
 1.7.4
 -------------------
 - Reverted 'Press Keys' because of backwards incompatible changes [zephraph]
