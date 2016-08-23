@@ -169,10 +169,10 @@ and 2.7.
 Once you have code, documentation and tests ready, it is time to finalize
 the pull request.
 
-### AUTHORS.txt
+### CHANGES.rst
 If you have done any non-trivial change and would like to be credited,
 add yourself to
-[AUTHORS.txt](https://github.com/robotframework/Selenium2Library/blob/master/AUTHORS.txt)
+[CHANGES.rst](https://github.com/robotframework/Selenium2Library/blob/master/CHANGES.rst)
 file.
 
 ### Resolving conflicts
@@ -183,7 +183,7 @@ same code as your changes. In that case you should
 to allow for an easy merge.
 
 The most common conflicting file is the aforementioned
-[AUTHORS.txt](https://github.com/robotframework/Selenium2Library/blob/master/AUTHORS.txt)
+[CHANGES.rst](https://github.com/robotframework/Selenium2Library/blob/master/CHANGES.rst)
 , but luckily fixing those conflicts is typically easy.
 
 ### Squashing commits
