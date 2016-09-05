@@ -65,12 +65,10 @@ class BrowserManagementTests(unittest.TestCase):
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)
 
-    """ After conversion with 'futurize' it is incompatible with Python 2.7
     def test_create_remote_browser_with_string_desired_prefs(self):
         expected_caps = "key1:val1,key2:val2"
         self.verify_browser(webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
             desired_capabilities=expected_caps)
-    """
 
     def test_capabilities_attribute_not_modified(self):
         expected_caps = {"some_cap":"42"}
@@ -99,7 +97,7 @@ class BrowserManagementTests(unittest.TestCase):
             bm._make_browser("fireox")
             self.fail("Exception not raised")
         except ValueError as e:
-            self.assertEquals("fireox is not a supported browser.", "{0}".format(e))
+            self.assertEquals("fireox is not a supported browser.", e.message)
 
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
-
 import env
 import os
 import sys
@@ -39,7 +37,7 @@ def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
     start_http_server()
-    runner = {'python': 'robot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
+    runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':
         runner += '.bat'
     execute_tests(runner, args)
@@ -48,22 +46,20 @@ def acceptance_tests(interpreter, browser, args):
 
 def start_http_server():
     server_output = TemporaryFile()
-    python_bin= 'python' + sys.version[:3]
-    Popen([python_bin, env.HTTP_SERVER_FILE ,'start'],
+    Popen(['python', env.HTTP_SERVER_FILE ,'start'],
           stdout=server_output, stderr=server_output)
 
 def execute_tests(runner, args):
     if not os.path.exists(env.RESULTS_DIR):
         os.mkdir(env.RESULTS_DIR)
     command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [env.ACCEPTANCE_TEST_DIR]
-    print()
-    print("Starting test execution with command:\n{0}".format(' '.join(command)))
+    print('')
+    print('Starting test execution with command:\n' + ' '.join(command))
     syslog = os.path.join(env.RESULTS_DIR, 'syslog.txt')
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
-    python_bin= 'python' + sys.version[:3]
-    call([python_bin, env.HTTP_SERVER_FILE, 'stop'])
+    call(['python', env.HTTP_SERVER_FILE, 'stop'])
 
 def process_output(args):
     print()
@@ -73,13 +69,13 @@ def process_output(args):
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
-    print()
-    print("Starting output processing with command:\n{0}".format(' '.join(rebot_cmd)))
+    print('')
+    print('Starting output processing with command:\n' + ' '.join(rebot_cmd))
     rc = call(rebot_cmd, env=os.environ)
     if rc == 0:
-        print("All critical tests passed")
+        print('All critical tests passed')
     else:
-        print("{0} critical test{1} failed".format(rc, 's' if rc != 1 else ''))
+        print('%d critical test%s failed' % (rc, 's' if rc != 1 else ''))
     return rc
 
 def _has_robot_27():
@@ -93,18 +89,18 @@ def _exit(rc):
     sys.exit(rc)
 
 def _help():
-    print("Usage:  python run_tests.py python|jython browser [options]")
+    print('Usage:  python run_tests.py python|jython browser [options]')
     print()
-    print("See README.txt for details.")
+    print('See README.txt for details.')
     return 255
 
 def _run_unit_tests():
-    print("Running unit tests")
+    print('Running unit tests')
     failures = run_unit_tests()
     if failures != 0:
-        print("\n{0} unit tests failed - not running acceptance tests!".format(failures))
+        print('\n%d unit tests failed - not running acceptance tests!' % failures)
     else:
-        print("All unit tests passed")
+        print('All unit tests passed')
     return failures
 
 

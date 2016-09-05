@@ -1,16 +1,12 @@
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/336012
 
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-
-import http.server
-import http.client
+import SimpleHTTPServer
+import BaseHTTPServer
+import httplib
 import os
-import sys
 
 
-class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """http request handler with QUIT stopping the server"""
 
     def do_QUIT(self):
@@ -22,7 +18,7 @@ class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         # We could also process paremeters here using something like below.
         # length = self.headers['Content-Length']
-        # print(self.rfile.read(int(length)))
+        # print self.rfile.read(int(length))
         self.do_GET()
 
     def send_head(self):
@@ -55,8 +51,12 @@ class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 return self.list_directory(path)
         ctype = self.guess_type(path)
+        if ctype.startswith('text/'):
+            mode = 'r'
+        else:
+            mode = 'rb'
         try:
-            f = open(path, 'rb')
+            f = open(path, mode)
         except IOError:
             self.send_error(404, "File not found")
             return None
@@ -69,7 +69,7 @@ class StoppableHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         return f
 
 
-class StoppableHttpServer(http.server.HTTPServer):
+class StoppableHttpServer(BaseHTTPServer.HTTPServer):
     """http server that reacts to self.stop flag"""
 
     def serve_forever(self):
@@ -80,19 +80,21 @@ class StoppableHttpServer(http.server.HTTPServer):
 
 def stop_server(port=7000):
     """send QUIT request to http server running on localhost:<port>"""
-    conn = http.client.HTTPConnection("localhost:%d" % port)
+    conn = httplib.HTTPConnection("localhost:%d" % port)
     conn.request("QUIT", "/")
     conn.getresponse()
 
 def start_server(port=7000):
+    import os
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), '..'))
     server = StoppableHttpServer(('', port), StoppableHttpRequestHandler)
     server.serve_forever()
     
     
 if __name__ == '__main__':
+    import sys
     if len(sys.argv) != 2 or sys.argv[1] not in [ 'start', 'stop' ]:
-        print("usage: {0} start|stop".format(sys.argv[0]))
+        print('usage: %s start|stop' % sys.argv[0])
         sys.exit(1)
     if sys.argv[1] == 'start':
         start_server()
