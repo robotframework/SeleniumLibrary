@@ -12,7 +12,7 @@ class MockRegistry:
     return self.mocks.get(cls, None)
   
   def unstub_all(self):
-    for mock in self.mocks.itervalues():    
+    for mock in self.mocks.values():    
       mock.unstub()
     self.mocks.clear()  
 
