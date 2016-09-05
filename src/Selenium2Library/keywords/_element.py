@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 try:
     basestring  # attempt to evaluate basestring

@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from selenium.webdriver.support.ui import Select
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchElementException
 
 
