@@ -1,3 +1,4 @@
+from time import sleep
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -30,7 +31,7 @@ class _AlertKeywords(KeywordGroup):
         will fail unless the alert is dismissed by this
         keyword or another like `Get Alert Message`.
         """
-        alert_text = self.get_alert_message()
+        alert_text = self._handle_alert('accept')
         if text and alert_text != text:
             raise AssertionError("Alert text should have been "
                                  "'%s' but was '%s'"
@@ -74,7 +75,10 @@ class _AlertKeywords(KeywordGroup):
         | Click Button | Send | # Shows a confirmation dialog |
         | Confirm Action |    | # Chooses Cancel |
         """
-        text = self._close_alert(not self._cancel_on_next_confirmation)
+        if self._cancel_on_next_confirmation:
+            text = self._handle_alert('dismiss')
+        else:
+            text = self._handle_alert('accept')
         self._cancel_on_next_confirmation = False
         return text
 
@@ -87,9 +91,9 @@ class _AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if dismiss:
-            return self._close_alert()
+            return self._handle_alert('dismiss')
         else:
-            return self._read_alert()
+            return self._handle_alert()
 
     def dismiss_alert(self, accept=True):
         """ Returns true if alert was confirmed, false if it was dismissed
@@ -98,38 +102,39 @@ class _AlertKeywords(KeywordGroup):
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Get Alert Message`.
         """
-        return self._handle_alert(accept)
+        if accept:
+            return self._handle_alert('accept')
+        else:
+            return self._handle_alert()
 
-    # Private
+    def _handle_alert(self, dismiss_type=None):
+        """Alert re-try for Chrome
 
-    def _close_alert(self, confirm=True):
-        try:
-            text = self._read_alert()
-            self._handle_alert(confirm)
-            return text
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        Because Chrome has difficulties to handle alerts, like::
 
-    def _read_alert(self):
-        alert = None
-        try:
-            alert = self._wait_alert()
-            # collapse new lines chars
-            return ' '.join(alert.text.splitlines())
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        alert.text
+        alert.dismiss
 
-    def _handle_alert(self, confirm=True):
-        try:
-            alert = self._wait_alert()
-            if not confirm:
-                alert.dismiss()
-                return False
-            else:
-                alert.accept()
-                return True
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        This function creates a re-try funtionality to better support
+        alerts in Chrome.
+        """
+        retry = 0
+        while retry < 4:
+            try:
+                return self._alert_worker(dismiss_type)
+            except WebDriverException:
+                sleep(0.2)
+                retry += 1
+        raise RuntimeError('There were no alerts')
+
+    def _alert_worker(self, dismiss_type=None):
+        alert = self._wait_alert()
+        text = ' '.join(alert.text.splitlines())
+        if dismiss_type == 'dismiss':
+            alert.dismiss()
+        elif dismiss_type == 'accept':
+            alert.accept()
+        return text
 
     def _wait_alert(self):
         return WebDriverWait(self._current_browser(), 1).until(
