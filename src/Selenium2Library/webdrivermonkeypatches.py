@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import time
 from robot import utils
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
-from locators import WindowManager
+from .locators import WindowManager
 
 class WebDriverMonkeyPatches:
 

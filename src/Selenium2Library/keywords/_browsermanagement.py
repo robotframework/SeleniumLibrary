@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import os
 import robot
 from robot.errors import DataError
@@ -5,7 +6,7 @@ from selenium import webdriver
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchWindowException
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

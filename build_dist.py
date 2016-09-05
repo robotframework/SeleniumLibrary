@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
-import os, sys, shutil, subprocess, argparse
+import argparse
+import os
+import shutil
+import subprocess
+import sys
+
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 DIST_DIR = os.path.join(THIS_DIR, "dist")
