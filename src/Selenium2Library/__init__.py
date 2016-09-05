@@ -1,7 +1,8 @@
+from __future__ import absolute_import
 import os
-from keywords import *
-from version import VERSION
-from utils import LibraryListener
+from .keywords import *
+from .version import VERSION
+from .utils import LibraryListener
 
 __version__ = VERSION
 
