@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import env
 import os
 import sys
@@ -53,7 +53,7 @@ def execute_tests(runner, args):
     if not os.path.exists(env.RESULTS_DIR):
         os.mkdir(env.RESULTS_DIR)
     command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [env.ACCEPTANCE_TEST_DIR]
-    print('')
+    print()
     print('Starting test execution with command:\n' + ' '.join(command))
     syslog = os.path.join(env.RESULTS_DIR, 'syslog.txt')
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
@@ -69,7 +69,7 @@ def process_output(args):
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
-    print('')
+    print()
     print('Starting output processing with command:\n' + ' '.join(rebot_cmd))
     rc = call(rebot_cmd, env=os.environ)
     if rc == 0:
