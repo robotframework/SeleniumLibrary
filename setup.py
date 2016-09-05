@@ -1,11 +1,7 @@
 #!/usr/bin/env python
 
-import sys
 from os.path import join, dirname
 
-sys.path.append(join(dirname(__file__), 'src'))
-from ez_setup import use_setuptools
-use_setuptools()
 from setuptools import setup
 
 execfile(join(dirname(__file__), 'src', 'Selenium2Library', 'version.py'))
@@ -37,7 +33,6 @@ setup(name         = 'robotframework-selenium2library',
 							'selenium >= 2.32.0',
 							'robotframework >= 2.6.0'
 						 ],
-      py_modules=['ez_setup'],
       package_dir  = {'' : 'src'},
       packages     = ['Selenium2Library','Selenium2Library.keywords','Selenium2Library.locators',
                       'Selenium2Library.utils'],
