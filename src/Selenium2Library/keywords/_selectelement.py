@@ -1,5 +1,7 @@
 from selenium.webdriver.support.ui import Select
 from keywordgroup import KeywordGroup
+from selenium.common.exceptions import NoSuchElementException
+
 
 class _SelectElementKeywords(KeywordGroup):
 
@@ -271,8 +273,16 @@ class _SelectElementKeywords(KeywordGroup):
 
         select, options = self._get_select_list_options(select)
         for item in items:
-            select.deselect_by_value(item)
-            select.deselect_by_visible_text(item)
+            # Only Selenium 2.52 and newer raise exceptions when there is no match.
+            # For backwards compatibility reasons we want to ignore them.
+            try:
+                select.deselect_by_value(item)
+            except NoSuchElementException:
+                pass
+            try:
+                select.deselect_by_visible_text(item)
+            except NoSuchElementException:
+                pass
 
     def unselect_from_list_by_index(self, locator, *indexes):
         """Unselects `*indexes` from list identified by `locator`
