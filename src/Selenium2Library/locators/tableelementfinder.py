@@ -79,6 +79,12 @@ class TableElementFinder(object):
         locators = [locator % str(col) for locator in locators]
         return self._search_in_locators(browser, locators, content)
 
+    """ Added By Adam Wu"""
+    def find_in_col(self, browser, table_locator, col, content):
+        locators = self._parse_table_locator(table_locator, 'col')
+        locators = [locator % str(col) for locator in locators]
+        return self._search_index_in_locators(browser, locators, content)
+
     def _parse_table_locator(self, table_locator, location_method):
         if table_locator.startswith('xpath='):
             table_locator_type = 'xpath'
@@ -104,3 +110,19 @@ class TableElementFinder(object):
                 if element_text and content in element_text:
                     return element
         return None
+
+    """ Added By Adam Wu"""
+    def _search_index_in_locators(self, browser, locators, content):        
+        for locator in locators:
+            index = 0
+            elements = self._element_finder.find(browser, locator)
+            #self.console("elements:" + elements)
+            for element in elements:
+                if content is None: return 0
+                index = index + 1
+                #self.console("index:" + str(index))
+                element_text = element.text
+                #self.console("element_text:" + element_text)
+                if element_text and content in element_text:
+                    return index
+        return 0
