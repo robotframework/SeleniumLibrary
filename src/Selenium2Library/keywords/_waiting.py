@@ -1,7 +1,6 @@
-from __future__ import absolute_import
 import time
 import robot
-from .keywordgroup import KeywordGroup
+from keywordgroup import KeywordGroup
 
 class _WaitingKeywords(KeywordGroup):
 

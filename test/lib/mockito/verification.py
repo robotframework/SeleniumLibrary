@@ -1,4 +1,3 @@
-from builtins import object
 #!/usr/bin/env python
 # coding: utf-8
 

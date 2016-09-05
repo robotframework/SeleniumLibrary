@@ -1,5 +1,4 @@
-from builtins import object
-class MockRegistry(object):
+class MockRegistry:
   """Registers mock()s, ensures that we only have one mock() per mocked_obj, and
   iterates over them to unstub each stubbed method. """
   

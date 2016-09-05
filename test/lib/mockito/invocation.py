@@ -1,9 +1,7 @@
-from __future__ import absolute_import
-from builtins import object
 #!/usr/bin/env python
 # coding: utf-8
 
-from . import matchers
+import matchers
 
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"
 __license__ = "MIT"

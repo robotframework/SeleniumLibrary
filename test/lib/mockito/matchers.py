@@ -5,7 +5,6 @@
 
 Common matchers for use in stubbing and verifications.
 '''
-from builtins import object
 
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"
 __license__ = "MIT"
@@ -14,7 +13,7 @@ __email__ = "mockito-python@googlegroups.com"
 
 __all__ = ['any', 'contains', 'times']
 
-class Matcher(object):
+class Matcher:
   def matches(self, arg):
     pass
   

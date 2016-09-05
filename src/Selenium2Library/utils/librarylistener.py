@@ -1,6 +1,4 @@
-from __future__ import absolute_import
-from builtins import object
-from . import events as event
+import events as event
 from robot.api import logger
 
 class LibraryListener(object):

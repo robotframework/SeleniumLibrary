@@ -1,7 +1,5 @@
-from builtins import object
 import sys
 import inspect
-from future.utils import with_metaclass
 try:
     from decorator import decorator
 except SyntaxError: # decorator module requires Python/Jython 2.4+
@@ -35,5 +33,5 @@ class KeywordGroupMetaClass(type):
                     dict[name] = decorator(_run_on_failure_decorator, method)
         return type.__new__(cls, clsname, bases, dict)
 
-class KeywordGroup(with_metaclass(KeywordGroupMetaClass, object)):
-    pass
+class KeywordGroup(object):
+    __metaclass__ = KeywordGroupMetaClass

@@ -1,12 +1,10 @@
-from __future__ import absolute_import
-from builtins import str
 #!/usr/bin/env python
 # coding: utf-8
 
-from . import verification
-from .mocking import mock, TestDouble
-from .mock_registry import mock_registry
-from .verification import VerificationError
+import verification
+from mocking import mock, TestDouble
+from mock_registry import mock_registry
+from verification import VerificationError
 
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"
 __license__ = "MIT"

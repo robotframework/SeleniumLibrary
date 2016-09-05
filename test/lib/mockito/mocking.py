@@ -1,11 +1,9 @@
-from __future__ import absolute_import
-from builtins import object
 #!/usr/bin/env python
 # coding: utf-8
 
 import inspect
-from . import invocation
-from .mock_registry import mock_registry
+import invocation
+from mock_registry import mock_registry
 import warnings
 
 __copyright__ = "Copyright 2008-2010, Mockito Contributors"

@@ -1,5 +1,4 @@
-from __future__ import absolute_import
-from .keywordgroup import KeywordGroup
+from keywordgroup import KeywordGroup
 
 class _CookieKeywords(KeywordGroup):
 
