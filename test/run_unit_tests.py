@@ -1,3 +1,4 @@
+from __future__ import print_function
 import env
 import os, sys
 import unittest
@@ -5,7 +6,7 @@ from Selenium2Library import utils
 
 def run_unit_tests(modules_to_run=[]):
     (test_module_names, test_modules) = utils.import_modules_under(
-        env.UNIT_TEST_DIR, include_root_package_name = False, pattern="test*.py")
+        env.UNIT_TEST_DIR, include_root_package_name = True, pattern="test*.py")
 
     bad_modules_to_run = [module_to_run for module_to_run in modules_to_run
         if module_to_run not in test_module_names]

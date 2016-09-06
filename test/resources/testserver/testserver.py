@@ -1,3 +1,4 @@
+from __future__ import print_function
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/336012
 
 import SimpleHTTPServer
@@ -18,7 +19,7 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_POST(self):
         # We could also process paremeters here using something like below.
         # length = self.headers['Content-Length']
-        # print self.rfile.read(int(length))
+        # print(self.rfile.read(int(length)))
         self.do_GET()
 
     def send_head(self):
