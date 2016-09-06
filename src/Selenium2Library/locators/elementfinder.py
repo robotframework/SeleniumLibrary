@@ -22,7 +22,7 @@ class ElementFinder(object):
             'default': self._find_by_default
         }
         self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
-        self._default_strategies = strategies.keys()
+        self._default_strategies = list(strategies.keys())
 
     def find(self, browser, locator, tag=None):
         assert browser is not None
@@ -190,9 +190,7 @@ class ElementFinder(object):
     def _filter_elements(self, elements, tag, constraints):
         elements = self._normalize_result(elements)
         if tag is None: return elements
-        return filter(
-            lambda element: self._element_matches(element, tag, constraints),
-            elements)
+        return [element for element in elements if self._element_matches(element, tag, constraints)]
 
     def _get_attrs_with_url(self, key_attrs, criteria, browser):
         attrs = []
