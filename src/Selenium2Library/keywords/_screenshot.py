@@ -1,8 +1,11 @@
+from __future__ import absolute_import
+import errno
+import os
 import robot
-import os, errno
+
 
 from Selenium2Library import utils
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 
 class _ScreenshotKeywords(KeywordGroup):
