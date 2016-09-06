@@ -1,3 +1,4 @@
+from __future__ import print_function
 import env
 import os, sys
 import unittest

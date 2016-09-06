@@ -37,6 +37,7 @@ This tool also allows testing the created log messages. They are specified
 using a syntax 'LOG x.y:z LEVEL Actual message', which is described in detail
 detail in the tool documentation.
 """
+from __future__ import print_function
 
 import re
 
