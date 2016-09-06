@@ -10,7 +10,7 @@ class _AlertKeywords(KeywordGroup):
     def __init__(self):
         self._accept = 'accept'
         self._dismiss = 'dismiss'
-        self._dismiss_on_next_confirmation = self._accept
+        self._next_alert_dismiss_type = self._accept
 
     # Public
 
@@ -41,7 +41,7 @@ class _AlertKeywords(KeywordGroup):
 
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
-        self._dismiss_on_next_confirmation = self._dismiss
+        self._next_alert_dismiss_type = self._dismiss
 
     def choose_ok_on_next_confirmation(self):
         """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
@@ -58,7 +58,7 @@ class _AlertKeywords(KeywordGroup):
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
         """
-        self._dismiss_on_next_confirmation = self._accept
+        self._next_alert_dismiss_type = self._accept
 
     def confirm_action(self):
         """Dismisses currently shown confirmation dialog and returns it's message.
@@ -77,8 +77,8 @@ class _AlertKeywords(KeywordGroup):
         | Click Button | Send | # Shows a confirmation dialog |
         | Confirm Action |    | # Chooses Cancel |
         """
-        text = self._handle_alert(self._dismiss_on_next_confirmation)
-        self._dismiss_on_next_confirmation = self._dismiss
+        text = self._handle_alert(self._next_alert_dismiss_type)
+        self._next_alert_dismiss_type = self._dismiss
         return text
 
     def get_alert_message(self, dismiss=True):
