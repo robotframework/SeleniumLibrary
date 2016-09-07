@@ -29,6 +29,46 @@ Create Webdriver With Bad Keyword Argument Dictionary
     Run Keyword And Expect Error    kwargs must be a dictionary.
     ...    Create Webdriver    Firefox    kwargs={'spam': 'eggs'}
 
+Get Browser Capabilities Using Dictionary
+    [Documentation]    Gets current browser capabilities from WebDriver
+    [Setup]    Set Driver Variables
+    Create Webdriver    ${DRIVER_NAME}
+    ${capabilities}=    Get Browser Capabilities
+    Log    Capabilities = ${capabilities}
+    Log    Common capabilities: 'takesScreenshot'=${capabilities['takesScreenshot']}, 'javascriptEnabled'=${capabilities['javascriptEnabled']},
+    Log    'cssSelectorsEnabled'=${capabilities['cssSelectorsEnabled']}, 'browserName'=${capabilities['browserName']},
+    Log    'platform'=${capabilities['platform']}, 'version'=${capabilities['version']}, 'nativeEvents'=${capabilities['nativeEvents']},
+    Log    'handlesAlerts'=${capabilities['handlesAlerts']}
+    ${browser}=    Normalize Browser Name
+    Should Match    ${capabilities['browserName']}    ${browser}
+    Run Keyword If    "${browser}" != "internet explorer"    Log
+    ...    Rotatable = ${capabilities['rotatable']}
+    # Disabled next step to PASS in RF pre 2.9
+    # Run Keyword If    "${browser}" == "internet explorer"    Run Keyword And Expect Error    *    Log
+    #    ...    Rotatable = ${capabilities['rotatable']}
+    Log    Platform = ${capabilities['platform']}
+    [Teardown]    Close Browser
+
+Get Browser Capabilities Using Attributes
+    [Documentation]    Gets current browser capabilities from WebDriver
+    [Setup]    Run Keywords    Cannot Run In RF Pre 2.9    Set Driver Variables
+    Create Webdriver    ${DRIVER_NAME}
+    &{capabilities}=    Get Browser Capabilities
+    Log    Capabilities = &{capabilities}
+    Log    Common capabilities: 'takesScreenshot'=${capabilities.takesScreenshot}, 'javascriptEnabled'=${capabilities.javascriptEnabled},
+    Log    'cssSelectorsEnabled'=${capabilities.cssSelectorsEnabled}, 'browserName'=${capabilities.browserName},
+    Log    'platform'=${capabilities.platform}, 'version'=${capabilities.version}, 'nativeEvents'=${capabilities.nativeEvents},
+    Log    'handlesAlerts'=${capabilities.handlesAlerts}
+    ${browser}=    Normalize Browser Name
+    Should Match    ${capabilities.browserName}    ${browser}
+    Run Keyword If    "${browser}" != "internet explorer"    Log
+    ...    Rotatable = ${capabilities.rotatable}
+    Run Keyword If    "${browser}" == "internet explorer"    Run Keyword And Expect Error    *
+    ...    Log    Rotatable = ${capabilities.rotatable}
+    Log    Platform = ${capabilities.platform}
+    Log    Wearable = ${capabilities.get('wearable', 'What were you expecting? To wear a browser?')}
+    [Teardown]    Close Browser
+
 *** Keywords ***
 Set Driver Variables
     [Documentation]    Selects proper driver
@@ -50,3 +90,16 @@ Set Driver Variables
     Run Keyword If    "${name}"=="Remote"    Set To Dictionary    ${kwargs}    command_executor
     ...    ${url as str}    desired_capabilities    ${caps}
     Set Test Variable    ${KWARGS}    ${kwargs}
+
+Cannot Run In RF Pre 2.9
+    [Documentation]    Skips the test if running in Robot Framework previous to 2.9.
+    Import Library    robot.version    WITH NAME    Version
+    ${VERSION}=    Version.Get Version
+    Run Keyword If    '${VERSION}' < '2.9.0'    Fail And Set Non-Critical
+    ...    This test does not work with Robot Framework ${VERSION}. Please use version 2.9 or newer.
+
+Normalize Browser Name
+    [Documentation]    Returns a normalized name for ${DRIVER_NAME} especially for IE
+    ${BROWSER}=    Set Variable    ${DRIVER_NAME.lower()}
+    ${ret}=    Set Variable If    "${BROWSER}" == "ie"    internet explorer    ${BROWSER}
+    [Return]    ${ret}

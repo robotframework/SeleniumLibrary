@@ -2,6 +2,7 @@ import os
 from fnmatch import fnmatch
 from browsercache import BrowserCache
 from librarylistener import LibraryListener
+from attrdict import AttrDict
 import events
 
 __all__ = [
@@ -11,6 +12,7 @@ __all__ = [
     "escape_xpath_value",
     "BrowserCache",
     "LibraryListener",
+    "AttrDict",
     "events"
 ]
 
