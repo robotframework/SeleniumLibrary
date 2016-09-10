@@ -7,11 +7,11 @@ from keywordgroup import KeywordGroup
 
 class _AlertKeywords(KeywordGroup):
 
-    _ACCEPT = 'accept'
-    _DISMISS = 'dismiss'
+    _ACCEPT_ALERT = 'accept'
+    _DISMISS_ALERT = 'dismiss'
 
     def __init__(self):
-        self._next_alert_dismiss_type = self._ACCEPT
+        self._next_alert_dismiss_type = self._ACCEPT_ALERT
 
     # Public
 
@@ -33,7 +33,7 @@ class _AlertKeywords(KeywordGroup):
         will fail unless the alert is dismissed by this
         keyword or another like `Get Alert Message`.
         """
-        alert_text = self._handle_alert(self._ACCEPT)
+        alert_text = self._handle_alert(self._ACCEPT_ALERT)
         if text and alert_text != text:
             raise AssertionError("Alert text should have been "
                                  "'%s' but was '%s'"
@@ -41,7 +41,7 @@ class _AlertKeywords(KeywordGroup):
 
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
-        self._next_alert_dismiss_type = self._DISMISS
+        self._next_alert_dismiss_type = self._DISMISS_ALERT
 
     def choose_ok_on_next_confirmation(self):
         """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
@@ -58,7 +58,7 @@ class _AlertKeywords(KeywordGroup):
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
         """
-        self._next_alert_dismiss_type = self._ACCEPT
+        self._next_alert_dismiss_type = self._ACCEPT_ALERT
 
     def confirm_action(self):
         """Dismisses currently shown confirmation dialog and returns it's message.
@@ -78,7 +78,7 @@ class _AlertKeywords(KeywordGroup):
         | Confirm Action |    | # Chooses Cancel |
         """
         text = self._handle_alert(self._next_alert_dismiss_type)
-        self._next_alert_dismiss_type = self._DISMISS
+        self._next_alert_dismiss_type = self._DISMISS_ALERT
         return text
 
     def get_alert_message(self, dismiss=True):
@@ -90,7 +90,7 @@ class _AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if dismiss:
-            return self._handle_alert(self._DISMISS)
+            return self._handle_alert(self._DISMISS_ALERT)
         else:
             return self._handle_alert()
 
@@ -102,7 +102,7 @@ class _AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if accept:
-            return self._handle_alert(self._ACCEPT)
+            return self._handle_alert(self._ACCEPT_ALERT)
         else:
             return self._handle_alert()
 
@@ -129,9 +129,9 @@ class _AlertKeywords(KeywordGroup):
     def _alert_worker(self, dismiss_type=None):
         alert = self._wait_alert()
         text = ' '.join(alert.text.splitlines())
-        if dismiss_type == self._DISMISS:
+        if dismiss_type == self._DISMISS_ALERT:
             alert.dismiss()
-        elif dismiss_type == self._ACCEPT:
+        elif dismiss_type == self._ACCEPT_ALERT:
             alert.accept()
         return text
 
