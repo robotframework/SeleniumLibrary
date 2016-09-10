@@ -1,4 +1,4 @@
-from time import sleep
+import time
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,16 +7,16 @@ from keywordgroup import KeywordGroup
 
 class _AlertKeywords(KeywordGroup):
 
+    _ACCEPT = 'accept'
+    _DISMISS = 'dismiss'
+
     def __init__(self):
-        self._accept = 'accept'
-        self._dismiss = 'dismiss'
-        self._next_alert_dismiss_type = self._accept
+        self._next_alert_dismiss_type = self._ACCEPT
 
     # Public
 
     def input_text_into_prompt(self, text):
         """Types the given `text` into alert box.  """
-        alert = None
         try:
             alert = self._wait_alert()
             alert.send_keys(text)
@@ -33,7 +33,7 @@ class _AlertKeywords(KeywordGroup):
         will fail unless the alert is dismissed by this
         keyword or another like `Get Alert Message`.
         """
-        alert_text = self._handle_alert(self._accept)
+        alert_text = self._handle_alert(self._ACCEPT)
         if text and alert_text != text:
             raise AssertionError("Alert text should have been "
                                  "'%s' but was '%s'"
@@ -41,7 +41,7 @@ class _AlertKeywords(KeywordGroup):
 
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
-        self._next_alert_dismiss_type = self._dismiss
+        self._next_alert_dismiss_type = self._DISMISS
 
     def choose_ok_on_next_confirmation(self):
         """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
@@ -58,7 +58,7 @@ class _AlertKeywords(KeywordGroup):
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
         """
-        self._next_alert_dismiss_type = self._accept
+        self._next_alert_dismiss_type = self._ACCEPT
 
     def confirm_action(self):
         """Dismisses currently shown confirmation dialog and returns it's message.
@@ -78,7 +78,7 @@ class _AlertKeywords(KeywordGroup):
         | Confirm Action |    | # Chooses Cancel |
         """
         text = self._handle_alert(self._next_alert_dismiss_type)
-        self._next_alert_dismiss_type = self._dismiss
+        self._next_alert_dismiss_type = self._DISMISS
         return text
 
     def get_alert_message(self, dismiss=True):
@@ -90,7 +90,7 @@ class _AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if dismiss:
-            return self._handle_alert(self._dismiss)
+            return self._handle_alert(self._DISMISS)
         else:
             return self._handle_alert()
 
@@ -102,7 +102,7 @@ class _AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if accept:
-            return self._handle_alert(self._accept)
+            return self._handle_alert(self._ACCEPT)
         else:
             return self._handle_alert()
 
@@ -122,16 +122,16 @@ class _AlertKeywords(KeywordGroup):
             try:
                 return self._alert_worker(dismiss_type)
             except WebDriverException:
-                sleep(0.2)
+                time.sleep(0.2)
                 retry += 1
         raise RuntimeError('There were no alerts')
 
     def _alert_worker(self, dismiss_type=None):
         alert = self._wait_alert()
         text = ' '.join(alert.text.splitlines())
-        if dismiss_type == self._dismiss:
+        if dismiss_type == self._DISMISS:
             alert.dismiss()
-        elif dismiss_type == self._accept:
+        elif dismiss_type == self._ACCEPT:
             alert.accept()
         return text
 
