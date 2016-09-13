@@ -94,7 +94,7 @@ def start_server(port=7000):
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 2 or sys.argv[1] not in [ 'start', 'stop' ]:
-        print 'usage: %s start|stop' % sys.argv[0]
+        print('usage: %s start|stop' % sys.argv[0])
         sys.exit(1)
     if sys.argv[1] == 'start':
         start_server()

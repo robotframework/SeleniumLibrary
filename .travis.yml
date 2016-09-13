@@ -1,7 +1,6 @@
 language: python
 sudo: false
 python:
-  - "2.6"
   - "2.7"
 install:
   #- pip install pep8 --use-mirrors
@@ -9,7 +8,7 @@ install:
   - pip install robotframework
   - pip install selenium
   - pip install decorator
-  - pip install docutils
+  - pip install mockito
   #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
   - "export DISPLAY=:99.0"
