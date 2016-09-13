@@ -27,8 +27,9 @@ Selenium 2 (WebDriver) library for Robot Framework
 - 增加了 get_table_rows 和 get_table_cols_at_row 两个关键字。
 - 增加了 get_index_in_table_column 和 get_index_in_table_row 两个关键字。
 
-推荐pip本地安装更新的方式，进入release页面，下载v1.8.0.1的tar.gz文件，假设文件放在D盘（如果放在其他目录请更改下方命令里的路径）。
-执行安装命令：
+推荐pip本地安装更新的方式，进入release页面，下载v1.8.0.1的tar.gz文件，不需要解压缩，假设文件放在D盘（如果放在其他目录请更改下方命令里的路径）。
+
+执行安装命令::
 
     pip install -U robotframework-selenium2library --find-links=D:\
 
