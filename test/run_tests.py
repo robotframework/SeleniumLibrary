@@ -3,10 +3,13 @@ from __future__ import print_function
 import env
 import os
 import sys
+from os.path import abspath, dirname, join
 from subprocess import Popen, call
 from tempfile import TemporaryFile
 
 from run_unit_tests import run_unit_tests
+
+CURDIR = dirname(abspath(__file__))
 
 ROBOT_ARGS = [
     '--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
@@ -96,7 +99,8 @@ def _help():
 
 def _run_unit_tests():
     print('Running unit tests')
-    failures = run_unit_tests()
+    pypath = sys.executable
+    failures = call([pypath, os.path.join(CURDIR,'run_unit_tests.py')])
     if failures != 0:
         print('\n%d unit tests failed - not running acceptance tests!' % failures)
     else:
