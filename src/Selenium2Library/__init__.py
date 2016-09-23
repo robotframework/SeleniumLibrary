@@ -130,8 +130,8 @@ class Selenium2Library(
 
     All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
     or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
-    For more information about the time syntax see:
-    http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+    For more information about the time syntax see the
+	[http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
     """
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
