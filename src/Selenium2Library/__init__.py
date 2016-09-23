@@ -19,7 +19,10 @@ class Selenium2Library(
     _WaitingKeywords,
     _AlertKeywords
 ):
-    """Selenium2Library is a web testing library for Robot Framework.
+    """Selenium2Library is a web testing library for Robot Framework. This
+	document is about using Selenium2Library. For information about
+	installation, support, and more please visit the
+	[https://github.com/robotframework/Selenium2Library|project page].
 
     It uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
     See http://seleniumhq.org/docs/03_webdriver.html for more information on Selenium 2
