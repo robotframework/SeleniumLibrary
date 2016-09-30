@@ -19,10 +19,11 @@ class Selenium2Library(
     _WaitingKeywords,
     _AlertKeywords
 ):
-    """Selenium2Library is a web testing library for Robot Framework. This
-	document is about using Selenium2Library. For information about
-	installation, support, and more please visit the
-	[https://github.com/robotframework/Selenium2Library|project page].
+    """Selenium2Library is a web testing library for Robot Framework.
+    
+    This document is about using Selenium2Library. For information about
+    installation, support, and more please visit the
+    [https://github.com/robotframework/Selenium2Library|project page].
 
     It uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
     See http://seleniumhq.org/docs/03_webdriver.html for more information on Selenium 2
@@ -134,7 +135,7 @@ class Selenium2Library(
     All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
     or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
     For more information about the time syntax see the
-	[http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
     """
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
