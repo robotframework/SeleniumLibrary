@@ -25,7 +25,7 @@ class Selenium2Library(
     installation, support, and more please visit the
     [https://github.com/robotframework/Selenium2Library|project page].
 
-    It uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
+    Selenium2Library uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
     See http://seleniumhq.org/docs/03_webdriver.html for more information on Selenium 2
     and WebDriver.
 
