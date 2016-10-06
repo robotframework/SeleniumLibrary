@@ -7,7 +7,9 @@ Resource          ../resource.robot
 *** Test Cases ***
 Click Element At Coordinates
     [Documentation]    LOG 2 Click clicking element 'Clickable' in coordinates '10', '20'.
-    [Tags]    Known Issue - Firefox
+    [Tags]    Known Issue Firefox
+    ...    Known Issue Internet Explorer
+    ...    Known Issue Safari
     Click Element At Coordinates    Clickable    ${10}    ${20}
     Element Text Should Be    outputX    110
     Element Text Should Be    outputY    120

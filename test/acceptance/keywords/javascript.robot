@@ -12,6 +12,7 @@ Clicking Elements Should Activate Javascript
 
 Alert Should Be Present
     [Documentation]    Alert Should Be Present
+    [Tags]    Known Issue Safari
     [Setup]    Go To Page "javascript/alert.html"
     Click Link    Click Me!
     Alert Should Be Present
@@ -23,6 +24,7 @@ Alert Should Be Present
 
 Get Alert Message
     [Documentation]    Get Alert Message
+    [Tags]    Known Issue Safari
     [Setup]    Go To Page "javascript/alert.html"
     Click Link    Click Me!
     ${msg} =    Get Alert Message
@@ -31,6 +33,7 @@ Get Alert Message
 
 Read Alert Message
     [Documentation]    Read Alert Message
+    [Tags]    Known Issue Safari
     [Setup]    Go To Page "javascript/alert.html"
     Click Link    Click Me!
     ${msg} =    Get Alert Message    ${FALSE}
@@ -40,6 +43,7 @@ Read Alert Message
 
 Input Text Into Prompt
     [Documentation]    Input Text Into Prompt
+    [Tags]    Known Issue Safari
     [Setup]    Go To Page "javascript/alert_prompt.html"
     Click Element    css=button
     Input Text Into Prompt    myname
@@ -48,7 +52,7 @@ Input Text Into Prompt
 
 Mouse Down On Link
     [Documentation]    Mouse Down On Link
-    [Tags]    Known Issue - Firefox
+    [Tags]    Known Issue Safari    Known Issue Firefox
     [Setup]    Go To Page "javascript/mouse_events.html"
     Mouse Down On Image    image_mousedown
     Text Field Should Contain    textfield    onmousedown
@@ -60,6 +64,7 @@ Mouse Down On Link
 
 Confirm Action
     [Documentation]    Confirm Action
+    [Tags]    Known Issue Safari
     Click Button    Change the title
     ${msg}=    Confirm Action
     Title Should Be    Changed after confirmation
@@ -67,6 +72,7 @@ Confirm Action
 
 Cancel Action
     [Documentation]    Cancel Action
+    [Tags]    Known Issue Safari
     Choose Cancel On Next Confirmation
     Click Button    Change the title
     ${msg}=    Confirm Action
@@ -88,12 +94,13 @@ Execute Javascript from File
 
 Open Context Menu
     [Documentation]    Open Context Menu
-    [Tags]    Known Issue - Firefox
+    [Tags]    Known Issue Safari    Known Issue Firefox
     Go To Page "javascript/context_menu.html"
     Open Context Menu    myDiv
 
 Drag and Drop
     [Documentation]    Drag and Drop
+    [Tags]  Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop    id=draggable    id=droppable
@@ -101,6 +108,7 @@ Drag and Drop
 
 Drag and Drop by Offset
     [Documentation]    Drag and Drop by Offset
+    [Tags]  Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${1}    ${1}
