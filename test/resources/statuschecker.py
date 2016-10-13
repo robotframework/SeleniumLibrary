@@ -177,14 +177,14 @@ if __name__=='__main__':
     import os
 
     if not 2 <= len(sys.argv) <= 3 or '--help' in sys.argv:
-        print __doc__
+        print(__doc__)
         sys.exit(1)
     infile = sys.argv[1]
     outfile = sys.argv[2] if len(sys.argv) == 3 else None
-    print  "Checking %s" % os.path.abspath(infile)
+    print("Checking %s" % os.path.abspath(infile))
     rc = process_output(infile, outfile)
     if outfile:
-        print "Output: %s" % os.path.abspath(outfile)
+        print("Output: %s" % os.path.abspath(outfile))
     if rc > 255:
         rc = 255
     sys.exit(rc)

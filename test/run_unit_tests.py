@@ -1,29 +1,22 @@
-import env
-import os, sys
-import unittest
-from Selenium2Library import utils
+#!/usr/bin/env python
 
-def run_unit_tests(modules_to_run=[]):
-    (test_module_names, test_modules) = utils.import_modules_under(
-        env.UNIT_TEST_DIR, include_root_package_name = False, pattern="test*.py")
+from os.path import abspath, dirname, join
+from unittest import defaultTestLoader, TextTestRunner
+import sys
 
-    bad_modules_to_run = [module_to_run for module_to_run in modules_to_run
-        if module_to_run not in test_module_names]
-    if bad_modules_to_run:
-        print "Specified test module%s not exist: %s" % (
-            ' does' if len(bad_modules_to_run) == 1 else 's do',
-            ', '.join(bad_modules_to_run))
-        return -1
 
-    tests = [unittest.defaultTestLoader.loadTestsFromModule(test_module) 
-        for test_module in test_modules]
+CURDIR = dirname(abspath(__file__))
 
-    runner = unittest.TextTestRunner()
-    result = runner.run(unittest.TestSuite(tests))
-    rc = len(result.failures) + len(result.errors)
-    if rc > 255: rc = 255
-    return rc
+
+def run_unit_tests():
+    sys.path.insert(0, join(CURDIR, '..', 'src'))
+    try:
+        suite = defaultTestLoader.discover(join(CURDIR, 'unit'), 'test_*.py')
+        result = TextTestRunner().run(suite)
+    finally:
+        sys.path.pop(0)
+    return min(len(result.failures) + len(result.errors), 255)
+
 
 if __name__ == '__main__':
-    sys.exit(run_unit_tests(sys.argv[1:]))
-
+    sys.exit(run_unit_tests())
