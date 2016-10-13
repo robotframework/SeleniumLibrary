@@ -70,6 +70,7 @@ class Selenium2Library(
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
     | partial link | Click Element `|` partial link=y Lin  | Matches anchor elements by their partial link text |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
+    | class      | Click Element `|` class=my_class       | Matches by class name selector                  |
     | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
     | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
