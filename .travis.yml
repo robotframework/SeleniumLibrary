@@ -11,6 +11,7 @@ before_install:
 install: true
   #- pip install pep8 --use-mirrors
   #- pip install pyflakes --use-mirrors
+<<<<<<< HEAD
   # Installation is done at before_install
   ##- pip install robotframework==3.0b1
   ##- pip install selenium
@@ -19,6 +20,12 @@ install: true
   ##- pip install future
   # Mockito is only used when in Python 2.7 after installing future
   ##- pip install mockito
+=======
+  - pip install robotframework
+  - pip install selenium==2.53.6
+  - pip install decorator
+  - pip install mockito
+>>>>>>> e080820... Changes to use Selenium 2.53.6 (and not 3.0)
   #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
   - "export DISPLAY=:99.0"
