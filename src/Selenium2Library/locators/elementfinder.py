@@ -15,6 +15,7 @@ class ElementFinder(object):
             'link': self._find_by_link_text,
             'partial link': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
+            'class': self._find_by_class_name,
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
@@ -106,6 +107,11 @@ class ElementFinder(object):
     def _find_by_css_selector(self, browser, criteria, tag, constraints):
         return self._filter_elements(
             browser.find_elements_by_css_selector(criteria),
+            tag, constraints)
+
+    def _find_by_class_name(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
+            browser.find_elements_by_class_name(criteria),
             tag, constraints)
 
     def _find_by_tag_name(self, browser, criteria, tag, constraints):
