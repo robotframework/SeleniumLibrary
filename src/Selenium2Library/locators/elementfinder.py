@@ -1,6 +1,7 @@
 from Selenium2Library import utils
 from robot.api import logger
 from robot.utils import NormalizedDict
+from robot.libraries.BuiltIn import BuiltIn
 
 
 class ElementFinder(object):
@@ -24,6 +25,7 @@ class ElementFinder(object):
         }
         self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
         self._default_strategies = list(strategies.keys())
+        self._locations = {}
 
     def find(self, browser, locator, tag=None):
         assert browser is not None
@@ -32,16 +34,36 @@ class ElementFinder(object):
         (prefix, criteria) = self._parse_locator(locator)
         prefix = 'default' if prefix is None else prefix
         strategy = self._strategies.get(prefix)
+        location = self._locations.get(prefix)
+        if location is not None:
+            if hasattr(strategy, '__call__'):
+                locator = strategy(location, criteria)
+            elif isinstance(strategy, basestring) and len(strategy) > 0:
+                locator = BuiltIn().run_keyword(strategy, location, criteria)
+                logger.debug("Get locator via keyword '" + strategy + "': '" + criteria + "' -> '" + locator + "'")
+            elif isinstance(location, dict):
+                locator = location.get(criteria, criteria)
+                logger.debug("Get locator via dictionary: '" + criteria + "' -> '" + locator + "'")
+            else:
+                raise ValueError("Invaild strategy '" + str(strategy) + "' with location '"+ str(location) + "'")
+            if isinstance(locator, basestring):
+                while locator.find('${') >= 0:
+                    locator = BuiltIn().run_keyword('Replace Variables', locator)
+                    logger.debug("Locator replaced variables: " + locator)
+            (prefix, criteria) = self._parse_locator(locator)
+            prefix = 'default' if prefix is None else prefix
+            strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
         (tag, constraints) = self._get_tag_and_constraints(tag)
         return strategy(browser, criteria, tag, constraints)
 
-    def register(self, strategy, persist):
+    def register(self, strategy, persist, location):
         if strategy.name in self._strategies:
             raise AttributeError("The custom locator '" + strategy.name +
             "' cannot be registered. A locator of that name already exists.")
-        self._strategies[strategy.name] = strategy.find
+        self._strategies[strategy.name] = strategy.find if location is None else strategy.finder
+        self._locations[strategy.name] = location
 
         if not persist:
             # Unregister after current scope ends
@@ -54,6 +76,7 @@ class ElementFinder(object):
             logger.info("Cannot unregister the non-registered strategy '" + strategy_name + "'")
         else:
             del self._strategies[strategy_name]
+            del self._locations[strategy_name]
 
     def has_strategy(self, strategy_name):
         return strategy_name in self.strategies
