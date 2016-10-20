@@ -650,36 +650,51 @@ return !element.dispatchEvent(evt);
 
     # Public, custom
     def add_location_strategy(self, strategy_name, strategy_keyword=None, location=None, persist=False):
-        """Adds a custom location strategy based on a user keyword. Location strategies are
-        automatically removed after leaving the current scope by default. Setting `persist`
-        to any non-empty string will cause the location strategy to stay registered throughout
-        the life of the test.
+        """Adds a custom location strategy based on a user keyword.
+        
+        strategy_name: give an unique shortname as a customized prefix, such as 'myid', so that you can
+        use 'myid=User Name' instead of a legency locator '//div[text()="User Name"]/../input' in test cases.
+        strategy_name will be removed automatically after leaving the current scope if persist=False. 
 
-        Trying to add a custom location strategy with the same name as one that already exists will
-        cause the keyword to fail.
-
-        stragegy_name:
-            User defined short name as prefix of custom locator and used in format of
-            'Any Keyword | ${stragegy_name}=${criteria}'. 
-
-        strategy_keyword:
-            User defined keyword resgistered for hook call by any keywords.
-            If not defined, use location.get() when ${location} is a dictionary.
-            
-            Arguments:
-            
-                ${location}: where to get locator by ${criteria}, such as a dictionary or a database.
-                
-                ${criteria}: meaningful text with good readability, such as element's GUI text.
-                
-            Return: 
-            
-                return web element(s) if ${location} is None, or 
-                return legency locator string like 'xpath=xxx'.
+        strategy_keyword: an user_keyword(location, criteria) to be registered for converting string ${criteria}
+        to a legency locator like 'id=xxx', 'css=xxx', 'xpath=//xxx' or '//div/button[1]'. ${criteria} should be
+        meaningful text to add good readability to test cases, such as element's GUI text. This keyword will be
+        called internally and automatically when any Selenium2Library keyword is called, and should
+        return a legency locator string or web element(s) if ${location} is None.
+        
+        location: the source that stores the mapping from ${criteria} to legency locator, such as a dictionary,
+        page objects, or database.
+        
+        Examples A ( ${location} is a database ):
+        | # *** define strategy keyword *** |
+        | Get Locator From DB | ${location} | ${criteria} |
+        |   | ${index}= | Convert To Integer | ${criteria} |
+        |   | ${locator}= | Read MySQL | ${location} | ${index} |
+        |   | [Return] | ${locator} |
+        | # *** register strategy keyword *** |
+        | Add Location Strategy | db | Get Locator From DB | ${MySQL} |
+        | # *** In Use *** |
+        | Page Should Contain Element | db=${item_index} |
+        
+         
+        Examples B ( ${location} is a python dictionary):
+        # Define python file and import:
+        div_blocks = '//form'
+        # ${index} defined in user keyword
+        page = '${div_blocks}/div[${index}]'
+        dict_page = {
+            'Add Button': '${page}/div/button[1]',
+            'Delete Button': '${page}/div/button[2]
+        }
+        | # *** Register strategy keyword *** |
+        | Add Location Strategy | pg | | ${dict_page} |
+        | # *** Use *** |
+        | ${index}= | Set Variable | 1
+        | Click Button | pg=Add Button |
         
         
-        Examples ( ${location} is None ):
-        | #***Strategy Keyword examples*** |
+        Examples C ( ${location} is None ):
+        | #*** Define Strategy Keyword *** |
         | Return Web Element By Javascript | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
         |   | ${element_object}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
         |   | [Return] | ${element_object} |
@@ -691,40 +706,6 @@ return !element.dispatchEvent(evt);
         | Add Location Strategy | byui | Return Web Element By Element Prompt Text |
         | Page Should Contain Element | byjs=${an_element_id} |
         | Page Should Contain Element | byui=User Name |
-        
-        Examples ( ${location} is a python dictionary ):
- 
-        # Step 1, define the dictionary:
-
-        all_blocks = '//form'
-
-        # ${index} to be defined in user keyword
-
-        login_block = '//${all_blocks}[@id="login"]/div[${index}]'
-
-        dict_users = {
-
-           'User Name': 'id=input_0',
-
-           'Password': 'id=input_1',
-
-            'Add Button': '${login_block}/div/button[1]',
-
-            'Delete Button': '${login_block}/div/button[2]
-
-        }
-
-        
-        Examples ( ${location} is a database ):
-        | # Step 1, define strategy keyword: |
-        | Read Locator String From DB | [Arguments] | ${location} | ${criteria} |
-        |   | ${locator_string}= | Read From Your Database | ${location} | ${criteria} |
-        |   | [Return] | ${locator_string} |
-        | # Step 2, register: |
-        | ${location}= | Set Variable | ${certain_database} |
-        | Add Location Strategy | db | Read Locator String From DB | ${location} |
-        | # Step 3, use custom locators: |
-        | Page Should Contain Element | db=${an_element_index} |
 
         See `Remove Location Strategy` for details about removing a custom location strategy.
         """
