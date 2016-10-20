@@ -1,6 +1,11 @@
 Release Notes
 =============
 
+1.8.1
+-------------------
+- Enhanced 'Add Location Strategy' to read locators stored in dictionary or remote database.
+  [divfor]
+
 1.8.0
 -----
 - Moved keyword documentation to:
