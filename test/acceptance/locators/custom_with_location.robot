@@ -8,10 +8,10 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Test Custom Locator With Location
-    Add Location Strategy    custom1    Keyword To Get Locator By Location And Criteria    ${dt_page_index}    #keyword + location to get locator from dict or remote database
+    Add Location Strategy    custom1    Keyword To Get Locator By Location And Criteria    location=${dt_page_index}    #keyword + location to get locator from dict or database
     Page Should Contain Element    custom1=This is the haystack
     Page Should Contain Element    custom1=This is more text
-    Add Location Strategy    custom2    \    ${dt_page_index}    #dict[criteria] as locator
+    Add Location Strategy    custom2    \    location=${dt_page_index}    #dict[criteria] as locator
     Page Should Contain Element    custom2=This is the haystack
     Page Should Contain Element    custom2=This is more text
     Add Location Strategy    custom3    location=${dt_page_index}    #alernative dict[criteria] as locator
