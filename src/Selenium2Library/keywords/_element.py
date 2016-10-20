@@ -664,7 +664,8 @@ return !element.dispatchEvent(evt);
         
         < location > the source that stores the mapping from ${criteria} to legacy locator, such as a dictionary,
         page objects, or database.
-        
+
+
         Examples A ( location is a database ):
         | # *** Define strategy keyword *** |
         | Get Locator From DB | ${location} | ${criteria} |
@@ -701,12 +702,10 @@ return !element.dispatchEvent(evt);
         | Page Should Contain Element | byjs=${an_element_id} |
         | Page Should Contain Element | byui=User Name |
 
-
         See `Remove Location Strategy` for details about removing a custom location strategy.
         """
         strategy = CustomLocator(strategy_name, strategy_keyword)
         self._element_finder.register(strategy, persist, location)
-
 
     def remove_location_strategy(self, strategy_name):
         """Removes a previously added custom location strategy.
