@@ -649,7 +649,7 @@ return !element.dispatchEvent(evt);
                    % (actual_xpath_count, xpath))
 
     # Public, custom
-    def add_location_strategy(self, strategy_name, strategy_keyword=None, location=None, persist=False):
+    def add_location_strategy(self, strategy_name, strategy_keyword=None, persist=False, location=None):
         """Add a custom location strategy based on given user keyword
         
         < strategy_name > an unique short name as a customized prefix, such as 'myid', so that you can
@@ -673,7 +673,7 @@ return !element.dispatchEvent(evt);
         |   | ${locator}= | Read MySQL | ${location} | ${index} |
         |   | [Return] | ${locator} |
         | # *** Register and use *** |
-        | Add Location Strategy | db | Get Locator From DB | ${MySQL} |
+        | Add Location Strategy | db | Get Locator From DB | ${False} | ${MySQL} |
         | Page Should Contain Element | db=${obj_index} |
 
 
