@@ -23,6 +23,7 @@ Selenium 2 (WebDriver) library for Robot Framework
 中文说明
 ------------
 2016-10-24：1.8.0.2在前一个版本基础上，增加了一些个人的修改：
+
 - 增加了click_element_at_table_cell、click_link_at_table_cell、click_subelement_at_table_cell这三个关键字
 
 2016-09-13：1.8.0.1在官方1.8.0版本的基础上，合并了个人的一些修改，包括以下：
