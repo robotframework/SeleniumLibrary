@@ -107,3 +107,12 @@ Drag and Drop by Offset
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${100}    ${20}
     Element Text Should Be    id=droppable    Dropped!
+
+Verify Console Log Can be Caucht
+   ${message}  Set Variable   Sample Console Error
+   Execute Javascript  console.error("${message}")
+   ${logs}=  Get Log  browser
+   ${length}=  Get Length   ${logs}
+   ${last pos}=  Evaluate  ${length}-1
+   &{err}=  Set Variable  @{logs}[${last pos}]
+   Should Contain  ${err.message}  ${message}
