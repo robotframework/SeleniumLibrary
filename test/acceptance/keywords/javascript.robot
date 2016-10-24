@@ -110,7 +110,7 @@ Drag and Drop by Offset
 
 Verify Console Log Can be Caught
    ${message}  Set Variable   Sample Console Error
-   Execute Javascript  console.error("${message}")
+   Execute Javascript  console.error('${message}')
    ${logs}=  Get Log  browser
    ${length}=  Get Length   ${logs}
    ${last pos}=  Evaluate  ${length}-1
