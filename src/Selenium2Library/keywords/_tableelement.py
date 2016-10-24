@@ -77,6 +77,87 @@ class _TableElementKeywords(KeywordGroup):
         raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
             % (table_locator, str(row), str(column)))
 
+    def click_element_at_table_cell(self, table_locator, row, column, loglevel='INFO'):
+        """Click a table cell.
+
+        Row and column number start from 1. Header and footer rows are
+        included in the count. This means that also cell content from
+        header or footer rows can be obtained with this keyword. To
+        understand how tables are identified, please take a look at
+        the `introduction`.
+        """
+        row = int(row)
+        row_index = row - 1
+        column = int(column)
+        column_index = column - 1
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                if column_index >= len(columns): columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                if column_index < len(columns):
+                    return columns[column_index].click()
+        self.log_source(loglevel)
+        raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
+            % (table_locator, str(row), str(column)))
+
+    def click_link_at_table_cell(self, table_locator, row, column, loglevel='INFO'):
+        """Click link within a table cell.
+
+        Row and column number start from 1. Header and footer rows are
+        included in the count. This means that also cell content from
+        header or footer rows can be obtained with this keyword. To
+        understand how tables are identified, please take a look at
+        the `introduction`.
+        """
+        row = int(row)
+        row_index = row - 1
+        column = int(column)
+        column_index = column - 1
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                if column_index >= len(columns): columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                if column_index < len(columns):
+                    return columns[column_index].find_element_by_tag_name('a').click()
+        self.log_source(loglevel)
+        raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
+            % (table_locator, str(row), str(column)))
+
+    def click_subelement_at_table_cell(self, table_locator, row, column, sub_element_xpath, loglevel='INFO'):
+        """Click a sub element indentified classpath in a table cell.
+
+        Row and column number start from 1. Header and footer rows are
+        included in the count. This means that also cell content from
+        header or footer rows can be obtained with this keyword. To
+        understand how tables are identified, please take a look at
+        the `introduction`.
+        """
+        row = int(row)
+        row_index = row - 1
+        column = int(column)
+        column_index = column - 1
+        table = self._table_element_finder.find(self._current_browser(), table_locator)
+        if table is not None:
+            rows = table.find_elements_by_xpath("./thead/tr")
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            if row_index >= len(rows): rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            if row_index < len(rows):
+                columns = rows[row_index].find_elements_by_tag_name('th')
+                if column_index >= len(columns): columns.extend(rows[row_index].find_elements_by_tag_name('td'))
+                if column_index < len(columns):
+                    return columns[column_index].find_element_by_xpath(sub_element_xpath).click()
+        self.log_source(loglevel)
+        raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
+            % (table_locator, str(row), str(column)))
+
     def table_cell_should_contain(self, table_locator, row, column, expected, loglevel='INFO'):
         """Verifies that a certain cell in a table contains `expected`.
 
