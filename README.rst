@@ -20,6 +20,23 @@ Selenium 2 (WebDriver) library for Robot Framework
 	:target: https://robotframework-slack.herokuapp.com
 	:alt: Slack channel
 
+中文说明
+------------
+2016-10-24：1.8.0.2在前一个版本基础上，增加了一些个人的修改：
+
+- 增加了click_element_at_table_cell、click_link_at_table_cell、click_subelement_at_table_cell这三个关键字
+
+2016-09-13：1.8.0.1在官方1.8.0版本的基础上，合并了个人的一些修改，包括以下：
+
+- 增加了 get_table_rows 和 get_table_cols_at_row 两个关键字。
+- 增加了 get_index_in_table_column 和 get_index_in_table_row 两个关键字。
+
+推荐pip本地安装更新的方式，进入release页面，下载v1.8.0.2的tar.gz文件，不需要解压缩，假设文件放在D盘（如果放在其他目录请更改下方命令里的路径）。
+
+执行安装命令::
+
+    pip install -U robotframework-selenium2library --find-links=D:\
+
 
 Introduction
 ------------
