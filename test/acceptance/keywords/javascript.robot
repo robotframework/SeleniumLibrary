@@ -112,7 +112,5 @@ Verify Console Log Can be Caught
    ${message}  Set Variable   Sample Console Error
    Execute Javascript  console.error('${message}')
    ${logs}=  Get Log  browser
-   ${length}=  Get Length   ${logs}
-   ${last pos}=  Evaluate  ${length}-1
-   &{err}=  Set Variable  @{logs}[${last pos}]
-   Should Contain  ${err.message}  ${message}
+   ${err}=  Convert To string  ${logs}
+   Should Contain  ${err}  ${message}
