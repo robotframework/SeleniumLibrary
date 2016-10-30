@@ -338,11 +338,8 @@ class _BrowserManagementKeywords(KeywordGroup):
         The `log_type` argument defines which logs to get. Possible values are:
         `browser`, `driver`, `client` or `server`
         """
-        available_types = ["browser", "driver", "client" , "server"]
-        if log_type not in  available_types:
-            raise  ValueErrorValueError(log_type + " is not a supported type")
-            
         return self._current_browser().get_log(log_type)
+
 
     def list_windows(self):
         """Return all current window handles as a list"""
