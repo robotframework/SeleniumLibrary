@@ -109,6 +109,7 @@ Drag and Drop by Offset
     Element Text Should Be    id=droppable    Dropped!
 
 Verify Console Log Can be Caught
+   [Tags]    Known Issue - Firefox
    ${message}  Set Variable   Sample Console Error
    Execute Javascript  console.error('${message}')
    ${logs}=  Get Log  browser
