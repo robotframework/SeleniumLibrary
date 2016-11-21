@@ -4,6 +4,18 @@ Resource          resource.robot
 Library           Collections
 
 *** Test Cases ***
+Create Reusable Webdriver
+    [Documentation]    LOG 2:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver
+    ...    LOG 2:4 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+
+    [Setup]    Set Driver Variables
+    Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
+    #Sleep       3s
+    Create Webdriver    Remote
+    Go To    ${FRONT PAGE}
+    Page Should Contain    needle
+    #Sleep       3s
+    [Teardown]    Close Browser
+
 Create Webdriver Creates Functioning WebDriver
     [Documentation]    LOG 2:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver
     ...    LOG 2:4 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+

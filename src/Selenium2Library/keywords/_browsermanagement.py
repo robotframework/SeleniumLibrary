@@ -8,6 +8,12 @@ from Selenium2Library.locators import WindowManager
 from keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchWindowException
 
+from selenium.webdriver.remote.errorhandler import ErrorHandler
+from selenium.webdriver.remote.remote_connection import RemoteConnection
+from selenium.webdriver.remote.switch_to import SwitchTo
+from selenium.webdriver.remote.mobile import Mobile
+from selenium.webdriver.remote.file_detector import FileDetector, LocalFileDetector
+
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
 BROWSER_NAMES = {'ff': "_make_ff",
@@ -26,6 +32,44 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'safari': "_make_safari",
                  'edge': "_make_edge"
                 }
+
+class _ReusableWebdriver(webdriver.Remote):
+    def __init__(self, command_executor='http://127.0.0.1:4444/wd/hub',
+                 desired_capabilities=None, browser_profile=None, proxy=None, keep_alive=False, file_detector=None):
+
+
+        session_file = open('session.txt', 'r+')
+        session_id = session_file.readline().replace("\n", "").replace("\r", "")
+        command_executor = session_file.readline().replace("\n", "").replace("\r", "")
+        cap = eval(session_file.readline().replace("\n", "").replace("\r", ""))
+        session_file.close()
+
+        # Here onwards this is identical to the selenium_webdriver.Remote's __init__
+        # except that the steps to create session & client are commented out 
+        if desired_capabilities is None:
+            raise WebDriverException("Desired Capabilities can't be None")
+        if not isinstance(desired_capabilities, dict):
+            raise WebDriverException("Desired Capabilities must be a dictionary")
+        if proxy is not None:
+            proxy.add_to_capabilities(desired_capabilities)
+        self.command_executor = command_executor
+        if type(self.command_executor) is bytes or isinstance(self.command_executor, str):
+            self.command_executor = RemoteConnection(command_executor, keep_alive=keep_alive)
+        self._is_remote = True
+        self.error_handler = ErrorHandler()
+        ## do not start session nor client
+        # self.start_client()
+        # self.start_session(desired_capabilities, browser_profile)
+        ## since we are not creating a new session we need to set attributes
+        ## that are usually set by the start_session()
+        self.session_id = session_id
+        self.capabilities = cap
+        self.w3c = "specificationLevel" in self.capabilities
+
+        self._switch_to = SwitchTo(self)
+        self._mobile = Mobile(self)
+        self.file_detector = file_detector or LocalFileDetector()
+
 
 class _BrowserManagementKeywords(KeywordGroup):
 
@@ -175,8 +219,18 @@ class _BrowserManagementKeywords(KeywordGroup):
         except AttributeError:
             raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
         self._info("Creating an instance of the %s WebDriver" % driver_name)
-        driver = creation_func(**init_kwargs)
-        self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+        if driver_name == 'Remote':
+            driver = _ReusableWebdriver(desired_capabilities={})
+            self._info("Session: '%s' - '%s' " % (driver.session_id, driver.command_executor._url))
+        else:
+            driver = creation_func(**init_kwargs)
+            self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+            self._info("Session: '%s' - '%s' " % (driver.session_id, driver.command_executor._url))
+            session_file = open('session.txt', 'w+')
+            session_file.write("%s\n" % driver.session_id)
+            session_file.write("%s\n" % driver.command_executor._url)
+            session_file.write("%s\n" % driver.capabilities)
+            session_file.close()
         return self._cache.register(driver, alias)
 
     def switch_browser(self, index_or_alias):

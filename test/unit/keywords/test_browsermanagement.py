@@ -102,12 +102,18 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()
         capt_data = {}
+        class FakeCmdExec(mock):
+            _url = 'http://dummy'
         class FakeWebDriver(mock):
+            command_executor = FakeCmdExec
             def __init__(self, some_arg=None):
                 mock.__init__(self)
                 capt_data['some_arg'] = some_arg
                 capt_data['webdriver'] = self
+                capt_data['session_id'] = 'dummy_ID'
+                #capt_data['command_executor'] = FakeCmdExecutor()
         webdriver.FakeWebDriver = FakeWebDriver
+        #when(webdriver.FakeWebDriver.session_id()).thenReturn('dummy_id')
         try:
             index = bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
             self.assertEquals(capt_data['some_arg'], 1)
