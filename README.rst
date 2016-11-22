@@ -35,7 +35,7 @@ Selenium 2 (WebDriver) library for Robot Framework
 
 执行安装命令::
 
-    pip install -U robotframework-selenium2library robotframework-selenium2library-1.8.0.2.tar.gz
+    pip install -U robotframework-selenium2library-1.8.0.2.tar.gz
 
 
 Introduction
