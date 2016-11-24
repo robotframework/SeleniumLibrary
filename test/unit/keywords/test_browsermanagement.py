@@ -102,12 +102,15 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()
         capt_data = {}
+        class FakeCmdExecutor(mock):
+            _url = "http://127.0.0.1:9999/dummy"
         class FakeWebDriver(mock):
             def __init__(self, some_arg=None):
                 mock.__init__(self)
                 capt_data['some_arg'] = some_arg
                 capt_data['webdriver'] = self
         webdriver.FakeWebDriver = FakeWebDriver
+        webdriver.FakeWebDriver.command_executor = FakeCmdExecutor
         try:
             index = bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
             self.assertEquals(capt_data['some_arg'], 1)
@@ -127,29 +130,27 @@ class BrowserManagementTests(unittest.TestCase):
         class FakeCmdExecutor(mock):
             _url = "http://127.0.0.1:9999/dummy"
         class FakeWebDriver(mock):
-            command_executor = FakeCmdExecutor
             session_id = "dummy_sid"
             def __init__(self):
                 mock.__init__(self)
                 capt_data['webdriver'] = self
         webdriver.FakeWebDriver = FakeWebDriver
+        webdriver.FakeWebDriver.command_executor = FakeCmdExecutor
         class FakeReusable(mock):
-            session_id = None
-            curl = None
             def __init__(self, command_executor, sid, **kwargs):
                 FakeReusable.session_id = sid
                 FakeReusable.curl = command_executor
         keywords._browsermanagement._ReusableDriver = FakeReusable
         try:
-            index = bm.create_webdriver('FakeWebDriver', 'fake')
+            bm.create_webdriver('FakeWebDriver', 'fake')
             (sid, url) = bm.save_webdriver(None)
             self.assertEquals(sid, FakeWebDriver.session_id)
             self.assertEquals(url, FakeCmdExecutor._url)
-            #self.assertEquals(sid, bm._current_browser().session_id)
-            #self.assertEquals(url, bm._current_browser().command_executor._url)
+            self.assertEquals(sid, bm._current_browser().session_id)
+            self.assertEquals(url, bm._current_browser().command_executor._url)
             old_index = bm._cache.current_index
-            bm.restore_webdriver(session_id=sid, session_url=url)
-            self.assertNotEqual(old_index, bm._cache.current_index)
+            new_index = bm.restore_webdriver(session_id=sid, session_url=url)
+            self.assertNotEqual(old_index, new_index)
             self.assertEquals(sid, FakeReusable.session_id)
             self.assertEquals(url, FakeReusable.curl)
         finally:

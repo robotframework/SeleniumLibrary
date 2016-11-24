@@ -204,8 +204,37 @@ class _BrowserManagementKeywords(KeywordGroup):
         return self._cache.register(driver, alias)
 
     def save_webdriver(self, file=''):
-        """saves the current web-driver session.
+        """Stores the current web-driver session.
 
+        This KW makes the WebDriver sessions persistent. I.e. you can store the session(s) and leave the browser
+        window(s) open after a pybot (test suite) execution. On the next pybot execution you can reconnect to those
+        already opened browser windows and avoid that slow opening of new browser window(s) step and possibly other
+        steps (e.g. login) that you might do in your suite/test set-up phase.
+        NOTE: When re-connecting the session must exists on the server side, in some scenarios the session
+        might have timed out and the re-connect will fail.
+
+        Saves the session information into file or returns it.
+
+        The file name is taken from the _file_ argument.
+        This accepts plain file name (e.g. "mysession.txt") and path-to-file (e.g. "/tmp/mysession.txt") format.
+        The _file_ argument has following special values:
+        - empty string i.e. ``${EMPTY}`` (default): the session is stored in the current execution directory in a file called
+          "session_<alias>.tmp" (if the connection has an alias) or "session_<index>.tmp" (if the connection does
+          not have an alias).
+        - None i.e. ``${None}``: no file is created. Returns a tuplet where the 1st value is the session ID and the 2nd
+          value is the Webdriver URL.
+
+        Returns the session file-name, unless _file_ argument is None (see above).
+
+        Examples:
+        | Create Webdriver | Firefox         |                |              |                              |
+        | ${file} =        | Save Webdriver  |                |              | # saved to "session_1.tmp"   |
+        | Create Webdriver | Firefox         | alias=foo      |              |                              |
+        | ${file} =        | Save Webdriver  |                |              | # saved to "session_foo.tmp" |
+        | ${file} =        | Save Webdriver  | file=dummy.tmp |              | # saved to "dummy.tmp"       |
+        | ${sid}           | ${url} =        | Save Webdriver | file=${None} | # no file created            |
+
+        See also `Restore Webdriver`
         """
         self._info("Saving WebDriver session data")
         sid = self._current_browser().session_id
@@ -226,6 +255,32 @@ class _BrowserManagementKeywords(KeywordGroup):
     def restore_webdriver(self, alias=None, file=None, session_id=None, session_url=None, delete_file=True):
         """Connects to an already opened web-driver session.
 
+        Restores a Webdriver Session that has been saved using the `Save Webdriver` KW.
+
+        Optional _alias_ is an alias for the browser instance and it can be used
+        for switching between browsers (just as index can be used). See `Switch
+        Browser` for more details.
+
+        The session can be restored by:
+        - using the default session file (e.g. with `alias=foo` we try to read the session info from a file called 
+          "session_foo.tmp")
+        - using explicit file: file-name is passed in _file_ argument. See `Save Webdriver` KW for _file_
+          argument documentation
+        - using the _session_id_ and _session_url_ arguments
+
+        Optional _delete_file_ can be used to delete (default) the file after the session has been restored.
+
+        Returns the index of this browser instance which can be used later to
+        switch back to it. Index starts from 1 and is reset back to it when
+        `Close All Browsers` keyword is used. See `Switch Browser` for
+        example.
+
+        Examples:
+        | Restore Webdriver | alias=foo      |               | # read from "session_foo.tmp" and registered with alias "foo" |
+        | Restore Webdriver | alias=bar      |  file=foo.tmp | # read from "foo.tmp" and registered with alias "bar"         |
+        | Restore Webdriver |                |  file=foo.tmp | # read from "foo.tmp" and registered without alias            |
+        | #do not use file and register without alias | |    |                                                               |
+        | Restore Webdriver | session_id=xxx |  session_url=http://127.0.0.1:9999/hub |                                      |
         """
         self._info("Restoring WebDriver session")
         if session_id is not None or session_url is not None:
