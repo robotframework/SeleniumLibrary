@@ -33,43 +33,23 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'edge': "_make_edge"
                 }
 
-class _ReusableWebdriver(webdriver.Remote):
-    def __init__(self, command_executor='http://127.0.0.1:4444/wd/hub',
-                 desired_capabilities=None, browser_profile=None, proxy=None, keep_alive=False, file_detector=None):
+class _ReusableDriver(webdriver.Remote):
+    def __init__(self, command_executor, sid, keep_alive=False, file_detector=None):
 
+        self.reuse_session_id = sid
+        super(_ReusableDriver, self).__init__(command_executor, desired_capabilities={},
+                                              browser_profile=None,
+                                              proxy=None, keep_alive=keep_alive,
+                                              file_detector=file_detector)
 
-        session_file = open('session.txt', 'r+')
-        session_id = session_file.readline().replace("\n", "").replace("\r", "")
-        command_executor = session_file.readline().replace("\n", "").replace("\r", "")
-        cap = eval(session_file.readline().replace("\n", "").replace("\r", ""))
-        session_file.close()
-
-        # Here onwards this is identical to the selenium_webdriver.Remote's __init__
-        # except that the steps to create session & client are commented out 
-        if desired_capabilities is None:
-            raise WebDriverException("Desired Capabilities can't be None")
-        if not isinstance(desired_capabilities, dict):
-            raise WebDriverException("Desired Capabilities must be a dictionary")
-        if proxy is not None:
-            proxy.add_to_capabilities(desired_capabilities)
-        self.command_executor = command_executor
-        if type(self.command_executor) is bytes or isinstance(self.command_executor, str):
-            self.command_executor = RemoteConnection(command_executor, keep_alive=keep_alive)
-        self._is_remote = True
-        self.error_handler = ErrorHandler()
-        ## do not start session nor client
-        # self.start_client()
-        # self.start_session(desired_capabilities, browser_profile)
-        ## since we are not creating a new session we need to set attributes
-        ## that are usually set by the start_session()
-        self.session_id = session_id
-        self.capabilities = cap
+    def start_session(self, desired_capabilities, browser_profile=None):
+        self.session_id = self.reuse_session_id
+        #print("%s" % self.session_id)
+        self.command_executor._commands["GetSession"] = ('GET', '/session/$sessionId')
+        response = self.execute("GetSession")
+        #print("%s" % response)
+        self.capabilities = response['value']
         self.w3c = "specificationLevel" in self.capabilities
-
-        self._switch_to = SwitchTo(self)
-        self._mobile = Mobile(self)
-        self.file_detector = file_detector or LocalFileDetector()
-
 
 class _BrowserManagementKeywords(KeywordGroup):
 
@@ -219,18 +199,54 @@ class _BrowserManagementKeywords(KeywordGroup):
         except AttributeError:
             raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
         self._info("Creating an instance of the %s WebDriver" % driver_name)
-        if driver_name == 'Remote':
-            driver = _ReusableWebdriver(desired_capabilities={})
-            self._info("Session: '%s' - '%s' " % (driver.session_id, driver.command_executor._url))
+        driver = creation_func(**init_kwargs)
+        self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+        return self._cache.register(driver, alias)
+
+    def save_webdriver(self, file=''):
+        """saves the current web-driver session.
+
+        """
+        self._info("Saving WebDriver session data")
+        sid = self._current_browser().session_id
+        curl = self._current_browser().command_executor._url
+        if file is None:
+            return (sid, curl)
+        elif file == "":
+            inv_dict = {v: k for k, v in self._cache._aliases.items()}
+            session_name = inv_dict.get(self._cache.current_index, self._cache.current_index)
+            file = "session_%s.tmp" % (session_name)
+        self._debug("Storing session (%s-%s) in file '%s'" % (sid, curl, file))
+        session_file = open(file, 'w+')
+        session_file.write("%s\n" % sid)
+        session_file.write("%s\n" % curl)
+        session_file.close()
+        return file
+
+    def restore_webdriver(self, alias=None, file=None, session_id=None, session_url=None, delete_file=True):
+        """Connects to an already opened web-driver session.
+
+        """
+        self._info("Restoring WebDriver session")
+        if session_id is not None or session_url is not None:
+            if session_id is None and session_url is None:
+                raise RuntimeError("both session_id and session_url cannot be None.")
+            saved_sid = session_id
+            saved_curl = session_url
         else:
-            driver = creation_func(**init_kwargs)
-            self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
-            self._info("Session: '%s' - '%s' " % (driver.session_id, driver.command_executor._url))
-            session_file = open('session.txt', 'w+')
-            session_file.write("%s\n" % driver.session_id)
-            session_file.write("%s\n" % driver.command_executor._url)
-            session_file.write("%s\n" % driver.capabilities)
+            if file is None:
+                if alias is None:
+                    raise RuntimeError("both alias and file cannot be None.")
+                else:
+                    file = "session_%s.tmp" % (alias)
+            session_file = open(file, 'r+')
+            saved_sid = session_file.readline().replace("\n", "").replace("\r", "")
+            saved_curl = session_file.readline().replace("\n", "").replace("\r", "")
             session_file.close()
+        self._debug("Reconnecting to '%s' with session id '%s' - alias: '%s' " % (saved_curl, saved_sid, alias))
+        driver = _ReusableDriver(saved_curl, saved_sid)
+        if delete_file and session_id is None and session_url is None:
+            os.remove(file)
         return self._cache.register(driver, alias)
 
     def switch_browser(self, index_or_alias):
