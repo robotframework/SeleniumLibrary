@@ -143,7 +143,7 @@ class BrowserManagementTests(unittest.TestCase):
         keywords._browsermanagement._ReusableDriver = FakeReusable
         try:
             bm.create_webdriver('FakeWebDriver', 'fake')
-            (sid, url) = bm.save_webdriver(None)
+            (sid, url, pid) = bm.save_webdriver(None)
             self.assertEquals(sid, FakeWebDriver.session_id)
             self.assertEquals(url, FakeCmdExecutor._url)
             self.assertEquals(sid, bm._current_browser().session_id)

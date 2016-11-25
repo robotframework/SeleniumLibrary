@@ -1,6 +1,7 @@
-import os
+import os, signal
 import robot
 from robot.errors import DataError
+from robot.api import logger
 from selenium import webdriver
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
@@ -42,12 +43,22 @@ class _ReusableDriver(webdriver.Remote):
                                               proxy=None, keep_alive=keep_alive,
                                               file_detector=file_detector)
 
+    def stop_client(self):
+        if self.pid is not None and self.pid != '':
+            logger.info("Stopping driver for session '%s' with PID: %s" % (self.session_id, self.pid))
+            try:
+                os.kill(int(self.pid), signal.SIGTERM)
+            except Exception:
+                logger.warn("Failed to stop the driver with PID '%s' - please kill the process manually " % (self.pid))
+        else:
+            logger.info("No driver process found for session '%s'" % (self.session_id))
+
     def start_session(self, desired_capabilities, browser_profile=None):
         self.session_id = self.reuse_session_id
-        #print("%s" % self.session_id)
-        self.command_executor._commands["GetSession"] = ('GET', '/session/$sessionId')
-        response = self.execute("GetSession")
-        #print("%s" % response)
+        logger.info("Reconnecting to session '%s' " % self.session_id)
+        self.command_executor._commands["GetSessionData"] = ('GET', '/session/$sessionId')
+        response = self.execute("GetSessionData")
+        logger.debug("Reconnect OK, session data: '%s' " % response)
         self.capabilities = response['value']
         self.w3c = "specificationLevel" in self.capabilities
 
@@ -237,10 +248,25 @@ class _BrowserManagementKeywords(KeywordGroup):
         See also `Restore Webdriver`
         """
         self._info("Saving WebDriver session data")
-        sid = self._current_browser().session_id
-        curl = self._current_browser().command_executor._url
+        driver_service_attr_names = ['service', 'iedriver']
+        cb = self._current_browser()
+        sid = cb.session_id
+        curl = cb.command_executor._url
+        # get pid if we are in a restored this session 
+        pid = cb.__dict__.get("pid", None)
+        if pid is None:
+            # get driver executable PID
+            # this part is browser-dependant, currently tested only with: FF, GC & IE
+            self._debug("'%s'" % self._current_browser().__dict__)
+            for srvc_name in driver_service_attr_names:
+                srvc = cb.__dict__.get(srvc_name, None)
+                if srvc is not None:
+                    pid = srvc.process.pid
+                    break
+            if pid is None:
+                self._info("Could not find driver process - we will not attempt to kill the driver process after re-connecting to it with restore_session() ")
         if file is None:
-            return (sid, curl)
+            return (sid, curl, pid)
         elif file == "":
             inv_dict = {v: k for k, v in self._cache._aliases.items()}
             session_name = inv_dict.get(self._cache.current_index, self._cache.current_index)
@@ -249,10 +275,12 @@ class _BrowserManagementKeywords(KeywordGroup):
         session_file = open(file, 'w+')
         session_file.write("%s\n" % sid)
         session_file.write("%s\n" % curl)
+        if pid is not None:
+            session_file.write("%s\n" % pid)
         session_file.close()
         return file
 
-    def restore_webdriver(self, alias=None, file=None, session_id=None, session_url=None, delete_file=True):
+    def restore_webdriver(self, alias=None, file=None, session_id=None, session_url=None, session_pid=None, delete_file=True):
         """Connects to an already opened web-driver session.
 
         Restores a Webdriver Session that has been saved using the `Save Webdriver` KW.
@@ -297,11 +325,17 @@ class _BrowserManagementKeywords(KeywordGroup):
             session_file = open(file, 'r+')
             saved_sid = session_file.readline().replace("\n", "").replace("\r", "")
             saved_curl = session_file.readline().replace("\n", "").replace("\r", "")
+            session_pid = session_file.readline().replace("\n", "").replace("\r", "")
             session_file.close()
         self._debug("Reconnecting to '%s' with session id '%s' - alias: '%s' " % (saved_curl, saved_sid, alias))
-        driver = _ReusableDriver(saved_curl, saved_sid)
-        if delete_file and session_id is None and session_url is None:
-            os.remove(file)
+        try:
+            driver = _ReusableDriver(saved_curl, saved_sid)
+            driver.pid = session_pid
+        except:
+            raise
+        finally:
+            if delete_file and session_id is None and session_url is None:
+                os.remove(file)
         return self._cache.register(driver, alias)
 
     def switch_browser(self, index_or_alias):

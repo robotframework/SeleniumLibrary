@@ -44,8 +44,8 @@ Create Reusable Webdriver with alias
     Restore Webdriver   alias=dummy     file=${file}     
     ${file}=    Save Webdriver
     Restore Webdriver   alias=dummy2    file=session_dummy.tmp     
-    ${sid}  ${url} =    Save Webdriver  ${None}
-    Restore Webdriver   alias=dummy     session_id=${sid}  session_url=${url}     
+    ${sid}  ${url}  ${pid} =    Save Webdriver  ${None}
+    Restore Webdriver   alias=dummy     session_id=${sid}  session_url=${url}  session_pid=${pid}     
     Go To    ${FRONT PAGE}
     Page Should Contain    needle
     [Teardown]    Close Browser
@@ -65,8 +65,8 @@ Create Reusable Webdriver without alias
     Restore Webdriver           file=${file}     
     ${file}=    Save Webdriver  ${CURDIR}/dummy.tmp
     Restore Webdriver           file=${file}     
-    ${sid}  ${url} =    Save Webdriver  ${None}
-    Restore Webdriver   session_id=${sid}  session_url=${url}     
+    ${sid}  ${url}  ${pid} =    Save Webdriver  ${None}
+    Restore Webdriver   session_id=${sid}  session_url=${url}  session_pid=${pid}
     Go To    ${FRONT PAGE}
     Page Should Contain    needle
     [Teardown]    Close Browser
@@ -83,7 +83,7 @@ Create Reusable Webdriver with runtime errors
     run keyword and expect error  *No browser is open*      Save Webdriver
     run keyword and expect error  *URLError*refused*        Restore Webdriver   session_id=foo   session_url=http://127.0.0.1:52470/foo
     Create Webdriver    ${DRIVER_NAME}       kwargs=${KWARGS}
-    ${sid}  ${url} =    Save Webdriver  ${None}
+    ${sid}  ${url}  ${pid} =    Save Webdriver  ${None}
     run keyword and expect error  **    Restore Webdriver   session_id=bogus  session_url=${url}     
     [Teardown]    Close Browser
 
