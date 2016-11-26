@@ -3,22 +3,17 @@ addons:
 language: python
 sudo: false
 python:
-  - "2.6"
   - "2.7"
   - "3.4"
-before_install:
-  - "./.travis_python_dep.sh"
-install: true
+install:
   #- pip install pep8 --use-mirrors
   #- pip install pyflakes --use-mirrors
-  # Installation is done at before_install
-  ##- pip install robotframework==3.0b1
-  ##- pip install selenium
-  ##- pip install decorator
-  ##- pip install docutils
-  ##- pip install future
-  # Mockito is only used when in Python 2.7 after installing future
-  ##- pip install mockito
+   - pip install robotframework
+   - pip install selenium==2.53.6
+   - pip install decorator
+   - pip install docutils
+   - pip install future
+   - pip install mockito
   #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
   - "export DISPLAY=:99.0"

@@ -1,6 +1,21 @@
 Release Notes
 =============
 
+1.8.0
+-----
+- Moved keyword documentation to:
+  http://robotframework.org/Selenium2Library/Selenium2Library.html
+- Library demo project was removed, users shoud use demo from:
+  https://bitbucket.org/robotframework/webdemo
+- docutils was removed as installation dependency.
+- Edge browser support was added to Open Browser keyword [jfx].
+- Unselect From List keyword was updated because selenium 2.53.0 or greater
+  raised an exception if item can not be unselected.
+- Get Element Size keyword was added [SergiuTudos]
+- Alert handling was improved to wait alert be present
+- Capture Page Screenshot keyword was enhanced to support custom index definition
+  in the filename
+
 1.7.4
 -------------------
 - Reverted 'Press Keys' because of backwards incompatible changes [zephraph]

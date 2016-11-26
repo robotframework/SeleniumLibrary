@@ -185,10 +185,10 @@ if __name__=='__main__':
         sys.exit(1)
     infile = sys.argv[1]
     outfile = sys.argv[2] if len(sys.argv) == 3 else None
-    print("Checking {0}".format(os.path.abspath(infile)))
+    print("Checking %s" % os.path.abspath(infile))
     rc = process_output(infile, outfile)
     if outfile:
-        print("Output: {0}".format(os.path.abspath(outfile)))
+        print("Output: %s" % os.path.abspath(outfile))
     if rc > 255:
         rc = 255
     sys.exit(rc)
