@@ -7,7 +7,7 @@ from os.path import abspath, dirname, join
 from subprocess import Popen, call
 from tempfile import TemporaryFile
 
-from run_unit_tests import run_unit_tests
+# from run_unit_tests import run_unit_tests
 
 CURDIR = dirname(abspath(__file__))
 
@@ -49,7 +49,7 @@ def acceptance_tests(interpreter, browser, args):
 
 def start_http_server():
     server_output = TemporaryFile()
-    python_bin= 'python' + sys.version[:3]
+    python_bin = sys.executable
     Popen([python_bin, env.HTTP_SERVER_FILE ,'start'],
           stdout=server_output, stderr=server_output)
 
@@ -63,14 +63,15 @@ def execute_tests(runner, args):
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
-    python_bin= 'python' + sys.version[:3]
+    python_bin = sys.executable
     call([python_bin, env.HTTP_SERVER_FILE, 'stop'])
 
 def process_output(args):
     print()
     if _has_robot_27():
-        call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
-             os.path.join(env.RESULTS_DIR, 'output.xml')])
+        python_bin = sys.executable
+        call([python_bin, os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
+            os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
