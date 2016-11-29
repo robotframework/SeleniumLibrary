@@ -353,6 +353,30 @@ class _ElementKeywords(KeywordGroup):
         self._info("Clicking element '%s'." % locator)
         self._element_find(locator, True, True).click()
 
+    def key_click_element(self, keyname, locator):
+        """Click element identified by `locator` while holding down a key.
+        The 'keyname' value should be expressed as a Keys constant as specified
+        in the selenium.webdriver.common.keys module.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        
+        Example:
+        | Key Click Element | CONTROL | id=downloadLink |
+        """
+        self._info("Clicking element '%s' while holding down the '%s' key." % (locator, keyname))
+        
+        # get the key code which corresponds to the passed key name
+        # invalid values will fail here (but meaningfully)
+        key = eval("Keys." + keyname)
+        
+        element = self._element_find(locator, True, True)
+        # press the key
+        ActionChains(self._current_browser()).key_down(key)
+        element.click()
+        # release the key
+        ActionChains(self._current_browser()).key_up(key)
+
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
         """Click element identified by `locator` at x/y coordinates of the element.
         Cursor is moved and the center of the element and x/y coordinates are
