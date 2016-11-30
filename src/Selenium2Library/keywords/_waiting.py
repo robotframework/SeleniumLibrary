@@ -150,6 +150,28 @@ class _WaitingKeywords(KeywordGroup):
                 return error or "Element '%s' was still visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_hidden)
 
+    def wait_for_angular(self, timeout=None, error=None):
+        """
+        """
+
+        if not error:
+            error = "Wait For Angular did not become true in <TIMEOUT>"
+
+        script = """
+var el = document.querySelector('body');
+try {
+  angular.element(el).injector().get('$browser').
+      notifyWhenNoOutstandingRequests();
+} catch (e) {
+  return true;
+}
+
+return false;
+"""
+
+        self._wait_until(timeout, error,
+                         lambda: self._current_browser().execute_script(script) == True)
+    
     def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is enabled.
 

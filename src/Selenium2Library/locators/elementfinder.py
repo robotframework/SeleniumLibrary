@@ -20,6 +20,9 @@ class ElementFinder(object):
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
             'scLocator': self._find_by_sc_locator,
+            'binding': self._find_by_binding,
+            'model': self._find_by_model,
+            'repeater': self._find_by_ng_repeater,
             'default': self._find_by_default
         }
         self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
@@ -123,9 +126,108 @@ class ElementFinder(object):
         js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
         return self._filter_elements([browser.execute_script(js)], tag, constraints)
 
+    def _find_by_binding(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
+            browser.execute_script("var binding = '%s'; var bindings = document.getElementsByClassName('ng-binding'); var matches = []; for (var i = 0; i < bindings.length; ++i) { var dataBinding = angular.element(bindings[i]).data('$binding'); if(dataBinding) { var bindingName = dataBinding.exp || dataBinding[0].exp || dataBinding; if (bindingName.indexOf(binding) != -1) { matches.push(bindings[i]); } } } return matches;" % criteria),
+            tag, constraints)
+
+    def _find_by_model(self, browser, criteria, tag, constraints):
+        prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\:']
+        for prefix in prefixes:
+            selector = '[%smodel="%s"]' % (prefix, criteria)
+            elements = browser.execute_script("""return document.querySelectorAll('%s');""" % selector);
+            if len(elements):
+                return self._filter_elements(elements, tag, constraints)
+
+    def _find_by_ng_repeater(self, browser, criteria, tag, constraints):
+        matches=[]
+        repeater_row_col = self._parse_ng_repeat_locator(criteria)
+
+        import collections
+        def get_iterable(x):
+            if isinstance(x, collections.Iterable):
+                return x
+            else:
+                return [x]
+        
+        rows = []
+        prefixes = ['ng-', 'ng_', 'data-ng-', 'x-ng-', 'ng\\\\:']
+        for prefix in prefixes:
+            repeatElems=[]
+            attr = prefix + 'repeat'
+            repeatElems = browser.execute_script("""return document.querySelectorAll('[%s]');""" % attr)
+            attr = attr.replace('\\','')
+            repeatElems = get_iterable(repeatElems)
+            for elem in repeatElems:
+                val = elem.get_attribute(attr)
+                if val and repeater_row_col['repeater'] in elem.get_attribute(attr):
+                    rows.append(elem)
+        multiRows = []
+        for prefix in prefixes:
+            attr = prefix + 'repeat-start'
+            repeatElems = browser.execute_script("""return document.querySelectorAll('[%s]');""" % attr)
+            attr = attr.replace('\\','')
+            for elem in repeatElems:
+                if repeater_row_col['repeater'] in elem.get_attribute(attr):
+                    item = elem
+                    is_end = item.get_attribute('ng-repeat-end')
+                    row = []
+                    while is_end!='':
+                        row.append(item)
+                        try:
+                            is_end = item.get_attribute('ng-repeat-end')
+                            item = item.find_element_by_xpath('./following-sibling::*')
+                        except:
+                            item = None
+                            is_end = ''
+                    multiRows.append(row)
+
+        # if ...@row[index]...
+        if repeater_row_col['row_index'] is not None:
+            if rows:
+                rows = get_iterable(rows[repeater_row_col['row_index']])
+            if multiRows:
+                multiRows = get_iterable(multiRows[repeater_row_col['row_index']])
+
+        # if ...@col=binding... 
+        if repeater_row_col['col_binding'] is not None:
+            from selenium.common.exceptions import NoSuchElementException
+            bindings=[]
+            for row in rows:
+                if 'ng-binding' in row.get_attribute("class"):
+                    bindings.append(row)
+                try:
+                    childBindings = row.find_elements_by_class_name('ng-binding')
+                    bindings.extend(childBindings)
+                except NoSuchElementException:
+                    pass
+            
+            for row in multiRows:
+                row = get_iterable(row)
+                for elem in row:
+                    if 'ng-binding' in elem.get_attribute("class"):
+                        bindings.append(elem)
+                    try:
+                        childBindings = elem.find_elements_by_class_name('ng-binding')
+                        bindings.extend(childBindings)
+                    except NoSuchElementException:
+                        pass
+            
+            for bind in bindings:
+                bindingName = browser.execute_script("dataBinding=angular.element(arguments[0]).data('$binding');if(dataBinding){bindingName=dataBinding.exp||dataBinding[0].exp||dataBinding;}return bindingName;",bind)
+                if repeater_row_col['col_binding'] in bindingName:
+                    matches.append(bind)
+            return matches
+        
+        matches = rows
+        matches.extend(multiRows)
+        return matches
+
     def _find_by_default(self, browser, criteria, tag, constraints):
         if criteria.startswith('//'):
             return self._find_by_xpath(browser, criteria, tag, constraints)
+        elif criteria.startswith('{{'):
+            return self._find_by_binding(browser, criteria, tag, constraints)
         return self._find_by_key_attrs(browser, criteria, tag, constraints)
 
     def _find_by_key_attrs(self, browser, criteria, tag, constraints):
@@ -219,12 +321,75 @@ class ElementFinder(object):
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
-        if not locator.startswith('//'):
+        if not locator.startswith('//') and not locator.startswith('{{'):
             locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0]
                 criteria = locator_parts[2].strip()
         return (prefix, criteria)
+
+    def _parse_ng_repeat_locator(self, criteria):
+        def _startswith(str,sep):
+            parts = str.lower().partition(sep)
+            if parts[1]==sep and parts[0]=='':
+                return parts[2]
+            else:
+                return None
+        
+        
+        def _parse_arrayRE(str):
+            import re
+            match = re.search(r"(?<=^\[).+([0-9]*).+(?=\]$)",str)
+            if match:
+                return match.group()
+            else:
+                return None
+        
+        def _parse_array(str):
+            if str[0]=='[' and str[-1]==']':
+                return int(str[1:-1])
+            else:
+                return None
+
+        rrc = criteria.rsplit('@')
+        extractElem = {'repeater': None, 'row_index': None, 'col_binding': None}
+        if len(rrc)==1:
+            #is only repeater
+            extractElem['repeater']=rrc[0]
+            return extractElem
+        else:
+            # for index in reversed(rrc):
+            while 1 < len(rrc):
+                index = rrc.pop()
+                row = _startswith(index,'row')
+                column = _startswith(index,'column')
+                if row:
+                    array = _parse_array(row)
+                    rlocator = _startswith(row,'=')
+                    if array is not None:
+                        extractElem['row_index'] = array
+                    elif rlocator:
+                        # row should be an list index and not binding locator
+                        raise ValueError("AngularJS ng-repeat locator with row as binding is not supported")
+                    else:
+                        # stray @ not releated to row/column seperator
+                        rrc[-1] = rrc[-1] + '@' + index
+                elif column:
+                    array = _parse_array(column)
+                    clocator = _startswith(column,'=')
+                    if array is not None:
+                        # col should be an binding locator and not list index
+                        raise ValueError("AngularJS ng-repeat locator with column as index is not supported")
+                    elif clocator:
+                        extractElem['col_binding'] = clocator
+                    else:
+                        # stray @ not releated to row/column seperator
+                        rrc[-1] = rrc[-1] + '@' + index
+                else:
+                    # stray @ not releated to row/column seperator
+                    rrc[-1] = rrc[-1] + '@' + index
+        extractElem['repeater']=rrc[0]
+        return extractElem
 
     def _normalize_result(self, elements):
         if not isinstance(elements, list):
