@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>(root)/forms/multiple_file_upload_form.html</title>
+</head>
+<body>
+<script type="text/javascript">
+
+function show_content_of_upload() {
+   var file_list = document.getElementById("files_list").files;
+   for (i = 0; i < file_list.length; i++) {
+      append_element_to_list(file_list[i].name);
+   }
+}
+
+function append_element_to_list(text_to_append){
+  var ul = document.getElementById("result");
+  var li = document.createElement("li");
+  li.appendChild(document.createTextNode(text_to_append));
+  ul.appendChild(li);
+}
+
+
+</script>
+<form action="submit.html" method="POST">
+    <input type="file" multiple name="files_list" id="files_list"/>
+    <input type="button" name="check_content" id="check_content" value="Check" onclick="show_content_of_upload()"/>
+</form>
+<ul id="result" />
+</body>
+</html>

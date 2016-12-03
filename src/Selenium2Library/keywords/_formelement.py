@@ -1,5 +1,6 @@
 import os
 from keywordgroup import KeywordGroup
+import logging
 from selenium.common.exceptions import WebDriverException
 
 class _FormElementKeywords(KeywordGroup):
@@ -179,6 +180,30 @@ class _FormElementKeywords(KeywordGroup):
             raise AssertionError("File '%s' does not exist on the local file system"
                         % file_path)
         self._element_find(locator, True, True).send_keys(file_path)
+
+    def choose_multiple_files(self, locator,browser="chrome", basePath="", *files):
+        """Inputs the "files" into file input field found by `locator`.
+        This Keyword extend the Choose Files option to allow user to select multiple files
+        (input type=files multiple).
+        The file paths need to be specified for each file.
+        Alternative is use basePath argument and then only files name.
+        The file specified with `file_path` must be available on the same host
+        where the Selenium Server is running.
+        Example:
+        | Choose Multiple Files | my_upload_field | chrome  | /home/user/files/ | trades.csv | trades.xsl | trades.doc |
+        | Choose Multiple Files | my_upload_field | firefox |                   | /folder/trades.csv | /folder1/trades.xsl | /folder3/trades.doc |
+        """
+        fileList = []
+        for file in files:
+            path_to_image = os.path.join(basePath, file)
+            if not os.path.isfile(path_to_image):
+                raise AssertionError("File '%s' does not exist on the local file system" % path_to_image)
+            fileList.append(path_to_image)
+            if browser not in ("googlechrome", "gc", "chrome"):
+                self._element_find(locator, True, True).send_keys(path_to_image)
+        if browser in ("googlechrome", "gc", "chrome"):
+            logging.info(fileList)
+            self._element_find(locator, True, True).send_keys("\n".join(fileList))
 
     def input_password(self, locator, text):
         """Types the given password into text field identified by `locator`.
