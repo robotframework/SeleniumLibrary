@@ -346,6 +346,13 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Returns the current location."""
         return self._current_browser().get_current_url()
 
+    def get_locations(self):
+        """Returns and logs current locations of all windows known to the browser."""
+        return self._log_list(
+            [window_info[4] for window_info in
+             self._window_manager._get_window_infos(self._current_browser())]
+        )
+
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
         return self._current_browser().get_page_source()

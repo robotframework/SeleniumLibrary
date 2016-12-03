@@ -23,6 +23,19 @@ Get Window Titles
     ${titles}=    Get Window Titles
     Should Be Equal    ${titles}    ${exp_titles}
 
+Get Location
+    [Documentation]  Get current location
+    ${current_url}=     Get Location
+    Should Be Equal  ${current_url}    ${ROOT}/javascript/popupwindow.html
+
+Get Locations
+    [Documentation]  Get all window locations
+    ${expected_urls}=   Create List     ${ROOT}/javascript/dynamic_content.html     ${ROOT}/javascript/popupwindow.html
+    ${urls}=    Get Locations
+    Sort List  ${expected_urls}
+    Sort List  ${urls}
+    Lists Should Be Equal   ${urls}     ${expected_urls}
+
 Get Window Names
     [Documentation]    Get Window Names
     ${exp_names}=    Create List    selenium_main_app_window    myName
