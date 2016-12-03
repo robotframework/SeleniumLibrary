@@ -1,6 +1,7 @@
 import os
 from keywordgroup import KeywordGroup
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.keys import Keys
 
 class _FormElementKeywords(KeywordGroup):
 
@@ -360,7 +361,7 @@ class _FormElementKeywords(KeywordGroup):
 
     def _input_text_into_text_field(self, locator, text):
         element = self._element_find(locator, True, True)
-        element.clear()
+        element.send_keys(Keys.CONTROL, "a")
         element.send_keys(text)
 
     def _is_form_element(self, element):
