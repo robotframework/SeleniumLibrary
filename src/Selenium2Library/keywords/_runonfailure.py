@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 from robot.libraries import BuiltIn
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 BUILTIN = BuiltIn.BuiltIn()
 

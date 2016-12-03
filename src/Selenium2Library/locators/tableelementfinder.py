@@ -1,6 +1,9 @@
+from __future__ import absolute_import
+from builtins import str
+from builtins import object
 from selenium.common.exceptions import NoSuchElementException
 from Selenium2Library import utils
-from elementfinder import ElementFinder
+from .elementfinder import ElementFinder
 
 class TableElementFinder(object):
 
@@ -91,9 +94,7 @@ class TableElementFinder(object):
 
         locator_suffixes = self._locator_suffixes[(table_locator_type, location_method)]
 
-        return map(
-            lambda locator_suffix: table_locator + locator_suffix,
-            locator_suffixes)
+        return [table_locator + locator_suffix for locator_suffix in locator_suffixes]
 
     def _search_in_locators(self, browser, locators, content):
         for locator in locators:

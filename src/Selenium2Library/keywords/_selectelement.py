@@ -1,5 +1,8 @@
+from __future__ import absolute_import
+from builtins import zip
+from builtins import range
 from selenium.webdriver.support.ui import Select
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchElementException
 
 

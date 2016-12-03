@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+from builtins import str
 import os
 import sys
 from Selenium2Library.locators import TableElementFinder
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 class _TableElementKeywords(KeywordGroup):
 

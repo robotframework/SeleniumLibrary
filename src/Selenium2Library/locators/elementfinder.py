@@ -1,3 +1,4 @@
+from builtins import object
 from Selenium2Library import utils
 from robot.api import logger
 from robot.utils import NormalizedDict

@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import time
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from keywordgroup import KeywordGroup
+from .keywordgroup import KeywordGroup
 
 
 class _AlertKeywords(KeywordGroup):

@@ -4,13 +4,16 @@ language: python
 sudo: false
 python:
   - "2.7"
+  - "3.4"
 install:
   #- pip install pep8 --use-mirrors
   #- pip install pyflakes --use-mirrors
-  - pip install robotframework
-  - pip install selenium==2.53.6
-  - pip install decorator
-  - pip install mockito
+   - pip install robotframework
+   - pip install selenium==2.53.6
+   - pip install decorator
+   - pip install docutils
+   - pip install future
+   - pip install mockito
   #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
 before_script:
   - "export DISPLAY=:99.0"

@@ -1,4 +1,5 @@
-from scope_event import ScopeStart, ScopeEnd
+from __future__ import absolute_import
+from .scope_event import ScopeStart, ScopeEnd
 
 _registered_events = [ ScopeStart, ScopeEnd ]
 _events = []

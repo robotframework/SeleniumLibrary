@@ -3,10 +3,13 @@ from __future__ import print_function
 import env
 import os
 import sys
+from os.path import abspath, dirname, join
 from subprocess import Popen, call
 from tempfile import TemporaryFile
 
-from run_unit_tests import run_unit_tests
+# from run_unit_tests import run_unit_tests
+
+CURDIR = dirname(abspath(__file__))
 
 ROBOT_ARGS = [
     '--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
@@ -37,7 +40,7 @@ def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
     ARG_VALUES['pyVersion'] = interpreter + sys.version[:3]
     start_http_server()
-    runner = {'python': 'pybot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
+    runner = {'python': 'robot', 'jython': 'jybot', 'ipy': 'ipybot'}[interpreter]
     if os.sep == '\\':
         runner += '.bat'
     execute_tests(runner, args)
@@ -46,7 +49,8 @@ def acceptance_tests(interpreter, browser, args):
 
 def start_http_server():
     server_output = TemporaryFile()
-    Popen(['python', env.HTTP_SERVER_FILE ,'start'],
+    python_bin = sys.executable
+    Popen([python_bin, env.HTTP_SERVER_FILE ,'start'],
           stdout=server_output, stderr=server_output)
 
 def execute_tests(runner, args):
@@ -54,28 +58,30 @@ def execute_tests(runner, args):
         os.mkdir(env.RESULTS_DIR)
     command = [runner] + [arg % ARG_VALUES for arg in ROBOT_ARGS] + args + [env.ACCEPTANCE_TEST_DIR]
     print()
-    print('Starting test execution with command:\n' + ' '.join(command))
+    print("Starting test execution with command:\n{0}".format(' '.join(command)))
     syslog = os.path.join(env.RESULTS_DIR, 'syslog.txt')
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 def stop_http_server():
-    call(['python', env.HTTP_SERVER_FILE, 'stop'])
+    python_bin = sys.executable
+    call([python_bin, env.HTTP_SERVER_FILE, 'stop'])
 
 def process_output(args):
     print()
     if _has_robot_27():
-        call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
-             os.path.join(env.RESULTS_DIR, 'output.xml')])
+        python_bin = sys.executable
+        call([python_bin, os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
+            os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
     print()
-    print('Starting output processing with command:\n' + ' '.join(rebot_cmd))
+    print("Starting output processing with command:\n{0}".format(' '.join(rebot_cmd)))
     rc = call(rebot_cmd, env=os.environ)
     if rc == 0:
-        print('All critical tests passed')
+        print("All critical tests passed")
     else:
-        print('%d critical test%s failed' % (rc, 's' if rc != 1 else ''))
+        print("{0} critical test{1} failed".format(rc, 's' if rc != 1 else ''))
     return rc
 
 def _has_robot_27():
@@ -89,18 +95,19 @@ def _exit(rc):
     sys.exit(rc)
 
 def _help():
-    print('Usage:  python run_tests.py python|jython browser [options]')
+    print("Usage:  python run_tests.py python|jython browser [options]")
     print()
-    print('See README.txt for details.')
+    print("See README.txt for details.")
     return 255
 
 def _run_unit_tests():
-    print('Running unit tests')
-    failures = run_unit_tests()
+    print("Running unit tests")
+    pypath = sys.executable
+    failures = call([pypath, os.path.join(CURDIR,'run_unit_tests.py')])
     if failures != 0:
-        print('\n%d unit tests failed - not running acceptance tests!' % failures)
+        print("\n{0} unit tests failed - not running acceptance tests!".format(failures))
     else:
-        print('All unit tests passed')
+        print("All unit tests passed")
     return failures
 
 

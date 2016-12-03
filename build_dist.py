@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
-import os, sys, shutil, subprocess, argparse
+from __future__ import print_function
+import os
+import sys
+import shutil
+import subprocess
+import argparse
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 DIST_DIR = os.path.join(THIS_DIR, "dist")
@@ -9,9 +14,9 @@ sys.path.append(os.path.join(THIS_DIR, "doc"))
 sys.path.append(os.path.join(THIS_DIR, "demo"))
 
 def main():
-    parser = argparse.ArgumentParser(description="Builds a Se2Lib distribution")
-    parser.add_argument('py_26_path', action='store', help='Python 2.6 executbale file path')
-    parser.add_argument('py_27_path', action='store', help='Python 2.7 executbale file path')
+    parser = argparse.ArgumentParser(description="Builds a Selenium2Library distribution")
+    parser.add_argument('py_26_path', action='store', help='Python 2.6 executable file path')
+    parser.add_argument('py_27_path', action='store', help='Python 2.7 executable file path')
     parser.add_argument('--release', action='store_true')
     parser.add_argument('--winonly', action='store_true')
     args = parser.parse_args()
@@ -33,7 +38,7 @@ def clear_dist_folder():
 
 def run_doc_gen():
     import generate
-    print
+    print()
     generate.main()
 
 def run_register(args):
@@ -41,7 +46,7 @@ def run_register(args):
         _run_setup(args.py_27_path, "register", [], False)
 
 def run_builds(args):
-    print
+    print()
     if not args.winonly:
         _run_setup(args.py_27_path, "sdist", [ "--formats=gztar,zip" ], args.release)
         _run_setup(args.py_26_path, "bdist_egg", [], args.release)
@@ -50,12 +55,12 @@ def run_builds(args):
         _run_setup(args.py_27_path, "bdist_wininst", [ "--plat-name=win32" ], args.release)
         _run_setup(args.py_27_path, "bdist_wininst", [ "--plat-name=win-amd64" ], args.release)
     else:
-        print    
+        print()
         print("Windows binary installers cannot be built on this platform!")    
 
 def run_demo_packaging():
     import package
-    print
+    print()
     package.main()
 
 def _run_setup(py_path, type, params, upload):
@@ -66,8 +71,8 @@ def _run_setup(py_path, type, params, upload):
     if upload:
         setup_args.append("upload")
         
-    print
-    print("Running: %s" % ' '.join(setup_args))
+    print()
+    print("Running: {0}".format(' '.join(setup_args)))
     returncode = subprocess.call(setup_args)
     if returncode != 0:
         print("Error running setup.py")
