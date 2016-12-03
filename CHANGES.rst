@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+1.8.1
+-----
+- Added 'Get Locations' keyword [thaffenden]
+
 1.8.0
 -----
 - Moved keyword documentation to:
