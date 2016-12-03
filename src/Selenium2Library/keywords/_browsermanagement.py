@@ -1,4 +1,5 @@
 import os
+import time
 import robot
 from robot.errors import DataError
 from selenium import webdriver
@@ -291,6 +292,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         element = self._element_find(locator, True, True)
         self._current_browser().switch_to_frame(element)
 
+
     def select_window(self, locator=None):
         """Selects the window matching locator and return previous window handle.
 
@@ -331,6 +333,52 @@ class _BrowserManagementKeywords(KeywordGroup):
             pass
         finally:
             self._window_manager.select(self._current_browser(), locator)
+
+
+
+
+    def wait_for_select_window(self, locator=None, max_timeout=10):
+
+        if locator is None:
+            self.select_window(locator)
+            return
+
+        locator_parts = locator.partition('=')
+        if len(locator_parts) < 1:
+            raise ValueError('syntax error: unexpected identifier')
+
+        prefix = locator_parts[0]
+        criteria =locator_parts[2]
+        index = 0
+        if prefix == 'title':
+            index = 3
+        elif prefix == 'name':
+            index = 2
+        elif prefix == 'url':
+            index = 4
+        else:
+            raise ValueError('syntax error: unexpected identifier')
+
+        timeout = robot.utils.timestr_to_secs(max_timeout)
+        max_time = time.time() + timeout
+        FIND = False
+
+        while True:
+            infos = self._window_manager._get_window_infos(self._current_browser())
+            for info in infos:
+                if info[index].strip().lower() == criteria.lower():
+                    FIND = True
+                    break
+
+            if FIND:
+                break
+            if time.time() > max_time:
+                raise AssertionError('Timeout error raised by text \'%s\'' % criteria)
+
+            time.sleep(0.2)
+
+        self.select_window(locator)
+
 
     def list_windows(self):
         """Return all current window handles as a list"""
