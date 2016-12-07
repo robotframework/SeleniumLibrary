@@ -1,8 +1,10 @@
 import unittest
-import os
-from Selenium2Library.locators import ElementFinder
-from mockito import *
+
+from mockito import any, mock, verify, when
 from robot.utils.asserts import assert_raises_with_msg
+
+from Selenium2Library.locators import ElementFinder
+
 
 class ElementFinderTests(unittest.TestCase):
 

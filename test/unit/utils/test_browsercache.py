@@ -1,7 +1,9 @@
 import unittest
-import os
+
+from mockito import mock, verify
+
 from Selenium2Library.utils import BrowserCache
-from mockito import *
+
 
 class BrowserCacheTests(unittest.TestCase): 
 

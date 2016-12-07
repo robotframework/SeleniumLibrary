@@ -1,12 +1,15 @@
 #!/usr/bin/env python
+
 from __future__ import print_function
-import env
+
 import os
 import sys
 from subprocess import Popen, call
 from tempfile import TemporaryFile
 
+import env
 from run_unit_tests import run_unit_tests
+
 
 ROBOT_ARGS = [
     '--doc', 'SeleniumSPacceptanceSPtestsSPwithSP%(browser)s',
@@ -31,7 +34,9 @@ REBOT_ARGS = [
     '--noncritical', 'known_issue_-_%(pyVersion)s',
     '--noncritical', 'known_issue_-_%(browser)s',
 ]
-ARG_VALUES = {'outdir': env.RESULTS_DIR, 'pythonpath': ':'.join((env.SRC_DIR, env.TEST_LIBS_DIR))}
+ARG_VALUES = {'outdir': env.RESULTS_DIR,
+              'pythonpath': ':'.join((env.SRC_DIR, env.TEST_LIBS_DIR))}
+
 
 def acceptance_tests(interpreter, browser, args):
     ARG_VALUES['browser'] = browser.replace('*', '')
@@ -44,10 +49,12 @@ def acceptance_tests(interpreter, browser, args):
     stop_http_server()
     return process_output(args)
 
+
 def start_http_server():
     server_output = TemporaryFile()
-    Popen(['python', env.HTTP_SERVER_FILE ,'start'],
+    Popen(['python', env.HTTP_SERVER_FILE, 'start'],
           stdout=server_output, stderr=server_output)
+
 
 def execute_tests(runner, args):
     if not os.path.exists(env.RESULTS_DIR):
@@ -58,14 +65,15 @@ def execute_tests(runner, args):
     syslog = os.path.join(env.RESULTS_DIR, 'syslog.txt')
     call(command, shell=os.sep=='\\', env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
+
 def stop_http_server():
     call(['python', env.HTTP_SERVER_FILE, 'stop'])
 
+
 def process_output(args):
     print()
-    if _has_robot_27():
-        call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
-             os.path.join(env.RESULTS_DIR, 'output.xml')])
+    call(['python', os.path.join(env.RESOURCES_DIR, 'statuschecker.py'),
+         os.path.join(env.RESULTS_DIR, 'output.xml')])
     rebot = 'rebot' if os.sep == '/' else 'rebot.bat'
     rebot_cmd = [rebot] + [ arg % ARG_VALUES for arg in REBOT_ARGS ] + args + \
                 [os.path.join(ARG_VALUES['outdir'], 'output.xml') ]
@@ -78,21 +86,13 @@ def process_output(args):
         print('%d critical test%s failed' % (rc, 's' if rc != 1 else ''))
     return rc
 
-def _has_robot_27():
-    try:
-        from robot.result import ExecutionResult
-    except:
-        return False
-    return True
-
-def _exit(rc):
-    sys.exit(rc)
 
 def _help():
     print('Usage:  python run_tests.py python|jython browser [options]')
     print()
     print('See README.txt for details.')
-    return 255
+    sys.exit(255)
+
 
 def _run_unit_tests():
     print('Running unit tests')
@@ -104,14 +104,15 @@ def _run_unit_tests():
     return failures
 
 
-if __name__ ==  '__main__':
+if __name__ == '__main__':
     if not len(sys.argv) > 2:
-        _exit(_help())
+        _help()
     unit_failures = _run_unit_tests()
     if unit_failures:
-        _exit(unit_failures)
+        sys.exit(unit_failures)
     interpreter = sys.argv[1]
     browser = sys.argv[2].lower()
     args = sys.argv[3:]
     if browser != 'unit':
-        _exit(acceptance_tests(interpreter, browser, args))
+        rc = acceptance_tests(interpreter, browser, args)
+        sys.exit(rc)

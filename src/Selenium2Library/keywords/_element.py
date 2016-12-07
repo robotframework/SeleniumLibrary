@@ -1,18 +1,13 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
+
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from keywordgroup import KeywordGroup
 
-try:
-    basestring  # attempt to evaluate basestring
-    def isstr(s):
-        return isinstance(s, basestring)
-except NameError:
-    def isstr(s):
-        return isinstance(s, str)
+from .keywordgroup import KeywordGroup
+
 
 class _ElementKeywords(KeywordGroup):
 
@@ -684,7 +679,7 @@ return !element.dispatchEvent(evt);
 
     def _element_find(self, locator, first_only, required, tag=None):
         browser = self._current_browser()
-        if isstr(locator):
+        if isinstance(locator, basestring):
             elements = self._element_finder.find(browser, locator, tag)
             if required and len(elements) == 0:
                 raise ValueError("Element locator '" + locator + "' did not match any elements.")
