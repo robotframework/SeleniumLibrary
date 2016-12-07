@@ -59,14 +59,14 @@ class WindowManager(object):
 
     def _select_by_default(self, browser, criteria):
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            handles = browser.get_window_handles()
+            handles = browser.window_handles
             browser.switch_to_window(handles[0])
             return
         try:
             starting_handle = browser.get_current_window_handle()
         except NoSuchWindowException:
             starting_handle = None
-        for handle in browser.get_window_handles():
+        for handle in browser.window_handles:
             browser.switch_to_window(handle)
             if criteria == handle:
                 return
@@ -76,9 +76,9 @@ class WindowManager(object):
         if starting_handle:
             browser.switch_to_window(starting_handle)
         raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
-    
+
     def _select_by_last_index(self, browser):
-        handles = browser.get_window_handles()
+        handles = browser.window_handles
         try:
             if handles[-1] == browser.get_current_window_handle():
                 raise AssertionError("No new window at last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}' to find it.")
@@ -89,19 +89,19 @@ class WindowManager(object):
         browser.switch_to_window(handles[-1])
 
     def _select_by_excludes(self, browser, excludes):
-        for handle in browser.get_window_handles():
+        for handle in browser.window_handles:
             if handle not in excludes:
                 browser.switch_to_window(handle)
                 return
         raise ValueError("Unable to locate new window")
-    
+
     # Private
 
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
         if locator is not None and len(locator) > 0:
-            locator_parts = locator.partition('=')        
+            locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
@@ -117,7 +117,7 @@ class WindowManager(object):
         except NoSuchWindowException:
             starting_handle = None
         try:
-            for handle in browser.get_window_handles():
+            for handle in browser.window_handles:
                 browser.switch_to_window(handle)
                 window_infos.append(browser.get_current_window_info())
         finally:
@@ -130,7 +130,7 @@ class WindowManager(object):
             starting_handle = browser.get_current_window_handle()
         except NoSuchWindowException:
             starting_handle = None
-        for handle in browser.get_window_handles():
+        for handle in browser.window_handles:
             browser.switch_to_window(handle)
             if matcher(browser.get_current_window_info()):
                 return

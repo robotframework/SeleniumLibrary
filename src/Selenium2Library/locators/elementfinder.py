@@ -212,7 +212,7 @@ class ElementFinder(object):
         return attrs
 
     def _get_base_url(self, browser):
-        url = browser.get_current_url()
+        url = browser.current_url
         if '/' in url:
             url = '/'.join(url.split('/')[:-1])
         return url

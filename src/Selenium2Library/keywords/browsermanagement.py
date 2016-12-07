@@ -340,7 +340,7 @@ class BrowserManagementKeywords(KeywordGroup):
 
     def list_windows(self):
         """Return all current window handles as a list"""
-        return self._current_browser().get_window_handles()
+        return self._current_browser().window_handles
 
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
@@ -350,7 +350,7 @@ class BrowserManagementKeywords(KeywordGroup):
 
     def get_location(self):
         """Returns the current location."""
-        return self._current_browser().get_current_url()
+        return self._current_browser().current_url
 
     def get_locations(self):
         """Returns and logs current locations of all windows known to the browser."""
@@ -361,11 +361,11 @@ class BrowserManagementKeywords(KeywordGroup):
 
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
-        return self._current_browser().get_page_source()
+        return self._current_browser().page_source
 
     def get_title(self):
         """Returns title of current page."""
-        return self._current_browser().get_title()
+        return self._current_browser().title
 
     def location_should_be(self, url):
         """Verifies that current URL is exactly `url`."""

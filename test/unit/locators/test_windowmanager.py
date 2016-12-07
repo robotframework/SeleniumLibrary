@@ -307,7 +307,7 @@ class WindowManagerTests(unittest.TestCase):
         browser.get_current_window_handle = lambda: browser.current_window.handle
         browser.get_title = lambda: browser.current_window.title
         browser.get_current_url = lambda: browser.current_window.url
-        browser.get_window_handles = lambda: window_handles
+        browser.window_handles = window_handles
         browser.switch_to_window = switch_to_window
         browser.get_current_window_info = lambda: (
             browser.current_window.handle, browser.current_window.id, browser.current_window.name,

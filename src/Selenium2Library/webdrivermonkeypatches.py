@@ -14,9 +14,6 @@ class WebDriverMonkeyPatches:
             time.sleep(speed)
         return result
 
-    def get_current_url(self):
-        return self.current_url
-
     def get_current_window_handle(self):
         return self.current_window_handle
 
@@ -25,15 +22,6 @@ class WebDriverMonkeyPatches:
         id_ = id_ if id_ is not None else 'undefined'
         name, title, url = (att if att else 'undefined' for att in (name, title, url))
         return self.current_window_handle, id_, name, title, url
-
-    def get_page_source(self):
-        return self.page_source
-
-    def get_title(self):
-        return self.title
-
-    def get_window_handles(self):
-        return self.window_handles
 
     def current_window_is_main(self):
         return self.current_window_handle == self.window_handles[0];
@@ -46,12 +34,8 @@ class WebDriverMonkeyPatches:
             self._speed = float(0)
         return self._speed
 
-    RemoteWebDriver.get_title = get_title
-    RemoteWebDriver.get_current_url = get_current_url
-    RemoteWebDriver.get_page_source = get_page_source
     RemoteWebDriver.get_current_window_handle = get_current_window_handle
     RemoteWebDriver.get_current_window_info = get_current_window_info
-    RemoteWebDriver.get_window_handles = get_window_handles
     RemoteWebDriver.set_speed = set_speed
     RemoteWebDriver._get_speed = _get_speed
     RemoteWebDriver.execute = execute
