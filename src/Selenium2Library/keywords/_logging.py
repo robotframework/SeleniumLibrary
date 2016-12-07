@@ -1,13 +1,13 @@
 import os
-import sys
-from robot.api import logger
-from keywordgroup import KeywordGroup
-from robot.libraries.BuiltIn import BuiltIn
 
+from robot.api import logger
+from robot.libraries.BuiltIn import BuiltIn
 try:
     from robot.libraries.BuiltIn import RobotNotRunningError
-except ImportError:
+except ImportError:  # Support RF < 2.8.5
     RobotNotRunningError = AttributeError
+
+from .keywordgroup import KeywordGroup
 
 
 class _LoggingKeywords(KeywordGroup):

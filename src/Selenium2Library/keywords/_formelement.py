@@ -1,6 +1,7 @@
 import os
-from keywordgroup import KeywordGroup
-from selenium.common.exceptions import WebDriverException
+
+from .keywordgroup import KeywordGroup
+
 
 class _FormElementKeywords(KeywordGroup):
 
