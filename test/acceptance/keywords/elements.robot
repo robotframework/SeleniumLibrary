@@ -32,6 +32,32 @@ More Get Elements
     : FOR    ${checkbox}    IN    @{checkboxes}
     \    Checkbox Should Be Selected    ${checkbox}
 
+Get Parent Web Element Passing Element
+    [Documentation]  Get parent web element of the element passed
+    ${expected_parent}=     Get WebElement  //div[@id="div_id"]
+    ${element}=    Get WebElement    //div[@id="div_id"]/a
+    ${parent}=  Get Parent Webelement   ${element}
+    Should be equal     ${parent}   ${expected_parent}
+
+Get Parent Web Element Passing Locator
+    [Documentation]  Get parent web element of the locator passed
+    ${expected_parent}=     Get WebElement  //div[@id="div_id"]
+    ${parent}=  Get Parent Webelement   //div[@id="div_id"]/a
+    Should be equal     ${parent}   ${expected_parent}
+
+Get Child Web Element Passing Element
+    [Documentation]  Get parent web element of the element passed
+    @{expected_children}=     Get WebElements  //div[@id="first_div"]/a
+    ${element}=    Get WebElement    //div[@id="first_div"]
+    @{children}=  Get Child Webelements   ${element}
+    Lists should be equal   ${children}     ${expected_children}
+
+Get Child Web Element Passing Locator
+    [Documentation]  Get parent web element of the locator passed
+    @{expected_children}=     Get WebElements  //div[@id="first_div"]/a
+    @{children}=  Get Child Webelements   //div[@id="first_div"]
+    Lists should be equal   ${children}     ${expected_children}
+
 Assign Id To Element
     [Documentation]    Tests also Reload Page keyword.
     Page Should Not Contain Element    my id

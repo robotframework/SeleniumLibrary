@@ -35,6 +35,22 @@ class _ElementKeywords(KeywordGroup):
         """
         return self._element_find(locator, False, True)
 
+    def get_parent_webelement(self, locator):
+        """Returns the parent WebElement for the given locator.
+
+        See `introduction` for details about locating elements.
+        """
+        locator_element = self.get_webelement(locator)
+        return locator_element.find_element(by="xpath", value="parent::*")
+
+    def get_child_webelements(self, locator):
+        """Returns the child WebElements for the given locator.
+
+        See `introduction` for details about locating elements.
+        """
+        locator_element = self.get_webelement(locator)
+        return locator_element.find_elements(by="xpath", value="child::*")
+
     # Public, element lookups
 
     def current_frame_contains(self, text, loglevel='INFO'):

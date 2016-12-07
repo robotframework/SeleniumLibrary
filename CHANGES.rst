@@ -4,6 +4,8 @@ Release Notes
 1.8.1
 -----
 - Added 'Get Locations' keyword [thaffenden]
+- Added 'Get Parent Webelement' keyword [thaffenden]
+- Added 'Get Child Webelement' keyword [thaffenden]
 
 1.8.0
 -----
