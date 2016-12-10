@@ -1,19 +1,23 @@
+import time
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from keywordgroup import KeywordGroup
+
+from .keywordgroup import KeywordGroup
 
 
 class _AlertKeywords(KeywordGroup):
 
+    __ACCEPT_ALERT = 'accept'
+    __DISMISS_ALERT = 'dismiss'
+
     def __init__(self):
-        self._cancel_on_next_confirmation = False
+        self._next_alert_dismiss_type = self.__ACCEPT_ALERT
 
     # Public
 
     def input_text_into_prompt(self, text):
         """Types the given `text` into alert box.  """
-        alert = None
         try:
             alert = self._wait_alert()
             alert.send_keys(text)
@@ -30,7 +34,7 @@ class _AlertKeywords(KeywordGroup):
         will fail unless the alert is dismissed by this
         keyword or another like `Get Alert Message`.
         """
-        alert_text = self.get_alert_message()
+        alert_text = self._handle_alert(self.__ACCEPT_ALERT)
         if text and alert_text != text:
             raise AssertionError("Alert text should have been "
                                  "'%s' but was '%s'"
@@ -38,7 +42,7 @@ class _AlertKeywords(KeywordGroup):
 
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
-        self._cancel_on_next_confirmation = True
+        self._next_alert_dismiss_type = self.__DISMISS_ALERT
 
     def choose_ok_on_next_confirmation(self):
         """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
@@ -55,7 +59,7 @@ class _AlertKeywords(KeywordGroup):
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
         """
-        self._cancel_on_next_confirmation = False
+        self._next_alert_dismiss_type = self.__ACCEPT_ALERT
 
     def confirm_action(self):
         """Dismisses currently shown confirmation dialog and returns it's message.
@@ -74,8 +78,8 @@ class _AlertKeywords(KeywordGroup):
         | Click Button | Send | # Shows a confirmation dialog |
         | Confirm Action |    | # Chooses Cancel |
         """
-        text = self._close_alert(not self._cancel_on_next_confirmation)
-        self._cancel_on_next_confirmation = False
+        text = self._handle_alert(self._next_alert_dismiss_type)
+        self._next_alert_dismiss_type = self.__DISMISS_ALERT
         return text
 
     def get_alert_message(self, dismiss=True):
@@ -87,9 +91,9 @@ class _AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if dismiss:
-            return self._close_alert()
+            return self._handle_alert(self.__DISMISS_ALERT)
         else:
-            return self._read_alert()
+            return self._handle_alert()
 
     def dismiss_alert(self, accept=True):
         """ Returns true if alert was confirmed, false if it was dismissed
@@ -98,38 +102,39 @@ class _AlertKeywords(KeywordGroup):
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Get Alert Message`.
         """
-        return self._handle_alert(accept)
+        if accept:
+            return self._handle_alert(self.__ACCEPT_ALERT)
+        else:
+            return self._handle_alert()
 
-    # Private
+    def _handle_alert(self, dismiss_type=None):
+        """Alert re-try for Chrome
 
-    def _close_alert(self, confirm=True):
-        try:
-            text = self._read_alert()
-            self._handle_alert(confirm)
-            return text
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        Because Chrome has difficulties to handle alerts, like::
 
-    def _read_alert(self):
-        alert = None
-        try:
-            alert = self._wait_alert()
-            # collapse new lines chars
-            return ' '.join(alert.text.splitlines())
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        alert.text
+        alert.dismiss
 
-    def _handle_alert(self, confirm=True):
-        try:
-            alert = self._wait_alert()
-            if not confirm:
-                alert.dismiss()
-                return False
-            else:
-                alert.accept()
-                return True
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        This function creates a re-try funtionality to better support
+        alerts in Chrome.
+        """
+        retry = 0
+        while retry < 4:
+            try:
+                return self._alert_worker(dismiss_type)
+            except WebDriverException:
+                time.sleep(0.2)
+                retry += 1
+        raise RuntimeError('There were no alerts')
+
+    def _alert_worker(self, dismiss_type=None):
+        alert = self._wait_alert()
+        text = ' '.join(alert.text.splitlines())
+        if dismiss_type == self.__DISMISS_ALERT:
+            alert.dismiss()
+        elif dismiss_type == self.__ACCEPT_ALERT:
+            alert.accept()
+        return text
 
     def _wait_alert(self):
         return WebDriverWait(self._current_browser(), 1).until(

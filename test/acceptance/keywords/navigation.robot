@@ -2,6 +2,7 @@
 Documentation     Tests navigation
 Test Setup        Go To Page "links.html"
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Variables ***
 ${LINKS TITLE}    (root)/links.html
@@ -15,6 +16,7 @@ Go To
 
 Go Back
     [Documentation]    Go Back
+    [Tags]    Known Issue Safari
     Click Link    Relative
     Title Should Be    ${INDEX TITLE}
     Go Back
@@ -28,6 +30,7 @@ Click Link
 
 Click Link With Whitespace
     [Documentation]    Click Link With Whitespace
+    [Tags]    Known Issue Safari
     Click Link    Link with whitespace
     Verify Location Is "target/second.html"
 

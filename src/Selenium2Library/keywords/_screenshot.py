@@ -1,8 +1,11 @@
-import robot
-import os, errno
+import errno
+import os
 
-from Selenium2Library import utils
-from keywordgroup import KeywordGroup
+from robot.utils import get_link_path
+
+from Selenium2Library.utils import events
+
+from .keywordgroup import KeywordGroup
 
 
 class _ScreenshotKeywords(KeywordGroup):
@@ -28,9 +31,8 @@ class _ScreenshotKeywords(KeywordGroup):
         if persist is False:
             self._screenshot_path_stack.append(self.screenshot_root_directory)
             # Restore after current scope ends
-            utils.events.on('scope_end', 'current',
-                            self._restore_screenshot_directory)
-
+            events.on('scope_end', 'current',
+                      self._restore_screenshot_directory)
         self.screenshot_root_directory = path
 
     def capture_page_screenshot(self,
@@ -130,7 +132,7 @@ class _ScreenshotKeywords(KeywordGroup):
         screenshotdir = self._get_screenshot_directory()
         logdir = self._get_log_dir()
         path = os.path.join(screenshotdir, filename)
-        link = robot.utils.get_link_path(path, logdir)
+        link = get_link_path(path, logdir)
         return path, link
 
     def _get_screenshot_index(self, filename):

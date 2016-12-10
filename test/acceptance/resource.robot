@@ -4,19 +4,19 @@ Library           Collections
 Library           OperatingSystem
 
 *** Variable ***
-${SERVER}         localhost:7000
-${BROWSER}        firefox
-${REMOTE_URL}     ${NONE}
-${DESIRED_CAPABILITIES}    ${NONE}
-${ROOT}           http://${SERVER}/html
-${FRONT PAGE}     ${ROOT}/
-${SPEED}          0
+${SERVER}=         localhost:7000
+${BROWSER}=        firefox
+${REMOTE_URL}=     ${NONE}
+${DESIRED_CAPABILITIES}=    ${NONE}
+${ROOT}=           http://${SERVER}/html
+${FRONT_PAGE}=     ${ROOT}/
+${SPEED}=          0
 
 *** Keyword ***
 Open Browser To Start Page
     [Documentation]    This keyword also tests 'Set Selenium Speed' and 'Set Selenium Timeout'
     ...    against all reason.
-    ${default speed}    ${default timeout} =    Open Browser To Start Page Without Testing Default Options
+    ${default speed}    ${default timeout}=    Open Browser To Start Page Without Testing Default Options
     Should Be Equal    ${default speed}    0 seconds
     Should Be Equal    ${default timeout}    5 seconds
 

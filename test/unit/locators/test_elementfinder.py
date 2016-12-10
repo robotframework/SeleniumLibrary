@@ -1,8 +1,10 @@
 import unittest
-import os
-from Selenium2Library.locators import ElementFinder
-from mockito import *
+
+from mockito import any, mock, verify, when
 from robot.utils.asserts import assert_raises_with_msg
+
+from Selenium2Library.locators import ElementFinder
+
 
 class ElementFinderTests(unittest.TestCase):
 
@@ -271,7 +273,6 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "partial link=my link", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
         
-
     def test_find_by_css_selector(self):
         finder = ElementFinder()
         browser = mock()
@@ -282,6 +283,18 @@ class ElementFinderTests(unittest.TestCase):
         result = finder.find(browser, "css=#test1")
         self.assertEqual(result, elements)
         result = finder.find(browser, "css=#test1", tag='a')
+        self.assertEqual(result, [elements[1], elements[3]])
+
+    def test_find_by_class_names(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_class_name("test1").thenReturn(elements)
+
+        result = finder.find(browser, "class=test1")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "class=test1", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
 
     def test_find_by_tag_name(self):

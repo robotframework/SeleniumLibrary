@@ -12,7 +12,7 @@ Click Element
 
 Double Click Element
     [Documentation]    LOG 2 Double clicking element 'doubleClickButton'.
-    [Tags]    Known Issue - Firefox
+    [Tags]    Known Issue Safari    Known Issue Firefox
     Double Click Element    doubleClickButton
     Element Text Should Be    output    double clicked
 

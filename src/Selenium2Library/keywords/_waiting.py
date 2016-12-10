@@ -1,6 +1,9 @@
 import time
-import robot
-from keywordgroup import KeywordGroup
+
+from robot.utils import secs_to_timestr, timestr_to_secs
+
+from .keywordgroup import KeywordGroup
+
 
 class _WaitingKeywords(KeywordGroup):
 
@@ -231,7 +234,7 @@ class _WaitingKeywords(KeywordGroup):
         self._wait_until_no_error(timeout, wait_func)
 
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
         maxtime = time.time() + timeout
         while True:
             timeout_error = wait_func(*args)
@@ -241,5 +244,5 @@ class _WaitingKeywords(KeywordGroup):
             time.sleep(0.2)
 
     def _format_timeout(self, timeout):
-        timeout = robot.utils.timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
-        return robot.utils.secs_to_timestr(timeout)
+        timeout = timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        return secs_to_timestr(timeout)

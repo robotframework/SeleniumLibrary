@@ -72,11 +72,12 @@ Get Vertical Position
 
 
 Get Element Size
-	${width}  ${height}=  Get Element Size  link=Link
-	Should be True  ${height} > ${0}
-	Should be True  ${width} > ${0}
-	Run Keyword And Expect Error  ValueError: Element locator 'non-existent' did not match any elements.  Get Element Size  non-existent
+    ${width}  ${height}=  Get Element Size  link=Link
+    Should be True  ${height} > ${0}
+    Should be True  ${width} > ${0}
+    Run Keyword And Expect Error  ValueError: Element locator 'non-existent' did not match any elements.  Get Element Size  non-existent
 
 Get Empty Element Size
+    [Tags]  Known Issue Internet Explorer
     ${width}  ${height}=  Get Element Size  id=emptyDiv
-  	Should be True  ${height} == 0
+    Should be True  ${height} == 0

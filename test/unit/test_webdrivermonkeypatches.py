@@ -1,7 +1,10 @@
 import unittest
+
+from mockito import when
+
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
-from mockito import *
+
 
 SCRIPT = "return [ window.id, window.name, document.title, document.URL ];"
 HANDLE = "17c3dc18-0443-478b-aec6-ed7e2a5da7e1"

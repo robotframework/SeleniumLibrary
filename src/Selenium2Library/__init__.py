@@ -1,9 +1,10 @@
-import os
-from keywords import *
-from version import VERSION
-from utils import LibraryListener
+from .keywords import *
+from .utils import LibraryListener
+from .version import VERSION
+
 
 __version__ = VERSION
+
 
 class Selenium2Library(
     _LoggingKeywords,
@@ -20,8 +21,12 @@ class Selenium2Library(
     _AlertKeywords
 ):
     """Selenium2Library is a web testing library for Robot Framework.
+    
+    This document is about using Selenium2Library. For information about
+    installation, support, and more please visit the
+    [https://github.com/robotframework/Selenium2Library|project page].
 
-    It uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
+    Selenium2Library uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
     See http://seleniumhq.org/docs/03_webdriver.html for more information on Selenium 2
     and WebDriver.
 
@@ -66,6 +71,7 @@ class Selenium2Library(
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
     | partial link | Click Element `|` partial link=y Lin  | Matches anchor elements by their partial link text |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
+    | class      | Click Element `|` class=my_class       | Matches by class name selector                  |
     | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
     | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
@@ -130,8 +136,8 @@ class Selenium2Library(
 
     All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
     or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
-    For more information about the time syntax see:
-    http://robotframework.googlecode.com/svn/trunk/doc/userguide/RobotFrameworkUserGuide.html#time-format.
+    For more information about the time syntax see the
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
     """
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'

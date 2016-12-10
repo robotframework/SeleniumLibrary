@@ -3,6 +3,7 @@ Documentation     Tests running on failure
 Suite Setup       Run Keywords    Go To Front Page    Set Info Loglevel
 Suite Teardown    Set Debug Loglevel
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Variables ***
 ${PAGE TITLE}     (root)/index.html

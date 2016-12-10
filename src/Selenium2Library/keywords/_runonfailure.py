@@ -1,7 +1,7 @@
-from robot.libraries import BuiltIn
-from keywordgroup import KeywordGroup
+from robot.libraries.BuiltIn import BuiltIn
 
-BUILTIN = BuiltIn.BuiltIn()
+from .keywordgroup import KeywordGroup
+
 
 class _RunOnFailureKeywords(KeywordGroup):
 
@@ -32,9 +32,6 @@ class _RunOnFailureKeywords(KeywordGroup):
         | Register Keyword To Run On Failure  | Log Source | # Run `Log Source` on failure. |
         | ${previous kw}= | Register Keyword To Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
         | Register Keyword To Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
-
-        This run-on-failure functionality only works when running tests on Python/Jython 2.4
-        or newer and it does not work on IronPython at all.
         """
         old_keyword = self._run_on_failure_keyword
         old_keyword_text = old_keyword if old_keyword is not None else "No keyword"
@@ -56,7 +53,7 @@ class _RunOnFailureKeywords(KeywordGroup):
             return
         self._running_on_failure_routine = True
         try:
-            BUILTIN.run_keyword(self._run_on_failure_keyword)
+            BuiltIn().run_keyword(self._run_on_failure_keyword)
         except Exception as err:
             self._run_on_failure_error(err)
         finally:

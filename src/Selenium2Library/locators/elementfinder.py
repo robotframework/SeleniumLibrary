@@ -1,6 +1,7 @@
-from Selenium2Library import utils
 from robot.api import logger
 from robot.utils import NormalizedDict
+
+from Selenium2Library.utils import escape_xpath_value, events
 
 
 class ElementFinder(object):
@@ -15,6 +16,7 @@ class ElementFinder(object):
             'link': self._find_by_link_text,
             'partial link': self._find_by_partial_link_text,
             'css': self._find_by_css_selector,
+            'class': self._find_by_class_name,
             'jquery': self._find_by_sizzle_selector,
             'sizzle': self._find_by_sizzle_selector,
             'tag': self._find_by_tag_name,
@@ -44,7 +46,7 @@ class ElementFinder(object):
 
         if not persist:
             # Unregister after current scope ends
-            utils.events.on('scope_end', 'current', self.unregister, strategy.name)
+            events.on('scope_end', 'current', self.unregister, strategy.name)
 
     def unregister(self, strategy_name):
         if strategy_name in self._default_strategies:
@@ -108,6 +110,11 @@ class ElementFinder(object):
             browser.find_elements_by_css_selector(criteria),
             tag, constraints)
 
+    def _find_by_class_name(self, browser, criteria, tag, constraints):
+        return self._filter_elements(
+            browser.find_elements_by_class_name(criteria),
+            tag, constraints)
+
     def _find_by_tag_name(self, browser, criteria, tag, constraints):
         return self._filter_elements(
             browser.find_elements_by_tag_name(criteria),
@@ -127,7 +134,7 @@ class ElementFinder(object):
         if tag is not None:
             key_attrs = self._key_attrs.get(tag, key_attrs)
 
-        xpath_criteria = utils.escape_xpath_value(criteria)
+        xpath_criteria = escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
         xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
@@ -200,7 +207,7 @@ class ElementFinder(object):
             if attr in key_attrs:
                 if url is None or xpath_url is None:
                     url = self._get_base_url(browser) + "/" + criteria
-                    xpath_url = utils.escape_xpath_value(url)
+                    xpath_url = escape_xpath_value(url)
                 attrs.append("%s=%s" % (attr, xpath_url))
         return attrs
 
@@ -218,7 +225,7 @@ class ElementFinder(object):
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0]
                 criteria = locator_parts[2].strip()
-        return (prefix, criteria)
+        return prefix, criteria
 
     def _normalize_result(self, elements):
         if not isinstance(elements, list):
