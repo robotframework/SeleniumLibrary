@@ -3,6 +3,7 @@ Documentation     Test textfields
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Variables         variables.py
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Get Value From Text Field

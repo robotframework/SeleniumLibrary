@@ -60,6 +60,7 @@ Click button created with <button> by tag content
 Choose File
     [Documentation]    Choose File
     [Setup]    Navigate To File Upload Form And Create Temp File To Upload
+    [Tags]  Known Issue Internet Explorer    Known Issue Safari
     Choose File    file_to_upload    ${CURDIR}${/}temp.txt
     ${dep_browser}=    Set Variable If
     ...    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'
