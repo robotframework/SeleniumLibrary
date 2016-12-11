@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from os.path import abspath, dirname, join
-
 from setuptools import setup
 
 

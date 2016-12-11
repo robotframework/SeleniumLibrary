@@ -1,6 +1,6 @@
-from browsercache import BrowserCache
-from librarylistener import LibraryListener
-import events
+from . import events
+from .browsercache import BrowserCache
+from .librarylistener import LibraryListener
 
 
 def escape_xpath_value(value):

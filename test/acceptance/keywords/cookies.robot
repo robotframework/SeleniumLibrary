@@ -31,6 +31,7 @@ App Sees Cookie Set By Selenium
 
 Delete Cookie
     [Documentation]    Delete Cookie
+    [Tags]    Known Issue Safari
     Delete Cookie    test
     ${cookies} =    Get Cookies
     Should Be Equal    ${cookies}    another=value
@@ -42,6 +43,7 @@ Non-existent Cookie
 
 Get Cookies When There Are None
     [Documentation]    Get Cookies When There Are None
+    [Tags]    Known Issue Safari
     Delete All Cookies
     ${cookies}=    Get Cookies
     Should Be Equal    ${cookies}    ${EMPTY}

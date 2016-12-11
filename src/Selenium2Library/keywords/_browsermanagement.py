@@ -1,12 +1,17 @@
-import os
-import robot
+import os.path
+
 from robot.errors import DataError
+from robot.utils import secs_to_timestr, timestr_to_secs
+
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchWindowException
+
 from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
-from keywordgroup import KeywordGroup
-from selenium.common.exceptions import NoSuchWindowException
+
+from .keywordgroup import KeywordGroup
+
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
@@ -26,6 +31,7 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'safari': "_make_safari",
                  'edge': "_make_edge"
                 }
+
 
 class _BrowserManagementKeywords(KeywordGroup):
 
@@ -346,6 +352,13 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Returns the current location."""
         return self._current_browser().get_current_url()
 
+    def get_locations(self):
+        """Returns and logs current locations of all windows known to the browser."""
+        return self._log_list(
+            [window_info[4] for window_info in
+             self._window_manager._get_window_infos(self._current_browser())]
+        )
+
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
         return self._current_browser().get_page_source()
@@ -421,19 +434,19 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Gets the delay in seconds that is waited after each Selenium command.
 
         See `Set Selenium Speed` for an explanation."""
-        return robot.utils.secs_to_timestr(self._speed_in_secs)
+        return secs_to_timestr(self._speed_in_secs)
 
     def get_selenium_timeout(self):
         """Gets the timeout in seconds that is used by various keywords.
 
         See `Set Selenium Timeout` for an explanation."""
-        return robot.utils.secs_to_timestr(self._timeout_in_secs)
+        return secs_to_timestr(self._timeout_in_secs)
 
     def get_selenium_implicit_wait(self):
         """Gets the wait in seconds that is waited by Selenium.
 
         See `Set Selenium Implicit Wait` for an explanation."""
-        return robot.utils.secs_to_timestr(self._implicit_wait_in_secs)
+        return secs_to_timestr(self._implicit_wait_in_secs)
 
     def set_selenium_speed(self, seconds):
         """Sets the delay in seconds that is waited after each Selenium command.
@@ -446,7 +459,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Set Selenium Speed | .5 seconds |
         """
         old_speed = self.get_selenium_speed()
-        self._speed_in_secs = robot.utils.timestr_to_secs(seconds)
+        self._speed_in_secs = timestr_to_secs(seconds)
         for browser in self._cache.browsers:
             browser.set_speed(self._speed_in_secs)
         return old_speed
@@ -469,7 +482,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Set Selenium Timeout | ${orig timeout} |
         """
         old_timeout = self.get_selenium_timeout()
-        self._timeout_in_secs = robot.utils.timestr_to_secs(seconds)
+        self._timeout_in_secs = timestr_to_secs(seconds)
         for browser in self._cache.get_open_browsers():
             browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
@@ -488,7 +501,7 @@ class _BrowserManagementKeywords(KeywordGroup):
         | Set Selenium Implicit Wait | ${orig wait} |
         """
         old_wait = self.get_selenium_implicit_wait()
-        self._implicit_wait_in_secs = robot.utils.timestr_to_secs(seconds)
+        self._implicit_wait_in_secs = timestr_to_secs(seconds)
         for browser in self._cache.get_open_browsers():
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
@@ -506,7 +519,7 @@ class _BrowserManagementKeywords(KeywordGroup):
 
         See also `Set Selenium Implicit Wait`.
         """
-        implicit_wait_in_secs = robot.utils.timestr_to_secs(seconds)
+        implicit_wait_in_secs = timestr_to_secs(seconds)
         self._current_browser().implicitly_wait(implicit_wait_in_secs)
 
     # Private

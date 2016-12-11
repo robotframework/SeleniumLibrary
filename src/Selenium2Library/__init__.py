@@ -1,9 +1,10 @@
-import os
-from keywords import *
-from version import VERSION
-from utils import LibraryListener
+from .keywords import *
+from .utils import LibraryListener
+from .version import VERSION
+
 
 __version__ = VERSION
+
 
 class Selenium2Library(
     _LoggingKeywords,
