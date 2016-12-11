@@ -49,17 +49,20 @@ def process_output(inpath, outpath=None):
     result.save(outpath)
     return result.return_code
 
+
 def _process_suite(suite):
     for subsuite in suite.suites:
         _process_suite(subsuite)
     for test in suite.tests:
         _process_test(test)
 
+
 def _process_test(test):
     exp = _Expected(test.doc)
     _check_status(test, exp)
     if test.status == 'PASS':
         _check_logs(test, exp)
+
 
 def _check_status(test, exp):
     if exp.status != test.status:
@@ -78,6 +81,7 @@ def _check_status(test, exp):
         test.status = 'PASS'
         test.message = 'Original test failed as expected.'
 
+
 def _message_matches(actual, expected):
     if actual == expected:
         return True
@@ -90,6 +94,7 @@ def _message_matches(actual, expected):
         if actual.startswith(start):
             return True
     return False
+
 
 def _check_logs(test, exp):
     for kw_indices, msg_index, level, message in exp.logs:
@@ -112,6 +117,7 @@ def _check_logs(test, exp):
             if _check_log_level(level, test, kw, msg_index):
                 _check_log_message(message, test, kw, msg_index)
 
+
 def _check_log_level(expected, test, kw, index):
     actual = kw.messages[index].level
     if actual == expected:
@@ -122,6 +128,7 @@ def _check_log_level(expected, test, kw, index):
                     % (index+1, kw.name, expected,
                        actual, kw.messages[index].message))
     return False
+
 
 def _check_log_message(expected, test, kw, index):
     actual = kw.messages[index].message.strip()
@@ -172,7 +179,7 @@ class _Expected:
         return level, message
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     import sys
     import os
 

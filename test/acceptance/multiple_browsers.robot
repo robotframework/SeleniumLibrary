@@ -3,6 +3,7 @@ Documentation     Several instances of browser
 Suite Setup       Open Two Browsers And Register Indexes
 Suite Teardown    Close All Browsers
 Resource          resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Last Opened Browser Should Be Active

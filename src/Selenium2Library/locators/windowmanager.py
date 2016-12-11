@@ -1,7 +1,5 @@
-from types import *
-from robot import utils
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchWindowException
+
 
 class WindowManager(object):
 
