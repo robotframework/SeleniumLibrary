@@ -5,16 +5,8 @@ from selenium.webdriver.remote.webelement import WebElement
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from Selenium2Library.keywords.keywordgroup import KeywordGroup
 
-try:
-    basestring  # attempt to evaluate basestring
-
-    def isstr(s):
-        return isinstance(s, basestring)
-except NameError:
-    def isstr(s):
-        return isinstance(s, str)
+from .keywordgroup import KeywordGroup
 
 
 class _ElementKeywords(KeywordGroup):
