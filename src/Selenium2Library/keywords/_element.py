@@ -607,7 +607,7 @@ return !element.dispatchEvent(evt);
     # Public, xpath
 
     def get_matching_xpath_count(self, xpath):
-        """Returns number of elements matching `xpath`
+        """Returns number of elements matching `xpath` as a string.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
 
