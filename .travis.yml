@@ -21,7 +21,7 @@ matrix:
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
-    - python: "3.3" # For PR and cron
+    - python: "2.7" # For PR and cron
       env:
         - BROWSER=chrome
         - SELENIUM=3.0.2
