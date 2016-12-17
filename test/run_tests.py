@@ -59,8 +59,6 @@ except ImportError:
 import env
 from run_unit_tests import run_unit_tests
 
-TRAVIS_PRS = ['push', 'pull_request', 'api']
-
 ROBOT_OPTIONS = [
     '--doc', 'Selenium2Library acceptance tests with {browser}',
     '--outputdir', env.RESULTS_DIR,
@@ -143,18 +141,22 @@ def log_start(command_list, sauceusername, saucekey):
 
 
 def get_sauce_conf(browser, sauceusername, saucekey):
-    return [
-        '--variable', 'SAUCE_USERNAME:{}'.format(sauceusername),
-        '--variable', 'SAUCE_ACCESS_KEY:{}'.format(saucekey),
-        '--variable',
-        'REMOTE_URL:http://{}:{}@ondemand.saucelabs.com:80/wd/hub'.format(
-            sauceusername, saucekey
-        ),
-        '--variable',
-        'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0}'.format(
-            env.TRAVIS_JOB_NUMBER, browser
-        )
-    ]
+    if browser == 'chrome' and env.TRAVIS:
+        conf = []
+    else:
+        conf = [
+            '--variable', 'SAUCE_USERNAME:{}'.format(sauceusername),
+            '--variable', 'SAUCE_ACCESS_KEY:{}'.format(saucekey),
+            '--variable',
+            'REMOTE_URL:http://{}:{}@ondemand.saucelabs.com:80/wd/hub'.format(
+                sauceusername, saucekey
+            ),
+            '--variable',
+            'DESIRED_CAPABILITIES:build:{0}-{1},version:54.0,tunnel-identifier:{0},platform:Windows 10'.format(
+                env.TRAVIS_JOB_NUMBER, browser
+            )
+        ]
+    return conf
 
 
 def process_output(browser, suite):
@@ -203,12 +205,13 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
-    browser = args.browser.lower()
-    if browser is not 'chrome' and env.TRAVIS_EVENT_TYPE in TRAVIS_PRS:
+    browser = args.browser.lower().strip()
+    if browser != 'chrome' and env.TRAVIS_EVENT_TYPE != 'cron':
         print(
-            'Can not run test with browser {} from SauceLabs\n'
+            'Can not run test with browser "{}" from SauceLabs\n'
             'SauceLabs can be used only when running with corn and from '
-            'Selenium2Library master banch'.format(browser)
+            'Selenium2Library master banch, but your event type '
+            'was "{}"'.format(browser, env.TRAVIS_EVENT_TYPE)
         )
         sys.exit(0)
     sauceusername, saucekey = sauce_credentials(

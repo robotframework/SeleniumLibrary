@@ -11,7 +11,7 @@ HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, "testserver", "testserver.py")
 SRC_DIR = os.path.join(ROOT_DIR, "..", "src")
 
 TRAVIS = os.environ.get("TRAVIS", False)
-TRAVIS_EVENT_TYPE = os.environ.get("TRAVIS_EVENT_TYPE", [])
+TRAVIS_EVENT_TYPE = os.environ.get("TRAVIS_EVENT_TYPE", None)
 TRAVIS_JOB_NUMBER = os.environ.get("TRAVIS_JOB_NUMBER", "localtunnel")
 SAUCE_USERNAME = os.environ.get("SAUCE_USERNAME", None)
 SAUCE_ACCESS_KEY = os.environ.get("SAUCE_ACCESS_KEY", None)
