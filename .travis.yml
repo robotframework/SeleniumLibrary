@@ -7,6 +7,11 @@ addons:
       - google-chrome
     packages:
       - google-chrome-stable
+before_install:
+  - wget http://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - sudo chmod u+x chromedriver
+  - sudo mv chromedriver /usr/bin/
 install:
   - pip install .
   - pip install -r requirements.txt
