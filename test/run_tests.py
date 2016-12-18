@@ -152,7 +152,7 @@ def get_sauce_conf(browser, sauceusername, saucekey):
                 sauceusername, saucekey
             ),
             '--variable',
-            'DESIRED_CAPABILITIES:build:{0}-{1},version:54.0,tunnel-identifier:{0},platform:Windows 10'.format(
+            'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0}'.format(
                 env.TRAVIS_JOB_NUMBER, browser
             )
         ]
