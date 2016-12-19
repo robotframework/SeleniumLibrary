@@ -2,6 +2,11 @@ from . import events
 from .browsercache import BrowserCache
 from .librarylistener import LibraryListener
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
 
 def escape_xpath_value(value):
     value = unicode(value)
