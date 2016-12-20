@@ -36,9 +36,9 @@ https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
 
 Examples:
 
-  run_tests.py python chrome
-  run_tests.py jython firefox --suite list
-  run_tests.py python chrome --scusername your_username --sckey account_key
+  run_tests.py chrome
+  run_tests.py --suite list --interpreter jython firefox
+  run_tests.py chrome --scusername your_username --sckey account_key
 """
 
 from __future__ import print_function
@@ -206,11 +206,11 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     browser = args.browser.lower().strip()
-    if browser != 'chrome' and env.TRAVIS_EVENT_TYPE != 'cron':
+    if env.TRAVIS and browser != 'chrome' and env.TRAVIS_EVENT_TYPE != 'cron':
         print(
             'Can not run test with browser "{}" from SauceLabs\n'
-            'SauceLabs can be used only when running with corn and from '
-            'Selenium2Library master banch, but your event type '
+            'SauceLabs can be used only when running with cron and from '
+            'Selenium2Library master branch, but your event type '
             'was "{}"'.format(browser, env.TRAVIS_EVENT_TYPE)
         )
         sys.exit(0)
