@@ -2,24 +2,51 @@ addons:
   firefox: latest-esr
 language: python
 sudo: false
-python:
-  - "2.7"
 install:
-  #- pip install pep8 --use-mirrors
-  #- pip install pyflakes --use-mirrors
-  - pip install robotframework
-  - pip install selenium==2.53.6
-  - pip install decorator
-  - pip install mockito
-  #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
+  - pip install .
+  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 script:
-  - "firefox --version"
-  - "python test/run_tests.py python $BROWSER --noncritical known_issue_-_travisci"
+  - "if [[ -n ${SELENIUM_VERSION+x} ]]; then pip install -U selenium==${SELENIUM_VERSION}; fi"
+  - "python test/run_tests.py python \"$BROWSER\""
 env:
-  matrix:
-  - BROWSER=firefox
-  #- BROWSER=ie # will be added when we have completed SauceLabs CI
-  #- BROWSER=safari # will be added after #247 merged
+  global:
+    - secure: "QyY0j8C+hVhsGLv4YU0UMvLm5wBDg6xT5J0Ee77C/JAQ6vcdCMpTfWI8oDxTZb7pBhpDkYuNe747yCYF5PrdBYQbO08FilxctReuJfMXcH44rZC5q49mUmPamkvg1LkzIWuC1s9uKnjlvyDT5ojuPXZl2Vn0gIhSIg+yOyBkM1U="
+    - secure: "HJaJTYauaBZODMDkbnRVsiCk+t2uVtztkkJ5V4dXSnE1uIBms2PVbufQwb+YNvzHkGheLtpnt/hLM1HhmSFgUtOCf+eumQ6kaLR2KRVEysXwWJzgZoLBidNBOy5rvAIsc9JJbDaIgYVGzyaJGTP9AMb8CyvIPE//lH10sf+GB7g="
+matrix:
+  include:
+    - os: linux
+      env:
+        - BROWSER=firefox
+        - SELENIUM_VERSION=2.53.6
+      addons:
+        firefox: "47.0.1"
+      python: "2.7"
+    - os: linux
+      env:
+        - BROWSER=chrome
+      addons:
+        sauce_connect: true
+      python: "2.7"
+    - os: linux
+      env:
+        - BROWSER=firefox
+        - SELENIUM_VERSION=2.53.6
+      addons:
+        sauce_connect: true
+      python: "3.4"
+    - os: linux
+      env:
+        - BROWSER="internet explorer"
+      addons:
+        sauce_connect: true
+      python: "2.7"
+    - os: linux
+      env:
+        - BROWSER=safari
+      addons:
+        sauce_connect: true
+      python: "2.7"

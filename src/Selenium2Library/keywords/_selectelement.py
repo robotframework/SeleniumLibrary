@@ -1,6 +1,7 @@
-from selenium.webdriver.support.ui import Select
-from keywordgroup import KeywordGroup
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
+
+from .keywordgroup import KeywordGroup
 
 
 class _SelectElementKeywords(KeywordGroup):

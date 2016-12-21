@@ -2,6 +2,7 @@
 Documentation     Tests waiting
 Test Setup        Go To Page "javascript/delayed_events.html"
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Wait For Condition

@@ -1,5 +1,6 @@
 from robot.utils import ConnectionCache
 
+
 class BrowserCache(ConnectionCache):
 
     def __init__(self):

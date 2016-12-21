@@ -1,7 +1,10 @@
 import unittest
-from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywords
+
+from mockito import mock, verify, verifyNoMoreInteractions
 from selenium import webdriver
-from mockito import *
+
+from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywords
+
 
 class BrowserManagementTests(unittest.TestCase): 
 

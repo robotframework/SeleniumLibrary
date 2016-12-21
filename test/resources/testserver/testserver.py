@@ -1,9 +1,9 @@
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/336012
 
+import os
+import httplib
 import SimpleHTTPServer
 import BaseHTTPServer
-import httplib
-import os
 import socket
 
 
@@ -117,7 +117,7 @@ class HttpEchoer(socket._fileobject):
         sys.stdout.flush()
         super(HttpEchoer, self).write(data)
 
-
+        
 def stop_server(port=7000):
     """send QUIT request to http server running on localhost:<port>"""
     conn = httplib.HTTPConnection("localhost:%d" % port)

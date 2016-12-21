@@ -1,9 +1,11 @@
 import unittest
-import os
-from Selenium2Library.locators import WindowManager
-from mockito import *
 import uuid
+
+from mockito import mock
+
+from Selenium2Library.locators import WindowManager
 from selenium.common.exceptions import NoSuchWindowException
+
 
 class WindowManagerTests(unittest.TestCase):
 
@@ -220,11 +222,7 @@ class WindowManagerTests(unittest.TestCase):
             { 'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html' },
             { 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html' },
             { 'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html' })
-
-        try:
-            self.assertRaises(ValueError, manager.select, browser, "win-1")
-        except ValueError as e:
-            self.assertEqual(context.exception.message, "Unable to locate window with name or title 'win-1'")
+        self.assertRaises(ValueError, manager.select, browser, "win-1")
 
     def test_select_with_sloppy_prefix(self):
         manager = WindowManager()
