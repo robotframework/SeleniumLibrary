@@ -1,46 +1,4 @@
 #!/usr/bin/env python
-
-"""Script to run Selenium2Library acceptance tests.
-
-Tests are executed using Robot Framework and results verified automatically
-afterwards using `robotstatuschecker` tool. The tool can be installed using
-`pip install robotstatuschecker` and more information about it can be found
-from https://github.com/robotframework/statuschecker/. Notice that initially
-some tests fail.
-
-Usage:
-
-  run_tests.py browser [options]
-
-Arguments:
-
-  browser:        Any browser supported by the library (e.g. `chrome`or
-                  `firefox`)
-  --interpreter:  Any Python interpreter supported by the library (e.g.
-                  `python`, `jython` or `c:\\Python27\\python.exe`). By
-                  default set to `python`.
-  --suite:        Selects the test suites by name.
-  --scusername:   Username to access Sauce Labs to order browsers when
-                  running test from local computer.
-  --sckey:        Access key for Sauce Labs account.
-
-When running test by using browser from Sauce labs, it is required that
-the Sauce Connect is used. The Sauce Connect allows the browser from Sauce Labs
-reach the acceptance test webserver. The acceptance test uses tunnel with
-name `localtunnel` and therefore when establishing  the Sauce Connect tunnel
-use the following command:
-`bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel`
-
-More details and to downlaod Sauce Connect visit:
-https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
-
-Examples:
-
-  run_tests.py chrome
-  run_tests.py --suite list --interpreter jython firefox
-  run_tests.py chrome --scusername your_username --sckey account_key
-"""
-
 from __future__ import print_function
 
 from contextlib import contextmanager
@@ -85,12 +43,14 @@ def unit_tests():
         sys.exit(failures)
 
 
-def acceptance_tests(interpreter, browser, suite, sauceusername, saucekey):
+def acceptance_tests(interpreter, browser, rf_options=[],
+                     sauce_username=None, sauce_key=None):
     if not os.path.exists(env.RESULTS_DIR):
         os.mkdir(env.RESULTS_DIR)
     with http_server():
-        execute_tests(interpreter, browser, suite, sauceusername, saucekey)
-    failures = process_output(browser, suite)
+        execute_tests(interpreter, browser, rf_options,
+                      sauce_username, sauce_key)
+    failures = process_output(browser, rf_options)
     if failures:
         print('\n{} critical test{} failed.'
               .format(failures, 's' if failures != 1 else ''))
@@ -112,27 +72,29 @@ def http_server():
         serverlog.close()
 
 
-def execute_tests(interpreter, browser, suite, sauceusername, saucekey):
+def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
+    options = []
     runner = [interpreter, '-m', 'robot.run']
-    options = [opt.format(browser=browser,
-                          py_version=interpreter + sys.version[:3])
-               for opt in ROBOT_OPTIONS]
-    if sauceusername and saucekey:
-        options.extend(get_sauce_conf(browser, sauceusername, saucekey))
+    options.extend(
+        [opt.format(browser=browser,
+         py_version=interpreter + sys.version[:3])
+            for opt in ROBOT_OPTIONS]
+    )
+    options += rf_options
+    if sauce_username and sauce_key:
+        options.extend(get_sauce_conf(browser, sauce_username, sauce_key))
     command = runner
-    if suite:
-        command += ['-s', suite]
     command += options + [env.ACCEPTANCE_TEST_DIR]
-    log_start(command, sauceusername, saucekey)
+    log_start(command, sauce_username, sauce_key)
     syslog = os.path.join(env.RESULTS_DIR, 'syslog.txt')
     subprocess.call(
         command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog)
     )
 
 
-def log_start(command_list, sauceusername, saucekey):
+def log_start(command_list, *hiddens):
     command = subprocess.list2cmdline(command_list)
-    for hidden in [sauceusername, saucekey]:
+    for hidden in hiddens:
         if hidden:
             command = command.replace(hidden, '*' * len(hidden))
     print()
@@ -140,82 +102,121 @@ def log_start(command_list, sauceusername, saucekey):
     print(command)
 
 
-def get_sauce_conf(browser, sauceusername, saucekey):
+def get_sauce_conf(browser, sauce_username, sauce_key):
     if browser == 'chrome' and env.TRAVIS:
-        conf = []
-    else:
-        conf = [
-            '--variable', 'SAUCE_USERNAME:{}'.format(sauceusername),
-            '--variable', 'SAUCE_ACCESS_KEY:{}'.format(saucekey),
-            '--variable',
-            'REMOTE_URL:http://{}:{}@ondemand.saucelabs.com:80/wd/hub'.format(
-                sauceusername, saucekey
-            ),
-            '--variable',
-            'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0}'.format(
-                env.TRAVIS_JOB_NUMBER, browser
-            )
-        ]
-    return conf
+        return []
+    return [
+        '--variable', 'SAUCE_USERNAME:{}'.format(sauce_username),
+        '--variable', 'SAUCE_ACCESS_KEY:{}'.format(sauce_key),
+        '--variable',
+        'REMOTE_URL:http://{}:{}@ondemand.saucelabs.com:80/wd/hub'.format(
+            sauce_username, sauce_key
+        ),
+        '--variable',
+        'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0}'.format(
+            env.TRAVIS_JOB_NUMBER, browser
+        )
+    ]
 
 
-def process_output(browser, suite):
+def process_output(browser, rf_options):
     print('Verifying results...')
+    options = []
     output = os.path.join(env.RESULTS_DIR, 'output.xml')
     robotstatuschecker.process_output(output, verbose=False)
-    options = [opt.format(browser=browser) for opt in REBOT_OPTIONS]
-    if suite:
-        options += ['-s', suite]
+    options.extend([opt.format(browser=browser) for opt in REBOT_OPTIONS])
+    options += rf_options
     try:
         rebot_cli(options + [output])
     except SystemExit as exit:
         return exit.code
 
 
-def sauce_credentials(sauceusername, saucekey):
-    if env.TRAVIS:
+def sauce_credentials(sauce_username, sauce_key):
+    # Refactor method when removing env.py file
+    if env.TRAVIS and not sauce_username and sauce_key:
         username = env.SAUCE_USERNAME
         key = env.SAUCE_ACCESS_KEY
     else:
-        username = sauceusername
-        key = saucekey
+        username = sauce_username
+        key = sauce_key
     return username, key
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Library test runner')
+    parser = argparse.ArgumentParser(
+        description='Script to run Selenium2Library acceptance tests.',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=(
+            'Tests are executed using Robot Framework and results verified '
+            'automatically afterwards using `robotstatuschecker` tool. The '
+            'tool can be installed using `pip install robotstatuschecker` '
+            'and more information about it can be found from: '
+            'https://github.com/robotframework/statuschecker/. Notice that '
+            'initially some tests fail.\n\n'
+            'When running test by using browser from Sauce labs, it is '
+            'required that the Sauce Connect is used. The Sauce Connect '
+            'allows the browser from Sauce Labs reach the acceptance test '
+            'webserver. The acceptance test uses tunnel with name '
+            '`localtunnel` and therefore when establishing the Sauce Connect '
+            'tunnel use the following command:\n'
+            '`bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel`\n\n'
+            'More details and to downlaod Sauce Connect visit: '
+            'https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup\n\n'
+            'It is posisble to pass Robot Framework command line arguments to '
+            'the test exection as a last arguments to the `run_tests.py`'
+            'command. Example arguments like --test, --suite, --include and '
+            '--exclude may be used to configure acceptance test execution. '
+            'The Robot Framework command line arguments are not displayed in '
+            'the optional arguments list in the help.\n\n'
+            'Examples:\n\n'
+            'python run_tests.py chrome\n'
+            'run_tests.py --interpreter jython firefox --suite javascript\n'
+            'python run_tests.py chrome --sauceusername your_username '
+            '--saucekey account_key --suite javascript\n'
+            ' '
+        )
+    )
     parser.add_argument(
         '--interpreter',
+        '-I',
         default='python',
-        help='Interpreter used run the test'
-    )
-    parser.add_argument('browser', help='Browser used in testing')
-    parser.add_argument(
-        '--suite',
-        '-s',
-        help='Selects the test suites by name.'
+        help=(
+            'Any Python interpreter supported by the library (e.g. `python`, '
+            '`jython` or `c:\\Python27\\python.exe`). By default set to '
+            '`python`.)'
+        )
     )
     parser.add_argument(
-        '--scusername',
+        'browser',
+        help='Any browser supported by the library (e.g. `chrome`or `firefox`)'
+    )
+    parser.add_argument(
+        '--sauceusername',
+        '-U',
         help='Username to order browser from SaucuLabs'
     )
     parser.add_argument(
-        '--sckey',
+        '--saucekey',
+        '-K',
         help='Access key to order browser from SaucuLabs'
     )
 
-    args = parser.parse_args()
+    args, rf_options = parser.parse_known_args()
+    print(rf_options)
+
     browser = args.browser.lower().strip()
     if env.TRAVIS and browser != 'chrome' and env.TRAVIS_EVENT_TYPE != 'cron':
         print(
-            'Can not run test with browser "{}" from SauceLabs\n'
+            'Can not run test with browser "{}" from SauceLabs with PR.\n'
             'SauceLabs can be used only when running with cron and from '
             'Selenium2Library master branch, but your event type '
-            'was "{}"'.format(browser, env.TRAVIS_EVENT_TYPE)
+            'was "{}". Only Chrome is suported with PR and when using '
+            'Travis'.format(browser, env.TRAVIS_EVENT_TYPE)
         )
         sys.exit(0)
-    sauceusername, saucekey = sauce_credentials(
-        args.scusername, args.sckey)
+    sauce_username, sauce_key = sauce_credentials(
+        args.sauceusername, args.saucekey)
     unit_tests()
-    acceptance_tests(args.interpreter, browser, args.suite,
-                     sauceusername, saucekey)
+    acceptance_tests(args.interpreter, browser, rf_options,
+                     sauce_username, sauce_key)
