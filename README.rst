@@ -22,6 +22,10 @@ Selenium 2 (WebDriver) library for Robot Framework
 
 中文说明
 ------------
+2016-11-28：1.8.0.3在前一个版本基础上，增加了一些个人的修改：
+
+- 增加了 get_list_values 关键字，原先的 get_list_items 获取的实际上是labels，增加一个获取所有的values的关键字
+
 2016-10-24：1.8.0.2在前一个版本基础上，增加了一些个人的修改：
 
 - 增加了click_element_at_table_cell、click_link_at_table_cell、click_subelement_at_table_cell这三个关键字
@@ -31,11 +35,11 @@ Selenium 2 (WebDriver) library for Robot Framework
 - 增加了 get_table_rows 和 get_table_cols_at_row 两个关键字。
 - 增加了 get_index_in_table_column 和 get_index_in_table_row 两个关键字。
 
-推荐pip本地安装更新的方式，进入release页面，下载v1.8.0.2的tar.gz文件，不需要解压缩，在命令行进入文件所在的目录执行下面的命令，看到提示1.8.0安装成功就行了（我忘记改版本号了）。
+推荐pip本地安装更新的方式，进入release页面，下载v1.8.0.3的tar.gz文件，不需要解压缩，在命令行进入文件所在的目录执行下面的命令，看到提示1.8.0.3安装成功就行了（我改版本号了）。
 
 执行安装命令::
 
-    pip install -U robotframework-selenium2library-1.8.0.2.tar.gz
+    pip install -U robotframework-selenium2library-1.8.0.3.tar.gz
 
 
 Introduction

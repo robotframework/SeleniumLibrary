@@ -8,7 +8,7 @@ class _SelectElementKeywords(KeywordGroup):
     # Public
 
     def get_list_items(self, locator):
-        """Returns the values in the select list identified by `locator`.
+        """Returns the labels in the select list identified by `locator`.
 
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
@@ -16,6 +16,16 @@ class _SelectElementKeywords(KeywordGroup):
         """
         select, options = self._get_select_list_options(locator)
         return self._get_labels_for_options(options)
+
+    def get_list_values(self, locator):
+        """Returns the values in the select list identified by `locator`.
+
+        Select list keywords work on both lists and combo boxes. Key attributes for
+        select lists are `id` and `name`. See `introduction` for details about
+        locating elements.
+        """
+        select, options = self._get_select_list_options(locator)
+        return self._get_values_for_options(options)
 
     def get_selected_list_label(self, locator):
         """Returns the visible label of the selected element from the select list identified by `locator`.
