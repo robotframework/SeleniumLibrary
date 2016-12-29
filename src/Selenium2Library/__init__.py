@@ -84,6 +84,10 @@ class Selenium2Library(
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
 
+    Please note that jQuery is not provided by Selenium2Library
+    and if there is need to use jQuery locators, the system 
+    under test must provide the jQuery library.
+
     *Using webelements*
     ------------------
     Starting with version 1.7 of the Selenium2Library, one can pass an argument
