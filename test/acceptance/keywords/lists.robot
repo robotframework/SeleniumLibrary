@@ -148,6 +148,18 @@ List Should Have No Selections
     ...    List 'interests' should have had no selection (selection was [ Males | Females | Others ])
     ...    List Should Have No Selections    interests
 
+Get List Values From Single-Select List
+    [Documentation]    Get List Items From Single-Select List
+    ${values}=    Get List Items    preferred_channel    ${False}
+    ${expected}=    Create List    email    phone    directmail
+    Should Be Equal    ${values}    ${expected}
+
+Get List Values From Multi-Select List
+    [Documentation]    Get List Items From Multi-Select List
+    ${values}=    Get List Items    interests    ${False}
+    ${expected}=    Create List    males    females    others
+    Should Be Equal    ${values}    ${expected}
+
 *** Keywords ***
 Unselect And Verify Selection
     [Documentation]    Unselect And Verify Selection
