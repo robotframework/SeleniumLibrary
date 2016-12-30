@@ -149,14 +149,14 @@ List Should Have No Selections
     ...    List Should Have No Selections    interests
 
 Get List Values From Single-Select List
-    [Documentation]    Get List Items From Single-Select List
-    ${values}=    Get List Items    preferred_channel    ${False}
+    [Documentation]    Get List Values From Single-Select List
+    ${values}=    Get List Items    preferred_channel    label=${False}
     ${expected}=    Create List    email    phone    directmail
     Should Be Equal    ${values}    ${expected}
 
 Get List Values From Multi-Select List
-    [Documentation]    Get List Items From Multi-Select List
-    ${values}=    Get List Items    interests    ${False}
+    [Documentation]    Get List Values From Multi-Select List
+    ${values}=    Get List Items    interests    label=${False}
     ${expected}=    Create List    males    females    others
     Should Be Equal    ${values}    ${expected}
 
