@@ -1,9 +1,10 @@
-import os
-from keywords import *
-from version import VERSION
-from utils import LibraryListener
+from .keywords import *
+from .utils import LibraryListener
+from .version import VERSION
+
 
 __version__ = VERSION
+
 
 class Selenium2Library(
     _LoggingKeywords,
@@ -70,6 +71,7 @@ class Selenium2Library(
     | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
     | partial link | Click Element `|` partial link=y Lin  | Matches anchor elements by their partial link text |
     | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
+    | class      | Click Element `|` class=my_class       | Matches by class name selector                  |
     | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
     | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
     | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
@@ -81,6 +83,10 @@ class Selenium2Library(
     | Click Link    page?a=b
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
+
+    Please note that jQuery is not provided by Selenium2Library
+    and if there is need to use jQuery locators, the system 
+    under test must provide the jQuery library.
 
     *Using webelements*
     ------------------

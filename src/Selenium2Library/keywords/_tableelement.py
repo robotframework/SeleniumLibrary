@@ -1,7 +1,7 @@
-import os
-import sys
 from Selenium2Library.locators import TableElementFinder
-from keywordgroup import KeywordGroup
+
+from .keywordgroup import KeywordGroup
+
 
 class _TableElementKeywords(KeywordGroup):
 

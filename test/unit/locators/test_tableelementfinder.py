@@ -1,6 +1,9 @@
 import unittest
+
+from mockito import mock, verify, when
+
 from Selenium2Library.locators import TableElementFinder
-from mockito import *
+
 
 class ElementFinderTests(unittest.TestCase):
 

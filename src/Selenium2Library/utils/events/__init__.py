@@ -1,7 +1,5 @@
-from scope_event import ScopeStart, ScopeEnd
+from .scope_event import ScopeStart, ScopeEnd
 
-_registered_events = [ ScopeStart, ScopeEnd ]
-_events = []
 
 __all__ = [
     "on",
@@ -9,16 +7,22 @@ __all__ = [
     "register_event"
 ]
 
+_registered_events = [ScopeStart, ScopeEnd]
+_events = []
+
+
 def on(event_name, *args, **kwargs):
     for event in _registered_events:
         if event.name == event_name:
             _events.append(event(*args, **kwargs))
             return
 
+
 def dispatch(event_name, *args, **kwargs):
     for event in _events:
         if event.name == event_name:
             event.trigger(*args, **kwargs)
+
 
 def register_event(event):
     for registered_event in _registered_events:

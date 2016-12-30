@@ -1,7 +1,8 @@
-from elementfinder import ElementFinder
-from tableelementfinder import TableElementFinder
-from windowmanager import WindowManager
-from customlocator import CustomLocator
+from .elementfinder import ElementFinder
+from .customlocator import CustomLocator
+from .tableelementfinder import TableElementFinder
+from .windowmanager import WindowManager
+
 
 __all__ = [
     "ElementFinder",
