@@ -74,7 +74,7 @@ def http_server():
 
 def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
     options = []
-    runner = [interpreter, '-m', 'robot.run']
+    runner = interpreter.split() + ['-m', 'robot.run']
     options.extend(
         [opt.format(browser=browser,
          py_version=interpreter + sys.version[:3])
@@ -201,10 +201,7 @@ if __name__ == '__main__':
         '-K',
         help='Access key to order browser from SaucuLabs'
     )
-
     args, rf_options = parser.parse_known_args()
-    print(rf_options)
-
     browser = args.browser.lower().strip()
     if env.TRAVIS and browser != 'chrome' and env.TRAVIS_EVENT_TYPE != 'cron':
         print(

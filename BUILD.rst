@@ -26,44 +26,10 @@ test/
 
 Unit and Acceptance Tests
 -------------------------
+To run tests give command::
+	python test/run_tests.py chomre
 
-The test directory contains everything needed to run Selenium2Library 
-tests with Robot Framework. This includes:
-
-- Unit tests under `unit` directory.
-- Acceptance tests written with Robot Framework under `acceptance` 
-  directory
-- A very simple httpserver.py which is used to serve the html for tests in
-  `resources/testserver`
-- A collection of simple html files under 'resources/html' directory
-- Start-up scripts for executing the tests
-- A copy of statuschecker.py for checking logged messages after the
-  execution, which requires the tests to run with log level DEBUG
-
-To run unit and acceptance tests, run::
-
-	python test/run_tests.py python|jython ff|ie|chrome [options]
-
-The first argument to the script defines the interpreter to be used
-to run Robot. The second argument defines the browser to be used,
-using the same browser tokens that you would use in your Robot
-tests.
-
-Due to the structure of the tests, the directory containg the test
-case files (`acceptance`) is always given to Robot as test data path.
-To run only a subset of test cases, Robot command line arguments
---test, --suite, --include and --exclude may be used.
-
-Examples::
-
-	# Run all tests with Python and Firefox
-	python test/run_tests.py python ff
-	# Run only test suite `javascript` with Jython and Internet Explorer
-	python test/run_tests.py jython ie -s javascript
-
-To run just the unit tests, run::
-
-	python test/run_unit_tests.py
+More details in test/README.rst
 
 
 Debugging Selenium2Library
