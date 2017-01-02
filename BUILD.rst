@@ -288,9 +288,9 @@ are parsed by the reStructuredText parser. To build them, run::
 
 
 .. _pdb: http://docs.python.org/2/library/pdb.html
-.. _downloads section on GitHub: https://github.com/rtomac/robotframework-selenium2library/downloads
+.. _downloads section on GitHub: https://github.com/robotframework/Selenium2Library/downloads
 .. _PyPI: http://pypi.python.org
 .. _.pypirc file: http://docs.python.org/distutils/packageindex.html#the-pypirc-file
-.. _this case: http://code.google.com/p/selenium/issues/detail?id=4375
-.. _report it: http://code.google.com/p/selenium/issues/list
+.. _this case: https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/4375
+.. _report it: https://github.com/SeleniumHQ/selenium/issues
 .. _Python's unittest documentation: http://docs.python.org/library/unittest.html
