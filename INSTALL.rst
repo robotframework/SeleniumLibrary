@@ -100,7 +100,7 @@ indicates that you are missing the Robot Framework package.  To correct this pro
 Similarly if you receive "No module named ..." error message then you have another missing dependency.  To correct, use easy_install to install the missing package.
 
 
-.. _Selenium Python Bindings: http://code.google.com/p/selenium/wiki/PythonBindings
-.. _PyPI: http://code.google.com/p/selenium/wiki/PythonBindings
+.. _Selenium Python Bindings: https://github.com/SeleniumHQ/selenium/wiki/Python-Bindings
+.. _PyPI: https://pypi.python.org/pypi
 .. _pip: http://www.pip-installer.org
 .. _easy_install: http://pypi.python.org/pypi/setuptools

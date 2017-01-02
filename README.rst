@@ -86,7 +86,7 @@ to resort to manual installation. This requires installing both the library
 and its dependencies yourself.
 
 1) Make sure you have `Robot Framework installed
-   <http://code.google.com/p/robotframework/wiki/Installation>`__.
+   <http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#installation-instructions>`__.
 
 2) Download source distributions (``*.tar.gz``) for the library and its
    dependencies:
@@ -131,12 +131,12 @@ The `user group for Robot Framework`_ is the best place to get help. Consider in
 - Traceback or other debug output containing error information
 
 .. _Robot Framework: http://robotframework.org
-.. _Selenium: http://selenium.openqa.org
+.. _Selenium: http://seleniumhq.org
 .. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
-.. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
+.. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary/
 .. _Wiki: https://github.com/robotframework/Selenium2Library/wiki
 .. _Keyword Documentation: http://robotframework.org/Selenium2Library/Selenium2Library.html
 .. _INSTALL.rst: https://github.com/robotframework/Selenium2Library/blob/master/INSTALL.rst
 .. _BUILD.rst: https://github.com/robotframework/Selenium2Library/blob/master/BUILD.rst
-.. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
+.. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _user group for Robot Framework: http://groups.google.com/group/robotframework-users
