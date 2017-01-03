@@ -2,7 +2,7 @@ Testing and debugging
 =====================
 Requirements
 ------------
-Before running the test, install the dependecies::
+Before running the test, install the dependencies::
 
     pip install requirements.txt
     pip install requirements-dev.txt
@@ -34,8 +34,8 @@ from: https://github.com/robotframework/statuschecker/. Notice that initially
 some tests fail.
 
 
-It is posisble to pass Robot Framework command line arguments to the test
-exection as a last arguments to the `run_tests.py` command. Example arguments
+It is possible to pass Robot Framework command line arguments to the test
+execution as a last arguments to the `run_tests.py` command. Example arguments
 like --test, --suite, --include and --exclude may be used to configure
 acceptance test execution.
 
@@ -55,10 +55,10 @@ Using Sauce Labs for acceptance tests
 
 When running test by using browser from Sauce labs, it is required that the
 Sauce Connect is used. The Sauce Connect allows the browser from Sauce Labs
-reach the acceptance test webserver. The acceptance test uses tunnel with
+reach the acceptance test web server. The acceptance test uses tunnel with
 name `localtunnel` and therefore when establishing the Sauce Connect tunnel
 use the following command::
     bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel
 
-More details and to downlaod Sauce Connect visit:
+More details and to download Sauce Connect visit:
 https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
