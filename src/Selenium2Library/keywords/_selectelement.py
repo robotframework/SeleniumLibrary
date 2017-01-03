@@ -15,10 +15,10 @@ class _SelectElementKeywords(KeywordGroup):
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         
-        Sample:
+        Example:
         | ${labels1} = | Get List Items | xpath=//h1 |
-        | ${labels2} = | Get List Items | xpath=//h1 | label=${True} |
-        | ${values} = | Get List Items | xpath=//h1 | label=${False} |
+        | ${labels2} = | Get List Items | xpath=//h1 | label=True |
+        | ${values} = | Get List Items | xpath=//h1 | label=False |
         | Should Be Equal | ${labels1} | ${labels2} |
         """
         select, options = self._get_select_list_options(locator)
