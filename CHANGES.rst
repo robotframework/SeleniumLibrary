@@ -4,6 +4,14 @@ Release Notes
 1.8.1
 -----
 - Added 'Get Locations' keyword [thaffenden]
+- Added Following Table keywords [Gaurang033]
+
+    - table_cell_should_not_contain
+    - table_column_should_not_contain
+    - table_footer_should_not_contain
+    - table_header_should_not_contain
+    - table_row_should_not_contain
+    - table_should_not_contain
 
 1.8.0
 -----
