@@ -27,9 +27,10 @@ test/
 Unit and Acceptance Tests
 -------------------------
 To run tests give command::
-	python test/run_tests.py chomre
 
-More details in test/README.rst
+    python test/run_tests.py <browser>
+
+More details in `<test/README.rst>`__
 
 
 Debugging Selenium2Library

@@ -159,36 +159,40 @@ def sauce_credentials(sauce_username, sauce_key):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Script to run Selenium2Library acceptance tests.',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=(
-            'Tests are executed using Robot Framework and results verified '
-            'automatically afterwards using `robotstatuschecker` tool. The '
-            'tool can be installed using `pip install robotstatuschecker` '
-            'and more information about it can be found from: '
-            'https://github.com/robotframework/statuschecker/. Notice that '
-            'initially some tests fail.\n\n'
-            'When running test by using browser from Sauce labs, it is '
-            'required that the Sauce Connect is used. The Sauce Connect '
-            'allows the browser from Sauce Labs reach the acceptance test '
-            'web server. The acceptance test uses tunnel with name '
-            '`localtunnel` and therefore when establishing the Sauce Connect '
-            'tunnel use the following command:\n'
-            '`bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel`\n\n'
-            'More details and to downlaod Sauce Connect visit: '
-            'https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup\n\n'
-            'It is possible to pass Robot Framework command line arguments to '
-            'the test execution as a last arguments to the `run_tests.py`'
-            'command. Example arguments like --test, --suite, --include and '
-            '--exclude may be used to configure acceptance test execution. '
-            'The Robot Framework command line arguments are not displayed in '
-            'the optional arguments list in the help.\n\n'
-            'Examples:\n\n'
-            'python run_tests.py chrome\n'
-            'run_tests.py --interpreter jython firefox --suite javascript\n'
-            'python run_tests.py chrome --sauceusername your_username '
-            '--saucekey account_key --suite javascript\n'
-            ' '
-        )
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog=("""\
+Tests are executed using Robot Framework and results verified automatically \
+afterwards using `robotstatuschecker` tool. The tool can be installed using \
+`pip install robotstatuschecker` and more information about it can be found \
+from: \
+https://github.com/robotframework/statuschecker/. Notice that initially some \
+tests fail.
+
+When running test by using browser from Sauce labs, it is required that the \
+Sauce Connect is used. The Sauce Connect allows the browser from Sauce Labs \
+reach the acceptance test web server. The acceptance test uses tunnel with \
+name `localtunnel` and therefore when establishing the Sauce Connect tunnel \
+use the following command:
+    `bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel`
+
+More details and to downlaod Sauce Connect visit: \
+https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
+
+It is possible to pass Robot Framework command line arguments to the test \
+execution as a last arguments to the `run_tests.py` command. It is \
+recommended to use arguments to select required suite or test for the \
+execution when developing new functionality for the library. Example like \
+--test, --suite, --include and --exclude.
+
+
+Examples:
+
+    run_tests.py chrome
+    run_tests.py --interpreter jython firefox --suite javascript
+    run_tests.py chrome --sauceusername your_username --saucekey account_key \
+--suite javascript
+
+""")
     )
     parser.add_argument(
         '--interpreter',
