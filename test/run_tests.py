@@ -27,10 +27,10 @@ Examples:
 
     run_tests.py chrome
     run_tests.py --interpreter jython firefox --suite javascript
-    run_tests.py chrome --sauceusername your_username --saucekey account_key \
---suite javascript
+    run_tests.py chrome --sauceusername your_username --saucekey account_key --suite javascript
 
 """
+
 from __future__ import print_function
 
 from contextlib import contextmanager
