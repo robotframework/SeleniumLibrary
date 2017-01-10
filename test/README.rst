@@ -42,14 +42,14 @@ by using different interpreter by using the `--interpreter` command line
 argument.
 
 Starting from version 2.0 onwards the Selenium2Library is tested by using 
-Python 2 and 3. Other interpreters are not test by the development team.
+Python 2 and 3. Other interpreters are not tested by the development team.
 
 
 Robot Framework command line arguments
 --------------------------------------
 
 It is possible to pass Robot Framework command line arguments to the test
-execution as a last arguments to the `run_tests.py` command. It is recommended
+execution as last arguments to the `run_tests.py` command. It is recommended
 to use arguments to select required suite or test for the execution when
 developing new functionality for the library. Example like --test, --suite,
 --include and --exclude.

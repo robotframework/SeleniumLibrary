@@ -18,7 +18,7 @@ More details and to downlaod Sauce Connect visit:
 https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
 
 It is possible to pass Robot Framework command line arguments to the test
-execution as a last arguments to the `run_tests.py` command. It is
+execution as last arguments to the `run_tests.py` command. It is
 recommended to use arguments to select required suite or test for the
 execution when developing new functionality for the library. Example like
 --test, --suite, --include and --exclude.
