@@ -8,15 +8,24 @@ class _SelectElementKeywords(KeywordGroup):
 
     # Public
 
-    def get_list_items(self, locator):
-        """Returns the values in the select list identified by `locator`.
+    def get_list_items(self, locator, value=False):
+        """Returns the labels or values in the select list identified by `locator`.
 
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
+        
+        Example:
+        | ${labels1} = | Get List Items | xpath=//h1 |
+        | ${labels2} = | Get List Items | xpath=//h1 | value=${False} |
+        | ${values} = | Get List Items | xpath=//h1 | value=True |
+        | Should Be Equal | ${labels1} | ${labels2} |
         """
         select, options = self._get_select_list_options(locator)
-        return self._get_labels_for_options(options)
+        if value:
+            return self._get_values_for_options(options)
+        else:
+            return self._get_labels_for_options(options)
 
     def get_selected_list_label(self, locator):
         """Returns the visible label of the selected element from the select list identified by `locator`.
