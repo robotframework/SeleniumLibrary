@@ -1,52 +1,43 @@
-addons:
-  firefox: latest-esr
 language: python
-sudo: false
+sudo: required
+dist: trusty
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+before_install:
+  - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+  - wget http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - sudo chmod u+x chromedriver
+  - sudo mv chromedriver /usr/bin/
 install:
   - pip install .
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt
+matrix:
+  include:
+    - python: "2.7" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=2.53.6
+    - python: "3.3" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=2.53.6
+    - python: "2.7" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=3.0.2
+    - python: "3.3" # For cron only
+      env:
+        - BROWSER=firefox
+        - SELENIUM=2.53.6
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - pip install selenium==$SELENIUM
 script:
-  - "if [[ -n ${SELENIUM_VERSION+x} ]]; then pip install -U selenium==${SELENIUM_VERSION}; fi"
-  - "python test/run_tests.py python \"$BROWSER\""
-env:
-  global:
-    - secure: "QyY0j8C+hVhsGLv4YU0UMvLm5wBDg6xT5J0Ee77C/JAQ6vcdCMpTfWI8oDxTZb7pBhpDkYuNe747yCYF5PrdBYQbO08FilxctReuJfMXcH44rZC5q49mUmPamkvg1LkzIWuC1s9uKnjlvyDT5ojuPXZl2Vn0gIhSIg+yOyBkM1U="
-    - secure: "HJaJTYauaBZODMDkbnRVsiCk+t2uVtztkkJ5V4dXSnE1uIBms2PVbufQwb+YNvzHkGheLtpnt/hLM1HhmSFgUtOCf+eumQ6kaLR2KRVEysXwWJzgZoLBidNBOy5rvAIsc9JJbDaIgYVGzyaJGTP9AMb8CyvIPE//lH10sf+GB7g="
-matrix:
-  include:
-    - os: linux
-      env:
-        - BROWSER=firefox
-        - SELENIUM_VERSION=2.53.6
-      addons:
-        firefox: "47.0.1"
-      python: "2.7"
-    - os: linux
-      env:
-        - BROWSER=chrome
-      addons:
-        sauce_connect: true
-      python: "2.7"
-    - os: linux
-      env:
-        - BROWSER=firefox
-        - SELENIUM_VERSION=2.53.6
-      addons:
-        sauce_connect: true
-      python: "3.4"
-    - os: linux
-      env:
-        - BROWSER="internet explorer"
-      addons:
-        sauce_connect: true
-      python: "2.7"
-    - os: linux
-      env:
-        - BROWSER=safari
-      addons:
-        sauce_connect: true
-      python: "2.7"
+  - python test/run_tests.py $BROWSER
