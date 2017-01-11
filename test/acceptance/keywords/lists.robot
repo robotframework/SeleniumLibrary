@@ -19,13 +19,13 @@ Get List Items From Multi-Select List
 
 Get List Values From Single-Select List
     [Documentation]    Get List Values From Single-Select List
-    ${values}=    Get List Items    preferred_channel    label=False
+    ${values}=    Get List Items    preferred_channel    value=${True}
     ${expected}=    Create List    email    phone    directmail
     Should Be Equal    ${values}    ${expected}
 
 Get List Values From Multi-Select List
     [Documentation]    Get List Values From Multi-Select List
-    ${values}=    Get List Items    interests    label=False
+    ${values}=    Get List Items    interests    value=True
     ${expected}=    Create List    males    females    others
     Should Be Equal    ${values}    ${expected}
 
