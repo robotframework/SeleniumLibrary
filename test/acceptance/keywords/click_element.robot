@@ -16,6 +16,14 @@ Double Click Element
     Double Click Element    doubleClickButton
     Element Text Should Be    output    double clicked
 
+Click All Element
+    [Documentation]    Test Click Elements keyword
+    Go To Page "forms/prefilled_email_form.html"
+    Click Elements    //*[@type='checkbox']
+    checkbox should not be selected     can_send_email
+    Checkbox Should Be Selected    can_send_sms
+    Go To Page "javascript/click.html"
+
 *** Keywords ***
 Initialize Page
     [Documentation]    Initialize Page

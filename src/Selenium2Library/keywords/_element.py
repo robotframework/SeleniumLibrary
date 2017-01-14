@@ -815,3 +815,16 @@ return !element.dispatchEvent(evt);
             raise AssertionError(message)
         self._info("Current page does not contain %s '%s'."
                    % (element_name, locator))
+
+    def click_elements(self, locator):
+        """
+        Clicks all the elements identified by `locator`.
+
+         Key attributes for arbitrary elements are `id` and `name`. See
+         `introduction` for details about locating elements.
+         """
+        elements = self._element_find(locator, False, True)
+        self._info("total %s elements found with matching locator %s" % (len(elements), locator))
+        self._info("clicking on all elements found with matching locator %s" % locator)
+        for element in elements:
+            element.click()
