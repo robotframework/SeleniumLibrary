@@ -363,6 +363,14 @@ class _BrowserManagementKeywords(KeywordGroup):
         """Returns the entire html source of the current page or frame."""
         return self._current_browser().get_page_source()
 
+    def get_log(self, log_type):
+        """Get the log for a given selenium log type
+
+        The `log_type` argument defines which logs to get. Possible values are:
+        `browser`, `driver`, `client` or `server`
+        """
+        return self._current_browser().get_log(log_type)
+
     def get_title(self):
         """Returns title of current page."""
         return self._current_browser().get_title()
