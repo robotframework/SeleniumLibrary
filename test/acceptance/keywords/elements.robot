@@ -48,8 +48,7 @@ Get Element Attribute
     Should Be Equal    ${id}    some_id
     ${class}=    Get Element Attribute    second_div@class
     Should Be Equal    ${class}    Second Class
-    ${element_by_link}=    Get Webelement    link=Link with id
-    ${id}=    Get Element Attribute    ${element_by_link}    id
+    ${id}=    Get Element Attribute    link=Link with id    id
     Should Be Equal    ${id}    some_id
     ${element_by_dom}=    Get Webelement    dom=document.getElementsByTagName('a')[3]
     ${id}=    Get Element Attribute    ${element_by_dom}    id
