@@ -267,13 +267,15 @@ class _ElementKeywords(KeywordGroup):
                           "in fact it was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
-    def get_element_attribute(self, attribute_locator):
+    def get_element_attribute(self, locator, attribute_name=None):
         """Return value of element attribute.
 
-        `attribute_locator` consists of element locator followed by an @ sign
+        Typically, `locator` consists of element locator followed by an @ sign
         and attribute name, for example "element_id@class".
+        In case when `attribute_name` is not None, `locator` is used only to get webelement.
         """
-        locator, attribute_name = self._parse_attribute_locator(attribute_locator)
+        if attribute_name is None:
+            locator, attribute_name = self._parse_attribute_locator(locator)
         element = self._element_find(locator, True, False)
         if element is None:
             raise ValueError("Element '%s' not found." % (locator))
