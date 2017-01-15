@@ -274,10 +274,10 @@ class _ElementKeywords(KeywordGroup):
         and attribute name, for example "element_id@class".
         In case when `attribute_name` is not None, `locator` is used only to get webelement.
         """
-        if attribute_name is None:
+        if not attribute_name:
             locator, attribute_name = self._parse_attribute_locator(locator)
         element = self._element_find(locator, True, False)
-        if element is None:
+        if not element:
             raise ValueError("Element '%s' not found." % (locator))
         return element.get_attribute(attribute_name)
 
