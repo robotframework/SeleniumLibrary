@@ -2,6 +2,7 @@
 Documentation     Tests elements
 Test Setup        Go To Page "links.html"
 Resource          ../resource.robot
+Library           String
 
 *** Test Cases ***
 Get Elements
@@ -61,6 +62,12 @@ Get Matching XPath Count
     [Documentation]    Get Matching XPath Count
     ${count}=    Get Matching XPath Count    //a
     Should Be Equal    ${count}    19
+    ${count}=    Get Matching XPath Count    //a    ${True}
+    Should Be Equal    ${count}    19
+    Should Be String    ${count}
+    ${count}=    Get Matching XPath Count    //a    ${False}
+    Should Be Equal As Numbers    ${count}    19
+    Should Not Be String    ${count}
     ${count}=    Get Matching XPath Count    //div[@id="first_div"]/a
     Should Be Equal    ${count}    2
 

@@ -622,8 +622,11 @@ return !element.dispatchEvent(evt);
 
     # Public, xpath
 
-    def get_matching_xpath_count(self, xpath):
+    def get_matching_xpath_count(self, xpath, return_str=True):
         """Returns number of elements matching `xpath`
+
+        The default return type is `str`but it can changed to `int` by setting
+        the ``return_str`` argument to Python False.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
 
@@ -636,7 +639,7 @@ return !element.dispatchEvent(evt);
         `Xpath Should Match X Times`.
         """
         count = len(self._element_find("xpath=" + xpath, False, False))
-        return str(count)
+        return str(count) if return_str else count
 
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
