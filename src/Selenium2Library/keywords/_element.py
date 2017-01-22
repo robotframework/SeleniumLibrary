@@ -267,15 +267,31 @@ class _ElementKeywords(KeywordGroup):
                           "in fact it was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
-    def get_element_attribute(self, attribute_locator):
-        """Return value of element attribute.
+    def get_element_attribute(self, locator, attribute_name=None):
+        """Returns value of the element attribute.
 
-        `attribute_locator` consists of element locator followed by an @ sign
-        and attribute name, for example "element_id@class".
+        There are two cases how to use this keyword.
+
+        First, if only `locator` is provided, `locator` should consists of
+        element locator followed by an @ sign and attribute name.
+        This behavior is left for backward compatibility.
+
+        Example:
+        | ${id}= | Get Element Attribute | link=Link with id@id |
+
+        Second, if `locator` and `attribute_name` are provided both, `locator`
+        should be standard locator and `attribute_name` is name of the
+        requested element attribute.
+
+        Examples:
+        | ${id}= | Get Element Attribute | link=Link with id | id |
+        | ${element_by_dom}= | Get Webelement | dom=document.getElementsByTagName('a')[3] |
+        | ${id}= | Get Element Attribute | ${element_by_dom} | id |
         """
-        locator, attribute_name = self._parse_attribute_locator(attribute_locator)
+        if not attribute_name:
+            locator, attribute_name = self._parse_attribute_locator(locator)
         element = self._element_find(locator, True, False)
-        if element is None:
+        if not element:
             raise ValueError("Element '%s' not found." % (locator))
         return element.get_attribute(attribute_name)
 
