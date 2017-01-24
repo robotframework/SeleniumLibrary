@@ -66,7 +66,7 @@ Get Matching XPath Count
     Should Be Equal    ${count}    19
     Should Be String    ${count}
     ${count}=    Get Matching XPath Count    //a    ${False}
-    Should Be Equal As Numbers    ${count}    19
+    Should Be Equal    ${count}    ${19}
     Should Not Be String    ${count}
     ${count}=    Get Matching XPath Count    //div[@id="first_div"]/a
     Should Be Equal    ${count}    2

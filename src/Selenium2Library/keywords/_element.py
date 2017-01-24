@@ -625,7 +625,7 @@ return !element.dispatchEvent(evt);
     def get_matching_xpath_count(self, xpath, return_str=True):
         """Returns number of elements matching `xpath`
 
-        The default return type is `str`but it can changed to `int` by setting
+        The default return type is `str` but it can changed to `int` by setting
         the ``return_str`` argument to Python False.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
