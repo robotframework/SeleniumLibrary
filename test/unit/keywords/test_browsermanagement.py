@@ -1,20 +1,20 @@
 import unittest
 
-from mockito import mock, verify, verifyNoMoreInteractions
+from mockito import when, mock, verify, verifyNoMoreInteractions
 from selenium import webdriver
 
 from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywords
 
 
-class BrowserManagementTests(unittest.TestCase): 
+class BrowserManagementTests(unittest.TestCase):
 
-    
+
     def test_create_firefox_browser(self):
         test_browsers = ((webdriver.Firefox, "ff"), (webdriver.Firefox, "firEfOx"))
 
         for test_browser in test_browsers:
             self.verify_browser(*test_browser)
-    
+
     def mock_createProfile(self, profile_directory=None):
         self.ff_profile_dir = profile_directory
         return self.old_profile_init(profile_directory)
@@ -104,23 +104,19 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()
-        capt_data = {}
-        class FakeWebDriver(mock):
-            def __init__(self, some_arg=None):
-                mock.__init__(self)
-                capt_data['some_arg'] = some_arg
-                capt_data['webdriver'] = self
+        FakeWebDriver = mock()
+        driver = mock()
+        when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
+        when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
         webdriver.FakeWebDriver = FakeWebDriver
         try:
-            index = bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
-            self.assertEquals(capt_data['some_arg'], 1)
-            self.assertEquals(capt_data['webdriver'], bm._current_browser())
-            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection(index))
-            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection('fake'))
-            capt_data.clear()
-            my_kwargs = {'some_arg':2}
-            bm.create_webdriver('FakeWebDriver', kwargs=my_kwargs)
-            self.assertEquals(capt_data['some_arg'], 2)
+            index = bm.create_webdriver('FakeWebDriver', 'fake1', some_arg=1)
+            self.assertEqual(bm._current_browser(), driver)
+            self.assertEquals(bm._cache.get_connection(index), driver)
+            self.assertEquals(bm._cache.get_connection('fake1'), driver)
+            my_kwargs = {'some_arg': 2}
+            bm.create_webdriver('FakeWebDriver', 'fake2', kwargs=my_kwargs)
+            self.assertEquals(bm._current_browser(), driver)
         finally:
             del webdriver.FakeWebDriver
 
@@ -129,7 +125,7 @@ class BrowserManagementTests(unittest.TestCase):
         bm = _BrowserManagementKeywords()
         old_init = webdriver_type.__init__
         webdriver_type.__init__ = self.mock_init
-        
+
         try:
             self.was_called = False
             bm._make_browser(browser_name, **kw)
@@ -138,7 +134,7 @@ class BrowserManagementTests(unittest.TestCase):
         finally:
             webdriver_type.__init__ = old_init
             self.assertTrue(self.was_called)
-            
+
     def mock_init(self, *args, **kw):
         self.was_called = True
 
