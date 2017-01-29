@@ -93,7 +93,6 @@ class _TableElementKeywords(KeywordGroup):
                    % (table_locator, row, column, value))
         cell_not_exist_message = ("Cell in table '%s' in row #%s and column #%s was not found"
                                   % (table_locator, row, column))
-        # TODO new message as per comment
         try:
             content = self.get_table_cell(table_locator, row, column, loglevel='NONE')
         except AssertionError as err:
