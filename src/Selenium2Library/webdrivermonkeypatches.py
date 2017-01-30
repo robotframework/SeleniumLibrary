@@ -14,9 +14,6 @@ class WebDriverMonkeyPatches:
             time.sleep(speed)
         return result
 
-    def get_current_window_handle(self):
-        return self.current_window_handle
-
     def get_current_window_info(self):
         id_, name, title, url = self.execute_script("return [ window.id, window.name, document.title, document.URL ];")
         id_ = id_ if id_ is not None else 'undefined'
@@ -34,7 +31,6 @@ class WebDriverMonkeyPatches:
             self._speed = float(0)
         return self._speed
 
-    RemoteWebDriver.get_current_window_handle = get_current_window_handle
     RemoteWebDriver.get_current_window_info = get_current_window_info
     RemoteWebDriver.set_speed = set_speed
     RemoteWebDriver._get_speed = _get_speed

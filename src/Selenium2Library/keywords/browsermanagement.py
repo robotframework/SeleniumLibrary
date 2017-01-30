@@ -332,7 +332,7 @@ class BrowserManagementKeywords(KeywordGroup):
         | Select Window |  | | # Chooses the main window again |
         """
         try:
-            return self._current_browser().get_current_window_handle()
+            return self._current_browser().current_window_handle
         except NoSuchWindowException:
             pass
         finally:

@@ -63,7 +63,7 @@ class WindowManager(object):
             browser.switch_to_window(handles[0])
             return
         try:
-            starting_handle = browser.get_current_window_handle()
+            starting_handle = browser.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
         for handle in browser.window_handles:
@@ -80,7 +80,7 @@ class WindowManager(object):
     def _select_by_last_index(self, browser):
         handles = browser.window_handles
         try:
-            if handles[-1] == browser.get_current_window_handle():
+            if handles[-1] == browser.current_window_handle:
                 raise AssertionError("No new window at last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}' to find it.")
         except IndexError:
             raise AssertionError("No window found")
@@ -113,7 +113,7 @@ class WindowManager(object):
     def _get_window_infos(self, browser):
         window_infos = []
         try:
-            starting_handle = browser.get_current_window_handle()
+            starting_handle = browser.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
         try:
@@ -127,7 +127,7 @@ class WindowManager(object):
 
     def _select_matching(self, browser, matcher, error):
         try:
-            starting_handle = browser.get_current_window_handle()
+            starting_handle = browser.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
         for handle in browser.window_handles:
