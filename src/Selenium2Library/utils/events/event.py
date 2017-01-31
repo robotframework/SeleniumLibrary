@@ -1,4 +1,5 @@
 import abc
+from builtins import object
 
 
 class Event(object):

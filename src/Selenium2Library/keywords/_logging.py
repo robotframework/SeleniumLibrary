@@ -2,6 +2,7 @@ import os
 
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
+
 try:
     from robot.libraries.BuiltIn import RobotNotRunningError
 except ImportError:  # Support RF < 2.8.5
