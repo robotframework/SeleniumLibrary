@@ -1,7 +1,7 @@
 from .keywordgroup import KeywordGroup
 
 
-class _CookieKeywords(KeywordGroup):
+class CookieKeywords(KeywordGroup):
 
     def delete_all_cookies(self):
         """Deletes all cookies."""

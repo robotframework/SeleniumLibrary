@@ -7,21 +7,21 @@ __version__ = VERSION
 
 
 class Selenium2Library(
-    _LoggingKeywords,
-    _RunOnFailureKeywords,
-    _BrowserManagementKeywords,
-    _ElementKeywords,
-    _TableElementKeywords,
-    _FormElementKeywords,
-    _SelectElementKeywords,
-    _JavaScriptKeywords,
-    _CookieKeywords,
-    _ScreenshotKeywords,
-    _WaitingKeywords,
-    _AlertKeywords
+    LoggingKeywords,
+    RunOnFailureKeywords,
+    BrowserManagementKeywords,
+    ElementKeywords,
+    TableElementKeywords,
+    FormElementKeywords,
+    SelectElementKeywords,
+    JavaScriptKeywords,
+    CookieKeywords,
+    ScreenshotKeywords,
+    WaitingKeywords,
+    AlertKeywords
 ):
     """Selenium2Library is a web testing library for Robot Framework.
-    
+
     This document is about using Selenium2Library. For information about
     installation, support, and more please visit the
     [https://github.com/robotframework/Selenium2Library|project page].
@@ -85,7 +85,7 @@ class Selenium2Library(
     | Click Link    default=page?a=b
 
     Please note that jQuery is not provided by Selenium2Library
-    and if there is need to use jQuery locators, the system 
+    and if there is need to use jQuery locators, the system
     under test must provide the jQuery library.
 
     *Using webelements*

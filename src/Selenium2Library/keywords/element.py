@@ -9,7 +9,7 @@ from Selenium2Library.locators import CustomLocator
 from .keywordgroup import KeywordGroup
 
 
-class _ElementKeywords(KeywordGroup):
+class ElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._element_finder = ElementFinder()

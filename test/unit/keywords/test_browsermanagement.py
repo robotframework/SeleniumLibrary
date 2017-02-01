@@ -3,7 +3,7 @@ import unittest
 from mockito import when, mock, verify, verifyNoMoreInteractions
 from selenium import webdriver
 
-from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywords
+from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
 
 
 class BrowserManagementTests(unittest.TestCase):
@@ -48,7 +48,7 @@ class BrowserManagementTests(unittest.TestCase):
         self.verify_browser(webdriver.Remote, "htmlunitwithjs")
 
     def test_parse_capabilities_string(self):
-        bm = _BrowserManagementKeywords()
+        bm = BrowserManagementKeywords()
         expected_caps = "key1:val1,key2:val2"
         capabilities = bm._parse_capabilities_string(expected_caps)
         self.assertTrue("val1", capabilities["key1"])
@@ -56,7 +56,7 @@ class BrowserManagementTests(unittest.TestCase):
         self.assertTrue(2, len(capabilities))
 
     def test_parse_complex_capabilities_string(self):
-        bm = _BrowserManagementKeywords()
+        bm = BrowserManagementKeywords()
         expected_caps = "proxyType:manual,httpProxy:IP:port"
         capabilities = bm._parse_capabilities_string(expected_caps)
         self.assertTrue("manual", capabilities["proxyType"])
@@ -80,7 +80,7 @@ class BrowserManagementTests(unittest.TestCase):
         self.assertFalse("some_cap" in webdriver.DesiredCapabilities.CHROME)
 
     def test_set_selenium_timeout_only_affects_open_browsers(self):
-        bm = _BrowserManagementKeywords()
+        bm = BrowserManagementKeywords()
         first_browser, second_browser = mock(), mock()
         bm._cache.register(first_browser)
         bm._cache.close()
@@ -95,7 +95,7 @@ class BrowserManagementTests(unittest.TestCase):
         verifyNoMoreInteractions(second_browser)
 
     def test_bad_browser_name(self):
-        bm = _BrowserManagementKeywords()
+        bm = BrowserManagementKeywords()
         try:
             bm._make_browser("fireox")
             self.fail("Exception not raised")
@@ -122,7 +122,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def verify_browser(self , webdriver_type , browser_name, **kw):
         #todo try lambda *x: was_called = true
-        bm = _BrowserManagementKeywords()
+        bm = BrowserManagementKeywords()
         old_init = webdriver_type.__init__
         webdriver_type.__init__ = self.mock_init
 
@@ -139,10 +139,10 @@ class BrowserManagementTests(unittest.TestCase):
         self.was_called = True
 
 
-class _BrowserManagementWithLoggingStubs(_BrowserManagementKeywords):
+class _BrowserManagementWithLoggingStubs(BrowserManagementKeywords):
 
     def __init__(self):
-        _BrowserManagementKeywords.__init__(self)
+        BrowserManagementKeywords.__init__(self)
         def mock_logging_method(self, *args, **kwargs):
             pass
         for name in ['_info', '_debug', '_warn', '_log', '_html']:

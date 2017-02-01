@@ -5,14 +5,14 @@ from robot.utils import secs_to_timestr, timestr_to_secs
 from .keywordgroup import KeywordGroup
 
 
-class _WaitingKeywords(KeywordGroup):
+class WaitingKeywords(KeywordGroup):
 
     # Public
 
     def wait_for_condition(self, condition, timeout=None, error=None):
         """Waits until the given `condition` is true or `timeout` expires.
 
-        The `condition` can be arbitrary JavaScript expression but must contain a 
+        The `condition` can be arbitrary JavaScript expression but must contain a
         return statement (with the value to be returned) at the end.
         See `Execute JavaScript` for information about accessing the
         actual contents of the window through JavaScript.
@@ -116,7 +116,7 @@ class _WaitingKeywords(KeywordGroup):
 
         `error` can be used to override the default error message.
 
-        See also `Wait Until Page Contains`, `Wait Until Page Contains 
+        See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
         Succeeds`.
         """
@@ -129,7 +129,7 @@ class _WaitingKeywords(KeywordGroup):
             else:
                 return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_visibility)
-    
+
     def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is not visible.
 
@@ -139,7 +139,7 @@ class _WaitingKeywords(KeywordGroup):
 
         `error` can be used to override the default error message.
 
-        See also `Wait Until Page Contains`, `Wait Until Page Contains 
+        See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
         Succeeds`.
         """

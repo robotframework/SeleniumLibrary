@@ -3,7 +3,7 @@ import os
 from .keywordgroup import KeywordGroup
 
 
-class _JavaScriptKeywords(KeywordGroup):
+class JavaScriptKeywords(KeywordGroup):
 
     # Public
 
