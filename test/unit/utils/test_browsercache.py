@@ -5,14 +5,14 @@ from mockito import mock, verify
 from Selenium2Library.utils import BrowserCache
 
 
-class BrowserCacheTests(unittest.TestCase): 
+class BrowserCacheTests(unittest.TestCase):
 
     def test_no_current_message(self):
         cache = BrowserCache()
         try:
             self.assertRaises(RuntimeError, cache.current.anyMember())
         except RuntimeError as e:
-            self.assertEqual(e.message, "No current browser")
+            self.assertEqual(str(e), "No current browser")
 
     def test_browsers_property(self):
         cache = BrowserCache()
