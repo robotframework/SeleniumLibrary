@@ -69,4 +69,4 @@ Set ${level} Loglevel
 
 Verify Location Is "${relative url}"
     [Documentation]    Verifies location
-    Location Should Be    ${ROOT}/${relative url}
+    Wait Until Keyword Succeeds    5    1    Location Should Be    ${ROOT}/${relative url}
