@@ -48,6 +48,6 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - pip install selenium==$SELENIUM
-  - pip install selenium==$ROBOTFRAMEWORK
+  - pip install robotframework==$ROBOTFRAMEWORK
 script:
   - python test/run_tests.py $BROWSER
