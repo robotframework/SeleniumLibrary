@@ -20,6 +20,7 @@ Get Window Titles
     [Documentation]    Get Window Titles
     ${exp_titles}=    Create List    Click link to show a popup window    Original
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${titles}=    Get Window Titles
     Should Be Equal    ${titles}    ${exp_titles}
 
@@ -40,6 +41,7 @@ Get Window Names
     [Documentation]    Get Window Names
     ${exp_names}=    Create List    selenium_main_app_window    myName
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${names}=    Get Window Names
     Should Be Equal    ${names}    ${exp_names}
 
@@ -47,6 +49,7 @@ Get Window Identifiers
     [Documentation]    Get Window Identifiers
     ${exp_ids}=    Create List    undefined    undefined
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${ids}=    Get Window Identifiers
     Should Be Equal    ${ids}    ${exp_ids}
 
@@ -90,6 +93,7 @@ Select Window By Handle
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${parent}=    Select Window    Original
     Title Should Be    Original
     ${child}=    Select Window    ${parent}
@@ -106,6 +110,7 @@ Select Popup Window By Excluded List
     Cannot Be Executed in IE
     @{excluded_handle_list}=    List Windows
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${parent}=    Select Window    ${excluded_handle_list}
     Title Should Be    Original
     Close Window
@@ -118,6 +123,7 @@ Select Window By Special Locator
     Cannot Be Executed in IE
     ${start}=    Select Window    self
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${parent}=    Select Window    new
     Title Should Be    Original
     Should Be True    '${start}' == '${parent}'
@@ -130,6 +136,7 @@ Open Popup Window, Select It And Verify
     [Arguments]    ${window_id}
     [Documentation]    Open Popup Window, Select It And Verify
     Click Link    my popup
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     Select Window    ${window_id}
     Title should Be    Original
 
@@ -148,3 +155,8 @@ Close Popup Window And Select Main Window By Title
     [Documentation]    Close Popup Window And Select Main Window By Title
     Close Window
     Select Window    title=Click link to show a popup window
+
+Wait Until Window Is Open
+    ${titles} =    Get Window Titles
+    ${status} =    Evaluate    len(${titles}) > 1
+    Should Be True    ${status}

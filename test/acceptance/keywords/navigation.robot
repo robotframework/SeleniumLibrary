@@ -101,6 +101,13 @@ Target Opens in New Window
     [Documentation]    Target Opens in New Window
     Cannot Be Executed in IE
     Click Link    Target opens in new window
+    Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     Select Window    ${INDEX TITLE}
     Verify Location Is "index.html"
     [Teardown]    Run Keyword If Test Passed    Run Keywords    Close Window    Select Window
+
+*** Keywords ***
+Wait Until Window Is Open
+    ${titles} =    Get Window Titles
+    ${status} =    Evaluate    len(${titles}) > 1
+    Should Be True    ${status}
