@@ -8,6 +8,11 @@ from Selenium2Library.locators import CustomLocator
 
 from .keywordgroup import KeywordGroup
 
+try:
+    unicode = unicode
+except NameError:
+    basestring = (str,bytes)
+
 
 class _ElementKeywords(KeywordGroup):
 

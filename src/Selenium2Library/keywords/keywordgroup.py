@@ -1,7 +1,7 @@
 import sys
 import inspect
-
 from decorator import decorator
+from future.utils import with_metaclass
 
 
 def _run_on_failure_decorator(method, *args, **kwargs):
@@ -32,6 +32,5 @@ class KeywordGroupMetaClass(type):
                     dict[name] = decorator(_run_on_failure_decorator, method)
         return type.__new__(cls, clsname, bases, dict)
 
-
-class KeywordGroup(object):
-    __metaclass__ = KeywordGroupMetaClass
+class KeywordGroup(with_metaclass(KeywordGroupMetaClass, object)):
+    pass
