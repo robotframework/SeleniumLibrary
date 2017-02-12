@@ -3,7 +3,7 @@ import os
 from .keywordgroup import KeywordGroup
 
 
-class _FormElementKeywords(KeywordGroup):
+class FormElementKeywords(KeywordGroup):
 
     # Public, form
 

@@ -3,7 +3,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from .keywordgroup import KeywordGroup
 
 
-class _RunOnFailureKeywords(KeywordGroup):
+class RunOnFailureKeywords(KeywordGroup):
 
     def __init__(self):
         self._run_on_failure_keyword = None
@@ -43,7 +43,7 @@ class _RunOnFailureKeywords(KeywordGroup):
         self._info('%s will be run on failure.' % new_keyword_text)
 
         return old_keyword_text
-    
+
     # Private
 
     def _run_on_failure(self):

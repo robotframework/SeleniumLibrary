@@ -33,7 +33,7 @@ BROWSER_NAMES = {'ff': "_make_ff",
                 }
 
 
-class _BrowserManagementKeywords(KeywordGroup):
+class BrowserManagementKeywords(KeywordGroup):
 
     def __init__(self):
         self._cache = BrowserCache()

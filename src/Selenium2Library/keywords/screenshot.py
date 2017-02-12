@@ -8,7 +8,7 @@ from Selenium2Library.utils import events
 from .keywordgroup import KeywordGroup
 
 
-class _ScreenshotKeywords(KeywordGroup):
+class ScreenshotKeywords(KeywordGroup):
 
     def __init__(self):
         self._screenshot_index = {}

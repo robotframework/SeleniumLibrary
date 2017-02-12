@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import Select
 from .keywordgroup import KeywordGroup
 
 
-class _SelectElementKeywords(KeywordGroup):
+class SelectElementKeywords(KeywordGroup):
 
     # Public
 
@@ -14,7 +14,7 @@ class _SelectElementKeywords(KeywordGroup):
         Select list keywords work on both lists and combo boxes. Key attributes for
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
-        
+
         Example:
         | ${labels1} = | Get List Items | xpath=//h1 |
         | ${labels2} = | Get List Items | xpath=//h1 | value=${False} |

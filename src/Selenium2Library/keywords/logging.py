@@ -10,7 +10,7 @@ except ImportError:  # Support RF < 2.8.5
 from .keywordgroup import KeywordGroup
 
 
-class _LoggingKeywords(KeywordGroup):
+class LoggingKeywords(KeywordGroup):
 
     # Private
 
