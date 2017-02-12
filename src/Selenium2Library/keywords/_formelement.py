@@ -185,8 +185,8 @@ class _FormElementKeywords(KeywordGroup):
         """Types the given password into text field identified by `locator`.
 
         Difference between this keyword and `Input Text` is that this keyword
-        does not log the given password. See `introduction` for details about
-        locating elements.
+        does not log the given password. Be aware that the password will be visible in report file!
+        See `introduction` for details about locating elements.
         """
         self._info("Typing password into text field '%s'" % locator)
         self._input_text_into_text_field(locator, text)
