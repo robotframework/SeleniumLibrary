@@ -272,7 +272,7 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, elements)
         result = finder.find(browser, "partial link=my link", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
-        
+
     def test_find_by_css_selector(self):
         finder = ElementFinder()
         browser = mock()

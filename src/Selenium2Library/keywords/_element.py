@@ -43,7 +43,6 @@ class _ElementKeywords(KeywordGroup):
                                  "but did not" % text)
         self._info("Current page contains text '%s'." % text)
 
-
     def current_frame_should_not_contain(self, text, loglevel='INFO'):
         """Verifies that current frame contains `text`.
 
@@ -696,6 +695,34 @@ return !element.dispatchEvent(evt);
         """
         self._element_finder.unregister(strategy_name)
 
+    def element_attribute_should_be(self, locator, *attributes):
+        """Verifies that select element by `locator` has attributes
+         where in key=value key is expected attribute and value it's expected
+         attributes's value f.e. type=text. Keyword supports multiple pairs.
+
+        Usage Example:
+
+        | Element Attribute Should Be | xpath=//input | type=text |
+        | Element Attribute Should Be | xpath=//input | type=image | width=100 |
+        """
+        self._info("Checking attributes '%s' for element '%s'" % (
+                                            ", ".join(attributes), locator))
+        if not attributes:
+            raise ValueError("No attribute given")
+        attrs = {}
+        for attr in attributes:
+            try:
+                key, value = attr.split("=", 1)
+                attrs.update({key: value})
+            except ValueError:
+                raise AssertionError(
+                        "Attribute %s does not match pattern key=value" % attr)
+        el = self._element_find(locator, True, True)
+        for attr_key, attr_value in attrs.iteritems():
+            value = el.get_attribute(attr_key)
+            if value != attr_value:
+                raise AssertionError(
+                        "Attribute %s value %s != %s" % (key, value, attr_value))
     # Private
 
     def _element_find(self, locator, first_only, required, tag=None):
