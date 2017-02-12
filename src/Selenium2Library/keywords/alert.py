@@ -88,7 +88,7 @@ class AlertKeywords(KeywordGroup):
         By default the current JavaScript alert will be dismissed.
         This keyword will fail if no alert is present. Note that
         following keywords will fail unless the alert is
-        dismissed by this keyword or another like `Get Alert Message`.
+        dismissed by this keyword or another like `Dismiss Alert`.
         """
         if dismiss:
             return self._handle_alert(self.__DISMISS_ALERT)
