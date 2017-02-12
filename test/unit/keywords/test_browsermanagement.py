@@ -50,7 +50,7 @@ class BrowserManagementTests(unittest.TestCase):
     def test_parse_capabilities_string(self):
         bm = _BrowserManagementKeywords()
         expected_caps = "key1:val1,key2:val2"
-        capabilities = bm._parse_capabilities_string(expected_caps)
+        capabilities = bm._parse_capabilities_string({}, expected_caps)
         self.assertTrue("val1", capabilities["key1"])
         self.assertTrue("val2", capabilities["key2"])
         self.assertTrue(2, len(capabilities))
@@ -58,7 +58,7 @@ class BrowserManagementTests(unittest.TestCase):
     def test_parse_complex_capabilities_string(self):
         bm = _BrowserManagementKeywords()
         expected_caps = "proxyType:manual,httpProxy:IP:port"
-        capabilities = bm._parse_capabilities_string(expected_caps)
+        capabilities = bm._parse_capabilities_string({}, expected_caps)
         self.assertTrue("manual", capabilities["proxyType"])
         self.assertTrue("IP:port", capabilities["httpProxy"])
         self.assertTrue(2, len(capabilities))
