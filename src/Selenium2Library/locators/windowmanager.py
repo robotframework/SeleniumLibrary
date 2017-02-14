@@ -70,7 +70,7 @@ class WindowManager(object):
             browser.switch_to_window(handle)
             if criteria == handle:
                 return
-            for item in browser.get_current_window_info()[2:4]:
+            for item in self._get_current_window_info(browser)[2:4]:
                 if item.strip().lower() == criteria.lower():
                     return
         if starting_handle:
@@ -119,7 +119,7 @@ class WindowManager(object):
         try:
             for handle in browser.window_handles:
                 browser.switch_to_window(handle)
-                window_infos.append(browser.get_current_window_info())
+                window_infos.append(self._get_current_window_info(browser))
         finally:
             if starting_handle:
                 browser.switch_to_window(starting_handle)
@@ -132,8 +132,17 @@ class WindowManager(object):
             starting_handle = None
         for handle in browser.window_handles:
             browser.switch_to_window(handle)
-            if matcher(browser.get_current_window_info()):
+            if matcher(self._get_current_window_info(browser)):
                 return
         if starting_handle:
             browser.switch_to_window(starting_handle)
         raise ValueError(error)
+
+    def _get_current_window_info(self, browser):
+        id_, name, title, url = browser.execute_script(
+            "return [ window.id, window.name, document.title, document.URL ];")
+        id_ = id_ if id_ is not None else 'undefined'
+        name, title, url = (
+            att if att else 'undefined' for att in (name, title, url)
+        )
+        return browser.current_window_handle, id_, name, title, url

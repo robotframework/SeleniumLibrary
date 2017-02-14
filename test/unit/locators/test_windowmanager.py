@@ -321,7 +321,6 @@ class WindowManagerTests(unittest.TestCase):
             if not id_:
                 id_ = 'undefined'
             window_info = [
-                handle,
                 id_,
                 window_spec.get('name'),
                 window_spec.get('title'),
@@ -332,15 +331,13 @@ class WindowManagerTests(unittest.TestCase):
         def switch_to_window(handle_):
             if handle_ in browser.window_handles:
                 browser.session_id = handle_
-                current_window.name = window_infos[handle_][2]
+                current_window.name = window_infos[handle_][1]
                 browser.current_window = current_window
         browser.switch_to_window = switch_to_window
 
-        def get_current_window_info():
+        def execute_script(script):
             handle_ = browser.session_id
             if handle_ in browser.window_handles:
                 return window_infos[handle_]
-        browser.get_current_window_info = get_current_window_info
-        # print
-        # print window_infos
+        browser.execute_script = execute_script
         return browser
