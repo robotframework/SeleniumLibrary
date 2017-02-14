@@ -14,9 +14,6 @@ class WebDriverMonkeyPatches:
             time.sleep(speed)
         return result
 
-    def current_window_is_main(self):
-        return self.current_window_handle == self.window_handles[0];
-
     def set_speed(self, seconds):
         self._speed = seconds
 
