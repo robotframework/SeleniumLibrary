@@ -1,12 +1,14 @@
 import os.path
+import time
+import types
 
 from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
 
 from selenium import webdriver
+from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
-from Selenium2Library import webdrivermonkeypatches
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
 
@@ -31,6 +33,14 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'safari': "_make_safari",
                  'edge': "_make_edge"
                 }
+
+
+def execute(self, driver_command, params=None):
+    result = self._base_execute(driver_command, params)
+    speed = self._speed if hasattr(self, '_speed') else 0
+    if speed > 0:
+        time.sleep(speed)
+    return result
 
 
 class BrowserManagementKeywords(KeywordGroup):
@@ -453,15 +463,16 @@ class BrowserManagementKeywords(KeywordGroup):
 
         This is useful mainly in slowing down the test execution to be able to
         view the execution. `seconds` may be given in Robot Framework time
-        format. Returns the previous speed value.
+        format. Returns the previous speed value in seconds.
 
         Example:
         | Set Selenium Speed | .5 seconds |
         """
-        old_speed = self.get_selenium_speed()
+        old_speed = self._speed_in_secs
         self._speed_in_secs = timestr_to_secs(seconds)
         for browser in self._cache.browsers:
-            browser.set_speed(self._speed_in_secs)
+            browser._speed = self._speed_in_secs
+            self._monkey_patch_speed(browser)
         return old_speed
 
     def set_selenium_timeout(self, seconds):
@@ -541,7 +552,6 @@ class BrowserManagementKeywords(KeywordGroup):
             raise ValueError(browser_name + " is not a supported browser.")
 
         browser = creation_func(remote, desired_capabilities, profile_dir)
-        browser.set_speed(self._speed_in_secs)
         browser.set_script_timeout(self._timeout_in_secs)
         browser.implicitly_wait(self._implicit_wait_in_secs)
 
@@ -639,3 +649,11 @@ class BrowserManagementKeywords(KeywordGroup):
             desired_capabilities[key.strip()] = value.strip()
 
         return desired_capabilities
+
+    def _get_speed(self, browser):
+        return browser._speed if hasattr(browser, '_speed') else float(0)
+
+    def _monkey_patch_speed(self, browser):
+        if not hasattr(browser, '_base_execute'):
+            browser._base_execute = browser.execute
+            browser.execute = types.MethodType(execute, browser)
