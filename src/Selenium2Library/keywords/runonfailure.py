@@ -1,16 +1,18 @@
 from robot.libraries.BuiltIn import BuiltIn
 
-from .keywordgroup import KeywordGroup
+from Selenium2Library.base import Base
+from Selenium2Library.robotlibcore import keyword
 
 
-class RunOnFailureKeywords(KeywordGroup):
+class RunOnFailureKeywords(Base):
 
-    def __init__(self):
+    def __init__(self, ctx):
+        Base.__init__(self)
+        self.ctx = ctx
         self._run_on_failure_keyword = None
         self._running_on_failure_routine = False
 
-    # Public
-
+    @keyword
     def register_keyword_to_run_on_failure(self, keyword):
         """Sets the keyword to execute when a Selenium2Library keyword fails.
 
@@ -40,13 +42,12 @@ class RunOnFailureKeywords(KeywordGroup):
         new_keyword_text = new_keyword if new_keyword is not None else "No keyword"
 
         self._run_on_failure_keyword = new_keyword
-        self._info('%s will be run on failure.' % new_keyword_text)
+        self.info('%s will be run on failure.' % new_keyword_text)
 
         return old_keyword_text
 
-    # Private
-
     def _run_on_failure(self):
+        self._run_on_failure_keyword = True
         if self._run_on_failure_keyword is None:
             return
         if self._running_on_failure_routine:

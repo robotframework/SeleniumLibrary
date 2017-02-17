@@ -6,46 +6,45 @@ from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
 
 from selenium import webdriver
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
-from Selenium2Library.utils import BrowserCache
+from Selenium2Library.base import Base
 from Selenium2Library.locators import WindowManager
-
-from .keywordgroup import KeywordGroup
+from Selenium2Library.robotlibcore import keyword
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
-BROWSER_NAMES = {'ff': "_make_ff",
-                 'firefox': "_make_ff",
-                 'ie': "_make_ie",
-                 'internetexplorer': "_make_ie",
-                 'googlechrome': "_make_chrome",
-                 'gc': "_make_chrome",
-                 'chrome': "_make_chrome",
-                 'opera' : "_make_opera",
-                 'phantomjs' : "_make_phantomjs",
-                 'htmlunit' : "_make_htmlunit",
-                 'htmlunitwithjs' : "_make_htmlunitwithjs",
-                 'android': "_make_android",
-                 'iphone': "_make_iphone",
-                 'safari': "_make_safari",
-                 'edge': "_make_edge"
-                }
+BROWSER_NAMES = {
+    'ff': "_make_ff",
+    'firefox': "_make_ff",
+    'ie': "_make_ie",
+    'internetexplorer': "_make_ie",
+    'googlechrome': "_make_chrome",
+    'gc': "_make_chrome",
+    'chrome': "_make_chrome",
+    'opera': "_make_opera",
+    'phantomjs': "_make_phantomjs",
+    'htmlunit': "_make_htmlunit",
+    'htmlunitwithjs': "_make_htmlunitwithjs",
+    'android': "_make_android",
+    'iphone': "_make_iphone",
+    'safari': "_make_safari",
+    'edge': "_make_edge"
+}
 
 
-class BrowserManagementKeywords(KeywordGroup):
+class BrowserManagementKeywords(Base):
 
-    def __init__(self):
-        self._cache = BrowserCache()
+    def __init__(self, ctx):
+        Base.__init__(self)
+        self.ctx = ctx
         self._window_manager = WindowManager()
         self._speed_in_secs = 0.0
         self._timeout_in_secs = float(5)
         self._implicit_wait_in_secs = float(0)
 
-    # Public, open and close
-
+    @keyword
     def close_all_browsers(self):
         """Closes all open browsers and resets the browser cache.
 
@@ -55,18 +54,24 @@ class BrowserManagementKeywords(KeywordGroup):
         This keyword should be used in test or suite teardown to make sure
         all browsers are closed.
         """
-        self._debug('Closing all browsers')
-        self._cache.close_all()
+        self.debug('Closing all browsers')
+        self.ctx.cache.close_all()
 
+    @keyword
     def close_browser(self):
         """Closes the current browser."""
-        if self._cache.current:
-            self._debug('Closing browser with session id %s'
-                        % self._cache.current.session_id)
-            self._cache.close()
+        if self.ctx.cache.current:
+            self.debug(
+                'Closing browser with session id {}'.format(
+                    self.ctx.cache.current.session_id
+                )
+            )
+            self.ctx.cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None,remote_url=False,
-                desired_capabilities=None,ff_profile_dir=None):
+    @keyword
+    def open_browser(
+            self, url, browser='firefox', alias=None, remote_url=False,
+            desired_capabilities=None, ff_profile_dir=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -116,24 +121,25 @@ class BrowserManagementKeywords(KeywordGroup):
         wish to overwrite the default.
         """
         if remote_url:
-            self._info("Opening browser '%s' to base url '%s' through remote server at '%s'"
+            self.info("Opening browser '%s' to base url '%s' through remote server at '%s'"
                     % (browser, url, remote_url))
         else:
-            self._info("Opening browser '%s' to base url '%s'" % (browser, url))
+            self.info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
         browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
         try:
             browser.get(url)
         except:
-            self._cache.register(browser, alias)
-            self._debug("Opened browser with session id %s but failed to open url '%s'"
+            self.ctx.register_browser(browser, alias)
+            self.debug("Opened browser with session id %s but failed to open url '%s'"
                         % (browser.session_id, url))
             raise
-        self._debug('Opened browser with session id %s'
-                    % browser.session_id)
-        return self._cache.register(browser, alias)
+        self.debug('Opened browser with session id %s' % browser.session_id)
+        return self.ctx.register_browser(browser, alias)
 
-    def create_webdriver(self, driver_name, alias=None, kwargs={}, **init_kwargs):
+    @keyword
+    def create_webdriver(self, driver_name, alias=None, kwargs={},
+                         **init_kwargs):
         """Creates an instance of a WebDriver.
 
         Like `Open Browser`, but allows passing arguments to a WebDriver's
@@ -182,11 +188,12 @@ class BrowserManagementKeywords(KeywordGroup):
             creation_func = getattr(webdriver, driver_name)
         except AttributeError:
             raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
-        self._info("Creating an instance of the %s WebDriver" % driver_name)
+        self.info("Creating an instance of the %s WebDriver" % driver_name)
         driver = creation_func(**init_kwargs)
-        self._debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
-        return self._cache.register(driver, alias)
+        self.debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+        return self.ctx.register_browser(driver, alias)
 
+    @keyword
     def switch_browser(self, index_or_alias):
         """Switches between active browsers using index or alias.
 
@@ -213,26 +220,31 @@ class BrowserManagementKeywords(KeywordGroup):
         | Switch Browser     | ${id}         |                   |          |
         """
         try:
-            self._cache.switch(index_or_alias)
-            self._debug('Switched to browser with Selenium session id %s'
+            self.ctx.cache.switch(index_or_alias)
+            self.debug('Switched to browser with Selenium session id %s'
                          % self._cache.current.session_id)
         except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
 
-    # Public, window management
-
+    @keyword
     def close_window(self):
         """Closes currently opened pop-up window."""
-        self._current_browser().close()
+        self.ctx.current_browser().close()
 
+    @keyword
     def get_window_identifiers(self):
         """Returns and logs id attributes of all windows known to the browser."""
-        return self._log_list(self._window_manager.get_window_ids(self._current_browser()))
+        return self._log_list(
+            self._window_manager.get_window_ids(self.ctx.current_browser())
+        )
 
+    @keyword
     def get_window_names(self):
         """Returns and logs names of all windows known to the browser."""
-        values = self._window_manager.get_window_names(self._current_browser())
+        values = self._window_manager.get_window_names(
+            self.ctx.current_browser()
+        )
 
         # for backward compatibility, since Selenium 1 would always
         # return this constant value for the main window
@@ -241,23 +253,29 @@ class BrowserManagementKeywords(KeywordGroup):
 
         return self._log_list(values)
 
+    @keyword
     def get_window_titles(self):
         """Returns and logs titles of all windows known to the browser."""
-        return self._log_list(self._window_manager.get_window_titles(self._current_browser()))
+        return self._log_list(
+            self._window_manager.get_window_titles(self.ctx.current_browser())
+        )
 
+    @keyword
     def maximize_browser_window(self):
         """Maximizes current browser window."""
-        self._current_browser().maximize_window()
+        self.ctx.current_browser().maximize_window()
 
+    @keyword
     def get_window_size(self):
         """Returns current window size as `width` then `height`.
 
         Example:
         | ${width} | ${height}= | Get Window Size |
         """
-        size = self._current_browser().get_window_size()
+        size = self.ctx.current_browser().get_window_size()
         return size['width'], size['height']
 
+    @keyword
     def set_window_size(self, width, height):
         """Sets the `width` and `height` of the current window to the specified values.
 
@@ -267,17 +285,19 @@ class BrowserManagementKeywords(KeywordGroup):
         | Should Be Equal | ${width}  | ${800}    |
         | Should Be Equal | ${height} | ${600}    |
         """
-        return self._current_browser().set_window_size(width, height)
+        return self.ctx.current_browser().set_window_size(width, height)
 
+    @keyword
     def get_window_position(self):
         """Returns current window position as `x` then `y` (relative to the left and top of the screen).
 
         Example:
         | ${x} | ${y}= | Get Window Position |
         """
-        position = self._current_browser().get_window_position()
+        position = self.ctx.current_browser().get_window_position()
         return position['x'], position['y']
 
+    @keyword
     def set_window_position(self, x, y):
         """Sets the position x and y of the current window (relative to the left and top of the screen) to the specified values.
 
@@ -287,18 +307,20 @@ class BrowserManagementKeywords(KeywordGroup):
         | Should Be Equal     | ${x}    | ${8}                |
         | Should Be Equal     | ${y}    | ${10}               |
         """
-        return self._current_browser().set_window_position(x, y)
+        return self.ctx.current_browser().set_window_position(x, y)
 
+    @keyword
     def select_frame(self, locator):
         """Sets frame identified by `locator` as current frame.
 
         Key attributes for frames are `id` and `name.` See `introduction` for
         details about locating elements.
         """
-        self._info("Selecting frame '%s'." % locator)
+        self.info("Selecting frame '%s'." % locator)
         element = self._element_find(locator, True, True)
-        self._current_browser().switch_to_frame(element)
+        self.ctx.current_browser().switch_to_frame(element)
 
+    @keyword
     def select_window(self, locator=None):
         """Selects the window matching locator and return previous window handle.
 
@@ -334,122 +356,135 @@ class BrowserManagementKeywords(KeywordGroup):
         | Select Window |  | | # Chooses the main window again |
         """
         try:
-            return self._current_browser().current_window_handle
+            return self.ctx.current_browser().current_window_handle
         except NoSuchWindowException:
             pass
         finally:
-            self._window_manager.select(self._current_browser(), locator)
+            self._window_manager.select(self.ctx.current_browser(), locator)
 
+    @keyword
     def list_windows(self):
         """Return all current window handles as a list"""
-        return self._current_browser().window_handles
+        return self.ctx.current_browser().window_handles
 
+    @keyword
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
-        self._current_browser().switch_to_default_content()
+        self.ctx.current_browser().switch_to_default_content()
 
-    # Public, browser/current page properties
-
+    @keyword
     def get_location(self):
         """Returns the current location."""
-        return self._current_browser().current_url
+        return self.ctx.current_browser().current_url
 
+    @keyword
     def get_locations(self):
         """Returns and logs current locations of all windows known to the browser."""
         return self._log_list(
             [window_info[4] for window_info in
-             self._window_manager._get_window_infos(self._current_browser())]
+             self._window_manager._get_window_infos(self.ctx.current_browser())]
         )
 
+    @keyword
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
-        return self._current_browser().page_source
+        return self.ctx.current_browser().page_source
 
+    @keyword
     def get_title(self):
         """Returns title of current page."""
-        return self._current_browser().title
+        return self.ctx.current_browser().title
 
+    @keyword
     def location_should_be(self, url):
         """Verifies that current URL is exactly `url`."""
         actual = self.get_location()
-        if  actual != url:
+        if actual != url:
             raise AssertionError("Location should have been '%s' but was '%s'"
                                  % (url, actual))
-        self._info("Current location is '%s'." % url)
+        self.info("Current location is '%s'." % url)
 
+    @keyword
     def location_should_contain(self, expected):
         """Verifies that current URL contains `expected`."""
         actual = self.get_location()
-        if not expected in actual:
+        if expected not in actual:
             raise AssertionError("Location should have contained '%s' "
                                  "but it was '%s'." % (expected, actual))
-        self._info("Current location contains '%s'." % expected)
+        self.info("Current location contains '%s'." % expected)
 
+    @keyword
     def log_location(self):
         """Logs and returns the current location."""
         url = self.get_location()
-        self._info(url)
+        self.info(url)
         return url
 
+    @keyword
     def log_source(self, loglevel='INFO'):
         """Logs and returns the entire html source of the current page or frame.
 
-        The `loglevel` argument defines the used log level. Valid log levels are
-        WARN, INFO (default), DEBUG, and NONE (no logging).
+        The `loglevel` argument defines the used log level. Valid log levels
+        are WARN, INFO (default), DEBUG, and NONE (no logging).
         """
         source = self.get_source()
-        self._log(source, loglevel.upper())
+        self.log(source, loglevel.upper())
         return source
 
+    @keyword
     def log_title(self):
         """Logs and returns the title of current page."""
         title = self.get_title()
-        self._info(title)
+        self.info(title)
         return title
 
+    @keyword
     def title_should_be(self, title):
         """Verifies that current page title equals `title`."""
         actual = self.get_title()
         if actual != title:
             raise AssertionError("Title should have been '%s' but was '%s'"
                                   % (title, actual))
-        self._info("Page title is '%s'." % title)
+        self.info("Page title is '%s'." % title)
 
-    # Public, navigation
-
+    @keyword
     def go_back(self):
         """Simulates the user clicking the "back" button on their browser."""
-        self._current_browser().back()
+        self.ctx.current_browser().back()
 
+    @keyword
     def go_to(self, url):
         """Navigates the active browser instance to the provided URL."""
-        self._info("Opening url '%s'" % url)
-        self._current_browser().get(url)
+        self.info("Opening url '%s'" % url)
+        self.ctx.current_browser().get(url)
 
+    @keyword
     def reload_page(self):
         """Simulates user reloading page."""
-        self._current_browser().refresh()
+        self.ctx.current_browser().refresh()
 
-    # Public, execution properties
-
+    @keyword
     def get_selenium_speed(self):
         """Gets the delay in seconds that is waited after each Selenium command.
 
         See `Set Selenium Speed` for an explanation."""
         return secs_to_timestr(self._speed_in_secs)
 
+    @keyword
     def get_selenium_timeout(self):
         """Gets the timeout in seconds that is used by various keywords.
 
         See `Set Selenium Timeout` for an explanation."""
         return secs_to_timestr(self._timeout_in_secs)
 
+    @keyword
     def get_selenium_implicit_wait(self):
         """Gets the wait in seconds that is waited by Selenium.
 
         See `Set Selenium Implicit Wait` for an explanation."""
         return secs_to_timestr(self._implicit_wait_in_secs)
 
+    @keyword
     def set_selenium_speed(self, seconds):
         """Sets the delay in seconds that is waited after each Selenium command.
 
@@ -469,11 +504,12 @@ class BrowserManagementKeywords(KeywordGroup):
         """
         old_speed = self._speed_in_secs
         self._speed_in_secs = timestr_to_secs(seconds)
-        for browser in self._cache.browsers:
+        for browser in self.ctx.cache.browsers:
             browser._speed = self._speed_in_secs
             self._monkey_patch_speed(browser)
         return old_speed
 
+    @keyword
     def set_selenium_timeout(self, seconds):
         """Sets the timeout in seconds used by various keywords.
 
@@ -493,10 +529,11 @@ class BrowserManagementKeywords(KeywordGroup):
         """
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = timestr_to_secs(seconds)
-        for browser in self._cache.get_open_browsers():
+        for browser in self.ctc.cache.get_open_browsers():
             browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
 
+    @keyword
     def set_selenium_implicit_wait(self, seconds):
         """Sets Selenium 2's default implicit wait in seconds and
         sets the implicit wait for all open browsers.
@@ -512,11 +549,11 @@ class BrowserManagementKeywords(KeywordGroup):
         """
         old_wait = self.get_selenium_implicit_wait()
         self._implicit_wait_in_secs = timestr_to_secs(seconds)
-        for browser in self._cache.get_open_browsers():
+        for browser in self.ctx.cache.get_open_browsers():
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
 
-
+    @keyword
     def set_browser_implicit_wait(self, seconds):
         """Sets current browser's implicit wait in seconds.
 
@@ -530,14 +567,7 @@ class BrowserManagementKeywords(KeywordGroup):
         See also `Set Selenium Implicit Wait`.
         """
         implicit_wait_in_secs = timestr_to_secs(seconds)
-        self._current_browser().implicitly_wait(implicit_wait_in_secs)
-
-    # Private
-
-    def _current_browser(self):
-        if not self._cache.current:
-            raise RuntimeError('No browser is open')
-        return self._cache.current
+        self.ctx.current_browser().implicitly_wait(implicit_wait_in_secs)
 
     def _get_browser_creation_function(self, browser_name):
         func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))
@@ -556,8 +586,7 @@ class BrowserManagementKeywords(KeywordGroup):
 
         return browser
 
-
-    def _make_ff(self , remote , desired_capabilites , profile_dir):
+    def _make_ff(self, remote, desired_capabilites, profile_dir):
 
         if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
@@ -568,43 +597,43 @@ class BrowserManagementKeywords(KeywordGroup):
             browser = webdriver.Firefox(firefox_profile=profile)
         return browser
 
-    def _make_ie(self , remote , desired_capabilities , profile_dir):
+    def _make_ie(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Ie,
                 webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
 
-    def _make_chrome(self , remote , desired_capabilities , profile_dir):
+    def _make_chrome(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Chrome,
                 webdriver.DesiredCapabilities.CHROME, remote, desired_capabilities)
 
-    def _make_opera(self , remote , desired_capabilities , profile_dir):
+    def _make_opera(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Opera,
                 webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
 
-    def _make_phantomjs(self , remote , desired_capabilities , profile_dir):
+    def _make_phantomjs(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.PhantomJS,
                 webdriver.DesiredCapabilities.PHANTOMJS, remote, desired_capabilities)
 
-    def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
+    def _make_htmlunit(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
 
-    def _make_htmlunitwithjs(self , remote , desired_capabilities , profile_dir):
+    def _make_htmlunitwithjs(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
 
-    def _make_android(self , remote , desired_capabilities , profile_dir):
+    def _make_android(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.ANDROID, remote, desired_capabilities)
 
-    def _make_iphone(self , remote , desired_capabilities , profile_dir):
+    def _make_iphone(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
                 webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
 
-    def _make_safari(self , remote , desired_capabilities , profile_dir):
+    def _make_safari(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Safari,
                 webdriver.DesiredCapabilities.SAFARI, remote, desired_capabilities)
 
-    def _make_edge(self , remote , desired_capabilities , profile_dir):
+    def _make_edge(self, remote, desired_capabilities, profile_dir):
         if hasattr(webdriver, 'Edge'):
             return self._generic_make_browser(webdriver.Edge,
                 webdriver.DesiredCapabilities.EDGE, remote, desired_capabilities)
@@ -620,7 +649,7 @@ class BrowserManagementKeywords(KeywordGroup):
             browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
         return browser
 
-    def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
+    def _create_remote_web_driver(self, capabilities_type, remote_url, desired_capabilities=None, profile=None):
         '''parses the string based desired_capabilities if neccessary and
         creates the associated remote web driver'''
 
@@ -662,3 +691,14 @@ class BrowserManagementKeywords(KeywordGroup):
         if not hasattr(browser, '_base_execute'):
             browser._base_execute = browser.execute
             browser.execute = types.MethodType(execute, browser)
+
+    def _log_list(self, items, what='item'):
+        msg = [
+            'Altogether {} {}.'.format(
+                len(items), what if len(items) == 1 else '{}s'.format(what)
+            )
+        ]
+        for index, item in enumerate(items):
+            msg.append('{}: {}'.format(index + 1, item))
+        self.info('\n'.join(msg))
+        return items

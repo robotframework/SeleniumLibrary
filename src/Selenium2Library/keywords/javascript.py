@@ -1,12 +1,16 @@
 import os
 
-from .keywordgroup import KeywordGroup
+from Selenium2Library.base import Base
+from Selenium2Library.robotlibcore import keyword
 
 
-class JavaScriptKeywords(KeywordGroup):
+class JavaScriptKeywords(Base):
 
-    # Public
+    def __init__(self, ctx):
+        Base.__init__(self)
+        self.ctx = ctx
 
+    @keyword
     def execute_javascript(self, *code):
         """Executes the given JavaScript code.
 
@@ -35,9 +39,10 @@ class JavaScriptKeywords(KeywordGroup):
         | Should Be Equal    | ${sum}                                | ${2}          |
         """
         js = self._get_javascript_to_execute(''.join(code))
-        self._info("Executing JavaScript:\n%s" % js)
-        return self._current_browser().execute_script(js)
+        self.info("Executing JavaScript:\n%s" % js)
+        return self.ctx.current_browser().execute_script(js)
 
+    @keyword
     def execute_async_javascript(self, *code):
         """Executes asynchronous JavaScript code.
 
@@ -59,10 +64,8 @@ class JavaScriptKeywords(KeywordGroup):
         | Should Be Equal          | ${retval}                                       | text                               |
         """
         js = self._get_javascript_to_execute(''.join(code))
-        self._info("Executing Asynchronous JavaScript:\n%s" % js)
-        return self._current_browser().execute_async_script(js)
-
-    # Private
+        self.info("Executing Asynchronous JavaScript:\n%s" % js)
+        return self.ctx.current_browser().execute_async_script(js)
 
     def _get_javascript_to_execute(self, code):
         codepath = code.replace('/', os.sep)

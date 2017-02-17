@@ -1,21 +1,23 @@
 import time
+
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from .keywordgroup import KeywordGroup
+from Selenium2Library.base import Base
+from Selenium2Library.robotlibcore import keyword
 
 
-class AlertKeywords(KeywordGroup):
+class AlertKeywords(Base):
 
     __ACCEPT_ALERT = 'accept'
     __DISMISS_ALERT = 'dismiss'
 
-    def __init__(self):
+    def __init__(self, ctx):
+        self.ctx = ctx
         self._next_alert_dismiss_type = self.__ACCEPT_ALERT
 
-    # Public
-
+    @keyword
     def input_text_into_prompt(self, text):
         """Types the given `text` into alert box.  """
         try:
@@ -24,6 +26,7 @@ class AlertKeywords(KeywordGroup):
         except WebDriverException:
             raise RuntimeError('There were no alerts')
 
+    @keyword
     def alert_should_be_present(self, text=''):
         """Verifies an alert is present and dismisses it.
 
@@ -40,10 +43,12 @@ class AlertKeywords(KeywordGroup):
                                  "'%s' but was '%s'"
                                  % (text, alert_text))
 
+    @keyword
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
         self._next_alert_dismiss_type = self.__DISMISS_ALERT
 
+    @keyword
     def choose_ok_on_next_confirmation(self):
         """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
         that Selenium's overridden window.confirm() function will normally
@@ -61,6 +66,7 @@ class AlertKeywords(KeywordGroup):
         """
         self._next_alert_dismiss_type = self.__ACCEPT_ALERT
 
+    @keyword
     def confirm_action(self):
         """Dismisses currently shown confirmation dialog and returns it's message.
 
@@ -82,6 +88,7 @@ class AlertKeywords(KeywordGroup):
         self._next_alert_dismiss_type = self.__DISMISS_ALERT
         return text
 
+    @keyword
     def get_alert_message(self, dismiss=True):
         """Returns the text of current JavaScript alert.
 
@@ -95,6 +102,7 @@ class AlertKeywords(KeywordGroup):
         else:
             return self._handle_alert()
 
+    @keyword
     def dismiss_alert(self, accept=True):
         """ Returns true if alert was confirmed, false if it was dismissed
 
