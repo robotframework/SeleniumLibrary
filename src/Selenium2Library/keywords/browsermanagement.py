@@ -35,20 +35,12 @@ BROWSER_NAMES = {'ff': "_make_ff",
                 }
 
 
-def execute(self, driver_command, params=None):
-    result = self._base_execute(driver_command, params)
-    speed = self._speed if hasattr(self, '_speed') else 0
-    if speed > 0:
-        time.sleep(speed)
-    return result
-
-
 class BrowserManagementKeywords(KeywordGroup):
 
     def __init__(self):
         self._cache = BrowserCache()
         self._window_manager = WindowManager()
-        self._speed_in_secs = float(0)
+        self._speed_in_secs = 0.0
         self._timeout_in_secs = float(5)
         self._implicit_wait_in_secs = float(0)
 
@@ -465,6 +457,13 @@ class BrowserManagementKeywords(KeywordGroup):
         view the execution. `seconds` may be given in Robot Framework time
         format. Returns the previous speed value in seconds.
 
+        One keyword may execute one or many Selenium commands and therefore
+        one keyword may slow down more than the ``seconds`` argument defines.
+        Example if delay is set to 1 second and because `Click Element`
+        executes two Selenium commands, then the total delay will be 2 seconds.
+        But because `Page Should Contain Element` executes only one selenium
+        command, then the total delay will be 1 second.
+
         Example:
         | Set Selenium Speed | .5 seconds |
         """
@@ -651,9 +650,15 @@ class BrowserManagementKeywords(KeywordGroup):
         return desired_capabilities
 
     def _get_speed(self, browser):
-        return browser._speed if hasattr(browser, '_speed') else float(0)
+        return browser._speed if hasattr(browser, '_speed') else 0.0
 
     def _monkey_patch_speed(self, browser):
+        def execute(self, driver_command, params=None):
+            result = self._base_execute(driver_command, params)
+            speed = self._speed if hasattr(self, '_speed') else 0.0
+            if speed > 0:
+                time.sleep(speed)
+            return result
         if not hasattr(browser, '_base_execute'):
             browser._base_execute = browser.execute
             browser.execute = types.MethodType(execute, browser)

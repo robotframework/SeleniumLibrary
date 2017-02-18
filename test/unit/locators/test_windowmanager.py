@@ -71,7 +71,7 @@ class WindowManagerTests(unittest.TestCase):
                 str(err),
                 "Unable to locate window with title 'Title -1'"
             )
-    unstub()
+        unstub()
 
     def test_select_by_name(self):
         manager = WindowManager()
