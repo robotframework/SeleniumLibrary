@@ -6,7 +6,6 @@ from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
 
 from selenium import webdriver
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from Selenium2Library.utils import BrowserCache
