@@ -38,7 +38,7 @@ matrix:
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
-        - ROBOTFRAMEWORK=3.0.1
+        - ROBOTFRAMEWORK=3.0.2
     - python: "3.3" # For cron only
       env:
         - BROWSER=firefox
