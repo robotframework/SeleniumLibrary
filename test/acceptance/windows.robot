@@ -24,6 +24,10 @@ Get Window Titles
     ${titles}=    Get Window Titles
     Should Be Equal    ${titles}    ${exp_titles}
 
+Get Title
+    ${title} =    Get Title
+    Should Be Equal As Strings    ${title}    Click link to show a popup window
+
 Get Location
     [Documentation]  Get current location
     ${current_url}=     Get Location

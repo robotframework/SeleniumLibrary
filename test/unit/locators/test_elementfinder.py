@@ -48,7 +48,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_explicit_default_strategy_and_equals(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "default=page.do?foo=bar", tag='a')
         verify(browser).find_elements_by_xpath(
             "//a[(@id='page.do?foo=bar' or @name='page.do?foo=bar' or @href='page.do?foo=bar' or " +
@@ -83,7 +83,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_a(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='a')
         verify(browser).find_elements_by_xpath(
             "//a[(@id='test1' or @name='test1' or @href='test1' or normalize-space(descendant-or-self::text())='test1' or @href='http://localhost/test1')]")
@@ -91,7 +91,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_link_synonym(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='link')
         verify(browser).find_elements_by_xpath(
             "//a[(@id='test1' or @name='test1' or @href='test1' or normalize-space(descendant-or-self::text())='test1' or @href='http://localhost/test1')]")
@@ -99,7 +99,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_img(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='img')
         verify(browser).find_elements_by_xpath(
             "//img[(@id='test1' or @name='test1' or @src='test1' or @alt='test1' or @src='http://localhost/test1')]")
@@ -107,7 +107,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_image_synonym(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='image')
         verify(browser).find_elements_by_xpath(
             "//img[(@id='test1' or @name='test1' or @src='test1' or @alt='test1' or @src='http://localhost/test1')]")
@@ -115,7 +115,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_input(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='input')
         verify(browser).find_elements_by_xpath(
             "//input[(@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
@@ -123,7 +123,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_radio_button_synonym(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='radio button')
         verify(browser).find_elements_by_xpath(
             "//input[@type='radio' and (@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
@@ -131,7 +131,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_checkbox_synonym(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='checkbox')
         verify(browser).find_elements_by_xpath(
             "//input[@type='checkbox' and (@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
@@ -139,7 +139,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_file_upload_synonym(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='file upload')
         verify(browser).find_elements_by_xpath(
             "//input[@type='file' and (@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
@@ -147,7 +147,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_text_field_synonym(self):
         finder = ElementFinder()
         browser = mock()
-        when(browser).get_current_url().thenReturn("http://localhost/mypage.html")
+        browser.current_url = "http://localhost/mypage.html"
         finder.find(browser, "test1", tag='text field')
         verify(browser).find_elements_by_xpath(
             "//input[@type='text' and (@id='test1' or @name='test1' or @value='test1' or @src='test1' or @src='http://localhost/test1')]")
@@ -260,7 +260,7 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, elements)
         result = finder.find(browser, "link=my link", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
-        
+
     def test_find_by_partial_link_text(self):
         finder = ElementFinder()
         browser = mock()
@@ -272,7 +272,7 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, elements)
         result = finder.find(browser, "partial link=my link", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
-        
+
     def test_find_by_css_selector(self):
         finder = ElementFinder()
         browser = mock()
