@@ -168,3 +168,13 @@ class TableElementKeywords(KeywordGroup):
             self.log_source(loglevel)
             raise AssertionError("Table identified by '%s' should have contained text '%s'." \
                 % (table_locator, expected))
+				
+	def table_should_not_contain(self, table_locator, not_expected, loglevel='INFO'):
+		"""Verifies that `expected` cant be found somewhere in the table.
+		`loglevel` argument.
+		"""
+		element = self._table_element_finder.find_by_content(self._current_browser(), table_locator, not_expected)
+		
+		if element is not None:
+			self.log_source(loglevel)
+			raise AssertionError("Table identified by '%s' should not have contained text '%s'." % (table_locator, not_expected))
