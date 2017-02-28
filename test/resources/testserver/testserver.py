@@ -4,17 +4,25 @@ import os
 import httplib
 import SimpleHTTPServer
 import BaseHTTPServer
+import socket
 
 
 class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     """http request handler with QUIT stopping the server"""
+
+    def setup(self):
+        SimpleHTTPServer.SimpleHTTPRequestHandler.setup(self)
+        self.rfile.close()
+        self.wfile.close()
+        self.rfile = HttpEchoer(self.connection._sock, 'rb', self.rbufsize)
+        self.wfile = HttpEchoer(self.connection._sock, 'wb', self.wbufsize)
 
     def do_QUIT(self):
         """send 200 OK response, and set server.stop to True"""
         self.send_response(200)
         self.end_headers()
         self.server.stop = True
-        
+
     def do_POST(self):
         # We could also process paremeters here using something like below.
         # length = self.headers['Content-Length']
@@ -63,7 +71,11 @@ class StoppableHttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", ctype)
         fs = os.fstat(f.fileno())
-        self.send_header("Content-Length", str(fs[6]))
+        # chrome hangs if this server runs on windows
+        # it probably waits for more data -> os.fstat() does not return correct
+        # length? We are responding with HTTP 1.0 = we do not need
+        # content-length header:
+        # self.send_header("Content-Length", str(fs[6]))
         self.send_header("Last-Modified", self.date_time_string(fs.st_mtime))
         self.end_headers()
         return f
@@ -79,6 +91,33 @@ class StoppableHttpServer(BaseHTTPServer.HTTPServer):
             self.handle_request()
 
 
+class HttpEchoer(socket._fileobject):
+    # echoes all HTTP traffic to a file if
+    # the server output is set to a file in run_tests.py
+    def read(self, size=-1):
+        data = super(HttpEchoer, self).read(size)
+        sys.stdout.write("-->: %s" % data)
+        sys.stdout.flush()
+        return data
+
+    def readline(self, size=-1):
+        data = super(HttpEchoer, self).readline(size)
+        sys.stdout.write("-->: %s" % data)
+        sys.stdout.flush()
+        return data
+
+    def readlines(self, sizehint=0):
+        data = super(HttpEchoer, self).readlines(sizehint)
+        sys.stdout.write("-->: %s" % data)
+        sys.stdout.flush()
+        return data
+
+    def write(self, data):
+        sys.stdout.write("<--: %s" % data)
+        sys.stdout.flush()
+        super(HttpEchoer, self).write(data)
+
+        
 def stop_server(port=7000):
     """send QUIT request to http server running on localhost:<port>"""
     conn = httplib.HTTPConnection("localhost:%d" % port)
@@ -91,8 +130,7 @@ def start_server(port=7000):
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), '..'))
     server = StoppableHttpServer(('', port), StoppableHttpRequestHandler)
     server.serve_forever()
-    
-    
+
 if __name__ == '__main__':
     import sys
     if len(sys.argv) != 2 or sys.argv[1] not in ['start', 'stop']:
@@ -102,5 +140,3 @@ if __name__ == '__main__':
         start_server()
     else:
         stop_server()
-
-
