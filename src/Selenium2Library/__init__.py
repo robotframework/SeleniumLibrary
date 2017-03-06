@@ -216,9 +216,9 @@ class Selenium2Library(DynamicCore):
 
     def current_browser(self):
         """returns the current active browser"""
-        if not self._cache.current:
+        if not self.cache.current:
             raise RuntimeError('No browser is open')
         return self.cache.current
 
     def register_browser(self, browser, alias):
-        self.cache.register(browser, alias)
+        return self.cache.register(browser, alias)

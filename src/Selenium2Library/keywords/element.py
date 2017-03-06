@@ -38,7 +38,7 @@ class ElementKeywords(Base):
 
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
-        if not self._is_text_present(text):
+        if not self.is_text_present(text):
             self.ctx.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
@@ -50,7 +50,7 @@ class ElementKeywords(Base):
 
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
-        if self._is_text_present(text):
+        if self.is_text_present(text):
             self.ctx.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s' "
                                  "but it did" % text)
@@ -236,7 +236,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Verifying element '%s' is visible." % locator)
-        visible = self._is_visible(locator)
+        visible = self.is_visible(locator)
         if not visible:
             if not message:
                 message = "The element '%s' should be visible, but it "\
@@ -255,7 +255,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Verifying element '%s' is not visible." % locator)
-        visible = self._is_visible(locator)
+        visible = self.is_visible(locator)
         if visible:
             if not message:
                 message = "The element '%s' should not be visible, "\
@@ -774,7 +774,7 @@ return !element.dispatchEvent(evt);
         element = self.element_find(locator, True, True)
         browser.switch_to_frame(element)
         self.info("Searching for text from frame '%s'." % locator)
-        found = self._is_text_present(text)
+        found = self.is_text_present(text)
         browser.switch_to_default_content()
         return found
 
@@ -799,11 +799,11 @@ return !element.dispatchEvent(evt);
             return False
         return True
 
-    def _is_text_present(self, text):
+    def is_text_present(self, text):
         locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text)
-        return self._is_element_present(locator)
+        return self.is_element_present(locator)
 
-    def _is_visible(self, locator):
+    def is_visible(self, locator):
         element = self.element_find(locator, True, False)
         if element is not None:
             return element.is_displayed()
@@ -850,21 +850,21 @@ return !element.dispatchEvent(evt);
             raise ValueError("Attribute locator '%s' does not contain an attribute name." % (attribute_locator))
         return parts[0], parts[2]
 
-    def _is_element_present(self, locator, tag=None):
+    def is_element_present(self, locator, tag=None):
         return self.element_find(locator, True, False, tag=tag) is not None
 
     def _page_contains(self, text):
         browser = self.ctx.current_browser()
         browser.switch_to_default_content()
 
-        if self._is_text_present(text):
+        if self.is_text_present(text):
             return True
 
         subframes = self.element_find("xpath=//frame|//iframe", False, False)
         self._debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
-            found_text = self._is_text_present(text)
+            found_text = self.is_text_present(text)
             browser.switch_to_default_content()
             if found_text:
                 return True
@@ -872,7 +872,7 @@ return !element.dispatchEvent(evt);
 
     def _page_should_contain_element(self, locator, tag, message, loglevel):
         element_name = tag if tag is not None else 'element'
-        if not self._is_element_present(locator, tag):
+        if not self.is_element_present(locator, tag):
             if not message:
                 message = "Page should have contained %s '%s' but did not"\
                            % (element_name, locator)
@@ -882,7 +882,7 @@ return !element.dispatchEvent(evt);
 
     def _page_should_not_contain_element(self, locator, tag, message, loglevel):
         element_name = tag if tag is not None else 'element'
-        if self._is_element_present(locator, tag):
+        if self.is_element_present(locator, tag):
             if not message:
                 message = "Page should not have contained %s '%s'"\
                            % (element_name, locator)
