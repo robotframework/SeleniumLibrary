@@ -1,6 +1,6 @@
 import unittest
 
-from mockito import when, mock, verify, verifyNoMoreInteractions
+from mockito import when, mock, verify, verifyNoMoreInteractions, unstub
 from selenium import webdriver
 
 from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
@@ -16,10 +16,6 @@ class BrowserManagementTests(unittest.TestCase):
 
         for test_browser in test_browsers:
             self.verify_browser(*test_browser)
-
-    def mock_createProfile(self, profile_directory=None):
-        self.ff_profile_dir = profile_directory
-        return self.old_profile_init(profile_directory)
 
     def test_create_ie_browser(self):
         test_browsers = (
@@ -65,6 +61,7 @@ class BrowserManagementTests(unittest.TestCase):
         self.assertTrue("val1", capabilities["key1"])
         self.assertTrue("val2", capabilities["key2"])
         self.assertTrue(2, len(capabilities))
+        unstub()
 
     def test_parse_complex_capabilities_string(self):
         ctx = mock()
@@ -74,6 +71,7 @@ class BrowserManagementTests(unittest.TestCase):
         self.assertTrue("manual", capabilities["proxyType"])
         self.assertTrue("IP:port", capabilities["httpProxy"])
         self.assertTrue(2, len(capabilities))
+        unstub()
 
     def test_create_remote_browser_with_desired_prefs(self):
         expected_caps = {"key1": "val1", "key2": "val2"}
@@ -98,19 +96,23 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         ctx = mock()
-        bm = BrowserManagementKeywords(ctx)
+        cache = mock()
+        ctx.cache = cache
         first_browser, second_browser = mock(), mock()
-        bm.ctx.cache.register(first_browser)
-        bm.ctx.cache.close()
-        verify(first_browser).quit()
-        bm.ctx.cache.register(second_browser)
+        when(cache).get_open_browsers().thenReturn(
+            [first_browser, second_browser]
+        )
+        bm = BrowserManagementKeywords(ctx)
         bm.set_selenium_timeout("10 seconds")
+        verify(first_browser).set_script_timeout(10.0)
         verify(second_browser).set_script_timeout(10.0)
-        bm.ctx.cache.close_all()
-        verify(second_browser).quit()
+        when(cache).get_open_browsers().thenReturn(
+            []
+        )
         bm.set_selenium_timeout("20 seconds")
         verifyNoMoreInteractions(first_browser)
         verifyNoMoreInteractions(second_browser)
+        unstub()
 
     def test_bad_browser_name(self):
         ctx = mock()
@@ -128,17 +130,18 @@ class BrowserManagementTests(unittest.TestCase):
         driver = mock()
         when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
         when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
+        when(ctx).register_browser(driver, 'fake1').thenReturn(0)
         webdriver.FakeWebDriver = FakeWebDriver
         try:
             index = bm.create_webdriver('FakeWebDriver', 'fake1', some_arg=1)
-            self.assertEqual(bm.ctx.current_browser(), driver)
-            self.assertEquals(bm.ctx.cache.get_connection(index), driver)
-            self.assertEquals(bm.ctx.cache.get_connection('fake1'), driver)
+            verify(ctx).register_browser(driver, 'fake1')
+            self.assertEqual(index, 0)
             my_kwargs = {'some_arg': 2}
             bm.create_webdriver('FakeWebDriver', 'fake2', kwargs=my_kwargs)
-            self.assertEquals(bm.ctx.current_browser(), driver)
+            verify(ctx).register_browser(driver, 'fake2')
         finally:
             del webdriver.FakeWebDriver
+        unstub()
 
     def verify_browser(self, webdriver_type, browser_name, **kw):
         # todo try lambda *x: was_called = true
@@ -155,6 +158,7 @@ class BrowserManagementTests(unittest.TestCase):
         finally:
             webdriver_type.__init__ = old_init
             self.assertTrue(self.was_called)
+        unstub()
 
     def mock_init(self, *args, **kw):
         self.was_called = True
