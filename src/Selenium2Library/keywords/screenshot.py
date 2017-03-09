@@ -91,11 +91,11 @@ class ScreenshotKeywords(Base):
         """
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
-        if hasattr(self.ctx.current_browser(), 'get_screenshot_as_file'):
-            if not self.ctx.current_browser().get_screenshot_as_file(path):
+        if hasattr(self.ctx.browser, 'get_screenshot_as_file'):
+            if not self.ctx.browser.get_screenshot_as_file(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         else:
-            if not self.ctx.current_browser().save_screenshot(path):
+            if not self.ctx.browser.save_screenshot(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         # Image is shown on its own row and thus prev row is closed on purpose
         msg = (

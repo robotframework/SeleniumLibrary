@@ -14,12 +14,3 @@ class Base(object):
 
     def warn(self, msg, html=False):
         logger.warn(msg, html)
-
-    def _log(self, message, level='INFO', html=False):
-        level = level.upper()
-        if (level == 'INFO'):
-            self.info(message, html)
-        elif (level == 'DEBUG'):
-            self.debug(message, html)
-        elif (level == 'WARN'):
-            self.warn(message, html)

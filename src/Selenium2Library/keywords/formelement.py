@@ -363,13 +363,13 @@ class FormElementKeywords(Base):
 
     def _get_radio_buttons(self, group_name):
         xpath = "xpath=//input[@type='radio' and @name='%s']" % group_name
-        self._debug('Radio group locator: ' + xpath)
+        self.debug('Radio group locator: ' + xpath)
         return self.element_find(xpath, False, True)
 
     def _get_radio_button_with_value(self, group_name, value):
         xpath = "xpath=//input[@type='radio' and @name='%s' and (@value='%s' or @id='%s')]" \
                  % (group_name, value, value)
-        self._debug('Radio group locator: ' + xpath)
+        self.debug('Radio group locator: ' + xpath)
         return self.element_find(xpath, True, True)
 
     def _get_value_from_radio_buttons(self, elements):

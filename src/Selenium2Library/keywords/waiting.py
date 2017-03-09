@@ -36,7 +36,7 @@ class WaitingKeywords(Base):
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
         self._wait_until(
             timeout, error,
-            lambda: self.ctx.current_browser().execute_script(condition) is True)
+            lambda: self.ctx.browser.execute_script(condition) is True)
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):

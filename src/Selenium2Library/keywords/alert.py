@@ -10,12 +10,12 @@ from Selenium2Library.robotlibcore import keyword
 
 class AlertKeywords(Base):
 
-    __ACCEPT_ALERT = 'accept'
-    __DISMISS_ALERT = 'dismiss'
+    ACCEPT_ALERT = 'accept'
+    DISMISS_ALERT = 'dismiss'
 
     def __init__(self, ctx):
         self.ctx = ctx
-        self._next_alert_dismiss_type = self.__ACCEPT_ALERT
+        self._next_alert_dismiss_type = self.ACCEPT_ALERT
 
     @keyword
     def input_text_into_prompt(self, text):
@@ -37,7 +37,7 @@ class AlertKeywords(Base):
         will fail unless the alert is dismissed by this
         keyword or another like `Get Alert Message`.
         """
-        alert_text = self._handle_alert(self.__ACCEPT_ALERT)
+        alert_text = self._handle_alert(self.ACCEPT_ALERT)
         if text and alert_text != text:
             raise AssertionError("Alert text should have been "
                                  "'%s' but was '%s'"
@@ -46,7 +46,7 @@ class AlertKeywords(Base):
     @keyword
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
-        self._next_alert_dismiss_type = self.__DISMISS_ALERT
+        self._next_alert_dismiss_type = self.DISMISS_ALERT
 
     @keyword
     def choose_ok_on_next_confirmation(self):
@@ -64,7 +64,7 @@ class AlertKeywords(Base):
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
         """
-        self._next_alert_dismiss_type = self.__ACCEPT_ALERT
+        self._next_alert_dismiss_type = self.ACCEPT_ALERT
 
     @keyword
     def confirm_action(self):
@@ -85,7 +85,7 @@ class AlertKeywords(Base):
         | Confirm Action |    | # Chooses Cancel |
         """
         text = self._handle_alert(self._next_alert_dismiss_type)
-        self._next_alert_dismiss_type = self.__DISMISS_ALERT
+        self._next_alert_dismiss_type = self.DISMISS_ALERT
         return text
 
     @keyword
@@ -98,7 +98,7 @@ class AlertKeywords(Base):
         dismissed by this keyword or another like `Dismiss Alert`.
         """
         if dismiss:
-            return self._handle_alert(self.__DISMISS_ALERT)
+            return self._handle_alert(self.DISMISS_ALERT)
         else:
             return self._handle_alert()
 
@@ -111,7 +111,7 @@ class AlertKeywords(Base):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if accept:
-            return self._handle_alert(self.__ACCEPT_ALERT)
+            return self._handle_alert(self.ACCEPT_ALERT)
         else:
             return self._handle_alert()
 
@@ -138,12 +138,12 @@ class AlertKeywords(Base):
     def _alert_worker(self, dismiss_type=None):
         alert = self._wait_alert()
         text = ' '.join(alert.text.splitlines())
-        if dismiss_type == self.__DISMISS_ALERT:
+        if dismiss_type == self.DISMISS_ALERT:
             alert.dismiss()
-        elif dismiss_type == self.__ACCEPT_ALERT:
+        elif dismiss_type == self.ACCEPT_ALERT:
             alert.accept()
         return text
 
     def _wait_alert(self):
-        return WebDriverWait(self._current_browser(), 1).until(
+        return WebDriverWait(self.ctx.browser, 1).until(
             EC.alert_is_present())

@@ -1,7 +1,8 @@
+from Selenium2Library.base import Base
 from Selenium2Library.robotlibcore import keyword
 
 
-class CookieKeywords(object):
+class CookieKeywords(Base):
 
     def __init__(self, ctx):
         self.ctx = ctx
@@ -9,7 +10,7 @@ class CookieKeywords(object):
     @keyword
     def delete_all_cookies(self):
         """Deletes all cookies."""
-        self.ctx.current_browser().delete_all_cookies()
+        self.ctx.browser.delete_all_cookies()
 
     @keyword
     def delete_cookie(self, name):
@@ -17,13 +18,13 @@ class CookieKeywords(object):
 
         If the cookie is not found, nothing happens.
         """
-        self.ctx.current_browser().delete_cookie(name)
+        self.ctx.browser.delete_cookie(name)
 
     @keyword
     def get_cookies(self):
         """Returns all cookies of the current page."""
         pairs = []
-        for cookie in self.ctx.current_browser().get_cookies():
+        for cookie in self.ctx.browser.get_cookies():
             pairs.append(cookie['name'] + "=" + cookie['value'])
         return '; '.join(pairs)
 
@@ -33,7 +34,7 @@ class CookieKeywords(object):
 
         If no cookie is found with `name`, this keyword fails.
         """
-        cookie = self.ctx.current_browser().get_cookie(name)
+        cookie = self.ctx.browser.get_cookie(name)
         if cookie is not None:
             return cookie['value']
         raise ValueError("Cookie with name %s not found." % name)
@@ -55,4 +56,4 @@ class CookieKeywords(object):
         # secure should be True or False so check explicitly for None
         if secure is not None:
             new_cookie['secure'] = secure
-        self.ctx.current_browser().add_cookie(new_cookie)
+        self.ctx.browser.add_cookie(new_cookie)

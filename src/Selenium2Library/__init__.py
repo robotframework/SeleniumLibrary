@@ -210,15 +210,20 @@ class Selenium2Library(DynamicCore):
     def run_keyword(self, name, args, kwargs):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
-        except Exception as e:
+        except Exception:
             print 'run failure here'
-            raise e
+            raise
 
-    def current_browser(self):
+    @property
+    def browser(self):
         """returns the current active browser"""
         if not self.cache.current:
             raise RuntimeError('No browser is open')
         return self.cache.current
+
+    def _current_browser(self):
+        logger.warn('Deprecated, please use self.browser')
+        return self.browser
 
     def register_browser(self, browser, alias):
         return self.cache.register(browser, alias)
