@@ -3,9 +3,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 
 from Selenium2Library import utils
+from Selenium2Library.base import Base
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from Selenium2Library.base import Base
+from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
 from Selenium2Library.robotlibcore import keyword
 
 
@@ -15,6 +16,7 @@ class ElementKeywords(Base):
         Base.__init__(self)
         self.ctx = ctx
         self.element_finder = ElementFinder()
+        self.log_source = BrowserManagementKeywords(self.ctx).log_source
 
     @keyword
     def get_webelement(self, locator):
@@ -39,7 +41,7 @@ class ElementKeywords(Base):
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
         if not self.is_text_present(text):
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
@@ -51,7 +53,7 @@ class ElementKeywords(Base):
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
         if self.is_text_present(text):
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s' "
                                  "but it did" % text)
         self.info("Current page should not contain text '%s'." % text)
@@ -107,7 +109,7 @@ class ElementKeywords(Base):
         details about locating elements.
         """
         if not self._frame_contains(locator, text):
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
@@ -123,7 +125,7 @@ class ElementKeywords(Base):
         will not be logged.
         """
         if not self._page_contains(text):
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
@@ -155,7 +157,7 @@ class ElementKeywords(Base):
             if not message:
                 message = "Locator %s should have matched %s times but matched %s times"\
                             %(locator, expected_locator_count, actual_locator_count)
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
                    % (actual_locator_count, locator))
@@ -167,7 +169,7 @@ class ElementKeywords(Base):
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
         if self._page_contains(text):
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s'" % text)
         self.info("Current page does not contain text '%s'." % text)
 
@@ -718,7 +720,7 @@ return !element.dispatchEvent(evt);
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
                             %(xpath, expected_xpath_count, actual_xpath_count)
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
                    % (actual_xpath_count, xpath))
@@ -841,7 +843,7 @@ return !element.dispatchEvent(evt);
             return getattr(Keys, key_name)
         except AttributeError:
             message = "Unknown key named '%s'." % (key_name)
-            self.ctx.debug(message)
+            self.debug(message)
             raise ValueError(message)
 
     def _parse_attribute_locator(self, attribute_locator):
@@ -863,7 +865,7 @@ return !element.dispatchEvent(evt);
             return True
 
         subframes = self.element_find("xpath=//frame|//iframe", False, False)
-        self.ctx.debug('Current frame has %d subframes' % len(subframes))
+        self.debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)
             found_text = self.is_text_present(text)
@@ -878,7 +880,7 @@ return !element.dispatchEvent(evt);
             if not message:
                 message = "Page should have contained %s '%s' but did not"\
                            % (element_name, locator)
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s '%s'." % (element_name, locator))
 
@@ -888,7 +890,7 @@ return !element.dispatchEvent(evt);
             if not message:
                 message = "Page should not have contained %s '%s'"\
                            % (element_name, locator)
-            self.ctx.log_source(loglevel)
+            self.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page does not contain %s '%s'."
                    % (element_name, locator))

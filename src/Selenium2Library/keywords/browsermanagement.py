@@ -66,7 +66,7 @@ class BrowserManagementKeywords(Base):
                     self.ctx.browser.session_id
                 )
             )
-            self.ctx.close()
+            self.ctx.cache.close()
 
     @keyword
     def open_browser(

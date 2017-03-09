@@ -1,5 +1,7 @@
 from robot.api import logger
 
+ROBOT_LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
+
 
 class Base(object):
 
@@ -10,7 +12,8 @@ class Base(object):
         logger.debug(msg, html)
 
     def log(self, msg, level='INFO', html=False):
-        logger.write(msg, level, html)
+        if level.upper() in ROBOT_LOG_LEVELS:
+            logger.write(msg, level, html)
 
     def warn(self, msg, html=False):
         logger.warn(msg, html)
