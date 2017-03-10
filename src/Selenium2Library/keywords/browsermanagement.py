@@ -60,10 +60,10 @@ class BrowserManagementKeywords(Base):
     @keyword
     def close_browser(self):
         """Closes the current browser."""
-        if self.ctx.browser:
+        if self.ctx.cache.current:
             self.debug(
                 'Closing browser with session id {}'.format(
-                    self.ctx.browser.session_id
+                    self.ctx.cache.current.session_id
                 )
             )
             self.ctx.cache.close()
@@ -221,8 +221,10 @@ class BrowserManagementKeywords(Base):
         """
         try:
             self.ctx.cache.switch(index_or_alias)
-            self.debug('Switched to browser with Selenium session id %s'
-                         % self.ctx.browser.current.session_id)
+            self.debug(
+                'Switched to browser with Selenium session id %s'
+                % self.ctx.browser.session_id
+            )
         except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)

@@ -1,6 +1,6 @@
 from robot.api import logger
 
-from Selenium2Library.utils import BrowserCache
+from .utils import BrowserCache
 from .keywords.alert import AlertKeywords
 from .keywords.browsermanagement import BrowserManagementKeywords
 from .keywords.cookie import CookieKeywords

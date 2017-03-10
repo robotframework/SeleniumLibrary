@@ -24,7 +24,7 @@ class ElementKeywords(Base):
 
         See `introduction` for details about locating elements.
         """
-        return self.element_find(locator, True, True)
+        return self.element_find(locator)
 
     @keyword
     def get_webelements(self, locator):
@@ -32,7 +32,7 @@ class ElementKeywords(Base):
 
         See `introduction` for details about locating elements.
         """
-        return self.element_find(locator, False, True)
+        return self.element_find(locator, first_only=False)
 
     @keyword
     def current_frame_contains(self, text, loglevel='INFO'):
@@ -152,7 +152,9 @@ class ElementKeywords(Base):
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
         """
-        actual_locator_count = len(self.element_find(locator, False, False))
+        actual_locator_count = len(self.element_find(
+            locator, first_only=False, required=False)
+        )
         if int(actual_locator_count) != int(expected_locator_count):
             if not message:
                 message = "Locator %s should have matched %s times but matched %s times"\
@@ -200,8 +202,8 @@ class ElementKeywords(Base):
         | Page Should Contain Element | my id |
         """
         self.info("Assigning temporary id '%s' to element '%s'" % (id, locator))
-        element = self.element_find(locator, True, True)
-        self.ctx.browser.execute_script(
+        element = self.self.element_find(locator)
+        self.ctx(
             "arguments[0].id = '%s';" % id, element
         )
 
@@ -280,7 +282,7 @@ class ElementKeywords(Base):
         """
         self.info("Verifying element '%s' contains exactly text '%s'."
                     % (locator, expected))
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         actual = element.text
         if expected != actual:
             if not message:
@@ -312,7 +314,7 @@ class ElementKeywords(Base):
         """
         if not attribute_name:
             locator, attribute_name = self._parse_attribute_locator(locator)
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if not element:
             raise ValueError("Element '%s' not found." % (locator))
         return element.get_attribute(attribute_name)
@@ -326,7 +328,7 @@ class ElementKeywords(Base):
 
         See also `Get Vertical Position`.
         """
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("Could not determine position for '%s'" % (locator))
         return element.location['x']
@@ -338,8 +340,7 @@ class ElementKeywords(Base):
         The element width and height is returned.
         Fails if a matching element is not found.
         """
-        element = self.element_find(locator, True, True)
-
+        element = self.element_find(locator)
         return element.size['width'], element.size['height']
 
     @keyword
@@ -364,7 +365,7 @@ class ElementKeywords(Base):
 
         See `introduction` for details about locating elements.
         """
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         element.clear()
 
     @keyword
@@ -376,12 +377,10 @@ class ElementKeywords(Base):
 
         See also `Get Horizontal Position`.
         """
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("Could not determine position for '%s'" % (locator))
         return element.location['y']
-
-    # Public, mouse input/events
 
     @keyword
     def click_element(self, locator):
@@ -391,7 +390,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Clicking element '%s'." % locator)
-        self.element_find(locator, True, True).click()
+        self.element_find(locator).click()
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
@@ -403,7 +402,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Click clicking element '%s' in coordinates '%s', '%s'." % (locator, xoffset, yoffset))
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         action = ActionChains(self.ctx.browser)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
@@ -418,14 +417,14 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Double clicking element '%s'." % locator)
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         action = ActionChains(self.ctx.browser)
         action.double_click(element).perform()
 
     @keyword
     def focus(self, locator):
         """Sets focus to element identified by `locator`."""
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         self.ctx.browser.execute_script(
             "arguments[0].focus();", element
         )
@@ -443,8 +442,8 @@ class ElementKeywords(Base):
         Examples:
         | Drag And Drop | elem1 | elem2 | # Move elem1 over elem2. |
         """
-        src_elem = self.element_find(source, True, True)
-        trg_elem = self.element_find(target, True, True)
+        src_elem = self.element_find(source)
+        trg_elem = self.element_find(target)
         action = ActionChains(self.ctx.browser)
         action.drag_and_drop(src_elem, trg_elem).perform()
 
@@ -458,7 +457,7 @@ class ElementKeywords(Base):
         Examples:
         | Drag And Drop By Offset | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
         """
-        src_elem = self.element_find(source, True, True)
+        src_elem = self.element_find(source)
         action = ActionChains(self.ctx.browser)
         action.drag_and_drop_by_offset(src_elem, xoffset, yoffset)
         action.perform()
@@ -476,7 +475,7 @@ class ElementKeywords(Base):
         `Mouse Down On Link`.
         """
         self.info("Simulating Mouse Down on element '%s'" % locator)
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
         action = ActionChains(self.ctx.browser)
@@ -490,7 +489,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Simulating Mouse Out on element '%s'" % locator)
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
         size = element.size
@@ -508,7 +507,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Simulating Mouse Over on element '%s'" % locator)
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
         action = ActionChains(self.ctx.browser)
@@ -522,7 +521,7 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Simulating Mouse Up on element '%s'" % locator)
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
         ActionChains(self.ctx.browser).release(element).perform()
@@ -530,7 +529,7 @@ class ElementKeywords(Base):
     @keyword
     def open_context_menu(self, locator):
         """Opens context menu on element identified by `locator`."""
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         action = ActionChains(self.ctx.browser)
         action.context_click(element).perform()
 
@@ -543,7 +542,7 @@ class ElementKeywords(Base):
 
         See `introduction` for details about locating elements.
         """
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         script = """
 element = arguments[0];
 eventName = arguments[1];
@@ -568,8 +567,7 @@ return !element.dispatchEvent(evt);
         """
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
-        element = self.element_find(locator, True, True)
-        #select it
+        element = self.element_find(locator)
         element.send_keys(key)
 
     @keyword
@@ -590,7 +588,10 @@ return !element.dispatchEvent(evt);
         If a link has no id, an empty string will be in the list instead.
         """
         links = []
-        for anchor in self.element_find("tag=a", False, False, 'a'):
+        elements = self.element_find(
+            "tag=a", first_only=False, required=False, tag='a'
+        )
+        for anchor in elements:
             links.append(anchor.get_attribute('id'))
         return links
 
@@ -601,7 +602,7 @@ return !element.dispatchEvent(evt);
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements.
         """
-        element = self.element_find(locator, True, True, 'link')
+        element = self.element_find(locator, tag='link')
         action = ActionChains(self.ctx.browser)
         action.click_and_hold(element).perform()
 
@@ -639,10 +640,12 @@ return !element.dispatchEvent(evt);
         `introduction` for details about locating elements.
         """
         self.info("Clicking image '%s'." % locator)
-        element = self.element_find(locator, True, False, 'image')
+        element = self.element_find(
+            locator, required=False, tag='image'
+        )
         if element is None:
             # A form may have an image as it's submit trigger.
-            element = self.element_find(locator, True, True, 'input')
+            element = self.element_find(locator, tag='input')
         element.click()
 
     @keyword
@@ -652,7 +655,7 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        element = self.element_find(locator, True, True, 'image')
+        element = self.element_find(locator, tag='image')
         action = ActionChains(self.ctx.browser)
         action.click_and_hold(element).perform()
 
@@ -698,7 +701,9 @@ return !element.dispatchEvent(evt);
         If you wish to assert the number of matching elements, use
         `Xpath Should Match X Times`.
         """
-        count = len(self.element_find("xpath=" + xpath, False, False))
+        count = len(self.element_find(
+            "xpath=" + xpath, first_only=False, required=False)
+        )
         return str(count) if return_str else count
 
     @keyword
@@ -715,7 +720,9 @@ return !element.dispatchEvent(evt);
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
         """
-        actual_xpath_count = len(self.element_find("xpath=" + xpath, False, False))
+        actual_xpath_count = len(self.element_find(
+            "xpath=" + xpath, first_only=False, required=False)
+        )
         if int(actual_xpath_count) != int(expected_xpath_count):
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
@@ -758,24 +765,26 @@ return !element.dispatchEvent(evt);
         """
         self.element_finder.unregister(strategy_name)
 
-    def element_find(self, locator, first_only, required, tag=None):
-        browser = self.ctx.browser
+    def element_find(self, locator, first_only=True, required=True, tag=None):
         if isinstance(locator, basestring):
-            elements = self.element_finder.find(browser, locator, tag)
+            elements = self.element_finder.find(self.ctx.browser, locator, tag)
             if required and len(elements) == 0:
-                raise ValueError("Element locator '" + locator + "' did not match any elements.")
+                raise ValueError(
+                    "Element locator '{}' did not match any elements.".format(
+                        locator
+                    )
+                )
             if first_only:
-                if len(elements) == 0: return None
+                if not elements:
+                    return None
                 return elements[0]
         elif isinstance(locator, WebElement):
             elements = locator
-        # do some other stuff here like deal with list of webelements
-        # ... or raise locator/element specific error if required
         return elements
 
     def _frame_contains(self, locator, text):
         browser = self.ctx.browser
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         browser.switch_to_frame(element)
         self.info("Searching for text from frame '%s'." % locator)
         found = self.is_text_present(text)
@@ -783,17 +792,19 @@ return !element.dispatchEvent(evt);
         return found
 
     def _get_text(self, locator):
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         if element is not None:
             return element.text
         return None
 
     def _get_value(self, locator, tag=None):
-        element = self.element_find(locator, True, False, tag=tag)
+        element = self.element_find(
+            locator, required=False, tag=tag
+        )
         return element.get_attribute('value') if element is not None else None
 
     def _is_enabled(self, locator):
-        element = self.element_find(locator, True, True)
+        element = self.element_find(locator)
         if not self._is_form_element(element):
             raise AssertionError("ERROR: Element %s is not an input." % (locator))
         if not element.is_enabled():
@@ -808,7 +819,7 @@ return !element.dispatchEvent(evt);
         return self.is_element_present(locator)
 
     def is_visible(self, locator):
-        element = self.element_find(locator, True, False)
+        element = self.element_find(locator, required=False)
         if element is not None:
             return element.is_displayed()
         return None
@@ -855,7 +866,7 @@ return !element.dispatchEvent(evt);
         return parts[0], parts[2]
 
     def is_element_present(self, locator, tag=None):
-        return self.element_find(locator, True, False, tag=tag) is not None
+        return True if self.element_find(locator, required=False, tag=tag) else None
 
     def _page_contains(self, text):
         browser = self.ctx.browser
@@ -864,7 +875,9 @@ return !element.dispatchEvent(evt);
         if self.is_text_present(text):
             return True
 
-        subframes = self.element_find("xpath=//frame|//iframe", False, False)
+        subframes = self.element_find(
+            "xpath=//frame|//iframe", first_only=False, required=False
+        )
         self.debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             browser.switch_to_frame(frame)

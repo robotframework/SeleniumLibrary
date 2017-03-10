@@ -11,7 +11,7 @@ class SelectElementKeywords(Base):
     def __init__(self, ctx):
         Base.__init__(self)
         self.ctx = ctx
-        self.element_find = ElementKeywords(ctx).element_find
+        self.element_find = ElementKeywords(ctx)
 
     @keyword
     def get_list_items(self, locator, value=False):
@@ -141,7 +141,9 @@ class SelectElementKeywords(Base):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self._page_should_contain_element(locator, 'list', message, loglevel)
+        self.element_find._page_should_contain_element(
+            locator, 'list', message, loglevel
+        )
 
     @keyword
     def page_should_not_contain_list(self, locator, message='', loglevel='INFO'):
@@ -153,7 +155,9 @@ class SelectElementKeywords(Base):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self._page_should_not_contain_element(locator, 'list', message, loglevel)
+        self.element_find._page_should_not_contain_element(
+            locator, 'list', message, loglevel
+        )
 
     @keyword
     def select_all_from_list(self, locator):
@@ -382,7 +386,7 @@ class SelectElementKeywords(Base):
         return labels
 
     def _get_select_list(self, locator):
-        el = self.element_find(locator, True, True, 'select')
+        el = self.element_find.element_find(locator, tag='select')
         return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):
@@ -400,7 +404,7 @@ class SelectElementKeywords(Base):
     def _get_values_for_options(self, options):
         values = []
         for option in options:
-             values.append(option.get_attribute('value'))
+            values.append(option.get_attribute('value'))
         return values
 
     def _is_multiselect_list(self, select):

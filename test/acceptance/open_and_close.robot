@@ -30,3 +30,36 @@ Browser Open With Not Well-Formed URL Should Close
     ...    LOG 2:3 DEBUG Finished Request
     Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}
     Close All Browsers
+
+Switch to closed browser is possible
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 1
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 2
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 3
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Switch Browser    Browser 1
+    Switch Browser    Browser 2
+    Close Browser
+    Switch Browser    Browser 3
+    Page Should Contain    Name:
+    Switch Browser    Browser 2
+    Run Keyword And Expect Error
+    ...    error: [Errno 111] Connection refused
+    ...    Page Should Contain    Name:
+    Close All Browsers
+
+Closing all browsers clears cache
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 1
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 2
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Switch Browser    Browser 1
+    Switch Browser    Browser 2
+    Close All Browsers
+    Run Keyword And Expect Error
+    ...    No browser with index or alias 'Browser 1' found.
+    ...    Switch Browser    Browser 1
+    Run Keyword And Expect Error
+    ...    No browser with index or alias 'Browser 2' found.
+    ...    Switch Browser    Browser 2
