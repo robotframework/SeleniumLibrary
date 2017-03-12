@@ -2,7 +2,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
 from Selenium2Library.base import Base
-from Selenium2Library.keywords.element import ElementKeywords
 from Selenium2Library.robotlibcore import keyword
 
 
@@ -11,7 +10,6 @@ class SelectElementKeywords(Base):
     def __init__(self, ctx):
         Base.__init__(self)
         self.ctx = ctx
-        self.element_find = ElementKeywords(ctx)
 
     @keyword
     def get_list_items(self, locator, value=False):
@@ -141,7 +139,7 @@ class SelectElementKeywords(Base):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self.element_find._page_should_contain_element(
+        self.page_contains_element(
             locator, 'list', message, loglevel
         )
 
@@ -155,7 +153,7 @@ class SelectElementKeywords(Base):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self.element_find._page_should_not_contain_element(
+        self.page_not_contains_element(
             locator, 'list', message, loglevel
         )
 
@@ -224,7 +222,7 @@ class SelectElementKeywords(Base):
             else:
                 if any (non_existing_items[:-1]):
                     items_str = non_existing_items[:-1] and "Option(s) '%s'" % ", ".join(non_existing_items[:-1])
-                    self._warn("%s not found within list '%s'." % (items_str, locator))
+                    self.warn("%s not found within list '%s'." % (items_str, locator))
                 if items and items[-1] in non_existing_items:
                     raise ValueError("Option '%s' not in list '%s'." % (items[-1], locator))
 
@@ -386,7 +384,7 @@ class SelectElementKeywords(Base):
         return labels
 
     def _get_select_list(self, locator):
-        el = self.element_find.element_find(locator, tag='select')
+        el = self.element_find(locator, tag='select')
         return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):

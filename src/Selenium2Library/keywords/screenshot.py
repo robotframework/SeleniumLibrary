@@ -1,6 +1,8 @@
 import errno
 import os
 
+from robot.libraries.BuiltIn import BuiltIn
+from robot.libraries.BuiltIn import RobotNotRunningError
 from robot.utils import get_link_path
 
 from Selenium2Library.base import Base
@@ -144,3 +146,14 @@ class ScreenshotKeywords(Base):
             self._screenshot_index[filename] = 0
         self._screenshot_index[filename] += 1
         return self._screenshot_index[filename]
+
+    def _get_log_dir(self):
+        try:
+            logfile = BuiltIn().get_variable_value('${LOG FILE}')
+        except RobotNotRunningError:
+            logfile = os.getcwd()
+        if logfile != 'NONE':
+            logdir = os.path.dirname(logfile)
+        else:
+            logdir = BuiltIn().get_variable_value('${OUTPUTDIR}')
+        return logdir

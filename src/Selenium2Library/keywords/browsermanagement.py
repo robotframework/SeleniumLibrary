@@ -40,9 +40,6 @@ class BrowserManagementKeywords(Base):
         Base.__init__(self)
         self.ctx = ctx
         self._window_manager = WindowManager()
-        self._speed_in_secs = 0.0
-        self._timeout_in_secs = float(5)
-        self._implicit_wait_in_secs = float(0)
 
     @keyword
     def close_all_browsers(self):
@@ -319,7 +316,7 @@ class BrowserManagementKeywords(Base):
         details about locating elements.
         """
         self.info("Selecting frame '%s'." % locator)
-        element = self._element_find(locator, True, True)
+        element = self.element_find(locator)
         self.ctx.browser.switch_to_frame(element)
 
     @keyword

@@ -202,9 +202,9 @@ class Selenium2Library(DynamicCore):
         self.cache = BrowserCache()
 
         self.screenshot_root_directory = screenshot_root_directory
-        # self.set_selenium_timeout(timeout)
-        # self.set_selenium_implicit_wait(implicit_wait)
-        # self.register_keyword_to_run_on_failure(run_on_failure)
+        self.set_selenium_timeout(timeout)
+        self.set_selenium_implicit_wait(implicit_wait)
+        self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
 
     def run_keyword(self, name, args, kwargs):
@@ -220,6 +220,11 @@ class Selenium2Library(DynamicCore):
         if not self.cache.current:
             raise RuntimeError('No browser is open')
         return self.cache.current
+
+    @property
+    def _cache(self):
+        logger.warn('Deprecated, please use self.cache')
+        return self.cache
 
     def _current_browser(self):
         logger.warn('Deprecated, please use self.browser')

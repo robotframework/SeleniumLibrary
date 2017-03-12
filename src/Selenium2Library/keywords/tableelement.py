@@ -1,6 +1,5 @@
 from Selenium2Library.base import Base
 from Selenium2Library.locators import TableElementFinder
-from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
 from Selenium2Library.robotlibcore import keyword
 
 
@@ -10,7 +9,6 @@ class TableElementKeywords(Base):
         Base.__init__(self)
         self.ctx = ctx
         self._table_element_finder = TableElementFinder()
-        self.log_source = BrowserManagementKeywords(self.ctx).log_source
 
     @keyword
     def get_table_cell(self, table_locator, row, column, loglevel='INFO'):
@@ -47,7 +45,7 @@ class TableElementKeywords(Base):
                     columns.extend(rows[row_index].find_elements_by_tag_name('td'))
                 if column_index < len(columns):
                     return columns[column_index].text
-        self.log_source(loglevel)
+        self.ctx.log_source(loglevel)
         raise AssertionError("Cell in table %s in row #%s and column #%s could not be found."
             % (table_locator, str(row), str(column)))
 
@@ -74,11 +72,11 @@ class TableElementKeywords(Base):
             content = self.get_table_cell(table_locator, row, column, loglevel='NONE')
         except AssertionError as err:
             self.info(err)
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError(message)
         self.info("Cell contains %s." % (content))
         if expected not in content:
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError(message)
 
     @keyword
@@ -104,7 +102,7 @@ class TableElementKeywords(Base):
         """
         element = self._table_element_finder.find_by_col(self.ctx.browser, table_locator, col, expected)
         if element is None:
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Column #%s in table identified by '%s' "
                    "should have contained text '%s'."
                    % (col, table_locator, expected))
@@ -122,7 +120,7 @@ class TableElementKeywords(Base):
         """
         element = self._table_element_finder.find_by_footer(self.ctx.browser, table_locator, expected)
         if element is None:
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Footer in table identified by '%s' should have contained "
                    "text '%s'." % (table_locator, expected))
 
@@ -138,7 +136,7 @@ class TableElementKeywords(Base):
         """
         element = self._table_element_finder.find_by_header(self.ctx.browser, table_locator, expected)
         if element is None:
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Header in table identified by '%s' should have contained "
                "text '%s'." % (table_locator, expected))
 
@@ -162,7 +160,7 @@ class TableElementKeywords(Base):
         """
         element = self._table_element_finder.find_by_row(self.ctx.browser, table_locator, row, expected)
         if element is None:
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Row #%s in table identified by '%s' should have contained "
                    "text '%s'." % (row, table_locator, expected))
 
@@ -178,6 +176,6 @@ class TableElementKeywords(Base):
         """
         element = self._table_element_finder.find_by_content(self.ctx.browser, table_locator, expected)
         if element is None:
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Table identified by '%s' should have contained text '%s'." \
                 % (table_locator, expected))

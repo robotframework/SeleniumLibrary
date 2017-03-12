@@ -1,12 +1,11 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.remote.webelement import WebElement
 
 from Selenium2Library import utils
 from Selenium2Library.base import Base
+from Selenium2Library.keywords.formelement import FormElementKeywords
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
 from Selenium2Library.robotlibcore import keyword
 
 
@@ -16,7 +15,7 @@ class ElementKeywords(Base):
         Base.__init__(self)
         self.ctx = ctx
         self.element_finder = ElementFinder()
-        self.log_source = BrowserManagementKeywords(self.ctx).log_source
+        self.form_element = FormElementKeywords(self.ctx)
 
     @keyword
     def get_webelement(self, locator):
@@ -41,7 +40,7 @@ class ElementKeywords(Base):
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
         if not self.is_text_present(text):
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
@@ -53,7 +52,7 @@ class ElementKeywords(Base):
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
         if self.is_text_present(text):
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s' "
                                  "but it did" % text)
         self.info("Current page should not contain text '%s'." % text)
@@ -109,7 +108,7 @@ class ElementKeywords(Base):
         details about locating elements.
         """
         if not self._frame_contains(locator, text):
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
@@ -125,7 +124,7 @@ class ElementKeywords(Base):
         will not be logged.
         """
         if not self._page_contains(text):
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
@@ -141,7 +140,9 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_contain_element(locator, None, message, loglevel)
+        self.page_contains_element(
+            locator, message=message, loglevel=loglevel
+        )
 
     @keyword
     def locator_should_match_x_times(self, locator, expected_locator_count, message='', loglevel='INFO'):
@@ -159,7 +160,7 @@ class ElementKeywords(Base):
             if not message:
                 message = "Locator %s should have matched %s times but matched %s times"\
                             %(locator, expected_locator_count, actual_locator_count)
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
                    % (actual_locator_count, locator))
@@ -171,7 +172,7 @@ class ElementKeywords(Base):
         See `Page Should Contain ` for explanation about `loglevel` argument.
         """
         if self._page_contains(text):
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s'" % text)
         self.info("Current page does not contain text '%s'." % text)
 
@@ -186,9 +187,9 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(locator, None, message, loglevel)
-
-    # Public, attributes
+        self.page_not_contains_element(
+            locator, message=message, loglevel=loglevel
+        )
 
     @keyword
     def assign_id_to_element(self, locator, id):
@@ -202,8 +203,8 @@ class ElementKeywords(Base):
         | Page Should Contain Element | my id |
         """
         self.info("Assigning temporary id '%s' to element '%s'" % (id, locator))
-        element = self.self.element_find(locator)
-        self.ctx(
+        element = self.element_find(locator)
+        self.ctx.browser.execute_script(
             "arguments[0].id = '%s';" % id, element
         )
 
@@ -616,7 +617,9 @@ return !element.dispatchEvent(evt);
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements.
         """
-        self._page_should_contain_element(locator, 'link', message, loglevel)
+        self.page_contains_element(
+            locator, tag='link', message=message, loglevel=loglevel
+        )
 
     @keyword
     def page_should_not_contain_link(self, locator, message='', loglevel='INFO'):
@@ -628,7 +631,7 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(
+        self.page_not_contains_element(
             locator, 'link', message, loglevel
         )
 
@@ -668,7 +671,9 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_contain_element(locator, 'image', message, loglevel)
+        self.page_contains_element(
+            locator, tag='image', message=message, loglevel=loglevel
+        )
 
     @keyword
     def page_should_not_contain_image(self, locator, message='', loglevel='INFO'):
@@ -680,7 +685,7 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self._page_should_not_contain_element(
+        self.page_not_contains_element(
             locator, 'image', message, loglevel
         )
 
@@ -727,7 +732,7 @@ return !element.dispatchEvent(evt);
             if not message:
                 message = "Xpath %s should have matched %s times but matched %s times"\
                             %(xpath, expected_xpath_count, actual_xpath_count)
-            self.log_source(loglevel)
+            self.ctx.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
                    % (actual_xpath_count, xpath))
@@ -765,23 +770,6 @@ return !element.dispatchEvent(evt);
         """
         self.element_finder.unregister(strategy_name)
 
-    def element_find(self, locator, first_only=True, required=True, tag=None):
-        if isinstance(locator, basestring):
-            elements = self.element_finder.find(self.ctx.browser, locator, tag)
-            if required and len(elements) == 0:
-                raise ValueError(
-                    "Element locator '{}' did not match any elements.".format(
-                        locator
-                    )
-                )
-            if first_only:
-                if not elements:
-                    return None
-                return elements[0]
-        elif isinstance(locator, WebElement):
-            elements = locator
-        return elements
-
     def _frame_contains(self, locator, text):
         browser = self.ctx.browser
         element = self.element_find(locator)
@@ -805,7 +793,7 @@ return !element.dispatchEvent(evt);
 
     def _is_enabled(self, locator):
         element = self.element_find(locator)
-        if not self._is_form_element(element):
+        if not self.form_element._is_form_element(element):
             raise AssertionError("ERROR: Element %s is not an input." % (locator))
         if not element.is_enabled():
             return False
@@ -816,7 +804,7 @@ return !element.dispatchEvent(evt);
 
     def is_text_present(self, text):
         locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text)
-        return self.is_element_present(locator)
+        return self.element_find(locator, required=False)
 
     def is_visible(self, locator):
         element = self.element_find(locator, required=False)
@@ -865,9 +853,6 @@ return !element.dispatchEvent(evt);
             raise ValueError("Attribute locator '%s' does not contain an attribute name." % (attribute_locator))
         return parts[0], parts[2]
 
-    def is_element_present(self, locator, tag=None):
-        return True if self.element_find(locator, required=False, tag=tag) else None
-
     def _page_contains(self, text):
         browser = self.ctx.browser
         browser.switch_to_default_content()
@@ -886,24 +871,3 @@ return !element.dispatchEvent(evt);
             if found_text:
                 return True
         return False
-
-    def _page_should_contain_element(self, locator, tag, message, loglevel):
-        element_name = tag if tag is not None else 'element'
-        if not self.is_element_present(locator, tag):
-            if not message:
-                message = "Page should have contained %s '%s' but did not"\
-                           % (element_name, locator)
-            self.log_source(loglevel)
-            raise AssertionError(message)
-        self.info("Current page contains %s '%s'." % (element_name, locator))
-
-    def _page_should_not_contain_element(self, locator, tag, message, loglevel):
-        element_name = tag if tag is not None else 'element'
-        if self.is_element_present(locator, tag):
-            if not message:
-                message = "Page should not have contained %s '%s'"\
-                           % (element_name, locator)
-            self.log_source(loglevel)
-            raise AssertionError(message)
-        self.info("Current page does not contain %s '%s'."
-                   % (element_name, locator))

@@ -9,7 +9,8 @@ class CustomSeleniumKeywords(Selenium2Library):
         we don't have to open a separate browser instance for the
         `Run On Failure Keyword Only Called Once` test."""
         ret = super(CustomSeleniumKeywords, self).__init__(*args, **kwargs)
-        self._cache = BuiltIn().get_library_instance("Selenium2Library")._cache
+        self.s2l = BuiltIn().get_library_instance("Selenium2Library")
+        self._cache = self.s2l.cache
 
     def custom_selenium_keyword(self):
         self.custom_selenium_keyword_inner()

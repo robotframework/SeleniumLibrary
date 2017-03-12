@@ -71,8 +71,12 @@ class JavaScriptKeywords(Base):
         codepath = code.replace('/', os.sep)
         if not (os.path.isabs(codepath) and os.path.isfile(codepath)):
             return code
-        self._html('Reading JavaScript from file <a href="file://%s">%s</a>.'
-                   % (codepath.replace(os.sep, '/'), codepath))
+        self.info(
+            'Reading JavaScript from file <a href="file://%s">%s</a>.'.format(
+                codepath.replace(os.sep, '/'), codepath
+            ),
+            html=True
+        )
         codefile = open(codepath)
         try:
             return codefile.read().strip()
