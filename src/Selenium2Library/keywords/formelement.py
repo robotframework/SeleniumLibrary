@@ -6,10 +6,6 @@ from Selenium2Library.robotlibcore import keyword
 
 class FormElementKeywords(Base):
 
-    def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
-
     @keyword
     def submit_form(self, locator=None):
         """Submits a form identified by `locator`.

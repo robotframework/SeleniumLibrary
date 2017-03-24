@@ -4,14 +4,17 @@ from selenium.webdriver.remote.webelement import WebElement
 from .locators.elementfinder import ElementFinder
 
 
+LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
+
+
 class Base(object):
 
-    def __init__(self):
+    def __init__(self, ctx):
+        self.ctx = ctx
         self.element_finder = ElementFinder()
         self._speed_in_secs = 0.0
         self._timeout_in_secs = 5.0
         self._implicit_wait_in_secs = 5.0
-        self.robot_log_levels = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
 
     def info(self, msg, html=False):
         logger.info(msg, html)
@@ -20,15 +23,23 @@ class Base(object):
         logger.debug(msg, html)
 
     def log(self, msg, level='INFO', html=False):
-        if level.upper() in self.robot_log_levels:
+        if level.upper() in LOG_LEVELS:
             logger.write(msg, level, html)
 
     def warn(self, msg, html=False):
         logger.warn(msg, html)
 
+    @property
+    def browser(self):
+        return self.ctx._browser
+
+    @property
+    def browsers(self):
+        return self.ctx._browsers
+
     def element_find(self, locator, first_only=True, required=True, tag=None):
         if isinstance(locator, basestring):
-            elements = self.element_finder.find(self.ctx.browser, locator, tag)
+            elements = self.element_finder.find(self.browser, locator, tag)
             if required and len(elements) == 0:
                 raise ValueError(
                     "Element locator '{}' did not match any elements.".format(

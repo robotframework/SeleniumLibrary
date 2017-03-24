@@ -37,8 +37,7 @@ BROWSER_NAMES = {
 class BrowserManagementKeywords(Base):
 
     def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
+        Base.__init__(self, ctx)
         self._window_manager = WindowManager()
 
     @keyword
@@ -52,18 +51,18 @@ class BrowserManagementKeywords(Base):
         all browsers are closed.
         """
         self.debug('Closing all browsers')
-        self.ctx.cache.close_all()
+        self.browsers.close_all()
 
     @keyword
     def close_browser(self):
         """Closes the current browser."""
-        if self.ctx.cache.current:
+        if self.browsers.current:
             self.debug(
                 'Closing browser with session id {}'.format(
-                    self.ctx.cache.current.session_id
+                    self.browsers.current.session_id
                 )
             )
-            self.ctx.cache.close()
+            self.browsers.close()
 
     @keyword
     def open_browser(
@@ -217,10 +216,10 @@ class BrowserManagementKeywords(Base):
         | Switch Browser     | ${id}         |                   |          |
         """
         try:
-            self.ctx.cache.switch(index_or_alias)
+            self.browsers.switch(index_or_alias)
             self.debug(
                 'Switched to browser with Selenium session id %s'
-                % self.ctx.browser.session_id
+                % self.browser.session_id
             )
         except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
             raise RuntimeError("No browser with index or alias '%s' found."
@@ -229,22 +228,19 @@ class BrowserManagementKeywords(Base):
     @keyword
     def close_window(self):
         """Closes currently opened pop-up window."""
-        self.ctx.browser.close()
+        self.browser.close()
 
     @keyword
     def get_window_identifiers(self):
         """Returns and logs id attributes of all windows known to the browser."""
         return self._log_list(
-            self._window_manager.get_window_ids(self.ctx.browser)
+            self._window_manager.get_window_ids(self.browser)
         )
 
     @keyword
     def get_window_names(self):
         """Returns and logs names of all windows known to the browser."""
-        values = self._window_manager.get_window_names(
-            self.ctx.browser
-        )
-
+        values = self._window_manager.get_window_names(self.browser)
         # for backward compatibility, since Selenium 1 would always
         # return this constant value for the main window
         if len(values) and values[0] == 'undefined':
@@ -256,13 +252,13 @@ class BrowserManagementKeywords(Base):
     def get_window_titles(self):
         """Returns and logs titles of all windows known to the browser."""
         return self._log_list(
-            self._window_manager.get_window_titles(self.ctx.browser)
+            self._window_manager.get_window_titles(self.browser)
         )
 
     @keyword
     def maximize_browser_window(self):
         """Maximizes current browser window."""
-        self.ctx.browser.maximize_window()
+        self.browser.maximize_window()
 
     @keyword
     def get_window_size(self):
@@ -271,7 +267,7 @@ class BrowserManagementKeywords(Base):
         Example:
         | ${width} | ${height}= | Get Window Size |
         """
-        size = self.ctx.browser.get_window_size()
+        size = self.browser.get_window_size()
         return size['width'], size['height']
 
     @keyword
@@ -284,7 +280,7 @@ class BrowserManagementKeywords(Base):
         | Should Be Equal | ${width}  | ${800}    |
         | Should Be Equal | ${height} | ${600}    |
         """
-        return self.ctx.browser.set_window_size(width, height)
+        return self.browser.set_window_size(width, height)
 
     @keyword
     def get_window_position(self):
@@ -293,7 +289,7 @@ class BrowserManagementKeywords(Base):
         Example:
         | ${x} | ${y}= | Get Window Position |
         """
-        position = self.ctx.browser.get_window_position()
+        position = self.browser.get_window_position()
         return position['x'], position['y']
 
     @keyword
@@ -306,7 +302,7 @@ class BrowserManagementKeywords(Base):
         | Should Be Equal     | ${x}    | ${8}                |
         | Should Be Equal     | ${y}    | ${10}               |
         """
-        return self.ctx.browser.set_window_position(x, y)
+        return self.browser.set_window_position(x, y)
 
     @keyword
     def select_frame(self, locator):
@@ -317,7 +313,7 @@ class BrowserManagementKeywords(Base):
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.element_find(locator)
-        self.ctx.browser.switch_to_frame(element)
+        self.browser.switch_to_frame(element)
 
     @keyword
     def select_window(self, locator=None):
@@ -355,44 +351,44 @@ class BrowserManagementKeywords(Base):
         | Select Window |  | | # Chooses the main window again |
         """
         try:
-            return self.ctx.browser.current_window_handle
+            return self.browser.current_window_handle
         except NoSuchWindowException:
             pass
         finally:
-            self._window_manager.select(self.ctx.browser, locator)
+            self._window_manager.select(self.browser, locator)
 
     @keyword
     def list_windows(self):
         """Return all current window handles as a list"""
-        return self.ctx.browser.window_handles
+        return self.browser.window_handles
 
     @keyword
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
-        self.ctx.browser.switch_to_default_content()
+        self.browser.switch_to_default_content()
 
     @keyword
     def get_location(self):
         """Returns the current location."""
-        return self.ctx.browser.current_url
+        return self.browser.current_url
 
     @keyword
     def get_locations(self):
         """Returns and logs current locations of all windows known to the browser."""
         return self._log_list(
             [window_info[4] for window_info in
-             self._window_manager._get_window_infos(self.ctx.browser)]
+             self._window_manager._get_window_infos(self.browser)]
         )
 
     @keyword
     def get_source(self):
         """Returns the entire html source of the current page or frame."""
-        return self.ctx.browser.page_source
+        return self.browser.page_source
 
     @keyword
     def get_title(self):
         """Returns title of current page."""
-        return self.ctx.browser.title
+        return self.browser.title
 
     @keyword
     def location_should_be(self, url):
@@ -449,18 +445,18 @@ class BrowserManagementKeywords(Base):
     @keyword
     def go_back(self):
         """Simulates the user clicking the "back" button on their browser."""
-        self.ctx.browser.back()
+        self.browser.back()
 
     @keyword
     def go_to(self, url):
         """Navigates the active browser instance to the provided URL."""
         self.info("Opening url '%s'" % url)
-        self.ctx.browser.get(url)
+        self.browser.get(url)
 
     @keyword
     def reload_page(self):
         """Simulates user reloading page."""
-        self.ctx.browser.refresh()
+        self.browser.refresh()
 
     @keyword
     def get_selenium_speed(self):
@@ -503,7 +499,7 @@ class BrowserManagementKeywords(Base):
         """
         old_speed = self._speed_in_secs
         self._speed_in_secs = timestr_to_secs(seconds)
-        for browser in self.ctx.cache.browsers:
+        for browser in self.browsers.browsers:
             browser._speed = self._speed_in_secs
             self._monkey_patch_speed(browser)
         return old_speed
@@ -528,7 +524,7 @@ class BrowserManagementKeywords(Base):
         """
         old_timeout = self.get_selenium_timeout()
         self._timeout_in_secs = timestr_to_secs(seconds)
-        for browser in self.ctx.cache.get_open_browsers():
+        for browser in self.browsers.get_open_browsers():
             browser.set_script_timeout(self._timeout_in_secs)
         return old_timeout
 
@@ -548,7 +544,7 @@ class BrowserManagementKeywords(Base):
         """
         old_wait = self.get_selenium_implicit_wait()
         self._implicit_wait_in_secs = timestr_to_secs(seconds)
-        for browser in self.ctx.cache.get_open_browsers():
+        for browser in self.browsers.get_open_browsers():
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
 
@@ -566,7 +562,7 @@ class BrowserManagementKeywords(Base):
         See also `Set Selenium Implicit Wait`.
         """
         implicit_wait_in_secs = timestr_to_secs(seconds)
-        self.ctx.browser.implicitly_wait(implicit_wait_in_secs)
+        self.browser.implicitly_wait(implicit_wait_in_secs)
 
     def _get_browser_creation_function(self, browser_name):
         func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))

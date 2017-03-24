@@ -7,8 +7,7 @@ from Selenium2Library.robotlibcore import keyword
 class RunOnFailureKeywords(Base):
 
     def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
+        Base.__init__(self, ctx)
         self._run_on_failure_keyword = None
         self._running_on_failure_routine = False
 

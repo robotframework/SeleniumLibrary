@@ -312,7 +312,6 @@ class WindowManagerTests(unittest.TestCase):
         browser = mock()
         current_window = mock()
         browser.window_handles = []
-        browser.window_handles = []
         window_infos = {}
         for window_spec in window_specs:
             handle = uuid.uuid4().hex

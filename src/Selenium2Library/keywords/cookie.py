@@ -4,13 +4,10 @@ from Selenium2Library.robotlibcore import keyword
 
 class CookieKeywords(Base):
 
-    def __init__(self, ctx):
-        self.ctx = ctx
-
     @keyword
     def delete_all_cookies(self):
         """Deletes all cookies."""
-        self.ctx.browser.delete_all_cookies()
+        self.browser.delete_all_cookies()
 
     @keyword
     def delete_cookie(self, name):
@@ -18,13 +15,13 @@ class CookieKeywords(Base):
 
         If the cookie is not found, nothing happens.
         """
-        self.ctx.browser.delete_cookie(name)
+        self.browser.delete_cookie(name)
 
     @keyword
     def get_cookies(self):
         """Returns all cookies of the current page."""
         pairs = []
-        for cookie in self.ctx.browser.get_cookies():
+        for cookie in self.browser.get_cookies():
             pairs.append(cookie['name'] + "=" + cookie['value'])
         return '; '.join(pairs)
 
@@ -34,7 +31,7 @@ class CookieKeywords(Base):
 
         If no cookie is found with `name`, this keyword fails.
         """
-        cookie = self.ctx.browser.get_cookie(name)
+        cookie = self.browser.get_cookie(name)
         if cookie is not None:
             return cookie['value']
         raise ValueError("Cookie with name %s not found." % name)
@@ -56,4 +53,4 @@ class CookieKeywords(Base):
         # secure should be True or False so check explicitly for None
         if secure is not None:
             new_cookie['secure'] = secure
-        self.ctx.browser.add_cookie(new_cookie)
+        self.browser.add_cookie(new_cookie)

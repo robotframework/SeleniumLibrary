@@ -10,9 +10,8 @@ from Selenium2Library.robotlibcore import keyword
 class WaitingKeywords(Base):
 
     def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
-        self.element = ElementKeywords(self.ctx)
+        Base.__init__(self, ctx)
+        self.element = ElementKeywords(ctx)
 
     @keyword
     def wait_for_condition(self, condition, timeout=None, error=None):
@@ -36,7 +35,7 @@ class WaitingKeywords(Base):
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
         self._wait_until(
             timeout, error,
-            lambda: self.ctx.browser.execute_script(condition) is True)
+            lambda: self.browser.execute_script(condition) is True)
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):

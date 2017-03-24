@@ -6,8 +6,7 @@ from Selenium2Library.robotlibcore import keyword
 class TableElementKeywords(Base):
 
     def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
+        Base.__init__(self, ctx)
         self._table_element_finder = TableElementFinder()
 
     @keyword
@@ -31,7 +30,7 @@ class TableElementKeywords(Base):
         if column > 0:
             column_index = column - 1
         table = self._table_element_finder.find(
-            self.ctx.browser, table_locator
+            self.browser, table_locator
         )
         if table is not None:
             rows = table.find_elements_by_xpath("./thead/tr")
@@ -100,7 +99,7 @@ class TableElementKeywords(Base):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self._table_element_finder.find_by_col(self.ctx.browser, table_locator, col, expected)
+        element = self._table_element_finder.find_by_col(self.browser, table_locator, col, expected)
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError("Column #%s in table identified by '%s' "
@@ -118,7 +117,7 @@ class TableElementKeywords(Base):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self._table_element_finder.find_by_footer(self.ctx.browser, table_locator, expected)
+        element = self._table_element_finder.find_by_footer(self.browser, table_locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError("Footer in table identified by '%s' should have contained "
@@ -134,7 +133,7 @@ class TableElementKeywords(Base):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self._table_element_finder.find_by_header(self.ctx.browser, table_locator, expected)
+        element = self._table_element_finder.find_by_header(self.browser, table_locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError("Header in table identified by '%s' should have contained "
@@ -158,7 +157,7 @@ class TableElementKeywords(Base):
 
         See `Page Should Contain Element` for explanation about `loglevel` argument.
         """
-        element = self._table_element_finder.find_by_row(self.ctx.browser, table_locator, row, expected)
+        element = self._table_element_finder.find_by_row(self.browser, table_locator, row, expected)
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError("Row #%s in table identified by '%s' should have contained "
@@ -174,7 +173,7 @@ class TableElementKeywords(Base):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self._table_element_finder.find_by_content(self.ctx.browser, table_locator, expected)
+        element = self._table_element_finder.find_by_content(self.browser, table_locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError("Table identified by '%s' should have contained text '%s'." \

@@ -1,4 +1,4 @@
-from robot.api import logger
+import warnings
 
 from .utils import BrowserCache
 from .keywords.alert import AlertKeywords
@@ -183,7 +183,6 @@ class Selenium2Library(DynamicCore):
         | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
         | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
-        self.logger = logger
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -197,10 +196,8 @@ class Selenium2Library(DynamicCore):
             ScreenshotKeywords(self),
             WaitingKeywords(self)
         ]
-
+        self._browsers = BrowserCache()
         DynamicCore.__init__(self, libraries)
-        self.cache = BrowserCache()
-
         self.screenshot_root_directory = screenshot_root_directory
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
@@ -214,21 +211,24 @@ class Selenium2Library(DynamicCore):
             print 'run failure here'
             raise
 
+    def register_browser(self, browser, alias):
+        return self._browsers.register(browser, alias)
+
     @property
-    def browser(self):
-        """returns the current active browser"""
-        if not self.cache.current:
+    def _browser(self):
+        """Current active browser"""
+        if not self._browsers.current:
             raise RuntimeError('No browser is open')
-        return self.cache.current
+        return self._browsers.current
 
     @property
     def _cache(self):
-        logger.warn('Deprecated, please use self.cache')
-        return self.cache
+        warnings.warn('"Selenium2Library._cache" is deprecated, '
+                      'use public API instead.', DeprecationWarning)
+        return self._browsers
 
     def _current_browser(self):
-        logger.warn('Deprecated, please use self.browser')
+        warnings.warn('"Selenium2Library._current_browser" is deprecated, '
+                      'use "Selenium2Library.browser" instead.',
+                      DeprecationWarning)
         return self.browser
-
-    def register_browser(self, browser, alias):
-        return self.cache.register(browser, alias)

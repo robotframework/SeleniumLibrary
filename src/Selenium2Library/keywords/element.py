@@ -12,10 +12,9 @@ from Selenium2Library.robotlibcore import keyword
 class ElementKeywords(Base):
 
     def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
+        Base.__init__(self, ctx)
         self.element_finder = ElementFinder()
-        self.form_element = FormElementKeywords(self.ctx)
+        self.form_element = FormElementKeywords(ctx)
 
     @keyword
     def get_webelement(self, locator):
@@ -204,9 +203,7 @@ class ElementKeywords(Base):
         """
         self.info("Assigning temporary id '%s' to element '%s'" % (id, locator))
         element = self.element_find(locator)
-        self.ctx.browser.execute_script(
-            "arguments[0].id = '%s';" % id, element
-        )
+        self.browser.execute_script("arguments[0].id = '%s';" % id, element)
 
     @keyword
     def element_should_be_disabled(self, locator):
@@ -404,7 +401,7 @@ class ElementKeywords(Base):
         """
         self.info("Click clicking element '%s' in coordinates '%s', '%s'." % (locator, xoffset, yoffset))
         element = self.element_find(locator)
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
@@ -419,16 +416,14 @@ class ElementKeywords(Base):
         """
         self.info("Double clicking element '%s'." % locator)
         element = self.element_find(locator)
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.double_click(element).perform()
 
     @keyword
     def focus(self, locator):
         """Sets focus to element identified by `locator`."""
         element = self.element_find(locator)
-        self.ctx.browser.execute_script(
-            "arguments[0].focus();", element
-        )
+        self.browser.execute_script("arguments[0].focus();", element)
 
     @keyword
     def drag_and_drop(self, source, target):
@@ -445,7 +440,7 @@ class ElementKeywords(Base):
         """
         src_elem = self.element_find(source)
         trg_elem = self.element_find(target)
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.drag_and_drop(src_elem, trg_elem).perform()
 
     @keyword
@@ -459,7 +454,7 @@ class ElementKeywords(Base):
         | Drag And Drop By Offset | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
         """
         src_elem = self.element_find(source)
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.drag_and_drop_by_offset(src_elem, xoffset, yoffset)
         action.perform()
 
@@ -479,7 +474,7 @@ class ElementKeywords(Base):
         element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -496,7 +491,7 @@ class ElementKeywords(Base):
         size = element.size
         offsetx = (size['width'] / 2) + 1
         offsety = (size['height'] / 2) + 1
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.move_to_element(element).move_by_offset(offsetx, offsety)
         action.perform()
 
@@ -511,7 +506,7 @@ class ElementKeywords(Base):
         element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.move_to_element(element).perform()
 
     @keyword
@@ -525,13 +520,13 @@ class ElementKeywords(Base):
         element = self.element_find(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        ActionChains(self.ctx.browser).release(element).perform()
+        ActionChains(self.browser).release(element).perform()
 
     @keyword
     def open_context_menu(self, locator):
         """Opens context menu on element identified by `locator`."""
         element = self.element_find(locator)
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.context_click(element).perform()
 
     @keyword
@@ -554,7 +549,7 @@ var evt = document.createEvent("HTMLEvents");
 evt.initEvent(eventName, true, true);
 return !element.dispatchEvent(evt);
         """
-        self.ctx.browser.execute_script(script, element, event)
+        self.browser.execute_script(script, element, event)
 
     @keyword
     def press_key(self, locator, key):
@@ -604,7 +599,7 @@ return !element.dispatchEvent(evt);
         `introduction` for details about locating elements.
         """
         element = self.element_find(locator, tag='link')
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -659,7 +654,7 @@ return !element.dispatchEvent(evt);
         `introduction` for details about locating elements.
         """
         element = self.element_find(locator, tag='image')
-        action = ActionChains(self.ctx.browser)
+        action = ActionChains(self.browser)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -771,12 +766,11 @@ return !element.dispatchEvent(evt);
         self.element_finder.unregister(strategy_name)
 
     def _frame_contains(self, locator, text):
-        browser = self.ctx.browser
         element = self.element_find(locator)
-        browser.switch_to_frame(element)
+        self.browser.switch_to_frame(element)
         self.info("Searching for text from frame '%s'." % locator)
         found = self.is_text_present(text)
-        browser.switch_to_default_content()
+        self.browser.switch_to_default_content()
         return found
 
     def _get_text(self, locator):
@@ -854,8 +848,7 @@ return !element.dispatchEvent(evt);
         return parts[0], parts[2]
 
     def _page_contains(self, text):
-        browser = self.ctx.browser
-        browser.switch_to_default_content()
+        self.browser.switch_to_default_content()
 
         if self.is_text_present(text):
             return True
@@ -865,9 +858,9 @@ return !element.dispatchEvent(evt);
         )
         self.debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
-            browser.switch_to_frame(frame)
+            self.browser.switch_to_frame(frame)
             found_text = self.is_text_present(text)
-            browser.switch_to_default_content()
+            self.browser.switch_to_default_content()
             if found_text:
                 return True
         return False

@@ -31,10 +31,23 @@ class HybridCore(object):
                     yield kw_name, getattr(library, name)
 
     def _get_members(self, library):
-        # Avoid calling properties by getting members from class, not instance.
+        if inspect.ismodule(library):
+            return inspect.getmembers(library)
         if inspect.isclass(library):
-            library = type(library)
-        return inspect.getmembers(library)
+            raise TypeError('Libraries must be modules or instances, got '
+                            'class {!r} instead.'.format(library.__name__))
+        if type(library) != library.__class__:
+            raise TypeError('Libraries must be modules or new-style class '
+                            'instances, got old-style class {!r} instead.'
+                            .format(library.__class__.__name__))
+        return self._get_members_from_instannce(library)
+
+    def _get_members_from_instannce(self, instance):
+        # Avoid calling properties by getting members from class, not instance.
+        cls = type(instance)
+        for name in dir(instance):
+            owner = cls if hasattr(cls, name) else instance
+            yield name, getattr(owner, name)
 
     def __getattr__(self, name):
         if name in self.keywords:

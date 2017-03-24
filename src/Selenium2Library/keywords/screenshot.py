@@ -13,8 +13,7 @@ from Selenium2Library.utils import events
 class ScreenshotKeywords(Base):
 
     def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
+        Base.__init__(self, ctx)
         self._screenshot_index = {}
         self._screenshot_path_stack = []
         self.screenshot_root_directory = None
@@ -93,11 +92,11 @@ class ScreenshotKeywords(Base):
         """
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
-        if hasattr(self.ctx.browser, 'get_screenshot_as_file'):
-            if not self.ctx.browser.get_screenshot_as_file(path):
+        if hasattr(self.browser, 'get_screenshot_as_file'):
+            if not self.browser.get_screenshot_as_file(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         else:
-            if not self.ctx.browser.save_screenshot(path):
+            if not self.browser.save_screenshot(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         # Image is shown on its own row and thus prev row is closed on purpose
         msg = (

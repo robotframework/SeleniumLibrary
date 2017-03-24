@@ -7,10 +7,6 @@ from Selenium2Library.robotlibcore import keyword
 
 class SelectElementKeywords(Base):
 
-    def __init__(self, ctx):
-        Base.__init__(self)
-        self.ctx = ctx
-
     @keyword
     def get_list_items(self, locator, value=False):
         """Returns the labels or values in the select list identified by `locator`.
@@ -412,7 +408,7 @@ class SelectElementKeywords(Base):
         return False
 
     def _unselect_all_options_from_multi_select_list(self, select):
-        self.ctx.browser.execute_script(
+        self.browser.execute_script(
             "arguments[0].selectedIndex = -1;", select
         )
 

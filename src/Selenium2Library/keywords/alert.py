@@ -14,7 +14,7 @@ class AlertKeywords(Base):
     DISMISS_ALERT = 'dismiss'
 
     def __init__(self, ctx):
-        self.ctx = ctx
+        Base.__init__(self, ctx)
         self._next_alert_dismiss_type = self.ACCEPT_ALERT
 
     @keyword
@@ -145,5 +145,4 @@ class AlertKeywords(Base):
         return text
 
     def _wait_alert(self):
-        return WebDriverWait(self.ctx.browser, 1).until(
-            EC.alert_is_present())
+        return WebDriverWait(self.browser, 1).until(EC.alert_is_present())
