@@ -6,11 +6,6 @@ from Selenium2Library.robotlibcore import keyword
 
 class RunOnFailureKeywords(Base):
 
-    def __init__(self, ctx):
-        Base.__init__(self, ctx)
-        self._run_on_failure_keyword = None
-        self._running_on_failure_routine = False
-
     @keyword
     def register_keyword_to_run_on_failure(self, keyword):
         """Sets the keyword to execute when a Selenium2Library keyword fails.
@@ -34,34 +29,33 @@ class RunOnFailureKeywords(Base):
         | ${previous kw}= | Register Keyword To Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
         | Register Keyword To Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
         """
-        old_keyword = self._run_on_failure_keyword
-        old_keyword_text = old_keyword if old_keyword is not None else "No keyword"
+        old_keyword = self.ctx._run_on_failure_keyword
+        old_keyword_text = old_keyword if old_keyword else "No keyword"
 
         new_keyword = keyword if keyword.strip().lower() != "nothing" else None
-        new_keyword_text = new_keyword if new_keyword is not None else "No keyword"
+        new_keyword_text = new_keyword if new_keyword else "No keyword"
 
-        self._run_on_failure_keyword = new_keyword
+        self.ctx._run_on_failure_keyword = new_keyword
         self.info('%s will be run on failure.' % new_keyword_text)
 
         return old_keyword_text
 
     def _run_on_failure(self):
-        self._run_on_failure_keyword = True
-        if self._run_on_failure_keyword is None:
+        if not self.ctx._run_on_failure_keyword:
             return
-        if self._running_on_failure_routine:
+        if self.ctx._running_on_failure_routine:
             return
-        self._running_on_failure_routine = True
+        self.ctx._running_on_failure_routine = True
         try:
-            BuiltIn().run_keyword(self._run_on_failure_keyword)
+            BuiltIn().run_keyword(self.ctx._run_on_failure_keyword)
         except Exception as err:
             self._run_on_failure_error(err)
         finally:
-            self._running_on_failure_routine = False
+            self.ctx._running_on_failure_routine = False
 
     def _run_on_failure_error(self, err):
-        err = "Keyword '%s' could not be run on failure: %s" % (self._run_on_failure_keyword, err)
-        if hasattr(self, '_warn'):
-            self._warn(err)
+        err = "Keyword '%s' could not be run on failure: %s" % (self.ctx._run_on_failure_keyword, err)
+        if hasattr(self, 'warn'):
+            self.warn(err)
             return
         raise Exception(err)

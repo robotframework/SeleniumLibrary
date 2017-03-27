@@ -183,6 +183,8 @@ class Selenium2Library(DynamicCore):
         | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
         | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
+        self._run_on_failure_keyword = None
+        self._running_on_failure_routine = False
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -208,7 +210,7 @@ class Selenium2Library(DynamicCore):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
-            print 'run failure here'
+            RunOnFailureKeywords(self)._run_on_failure()
             raise
 
     def register_browser(self, browser, alias):
