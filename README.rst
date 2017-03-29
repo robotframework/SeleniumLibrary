@@ -97,7 +97,7 @@ and its dependencies yourself.
 
 3) Extract each source distribution to a temporary location.
 
-4) Go each created directory from the command line and install each project
+4) Go to each created directory from the command line and install each project
    using::
 
        python setup.py install
