@@ -91,11 +91,11 @@ class WaitingKeywords(Base):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
+        def is_element_present(locator):
+            return self.element_find(locator, required=False) is not None
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
-        self._wait_until(
-            timeout, error, self.element_find, locator
-        )
+        self._wait_until(timeout, error, is_element_present, locator)
 
     @keyword
     def wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None):
@@ -112,7 +112,7 @@ class WaitingKeywords(Base):
         Keyword Succeeds`.
         """
         def check_present():
-            present = self.element_find(locator)
+            present = self.element_find(locator, required=False)
             if not present:
                 return
             else:
@@ -182,7 +182,7 @@ class WaitingKeywords(Base):
         Succeeds`.
         """
         def check_enabled():
-            element = self.element_find(locator)
+            element = self.element_find(locator, required=False)
             if not element:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
 
