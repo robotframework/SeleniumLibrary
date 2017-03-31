@@ -333,11 +333,13 @@ class WindowManagerTests(unittest.TestCase):
                 browser.session_id = handle_
                 current_window.name = window_infos[handle_][1]
                 browser.current_window = current_window
+                browser.title = window_infos[handle_][2]
+                browser.current_url = window_infos[handle_][3]
         browser.switch_to_window = switch_to_window
 
         def execute_script(script):
             handle_ = browser.session_id
             if handle_ in browser.window_handles:
-                return window_infos[handle_]
+                return window_infos[handle_][:2]
         browser.execute_script = execute_script
         return browser

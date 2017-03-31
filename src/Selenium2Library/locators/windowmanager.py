@@ -1,4 +1,5 @@
 from selenium.common.exceptions import NoSuchWindowException
+from selenium.common.exceptions import WebDriverException
 
 
 class WindowManager(object):
@@ -139,8 +140,10 @@ class WindowManager(object):
         raise ValueError(error)
 
     def _get_current_window_info(self, browser):
-        id_, name, title, url = browser.execute_script(
-            "return [ window.id, window.name, document.title, document.URL ];")
+        id_, name = browser.execute_script("return [ window.id, window.name ];")
+        title = browser.title
+        url = browser.current_url
+
         id_ = id_ if id_ is not None else 'undefined'
         name, title, url = (
             att if att else 'undefined' for att in (name, title, url)
