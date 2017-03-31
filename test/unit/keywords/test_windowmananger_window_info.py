@@ -3,6 +3,7 @@ import unittest
 from mockito import mock, when, unstub
 
 from Selenium2Library.locators import WindowManager
+from selenium.common.exceptions import WebDriverException
 
 SCRIPT = "return [ window.id, window.name ];"
 HANDLE = "17c3dc18-0443-478b-aec6-ed7e2a5da7e1"
@@ -91,4 +92,18 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         self.mock_window_info(driver, *[{}, '', '', ''])
         info = manager._get_current_window_info(driver)
         self.assertEqual(info[1], {})
+        unstub()
+
+    def test_no_javascript_support(self):
+        manager = WindowManager()
+        driver = mock()
+        elem = mock()
+        when(driver).execute_script(SCRIPT).thenRaise(WebDriverException)
+        driver.title = 'title'
+        driver.current_url = 'url'
+        driver.current_window_handle = HANDLE
+        info = manager._get_current_window_info(driver)
+        self.assertEqual(
+            info, (HANDLE, 'undefined', 'undefined', 'title', 'url')
+        )
         unstub()

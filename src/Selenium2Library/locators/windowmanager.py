@@ -140,7 +140,14 @@ class WindowManager(object):
         raise ValueError(error)
 
     def _get_current_window_info(self, browser):
-        id_, name = browser.execute_script("return [ window.id, window.name ];")
+        try:
+            id_, name = browser.execute_script("return [ window.id, window.name ];")
+        except WebDriverException:
+            # The webdriver implementation doesn't support Javascript so we
+            # can't get window id or name this way.
+            id_ = None
+            name = ''
+
         title = browser.title
         url = browser.current_url
 

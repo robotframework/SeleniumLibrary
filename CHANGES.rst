@@ -4,6 +4,8 @@ Release Notes
 1.8.1
 -----
 - Added 'Get Locations' keyword [thaffenden]
+- Fix getting window information and switching windows on browsers that do not
+  support javascript
 
 1.8.0
 -----
