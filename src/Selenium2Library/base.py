@@ -37,6 +37,8 @@ class Base(object):
     def browsers(self):
         return self.ctx._browsers
 
+    # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
+    # in Base class
     def element_find(self, locator, first_only=True, required=True, tag=None):
         if isinstance(locator, basestring):
             elements = self.element_finder.find(self.browser, locator, tag)
@@ -54,12 +56,16 @@ class Base(object):
             elements = locator
         return elements
 
+    # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
+    # in Base class
     def get_value(self, locator, tag=None):
         element = self.element_find(
             locator, required=False, tag=tag
         )
         return element.get_attribute('value') if element is not None else None
 
+    # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
+    # in Base class
     def page_contains_element(self, locator, tag=None,
                               message=None, loglevel='INFO'):
         element_name = tag if tag else 'element'
@@ -75,6 +81,8 @@ class Base(object):
             "Current page contains %s '%s'." % (element_name, locator)
         )
 
+    # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
+    # in Base class
     def page_not_contains_element(self, locator, tag=None,
                                   message=None, loglevel='INFO'):
         element_name = tag if tag else 'element'
