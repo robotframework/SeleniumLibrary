@@ -21,7 +21,7 @@ class BrowserCache(ConnectionCache):
     def close(self):
         if self.current:
             browser = self.current
-            browser.quit()
+            browser.close()
             self.current = self._no_current
             self._closed.add(browser)
 
