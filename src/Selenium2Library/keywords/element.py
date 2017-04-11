@@ -8,6 +8,10 @@ from Selenium2Library.locators import CustomLocator
 
 from .keywordgroup import KeywordGroup
 
+try:
+    basestring        # Python 2
+except NameError:
+    basestring = str  # Python 3
 
 class ElementKeywords(KeywordGroup):
 
