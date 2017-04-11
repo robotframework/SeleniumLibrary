@@ -699,6 +699,10 @@ return !element.dispatchEvent(evt);
     # Private
 
     def _element_find(self, locator, first_only, required, tag=None):
+        try:
+            basestring        # Python 2
+        except NameError:
+            basestring = str  # Python 3
         browser = self._current_browser()
         if isinstance(locator, basestring):
             elements = self._element_finder.find(browser, locator, tag)
