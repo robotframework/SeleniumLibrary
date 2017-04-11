@@ -4,7 +4,10 @@ from .librarylistener import LibraryListener
 
 
 def escape_xpath_value(value):
-    value = unicode(value)
+    try:
+        value = unicode(value)  # Python 2
+    except NameError:
+        pass                    # Python 3
     if '"' in value and '\'' in value:
         parts_wo_apos = value.split('\'')
         return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
