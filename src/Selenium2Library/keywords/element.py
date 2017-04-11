@@ -699,6 +699,7 @@ return !element.dispatchEvent(evt);
     # Private
 
     def _element_find(self, locator, first_only, required, tag=None):
+        print('locator ({}): {}'.format(type(locator), locator))
         try:
             basestring        # Python 2
         except NameError:
@@ -713,6 +714,8 @@ return !element.dispatchEvent(evt);
                 return elements[0]
         elif isinstance(locator, WebElement):
             elements = locator
+        else:
+            elements = []
         # do some other stuff here like deal with list of webelements
         # ... or raise locator/element specific error if required
         return elements
