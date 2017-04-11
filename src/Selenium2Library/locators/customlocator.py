@@ -1,5 +1,10 @@
 from robot.libraries.BuiltIn import BuiltIn
 
+try:
+    unicode        # Python 2
+except NameError:
+    unicode = str  # Python 3
+
 
 class CustomLocator(object):
 
