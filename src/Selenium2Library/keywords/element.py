@@ -713,7 +713,7 @@ return !element.dispatchEvent(evt);
                     return None
                 return elements[0]
         else:
-            elements = locator isinstance(locator, WebElement) else None
+            elements = locator if isinstance(locator, WebElement) else None
             
         # do some other stuff here like deal with list of webelements
         # ... or raise locator/element specific error if required
