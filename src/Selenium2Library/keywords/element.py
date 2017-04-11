@@ -700,9 +700,9 @@ return !element.dispatchEvent(evt);
 
     def _element_find(self, locator, first_only, required, tag=None):
         try:
-            basestring          # Python 2
+            basestring        # Python 2
         except NameError:
-            basestring = bytes  # Python 3
+            basestring = str  # Python 3
         browser = self._current_browser()
         if isinstance(locator, basestring):
             elements = self._element_finder.find(browser, locator, tag)
@@ -712,8 +712,9 @@ return !element.dispatchEvent(evt);
                 if len(elements) == 0:
                     return None
                 return elements[0]
-        elif isinstance(locator, WebElement):
-            elements = locator
+        else:
+            elements = locator isinstance(locator, WebElement) else None
+            
         # do some other stuff here like deal with list of webelements
         # ... or raise locator/element specific error if required
         return elements
