@@ -1,5 +1,5 @@
 language: python
-sudo: false  # allow travis to test in parallel
+sudo: required
 dist: trusty
 addons:
   apt:
@@ -11,10 +11,8 @@ before_install:
   - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
   - wget http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
   - unzip chromedriver_linux64.zip
-  - # sudo chmod u+x chromedriver
-  - # sudo mv chromedriver /usr/bin/
-  - chmod u+x chromedriver
-  - mv chromedriver /usr/bin/
+  - sudo chmod u+x chromedriver
+  - sudo mv chromedriver /usr/bin/
   - pip install --upgrade pip
 install:
   - pip install .
