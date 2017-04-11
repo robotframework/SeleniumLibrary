@@ -1,5 +1,5 @@
 language: python
-# sudo: required  # allow travis to test in parallel
+sudo: false  # allow travis to test in parallel
 dist: trusty
 addons:
   apt:
