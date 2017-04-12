@@ -260,6 +260,18 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, elements)
         result = finder.find(browser, "link=my link", tag='a')
         self.assertEqual(result, [elements[1], elements[3]])
+        
+    def test_find_by_partial_link_text(self):
+        finder = ElementFinder()
+        browser = mock()
+
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(browser).find_elements_by_partial_link_text("my link").thenReturn(elements)
+
+        result = finder.find(browser, "partial link=my link")
+        self.assertEqual(result, elements)
+        result = finder.find(browser, "partial link=my link", tag='a')
+        self.assertEqual(result, [elements[1], elements[3]])
 
     def test_find_by_partial_link_text(self):
         finder = ElementFinder()
