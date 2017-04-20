@@ -1,6 +1,7 @@
 import os.path
 import time
 import types
+from functools import partial
 
 from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
@@ -65,8 +66,9 @@ class BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None,remote_url=False,
-                desired_capabilities=None,ff_profile_dir=None):
+    def open_browser(self, url, browser='firefox', alias=None,
+                     remote_url=False, desired_capabilities=None,
+                     ff_profile_dir=None, **init_kwargs):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -114,6 +116,8 @@ class BrowserManagementKeywords(KeywordGroup):
 
         Optional 'ff_profile_dir' is the path to the firefox profile dir if you
         wish to overwrite the default.
+
+        Use keyword arguments to pass arguments to WebDriver __init__.
         """
         if remote_url:
             self._info("Opening browser '%s' to base url '%s' through remote server at '%s'"
@@ -121,7 +125,8 @@ class BrowserManagementKeywords(KeywordGroup):
         else:
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
+        browser = self._make_browser(browser_name, desired_capabilities,
+                                     ff_profile_dir, remote_url, **init_kwargs)
         try:
             browser.get(url)
         except:
@@ -544,29 +549,29 @@ class BrowserManagementKeywords(KeywordGroup):
         return getattr(self, func_name) if func_name else None
 
     def _make_browser(self, browser_name, desired_capabilities=None,
-                      profile_dir=None, remote=None):
+                      profile_dir=None, remote=None, **kwargs):
         creation_func = self._get_browser_creation_function(browser_name)
 
         if not creation_func:
             raise ValueError(browser_name + " is not a supported browser.")
 
-        browser = creation_func(remote, desired_capabilities, profile_dir)
+        browser_func = creation_func(remote, desired_capabilities, profile_dir)
+        browser = browser_func(**kwargs)
         browser.set_script_timeout(self._timeout_in_secs)
         browser.implicitly_wait(self._implicit_wait_in_secs)
 
         return browser
 
-
     def _make_ff(self , remote , desired_capabilites , profile_dir):
-
         if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
         if remote:
-            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
-                        remote , desired_capabilites , profile)
+            browser_func = self._create_remote_web_driver(
+                webdriver.DesiredCapabilities.FIREFOX, remote,
+                desired_capabilites, profile)
         else:
-            browser = webdriver.Firefox(firefox_profile=profile)
-        return browser
+            browser_func = partial(webdriver.Firefox, firefox_profile=profile)
+        return browser_func
 
     def _make_ie(self , remote , desired_capabilities , profile_dir):
         return self._generic_make_browser(webdriver.Ie,
@@ -615,10 +620,10 @@ class BrowserManagementKeywords(KeywordGroup):
         '''most of the make browser functions just call this function which creates the
         appropriate web-driver'''
         if not remote_url:
-            browser = webdriver_type()
+            browser_func = webdriver_type
         else:
-            browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
-        return browser
+            browser_func = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
+        return browser_func
 
     def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
         '''parses the string based desired_capabilities if neccessary and
@@ -631,8 +636,9 @@ class BrowserManagementKeywords(KeywordGroup):
 
         desired_capabilities_object.update(desired_capabilities or {})
 
-        return webdriver.Remote(desired_capabilities=desired_capabilities_object,
-                command_executor=str(remote_url), browser_profile=profile)
+        return partial(
+            webdriver.Remote, desired_capabilities=desired_capabilities_object,
+            command_executor=str(remote_url), browser_profile=profile)
 
     def _parse_capabilities_string(self, capabilities_string):
         '''parses the string based desired_capabilities which should be in the form

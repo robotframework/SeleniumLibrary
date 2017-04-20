@@ -47,6 +47,21 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_htmlunitwihtjs_browser(self):
         self.verify_browser(webdriver.Remote, "htmlunitwithjs")
 
+    def test_create_browser_with_kwargs(self):
+        self.was_called_with_kw = None
+        self.verify_browser(webdriver.Firefox, "firefox",
+                            some_non_exisiting_option="value")
+        self.assertEqual(self.was_called_with_kw["some_non_exisiting_option"],
+                         "value")
+
+    def test_create_remote_browser_with_kwargs(self):
+        self.was_called_with_kw = None
+        self.verify_browser(webdriver.Remote, "chrome",
+                            remote="http://127.0.0.1/wd/hub",
+                            some_non_exisiting_option="value")
+        self.assertEqual(self.was_called_with_kw["some_non_exisiting_option"],
+                         "value")
+
     def test_parse_capabilities_string(self):
         bm = BrowserManagementKeywords()
         expected_caps = "key1:val1,key2:val2"
@@ -137,6 +152,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def mock_init(self, *args, **kw):
         self.was_called = True
+        self.was_called_with_kw = kw
 
 
 class _BrowserManagementWithLoggingStubs(BrowserManagementKeywords):
