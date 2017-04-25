@@ -1,11 +1,11 @@
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
 
 from Selenium2Library import utils
 from Selenium2Library.base import Base
 from Selenium2Library.keywords.formelement import FormElementKeywords
-from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
+from Selenium2Library.locators import ElementFinder
 from Selenium2Library.robotlibcore import keyword
 
 

@@ -1,6 +1,5 @@
 import warnings
 
-from .utils import BrowserCache
 from .keywords.alert import AlertKeywords
 from .keywords.browsermanagement import BrowserManagementKeywords
 from .keywords.cookie import CookieKeywords
@@ -12,9 +11,10 @@ from .keywords.screenshot import ScreenshotKeywords
 from .keywords.selectelement import SelectElementKeywords
 from .keywords.tableelement import TableElementKeywords
 from .keywords.waiting import WaitingKeywords
+from .robotlibcore import DynamicCore
+from .utils import BrowserCache
 from .utils import LibraryListener
 from .version import VERSION
-from .robotlibcore import DynamicCore
 
 __version__ = VERSION
 
@@ -210,7 +210,7 @@ class Selenium2Library(DynamicCore):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
-            RunOnFailureKeywords(self)._run_on_failure()
+            RunOnFailureKeywords(self).run_on_failure()
             raise
 
     def register_browser(self, browser, alias):

@@ -40,7 +40,7 @@ class RunOnFailureKeywords(Base):
 
         return old_keyword_text
 
-    def _run_on_failure(self):
+    def run_on_failure(self):
         if not self.ctx._run_on_failure_keyword:
             return
         if self.ctx._running_on_failure_routine:
@@ -49,11 +49,11 @@ class RunOnFailureKeywords(Base):
         try:
             BuiltIn().run_keyword(self.ctx._run_on_failure_keyword)
         except Exception as err:
-            self._run_on_failure_error(err)
+            self.run_on_failure_error(err)
         finally:
             self.ctx._running_on_failure_routine = False
 
-    def _run_on_failure_error(self, err):
+    def run_on_failure_error(self, err):
         err = "Keyword '%s' could not be run on failure: %s" % (self.ctx._run_on_failure_keyword, err)
         if hasattr(self, 'warn'):
             self.warn(err)

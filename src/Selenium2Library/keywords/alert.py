@@ -1,8 +1,8 @@
 import time
 
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from Selenium2Library.base import Base
 from Selenium2Library.robotlibcore import keyword
