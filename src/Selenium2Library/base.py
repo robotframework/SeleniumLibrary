@@ -9,10 +9,6 @@ LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
 
 class Base(object):
 
-    _speed_in_secs = 0.0
-    _timeout_in_secs = 5.0
-    _implicit_wait_in_secs = 5.0
-
     def __init__(self, ctx):
         self.ctx = ctx
         self.element_finder = ElementFinder()

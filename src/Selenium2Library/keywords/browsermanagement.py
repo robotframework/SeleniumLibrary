@@ -463,21 +463,21 @@ class BrowserManagementKeywords(Base):
         """Gets the delay in seconds that is waited after each Selenium command.
 
         See `Set Selenium Speed` for an explanation."""
-        return secs_to_timestr(self._speed_in_secs)
+        return secs_to_timestr(self.ctx._speed_in_secs)
 
     @keyword
     def get_selenium_timeout(self):
         """Gets the timeout in seconds that is used by various keywords.
 
         See `Set Selenium Timeout` for an explanation."""
-        return secs_to_timestr(self._timeout_in_secs)
+        return secs_to_timestr(self.ctx._timeout_in_secs)
 
     @keyword
     def get_selenium_implicit_wait(self):
         """Gets the wait in seconds that is waited by Selenium.
 
         See `Set Selenium Implicit Wait` for an explanation."""
-        return secs_to_timestr(self._implicit_wait_in_secs)
+        return secs_to_timestr(self.ctx._implicit_wait_in_secs)
 
     @keyword
     def set_selenium_speed(self, seconds):
@@ -497,10 +497,10 @@ class BrowserManagementKeywords(Base):
         Example:
         | Set Selenium Speed | .5 seconds |
         """
-        old_speed = self._speed_in_secs
-        self._speed_in_secs = timestr_to_secs(seconds)
+        old_speed = self.ctx._speed_in_secs
+        self.ctx._speed_in_secs = timestr_to_secs(seconds)
         for browser in self.browsers.browsers:
-            browser._speed = self._speed_in_secs
+            browser._speed = self.ctx._speed_in_secs
             self._monkey_patch_speed(browser)
         return old_speed
 
@@ -523,9 +523,9 @@ class BrowserManagementKeywords(Base):
         | Set Selenium Timeout | ${orig timeout} |
         """
         old_timeout = self.get_selenium_timeout()
-        self._timeout_in_secs = timestr_to_secs(seconds)
+        self.ctx._timeout_in_secs = timestr_to_secs(seconds)
         for browser in self.browsers.get_open_browsers():
-            browser.set_script_timeout(self._timeout_in_secs)
+            browser.set_script_timeout(self.ctx._timeout_in_secs)
         return old_timeout
 
     @keyword
@@ -543,9 +543,9 @@ class BrowserManagementKeywords(Base):
         | Set Selenium Implicit Wait | ${orig wait} |
         """
         old_wait = self.get_selenium_implicit_wait()
-        self._implicit_wait_in_secs = timestr_to_secs(seconds)
+        self.ctx._implicit_wait_in_secs = timestr_to_secs(seconds)
         for browser in self.browsers.get_open_browsers():
-            browser.implicitly_wait(self._implicit_wait_in_secs)
+            browser.implicitly_wait(self.ctx._implicit_wait_in_secs)
         return old_wait
 
     @keyword
@@ -576,8 +576,8 @@ class BrowserManagementKeywords(Base):
             raise ValueError(browser_name + " is not a supported browser.")
 
         browser = creation_func(remote, desired_capabilities, profile_dir)
-        browser.set_script_timeout(self._timeout_in_secs)
-        browser.implicitly_wait(self._implicit_wait_in_secs)
+        browser.set_script_timeout(self.ctx._timeout_in_secs)
+        browser.implicitly_wait(self.ctx._implicit_wait_in_secs)
 
         return browser
 

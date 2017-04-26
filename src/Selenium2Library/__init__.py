@@ -185,6 +185,9 @@ class Selenium2Library(DynamicCore):
         """
         self._run_on_failure_keyword = None
         self._running_on_failure_routine = False
+        self._speed_in_secs = 0.0
+        self._timeout_in_secs = 5.0
+        self._implicit_wait_in_secs = 5.0
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),

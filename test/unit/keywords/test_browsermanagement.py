@@ -96,6 +96,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         ctx = mock()
+        ctx._timeout_in_secs = 5.0
         _browsers = mock()
         ctx._browsers = _browsers
         first_browser, second_browser = mock(), mock()

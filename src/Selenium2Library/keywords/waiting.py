@@ -248,7 +248,7 @@ class WaitingKeywords(Base):
         self._wait_until_no_error(timeout, wait_func)
 
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if timeout else self.ctx._timeout_in_secs
         maxtime = time.time() + timeout
         while True:
             timeout_error = wait_func(*args)
@@ -258,5 +258,5 @@ class WaitingKeywords(Base):
             time.sleep(0.2)
 
     def _format_timeout(self, timeout):
-        timeout = timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if timeout else self.ctx._timeout_in_secs
         return secs_to_timestr(timeout)
