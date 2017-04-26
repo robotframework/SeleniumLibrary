@@ -123,7 +123,7 @@ class AlertKeywords(Base):
         alert.text
         alert.dismiss
 
-        This function creates a re-try funtionality to better support
+        This function creates a re-try functionality to better support
         alerts in Chrome.
         """
         retry = 0

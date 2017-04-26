@@ -68,9 +68,8 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self.info(
-            "Verifying element '%s' contains text '%s'." % (locator, expected)
-        )
+        self.info("Verifying element '%s' contains "
+                  "text '%s'." % (locator, expected))
         actual = self._get_text(locator)
         if expected not in actual:
             if not message:
@@ -87,9 +86,8 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `Element Should Contain` for more details.
         """
-        self.info(
-            "Verifying element '%s' does not contain text '%s'."
-                   % (locator, expected))
+        self.info("Verifying element '%s' does not contain text '%s'."
+                  % (locator, expected))
         actual = self._get_text(locator)
         if expected in actual:
             if not message:
@@ -162,7 +160,7 @@ class ElementKeywords(Base):
             self.ctx.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
-                   % (actual_locator_count, locator))
+                  % (actual_locator_count, locator))
 
     @keyword
     def page_should_not_contain(self, text, loglevel='INFO'):
@@ -186,9 +184,8 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, message=message, loglevel=loglevel
-        )
+        self.page_not_contains_element(locator, message=message,
+                                       loglevel=loglevel)
 
     @keyword
     def assign_id_to_element(self, locator, id):
@@ -201,7 +198,8 @@ class ElementKeywords(Base):
         | Assign ID to Element | xpath=//div[@id="first_div"] | my id |
         | Page Should Contain Element | my id |
         """
-        self.info("Assigning temporary id '%s' to element '%s'" % (id, locator))
+        self.info("Assigning temporary id '%s' "
+                  "to element '%s'" % (id, locator))
         element = self.element_find(locator)
         self.browser.execute_script("arguments[0].id = '%s';" % id, element)
 
@@ -243,8 +241,8 @@ class ElementKeywords(Base):
         visible = self.is_visible(locator)
         if not visible:
             if not message:
-                message = "The element '%s' should be visible, but it "\
-                          "is not." % locator
+                message = ("The element '%s' should be visible, but it "
+                           "is not." % locator)
             raise AssertionError(message)
 
     @keyword
@@ -262,8 +260,8 @@ class ElementKeywords(Base):
         visible = self.is_visible(locator)
         if visible:
             if not message:
-                message = "The element '%s' should not be visible, "\
-                          "but it is." % locator
+                message = ("The element '%s' should not be visible, "
+                           "but it is." % locator)
             raise AssertionError(message)
 
     @keyword
@@ -279,13 +277,14 @@ class ElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Verifying element '%s' contains exactly text '%s'."
-                    % (locator, expected))
+                  % (locator, expected))
         element = self.element_find(locator)
         actual = element.text
         if expected != actual:
             if not message:
-                message = "The text of element '%s' should have been '%s' but "\
-                          "in fact it was '%s'." % (locator, expected, actual)
+                message = ("The text of element '%s' should have been '%s' "
+                           "but in fact it was '%s'."
+                           % (locator, expected, actual))
             raise AssertionError(message)
 
     @keyword
@@ -399,7 +398,8 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self.info("Click clicking element '%s' in coordinates '%s', '%s'." % (locator, xoffset, yoffset))
+        self.info("Click clicking element '%s' in coordinates "
+                  "'%s', '%s'." % (locator, xoffset, yoffset))
         element = self.element_find(locator)
         action = ActionChains(self.browser)
         action.move_to_element(element)
@@ -612,9 +612,8 @@ return !element.dispatchEvent(evt);
         Key attributes for links are `id`, `name`, `href` and link text. See
         `introduction` for details about locating elements.
         """
-        self.page_contains_element(
-            locator, tag='link', message=message, loglevel=loglevel
-        )
+        self.page_contains_element(locator, tag='link', message=message,
+                                   loglevel=loglevel)
 
     @keyword
     def page_should_not_contain_link(self, locator, message='', loglevel='INFO'):
@@ -626,9 +625,7 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'link', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'link', message, loglevel)
 
     @keyword
     def click_image(self, locator):
@@ -638,9 +635,7 @@ return !element.dispatchEvent(evt);
         `introduction` for details about locating elements.
         """
         self.info("Clicking image '%s'." % locator)
-        element = self.element_find(
-            locator, required=False, tag='image'
-        )
+        element = self.element_find(locator, required=False, tag='image')
         if element is None:
             # A form may have an image as it's submit trigger.
             element = self.element_find(locator, tag='input')
@@ -666,9 +661,8 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self.page_contains_element(
-            locator, tag='image', message=message, loglevel=loglevel
-        )
+        self.page_contains_element(locator, tag='image', message=message,
+                                   loglevel=loglevel)
 
     @keyword
     def page_should_not_contain_image(self, locator, message='', loglevel='INFO'):
@@ -680,9 +674,7 @@ return !element.dispatchEvent(evt);
         Key attributes for images are `id`, `src` and `alt`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'image', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'image', message, loglevel)
 
     @keyword
     def get_matching_xpath_count(self, xpath, return_str=True):
@@ -701,9 +693,8 @@ return !element.dispatchEvent(evt);
         If you wish to assert the number of matching elements, use
         `Xpath Should Match X Times`.
         """
-        count = len(self.element_find(
-            "xpath=" + xpath, first_only=False, required=False)
-        )
+        count = len(self.element_find("xpath=" + xpath, first_only=False,
+                                      required=False))
         return str(count) if return_str else count
 
     @keyword
@@ -721,16 +712,16 @@ return !element.dispatchEvent(evt);
         `loglevel` arguments.
         """
         actual_xpath_count = len(self.element_find(
-            "xpath=" + xpath, first_only=False, required=False)
-        )
+            "xpath=" + xpath, first_only=False, required=False))
         if int(actual_xpath_count) != int(expected_xpath_count):
             if not message:
-                message = "Xpath %s should have matched %s times but matched %s times"\
-                            %(xpath, expected_xpath_count, actual_xpath_count)
+                message = ("Xpath %s should have matched %s times but "
+                           "matched %s times"
+                           % (xpath, expected_xpath_count, actual_xpath_count))
             self.ctx.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
-                   % (actual_xpath_count, xpath))
+                  % (actual_xpath_count, xpath))
 
     @keyword
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):

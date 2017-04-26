@@ -54,7 +54,8 @@ class RunOnFailureKeywords(Base):
             self.ctx._running_on_failure_routine = False
 
     def run_on_failure_error(self, err):
-        err = "Keyword '%s' could not be run on failure: %s" % (self.ctx._run_on_failure_keyword, err)
+        err = ("Keyword '%s' could not be run on failure: %s"
+               % (self.ctx._run_on_failure_keyword, err))
         if hasattr(self, 'warn'):
             self.warn(err)
             return

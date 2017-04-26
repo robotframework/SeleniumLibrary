@@ -57,11 +57,8 @@ class BrowserManagementKeywords(Base):
     def close_browser(self):
         """Closes the current browser."""
         if self.browsers.current:
-            self.debug(
-                'Closing browser with session id {}'.format(
-                    self.browsers.current.session_id
-                )
-            )
+            self.debug('Closing browser with session '
+                       'id {}'.format(self.browsers.current.session_id))
             self.browsers.close()
 
     @keyword
@@ -217,10 +214,8 @@ class BrowserManagementKeywords(Base):
         """
         try:
             self.browsers.switch(index_or_alias)
-            self.debug(
-                'Switched to browser with Selenium session id %s'
-                % self.browser.session_id
-            )
+            self.debug('Switched to browser with Selenium session id %s'
+                       % self.browser.session_id)
         except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
@@ -233,9 +228,7 @@ class BrowserManagementKeywords(Base):
     @keyword
     def get_window_identifiers(self):
         """Returns and logs id attributes of all windows known to the browser."""
-        return self._log_list(
-            self._window_manager.get_window_ids(self.browser)
-        )
+        return self._log_list(self._window_manager.get_window_ids(self.browser))
 
     @keyword
     def get_window_names(self):
@@ -377,8 +370,7 @@ class BrowserManagementKeywords(Base):
         """Returns and logs current locations of all windows known to the browser."""
         return self._log_list(
             [window_info[4] for window_info in
-             self._window_manager._get_window_infos(self.browser)]
-        )
+             self._window_manager._get_window_infos(self.browser)])
 
     @keyword
     def get_source(self):
@@ -439,7 +431,7 @@ class BrowserManagementKeywords(Base):
         actual = self.get_title()
         if actual != title:
             raise AssertionError("Title should have been '%s' but was '%s'"
-                                  % (title, actual))
+                                 % (title, actual))
         self.info("Page title is '%s'." % title)
 
     @keyword
@@ -690,8 +682,7 @@ class BrowserManagementKeywords(Base):
     def _log_list(self, items, what='item'):
         msg = [
             'Altogether {} {}.'.format(
-                len(items), what if len(items) == 1 else '{}s'.format(what)
-            )
+                len(items), what if len(items) == 1 else '{}s'.format(what))
         ]
         for index, item in enumerate(items):
             msg.append('{}: {}'.format(index + 1, item))

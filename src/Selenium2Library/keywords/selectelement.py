@@ -135,9 +135,7 @@ class SelectElementKeywords(Base):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self.page_contains_element(
-            locator, 'list', message, loglevel
-        )
+        self.page_contains_element(locator, 'list', message, loglevel)
 
     @keyword
     def page_should_not_contain_list(self, locator, message='', loglevel='INFO'):
@@ -149,9 +147,7 @@ class SelectElementKeywords(Base):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'list', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'list', message, loglevel)
 
     @keyword
     def select_all_from_list(self, locator):
@@ -164,7 +160,8 @@ class SelectElementKeywords(Base):
 
         select = self._get_select_list(locator)
         if not select.is_multiple:
-            raise RuntimeError("Keyword 'Select all from list' works only for multiselect lists.")
+            raise RuntimeError("Keyword 'Select all from list' works only for "
+                               "multiselect lists.")
 
         for i in range(len(select.options)):
             select.select_by_index(i)

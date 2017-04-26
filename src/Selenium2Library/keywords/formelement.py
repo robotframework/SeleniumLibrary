@@ -44,7 +44,7 @@ class FormElementKeywords(Base):
         element = self._get_checkbox(locator)
         if element.is_selected():
             raise AssertionError("Checkbox '%s' should not have been selected"
-                                  % locator)
+                                 % locator)
 
     @keyword
     def page_should_contain_checkbox(self, locator, message='', loglevel='INFO'):
@@ -70,9 +70,7 @@ class FormElementKeywords(Base):
         Key attributes for checkboxes are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'checkbox', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'checkbox', message, loglevel)
 
     @keyword
     def select_checkbox(self, locator):
@@ -110,9 +108,7 @@ class FormElementKeywords(Base):
         Key attributes for radio buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self.page_contains_element(
-            locator, 'radio button', message, loglevel
-        )
+        self.page_contains_element(locator, 'radio button', message, loglevel)
 
     @keyword
     def page_should_not_contain_radio_button(self, locator, message='', loglevel='INFO'):
@@ -124,9 +120,8 @@ class FormElementKeywords(Base):
         Key attributes for radio buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'radio button', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'radio button', message,
+                                       loglevel)
 
     @keyword
     def radio_button_should_be_set_to(self, group_name, value):
@@ -135,14 +130,14 @@ class FormElementKeywords(Base):
         See `Select Radio Button` for information about how radio buttons are
         located.
         """
-        self.info("Verifying radio button '%s' has selection '%s'." \
-                   % (group_name, value))
+        self.info("Verifying radio button '%s' has selection '%s'."
+                  % (group_name, value))
         elements = self._get_radio_buttons(group_name)
         actual_value = self._get_value_from_radio_buttons(elements)
         if actual_value is None or actual_value != value:
             raise AssertionError("Selection of radio button '%s' should have "
                                  "been '%s' but was '%s'"
-                                  % (group_name, value, actual_value))
+                                 % (group_name, value, actual_value))
 
     @keyword
     def radio_button_should_not_be_selected(self, group_name):
@@ -157,7 +152,7 @@ class FormElementKeywords(Base):
         if actual_value is not None:
             raise AssertionError("Radio button group '%s' should not have had "
                                  "selection, but '%s' was selected"
-                                  % (group_name, actual_value))
+                                 % (group_name, actual_value))
 
     @keyword
     def select_radio_button(self, group_name, value):
@@ -174,7 +169,8 @@ class FormElementKeywords(Base):
         | Select Radio Button | size | XL | # Matches HTML like <input type="radio" name="size" value="XL">XL</input> |
         | Select Radio Button | size | sizeXL | # Matches HTML like <input type="radio" name="size" value="XL" id="sizeXL">XL</input> |
         """
-        self.info("Selecting '%s' from radio button '%s'." % (value, group_name))
+        self.info("Selecting '%s' from radio button '%s'."
+                  % (value, group_name))
         element = self._get_radio_button_with_value(group_name, value)
         if not element.is_selected():
             element.click()
@@ -192,7 +188,7 @@ class FormElementKeywords(Base):
         """
         if not os.path.isfile(file_path):
             raise AssertionError("File '%s' does not exist on the local file system"
-                        % file_path)
+                                 % file_path)
         self.element_find(locator).send_keys(file_path)
 
     @keyword
@@ -225,9 +221,7 @@ class FormElementKeywords(Base):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_contains_element(
-            locator, 'text field', message, loglevel
-        )
+        self.page_contains_element(locator, 'text field', message, loglevel)
 
     @keyword
     def page_should_not_contain_textfield(self, locator, message='', loglevel='INFO'):
@@ -239,9 +233,7 @@ class FormElementKeywords(Base):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'text field', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'text field', message, loglevel)
 
     @keyword
     def textfield_should_contain(self, locator, expected, message=''):
@@ -372,12 +364,8 @@ class FormElementKeywords(Base):
         Key attributes for buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(
-            locator, 'button', message, loglevel
-        )
-        self.page_not_contains_element(
-            locator, 'input', message, loglevel
-        )
+        self.page_not_contains_element(locator, 'button', message, loglevel)
+        self.page_not_contains_element(locator, 'input', message, loglevel)
 
     def _get_checkbox(self, locator):
         return self.element_find(locator, tag='input')
