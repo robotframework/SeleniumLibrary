@@ -56,9 +56,7 @@ class FormElementKeywords(Base):
         Key attributes for checkboxes are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_contains_element(
-            locator, 'checkbox', message, loglevel
-        )
+        self.page_contains_element(locator, 'checkbox', message, loglevel)
 
     @keyword
     def page_should_not_contain_checkbox(self, locator, message='', loglevel='INFO'):
@@ -265,10 +263,9 @@ class FormElementKeywords(Base):
             locator, required=False, tag='text field'
         )
         if not element:
-            element = self.element_find(
-                locator, required=False, tag='file upload'
-            )
-        actual = element.get_attribute('value') if element is not None else None
+            element = self.element_find(locator, required=False,
+                                        tag='file upload')
+        actual = element.get_attribute('value') if element else None
         if actual != expected:
             if not message:
                 message = "Value of text field '%s' should have been '%s' "\
@@ -324,9 +321,7 @@ class FormElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         self.info("Clicking button '%s'." % locator)
-        element = self.element_find(
-            locator, required=False, tag='input'
-        )
+        element = self.element_find(locator, required=False, tag='input')
         if element is None:
             element = self.element_find(locator, tag='button')
         element.click()
@@ -344,13 +339,9 @@ class FormElementKeywords(Base):
         `introduction` for details about locating elements.
         """
         try:
-            self.page_contains_element(
-                locator, 'input', message, loglevel
-            )
+            self.page_contains_element(locator, 'input', message, loglevel)
         except AssertionError:
-            self.page_contains_element(
-                locator, 'button', message, loglevel
-            )
+            self.page_contains_element(locator, 'button', message, loglevel)
 
     @keyword
     def page_should_not_contain_button(self, locator, message='', loglevel='INFO'):

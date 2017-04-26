@@ -244,9 +244,7 @@ class BrowserManagementKeywords(Base):
     @keyword
     def get_window_titles(self):
         """Returns and logs titles of all windows known to the browser."""
-        return self._log_list(
-            self._window_manager.get_window_titles(self.browser)
-        )
+        return self._log_list(self._window_manager.get_window_titles(self.browser))
 
     @keyword
     def maximize_browser_window(self):

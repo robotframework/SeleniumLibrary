@@ -137,9 +137,7 @@ class ElementKeywords(Base):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
         """
-        self.page_contains_element(
-            locator, message=message, loglevel=loglevel
-        )
+        self.page_contains_element(locator, message=message, loglevel=loglevel)
 
     @keyword
     def locator_should_match_x_times(self, locator, expected_locator_count, message='', loglevel='INFO'):
@@ -584,9 +582,8 @@ return !element.dispatchEvent(evt);
         If a link has no id, an empty string will be in the list instead.
         """
         links = []
-        elements = self.element_find(
-            "tag=a", first_only=False, required=False, tag='a'
-        )
+        elements = self.element_find("tag=a", first_only=False,
+                                     required=False, tag='a')
         for anchor in elements:
             links.append(anchor.get_attribute('id'))
         return links
@@ -844,9 +841,8 @@ return !element.dispatchEvent(evt);
         if self.is_text_present(text):
             return True
 
-        subframes = self.element_find(
-            "xpath=//frame|//iframe", first_only=False, required=False
-        )
+        subframes = self.element_find("xpath=//frame|//iframe",
+                                      first_only=False, required=False)
         self.debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
             self.browser.switch_to_frame(frame)

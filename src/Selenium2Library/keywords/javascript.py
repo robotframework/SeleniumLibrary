@@ -69,10 +69,8 @@ class JavaScriptKeywords(Base):
             return code
         self.info(
             'Reading JavaScript from file <a href="file://%s">%s</a>.'.format(
-                codepath.replace(os.sep, '/'), codepath
-            ),
-            html=True
-        )
+                codepath.replace(os.sep, '/'), codepath),
+            html=True)
         codefile = open(codepath)
         try:
             return codefile.read().strip()

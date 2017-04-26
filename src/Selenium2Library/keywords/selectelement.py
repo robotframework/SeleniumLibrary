@@ -405,9 +405,7 @@ class SelectElementKeywords(Base):
         return False
 
     def _unselect_all_options_from_multi_select_list(self, select):
-        self.browser.execute_script(
-            "arguments[0].selectedIndex = -1;", select
-        )
+        self.browser.execute_script("arguments[0].selectedIndex = -1;", select)
 
     def _unselect_option_from_multi_select_list(self, select, options, index):
         if options[index].is_selected():
