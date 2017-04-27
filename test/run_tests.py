@@ -226,7 +226,7 @@ if __name__ == '__main__':
             'Can not run test with browser "{}" from SauceLabs with PR.\n'
             'SauceLabs can be used only when running with cron and from '
             'Selenium2Library master branch, but your event type '
-            'was "{}". Only Chrome is suported with PR and when using '
+            'was "{}". Only Chrome is supported with PR and when using '
             'Travis'.format(browser, TRAVIS_EVENT_TYPE)
         )
         sys.exit(0)
