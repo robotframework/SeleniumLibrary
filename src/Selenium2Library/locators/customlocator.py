@@ -1,5 +1,10 @@
 from robot.libraries.BuiltIn import BuiltIn
 
+try:
+    basestring        # Python 2
+except NameError:
+    basestring = str  # Python 3
+
 
 class CustomLocator(object):
 

@@ -13,6 +13,7 @@ before_install:
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
+  - pip install --upgrade pip
 install:
   - pip install .
   - pip install -r requirements.txt
@@ -34,12 +35,12 @@ matrix:
         - BROWSER=chrome
         - SELENIUM=3.3.1
         - ROBOTFRAMEWORK=2.8.7
-    - python: "3.3" # For PR and cron
+    - python: "3.6" # For PR and cron
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
-    - python: "3.3" # For cron only
+    - python: "3.6" # For cron only
       env:
         - BROWSER=firefox
         - SELENIUM=2.53.6

@@ -625,6 +625,11 @@ class BrowserManagementKeywords(KeywordGroup):
         creates the associated remote web driver'''
 
         desired_capabilities_object = capabilities_type.copy()
+        
+        try:
+            unicode        # Python 2
+        except NameError:
+            unicode = str  # Python 3
 
         if type(desired_capabilities) in (str, unicode):
             desired_capabilities = self._parse_capabilities_string(desired_capabilities)
