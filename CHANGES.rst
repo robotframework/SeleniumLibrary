@@ -1,6 +1,12 @@
 Release Notes
 =============
 
+1.8.1
+-----
+- Added 'Get Locations' keyword [thaffenden]
+- Fix getting window information and switching windows on browsers that do not
+  support javascript
+
 1.8.0
 -----
 - Moved keyword documentation to:
@@ -280,7 +286,7 @@ continuous integration builds to go green by fixing internal tests.
 
 - Fixed issue with select window under IE. Also addresses issue with Firefox
   when using selenum 2.25.0
-  (see http://code.google.com/p/selenium/issues/detail?id=4375).
+  (see https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/4375.
   [adwu73]
 
 - Added iframe support by removing strict filtering for only <frame> elements.

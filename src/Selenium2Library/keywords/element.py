@@ -1,20 +1,15 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
+
 from Selenium2Library import utils
 from Selenium2Library.locators import ElementFinder
 from Selenium2Library.locators import CustomLocator
-from keywordgroup import KeywordGroup
 
-try:
-    basestring  # attempt to evaluate basestring
-    def isstr(s):
-        return isinstance(s, basestring)
-except NameError:
-    def isstr(s):
-        return isinstance(s, str)
+from .keywordgroup import KeywordGroup
 
-class _ElementKeywords(KeywordGroup):
+
+class ElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._element_finder = ElementFinder()
@@ -272,15 +267,31 @@ class _ElementKeywords(KeywordGroup):
                           "in fact it was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
 
-    def get_element_attribute(self, attribute_locator):
-        """Return value of element attribute.
+    def get_element_attribute(self, locator, attribute_name=None):
+        """Returns value of the element attribute.
 
-        `attribute_locator` consists of element locator followed by an @ sign
-        and attribute name, for example "element_id@class".
+        There are two cases how to use this keyword.
+
+        First, if only `locator` is provided, `locator` should consists of
+        element locator followed by an @ sign and attribute name.
+        This behavior is left for backward compatibility.
+
+        Example:
+        | ${id}= | Get Element Attribute | link=Link with id@id |
+
+        Second, if `locator` and `attribute_name` are provided both, `locator`
+        should be standard locator and `attribute_name` is name of the
+        requested element attribute.
+
+        Examples:
+        | ${id}= | Get Element Attribute | link=Link with id | id |
+        | ${element_by_dom}= | Get Webelement | dom=document.getElementsByTagName('a')[3] |
+        | ${id}= | Get Element Attribute | ${element_by_dom} | id |
         """
-        locator, attribute_name = self._parse_attribute_locator(attribute_locator)
+        if not attribute_name:
+            locator, attribute_name = self._parse_attribute_locator(locator)
         element = self._element_find(locator, True, False)
-        if element is None:
+        if not element:
             raise ValueError("Element '%s' not found." % (locator))
         return element.get_attribute(attribute_name)
 
@@ -363,9 +374,11 @@ class _ElementKeywords(KeywordGroup):
         """
         self._info("Click clicking element '%s' in coordinates '%s', '%s'." % (locator, xoffset, yoffset))
         element = self._element_find(locator, True, True)
-        #self._element_find(locator, True, True).click()
-        #ActionChains(self._current_browser()).move_to_element_with_offset(element, xoffset, yoffset).click().perform()
-        ActionChains(self._current_browser()).move_to_element(element).move_by_offset(xoffset, yoffset).click().perform()
+        action = ActionChains(self._current_browser())
+        action.move_to_element(element)
+        action.move_by_offset(xoffset, yoffset)
+        action.click()
+        action.perform()
 
     def double_click_element(self, locator):
         """Double click element identified by `locator`.
@@ -394,10 +407,9 @@ class _ElementKeywords(KeywordGroup):
         Examples:
         | Drag And Drop | elem1 | elem2 | # Move elem1 over elem2. |
         """
-        src_elem = self._element_find(source,True,True)
-        trg_elem =  self._element_find(target,True,True)
+        src_elem = self._element_find(source, True, True)
+        trg_elem = self._element_find(target, True, True)
         ActionChains(self._current_browser()).drag_and_drop(src_elem, trg_elem).perform()
-
 
     def drag_and_drop_by_offset(self, source, xoffset, yoffset):
         """Drags element identified with `source` which is a locator.
@@ -409,7 +421,9 @@ class _ElementKeywords(KeywordGroup):
         | Drag And Drop By Offset | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
         """
         src_elem = self._element_find(source, True, True)
-        ActionChains(self._current_browser()).drag_and_drop_by_offset(src_elem, xoffset, yoffset).perform()
+        action = ActionChains(self._current_browser())
+        action.drag_and_drop_by_offset(src_elem, xoffset, yoffset)
+        action.perform()
 
     def mouse_down(self, locator):
         """Simulates pressing the left mouse button on the element specified by `locator`.
@@ -587,7 +601,6 @@ return !element.dispatchEvent(evt);
 
     def page_should_contain_image(self, locator, message='', loglevel='INFO'):
         """Verifies image identified by `locator` is found from current page.
-
         See `Page Should Contain Element` for explanation about `message` and
         `loglevel` arguments.
 
@@ -609,8 +622,11 @@ return !element.dispatchEvent(evt);
 
     # Public, xpath
 
-    def get_matching_xpath_count(self, xpath):
+    def get_matching_xpath_count(self, xpath, return_str=True):
         """Returns number of elements matching `xpath`
+
+        The default return type is `str` but it can changed to `int` by setting
+        the ``return_str`` argument to Python False.
 
         One should not use the xpath= prefix for 'xpath'. XPath is assumed.
 
@@ -623,7 +639,7 @@ return !element.dispatchEvent(evt);
         `Xpath Should Match X Times`.
         """
         count = len(self._element_find("xpath=" + xpath, False, False))
-        return str(count)
+        return str(count) if return_str else count
 
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
         """Verifies that the page contains the given number of elements located by the given `xpath`.
@@ -684,7 +700,7 @@ return !element.dispatchEvent(evt);
 
     def _element_find(self, locator, first_only, required, tag=None):
         browser = self._current_browser()
-        if isstr(locator):
+        if isinstance(locator, basestring):
             elements = self._element_finder.find(browser, locator, tag)
             if required and len(elements) == 0:
                 raise ValueError("Element locator '" + locator + "' did not match any elements.")
@@ -728,7 +744,7 @@ return !element.dispatchEvent(evt);
         return True
 
     def _is_text_present(self, text):
-        locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text);
+        locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text)
         return self._is_element_present(locator)
 
     def _is_visible(self, locator):
@@ -764,11 +780,11 @@ return !element.dispatchEvent(evt);
 
     def _map_named_key_code_to_special_key(self, key_name):
         try:
-           return getattr(Keys, key_name)
+            return getattr(Keys, key_name)
         except AttributeError:
-           message = "Unknown key named '%s'." % (key_name)
-           self._debug(message)
-           raise ValueError(message)
+            message = "Unknown key named '%s'." % (key_name)
+            self._debug(message)
+            raise ValueError(message)
 
     def _parse_attribute_locator(self, attribute_locator):
         parts = attribute_locator.rpartition('@')
@@ -776,10 +792,10 @@ return !element.dispatchEvent(evt);
             raise ValueError("Attribute locator '%s' does not contain an element locator." % (attribute_locator))
         if len(parts[2]) == 0:
             raise ValueError("Attribute locator '%s' does not contain an attribute name." % (attribute_locator))
-        return (parts[0], parts[2])
+        return parts[0], parts[2]
 
     def _is_element_present(self, locator, tag=None):
-        return (self._element_find(locator, True, False, tag=tag) is not None)
+        return self._element_find(locator, True, False, tag=tag) is not None
 
     def _page_contains(self, text):
         browser = self._current_browser()
@@ -796,7 +812,6 @@ return !element.dispatchEvent(evt);
             browser.switch_to_default_content()
             if found_text:
                 return True
-
         return False
 
     def _page_should_contain_element(self, locator, tag, message, loglevel):

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
+import sys
 from os.path import abspath, dirname, join
 from unittest import defaultTestLoader, TextTestRunner
-import sys
 
 
 CURDIR = dirname(abspath(__file__))

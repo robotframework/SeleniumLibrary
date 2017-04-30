@@ -2,6 +2,7 @@
 Documentation     Tests screenshots
 Suite Setup       Go To Page "links.html"
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Capture page screenshot to default location

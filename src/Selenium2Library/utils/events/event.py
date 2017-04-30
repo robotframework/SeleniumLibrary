@@ -1,5 +1,6 @@
 import abc
 
+
 class Event(object):
 
     @abc.abstractmethod

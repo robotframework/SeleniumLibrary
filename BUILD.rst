@@ -26,44 +26,11 @@ test/
 
 Unit and Acceptance Tests
 -------------------------
+To run tests give command::
 
-The test directory contains everything needed to run Selenium2Library 
-tests with Robot Framework. This includes:
+    python test/run_tests.py <browser>
 
-- Unit tests under `unit` directory.
-- Acceptance tests written with Robot Framework under `acceptance` 
-  directory
-- A very simple httpserver.py which is used to serve the html for tests in
-  `resources/testserver`
-- A collection of simple html files under 'resources/html' directory
-- Start-up scripts for executing the tests
-- A copy of statuschecker.py for checking logged messages after the
-  execution, which requires the tests to run with log level DEBUG
-
-To run unit and acceptance tests, run::
-
-	python test/run_tests.py python|jython ff|ie|chrome [options]
-
-The first argument to the script defines the interpreter to be used
-to run Robot. The second argument defines the browser to be used,
-using the same browser tokens that you would use in your Robot
-tests.
-
-Due to the structure of the tests, the directory containg the test
-case files (`acceptance`) is always given to Robot as test data path.
-To run only a subset of test cases, Robot command line arguments
---test, --suite, --include and --exclude may be used.
-
-Examples::
-
-	# Run all tests with Python and Firefox
-	python test/run_tests.py python ff
-	# Run only test suite `javascript` with Jython and Internet Explorer
-	python test/run_tests.py jython ie -s javascript
-
-To run just the unit tests, run::
-
-	python test/run_unit_tests.py
+More details in `<test/README.rst>`__
 
 
 Debugging Selenium2Library
@@ -288,9 +255,9 @@ are parsed by the reStructuredText parser. To build them, run::
 
 
 .. _pdb: http://docs.python.org/2/library/pdb.html
-.. _downloads section on GitHub: https://github.com/rtomac/robotframework-selenium2library/downloads
+.. _downloads section on GitHub: https://github.com/robotframework/Selenium2Library/downloads
 .. _PyPI: http://pypi.python.org
 .. _.pypirc file: http://docs.python.org/distutils/packageindex.html#the-pypirc-file
-.. _this case: http://code.google.com/p/selenium/issues/detail?id=4375
-.. _report it: http://code.google.com/p/selenium/issues/list
+.. _this case: https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/4375
+.. _report it: https://github.com/SeleniumHQ/selenium/issues
 .. _Python's unittest documentation: http://docs.python.org/library/unittest.html

@@ -1,9 +1,9 @@
-import os
-import sys
 from Selenium2Library.locators import TableElementFinder
-from keywordgroup import KeywordGroup
 
-class _TableElementKeywords(KeywordGroup):
+from .keywordgroup import KeywordGroup
+
+
+class TableElementKeywords(KeywordGroup):
 
     def __init__(self):
         self._table_element_finder = TableElementFinder()

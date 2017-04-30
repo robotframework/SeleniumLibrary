@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 from os.path import abspath, dirname, join
-
 from setuptools import setup
 
 
 CURDIR = dirname(abspath(__file__))
 
-execfile(join(CURDIR, 'src', 'Selenium2Library', 'version.py'))
+with open(join(CURDIR, 'src', 'Selenium2Library', 'version.py')) as f:
+    exec(f.read())
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework

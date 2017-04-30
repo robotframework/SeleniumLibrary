@@ -1,6 +1,7 @@
 from robot.utils import ConnectionCache
 from robot.api.logger import debug
 
+
 class BrowserCache(ConnectionCache):
 
     def __init__(self):

@@ -1,7 +1,6 @@
-from types import *
-from robot import utils
-from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchWindowException
+from selenium.common.exceptions import WebDriverException
+
 
 class WindowManager(object):
 
@@ -61,28 +60,28 @@ class WindowManager(object):
 
     def _select_by_default(self, browser, criteria):
         if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            handles = browser.get_window_handles()
+            handles = browser.window_handles
             browser.switch_to_window(handles[0])
             return
         try:
-            starting_handle = browser.get_current_window_handle()
+            starting_handle = browser.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
-        for handle in browser.get_window_handles():
+        for handle in browser.window_handles:
             browser.switch_to_window(handle)
             if criteria == handle:
                 return
-            for item in browser.get_current_window_info()[2:4]:
+            for item in self._get_current_window_info(browser)[2:4]:
                 if item.strip().lower() == criteria.lower():
                     return
         if starting_handle:
             browser.switch_to_window(starting_handle)
         raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
-    
+
     def _select_by_last_index(self, browser):
-        handles = browser.get_window_handles()
+        handles = browser.window_handles
         try:
-            if handles[-1] == browser.get_current_window_handle():
+            if handles[-1] == browser.current_window_handle:
                 raise AssertionError("No new window at last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}' to find it.")
         except IndexError:
             raise AssertionError("No window found")
@@ -91,19 +90,19 @@ class WindowManager(object):
         browser.switch_to_window(handles[-1])
 
     def _select_by_excludes(self, browser, excludes):
-        for handle in browser.get_window_handles():
+        for handle in browser.window_handles:
             if handle not in excludes:
                 browser.switch_to_window(handle)
                 return
         raise ValueError("Unable to locate new window")
-    
+
     # Private
 
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
         if locator is not None and len(locator) > 0:
-            locator_parts = locator.partition('=')        
+            locator_parts = locator.partition('=')
             if len(locator_parts[1]) > 0:
                 prefix = locator_parts[0].strip().lower()
                 criteria = locator_parts[2].strip()
@@ -115,13 +114,13 @@ class WindowManager(object):
     def _get_window_infos(self, browser):
         window_infos = []
         try:
-            starting_handle = browser.get_current_window_handle()
+            starting_handle = browser.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
         try:
-            for handle in browser.get_window_handles():
+            for handle in browser.window_handles:
                 browser.switch_to_window(handle)
-                window_infos.append(browser.get_current_window_info())
+                window_infos.append(self._get_current_window_info(browser))
         finally:
             if starting_handle:
                 browser.switch_to_window(starting_handle)
@@ -129,13 +128,31 @@ class WindowManager(object):
 
     def _select_matching(self, browser, matcher, error):
         try:
-            starting_handle = browser.get_current_window_handle()
+            starting_handle = browser.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
-        for handle in browser.get_window_handles():
+        for handle in browser.window_handles:
             browser.switch_to_window(handle)
-            if matcher(browser.get_current_window_info()):
+            if matcher(self._get_current_window_info(browser)):
                 return
         if starting_handle:
             browser.switch_to_window(starting_handle)
         raise ValueError(error)
+
+    def _get_current_window_info(self, browser):
+        try:
+            id_, name = browser.execute_script("return [ window.id, window.name ];")
+        except WebDriverException:
+            # The webdriver implementation doesn't support Javascript so we
+            # can't get window id or name this way.
+            id_ = None
+            name = ''
+
+        title = browser.title
+        url = browser.current_url
+
+        id_ = id_ if id_ is not None else 'undefined'
+        name, title, url = (
+            att if att else 'undefined' for att in (name, title, url)
+        )
+        return browser.current_window_handle, id_, name, title, url
