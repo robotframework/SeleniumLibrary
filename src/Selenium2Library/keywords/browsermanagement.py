@@ -9,7 +9,6 @@ from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
 
 from selenium import webdriver
-#from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from Selenium2Library.utils import BrowserCache
@@ -17,12 +16,6 @@ from Selenium2Library.locators import WindowManager
 from Selenium2Library.keywords.logging import LoggingKeywords
 
 from .keywordgroup import KeywordGroup
-
-#from selenium.webdriver.remote.errorhandler import ErrorHandler
-#from selenium.webdriver.remote.remote_connection import RemoteConnection
-#from selenium.webdriver.remote.switch_to import SwitchTo
-#from selenium.webdriver.remote.mobile import Mobile
-#from selenium.webdriver.remote.file_detector import FileDetector, LocalFileDetector
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
