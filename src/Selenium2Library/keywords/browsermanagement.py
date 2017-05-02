@@ -1,10 +1,7 @@
-#Jari
-import os, signal
-import robot
-from robot.api import logger
-#Jari
-
 import os.path
+import os
+import signal
+
 import time
 import types
 
@@ -12,20 +9,20 @@ from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
 
 from selenium import webdriver
-from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
+#from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from Selenium2Library.utils import BrowserCache
 from Selenium2Library.locators import WindowManager
+from Selenium2Library.keywords.logging import LoggingKeywords
 
 from .keywordgroup import KeywordGroup
 
-
-from selenium.webdriver.remote.errorhandler import ErrorHandler
-from selenium.webdriver.remote.remote_connection import RemoteConnection
-from selenium.webdriver.remote.switch_to import SwitchTo
-from selenium.webdriver.remote.mobile import Mobile
-from selenium.webdriver.remote.file_detector import FileDetector, LocalFileDetector
+#from selenium.webdriver.remote.errorhandler import ErrorHandler
+#from selenium.webdriver.remote.remote_connection import RemoteConnection
+#from selenium.webdriver.remote.switch_to import SwitchTo
+#from selenium.webdriver.remote.mobile import Mobile
+#from selenium.webdriver.remote.file_detector import FileDetector, LocalFileDetector
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
@@ -36,17 +33,18 @@ BROWSER_NAMES = {'ff': "_make_ff",
                  'googlechrome': "_make_chrome",
                  'gc': "_make_chrome",
                  'chrome': "_make_chrome",
-                 'opera' : "_make_opera",
-                 'phantomjs' : "_make_phantomjs",
-                 'htmlunit' : "_make_htmlunit",
-                 'htmlunitwithjs' : "_make_htmlunitwithjs",
+                 'opera': "_make_opera",
+                 'phantomjs': "_make_phantomjs",
+                 'htmlunit': "_make_htmlunit",
+                 'htmlunitwithjs': "_make_htmlunitwithjs",
                  'android': "_make_android",
                  'iphone': "_make_iphone",
                  'safari': "_make_safari",
                  'edge': "_make_edge"
-                }
+                 }
 
-class _ReusableDriver(webdriver.Remote):
+
+class _ReusableDriver(webdriver.Remote, LoggingKeywords):
     def __init__(self, command_executor, sid, keep_alive=False, file_detector=None):
 
         self.reuse_session_id = sid
@@ -57,26 +55,25 @@ class _ReusableDriver(webdriver.Remote):
 
     def stop_client(self):
         if self.pid is not None and self.pid != '':
-            logger.info("Stopping driver for session '%s' with PID: %s" % (self.session_id, self.pid))
+            self._info("Stopping driver for session '%s' with PID: %s" % (self.session_id, self.pid))
             try:
                 os.kill(int(self.pid), signal.SIGTERM)
-            except Exception:
-                logger.warn("Failed to stop the driver with PID '%s' - please kill the process manually " % (self.pid))
+            except EnvironmentError:
+                self._warn("Failed to stop the driver with PID '%s' - please kill the process manually " % (self.pid))
         else:
-            logger.info("No driver process found for session '%s'" % (self.session_id))
+            self._info("No driver process found for session '%s'" % (self.session_id))
 
     def start_session(self, desired_capabilities, browser_profile=None):
         self.session_id = self.reuse_session_id
-        logger.info("Reconnecting to session '%s' " % self.session_id)
+        self._info("Reconnecting to session '%s' " % self.session_id)
         self.command_executor._commands["GetSessionData"] = ('GET', '/session/$sessionId')
         response = self.execute("GetSessionData")
-        logger.debug("Reconnect OK, session data: '%s' " % response)
+        self._debug("Reconnect OK, session data: '%s' " % response)
         self.capabilities = response['value']
         self.w3c = "specificationLevel" in self.capabilities
 
 
 class BrowserManagementKeywords(KeywordGroup):
-
     def __init__(self):
         self._cache = BrowserCache()
         self._window_manager = WindowManager()
@@ -105,8 +102,8 @@ class BrowserManagementKeywords(KeywordGroup):
                         % self._cache.current.session_id)
             self._cache.close()
 
-    def open_browser(self, url, browser='firefox', alias=None,remote_url=False,
-                desired_capabilities=None,ff_profile_dir=None):
+    def open_browser(self, url, browser='firefox', alias=None, remote_url=False,
+                     desired_capabilities=None, ff_profile_dir=None):
         """Opens a new browser instance to given URL.
 
         Returns the index of this browser instance which can be used later to
@@ -157,11 +154,11 @@ class BrowserManagementKeywords(KeywordGroup):
         """
         if remote_url:
             self._info("Opening browser '%s' to base url '%s' through remote server at '%s'"
-                    % (browser, url, remote_url))
+                       % (browser, url, remote_url))
         else:
             self._info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
+        browser = self._make_browser(browser_name, desired_capabilities, ff_profile_dir, remote_url)
         try:
             browser.get(url)
         except:
@@ -230,6 +227,10 @@ class BrowserManagementKeywords(KeywordGroup):
     def save_webdriver(self, file=''):
         """Stores the current web-driver session.
 
+        NOTE: This KW is not for production use. The `Save Webdriver` and `Restore Webdriver` KW's are there to
+        speed up the test case development i.e. instead of always opening new browser window you can reconnect to
+        an already opened Browser window.
+
         This KW makes the WebDriver sessions persistent. I.e. you can store the session(s) and leave the browser
         window(s) open after a pybot (test suite) execution. On the next pybot execution you can reconnect to those
         already opened browser windows and avoid that slow opening of new browser window(s) step and possibly other
@@ -242,9 +243,9 @@ class BrowserManagementKeywords(KeywordGroup):
         The file name is taken from the _file_ argument.
         This accepts plain file name (e.g. "mysession.txt") and path-to-file (e.g. "/tmp/mysession.txt") format.
         The _file_ argument has following special values:
-        - empty string i.e. ``${EMPTY}`` (default): the session is stored in the current execution directory in a file called
-          "session_<alias>.tmp" (if the connection has an alias) or "session_<index>.tmp" (if the connection does
-          not have an alias).
+        - empty string i.e. ``${EMPTY}`` (default): the session is stored in the current execution directory in a 
+          file called "session_<alias>.tmp" (if the connection has an alias) or "session_<index>.tmp" 
+          (if the connection does not have an alias).
         - None i.e. ``${None}``: no file is created. Returns a tuplet where the 1st value is the session ID and the 2nd
           value is the Webdriver URL.
 
@@ -277,7 +278,9 @@ class BrowserManagementKeywords(KeywordGroup):
                     pid = srvc.process.pid
                     break
             if pid is None:
-                self._info("Could not find driver process - we will not attempt to kill the driver process after re-connecting to it with restore_session() ")
+                self._info(
+                    "Could not find driver process - we will not attempt to " +
+                    " kill the driver process after re-connecting to it with restore_session() ")
         if file is None:
             return (sid, curl, pid)
         elif file == "":
@@ -293,8 +296,13 @@ class BrowserManagementKeywords(KeywordGroup):
         session_file.close()
         return file
 
-    def restore_webdriver(self, alias=None, file=None, session_id=None, session_url=None, session_pid=None, delete_file=True):
+    def restore_webdriver(self, alias=None, file=None, session_id=None, session_url=None, session_pid=None,
+                          delete_file=True):
         """Connects to an already opened web-driver session.
+
+        NOTE: This KW is not for production use. The `Save Webdriver` and `Restore Webdriver` KW's are there to
+        speed up the test case development i.e. instead of always opening new browser window you can reconnect to
+        an already opened Browser window.
 
         Restores a Webdriver Session that has been saved using the `Save Webdriver` KW.
 
@@ -303,7 +311,7 @@ class BrowserManagementKeywords(KeywordGroup):
         Browser` for more details.
 
         The session can be restored by:
-        - using the default session file (e.g. with `alias=foo` we try to read the session info from a file called 
+        - using the default session file (e.g. with `alias=foo` we try to read the session info from a file called
           "session_foo.tmp")
         - using explicit file: file-name is passed in _file_ argument. See `Save Webdriver` KW for _file_
           argument documentation
@@ -317,11 +325,11 @@ class BrowserManagementKeywords(KeywordGroup):
         example.
 
         Examples:
-        | Restore Webdriver | alias=foo      |               | # read from "session_foo.tmp" and registered with alias "foo" |
-        | Restore Webdriver | alias=bar      |  file=foo.tmp | # read from "foo.tmp" and registered with alias "bar"         |
-        | Restore Webdriver |                |  file=foo.tmp | # read from "foo.tmp" and registered without alias            |
-        | #do not use file and register without alias | |    |                                                               |
-        | Restore Webdriver | session_id=xxx |  session_url=http://127.0.0.1:9999/hub |                                      |
+        | Restore Webdriver | alias=foo    |              | #read from "session_foo.tmp" and register with alias "foo" |
+        | Restore Webdriver | alias=bar    | file=foo.tmp | #read from "foo.tmp" and register with alias "bar"         |
+        | Restore Webdriver |              | file=foo.tmp | #read from "foo.tmp" and register without alias            |
+        | #do not use file and register without alias | |    |                                                         |
+        | Restore Webdriver | session_id=x | session_url=http://127.0.0.1:9999/hub |                                   |
         """
         self._info("Restoring WebDriver session")
         if session_id is not None or session_url is not None:
@@ -379,7 +387,7 @@ class BrowserManagementKeywords(KeywordGroup):
         try:
             self._cache.switch(index_or_alias)
             self._debug('Switched to browser with Selenium session id %s'
-                         % self._cache.current.session_id)
+                        % self._cache.current.session_id)
         except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
@@ -536,7 +544,7 @@ class BrowserManagementKeywords(KeywordGroup):
     def location_should_be(self, url):
         """Verifies that current URL is exactly `url`."""
         actual = self.get_location()
-        if  actual != url:
+        if actual != url:
             raise AssertionError("Location should have been '%s' but was '%s'"
                                  % (url, actual))
         self._info("Current location is '%s'." % url)
@@ -576,7 +584,7 @@ class BrowserManagementKeywords(KeywordGroup):
         actual = self.get_title()
         if actual != title:
             raise AssertionError("Title should have been '%s' but was '%s'"
-                                  % (title, actual))
+                                 % (title, actual))
         self._info("Page title is '%s'." % title)
 
     # Public, navigation
@@ -680,7 +688,6 @@ class BrowserManagementKeywords(KeywordGroup):
             browser.implicitly_wait(self._implicit_wait_in_secs)
         return old_wait
 
-
     def set_browser_implicit_wait(self, seconds):
         """Sets current browser's implicit wait in seconds.
 
@@ -720,71 +727,71 @@ class BrowserManagementKeywords(KeywordGroup):
 
         return browser
 
-
-    def _make_ff(self , remote , desired_capabilites , profile_dir):
+    def _make_ff(self, remote, desired_capabilites, profile_dir):
 
         if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
         if remote:
-            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
-                        remote , desired_capabilites , profile)
+            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX,
+                                                     remote, desired_capabilites, profile)
         else:
             browser = webdriver.Firefox(firefox_profile=profile)
         return browser
 
-    def _make_ie(self , remote , desired_capabilities , profile_dir):
+    def _make_ie(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Ie,
-                webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.INTERNETEXPLORER, remote, desired_capabilities)
 
-    def _make_chrome(self , remote , desired_capabilities , profile_dir):
+    def _make_chrome(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Chrome,
-                webdriver.DesiredCapabilities.CHROME, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.CHROME, remote, desired_capabilities)
 
-    def _make_opera(self , remote , desired_capabilities , profile_dir):
+    def _make_opera(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Opera,
-                webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.OPERA, remote, desired_capabilities)
 
-    def _make_phantomjs(self , remote , desired_capabilities , profile_dir):
+    def _make_phantomjs(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.PhantomJS,
-                webdriver.DesiredCapabilities.PHANTOMJS, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.PHANTOMJS, remote, desired_capabilities)
 
-    def _make_htmlunit(self , remote , desired_capabilities , profile_dir):
+    def _make_htmlunit(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.HTMLUNIT, remote, desired_capabilities)
 
-    def _make_htmlunitwithjs(self , remote , desired_capabilities , profile_dir):
+    def _make_htmlunitwithjs(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.HTMLUNITWITHJS, remote, desired_capabilities)
 
-    def _make_android(self , remote , desired_capabilities , profile_dir):
+    def _make_android(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.ANDROID, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.ANDROID, remote, desired_capabilities)
 
-    def _make_iphone(self , remote , desired_capabilities , profile_dir):
+    def _make_iphone(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Remote,
-                webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.IPHONE, remote, desired_capabilities)
 
-    def _make_safari(self , remote , desired_capabilities , profile_dir):
+    def _make_safari(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_browser(webdriver.Safari,
-                webdriver.DesiredCapabilities.SAFARI, remote, desired_capabilities)
+                                          webdriver.DesiredCapabilities.SAFARI, remote, desired_capabilities)
 
-    def _make_edge(self , remote , desired_capabilities , profile_dir):
+    def _make_edge(self, remote, desired_capabilities, profile_dir):
         if hasattr(webdriver, 'Edge'):
             return self._generic_make_browser(webdriver.Edge,
-                webdriver.DesiredCapabilities.EDGE, remote, desired_capabilities)
+                                              webdriver.DesiredCapabilities.EDGE, remote, desired_capabilities)
         else:
-            raise ValueError("Edge is not a supported browser with your version of Selenium python library. Please, upgrade to minimum required version 2.47.0.")
+            raise ValueError(
+                "Edge is not a supported browser with your version of Selenium python library. Please, upgrade to minimum required version 2.47.0.")
 
-    def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
+    def _generic_make_browser(self, webdriver_type, desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the
         appropriate web-driver'''
         if not remote_url:
             browser = webdriver_type()
         else:
-            browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
+            browser = self._create_remote_web_driver(desired_cap_type, remote_url, desired_caps)
         return browser
 
-    def _create_remote_web_driver(self , capabilities_type , remote_url , desired_capabilities=None , profile=None):
+    def _create_remote_web_driver(self, capabilities_type, remote_url, desired_capabilities=None, profile=None):
         '''parses the string based desired_capabilities if neccessary and
         creates the associated remote web driver'''
 
@@ -796,7 +803,7 @@ class BrowserManagementKeywords(KeywordGroup):
         desired_capabilities_object.update(desired_capabilities or {})
 
         return webdriver.Remote(desired_capabilities=desired_capabilities_object,
-                command_executor=str(remote_url), browser_profile=profile)
+                                command_executor=str(remote_url), browser_profile=profile)
 
     def _parse_capabilities_string(self, capabilities_string):
         '''parses the string based desired_capabilities which should be in the form
@@ -823,6 +830,7 @@ class BrowserManagementKeywords(KeywordGroup):
             if speed > 0:
                 time.sleep(speed)
             return result
+
         if not hasattr(browser, '_base_execute'):
             browser._base_execute = browser.execute
             browser.execute = types.MethodType(execute, browser)

@@ -73,11 +73,10 @@ ROBOT_OPTIONS = [
     '--log', 'NONE',
     '--loglevel', 'DEBUG',
     '--pythonpath', os.pathsep.join([SRC_DIR, TEST_LIBS_DIR]),
-    #'--suite', 'Acceptance.Create_Webdriver',
     '--suite', 'Acceptance.Create_Webdriver',
     #'-t', '*Functioning*',
     #'-t', '*Reusable*',
-    #'-b', 'debug.log',
+    '-b', 'debug.log',
 ]
 REBOT_OPTIONS = [
     '--outputdir', RESULTS_DIR,

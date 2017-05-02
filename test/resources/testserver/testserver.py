@@ -19,13 +19,6 @@ except ImportError:  # Python 3
 class StoppableHttpRequestHandler(SimpleHTTPRequestHandler):
     """http request handler with QUIT stopping the server"""
 
-    def setup(self):
-        SimpleHTTPServer.SimpleHTTPRequestHandler.setup(self)
-        self.rfile.close()
-        self.wfile.close()
-        self.rfile = HttpEchoer(self.connection._sock, 'rb', self.rbufsize)
-        self.wfile = HttpEchoer(self.connection._sock, 'wb', self.wbufsize)
-
     def do_QUIT(self):
         self.send_response(200)
         self.end_headers()
@@ -35,8 +28,10 @@ class StoppableHttpRequestHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
         self.do_GET()
 
+
 class ThreadingHttpServer(ThreadingMixIn, HTTPServer):
     pass
+
 
 def stop_server(port=7000):
     """send QUIT request to http server running on localhost:<port>"""
@@ -44,10 +39,12 @@ def stop_server(port=7000):
     conn.request("QUIT", "/")
     conn.getresponse()
 
+
 def start_server(path, port=7000):
     os.chdir(path)
     server = ThreadingHttpServer(('', port), StoppableHttpRequestHandler)
     server.serve_forever()
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2 or sys.argv[1] not in ['start', 'stop']:

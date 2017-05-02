@@ -1,13 +1,9 @@
 import unittest
-#Jari 
-## from Selenium2Library.keywords._browsermanagement import _BrowserManagementKeywords
-from Selenium2Library import keywords
-#Jari 
 
 from mockito import when, mock, verify, verifyNoMoreInteractions
 from selenium import webdriver
 
-from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
+from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords, _ReusableDriver
 
 
 class BrowserManagementTests(unittest.TestCase):
@@ -108,58 +104,45 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_create_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()
-        capt_data = {}
-        class FakeCmdExecutor(mock):
-            _url = "http://127.0.0.1:9999/dummy"
-        class FakeWebDriver(mock):
-            def __init__(self, some_arg=None):
-                mock.__init__(self)
-                capt_data['some_arg'] = some_arg
-                capt_data['webdriver'] = self
+        FakeWebDriver = mock()
+        driver = mock()
+        when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
+        when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
         webdriver.FakeWebDriver = FakeWebDriver
-        webdriver.FakeWebDriver.command_executor = FakeCmdExecutor
         try:
-            index = bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
-            self.assertEquals(capt_data['some_arg'], 1)
-            self.assertEquals(capt_data['webdriver'], bm._current_browser())
-            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection(index))
-            self.assertEquals(capt_data['webdriver'], bm._cache.get_connection('fake'))
-            capt_data.clear()
-            my_kwargs = {'some_arg':2}
-            bm.create_webdriver('FakeWebDriver', kwargs=my_kwargs)
-            self.assertEquals(capt_data['some_arg'], 2)
+            index = bm.create_webdriver('FakeWebDriver', 'fake1', some_arg=1)
+            self.assertEqual(bm._current_browser(), driver)
+            self.assertEquals(bm._cache.get_connection(index), driver)
+            self.assertEquals(bm._cache.get_connection('fake1'), driver)
+            my_kwargs = {'some_arg': 2}
+            bm.create_webdriver('FakeWebDriver', 'fake2', kwargs=my_kwargs)
+            self.assertEquals(bm._current_browser(), driver)
         finally:
             del webdriver.FakeWebDriver
 
     def test_create_reusable_webdriver(self):
         bm = _BrowserManagementWithLoggingStubs()
-        capt_data = {}
-        class FakeCmdExecutor(mock):
-            _url = "http://127.0.0.1:9999/dummy"
-        class FakeWebDriver(mock):
-            session_id = "dummy_sid"
-            def __init__(self):
-                mock.__init__(self)
-                capt_data['webdriver'] = self
+        FakeCmdExecutor = mock()
+        FakeCmdExecutor._url = "http://127.0.0.1:9999/dummy"
+        FakeWebDriver = mock()
+        FakeWebDriver.command_executor = FakeCmdExecutor
+        FakeWebDriver.session_id = "dummy_id"
+        when(FakeWebDriver).__call__(some_arg=1).thenReturn(FakeWebDriver)
+        when(FakeWebDriver).__call__(some_arg=2).thenReturn(FakeWebDriver)
+        when(_ReusableDriver).execute("GetSessionData").thenReturn({'value': 'dummy'})
         webdriver.FakeWebDriver = FakeWebDriver
-        webdriver.FakeWebDriver.command_executor = FakeCmdExecutor
-        class FakeReusable(mock):
-            def __init__(self, command_executor, sid, **kwargs):
-                FakeReusable.session_id = sid
-                FakeReusable.curl = command_executor
-        keywords.browsermanagement._ReusableDriver = FakeReusable
         try:
-            bm.create_webdriver('FakeWebDriver', 'fake')
+            bm.create_webdriver('FakeWebDriver', 'fake', some_arg=1)
+            self.assertEquals(FakeWebDriver.session_id, bm._current_browser().session_id)
+            self.assertEquals(FakeCmdExecutor._url, bm._current_browser().command_executor._url)
             (sid, url, pid) = bm.save_webdriver(None)
-            self.assertEquals(sid, FakeWebDriver.session_id)
-            self.assertEquals(url, FakeCmdExecutor._url)
-            self.assertEquals(sid, bm._current_browser().session_id)
-            self.assertEquals(url, bm._current_browser().command_executor._url)
+            self.assertEquals(FakeWebDriver.session_id, sid)
+            self.assertEquals(FakeCmdExecutor._url, url)
             old_index = bm._cache.current_index
             new_index = bm.restore_webdriver(session_id=sid, session_url=url)
             self.assertNotEqual(old_index, new_index)
-            self.assertEquals(sid, FakeReusable.session_id)
-            self.assertEquals(url, FakeReusable.curl)
+            self.assertEquals(sid, FakeWebDriver.session_id)
+            self.assertEquals(url, FakeCmdExecutor._url)
         finally:
             del webdriver.FakeWebDriver
 
