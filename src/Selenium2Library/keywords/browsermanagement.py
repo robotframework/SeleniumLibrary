@@ -38,6 +38,7 @@ BROWSER_NAMES = {'ff': "_make_ff",
 
 
 class _ReusableDriver(webdriver.Remote, LoggingKeywords):
+
     def __init__(self, command_executor, sid, keep_alive=False, file_detector=None):
 
         self.reuse_session_id = sid
