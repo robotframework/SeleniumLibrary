@@ -1,12 +1,12 @@
 import os
 
-from .keywordgroup import KeywordGroup
+from Selenium2Library.base import Base
+from Selenium2Library.robotlibcore import keyword
 
 
-class JavaScriptKeywords(KeywordGroup):
+class JavaScriptKeywords(Base):
 
-    # Public
-
+    @keyword
     def execute_javascript(self, *code):
         """Executes the given JavaScript code.
 
@@ -35,9 +35,10 @@ class JavaScriptKeywords(KeywordGroup):
         | Should Be Equal    | ${sum}                                | ${2}          |
         """
         js = self._get_javascript_to_execute(''.join(code))
-        self._info("Executing JavaScript:\n%s" % js)
-        return self._current_browser().execute_script(js)
+        self.info("Executing JavaScript:\n%s" % js)
+        return self.browser.execute_script(js)
 
+    @keyword
     def execute_async_javascript(self, *code):
         """Executes asynchronous JavaScript code.
 
@@ -59,17 +60,17 @@ class JavaScriptKeywords(KeywordGroup):
         | Should Be Equal          | ${retval}                                       | text                               |
         """
         js = self._get_javascript_to_execute(''.join(code))
-        self._info("Executing Asynchronous JavaScript:\n%s" % js)
-        return self._current_browser().execute_async_script(js)
-
-    # Private
+        self.info("Executing Asynchronous JavaScript:\n%s" % js)
+        return self.browser.execute_async_script(js)
 
     def _get_javascript_to_execute(self, code):
         codepath = code.replace('/', os.sep)
         if not (os.path.isabs(codepath) and os.path.isfile(codepath)):
             return code
-        self._html('Reading JavaScript from file <a href="file://%s">%s</a>.'
-                   % (codepath.replace(os.sep, '/'), codepath))
+        self.info(
+            'Reading JavaScript from file <a href="file://%s">%s</a>.'.format(
+                codepath.replace(os.sep, '/'), codepath),
+            html=True)
         codefile = open(codepath)
         try:
             return codefile.read().strip()

@@ -2,13 +2,18 @@ import time
 
 from robot.utils import secs_to_timestr, timestr_to_secs
 
-from .keywordgroup import KeywordGroup
+from Selenium2Library.base import Base
+from Selenium2Library.keywords.element import ElementKeywords
+from Selenium2Library.robotlibcore import keyword
 
 
-class WaitingKeywords(KeywordGroup):
+class WaitingKeywords(Base):
 
-    # Public
+    def __init__(self, ctx):
+        Base.__init__(self, ctx)
+        self.element = ElementKeywords(ctx)
 
+    @keyword
     def wait_for_condition(self, condition, timeout=None, error=None):
         """Waits until the given `condition` is true or `timeout` expires.
 
@@ -28,9 +33,11 @@ class WaitingKeywords(KeywordGroup):
         """
         if not error:
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
-        self._wait_until(timeout, error,
-                         lambda: self._current_browser().execute_script(condition) == True)
+        self._wait_until(
+            timeout, error,
+            lambda: self.browser.execute_script(condition) is True)
 
+    @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
         """Waits until `text` appears on current page.
 
@@ -46,8 +53,9 @@ class WaitingKeywords(KeywordGroup):
         """
         if not error:
             error = "Text '%s' did not appear in <TIMEOUT>" % text
-        self._wait_until(timeout, error, self._is_text_present, text)
+        self._wait_until(timeout, error, self.element.is_text_present, text)
 
+    @keyword
     def wait_until_page_does_not_contain(self, text, timeout=None, error=None):
         """Waits until `text` disappears from current page.
 
@@ -62,13 +70,14 @@ class WaitingKeywords(KeywordGroup):
         Keyword Succeeds`.
         """
         def check_present():
-            present = self._is_text_present(text)
+            present = self.element.is_text_present(text)
             if not present:
                 return
             else:
                 return error or "Text '%s' did not disappear in %s" % (text, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_present)
 
+    @keyword
     def wait_until_page_contains_element(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` appears on current page.
 
@@ -82,10 +91,13 @@ class WaitingKeywords(KeywordGroup):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
+        def is_element_present(locator):
+            return self.element_find(locator, required=False) is not None
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
-        self._wait_until(timeout, error, self._is_element_present, locator)
+        self._wait_until(timeout, error, is_element_present, locator)
 
+    @keyword
     def wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` disappears from current page.
 
@@ -100,13 +112,14 @@ class WaitingKeywords(KeywordGroup):
         Keyword Succeeds`.
         """
         def check_present():
-            present = self._is_element_present(locator)
+            present = self.element_find(locator, required=False)
             if not present:
                 return
             else:
                 return error or "Element '%s' did not disappear in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_present)
 
+    @keyword
     def wait_until_element_is_visible(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is visible.
 
@@ -121,7 +134,7 @@ class WaitingKeywords(KeywordGroup):
         Succeeds`.
         """
         def check_visibility():
-            visible = self._is_visible(locator)
+            visible = self.element.is_visible(locator)
             if visible:
                 return
             elif visible is None:
@@ -130,6 +143,7 @@ class WaitingKeywords(KeywordGroup):
                 return error or "Element '%s' was not visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_visibility)
 
+    @keyword
     def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is not visible.
 
@@ -144,7 +158,7 @@ class WaitingKeywords(KeywordGroup):
         Succeeds`.
         """
         def check_hidden():
-            visible = self._is_visible(locator)
+            visible = self.element.is_visible(locator)
             if not visible:
                 return
             elif visible is None:
@@ -153,6 +167,7 @@ class WaitingKeywords(KeywordGroup):
                 return error or "Element '%s' was still visible in %s" % (locator, self._format_timeout(timeout))
         self._wait_until_no_error(timeout, check_hidden)
 
+    @keyword
     def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is enabled.
 
@@ -167,7 +182,7 @@ class WaitingKeywords(KeywordGroup):
         Succeeds`.
         """
         def check_enabled():
-            element = self._element_find(locator, True, False)
+            element = self.element_find(locator, required=False)
             if not element:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
 
@@ -179,6 +194,7 @@ class WaitingKeywords(KeywordGroup):
 
         self._wait_until_no_error(timeout, check_enabled)
 
+    @keyword
     def wait_until_element_contains(self, locator, text, timeout=None, error=None):
         """Waits until given element contains `text`.
 
@@ -192,7 +208,7 @@ class WaitingKeywords(KeywordGroup):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
-        element = self._element_find(locator, True, True)
+        element = self.element_find(locator)
         def check_text():
             actual = element.text
             if text in actual:
@@ -202,7 +218,7 @@ class WaitingKeywords(KeywordGroup):
                             "Its text was '%s'." % (text, self._format_timeout(timeout), locator, actual)
         self._wait_until_no_error(timeout, check_text)
 
-
+    @keyword
     def wait_until_element_does_not_contain(self, locator, text, timeout=None, error=None):
         """Waits until given element does not contain `text`.
 
@@ -216,16 +232,14 @@ class WaitingKeywords(KeywordGroup):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
-        element = self._element_find(locator, True, True)
+        element = self.element_find(locator)
         def check_text():
             actual = element.text
-            if not text in actual:
+            if text not in actual:
                 return
             else:
                 return error or "Text '%s' did not disappear in %s from element '%s'." % (text, self._format_timeout(timeout), locator)
         self._wait_until_no_error(timeout, check_text)
-
-    # Private
 
     def _wait_until(self, timeout, error, function, *args):
         error = error.replace('<TIMEOUT>', self._format_timeout(timeout))
@@ -234,7 +248,7 @@ class WaitingKeywords(KeywordGroup):
         self._wait_until_no_error(timeout, wait_func)
 
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if timeout else self.ctx._timeout_in_secs
         maxtime = time.time() + timeout
         while True:
             timeout_error = wait_func(*args)
@@ -244,5 +258,5 @@ class WaitingKeywords(KeywordGroup):
             time.sleep(0.2)
 
     def _format_timeout(self, timeout):
-        timeout = timestr_to_secs(timeout) if timeout is not None else self._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if timeout else self.ctx._timeout_in_secs
         return secs_to_timestr(timeout)

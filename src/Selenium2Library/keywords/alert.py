@@ -1,21 +1,23 @@
 import time
+
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-from .keywordgroup import KeywordGroup
+from Selenium2Library.base import Base
+from Selenium2Library.robotlibcore import keyword
 
 
-class AlertKeywords(KeywordGroup):
+class AlertKeywords(Base):
 
-    __ACCEPT_ALERT = 'accept'
-    __DISMISS_ALERT = 'dismiss'
+    ACCEPT_ALERT = 'accept'
+    DISMISS_ALERT = 'dismiss'
 
-    def __init__(self):
-        self._next_alert_dismiss_type = self.__ACCEPT_ALERT
+    def __init__(self, ctx):
+        Base.__init__(self, ctx)
+        self._next_alert_dismiss_type = self.ACCEPT_ALERT
 
-    # Public
-
+    @keyword
     def input_text_into_prompt(self, text):
         """Types the given `text` into alert box.  """
         try:
@@ -24,6 +26,7 @@ class AlertKeywords(KeywordGroup):
         except WebDriverException:
             raise RuntimeError('There were no alerts')
 
+    @keyword
     def alert_should_be_present(self, text=''):
         """Verifies an alert is present and dismisses it.
 
@@ -34,16 +37,18 @@ class AlertKeywords(KeywordGroup):
         will fail unless the alert is dismissed by this
         keyword or another like `Get Alert Message`.
         """
-        alert_text = self._handle_alert(self.__ACCEPT_ALERT)
+        alert_text = self._handle_alert(self.ACCEPT_ALERT)
         if text and alert_text != text:
             raise AssertionError("Alert text should have been "
                                  "'%s' but was '%s'"
                                  % (text, alert_text))
 
+    @keyword
     def choose_cancel_on_next_confirmation(self):
         """Cancel will be selected the next time `Confirm Action` is used."""
-        self._next_alert_dismiss_type = self.__DISMISS_ALERT
+        self._next_alert_dismiss_type = self.DISMISS_ALERT
 
+    @keyword
     def choose_ok_on_next_confirmation(self):
         """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
         that Selenium's overridden window.confirm() function will normally
@@ -59,8 +64,9 @@ class AlertKeywords(KeywordGroup):
         consume it by using a keywords such as `Get Alert Message`, or else
         the following selenium operations will fail.
         """
-        self._next_alert_dismiss_type = self.__ACCEPT_ALERT
+        self._next_alert_dismiss_type = self.ACCEPT_ALERT
 
+    @keyword
     def confirm_action(self):
         """Dismisses currently shown confirmation dialog and returns it's message.
 
@@ -79,9 +85,10 @@ class AlertKeywords(KeywordGroup):
         | Confirm Action |    | # Chooses Cancel |
         """
         text = self._handle_alert(self._next_alert_dismiss_type)
-        self._next_alert_dismiss_type = self.__DISMISS_ALERT
+        self._next_alert_dismiss_type = self.DISMISS_ALERT
         return text
 
+    @keyword
     def get_alert_message(self, dismiss=True):
         """Returns the text of current JavaScript alert.
 
@@ -91,10 +98,11 @@ class AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Dismiss Alert`.
         """
         if dismiss:
-            return self._handle_alert(self.__DISMISS_ALERT)
+            return self._handle_alert(self.DISMISS_ALERT)
         else:
             return self._handle_alert()
 
+    @keyword
     def dismiss_alert(self, accept=True):
         """ Returns true if alert was confirmed, false if it was dismissed
 
@@ -103,7 +111,7 @@ class AlertKeywords(KeywordGroup):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if accept:
-            return self._handle_alert(self.__ACCEPT_ALERT)
+            return self._handle_alert(self.ACCEPT_ALERT)
         else:
             return self._handle_alert()
 
@@ -115,7 +123,7 @@ class AlertKeywords(KeywordGroup):
         alert.text
         alert.dismiss
 
-        This function creates a re-try funtionality to better support
+        This function creates a re-try functionality to better support
         alerts in Chrome.
         """
         retry = 0
@@ -130,12 +138,11 @@ class AlertKeywords(KeywordGroup):
     def _alert_worker(self, dismiss_type=None):
         alert = self._wait_alert()
         text = ' '.join(alert.text.splitlines())
-        if dismiss_type == self.__DISMISS_ALERT:
+        if dismiss_type == self.DISMISS_ALERT:
             alert.dismiss()
-        elif dismiss_type == self.__ACCEPT_ALERT:
+        elif dismiss_type == self.ACCEPT_ALERT:
             alert.accept()
         return text
 
     def _wait_alert(self):
-        return WebDriverWait(self._current_browser(), 1).until(
-            EC.alert_is_present())
+        return WebDriverWait(self.browser, 1).until(EC.alert_is_present())

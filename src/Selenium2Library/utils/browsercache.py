@@ -17,7 +17,7 @@ class BrowserCache(ConnectionCache):
             if browser not in self._closed:
                 open_browsers.append(browser)
         return open_browsers
-    
+
     def close(self):
         if self.current:
             browser = self.current

@@ -1,22 +1,24 @@
 import errno
 import os
 
+from robot.libraries.BuiltIn import BuiltIn
+from robot.libraries.BuiltIn import RobotNotRunningError
 from robot.utils import get_link_path
 
+from Selenium2Library.base import Base
+from Selenium2Library.robotlibcore import keyword
 from Selenium2Library.utils import events
 
-from .keywordgroup import KeywordGroup
 
+class ScreenshotKeywords(Base):
 
-class ScreenshotKeywords(KeywordGroup):
-
-    def __init__(self):
+    def __init__(self, ctx):
+        Base.__init__(self, ctx)
         self._screenshot_index = {}
         self._screenshot_path_stack = []
         self.screenshot_root_directory = None
 
-    # Public
-
+    @keyword
     def set_screenshot_directory(self, path, persist=False):
         """Sets the root output directory for captured screenshots.
 
@@ -35,6 +37,7 @@ class ScreenshotKeywords(KeywordGroup):
                       self._restore_screenshot_directory)
         self.screenshot_root_directory = path
 
+    @keyword
     def capture_page_screenshot(self,
                                 filename='selenium-screenshot-{index}.png'):
         """Takes a screenshot of the current page and embeds it into the log.
@@ -89,18 +92,20 @@ class ScreenshotKeywords(KeywordGroup):
         """
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
-        if hasattr(self._current_browser(), 'get_screenshot_as_file'):
-            if not self._current_browser().get_screenshot_as_file(path):
+        if hasattr(self.browser, 'get_screenshot_as_file'):
+            if not self.browser.get_screenshot_as_file(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         else:
-            if not self._current_browser().save_screenshot(path):
+            if not self.browser.save_screenshot(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         # Image is shown on its own row and thus prev row is closed on purpose
-        self._html('</td></tr><tr><td colspan="3"><a href="%s">'
-                   '<img src="%s" width="800px"></a>' % (link, link))
+        msg = (
+            '</td></tr><tr><td colspan="3"><a href="{}">'
+            '<img src="{}" width="800px"></a>'.format(link, link)
+        )
+        self.info(msg, html=True)
         return path
 
-    # Private
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
         if not os.path.exists(target_dir):
@@ -140,3 +145,14 @@ class ScreenshotKeywords(KeywordGroup):
             self._screenshot_index[filename] = 0
         self._screenshot_index[filename] += 1
         return self._screenshot_index[filename]
+
+    def _get_log_dir(self):
+        try:
+            logfile = BuiltIn().get_variable_value('${LOG FILE}')
+        except RobotNotRunningError:
+            logfile = os.getcwd()
+        if logfile != 'NONE':
+            logdir = os.path.dirname(logfile)
+        else:
+            logdir = BuiltIn().get_variable_value('${OUTPUTDIR}')
+        return logdir

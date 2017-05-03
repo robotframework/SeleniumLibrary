@@ -1,25 +1,25 @@
-from .keywords import *
+import warnings
+
+from .keywords.alert import AlertKeywords
+from .keywords.browsermanagement import BrowserManagementKeywords
+from .keywords.cookie import CookieKeywords
+from .keywords.element import ElementKeywords
+from .keywords.formelement import FormElementKeywords
+from .keywords.javascript import JavaScriptKeywords
+from .keywords.runonfailure import RunOnFailureKeywords
+from .keywords.screenshot import ScreenshotKeywords
+from .keywords.selectelement import SelectElementKeywords
+from .keywords.tableelement import TableElementKeywords
+from .keywords.waiting import WaitingKeywords
+from .robotlibcore import DynamicCore
+from .utils import BrowserCache
 from .utils import LibraryListener
 from .version import VERSION
-
 
 __version__ = VERSION
 
 
-class Selenium2Library(
-    LoggingKeywords,
-    RunOnFailureKeywords,
-    BrowserManagementKeywords,
-    ElementKeywords,
-    TableElementKeywords,
-    FormElementKeywords,
-    SelectElementKeywords,
-    JavaScriptKeywords,
-    CookieKeywords,
-    ScreenshotKeywords,
-    WaitingKeywords,
-    AlertKeywords
-):
+class Selenium2Library(DynamicCore):
     """Selenium2Library is a web testing library for Robot Framework.
 
     This document is about using Selenium2Library. For information about
@@ -151,8 +151,7 @@ class Selenium2Library(
                  timeout=5.0,
                  implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None
-    ):
+                 screenshot_root_directory=None):
 
         """Selenium2Library can be imported with optional arguments.
 
@@ -184,10 +183,57 @@ class Selenium2Library(
         | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
         | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
-        for base in Selenium2Library.__bases__:
-            base.__init__(self)
+        self._run_on_failure_keyword = None
+        self._running_on_failure_routine = False
+        self._speed_in_secs = 0.0
+        self._timeout_in_secs = 5.0
+        self._implicit_wait_in_secs = 5.0
+        libraries = [
+            AlertKeywords(self),
+            BrowserManagementKeywords(self),
+            RunOnFailureKeywords(self),
+            ElementKeywords(self),
+            TableElementKeywords(self),
+            FormElementKeywords(self),
+            SelectElementKeywords(self),
+            JavaScriptKeywords(self),
+            CookieKeywords(self),
+            ScreenshotKeywords(self),
+            WaitingKeywords(self)
+        ]
+        self._browsers = BrowserCache()
+        DynamicCore.__init__(self, libraries)
         self.screenshot_root_directory = screenshot_root_directory
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
+
+    def run_keyword(self, name, args, kwargs):
+        try:
+            return DynamicCore.run_keyword(self, name, args, kwargs)
+        except Exception:
+            RunOnFailureKeywords(self).run_on_failure()
+            raise
+
+    def register_browser(self, browser, alias):
+        return self._browsers.register(browser, alias)
+
+    @property
+    def _browser(self):
+        """Current active browser"""
+        if not self._browsers.current:
+            raise RuntimeError('No browser is open')
+        return self._browsers.current
+
+    @property
+    def _cache(self):
+        warnings.warn('"Selenium2Library._cache" is deprecated, '
+                      'use public API instead.', DeprecationWarning)
+        return self._browsers
+
+    def _current_browser(self):
+        warnings.warn('"Selenium2Library._current_browser" is deprecated, '
+                      'use "Selenium2Library.browser" instead.',
+                      DeprecationWarning)
+        return self.browser

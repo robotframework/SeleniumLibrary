@@ -43,6 +43,11 @@ Run on Failure Returns Previous Value
     ${old}=    Register Keyword to Run on Failure    ${old}
     Should Be Equal    ${old}    Log Source
 
+Run On Failure also fails
+    Register Keyword to Run on Failure    Failure During Run On failure
+    Run Keyword And Expect Error    ${FAILURE MESSAGE}    Page Should Not Contain
+    ...    needle    loglevel=None
+
 *** Keywords ***
 On Fail
     [Documentation]    On Fail
@@ -61,3 +66,6 @@ Restore Old Search Order
 Open Browser To Front Page
     [Documentation]    Open Browser To Front Page
     Open Browser    ${FRONT PAGE}
+
+Failure During Run On failure
+    Page Should Not Contain    needle
