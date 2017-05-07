@@ -1,162 +1,138 @@
 import unittest
 
-from mockito import mock, verify, when
+from mockito import mock, verify, when, unstub
 
-from Selenium2Library.locators import TableElementFinder
+from Selenium2Library.locators.tableelementfinder import TableElementFinder
 
 
 class ElementFinderTests(unittest.TestCase):
 
-    def test_find_with_implicit_css_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_css_selector("table#test1").thenReturn([])
-        
-        finder.find(browser, "test1")
+    def setUp(self):
+        self.ctx = mock()
+        self._browser = mock()
+        self.ctx._browser = self._browser
+        self.finder = TableElementFinder(self.ctx)
 
-        verify(browser).find_elements_by_css_selector("table#test1")
+    def tearDown(self):
+        unstub()
+
+    def test_find_with_implicit_css_locator(self):
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1").thenReturn([])
+        self.finder.find("test1")
+        verify(self._browser).find_elements_by_css_selector("table#test1")
 
     def test_find_with_css_selector(self):
-        finder = TableElementFinder()
-        browser = mock()
         elements = self._make_mock_elements('table', 'table', 'table')
-        when(browser).find_elements_by_css_selector("table#test1").thenReturn(elements)
-        
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1").thenReturn(elements)
         self.assertEqual(
-            finder.find(browser, "css=table#test1"),
+            self.finder.find("css=table#test1"),
             elements[0])
-
-        verify(browser).find_elements_by_css_selector("table#test1")
+        verify(self._browser).find_elements_by_css_selector("table#test1")
 
     def test_find_with_xpath_selector(self):
-        finder = TableElementFinder()
-        browser = mock()
         elements = self._make_mock_elements('table', 'table', 'table')
-        when(browser).find_elements_by_xpath("//table[@id='test1']").thenReturn(elements)
-        
+        when(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']").thenReturn(elements)
         self.assertEqual(
-            finder.find(browser, "xpath=//table[@id='test1']"),
+            self.finder.find("xpath=//table[@id='test1']"),
             elements[0])
-
-        verify(browser).find_elements_by_xpath("//table[@id='test1']")
+        verify(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']")
 
     def test_find_with_content_constraint(self):
-        finder = TableElementFinder()
-        browser = mock()
         elements = self._make_mock_elements('td', 'td', 'td')
         elements[1].text = 'hi'
-        when(browser).find_elements_by_css_selector("table#test1").thenReturn(elements)
-        
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1").thenReturn(elements)
         self.assertEqual(
-            finder.find_by_content(browser, "test1", 'hi'),
+            self.finder.find_by_content("test1", 'hi'),
             elements[1])
-
-        verify(browser).find_elements_by_css_selector("table#test1")
+        verify(self._browser).find_elements_by_css_selector("table#test1")
 
     def test_find_with_null_content_constraint(self):
-        finder = TableElementFinder()
-        browser = mock()
         elements = self._make_mock_elements('td', 'td', 'td')
         elements[1].text = 'hi'
-        when(browser).find_elements_by_css_selector("table#test1").thenReturn(elements)
-        
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1").thenReturn(elements)
         self.assertEqual(
-            finder.find_by_content(browser, "test1", None),
+            self.finder.find_by_content("test1", None),
             elements[0])
-
-        verify(browser).find_elements_by_css_selector("table#test1")
+        verify(self._browser).find_elements_by_css_selector("table#test1")
 
     def test_find_by_content_with_css_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_css_selector("table#test1").thenReturn([])
-        
-        finder.find_by_content(browser, "css=table#test1", 'hi')
-
-        verify(browser).find_elements_by_css_selector("table#test1")
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1").thenReturn([])
+        self.finder.find_by_content("css=table#test1", 'hi')
+        verify(self._browser).find_elements_by_css_selector("table#test1")
 
     def test_find_by_content_with_xpath_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_xpath("//table[@id='test1']//*").thenReturn([])
-        
-        finder.find_by_content(browser, "xpath=//table[@id='test1']", 'hi')
-
-        verify(browser).find_elements_by_xpath("//table[@id='test1']//*")
+        when(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']//*").thenReturn([])
+        self.finder.find_by_content("xpath=//table[@id='test1']", 'hi')
+        verify(self._browser).find_elements_by_xpath("//table[@id='test1']//*")
 
     def test_find_by_header_with_css_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_css_selector("table#test1 th").thenReturn([])
-        
-        finder.find_by_header(browser, "css=table#test1", 'hi')
-
-        verify(browser).find_elements_by_css_selector("table#test1 th")
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1 th").thenReturn([])
+        self.finder.find_by_header("css=table#test1", 'hi')
+        verify(self._browser).find_elements_by_css_selector("table#test1 th")
 
     def test_find_by_header_with_xpath_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_xpath("//table[@id='test1']//th").thenReturn([])
-        
-        finder.find_by_header(browser, "xpath=//table[@id='test1']", 'hi')
-
-        verify(browser).find_elements_by_xpath("//table[@id='test1']//th")
+        when(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']//th").thenReturn([])
+        self.finder.find_by_header("xpath=//table[@id='test1']", 'hi')
+        verify(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']//th")
 
     def test_find_by_footer_with_css_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_css_selector("table#test1 tfoot td").thenReturn([])
-        
-        finder.find_by_footer(browser, "css=table#test1", 'hi')
-
-        verify(browser).find_elements_by_css_selector("table#test1 tfoot td")
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1 tfoot td").thenReturn([])
+        self.finder.find_by_footer("css=table#test1", 'hi')
+        verify(self._browser).find_elements_by_css_selector(
+            "table#test1 tfoot td")
 
     def test_find_by_footer_with_xpath_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_xpath("//table[@id='test1']//tfoot//td").thenReturn([])
-        
-        finder.find_by_footer(browser, "xpath=//table[@id='test1']", 'hi')
-
-        verify(browser).find_elements_by_xpath("//table[@id='test1']//tfoot//td")
+        when(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']//tfoot//td").thenReturn([])
+        self.finder.find_by_footer("xpath=//table[@id='test1']", 'hi')
+        verify(self._browser).find_elements_by_xpath("//table[@id='test1']"
+                                                     "//tfoot//td")
 
     def test_find_by_row_with_css_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_css_selector("table#test1 tr:nth-child(2)").thenReturn([])
-        
-        finder.find_by_row(browser, "css=table#test1", 2, 'hi')
-
-        verify(browser).find_elements_by_css_selector("table#test1 tr:nth-child(2)")
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1 tr:nth-child(2)").thenReturn([])
+        self.finder.find_by_row("css=table#test1", 2, 'hi')
+        verify(self._browser).find_elements_by_css_selector("table#test1 "
+                                                            "tr:nth-child(2)")
 
     def test_find_by_row_with_xpath_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_xpath("//table[@id='test1']//tr[2]//*").thenReturn([])
-        
-        finder.find_by_row(browser, "xpath=//table[@id='test1']", 2, 'hi')
-
-        verify(browser).find_elements_by_xpath("//table[@id='test1']//tr[2]//*")
+        when(self._browser).find_elements_by_xpath(
+            "//table[@id='test1']//tr[2]//*").thenReturn([])
+        self.finder.find_by_row("xpath=//table[@id='test1']", 2, 'hi')
+        verify(self._browser).find_elements_by_xpath("//table[@id='test1']"
+                                                     "//tr[2]//*")
 
     def test_find_by_col_with_css_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_css_selector("table#test1 tr td:nth-child(2)").thenReturn([])
-        when(browser).find_elements_by_css_selector("table#test1 tr th:nth-child(2)").thenReturn([])
-        
-        finder.find_by_col(browser, "css=table#test1", 2, 'hi')
-
-        verify(browser).find_elements_by_css_selector("table#test1 tr td:nth-child(2)")
-        verify(browser).find_elements_by_css_selector("table#test1 tr th:nth-child(2)")
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1 tr td:nth-child(2)").thenReturn([])
+        when(self._browser).find_elements_by_css_selector(
+            "table#test1 tr th:nth-child(2)").thenReturn([])
+        self.finder.find_by_col("css=table#test1", 2, 'hi')
+        verify(self._browser).find_elements_by_css_selector(
+            "table#test1 tr td:nth-child(2)")
+        verify(self._browser).find_elements_by_css_selector(
+            "table#test1 tr th:nth-child(2)")
 
     def test_find_by_col_with_xpath_locator(self):
-        finder = TableElementFinder()
-        browser = mock()
-        when(browser).find_elements_by_xpath("//table[@id='test1']//tr//*[self::td or self::th][2]").thenReturn([])
-        
-        finder.find_by_col(browser, "xpath=//table[@id='test1']", 2, 'hi')
-
-        verify(browser).find_elements_by_xpath("//table[@id='test1']//tr//*[self::td or self::th][2]")
+        when(self._browser).find_elements_by_xpath("//table[@id='test1']//tr//"
+                                                   "*[self::td or self"
+                                                   "::th][2]").thenReturn([])
+        self.finder.find_by_col("xpath=//table[@id='test1']", 2, 'hi')
+        verify(self._browser).find_elements_by_xpath("//table[@id='test1']"
+                                                     "//tr//*[self::td or self"
+                                                     "::th][2]")
 
     def _make_mock_elements(self, *tags):
         elements = []
@@ -178,5 +154,4 @@ class ElementFinderTests(unittest.TestCase):
         def get_attribute(name):
             return element.attributes[name]
         element.get_attribute = get_attribute
-
         return element

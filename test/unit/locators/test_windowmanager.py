@@ -3,7 +3,7 @@ import uuid
 
 from mockito import mock, unstub
 
-from Selenium2Library.locators import WindowManager
+from Selenium2Library.locators.windowmanager import WindowManager
 
 
 class WindowManagerTests(unittest.TestCase):

@@ -9,7 +9,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from Selenium2Library.base import Base
-from Selenium2Library.locators import WindowManager
+from Selenium2Library.locators.windowmanager import WindowManager
 from Selenium2Library.robotlibcore import keyword
 
 
