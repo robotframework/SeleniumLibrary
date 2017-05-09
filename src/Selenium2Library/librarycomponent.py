@@ -2,15 +2,16 @@ from robot.api import logger
 from selenium.webdriver.remote.webelement import WebElement
 
 from .locators.elementfinder import ElementFinder
+from Selenium2Library.contextaware import ContextAware
 
 
 LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
 
 
-class Base(object):
+class LibraryComponent(ContextAware):
 
     def __init__(self, ctx):
-        self.ctx = ctx
+        ContextAware.__init__(self, ctx)
         self.element_finder = ElementFinder()
 
     def info(self, msg, html=False):
@@ -26,16 +27,8 @@ class Base(object):
     def warn(self, msg, html=False):
         logger.warn(msg, html)
 
-    @property
-    def browser(self):
-        return self.ctx._browser
-
-    @property
-    def browsers(self):
-        return self.ctx._browsers
-
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in Base class
+    # in ContextAware class
     def element_find(self, locator, first_only=True, required=True, tag=None):
         if isinstance(locator, basestring):
             elements = self.element_finder.find(self.browser, locator, tag)
@@ -54,7 +47,7 @@ class Base(object):
         return elements
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in Base class
+    # in ContextAware class
     def get_value(self, locator, tag=None):
         element = self.element_find(
             locator, required=False, tag=tag
@@ -62,7 +55,7 @@ class Base(object):
         return element.get_attribute('value') if element is not None else None
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in Base class
+    # in ContextAware class
     def page_contains_element(self, locator, tag=None,
                               message=None, loglevel='INFO'):
         element_name = tag if tag else 'element'
@@ -79,7 +72,7 @@ class Base(object):
         )
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in Base class
+    # in ContextAware class
     def page_not_contains_element(self, locator, tag=None,
                                   message=None, loglevel='INFO'):
         element_name = tag if tag else 'element'

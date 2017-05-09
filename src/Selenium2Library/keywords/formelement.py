@@ -1,10 +1,10 @@
 import os
 
-from Selenium2Library.base import Base
+from Selenium2Library.librarycomponent import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
-class FormElementKeywords(Base):
+class FormElementKeywords(LibraryComponent):
 
     @keyword
     def submit_form(self, locator=None):

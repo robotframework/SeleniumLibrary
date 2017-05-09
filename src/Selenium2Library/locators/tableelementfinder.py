@@ -1,11 +1,11 @@
 from .elementfinder import ElementFinder
-from Selenium2Library.base import Base
+from Selenium2Library.contextaware import ContextAware
 
 
-class TableElementFinder(Base):
+class TableElementFinder(ContextAware):
 
     def __init__(self, ctx):
-        Base.__init__(self, ctx)
+        ContextAware.__init__(self, ctx)
         self._element_finder = ElementFinder()
 
         self._locator_suffixes = {

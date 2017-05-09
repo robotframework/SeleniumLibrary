@@ -1,8 +1,8 @@
-from Selenium2Library.base import Base
+from Selenium2Library.librarycomponent import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
-class CookieKeywords(Base):
+class CookieKeywords(LibraryComponent):
 
     @keyword
     def delete_all_cookies(self):

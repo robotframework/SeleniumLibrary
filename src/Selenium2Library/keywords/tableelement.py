@@ -1,12 +1,12 @@
-from Selenium2Library.base import Base
+from Selenium2Library.librarycomponent import LibraryComponent
 from Selenium2Library.locators.tableelementfinder import TableElementFinder
 from Selenium2Library.robotlibcore import keyword
 
 
-class TableElementKeywords(Base):
+class TableElementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
-        Base.__init__(self, ctx)
+        LibraryComponent.__init__(self, ctx)
         self._table_element_finder = TableElementFinder(ctx)
 
     @keyword
