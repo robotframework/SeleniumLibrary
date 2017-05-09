@@ -1,6 +1,6 @@
 import os
 
-from Selenium2Library.librarycomponent import LibraryComponent
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 

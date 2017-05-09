@@ -1,16 +1,16 @@
 import warnings
 
-from .keywords.alert import AlertKeywords
-from .keywords.browsermanagement import BrowserManagementKeywords
-from .keywords.cookie import CookieKeywords
-from .keywords.element import ElementKeywords
-from .keywords.formelement import FormElementKeywords
-from .keywords.javascript import JavaScriptKeywords
-from .keywords.runonfailure import RunOnFailureKeywords
-from .keywords.screenshot import ScreenshotKeywords
-from .keywords.selectelement import SelectElementKeywords
-from .keywords.tableelement import TableElementKeywords
-from .keywords.waiting import WaitingKeywords
+from .keywords import AlertKeywords
+from .keywords import BrowserManagementKeywords
+from .keywords import CookieKeywords
+from .keywords import ElementKeywords
+from .keywords import FormElementKeywords
+from .keywords import JavaScriptKeywords
+from .keywords import RunOnFailureKeywords
+from .keywords import ScreenshotKeywords
+from .keywords import SelectElementKeywords
+from .keywords import TableElementKeywords
+from .keywords import WaitingKeywords
 from .robotlibcore import DynamicCore
 from .utils import BrowserCache
 from .utils import LibraryListener

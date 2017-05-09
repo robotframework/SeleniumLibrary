@@ -1,4 +1,4 @@
-from Selenium2Library.librarycomponent import LibraryComponent
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.locators.tableelementfinder import TableElementFinder
 from Selenium2Library.robotlibcore import keyword
 

@@ -1,8 +1,8 @@
 from robot.api import logger
 from selenium.webdriver.remote.webelement import WebElement
 
-from .locators.elementfinder import ElementFinder
-from Selenium2Library.contextaware import ContextAware
+from Selenium2Library.context import ContextAware
+from Selenium2Library.locators import ElementFinder
 
 
 LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
@@ -28,7 +28,7 @@ class LibraryComponent(ContextAware):
         logger.warn(msg, html)
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in ContextAware class
+    # in LibraryComponent class
     def element_find(self, locator, first_only=True, required=True, tag=None):
         if isinstance(locator, basestring):
             elements = self.element_finder.find(self.browser, locator, tag)
@@ -47,7 +47,7 @@ class LibraryComponent(ContextAware):
         return elements
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in ContextAware class
+    # in LibraryComponent class
     def get_value(self, locator, tag=None):
         element = self.element_find(
             locator, required=False, tag=tag
@@ -55,7 +55,7 @@ class LibraryComponent(ContextAware):
         return element.get_attribute('value') if element is not None else None
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in ContextAware class
+    # in LibraryComponent class
     def page_contains_element(self, locator, tag=None,
                               message=None, loglevel='INFO'):
         element_name = tag if tag else 'element'
@@ -72,7 +72,7 @@ class LibraryComponent(ContextAware):
         )
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
-    # in ContextAware class
+    # in LibraryComponent class
     def page_not_contains_element(self, locator, tag=None,
                                   message=None, loglevel='INFO'):
         element_name = tag if tag else 'element'

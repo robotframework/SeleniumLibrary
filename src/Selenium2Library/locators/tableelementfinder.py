@@ -1,5 +1,5 @@
 from .elementfinder import ElementFinder
-from Selenium2Library.contextaware import ContextAware
+from Selenium2Library.context import ContextAware
 
 
 class TableElementFinder(ContextAware):

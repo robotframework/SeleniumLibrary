@@ -2,8 +2,8 @@ import time
 
 from robot.utils import secs_to_timestr, timestr_to_secs
 
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.keywords.element import ElementKeywords
-from Selenium2Library.librarycomponent import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
