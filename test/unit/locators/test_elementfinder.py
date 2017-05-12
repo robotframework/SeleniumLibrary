@@ -3,7 +3,7 @@ import unittest
 from mockito import any, mock, verify, when
 from robot.utils.asserts import assert_raises_with_msg
 
-from Selenium2Library.locators import ElementFinder
+from Selenium2Library.locators.elementfinder import ElementFinder
 
 
 class ElementFinderTests(unittest.TestCase):

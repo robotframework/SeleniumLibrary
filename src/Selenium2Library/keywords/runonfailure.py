@@ -1,10 +1,10 @@
 from robot.libraries.BuiltIn import BuiltIn
 
-from Selenium2Library.base import Base
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
-class RunOnFailureKeywords(Base):
+class RunOnFailureKeywords(LibraryComponent):
 
     @keyword
     def register_keyword_to_run_on_failure(self, keyword):

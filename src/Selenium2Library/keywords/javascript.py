@@ -1,10 +1,10 @@
 import os
 
-from Selenium2Library.base import Base
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
-class JavaScriptKeywords(Base):
+class JavaScriptKeywords(LibraryComponent):
 
     @keyword
     def execute_javascript(self, *code):

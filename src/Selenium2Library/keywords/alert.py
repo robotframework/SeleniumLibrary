@@ -4,17 +4,17 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from Selenium2Library.base import Base
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
-class AlertKeywords(Base):
+class AlertKeywords(LibraryComponent):
 
     ACCEPT_ALERT = 'accept'
     DISMISS_ALERT = 'dismiss'
 
     def __init__(self, ctx):
-        Base.__init__(self, ctx)
+        LibraryComponent.__init__(self, ctx)
         self._next_alert_dismiss_type = self.ACCEPT_ALERT
 
     @keyword

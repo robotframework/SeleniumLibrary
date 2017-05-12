@@ -1,18 +1,18 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-from Selenium2Library import utils
-from Selenium2Library.base import Base
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.keywords.formelement import FormElementKeywords
-from Selenium2Library.locators import CustomLocator
-from Selenium2Library.locators import ElementFinder
+from Selenium2Library.locators.customlocator import CustomLocator
+from Selenium2Library.locators.elementfinder import ElementFinder
 from Selenium2Library.robotlibcore import keyword
+from Selenium2Library.utils import escape_xpath_value
 
 
-class ElementKeywords(Base):
+class ElementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
-        Base.__init__(self, ctx)
+        LibraryComponent.__init__(self, ctx)
         self.element_finder = ElementFinder()
         self.form_element = FormElementKeywords(ctx)
 
@@ -785,7 +785,7 @@ return !element.dispatchEvent(evt);
         return True
 
     def is_text_present(self, text):
-        locator = "xpath=//*[contains(., %s)]" % utils.escape_xpath_value(text)
+        locator = "xpath=//*[contains(., %s)]" % escape_xpath_value(text)
         return self.element_find(locator, required=False)
 
     def is_visible(self, locator):

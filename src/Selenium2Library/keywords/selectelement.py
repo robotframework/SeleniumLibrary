@@ -1,11 +1,11 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
-from Selenium2Library.base import Base
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.robotlibcore import keyword
 
 
-class SelectElementKeywords(Base):
+class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def get_list_items(self, locator, value=False):

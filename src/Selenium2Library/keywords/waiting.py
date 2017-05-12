@@ -2,15 +2,15 @@ import time
 
 from robot.utils import secs_to_timestr, timestr_to_secs
 
-from Selenium2Library.base import Base
+from Selenium2Library.base import LibraryComponent
 from Selenium2Library.keywords.element import ElementKeywords
 from Selenium2Library.robotlibcore import keyword
 
 
-class WaitingKeywords(Base):
+class WaitingKeywords(LibraryComponent):
 
     def __init__(self, ctx):
-        Base.__init__(self, ctx)
+        LibraryComponent.__init__(self, ctx)
         self.element = ElementKeywords(ctx)
 
     @keyword

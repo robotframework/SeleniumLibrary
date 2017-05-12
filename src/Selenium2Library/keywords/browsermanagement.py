@@ -8,8 +8,8 @@ from robot.utils import secs_to_timestr, timestr_to_secs
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
-from Selenium2Library.base import Base
-from Selenium2Library.locators import WindowManager
+from Selenium2Library.base import LibraryComponent
+from Selenium2Library.locators.windowmanager import WindowManager
 from Selenium2Library.robotlibcore import keyword
 
 
@@ -34,10 +34,10 @@ BROWSER_NAMES = {
 }
 
 
-class BrowserManagementKeywords(Base):
+class BrowserManagementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
-        Base.__init__(self, ctx)
+        LibraryComponent.__init__(self, ctx)
         self._window_manager = WindowManager()
 
     @keyword
