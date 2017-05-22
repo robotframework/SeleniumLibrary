@@ -30,20 +30,16 @@ class LibraryComponent(ContextAware):
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy
     # in LibraryComponent class
     def element_find(self, locator, first_only=True, required=True, tag=None):
-        if isinstance(locator, basestring):
-            elements = self.element_finder.find(self.browser, locator, tag)
-            if required and len(elements) == 0:
-                raise ValueError(
-                    "Element locator '{}' did not match any elements.".format(
-                        locator
-                    )
-                )
-            if first_only:
-                if not elements:
-                    return None
-                return elements[0]
-        elif isinstance(locator, WebElement):
-            elements = locator
+        if isinstance(locator, WebElement):
+            return locator
+        elements = self.element_finder.find(self.browser, locator, tag)
+        if required and not elements:
+            raise ValueError("Element locator '{}' did not match any "
+                             "elements.".format(locator))
+        if first_only:
+            if not elements:
+                return None
+            return elements[0]
         return elements
 
     # TODO: Move logic in elementfinder.ElementFinder but keep method as proxy

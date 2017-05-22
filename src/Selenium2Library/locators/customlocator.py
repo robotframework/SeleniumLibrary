@@ -1,6 +1,12 @@
 from robot.libraries.BuiltIn import BuiltIn
 
 
+try:
+    basestring
+except NameError:
+    basestring = str
+
+
 class CustomLocator(object):
 
     def __init__(self, name, finder):
