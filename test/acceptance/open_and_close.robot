@@ -44,9 +44,11 @@ Switch to closed browser is possible
     Switch Browser    Browser 3
     Page Should Contain    Name:
     Switch Browser    Browser 2
-    Run Keyword And Expect Error
-    ...    error: [Errno 111] Connection refused
+    ${error} =    Run Keyword And Expect Error
+    ...    *
     ...    Page Should Contain    Name:
+    # Regexp is required because Linux and Windows raises different errors
+    Should Match Regexp    ${error}    error: \\[Errno 111\\] Connection refused|ConnectionRefusedError: \\[WinError 10061\\] No connection could be made because the target machine actively refused it
     Close All Browsers
 
 Closing all browsers clears cache
