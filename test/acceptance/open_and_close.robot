@@ -45,7 +45,7 @@ Switch to closed browser is possible
     Page Should Contain    Name:
     Switch Browser    Browser 2
     Run Keyword And Expect Error
-    ...    error: [Errno 111] Connection refused
+    ...    *
     ...    Page Should Contain    Name:
     Close All Browsers
 
