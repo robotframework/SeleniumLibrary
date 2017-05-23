@@ -640,7 +640,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
         desired_capabilities_object = capabilities_type.copy()
 
-        if type(desired_capabilities) in (str, unicode):
+        if not isinstance(desired_capabilities, dict):
             desired_capabilities = self._parse_capabilities_string(desired_capabilities)
 
         desired_capabilities_object.update(desired_capabilities or {})
