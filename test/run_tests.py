@@ -124,7 +124,7 @@ def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
     runner = interpreter.split() + ['-m', 'robot.run']
     options.extend(
         [opt.format(browser=browser,
-         py_version=interpreter + sys.version[:3])
+         py_version=interpreter)
             for opt in ROBOT_OPTIONS]
     )
     options += rf_options
@@ -198,7 +198,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--interpreter',
         '-I',
-        default='python',
+        default='python' + sys.version[:3],
         help=textwrap.dedent("""\
             Any Python interpreter supported by the library.
             E.g. `python`, `jython` or `c:\\Python27\\python.exe`.
