@@ -304,7 +304,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.element_find(locator)
-        self.browser.switch_to_frame(element)
+        self.browser.switch_to.frame(element)
 
     @keyword
     def select_window(self, locator=None):
@@ -356,7 +356,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def unselect_frame(self):
         """Sets the top frame as the current frame."""
-        self.browser.switch_to_default_content()
+        self.browser.switch_to.default_content()
 
     @keyword
     def get_location(self):

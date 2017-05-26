@@ -755,10 +755,10 @@ return !element.dispatchEvent(evt);
 
     def _frame_contains(self, locator, text):
         element = self.element_find(locator)
-        self.browser.switch_to_frame(element)
+        self.browser.switch_to.frame(element)
         self.info("Searching for text from frame '%s'." % locator)
         found = self.is_text_present(text)
-        self.browser.switch_to_default_content()
+        self.browser.switch_to.default_content()
         return found
 
     def _get_text(self, locator):
@@ -836,7 +836,7 @@ return !element.dispatchEvent(evt);
         return parts[0], parts[2]
 
     def _page_contains(self, text):
-        self.browser.switch_to_default_content()
+        self.browser.switch_to.default_content()
 
         if self.is_text_present(text):
             return True
@@ -845,9 +845,9 @@ return !element.dispatchEvent(evt);
                                       first_only=False, required=False)
         self.debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
-            self.browser.switch_to_frame(frame)
+            self.browser.switch_to.frame(frame)
             found_text = self.is_text_present(text)
-            self.browser.switch_to_default_content()
+            self.browser.switch_to.default_content()
             if found_text:
                 return True
         return False
