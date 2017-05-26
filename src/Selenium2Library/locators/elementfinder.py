@@ -4,6 +4,25 @@ from robot.utils import NormalizedDict
 from Selenium2Library.utils import escape_xpath_value, events
 
 
+class ParserLocator(object):
+
+    @classmethod
+    def parse_locator(cls, locator):
+        prefix = None
+        criteria = locator
+        if locator.startswith('//') or locator.startswith('(//'):
+            prefix = 'xpath'
+        else:
+            locator_parts = locator.split('=', 1)
+            if len(locator_parts) == 2:
+                prefix = locator_parts[0]
+                criteria = locator_parts[1].strip()
+            elif len(locator_parts) == 1:
+                prefix = 'default'
+                criteria = locator
+        return prefix, criteria
+
+
 class ElementFinder(object):
 
     def __init__(self):
@@ -23,19 +42,33 @@ class ElementFinder(object):
             'scLocator': self._find_by_sc_locator,
             'default': self._find_by_default
         }
-        self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
+        self._strategies = NormalizedDict(initial=strategies, caseless=True,
+                                          spaceless=True)
         self._default_strategies = list(strategies.keys())
+        self._key_attrs = {
+            None: ['@id', '@name'],
+            'a': [
+                '@id', '@name', '@href',
+                'normalize-space(descendant-or-self::text())'
+            ],
+            'img': ['@id', '@name', '@src', '@alt'],
+            'input': ['@id', '@name', '@value', '@src'],
+            'button': [
+                '@id', '@name', '@value',
+                'normalize-space(descendant-or-self::text())'
+            ]
+        }
 
     def find(self, browser, locator, tag=None):
         assert browser is not None
         assert locator is not None and len(locator) > 0
 
-        (prefix, criteria) = self._parse_locator(locator)
-        prefix = 'default' if prefix is None else prefix
+        prefix, criteria = ParserLocator.parse_locator(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:
-            raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
-        (tag, constraints) = self._get_tag_and_constraints(tag)
+            raise ValueError('Element locator with prefix \'{}\' '
+                             'is not supported'.format(prefix))
+        tag, constraints = self._get_tag_and_constraints(tag)
         return strategy(browser, criteria, tag, constraints)
 
     def register(self, strategy, persist):
@@ -58,8 +91,6 @@ class ElementFinder(object):
 
     def has_strategy(self, strategy_name):
         return strategy_name in self.strategies
-
-    # Strategy routines, private
 
     def _find_by_identifier(self, browser, criteria, tag, constraints):
         elements = self._normalize_result(browser.find_elements_by_id(criteria))
@@ -125,11 +156,6 @@ class ElementFinder(object):
         return self._filter_elements([browser.execute_script(js)], tag, constraints)
 
     def _find_by_default(self, browser, criteria, tag, constraints):
-        if criteria.startswith('//'):
-            return self._find_by_xpath(browser, criteria, tag, constraints)
-        return self._find_by_key_attrs(browser, criteria, tag, constraints)
-
-    def _find_by_key_attrs(self, browser, criteria, tag, constraints):
         key_attrs = self._key_attrs.get(None)
         if tag is not None:
             key_attrs = self._key_attrs.get(tag, key_attrs)
@@ -144,22 +170,11 @@ class ElementFinder(object):
             xpath_tag,
             ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
             ' or '.join(xpath_searchers))
-
         return self._normalize_result(browser.find_elements_by_xpath(xpath))
 
-    # Private
-
-    _key_attrs = {
-        None: ['@id', '@name'],
-        'a': ['@id', '@name', '@href', 'normalize-space(descendant-or-self::text())'],
-        'img': ['@id', '@name', '@src', '@alt'],
-        'input': ['@id', '@name', '@value', '@src'],
-        'button': ['@id', '@name', '@value', 'normalize-space(descendant-or-self::text())']
-    }
-
     def _get_tag_and_constraints(self, tag):
-        if tag is None: return None, {}
-
+        if tag is None:
+            return None, {}
         tag = tag.lower()
         constraints = {}
         if tag == 'link':
@@ -216,16 +231,6 @@ class ElementFinder(object):
         if '/' in url:
             url = '/'.join(url.split('/')[:-1])
         return url
-
-    def _parse_locator(self, locator):
-        prefix = None
-        criteria = locator
-        if not locator.startswith('//'):
-            locator_parts = locator.partition('=')
-            if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0]
-                criteria = locator_parts[2].strip()
-        return prefix, criteria
 
     def _normalize_result(self, elements):
         if not isinstance(elements, list):
