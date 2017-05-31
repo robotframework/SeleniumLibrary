@@ -1,5 +1,6 @@
 import errno
 import os
+import re
 
 from robot.libraries.BuiltIn import BuiltIn
 from robot.libraries.BuiltIn import RobotNotRunningError
@@ -67,6 +68,13 @@ class ScreenshotKeywords(LibraryComponent):
         If there is a need to write literal _{index}_ or if ``filename``
         contains _{_ or _}_ characters, then the braces must be doubled.
 
+        If _{index}_ is used, the computed filename will not overwrite
+        an existing file. The number chosen will be the first number
+        that results in a unique filename. For example, if the
+        computed name is screenshot-1.png but screenshot-1.png already
+        exists, screenshot-2.png will be tried, and so on, until a
+        unique name is found.
+
         Example 1:
         | ${file1} = | Capture Page Screenshot |
         | File Should Exist | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
@@ -89,6 +97,7 @@ class ScreenshotKeywords(LibraryComponent):
         Example 3:
         | Capture Page Screenshot | ${OTHER_DIR}${/}sc-{index:06}.png |
         | File Should Exist | ${OTHER_DIR}${/}sc-000001.png |
+
         """
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
@@ -130,11 +139,24 @@ class ScreenshotKeywords(LibraryComponent):
     def _restore_screenshot_directory(self):
         self.screenshot_root_directory = self._screenshot_path_stack.pop()
 
-    def _get_screenshot_paths(self, filename):
-        filename = filename.format(
-            index=self._get_screenshot_index(filename))
-        filename = filename.replace('/', os.sep)
+    def _get_screenshot_paths(self, filename_template):
         screenshotdir = self._get_screenshot_directory()
+
+        filename = filename_template.format(
+            index=self._get_screenshot_index(filename_template))
+
+        # Sorry for the gnarley regular expression.  it attempts to
+        # match python formatter syntax such as {index} or {index:...}
+        # but not {{index}} or # {{index:...}}
+        if re.search(r'(?<!{){index(![rs])?(:.*?)?}(?!})', filename_template):
+            # make sure the computed filename doesn't exist. We only
+            # do this if the template had the {index} formatting
+            # sequence (or one of it's variations)
+            while os.path.exists(os.path.join(screenshotdir, filename)):
+                filename = filename_template.format(
+                    index=self._get_screenshot_index(filename_template))
+
+        filename = filename.replace('/', os.sep)
         logdir = self._get_log_dir()
         path = os.path.join(screenshotdir, filename)
         link = get_link_path(path, logdir)
