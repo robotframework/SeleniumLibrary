@@ -8,19 +8,15 @@ class LocatorParser(object):
 
     @classmethod
     def parse(cls, locator):
-        prefix = None
-        criteria = locator
         if locator.startswith(('//', '(//')):
             prefix = 'xpath'
+            criteria = locator
+        elif '=' not in locator:
+            prefix = 'default'
+            criteria = locator
         else:
-            locator_parts = locator.split('=', 1)
-            if len(locator_parts) == 2:
-                prefix = locator_parts[0]
-                criteria = locator_parts[1].strip()
-            elif len(locator_parts) == 1:
-                prefix = 'default'
-                criteria = locator
-        return prefix, criteria
+            prefix, criteria = locator.split('=', 1)
+        return prefix, criteria.strip()
 
 
 class ElementFinder(object):
@@ -47,16 +43,12 @@ class ElementFinder(object):
         self._default_strategies = list(strategies.keys())
         self._key_attrs = {
             None: ['@id', '@name'],
-            'a': [
-                '@id', '@name', '@href',
-                'normalize-space(descendant-or-self::text())'
-            ],
+            'a': ['@id', '@name', '@href',
+                  'normalize-space(descendant-or-self::text())'],
             'img': ['@id', '@name', '@src', '@alt'],
             'input': ['@id', '@name', '@value', '@src'],
-            'button': [
-                '@id', '@name', '@value',
-                'normalize-space(descendant-or-self::text())'
-            ]
+            'button': ['@id', '@name', '@value',
+                       'normalize-space(descendant-or-self::text())']
         }
 
     def find(self, browser, locator, tag=None):
@@ -64,10 +56,10 @@ class ElementFinder(object):
         assert locator is not None and len(locator) > 0
 
         prefix, criteria = LocatorParser.parse(locator)
+        if prefix not in self._strategies:
+            raise ValueError("Element locator with prefix '{}' "
+                             "is not supported".format(prefix))
         strategy = self._strategies.get(prefix)
-        if strategy is None:
-            raise ValueError('Element locator with prefix \'{}\' '
-                             'is not supported'.format(prefix))
         tag, constraints = self._get_tag_and_constraints(tag)
         return strategy(browser, criteria, tag, constraints)
 

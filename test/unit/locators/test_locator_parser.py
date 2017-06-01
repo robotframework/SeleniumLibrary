@@ -19,6 +19,10 @@ class LocatorParserTests(unittest.TestCase):
         self.assertEqual(prefix, 'xpath')
         self.assertEqual(criteria, '//foo[@attr=value]')
 
+        prefix, criteria = LocatorParser.parse('//foo/bar  ')
+        self.assertEqual(prefix, 'xpath')
+        self.assertEqual(criteria, '//foo/bar')
+
     def test_parse_dom(self):
         prefix, criteria = LocatorParser.parse(
             'dom=document.images[56]')
@@ -56,3 +60,8 @@ class LocatorParserTests(unittest.TestCase):
         prefix, criteria = LocatorParser.parse('default=page?a=b')
         self.assertEqual(prefix, 'default')
         self.assertEqual(criteria, 'page?a=b')
+
+    def test_parse_invalid(self):
+        prefix, criteria = LocatorParser.parse('foo=bar')
+        self.assertEqual(prefix, 'foo')
+        self.assertEqual(criteria, 'bar')
