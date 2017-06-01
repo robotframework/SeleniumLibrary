@@ -4,10 +4,10 @@ from robot.utils import NormalizedDict
 from Selenium2Library.utils import escape_xpath_value, events
 
 
-class ParserLocator(object):
+class LocatorParser(object):
 
     @classmethod
-    def parse_locator(cls, locator):
+    def parse(cls, locator):
         prefix = None
         criteria = locator
         if locator.startswith('//') or locator.startswith('(//'):
@@ -63,7 +63,7 @@ class ElementFinder(object):
         assert browser is not None
         assert locator is not None and len(locator) > 0
 
-        prefix, criteria = ParserLocator.parse_locator(locator)
+        prefix, criteria = LocatorParser.parse(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError('Element locator with prefix \'{}\' '
