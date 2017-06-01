@@ -10,7 +10,7 @@ class LocatorParser(object):
     def parse(cls, locator):
         prefix = None
         criteria = locator
-        if locator.startswith('//') or locator.startswith('(//'):
+        if locator.startswith(('//', '(//')):
             prefix = 'xpath'
         else:
             locator_parts = locator.split('=', 1)
