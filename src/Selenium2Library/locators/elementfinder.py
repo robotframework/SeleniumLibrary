@@ -4,21 +4,6 @@ from robot.utils import NormalizedDict
 from Selenium2Library.utils import escape_xpath_value, events
 
 
-class LocatorParser(object):
-
-    @classmethod
-    def parse(cls, locator):
-        if locator.startswith(('//', '(//')):
-            prefix = 'xpath'
-            criteria = locator
-        elif '=' not in locator:
-            prefix = 'default'
-            criteria = locator
-        else:
-            prefix, criteria = locator.split('=', 1)
-        return prefix, criteria.strip()
-
-
 class ElementFinder(object):
 
     def __init__(self):
@@ -40,7 +25,7 @@ class ElementFinder(object):
         }
         self._strategies = NormalizedDict(initial=strategies, caseless=True,
                                           spaceless=True)
-        self._default_strategies = list(strategies.keys())
+        self._default_strategies = list(strategies)
         self._key_attrs = {
             None: ['@id', '@name'],
             'a': ['@id', '@name', '@href',
@@ -52,21 +37,19 @@ class ElementFinder(object):
         }
 
     def find(self, browser, locator, tag=None):
-        assert browser is not None
-        assert locator is not None and len(locator) > 0
-
-        prefix, criteria = LocatorParser.parse(locator)
+        prefix, criteria = self._parse_locator(locator)
         if prefix not in self._strategies:
-            raise ValueError("Element locator with prefix '{}' "
-                             "is not supported".format(prefix))
+            raise ValueError("Element locator with prefix '%s' "
+                             "is not supported." % prefix)
         strategy = self._strategies.get(prefix)
         tag, constraints = self._get_tag_and_constraints(tag)
         return strategy(browser, criteria, tag, constraints)
 
     def register(self, strategy, persist):
         if strategy.name in self._strategies:
-            raise AttributeError("The custom locator '" + strategy.name +
-            "' cannot be registered. A locator of that name already exists.")
+            raise RuntimeError("The custom locator '%s' cannot be registered. "
+                               "A locator of that name already exists."
+                               % strategy.name)
         self._strategies[strategy.name] = strategy.find
 
         if not persist:
@@ -75,9 +58,11 @@ class ElementFinder(object):
 
     def unregister(self, strategy_name):
         if strategy_name in self._default_strategies:
-            raise AttributeError("Cannot unregister the default strategy '" + strategy_name + "'")
+            raise RuntimeError("Cannot unregister the default strategy '%s'."
+                               % strategy_name)
         elif strategy_name not in self._strategies:
-            logger.info("Cannot unregister the non-registered strategy '" + strategy_name + "'")
+            logger.info("Cannot unregister the non-registered strategy '%s'."
+                        % strategy_name)
         else:
             del self._strategies[strategy_name]
 
@@ -148,20 +133,22 @@ class ElementFinder(object):
         return self._filter_elements([browser.execute_script(js)], tag, constraints)
 
     def _find_by_default(self, browser, criteria, tag, constraints):
-        key_attrs = self._key_attrs.get(None)
-        if tag is not None:
-            key_attrs = self._key_attrs.get(tag, key_attrs)
-
+        if tag in self._key_attrs:
+            key_attrs = self._key_attrs[tag]
+        else:
+            key_attrs = self._key_attrs[None]
         xpath_criteria = escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
         xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
         xpath_searchers.extend(
             self._get_attrs_with_url(key_attrs, criteria, browser))
-        xpath = "//%s[%s(%s)]" % (
+        xpath = "//%s[%s%s(%s)]" % (
             xpath_tag,
-            ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
-            ' or '.join(xpath_searchers))
+            ' and '.join(xpath_constraints),
+            ' and ' if xpath_constraints else '',
+            ' or '.join(xpath_searchers)
+        )
         return self._normalize_result(browser.find_elements_by_xpath(xpath))
 
     def _get_tag_and_constraints(self, tag):
@@ -192,6 +179,14 @@ class ElementFinder(object):
         elif tag == 'text area':
             tag = 'textarea'
         return tag, constraints
+
+    def _parse_locator(self, locator):
+        if locator.startswith(('//', '(//')):
+            return 'xpath', locator
+        if '=' not in locator:
+            return 'default', locator
+        prefix, criteria = locator.split('=', 1)
+        return prefix.strip(), criteria.lstrip()
 
     def _element_matches(self, element, tag, constraints):
         if not element.tag_name.lower() == tag:

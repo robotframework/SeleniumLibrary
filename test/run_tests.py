@@ -72,7 +72,8 @@ ROBOT_OPTIONS = [
     '--report', 'NONE',
     '--log', 'NONE',
     '--loglevel', 'DEBUG',
-    '--pythonpath', os.pathsep.join([SRC_DIR, TEST_LIBS_DIR]),
+    '--pythonpath', SRC_DIR,
+    '--pythonpath', TEST_LIBS_DIR
 ]
 REBOT_OPTIONS = [
     '--outputdir', RESULTS_DIR,

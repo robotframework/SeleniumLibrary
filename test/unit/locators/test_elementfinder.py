@@ -11,27 +11,14 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_invalid_prefix(self):
         finder = ElementFinder()
         browser = mock()
-        assert_raises_with_msg(ValueError, "Element locator with prefix 'something' is not supported",
+        assert_raises_with_msg(ValueError, "Element locator with prefix 'something' is not supported.",
                                finder.find, browser, "something=test1")
-        assert_raises_with_msg(ValueError, "Element locator with prefix ' by ID ' is not supported",
+        assert_raises_with_msg(ValueError, "Element locator with prefix 'by ID' is not supported.",
                                finder.find, browser, " by ID =test1")
 
     def test_find_with_null_browser(self):
         finder = ElementFinder()
-        self.assertRaises(AssertionError,
-            finder.find, None, "id=test1")
-
-    def test_find_with_null_locator(self):
-        finder = ElementFinder()
-        browser = mock()
-        self.assertRaises(AssertionError,
-            finder.find, browser, None)
-
-    def test_find_with_empty_locator(self):
-        finder = ElementFinder()
-        browser = mock()
-        self.assertRaises(AssertionError,
-            finder.find, browser, "")
+        self.assertRaises(AttributeError, finder.find, None, "id=test1")
 
     def test_find_with_no_tag(self):
         finder = ElementFinder()
@@ -335,7 +322,7 @@ class ElementFinderTests(unittest.TestCase):
         browser = mock()
 
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(browser).find_elements_by_id("test1").thenReturn(elements)
+        when(browser).find_elements_by_id("test1  ").thenReturn(elements)
 
         result = finder.find(browser, "id= test1  ")
         self.assertEqual(result, elements)
