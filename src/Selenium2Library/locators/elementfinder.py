@@ -220,7 +220,9 @@ class ElementFinder(ContextAware):
             constraints['type'] = 'checkbox'
         elif tag == 'text field':
             tag = 'input'
-            constraints['type'] = 'text'
+            constraints['type'] = ['date', 'datetime-local', 'email', 'month',
+                                   'number', 'password', 'search', 'tel',
+                                   'text', 'time' 'url', 'week']
         elif tag == 'file upload':
             tag = 'input'
             constraints['type'] = 'file'
@@ -240,6 +242,8 @@ class ElementFinder(ContextAware):
         if not element.tag_name.lower() == tag:
             return False
         for name in constraints:
+            if type(constraints) is list and element.get_attribute(name) not in constraints[name]
+                return False
             if not element.get_attribute(name) == constraints[name]:
                 return False
         return True
