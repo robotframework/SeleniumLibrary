@@ -51,16 +51,23 @@ class Selenium2Library(DynamicCore):
 
     *Using locators*
     ---------------
-    By default, when a locator value is provided, it is matched against the
-    key attributes of the particular element type. For example, `id` and
-    `name` are key attributes to all elements, and locating elements is easy
-    using just the `id` as a `locator`. For example:
+    The locator can be used in two ways. In explicit way, where the strategy
+    of the locator is defined as prefix in the locator or in implicit way,
+    where there strategy is determined from the locator.
 
-    | Click Element    my_element
+    The implicit way supports two strategies: `xpath` and matching against
+    `id` and `name` attributes. If locator starts with `//` or `(//` then
+    `xpath` strategy will be used. If locator does not start with `//` or
+    `(//`, then it is matched against the `id` and `name` key attributes of
+    elements. Example
 
-    It is also possible to specify the approach Selenium2Library should take
-    to find an element by specifying a lookup strategy with a locator
-    prefix. Supported strategies are:
+    | Click Element    my_element    # id and name attribute matching
+    | Click Element    //div         # xpath
+    | Click Element    (//div)[2]    # xpath
+
+    In the explicit way, it is possible to specify the approach
+    Selenium2Library should take to find an element by specifying a lookup
+    strategy with a locator prefix. Supported strategies are:
 
     | *Strategy* | *Example*                               | *Description*                                   |
     | identifier | Click Element `|` identifier=my_element | Matches by @id or @name attribute               |
