@@ -57,8 +57,9 @@ class Selenium2Library(DynamicCore):
 
     The implicit way supports two strategies: `xpath` and matching against
     `id` and `name` attributes. If locator starts with `//` or `(//` then
-    `xpath` strategy will be used. If locator does not start with `//` or
-    `(//`, then it is matched against the `id` and `name` key attributes of
+    `xpath` strategy will be used. Determining `(//`  as xpath is supported
+    from release 3.0.0 onwards. If locator does not start with `//` or `(//`,
+    then it is matched against the `id` and `name` key attributes of
     elements. Example
 
     | Click Element    my_element    # id and name attribute matching
