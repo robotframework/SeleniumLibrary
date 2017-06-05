@@ -4,13 +4,15 @@ Selenium2Library Installation
 Preconditions
 -------------
 
-Selenium2Library supports all Python and Jython interpreters supported by the
-Robot Framework and the `Selenium Python Bindings`_. The Robot Framework Python
-Bindings are the most restrictive and as of now require Python 2.7 or
-Python 3.3+
+Selenium2Library supports almost all Python interpreters supported by the
+Robot Framework and the `Selenium Python Bindings`_. The Selenium2Library
+requires Python 2.7 or Python 3.3+. String from release 3.0.0, the Python
+2.6 is not anymore supported.
 
 Selenium2Library depends on Robot Framework and Selenium. All dependencies are
-declared in requirements.txt with their minimum required versions.
+declared in `requirements.txt`_ with their minimum required versions. With the
+Selenium it might be possible that the Selenium2Library supports older versions,
+but older Selenium version are not tested by the development team.
 
 Installing using pip (recommended) or easy_install
 --------------------------------------------------
@@ -21,6 +23,21 @@ both Selenium2Library **and** it's dependiences are installed.
 To install using pip, run::
 
     pip install robotframework-selenium2library
+
+The main benefit of using `pip` is that it automatically installs all
+dependencies needed by the library. Other nice features are easy upgrading
+and support for un-installation::
+
+    pip install --upgrade robotframework-selenium2library
+    pip uninstall robotframework-selenium2library
+
+Notice that using ``--upgrade`` above updates both the library and all
+its dependencies to the latest version. If you want, you can also install
+a specific version or upgrade only the Selenium tool used by the library::
+
+    pip install robotframework-selenium2library==1.8.0
+    pip install --upgrade selenium
+    pip install selenium==3.4.2
 
 Or alternately, if you only have `easy_install`_,::
 
@@ -49,7 +66,7 @@ to handle communicating with it.
 For more information about ``--proxy`` option and using pip with proxies
 in general see:
 
-- http://pip-installer.org/en/latest/usage.html
+- https://pip.pypa.io/en/stable/
 - http://stackoverflow.com/questions/9698557/how-to-use-pip-on-windows-behind-an-authenticating-proxy
 - http://stackoverflow.com/questions/14149422/using-pip-behind-a-proxy
 
@@ -96,7 +113,7 @@ The most common issue with installing Selenium2Library is missing dependencies. 
 
 indicates that you are missing the Robot Framework package.  To correct this problem try typing at the prompt::
 
-      pip_install robotframework
+      pip install robotframework
 
 Similarly if you receive "No module named ..." error message then you have another missing dependency.  To correct, use pip to install the missing package.
 
@@ -105,3 +122,4 @@ Similarly if you receive "No module named ..." error message then you have anoth
 .. _PyPI: https://pypi.python.org/pypi
 .. _pip: http://www.pip-installer.org
 .. _easy_install: http://pypi.python.org/pypi/setuptools
+.. _requirements.txt: https://github.com/robotframework/Selenium2Library/blob/master/requirements.txt

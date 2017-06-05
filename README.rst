@@ -44,20 +44,7 @@ The recommended installation method is using
 
     pip install robotframework-selenium2library
 
-The main benefit of using ``pip`` is that it automatically installs all
-dependencies needed by the library. Other nice features are easy upgrading
-and support for un-installation::
-
-    pip install --upgrade robotframework-selenium2library
-    pip uninstall robotframework-selenium2library
-
-Notice that using ``--upgrade`` above updates both the library and all
-its dependencies to the latest version. If you want, you can also install
-a specific version or upgrade only the Selenium tool used by the library::
-
-    pip install robotframework-selenium2library==1.4.1
-    pip install --upgrade selenium
-    pip install selenium==2.34
+For more information about installation and please see `INSTALL.rst`_.
 
 Usage
 -----
