@@ -187,7 +187,7 @@ class ElementFinder(ContextAware):
             key_attrs = self._key_attrs[None]
         xpath_criteria = escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
-        xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
+        xpath_constraints = self._get_xpath_constraints(constraints)
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
         xpath_searchers.extend(self._get_attrs_with_url(key_attrs, criteria))
         xpath = "//%s[%s%s(%s)]" % (
@@ -198,6 +198,17 @@ class ElementFinder(ContextAware):
         )
         return self._normalize_result(
             self.browser.find_elements_by_xpath(xpath))
+
+    def _get_xpath_constraints(self, constraints):
+        xpath_constraints = []
+        for name in constraints:
+            value = constraints[name]
+            if isinstance(value, list):
+                contraint = "@%s[. = '%s']" % (name, "' or . = '".join(value))
+            else:
+                contraint = "@%s='%s'" % (name, value)
+            xpath_constraints.append(contraint)
+        return xpath_constraints
 
     def _get_tag_and_constraints(self, tag):
         if tag is None:

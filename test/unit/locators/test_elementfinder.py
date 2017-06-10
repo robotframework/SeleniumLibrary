@@ -139,8 +139,10 @@ class ElementFinderTests(unittest.TestCase):
         self.ctx._browser.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='text field', required=False)
         verify(self.ctx._browser).find_elements_by_xpath(
-            "//input[@type='text' and (@id='test1' or @name='test1' or "
-            "@value='test1' or @src='test1' or "
+            "//input[@type[. = 'date' or . = 'datetime-local' or . = 'email' or "
+            ". = 'month' or . = 'number' or . = 'password' or . = 'search' or "
+            ". = 'tel' or . = 'text' or . = 'time' or . = 'url' or . = 'week'] and "
+            "(@id='test1' or @name='test1' or @value='test1' or @src='test1' or "
             "@src='http://localhost/test1')]")
 
     def test_find_with_button(self):
