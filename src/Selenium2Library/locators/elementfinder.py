@@ -253,9 +253,10 @@ class ElementFinder(ContextAware):
         if not element.tag_name.lower() == tag:
             return False
         for name in constraints:
-            if isinstance(constraints[name], list) and element.get_attribute(name) not in constraints[name]:
-                return False
-            if not element.get_attribute(name) == constraints[name]:
+            if isinstance(constraints[name], list):
+                if element.get_attribute(name) not in constraints[name]:
+                    return False
+            elif not element.get_attribute(name) == constraints[name]:
                 return False
         return True
 
