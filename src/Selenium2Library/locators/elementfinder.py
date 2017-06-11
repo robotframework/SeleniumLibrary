@@ -256,7 +256,7 @@ class ElementFinder(ContextAware):
             if isinstance(constraints[name], list):
                 if element.get_attribute(name) not in constraints[name]:
                     return False
-            elif not element.get_attribute(name) == constraints[name]:
+            elif element.get_attribute(name) != constraints[name]:
                 return False
         return True
 
