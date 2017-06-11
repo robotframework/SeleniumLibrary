@@ -200,15 +200,15 @@ class ElementFinder(ContextAware):
             self.browser.find_elements_by_xpath(xpath))
 
     def _get_xpath_constraints(self, constraints):
-        xpath_constraints = []
-        for name in constraints:
-            value = constraints[name]
-            if isinstance(value, list):
-                contraint = "@%s[. = '%s']" % (name, "' or . = '".join(value))
-            else:
-                contraint = "@%s='%s'" % (name, value)
-            xpath_constraints.append(contraint)
+        xpath_constraints = [self._get_xpath_constraint(name, value)
+                             for name, value in constraints.items()]
         return xpath_constraints
+
+    def _get_xpath_constraint(self, name, value):
+        if isinstance(value, list):
+            return "@%s[. = '%s']" % (name, "' or . = '".join(value))
+        else:
+            return "@%s='%s'" % (name, value)
 
     def _get_tag_and_constraints(self, tag):
         if tag is None:
