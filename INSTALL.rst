@@ -14,8 +14,13 @@ declared in `requirements.txt`_ with their minimum required versions. With the
 Selenium it might be possible that the Selenium2Library supports older versions,
 but older Selenium version are not tested by the development team.
 
-Installing using pip (recommended) or easy_install
---------------------------------------------------
+Selenium needs a browser specific driver to downloaded and placed in the
+operating system PATH variable. For more details about supported drivers and
+their downloads can be found from the selenium documentation:
+https://seleniumhq.github.io/selenium/docs/api/py/index.html#drivers
+
+Installing using pip
+--------------------
 
 Selenium2Library is available in the Python Package Index (PyPI_). It is
 recommended that you use `pip`_ to install. Using pip will ensure that
@@ -38,17 +43,6 @@ a specific version or upgrade only the Selenium tool used by the library::
     pip install robotframework-selenium2library==1.8.0
     pip install --upgrade selenium
     pip install selenium==3.4.2
-
-Or alternately, if you only have `easy_install`_,::
-
-    easy_install robotframework-selenium2library
-
-If you install Selenium2Library under Windows **and** you use easy_install,
-you will need to install Selenium2Library's dependencies seperately.
-To install the dependencies, run::
-
-    easy_install robotframework
-    easy_install selenium
 
 Once installation is completed, you should verify proper installation of
 Selenium2Library and it's dependencies. See `Verifying Installation` section
@@ -89,6 +83,11 @@ Note: In most linux systems, you need to have root privileges for installation.
 Uninstallation is achieved by deleting the installation directory and its
 contents from the file system. The default installation directory is
 `[PythonLibraries]/site-packages/Selenium2Library`.
+
+With resent versions of `pip` it is possible to perform the installation
+directly from the Selenium2Library GitHub repository. For more details about
+the `pip` vcs support, please refer to the pip documentation:
+https://pip.pypa.io/en/stable/reference/pip_install/#vcs-support
 
 Verifying Installation
 ----------------------
