@@ -145,9 +145,8 @@ class ScreenshotKeywords(LibraryComponent):
         filename = filename_template.format(
             index=self._get_screenshot_index(filename_template))
 
-        # Sorry for the gnarley regular expression.  it attempts to
-        # match python formatter syntax such as {index} or {index:...}
-        # but not {{index}} or # {{index:...}}
+        # try to match {index} but not {{index}} (plus handle
+        # other variants like {index!r})
         if re.search(r'(?<!{){index(![rs])?(:.*?)?}(?!})', filename_template):
             # make sure the computed filename doesn't exist. We only
             # do this if the template had the {index} formatting
