@@ -12,7 +12,7 @@ class LibraryComponent(ContextAware):
 
     def __init__(self, ctx):
         ContextAware.__init__(self, ctx)
-        self.element_finder = ElementFinder()
+        self.element_finder = ElementFinder(ctx)
 
     def info(self, msg, html=False):
         logger.info(msg, html)
@@ -32,7 +32,7 @@ class LibraryComponent(ContextAware):
     def element_find(self, locator, first_only=True, required=True, tag=None):
         if isinstance(locator, WebElement):
             return locator
-        elements = self.element_finder.find(self.browser, locator, tag)
+        elements = self.element_finder.find(locator, tag)
         if required and not elements:
             raise ValueError("Element locator '{}' did not match any "
                              "elements.".format(locator))

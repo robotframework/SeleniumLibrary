@@ -1,5 +1,7 @@
 import unittest
 
+from mockito import mock
+
 from Selenium2Library.locators.elementfinder import ElementFinder
 
 
@@ -7,7 +9,8 @@ class LocatorParserTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.parse = ElementFinder()._parse_locator
+        ctx = mock()
+        cls.parse = ElementFinder(ctx)._parse_locator
 
     def test_parse_xpath(self):
         prefix, criteria = self.parse('//foo/bar')

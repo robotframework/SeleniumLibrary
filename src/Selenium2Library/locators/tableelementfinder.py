@@ -7,7 +7,7 @@ class TableElementFinder(ContextAware):
 
     def __init__(self, ctx):
         ContextAware.__init__(self, ctx)
-        self._element_finder = ElementFinder()
+        self._element_finder = ElementFinder(ctx)
 
         self._locator_suffixes = {
             ('css', 'default'): [''],
@@ -95,7 +95,7 @@ class TableElementFinder(ContextAware):
 
     def _search_in_locators(self, locators, content):
         for locator in locators:
-            elements = self._element_finder.find(self.browser, locator)
+            elements = self._element_finder.find(locator)
             for element in elements:
                 if content is None:
                     return element
