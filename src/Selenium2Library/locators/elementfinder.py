@@ -2,11 +2,13 @@ from robot.api import logger
 from robot.utils import NormalizedDict
 
 from Selenium2Library.utils import escape_xpath_value, events
+from Selenium2Library.base import ContextAware
 
 
-class ElementFinder(object):
+class ElementFinder(ContextAware):
 
-    def __init__(self):
+    def __init__(self, ctx):
+        ContextAware.__init__(self, ctx)
         strategies = {
             'identifier': self._find_by_identifier,
             'id': self._find_by_id,
@@ -36,14 +38,14 @@ class ElementFinder(object):
                        'normalize-space(descendant-or-self::text())']
         }
 
-    def find(self, browser, locator, tag=None):
+    def find(self, locator, tag=None):
         prefix, criteria = self._parse_locator(locator)
         if prefix not in self._strategies:
             raise ValueError("Element locator with prefix '%s' "
                              "is not supported." % prefix)
         strategy = self._strategies.get(prefix)
         tag, constraints = self._get_tag_and_constraints(tag)
-        return strategy(browser, criteria, tag, constraints)
+        return strategy(criteria, tag, constraints)
 
     def register(self, strategy, persist):
         if strategy.name in self._strategies:
@@ -69,70 +71,73 @@ class ElementFinder(object):
     def has_strategy(self, strategy_name):
         return strategy_name in self.strategies
 
-    def _find_by_identifier(self, browser, criteria, tag, constraints):
-        elements = self._normalize_result(browser.find_elements_by_id(criteria))
-        elements.extend(self._normalize_result(browser.find_elements_by_name(criteria)))
+    def _find_by_identifier(self, criteria, tag, constraints):
+        elements = self._normalize_result(
+            self.browser.find_elements_by_id(criteria))
+        elements.extend(self._normalize_result(
+            self.browser.find_elements_by_name(criteria)))
         return self._filter_elements(elements, tag, constraints)
 
-    def _find_by_id(self, browser, criteria, tag, constraints):
+    def _find_by_id(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_id(criteria),
+            self.browser.find_elements_by_id(criteria),
             tag, constraints)
 
-    def _find_by_name(self, browser, criteria, tag, constraints):
+    def _find_by_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_name(criteria),
+            self.browser.find_elements_by_name(criteria),
             tag, constraints)
 
-    def _find_by_xpath(self, browser, criteria, tag, constraints):
+    def _find_by_xpath(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_xpath(criteria),
+            self.browser.find_elements_by_xpath(criteria),
             tag, constraints)
 
-    def _find_by_dom(self, browser, criteria, tag, constraints):
-        result = browser.execute_script("return %s;" % criteria)
+    def _find_by_dom(self, criteria, tag, constraints):
+        result = self.browser.execute_script("return %s;" % criteria)
         if result is None:
             return []
         if not isinstance(result, list):
             result = [result]
         return self._filter_elements(result, tag, constraints)
 
-    def _find_by_sizzle_selector(self, browser, criteria, tag, constraints):
+    def _find_by_sizzle_selector(self, criteria, tag, constraints):
         js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
         return self._filter_elements(
-            browser.execute_script(js),
+            self.browser.execute_script(js),
             tag, constraints)
 
-    def _find_by_link_text(self, browser, criteria, tag, constraints):
+    def _find_by_link_text(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_link_text(criteria),
+            self.browser.find_elements_by_link_text(criteria),
             tag, constraints)
 
-    def _find_by_partial_link_text(self, browser, criteria, tag, constraints):
+    def _find_by_partial_link_text(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_partial_link_text(criteria),
+            self.browser.find_elements_by_partial_link_text(criteria),
             tag, constraints)
 
-    def _find_by_css_selector(self, browser, criteria, tag, constraints):
+    def _find_by_css_selector(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_css_selector(criteria),
+            self.browser.find_elements_by_css_selector(criteria),
             tag, constraints)
 
-    def _find_by_class_name(self, browser, criteria, tag, constraints):
+    def _find_by_class_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_class_name(criteria),
+            self.browser.find_elements_by_class_name(criteria),
             tag, constraints)
 
-    def _find_by_tag_name(self, browser, criteria, tag, constraints):
+    def _find_by_tag_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_tag_name(criteria),
+            self.browser.find_elements_by_tag_name(criteria),
             tag, constraints)
 
-    def _find_by_sc_locator(self, browser, criteria, tag, constraints):
+    def _find_by_sc_locator(self, criteria, tag, constraints):
         js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
-        return self._filter_elements([browser.execute_script(js)], tag, constraints)
+        return self._filter_elements([self.browser.execute_script(js)],
+                                     tag, constraints)
 
-    def _find_by_default(self, browser, criteria, tag, constraints):
+    def _find_by_default(self, criteria, tag, constraints):
         if tag in self._key_attrs:
             key_attrs = self._key_attrs[tag]
         else:
@@ -141,15 +146,15 @@ class ElementFinder(object):
         xpath_tag = tag if tag is not None else '*'
         xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
-        xpath_searchers.extend(
-            self._get_attrs_with_url(key_attrs, criteria, browser))
+        xpath_searchers.extend(self._get_attrs_with_url(key_attrs, criteria))
         xpath = "//%s[%s%s(%s)]" % (
             xpath_tag,
             ' and '.join(xpath_constraints),
             ' and ' if xpath_constraints else '',
             ' or '.join(xpath_searchers)
         )
-        return self._normalize_result(browser.find_elements_by_xpath(xpath))
+        return self._normalize_result(
+            self.browser.find_elements_by_xpath(xpath))
 
     def _get_tag_and_constraints(self, tag):
         if tag is None:
@@ -201,20 +206,20 @@ class ElementFinder(object):
         if tag is None: return elements
         return [element for element in elements if self._element_matches(element, tag, constraints)]
 
-    def _get_attrs_with_url(self, key_attrs, criteria, browser):
+    def _get_attrs_with_url(self, key_attrs, criteria):
         attrs = []
         url = None
         xpath_url = None
         for attr in ['@src', '@href']:
             if attr in key_attrs:
                 if url is None or xpath_url is None:
-                    url = self._get_base_url(browser) + "/" + criteria
+                    url = self._get_base_url() + "/" + criteria
                     xpath_url = escape_xpath_value(url)
                 attrs.append("%s=%s" % (attr, xpath_url))
         return attrs
 
-    def _get_base_url(self, browser):
-        url = browser.current_url
+    def _get_base_url(self):
+        url = self.browser.current_url
         if '/' in url:
             url = '/'.join(url.split('/')[:-1])
         return url

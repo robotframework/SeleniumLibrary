@@ -13,7 +13,7 @@ class ElementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
-        self.element_finder = ElementFinder()
+        self.element_finder = ElementFinder(ctx)
         self.form_element = FormElementKeywords(ctx)
 
     @keyword

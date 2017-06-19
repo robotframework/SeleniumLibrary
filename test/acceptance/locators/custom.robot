@@ -48,7 +48,7 @@ Teardown Custom Locator
     Remove Location Strategy    custom
 
 Custom Locator Strategy
-    [Arguments]    ${browser}    ${criteria}    ${tag}    ${constraints}
+    [Arguments]    ${criteria}    ${tag}    ${constraints}
     [Documentation]    Custom Locator Strategy
     ${retVal}=    Execute Javascript    return window.document.getElementById('${criteria}') || [];
     [Return]    ${retVal}
