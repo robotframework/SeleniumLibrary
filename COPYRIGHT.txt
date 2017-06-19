@@ -1,5 +1,5 @@
 Copyright 2008-2011 Nokia Networks
-Copyright 2011-2016 Ryan Topac, Ed Manlove and contributors
+Copyright 2011-2016 Ryan Tomac, Ed Manlove and contributors
 Copyright 2016-     Robot Framework Foundation
 
 Licensed under the Apache License, Version 2.0 (the "License");
