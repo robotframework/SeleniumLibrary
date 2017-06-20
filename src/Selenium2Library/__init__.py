@@ -1,4 +1,6 @@
 import warnings
+import urllib
+import urlparse
 
 from .keywords import AlertKeywords
 from .keywords import BrowserManagementKeywords
@@ -15,6 +17,7 @@ from .robotlibcore import DynamicCore
 from .utils import BrowserCache
 from .utils import LibraryListener
 from .version import VERSION
+
 
 __version__ = VERSION
 
@@ -159,7 +162,8 @@ class Selenium2Library(DynamicCore):
                  timeout=5.0,
                  implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None):
+                 screenshot_root_directory=None, 
+                 domain_tracking=False):
 
         """Selenium2Library can be imported with optional arguments.
 
@@ -196,6 +200,8 @@ class Selenium2Library(DynamicCore):
         self._speed_in_secs = 0.0
         self._timeout_in_secs = 5.0
         self._implicit_wait_in_secs = 5.0
+        self._domains_visited = set()
+        self._domain_tracking = domain_tracking
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -218,14 +224,25 @@ class Selenium2Library(DynamicCore):
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
 
     def run_keyword(self, name, args, kwargs):
+        if self._domain_tracking:
+            self._record_current_domain()
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
             RunOnFailureKeywords(self).run_on_failure()
             raise
 
+    def _record_current_domain(self):
+        try:
+            uri = urlparse.urlsplit(self.get_location())
+            if uri.netloc:
+                self._domains_visited.add('{uri.scheme}://{uri.netloc}/'.format(uri=uri))
+        except:
+            pass   
+
     def register_browser(self, browser, alias):
         return self._browsers.register(browser, alias)
+
 
     @property
     def _browser(self):
@@ -245,3 +262,7 @@ class Selenium2Library(DynamicCore):
                       'use "Selenium2Library.browser" instead.',
                       DeprecationWarning)
         return self.browser
+
+    def _get_domains_visited(self):
+        assert(self._domain_tracking, "Must enable domain tracking to get the domains visited.")
+        return self._domains_visited

@@ -13,6 +13,9 @@ from Selenium2Library.locators.elementfinder import ElementFinder
 from Selenium2Library.locators.windowmanager import WindowManager
 from Selenium2Library.robotlibcore import keyword
 
+from robot.api import logger
+
+
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
@@ -62,6 +65,32 @@ class BrowserManagementKeywords(LibraryComponent):
             self.debug('Closing browser with session '
                        'id {}'.format(self.browsers.current.session_id))
             self.browsers.close()
+
+    @keyword
+    def delete_all_cookies_across_all_domains(self):
+        """ Deletes cookies fom all unique domains visited. """
+        if not self.ctx._domain_tracking:
+            raise AssertionError("Cannot use this keyword when domain tracking is not enabled.")
+        self.ctx._domain_tracking = False
+        for domain in self.ctx._domains_visited:
+            self.go_to(domain)
+            self.browser.delete_all_cookies()
+        self.ctx._domains_visited = set()
+        self.ctx_domain_tracking = True
+
+    @keyword
+    def get_domains_visited(self):
+        """ Returns a list of unique domains visited. """
+        if not self.ctx._domain_tracking:
+            raise AssertionError("Cannot use this keyword when domain tracking is not enabled.")
+        return self.ctx._domains_visited
+
+    @keyword
+    def clear_domains_visited(self):
+        """ Clears the list of unique domains visited. """
+        if not self.ctx._domain_tracking:
+            raise AssertionError("Cannot use this keyword when domain tracking is not enabled.")
+        self.ctx._domains_visited = set()
 
     @keyword
     def open_browser(
