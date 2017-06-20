@@ -2,8 +2,8 @@ from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 
-from Selenium2Library.utils import escape_xpath_value, events
 from Selenium2Library.base import ContextAware
+from Selenium2Library.utils import escape_xpath_value, events
 
 
 class ElementFinder(ContextAware):
@@ -39,7 +39,7 @@ class ElementFinder(ContextAware):
                        'normalize-space(descendant-or-self::text())']
         }
 
-    def find(self, locator, first_only=True, required=True, tag=None):
+    def find(self, locator, tag=None, first_only=True, required=True):
         if isinstance(locator, WebElement):
             return locator
         prefix, criteria = self._parse_locator(locator)
@@ -58,8 +58,35 @@ class ElementFinder(ContextAware):
             return elements[0]
         return elements
 
+    def assert_page_contains(self, locator, tag=None, message=None,
+                             loglevel='INFO'):
+        element_name = tag if tag else 'element'
+        if not self.find(locator, tag, required=False):
+            if not message:
+                message = (
+                    "Page should have contained %s "
+                    "'%s' but did not" % (element_name, locator)
+                )
+            self.ctx.log_source(loglevel)  # TODO: Could this moved to base
+            raise AssertionError(message)
+        logger.info("Current page contains %s '%s'." % (element_name, locator))
+
+    def assert_page_not_contains(self, locator, tag=None, message=None,
+                                 loglevel='INFO'):
+        element_name = tag if tag else 'element'
+        if self.find(locator, tag, required=False):
+            if not message:
+                message = (
+                    "Page should not have contained %s '%s'"
+                    % (element_name, locator)
+                )
+            self.ctx.log_source(loglevel)  # TODO: Could this moved to base
+            raise AssertionError(message)
+        logger.info("Current page does not contain %s '%s'."
+                    % (element_name, locator))
+
     def get_value(self, locator, tag=None):
-        element = self.find(locator, required=False, tag=tag)
+        element = self.find(locator, tag, required=False)
         return element.get_attribute('value') if element else None
 
     def register(self, strategy, persist):

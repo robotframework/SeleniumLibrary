@@ -6,8 +6,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.libraries.BuiltIn import RobotNotRunningError
 from robot.utils import get_link_path
 
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.robotlibcore import keyword
+from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.utils import events
 
 

@@ -1,7 +1,6 @@
 from robot.libraries.BuiltIn import BuiltIn
 
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.robotlibcore import keyword
+from Selenium2Library.base import LibraryComponent, keyword
 
 
 class RunOnFailureKeywords(LibraryComponent):

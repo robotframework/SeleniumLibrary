@@ -8,10 +8,8 @@ from robot.utils import secs_to_timestr, timestr_to_secs
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.locators.elementfinder import ElementFinder
+from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.locators.windowmanager import WindowManager
-from Selenium2Library.robotlibcore import keyword
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -40,7 +38,6 @@ class BrowserManagementKeywords(LibraryComponent):
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
         self._window_manager = WindowManager()
-        self.element_finder = ElementFinder(ctx)
 
     @keyword
     def close_all_browsers(self):
@@ -305,7 +302,7 @@ class BrowserManagementKeywords(LibraryComponent):
         details about locating elements.
         """
         self.info("Selecting frame '%s'." % locator)
-        element = self.element_finder.find(locator)
+        element = self.find_element(locator)
         self.browser.switch_to.frame(element)
 
     @keyword

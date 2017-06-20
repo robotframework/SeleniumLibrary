@@ -1,16 +1,13 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.locators.elementfinder import ElementFinder
-from Selenium2Library.robotlibcore import keyword
+from Selenium2Library.base import LibraryComponent, keyword
 
 
 class SelectElementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
-        self.element_finder = ElementFinder(ctx)
 
     @keyword
     def get_list_items(self, locator, value=False):
@@ -140,7 +137,7 @@ class SelectElementKeywords(LibraryComponent):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self.page_contains_element(locator, 'list', message, loglevel)
+        self.assert_page_contains(locator, 'list', message, loglevel)
 
     @keyword
     def page_should_not_contain_list(self, locator, message='', loglevel='INFO'):
@@ -152,7 +149,7 @@ class SelectElementKeywords(LibraryComponent):
         Key attributes for lists are `id` and `name`. See `introduction` for
         details about locating elements.
         """
-        self.page_not_contains_element(locator, 'list', message, loglevel)
+        self.assert_page_not_contains(locator, 'list', message, loglevel)
 
     @keyword
     def select_all_from_list(self, locator):
@@ -382,7 +379,7 @@ class SelectElementKeywords(LibraryComponent):
         return labels
 
     def _get_select_list(self, locator):
-        el = self.element_finder.find(locator, tag='select')
+        el = self.find_element(locator, tag='select')
         return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):

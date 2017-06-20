@@ -1,5 +1,6 @@
 import warnings
 
+from .base import DynamicCore
 from .keywords import AlertKeywords
 from .keywords import BrowserManagementKeywords
 from .keywords import CookieKeywords
@@ -11,12 +12,12 @@ from .keywords import ScreenshotKeywords
 from .keywords import SelectElementKeywords
 from .keywords import TableElementKeywords
 from .keywords import WaitingKeywords
-from .robotlibcore import DynamicCore
+from .locators import ElementFinder
 from .utils import BrowserCache
 from .utils import LibraryListener
-from .version import VERSION
 
-__version__ = VERSION
+
+__version__ = '3.0.0.dev1'
 
 
 class Selenium2Library(DynamicCore):
@@ -153,7 +154,7 @@ class Selenium2Library(DynamicCore):
     """
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
-    ROBOT_LIBRARY_VERSION = VERSION
+    ROBOT_LIBRARY_VERSION = __version__
 
     def __init__(self,
                  timeout=5.0,
@@ -216,6 +217,7 @@ class Selenium2Library(DynamicCore):
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
+        self.element_finder = ElementFinder(self)
 
     def run_keyword(self, name, args, kwargs):
         try:

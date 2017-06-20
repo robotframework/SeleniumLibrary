@@ -1,7 +1,5 @@
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.locators.elementfinder import ElementFinder
+from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.locators import TableElementFinder
-from Selenium2Library.robotlibcore import keyword
 
 
 class TableElementKeywords(LibraryComponent):
@@ -9,7 +7,6 @@ class TableElementKeywords(LibraryComponent):
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
         self._table_element_finder = TableElementFinder(ctx)
-        self.element_finder = ElementFinder(ctx)
 
     @keyword
     def get_table_cell(self, table_locator, row, column, loglevel='INFO'):
