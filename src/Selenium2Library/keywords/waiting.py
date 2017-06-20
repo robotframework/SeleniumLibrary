@@ -3,6 +3,7 @@ import time
 from robot.utils import secs_to_timestr, timestr_to_secs
 
 from Selenium2Library.base import LibraryComponent
+from Selenium2Library.locators.elementfinder import ElementFinder
 from Selenium2Library.keywords.element import ElementKeywords
 from Selenium2Library.robotlibcore import keyword
 
@@ -12,6 +13,7 @@ class WaitingKeywords(LibraryComponent):
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
         self.element = ElementKeywords(ctx)
+        self.element_finder = ElementFinder(ctx)
 
     @keyword
     def wait_for_condition(self, condition, timeout=None, error=None):
@@ -92,7 +94,7 @@ class WaitingKeywords(LibraryComponent):
         Keyword Succeeds`.
         """
         def is_element_present(locator):
-            return self.element_find(locator, required=False) is not None
+            return self.element_finder.find(locator, required=False) is not None
         if not error:
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, is_element_present, locator)
@@ -112,7 +114,7 @@ class WaitingKeywords(LibraryComponent):
         Keyword Succeeds`.
         """
         def check_present():
-            present = self.element_find(locator, required=False)
+            present = self.element_finder.find(locator, required=False)
             if not present:
                 return
             else:
@@ -182,7 +184,7 @@ class WaitingKeywords(LibraryComponent):
         Succeeds`.
         """
         def check_enabled():
-            element = self.element_find(locator, required=False)
+            element = self.element_finder.find(locator, required=False)
             if not element:
                 return error or "Element locator '%s' did not match any elements after %s" % (locator, self._format_timeout(timeout))
 
@@ -208,7 +210,7 @@ class WaitingKeywords(LibraryComponent):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
-        element = self.element_find(locator)
+        element = self.element_finder.find(locator)
         def check_text():
             actual = element.text
             if text in actual:
@@ -232,7 +234,7 @@ class WaitingKeywords(LibraryComponent):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
-        element = self.element_find(locator)
+        element = self.element_finder.find(locator)
         def check_text():
             actual = element.text
             if text not in actual:

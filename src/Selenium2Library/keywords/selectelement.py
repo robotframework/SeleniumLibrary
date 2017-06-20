@@ -2,10 +2,15 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
 from Selenium2Library.base import LibraryComponent
+from Selenium2Library.locators.elementfinder import ElementFinder
 from Selenium2Library.robotlibcore import keyword
 
 
 class SelectElementKeywords(LibraryComponent):
+
+    def __init__(self, ctx):
+        LibraryComponent.__init__(self, ctx)
+        self.element_finder = ElementFinder(ctx)
 
     @keyword
     def get_list_items(self, locator, value=False):
@@ -377,7 +382,7 @@ class SelectElementKeywords(LibraryComponent):
         return labels
 
     def _get_select_list(self, locator):
-        el = self.element_find(locator, tag='select')
+        el = self.element_finder.find(locator, tag='select')
         return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):

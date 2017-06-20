@@ -1,5 +1,6 @@
 from robot.api import logger
 from robot.utils import NormalizedDict
+from selenium.webdriver.remote.webelement import WebElement
 
 from Selenium2Library.utils import escape_xpath_value, events
 from Selenium2Library.base import ContextAware
@@ -38,14 +39,28 @@ class ElementFinder(ContextAware):
                        'normalize-space(descendant-or-self::text())']
         }
 
-    def find(self, locator, tag=None):
+    def find(self, locator, first_only=True, required=True, tag=None):
+        if isinstance(locator, WebElement):
+            return locator
         prefix, criteria = self._parse_locator(locator)
         if prefix not in self._strategies:
             raise ValueError("Element locator with prefix '%s' "
                              "is not supported." % prefix)
         strategy = self._strategies.get(prefix)
         tag, constraints = self._get_tag_and_constraints(tag)
-        return strategy(criteria, tag, constraints)
+        elements = strategy(criteria, tag, constraints)
+        if required and not elements:
+            raise ValueError("Element locator '{}' did not match any "
+                             "elements.".format(locator))
+        if first_only:
+            if not elements:
+                return None
+            return elements[0]
+        return elements
+
+    def get_value(self, locator, tag=None):
+        element = self.find(locator, required=False, tag=tag)
+        return element.get_attribute('value') if element else None
 
     def register(self, strategy, persist):
         if strategy.name in self._strategies:
