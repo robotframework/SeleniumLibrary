@@ -1,4 +1,3 @@
-# TODO: Move back to base when updating ElementFinder use ctx
 class ContextAware(object):
 
     def __init__(self, ctx):

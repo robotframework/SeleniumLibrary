@@ -1,4 +1,4 @@
-from Selenium2Library.context import ContextAware
+from Selenium2Library.base import ContextAware
 
 from .elementfinder import ElementFinder
 

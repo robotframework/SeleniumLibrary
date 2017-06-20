@@ -1,15 +1,12 @@
 import os
 
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.locators.elementfinder import ElementFinder
-from Selenium2Library.robotlibcore import keyword
+from Selenium2Library.base import LibraryComponent, keyword
 
 
 class FormElementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
-        self.element_finder = ElementFinder(ctx)
 
     @keyword
     def submit_form(self, locator=None):
@@ -22,7 +19,7 @@ class FormElementKeywords(LibraryComponent):
         self.info("Submitting form '%s'." % locator)
         if not locator:
             locator = 'xpath=//form'
-        element = self.element_finder.find(locator, tag='form')
+        element = self.find_element(locator, tag='form')
         element.submit()
 
     @keyword
@@ -61,7 +58,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for checkboxes are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_contains_element(locator, 'checkbox', message, loglevel)
+        self.assert_page_contains(locator, 'checkbox', message, loglevel)
 
     @keyword
     def page_should_not_contain_checkbox(self, locator, message='', loglevel='INFO'):
@@ -73,7 +70,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for checkboxes are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_not_contains_element(locator, 'checkbox', message, loglevel)
+        self.assert_page_not_contains(locator, 'checkbox', message, loglevel)
 
     @keyword
     def select_checkbox(self, locator):
@@ -111,7 +108,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for radio buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self.page_contains_element(locator, 'radio button', message, loglevel)
+        self.assert_page_contains(locator, 'radio button', message, loglevel)
 
     @keyword
     def page_should_not_contain_radio_button(self, locator, message='', loglevel='INFO'):
@@ -123,8 +120,8 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for radio buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(locator, 'radio button', message,
-                                       loglevel)
+        self.assert_page_not_contains(locator, 'radio button', message,
+                                      loglevel)
 
     @keyword
     def radio_button_should_be_set_to(self, group_name, value):
@@ -192,7 +189,7 @@ class FormElementKeywords(LibraryComponent):
         if not os.path.isfile(file_path):
             raise AssertionError("File '%s' does not exist on the local file system"
                                  % file_path)
-        self.element_finder.find(locator).send_keys(file_path)
+        self.find_element(locator).send_keys(file_path)
 
     @keyword
     def input_password(self, locator, text):
@@ -224,7 +221,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_contains_element(locator, 'text field', message, loglevel)
+        self.assert_page_contains(locator, 'text field', message, loglevel)
 
     @keyword
     def page_should_not_contain_textfield(self, locator, message='', loglevel='INFO'):
@@ -236,7 +233,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        self.page_not_contains_element(locator, 'text field', message, loglevel)
+        self.assert_page_not_contains(locator, 'text field', message, loglevel)
 
     @keyword
     def textfield_should_contain(self, locator, expected, message=''):
@@ -264,11 +261,10 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        element = self.element_finder.find(locator, required=False,
-                                           tag='text field')
+        element = self.find_element(locator, tag='text field', required=False)
         if not element:
-            element = self.element_finder.find(locator, required=False,
-                                               tag='file upload')
+            element = self.find_element(locator, tag='file upload',
+                                        required=False)
         actual = element.get_attribute('value') if element else None
         if actual != expected:
             if not message:
@@ -325,10 +321,9 @@ class FormElementKeywords(LibraryComponent):
         `introduction` for details about locating elements.
         """
         self.info("Clicking button '%s'." % locator)
-        element = self.element_finder.find(locator, required=False,
-                                           tag='input')
+        element = self.find_element(locator, tag='input', required=False)
         if element is None:
-            element = self.element_finder.find(locator, tag='button')
+            element = self.find_element(locator, tag='button')
         element.click()
 
     @keyword
@@ -344,9 +339,9 @@ class FormElementKeywords(LibraryComponent):
         `introduction` for details about locating elements.
         """
         try:
-            self.page_contains_element(locator, 'input', message, loglevel)
+            self.assert_page_contains(locator, 'input', message, loglevel)
         except AssertionError:
-            self.page_contains_element(locator, 'button', message, loglevel)
+            self.assert_page_contains(locator, 'button', message, loglevel)
 
     @keyword
     def page_should_not_contain_button(self, locator, message='', loglevel='INFO'):
@@ -360,22 +355,22 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for buttons are `id`, `name` and `value`. See
         `introduction` for details about locating elements.
         """
-        self.page_not_contains_element(locator, 'button', message, loglevel)
-        self.page_not_contains_element(locator, 'input', message, loglevel)
+        self.assert_page_not_contains(locator, 'button', message, loglevel)
+        self.assert_page_not_contains(locator, 'input', message, loglevel)
 
     def _get_checkbox(self, locator):
-        return self.element_finder.find(locator, tag='input')
+        return self.find_element(locator, tag='input')
 
     def _get_radio_buttons(self, group_name):
         xpath = "xpath=//input[@type='radio' and @name='%s']" % group_name
         self.debug('Radio group locator: ' + xpath)
-        return self.element_finder.find(xpath, first_only=False)
+        return self.find_element(xpath, first_only=False)
 
     def _get_radio_button_with_value(self, group_name, value):
         xpath = "xpath=//input[@type='radio' and @name='%s' and (@value='%s' or @id='%s')]" \
                  % (group_name, value, value)
         self.debug('Radio group locator: ' + xpath)
-        return self.element_finder.find(xpath)
+        return self.find_element(xpath)
 
     def _get_value_from_radio_buttons(self, elements):
         for element in elements:
@@ -384,7 +379,7 @@ class FormElementKeywords(LibraryComponent):
         return None
 
     def _input_text_into_text_field(self, locator, text):
-        element = self.element_finder.find(locator)
+        element = self.find_element(locator)
         element.clear()
         element.send_keys(text)
 

@@ -5,7 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from Selenium2Library.base import LibraryComponent
-from Selenium2Library.robotlibcore import keyword
+from Selenium2Library.base import keyword
 
 
 class AlertKeywords(LibraryComponent):
