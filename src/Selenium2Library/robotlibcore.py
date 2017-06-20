@@ -37,33 +37,34 @@ except ImportError:  # Support RF < 2.9
 
 PY2 = sys.version_info < (3,)
 
-__version__ = '1.0rc1'
+__version__ = '1.0rc2'
 
 
 class HybridCore(object):
 
-    def __init__(self, libraries):
-        self.keywords = dict(self._find_keywords(*libraries))
-        self.keywords.update(self._find_keywords(self))
+    def __init__(self, library_components):
+        self.keywords = {}
+        self.add_library_components(library_components)
+        self.add_library_components([self])
 
-    def _find_keywords(self, *libraries):
-        for library in libraries:
-            for name, func in self._get_members(library):
+    def add_library_components(self, library_components):
+        for component in library_components:
+            for name, func in self._get_members(component):
                 if callable(func) and hasattr(func, 'robot_name'):
                     kw_name = func.robot_name or name
-                    yield kw_name, getattr(library, name)
+                    self.keywords[kw_name] = getattr(component, name)
 
-    def _get_members(self, library):
-        if inspect.ismodule(library):
-            return inspect.getmembers(library)
-        if inspect.isclass(library):
+    def _get_members(self, component):
+        if inspect.ismodule(component):
+            return inspect.getmembers(component)
+        if inspect.isclass(component):
             raise TypeError('Libraries must be modules or instances, got '
-                            'class {!r} instead.'.format(library.__name__))
-        if type(library) != library.__class__:
+                            'class {!r} instead.'.format(component.__name__))
+        if type(component) != component.__class__:
             raise TypeError('Libraries must be modules or new-style class '
                             'instances, got old-style class {!r} instead.'
-                            .format(library.__class__.__name__))
-        return self._get_members_from_instannce(library)
+                            .format(component.__class__.__name__))
+        return self._get_members_from_instannce(component)
 
     def _get_members_from_instannce(self, instance):
         # Avoid calling properties by getting members from class, not instance.
