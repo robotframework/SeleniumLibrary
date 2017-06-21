@@ -13,13 +13,13 @@ class WindowManager(object):
         }
 
     def get_window_ids(self, browser):
-        return [ window_info[1] for window_info in self._get_window_infos(browser) ]
+        return [window_info[1] for window_info in self._get_window_infos(browser)]
 
     def get_window_names(self, browser):
-        return [ window_info[2] for window_info in self._get_window_infos(browser) ]
+        return [window_info[2] for window_info in self._get_window_infos(browser)]
 
     def get_window_titles(self, browser):
-        return [ window_info[3] for window_info in self._get_window_infos(browser) ]
+        return [window_info[3] for window_info in self._get_window_infos(browser)]
 
     def select(self, browser, locator):
         assert browser is not None
@@ -35,7 +35,8 @@ class WindowManager(object):
         (prefix, criteria) = self._parse_locator(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:
-            raise ValueError("Window locator with prefix '" + prefix + "' is not supported")
+            raise ValueError("Window locator with prefix '{}' is not supported"
+                             .format(prefix))
         return strategy(browser, criteria)
 
     # Strategy routines, private
@@ -76,17 +77,22 @@ class WindowManager(object):
                     return
         if starting_handle:
             browser.switch_to.window(starting_handle)
-        raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
+        raise ValueError("Unable to locate window with handle or name or "
+                         "title or URL '{}'".format(criteria))
 
     def _select_by_last_index(self, browser):
         handles = browser.window_handles
         try:
             if handles[-1] == browser.current_window_handle:
-                raise AssertionError("No new window at last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}' to find it.")
+                raise AssertionError("No new window at last index. Please use "
+                                     "'@{ex}= | List Windows' + new window "
+                                     "trigger + 'Select Window | ${ex}' to "
+                                     "find it.")
         except IndexError:
             raise AssertionError("No window found")
         except NoSuchWindowException:
-            raise AssertionError("Currently no focus window. where are you making a popup window?")
+            raise AssertionError("Currently no focus window. where are you "
+                                 "making a popup window?")
         browser.switch_to.window(handles[-1])
 
     def _select_by_excludes(self, browser, excludes):
@@ -95,8 +101,6 @@ class WindowManager(object):
                 browser.switch_to.window(handle)
                 return
         raise ValueError("Unable to locate new window")
-
-    # Private
 
     def _parse_locator(self, locator):
         prefix = None
@@ -141,9 +145,10 @@ class WindowManager(object):
 
     def _get_current_window_info(self, browser):
         try:
-            id_, name = browser.execute_script("return [ window.id, window.name ];")
+            id_, name = browser.execute_script("return [ window.id, "
+                                               "window.name ];")
         except WebDriverException:
-            # The webdriver implementation doesn't support Javascript so we
+            # If the webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
             id_ = None
             name = ''
