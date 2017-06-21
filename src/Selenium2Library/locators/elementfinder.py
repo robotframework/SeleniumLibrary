@@ -1,3 +1,5 @@
+import copy
+
 from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
@@ -29,6 +31,7 @@ class ElementFinder(ContextAware):
         self._strategies = NormalizedDict(initial=strategies, caseless=True,
                                           spaceless=True)
         self._default_strategies = list(strategies)
+        self._original_strategies = copy.deepcopy(self._default_strategies)
         self._key_attrs = {
             None: ['@id', '@name'],
             'a': ['@id', '@name', '@href',
@@ -48,7 +51,10 @@ class ElementFinder(ContextAware):
                              "is not supported." % prefix)
         strategy = self._strategies.get(prefix)
         tag, constraints = self._get_tag_and_constraints(tag)
-        elements = strategy(criteria, tag, constraints)
+        if prefix in self._original_strategies:
+            elements = strategy(criteria, tag, constraints)
+        else:
+            elements = strategy(self.browser, criteria, tag, constraints)
         if required and not elements:
             raise ValueError("Element locator '{}' did not match any "
                              "elements.".format(locator))
