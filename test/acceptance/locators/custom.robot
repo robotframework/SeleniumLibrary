@@ -40,15 +40,12 @@ Ensure Locators Can Persist
 *** Keywords ***
 Setup Custom Locator
     [Arguments]    ${persist}=${EMPTY}
-    [Documentation]    Setup Custom Locator
     Add Location Strategy    custom    Custom Locator Strategy    persist=${persist}
 
 Teardown Custom Locator
-    [Documentation]    Teardown Custom Locator
     Remove Location Strategy    custom
 
 Custom Locator Strategy
-    [Arguments]    ${criteria}    ${tag}    ${constraints}
-    [Documentation]    Custom Locator Strategy
+    [Arguments]    ${browser}    ${criteria}    ${tag}    ${constraints}
     ${retVal}=    Execute Javascript    return window.document.getElementById('${criteria}') || [];
     [Return]    ${retVal}
