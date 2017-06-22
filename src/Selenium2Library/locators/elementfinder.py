@@ -97,7 +97,6 @@ class ElementFinder(ContextAware):
                                "A locator of that name already exists."
                                % strategy.name)
         self._strategies[strategy.name] = strategy.find
-
         if not persist:
             # Unregister after current scope ends
             events.on('scope_end', 'current', self.unregister, strategy.name)
