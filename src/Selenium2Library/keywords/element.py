@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 
 from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.keywords.formelement import FormElementKeywords
-from Selenium2Library.locators.customlocator import CustomLocator
 from Selenium2Library.utils import escape_xpath_value
 
 
@@ -716,16 +715,18 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
-        """Adds a custom location strategy based on a user keyword. Location strategies are
-        automatically removed after leaving the current scope by default. Setting `persist`
-        to any non-empty string will cause the location strategy to stay registered throughout
-        the life of the test.
+        """Adds a custom location strategy based on a keyword.
 
-        Trying to add a custom location strategy with the same name as one that already exists will
-        cause the keyword to fail.
+        Location strategies are automatically removed after leaving the current
+        scope by default. Setting `persist` to Python True will cause the
+        location strategy to stay registered throughout the life of the test.
+
+        Trying to add a custom location strategy with the same name as one that
+        already exists will cause the keyword to fail.
 
         Custom locator keyword example:
-        | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
+        | Custom Locator Strategy |
+        |   | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
         |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
         |   | [Return] | ${retVal} |
 
@@ -733,14 +734,15 @@ return !element.dispatchEvent(evt);
         | Add Location Strategy | custom | Custom Locator Strategy |
         | Page Should Contain Element | custom=my_id |
 
-        See `Remove Location Strategy` for details about removing a custom location strategy.
+        See `Remove Location Strategy` for details about removing a custom
+        location strategy.
         """
-        strategy = CustomLocator(strategy_name, strategy_keyword)
-        self.element_finder.register(strategy, persist)
+        self.element_finder.register(strategy_name, strategy_keyword, persist)
 
     @keyword
     def remove_location_strategy(self, strategy_name):
         """Removes a previously added custom location strategy.
+
         Will fail if a default strategy is specified.
 
         See `Add Location Strategy` for details about adding a custom location strategy.
