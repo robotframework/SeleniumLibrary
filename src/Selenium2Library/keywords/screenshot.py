@@ -74,24 +74,31 @@ class ScreenshotKeywords(LibraryComponent):
         exists, screenshot-2.png will be tried, and so on, until a
         unique name is found.
 
+        *Note: The keyword "Should Be Equal" in the following examples do not
+        compare the contents of ${file1} and
+        ${${OUTPUTDIR}${/}selenium-screenshot-1.png}, and only compares the
+        names of the screenshots for equality. In other words, "Should Be Equal"
+        cannot be used to compare screenshots directly. Hence, the keyword will
+        fail in these scenarios.
+
         Example 1:
         | ${file1} = | Capture Page Screenshot |
         | File Should Exist | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
-        | Should Be Equal | ${file1} | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
+        | Should Be Equal* | ${file1} | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
         | ${file2} = | Capture Page Screenshot |
         | File Should Exist | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
-        | Should Be Equal | ${file2} | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
+        | Should Be Equal* | ${file2} | ${OUTPUTDIR}${/}selenium-screenshot-2.png |
 
         Example 2:
         | ${file1} = | Capture Page Screenshot | ${OTHER_DIR}${/}other-{index}-name.png |
         | ${file2} = | Capture Page Screenshot | ${OTHER_DIR}${/}some-other-name-{index}.png |
         | ${file3} = | Capture Page Screenshot | ${OTHER_DIR}${/}other-{index}-name.png |
         | File Should Exist | ${OTHER_DIR}${/}other-1-name.png |
-        | Should Be Equal | ${file1} | ${OTHER_DIR}${/}other-1-name.png |
+        | Should Be Equal* | ${file1} | ${OTHER_DIR}${/}other-1-name.png |
         | File Should Exist | ${OTHER_DIR}${/}some-other-name-1.png |
-        | Should Be Equal | ${file2} | ${OTHER_DIR}${/}some-other-name-1.png |
+        | Should Be Equal* | ${file2} | ${OTHER_DIR}${/}some-other-name-1.png |
         | File Should Exist | ${OTHER_DIR}${/}other-2-name.png |
-        | Should Be Equal | ${file3} | ${OTHER_DIR}${/}other-2-name.png |
+        | Should Be Equal* | ${file3} | ${OTHER_DIR}${/}other-2-name.png |
 
         Example 3:
         | Capture Page Screenshot | ${OTHER_DIR}${/}sc-{index:06}.png |
