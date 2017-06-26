@@ -2,8 +2,8 @@ from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 
+from .customlocator import CustomLocator
 from Selenium2Library.base import ContextAware
-from Selenium2Library.locators.customlocator import CustomLocator
 from Selenium2Library.utils import escape_xpath_value, events
 
 
