@@ -22,7 +22,7 @@ matrix:
     - python: "3.6" # For PR and cron
       env:
         - BROWSER=chrome
-        - SELENIUM=3.4.2
+        - SELENIUM=3.4.3
         - ROBOTFRAMEWORK=3.0.2
     - python: "2.7" # For PR and cron
       env:
@@ -32,7 +32,7 @@ matrix:
     - python: "2.7" # For PR and cron
       env:
         - BROWSER=chrome
-        - SELENIUM=3.4.2
+        - SELENIUM=3.4.3
         - ROBOTFRAMEWORK=2.8.7
     - python: "3.3" # For PR and cron
       env:
@@ -42,7 +42,7 @@ matrix:
     - python: "3.3" # For cron only
       env:
         - BROWSER=firefox
-        - SELENIUM=3.4.2
+        - SELENIUM=3.4.3
         - ROBOTFRAMEWORK=3.0.2
 before_script:
   - "export DISPLAY=:99.0"
