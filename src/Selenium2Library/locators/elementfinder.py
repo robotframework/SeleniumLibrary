@@ -187,7 +187,7 @@ class ElementFinder(ContextAware):
             key_attrs = self._key_attrs[None]
         xpath_criteria = escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
-        xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
+        xpath_constraints = self._get_xpath_constraints(constraints)
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
         xpath_searchers.extend(self._get_attrs_with_url(key_attrs, criteria))
         xpath = "//%s[%s%s(%s)]" % (
@@ -198,6 +198,17 @@ class ElementFinder(ContextAware):
         )
         return self._normalize_result(
             self.browser.find_elements_by_xpath(xpath))
+
+    def _get_xpath_constraints(self, constraints):
+        xpath_constraints = [self._get_xpath_constraint(name, value)
+                             for name, value in constraints.items()]
+        return xpath_constraints
+
+    def _get_xpath_constraint(self, name, value):
+        if isinstance(value, list):
+            return "@%s[. = '%s']" % (name, "' or . = '".join(value))
+        else:
+            return "@%s='%s'" % (name, value)
 
     def _get_tag_and_constraints(self, tag):
         if tag is None:
@@ -220,7 +231,9 @@ class ElementFinder(ContextAware):
             constraints['type'] = 'checkbox'
         elif tag == 'text field':
             tag = 'input'
-            constraints['type'] = 'text'
+            constraints['type'] = ['date', 'datetime-local', 'email', 'month',
+                                   'number', 'password', 'search', 'tel',
+                                   'text', 'time', 'url', 'week']
         elif tag == 'file upload':
             tag = 'input'
             constraints['type'] = 'file'
@@ -240,7 +253,10 @@ class ElementFinder(ContextAware):
         if not element.tag_name.lower() == tag:
             return False
         for name in constraints:
-            if not element.get_attribute(name) == constraints[name]:
+            if isinstance(constraints[name], list):
+                if element.get_attribute(name) not in constraints[name]:
+                    return False
+            elif element.get_attribute(name) != constraints[name]:
                 return False
         return True
 

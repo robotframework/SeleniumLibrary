@@ -226,26 +226,39 @@ Page Should Contain TextField
     [Documentation]    Page Should Contain TextField
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Contain Text Field    name
+    Page Should Contain Text Field    website
     Page Should Contain Text Field    xpath=//input[@type='text' and @name='email']
+    Page Should Contain Text Field    xpath=//input[@type='url' and @name='website']
     Run Keyword And Expect Error    Page should have contained text field 'non-existing' but did not
     ...    Page Should Contain Text Field    non-existing
+    Run Keyword And Expect Error    Page should have contained text field 'can_send_email' but did not
+    ...    Page Should Contain Text Field    can_send_email
 
 Page Should Not Contain Text Field
     [Documentation]    Page Should Not Contain Text Field
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Not Contain Text Field    non-existing
+    Page Should Not Contain Text Field    can_send_email
     Run Keyword And Expect Error    Page should not have contained text field 'name'
     ...    Page Should Not Contain Text Field    name
+    Run Keyword And Expect Error    Page should not have contained text field 'website'
+    ...    Page Should Not Contain Text Field    website
 
 TextField Should Contain
     [Documentation]    LOG 2:7 Text field 'name' contains text ''.
     [Setup]    Go To Page "forms/email_form.html"
     TextField Should contain    name    ${EMPTY}
+    TextField Should contain    website    ${EMPTY}
     Input Text    name    my name
+    Input Text    website    https://example.org
     TextField Should contain    name    my name
+    TextField Should contain    website    https://example.org
     Run Keyword And Expect Error
     ...    Text field 'name' should have contained text 'non-existing' but it contained 'my name'
     ...    TextField Should contain    name    non-existing
+    Run Keyword And Expect Error
+    ...    Text field 'website' should have contained text 'https://w3.org' but it contained 'https://example.org'
+    ...    TextField Should contain    website    https://w3.org
 
 TextField Value Should Be
     [Documentation]    LOG 2:7 Content of text field 'name' is ''.

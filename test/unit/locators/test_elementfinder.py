@@ -139,8 +139,10 @@ class ElementFinderTests(unittest.TestCase):
         self.ctx._browser.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='text field', required=False)
         verify(self.ctx._browser).find_elements_by_xpath(
-            "//input[@type='text' and (@id='test1' or @name='test1' or "
-            "@value='test1' or @src='test1' or "
+            "//input[@type[. = 'date' or . = 'datetime-local' or . = 'email' or "
+            ". = 'month' or . = 'number' or . = 'password' or . = 'search' or "
+            ". = 'tel' or . = 'text' or . = 'time' or . = 'url' or . = 'week'] and "
+            "(@id='test1' or @name='test1' or @value='test1' or @src='test1' or "
             "@src='http://localhost/test1')]")
 
     def test_find_with_button(self):
@@ -295,18 +297,20 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_id_with_synonym_and_constraints(self):
         elements = self._make_mock_elements('div', 'input', 'span', 'input',
-                                            'a', 'input', 'div', 'input')
+                                            'a', 'input', 'div', 'input',
+                                            'input')
         elements[1].set_attribute('type', 'radio')
         elements[3].set_attribute('type', 'checkbox')
         elements[5].set_attribute('type', 'text')
         elements[7].set_attribute('type', 'file')
+        elements[8].set_attribute('type', 'email')
         when(self.ctx._browser).find_elements_by_id("test1").thenReturn(
             elements)
         result = self.finder.find("id=test1", first_only=False)
         self.assertEqual(result, elements)
         result = self.finder.find("id=test1", tag='input', first_only=False)
         self.assertEqual(result, [elements[1], elements[3], elements[5],
-                                  elements[7]])
+                                  elements[7], elements[8]])
         result = self.finder.find("id=test1", tag='radio button',
                                   first_only=False)
         self.assertEqual(result, [elements[1]])
@@ -314,7 +318,7 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, [elements[3]])
         result = self.finder.find("id=test1", tag='text field',
                                   first_only=False)
-        self.assertEqual(result, [elements[5]])
+        self.assertEqual(result, [elements[5], elements[8]])
         result = self.finder.find("id=test1", tag='file upload',
                                   first_only=False)
         self.assertEqual(result, [elements[7]])
