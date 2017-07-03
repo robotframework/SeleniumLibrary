@@ -244,6 +244,6 @@ class Selenium2Library(DynamicCore):
 
     def _current_browser(self):
         warnings.warn('"Selenium2Library._current_browser" is deprecated, '
-                      'use "Selenium2Library.browser" instead.',
+                      'use "Selenium2Library._browser" instead.',
                       DeprecationWarning)
-        return self.browser
+        return self._browser
