@@ -1,5 +1,6 @@
 from .browsercache import BrowserCache
 from .librarylistener import LibraryListener
+from .types import is_string, is_truthy
 
 
 def escape_xpath_value(value):
