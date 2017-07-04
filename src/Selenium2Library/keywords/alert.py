@@ -4,8 +4,9 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from Selenium2Library.base import LibraryComponent
 from Selenium2Library.base import keyword
+from Selenium2Library.base import LibraryComponent
+from Selenium2Library.utils import is_truthy
 
 
 class AlertKeywords(LibraryComponent):
@@ -97,7 +98,7 @@ class AlertKeywords(LibraryComponent):
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Dismiss Alert`.
         """
-        if dismiss:
+        if is_truthy(dismiss):
             return self._handle_alert(self.DISMISS_ALERT)
         else:
             return self._handle_alert()
@@ -110,7 +111,7 @@ class AlertKeywords(LibraryComponent):
         following keywords will fail unless the alert is
         dismissed by this keyword or another like `Get Alert Message`.
         """
-        if accept:
+        if is_truthy(accept):
             return self._handle_alert(self.ACCEPT_ALERT)
         else:
             return self._handle_alert()
