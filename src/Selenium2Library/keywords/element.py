@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.keywords.formelement import FormElementKeywords
 from Selenium2Library.utils import escape_xpath_value
+from Selenium2Library.utils import is_truthy
 
 
 class ElementKeywords(LibraryComponent):
@@ -68,7 +69,7 @@ class ElementKeywords(LibraryComponent):
                   "text '%s'." % (locator, expected))
         actual = self._get_text(locator)
         if expected not in actual:
-            if not message:
+            if not is_truthy(message):
                 message = "Element '%s' should have contained text '%s' but "\
                           "its text was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
@@ -86,7 +87,7 @@ class ElementKeywords(LibraryComponent):
                   % (locator, expected))
         actual = self._get_text(locator)
         if expected in actual:
-            if not message:
+            if not is_truthy(message):
                 message = "Element '%s' should not contain text '%s' but " \
                           "it did." % (locator, expected)
             raise AssertionError(message)
@@ -148,7 +149,7 @@ class ElementKeywords(LibraryComponent):
             locator, first_only=False, required=False)
         )
         if int(actual_locator_count) != int(expected_locator_count):
-            if not message:
+            if not is_truthy(message):
                 message = "Locator %s should have matched %s times but matched %s times"\
                             %(locator, expected_locator_count, actual_locator_count)
             self.ctx.log_source(loglevel)
@@ -233,7 +234,7 @@ class ElementKeywords(LibraryComponent):
         self.info("Verifying element '%s' is visible." % locator)
         visible = self.is_visible(locator)
         if not visible:
-            if not message:
+            if not is_truthy(message):
                 message = ("The element '%s' should be visible, but it "
                            "is not." % locator)
             raise AssertionError(message)
@@ -252,7 +253,7 @@ class ElementKeywords(LibraryComponent):
         self.info("Verifying element '%s' is not visible." % locator)
         visible = self.is_visible(locator)
         if visible:
-            if not message:
+            if not is_truthy(message):
                 message = ("The element '%s' should not be visible, "
                            "but it is." % locator)
             raise AssertionError(message)
@@ -274,7 +275,7 @@ class ElementKeywords(LibraryComponent):
         element = self.find_element(locator)
         actual = element.text
         if expected != actual:
-            if not message:
+            if not is_truthy(message):
                 message = ("The text of element '%s' should have been '%s' "
                            "but in fact it was '%s'."
                            % (locator, expected, actual))
@@ -302,7 +303,7 @@ class ElementKeywords(LibraryComponent):
         | ${element_by_dom}= | Get Webelement | dom=document.getElementsByTagName('a')[3] |
         | ${id}= | Get Element Attribute | ${element_by_dom} | id |
         """
-        if not attribute_name:
+        if not is_truthy(attribute_name):
             locator, attribute_name = self._parse_attribute_locator(locator)
         element = self.find_element(locator, required=False)
         if not element:
@@ -319,8 +320,9 @@ class ElementKeywords(LibraryComponent):
         See also `Get Vertical Position`.
         """
         element = self.find_element(locator, required=False)
-        if element is None:
-            raise AssertionError("Could not determine position for '%s'" % (locator))
+        if not element:
+            raise AssertionError("Could not determine position for '%s'"
+                                 % locator)
         return element.location['x']
 
     @keyword
@@ -369,7 +371,8 @@ class ElementKeywords(LibraryComponent):
         """
         element = self.find_element(locator, required=False)
         if element is None:
-            raise AssertionError("Could not determine position for '%s'" % (locator))
+            raise AssertionError("Could not determine position for '%s'"
+                                 % locator)
         return element.location['y']
 
     @keyword
@@ -685,7 +688,7 @@ return !element.dispatchEvent(evt);
         """
         count = len(self.find_element("xpath=" + xpath, first_only=False,
                                       required=False))
-        return str(count) if return_str else count
+        return str(count) if is_truthy(return_str) else count
 
     @keyword
     def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
@@ -704,7 +707,7 @@ return !element.dispatchEvent(evt);
         actual_xpath_count = len(self.find_element(
             "xpath=" + xpath, first_only=False, required=False))
         if int(actual_xpath_count) != int(expected_xpath_count):
-            if not message:
+            if not is_truthy(message):
                 message = ("Xpath %s should have matched %s times but "
                            "matched %s times"
                            % (xpath, expected_xpath_count, actual_xpath_count))
@@ -766,7 +769,7 @@ return !element.dispatchEvent(evt);
     def _is_enabled(self, locator):
         element = self.find_element(locator)
         if not self.form_element._is_form_element(element):
-            raise AssertionError("ERROR: Element %s is not an input." % (locator))
+            raise AssertionError("ERROR: Element %s is not an input." % locator)
         if not element.is_enabled():
             return False
         read_only = element.get_attribute('readonly')

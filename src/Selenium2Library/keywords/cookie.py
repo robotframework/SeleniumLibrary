@@ -1,4 +1,5 @@
 from Selenium2Library.base import LibraryComponent, keyword
+from Selenium2Library.utils import is_truthy
 
 
 class CookieKeywords(LibraryComponent):
@@ -45,9 +46,9 @@ class CookieKeywords(LibraryComponent):
         new_cookie = {'name': name, 'value': value}
         if path:
             new_cookie['path'] = path
-        if domain:
+        if is_truthy(domain):
             new_cookie['domain'] = domain
-        # secure should be True or False so check explicitly for None
-        if secure is not None:
+        # Secure should be True or False
+        if is_truthy(secure):
             new_cookie['secure'] = secure
         self.browser.add_cookie(new_cookie)

@@ -4,12 +4,12 @@ import types
 
 from robot.errors import DataError
 from robot.utils import secs_to_timestr, timestr_to_secs
-
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.locators.windowmanager import WindowManager
+from Selenium2Library.utils import is_truthy
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -112,19 +112,20 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional 'ff_profile_dir' is the path to the firefox profile dir if you
         wish to overwrite the default.
         """
-        if remote_url:
-            self.info("Opening browser '%s' to base url '%s' through remote server at '%s'"
-                    % (browser, url, remote_url))
+        if is_truthy(remote_url):
+            self.info("Opening browser '%s' to base url '%s' through "
+                      "remote server at '%s'" % (browser, url, remote_url))
         else:
             self.info("Opening browser '%s' to base url '%s'" % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name,desired_capabilities,ff_profile_dir,remote_url)
+        browser = self._make_browser(browser_name, desired_capabilities,
+                                     ff_profile_dir, remote_url)
         try:
             browser.get(url)
         except:
             self.ctx.register_browser(browser, alias)
-            self.debug("Opened browser with session id %s but failed to open url '%s'"
-                        % (browser.session_id, url))
+            self.debug("Opened browser with session id %s but failed "
+                       "to open url '%s'" % (browser.session_id, url))
             raise
         self.debug('Opened browser with session id %s' % browser.session_id)
         return self.ctx.register_browser(browser, alias)
@@ -572,11 +573,13 @@ class BrowserManagementKeywords(LibraryComponent):
 
     def _make_ff(self, remote, desired_capabilites, profile_dir):
 
-        if not profile_dir: profile_dir = FIREFOX_PROFILE_DIR
+        if not is_truthy(profile_dir):
+            profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
-        if remote:
-            browser = self._create_remote_web_driver(webdriver.DesiredCapabilities.FIREFOX  ,
-                        remote , desired_capabilites , profile)
+        if is_truthy(remote):
+            browser = self._create_remote_web_driver(
+                webdriver.DesiredCapabilities.FIREFOX, remote,
+                desired_capabilites, profile)
         else:
             browser = webdriver.Firefox(firefox_profile=profile)
         return browser
@@ -627,10 +630,11 @@ class BrowserManagementKeywords(LibraryComponent):
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the
         appropriate web-driver'''
-        if not remote_url:
+        if not is_truthy(remote_url):
             browser = webdriver_type()
         else:
-            browser = self._create_remote_web_driver(desired_cap_type,remote_url , desired_caps)
+            browser = self._create_remote_web_driver(desired_cap_type,
+                                                     remote_url, desired_caps)
         return browser
 
     def _create_remote_web_driver(self, capabilities_type, remote_url, desired_capabilities=None, profile=None):
@@ -653,7 +657,7 @@ class BrowserManagementKeywords(LibraryComponent):
         '''
         desired_capabilities = {}
 
-        if not capabilities_string:
+        if not is_truthy(capabilities_string):
             return desired_capabilities
 
         for cap in capabilities_string.split(","):

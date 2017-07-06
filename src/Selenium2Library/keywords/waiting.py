@@ -4,6 +4,7 @@ from robot.utils import secs_to_timestr, timestr_to_secs
 
 from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.keywords.element import ElementKeywords
+from Selenium2Library.utils import is_truthy
 
 
 class WaitingKeywords(LibraryComponent):
@@ -30,7 +31,7 @@ class WaitingKeywords(LibraryComponent):
         Element`, `Wait Until Element Is Visible` and BuiltIn keyword
         `Wait Until Keyword Succeeds`.
         """
-        if not error:
+        if not is_truthy(error):
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
         self._wait_until(
             timeout, error,
@@ -50,7 +51,7 @@ class WaitingKeywords(LibraryComponent):
         `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
         Keyword Succeeds`.
         """
-        if not error:
+        if not is_truthy(error):
             error = "Text '%s' did not appear in <TIMEOUT>" % text
         self._wait_until(timeout, error, self.element.is_text_present, text)
 
@@ -92,7 +93,7 @@ class WaitingKeywords(LibraryComponent):
         """
         def is_element_present(locator):
             return self.find_element(locator, required=False) is not None
-        if not error:
+        if not is_truthy(error):
             error = "Element '%s' did not appear in <TIMEOUT>" % locator
         self._wait_until(timeout, error, is_element_present, locator)
 
@@ -247,15 +248,16 @@ class WaitingKeywords(LibraryComponent):
         self._wait_until_no_error(timeout, wait_func)
 
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = timestr_to_secs(timeout) if timeout else self.ctx._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx._timeout_in_secs
         maxtime = time.time() + timeout
         while True:
             timeout_error = wait_func(*args)
-            if not timeout_error: return
+            if not timeout_error:
+                return
             if time.time() > maxtime:
                 raise AssertionError(timeout_error)
             time.sleep(0.2)
 
     def _format_timeout(self, timeout):
-        timeout = timestr_to_secs(timeout) if timeout else self.ctx._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx._timeout_in_secs
         return secs_to_timestr(timeout)

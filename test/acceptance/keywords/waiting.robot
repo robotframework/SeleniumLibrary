@@ -50,6 +50,12 @@ Wait Until Element Is Visible
     ...    User error message    Wait Until Element Is Visible    invalid    0.1
     ...    User error message
 
+Wait Until Element Is Visible with locator and error arguments
+    Wait Until Element Is Visible    hidden    error=My error message
+
+Wait Until Element Is Visible with locator only
+    Wait Until Element Is Visible    hidden
+
 Wait Until Element Is Enabled
     [Documentation]    Wait Until Element Is Enabled
     Run Keyword And Expect Error    Element 'id=disabled' was not enabled in 100 milliseconds
