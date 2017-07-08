@@ -4,11 +4,11 @@ import sys
 
 PY2 = sys.version_info[0] == 2
 
-
-def is_string(item):
-    if PY2:
+if PY2:
+    def is_string(item):
         return isinstance(item, (str, unicode))
-    return isinstance(item, str)
+else:
+    from robot.utils import is_string
 
 
 def is_truthy(item):
