@@ -36,15 +36,13 @@ class CookieKeywords(LibraryComponent):
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
-    def add_cookie(self, name, value, path=None, domain=None, secure=None,
-                   expiry=None):
+    def add_cookie(self, name, value, path=None, domain=None, secure=None):
         """Adds a cookie to your current session.
+
         "name" and "value" are required, "path", "domain" and "secure" are
-        optional"""
-        new_cookie = {
-            'name': name,
-            'value': value
-        }
+        optional
+        """
+        new_cookie = {'name': name, 'value': value}
         if path:
             new_cookie['path'] = path
         if domain:
