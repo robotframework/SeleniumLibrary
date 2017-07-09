@@ -44,7 +44,7 @@ class CookieKeywords(LibraryComponent):
         optional
         """
         new_cookie = {'name': name, 'value': value}
-        if path:
+        if is_truthy(path):
             new_cookie['path'] = path
         if is_truthy(domain):
             new_cookie['domain'] = domain
