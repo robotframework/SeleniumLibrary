@@ -1,16 +1,16 @@
 import unittest
 
-from mockito import mock, unstub, verify, when
+from mockito import mock, unstub, when
 
 from Selenium2Library.keywords import ElementKeywords
 
 
 class KeywordArgumentsElementTest(unittest.TestCase):
 
-    def setUp(cls):
+    def setUp(self):
         ctx = mock()
         ctx._browser = mock()
-        cls.element = ElementKeywords(ctx)
+        self.element = ElementKeywords(ctx)
 
     def tearDown(self):
         unstub()

@@ -15,7 +15,7 @@ class KeywordArgumentsAlertTest(unittest.TestCase):
     def setUpClass(self):
         self.alert = AlertKeywords(mock())
 
-    def tearDown(cls):
+    def tearDown(self):
         unstub()
 
     def test_get_alert_message_dismiss_true(self):

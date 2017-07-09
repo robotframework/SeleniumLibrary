@@ -25,7 +25,7 @@ class KeywordArgumentsCookieTest(unittest.TestCase):
         self.cookie.add_cookie('name', 'value', path='None', domain='None',
                                secure='True')
         cookie = self.default_cookie
-        cookie['secure'] = True
+        cookie['secure'] = 'True'
         verify(self.ctx._browser).add_cookie(cookie)
 
     def test_add_cookie_secure_false(self):
