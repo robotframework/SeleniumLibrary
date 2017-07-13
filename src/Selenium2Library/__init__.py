@@ -223,11 +223,21 @@ class Selenium2Library(DynamicCore):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
-            RunOnFailureKeywords(self).run_on_failure()
+            self.run_on_failure()
             raise
 
     def register_browser(self, browser, alias):
         return self._browsers.register(browser, alias)
+
+    def run_on_failure(self):
+        """Executes the registered run on failure keyword.
+
+        This is designed as an API when writing library which extends the
+        SeleniumLibrary with new functionality. If that new functionality
+        does not (always) relay on SeleniumLibrary keyword methods, then the
+        new functionality can use this method to execute the run on failure
+        functionality in SeleniumLibrary"""
+        RunOnFailureKeywords(self).run_on_failure()
 
     @property
     def _browser(self):
@@ -247,3 +257,9 @@ class Selenium2Library(DynamicCore):
                       'use "Selenium2Library._browser" instead.',
                       DeprecationWarning)
         return self._browser
+
+    def _run_on_failure(self):
+        warnings.warn('"Selenium2Library._run_on_failure" is deprecated, '
+                      'use "Selenium2Library.run_on_failure" instead.',
+                      DeprecationWarning)
+        self.run_on_failure()
