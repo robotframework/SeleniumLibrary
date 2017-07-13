@@ -1,7 +1,6 @@
 import unittest
 
-from mockito import mock, unstub, when, verify
-from mockito.matchers import ANY
+from mockito import mock, unstub, when
 
 
 from Selenium2Library.keywords import SelectElementKeywords
