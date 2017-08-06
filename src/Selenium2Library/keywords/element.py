@@ -223,15 +223,15 @@ class ElementKeywords(LibraryComponent):
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
 
-        New in SeleniumLibrary 2.0.1.
+        New in SeleniumLibrary 3.0.0.
         """
         element = self.find_element(locator)
-        try:
+        if self.browser.capabilities['browserName'] != "firefox":
+            focused = self.browser.switch_to.active_element
+        else:
             focused = self.browser.execute_script('return document.activeElement;')
-        except (IOError, RuntimeError) as err:
-            raise AssertionError("Internal Error: '%s'" % (err))
-        if not element == focused:
-            raise AssertionError("ERROR: Element '%s' is not with focus." % (locator))
+        if element != focused:
+            raise AssertionError("Element '%s' is not with focus." % (locator))
 
     @keyword
     def element_should_be_visible(self, locator, message=''):
