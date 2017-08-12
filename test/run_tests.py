@@ -68,7 +68,6 @@ ROBOT_OPTIONS = [
     '--doc', 'Selenium2Library acceptance tests with {browser}',
     '--outputdir', RESULTS_DIR,
     '--variable', 'BROWSER:{browser}',
-    '--variable', 'PY_VERSION:{py_version}',
     '--report', 'NONE',
     '--log', 'NONE',
     '--loglevel', 'DEBUG',
@@ -123,11 +122,7 @@ def http_server():
 def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
     options = []
     runner = interpreter.split() + ['-m', 'robot.run']
-    options.extend(
-        [opt.format(browser=browser,
-         py_version=interpreter + sys.version[:3])
-            for opt in ROBOT_OPTIONS]
-    )
+    options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     options += rf_options
     if sauce_username and sauce_key:
         options.extend(get_sauce_conf(browser, sauce_username, sauce_key))
