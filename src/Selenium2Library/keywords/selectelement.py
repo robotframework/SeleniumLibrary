@@ -2,6 +2,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
 from Selenium2Library.base import LibraryComponent, keyword
+from Selenium2Library.utils import is_truthy
 
 
 class SelectElementKeywords(LibraryComponent):
@@ -24,7 +25,7 @@ class SelectElementKeywords(LibraryComponent):
         | Should Be Equal | ${labels1} | ${labels2} |
         """
         select, options = self._get_select_list_options(locator)
-        if value:
+        if is_truthy(value):
             return self._get_values_for_options(options)
         else:
             return self._get_labels_for_options(options)

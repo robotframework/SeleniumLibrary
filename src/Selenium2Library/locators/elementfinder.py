@@ -5,6 +5,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from .customlocator import CustomLocator
 from Selenium2Library.base import ContextAware
 from Selenium2Library.utils import escape_xpath_value, events
+from Selenium2Library.utils import is_falsy
 
 
 class ElementFinder(ContextAware):
@@ -63,11 +64,9 @@ class ElementFinder(ContextAware):
                              loglevel='INFO'):
         element_name = tag if tag else 'element'
         if not self.find(locator, tag, required=False):
-            if not message:
-                message = (
-                    "Page should have contained %s "
-                    "'%s' but did not" % (element_name, locator)
-                )
+            if is_falsy(message):
+                message = ("Page should have contained %s '%s' but did not"
+                           % (element_name, locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
             raise AssertionError(message)
         logger.info("Current page contains %s '%s'." % (element_name, locator))
@@ -76,11 +75,9 @@ class ElementFinder(ContextAware):
                                  loglevel='INFO'):
         element_name = tag if tag else 'element'
         if self.find(locator, tag, required=False):
-            if not message:
-                message = (
-                    "Page should not have contained %s '%s'"
-                    % (element_name, locator)
-                )
+            if is_falsy(message):
+                message = ("Page should not have contained %s '%s'"
+                           % (element_name, locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
             raise AssertionError(message)
         logger.info("Current page does not contain %s '%s'."
@@ -97,7 +94,7 @@ class ElementFinder(ContextAware):
                                "A locator of that name already exists."
                                % strategy.name)
         self._strategies[strategy.name] = strategy.find
-        if not persist:
+        if is_falsy(persist):
             # Unregister after current scope ends
             events.on('scope_end', 'current', self.unregister, strategy.name)
 
@@ -262,7 +259,8 @@ class ElementFinder(ContextAware):
 
     def _filter_elements(self, elements, tag, constraints):
         elements = self._normalize_result(elements)
-        if tag is None: return elements
+        if tag is None:
+            return elements
         return [element for element in elements if self._element_matches(element, tag, constraints)]
 
     def _get_attrs_with_url(self, key_attrs, criteria):
