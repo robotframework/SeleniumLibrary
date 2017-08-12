@@ -16,8 +16,8 @@ Selenium 2 (WebDriver) library for Robot Framework
 .. image:: https://coveralls.io/repos/robotframework/Selenium2Library/badge.svg?branch=master&service=github
 	:target: https://coveralls.io/github/robotframework/Selenium2Library?branch=master
 
-.. image:: https://robotframework-slack.herokuapp.com/badge.svg
-	:target: https://robotframework-slack.herokuapp.com
+.. image:: https://robotframework-slack-invite.herokuapp.com/badge.svg
+	:target: https://robotframework-slack-invite.herokuapp.com/
 	:alt: Slack channel
 
 
