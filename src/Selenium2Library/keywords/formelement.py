@@ -1,7 +1,7 @@
 import os
 
 from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.utils import is_truthy
+from Selenium2Library.utils import is_falsy
 
 
 class FormElementKeywords(LibraryComponent):
@@ -18,7 +18,7 @@ class FormElementKeywords(LibraryComponent):
         details about locating elements.
         """
         self.info("Submitting form '%s'." % locator)
-        if not is_truthy(locator):
+        if is_falsy(locator):
             locator = 'xpath=//form'
         element = self.find_element(locator, tag='form')
         element.submit()
@@ -247,7 +247,7 @@ class FormElementKeywords(LibraryComponent):
         """
         actual = self.element_finder.get_value(locator, 'text field')
         if expected not in actual:
-            if not is_truthy(message):
+            if is_falsy(message):
                 message = "Text field '%s' should have contained text '%s' "\
                           "but it contained '%s'" % (locator, expected, actual)
             raise AssertionError(message)
@@ -268,7 +268,7 @@ class FormElementKeywords(LibraryComponent):
                                         required=False)
         actual = element.get_attribute('value') if element else None
         if actual != expected:
-            if not is_truthy(message):
+            if is_falsy(message):
                 message = "Value of text field '%s' should have been '%s' "\
                           "but was '%s'" % (locator, expected, actual)
             raise AssertionError(message)
@@ -286,7 +286,7 @@ class FormElementKeywords(LibraryComponent):
         actual = self.element_finder.get_value(locator, 'text area')
         if actual is not None:
             if expected not in actual:
-                if not is_truthy(message):
+                if is_falsy(message):
                     message = "Text field '%s' should have contained text '%s' "\
                               "but it contained '%s'" % (locator, expected, actual)
                 raise AssertionError(message)
@@ -306,7 +306,7 @@ class FormElementKeywords(LibraryComponent):
         actual = self.element_finder.get_value(locator, 'text area')
         if actual is not None:
             if expected != actual:
-                if not is_truthy(message):
+                if is_falsy(message):
                     message = "Text field '%s' should have contained text '%s' "\
                               "but it contained '%s'" % (locator, expected, actual)
                 raise AssertionError(message)

@@ -8,7 +8,7 @@ from robot.utils import get_link_path
 
 from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.utils import events
-from Selenium2Library.utils import is_truthy
+from Selenium2Library.utils import is_falsy
 
 
 class ScreenshotKeywords(LibraryComponent):
@@ -31,7 +31,7 @@ class ScreenshotKeywords(LibraryComponent):
         """
         path = os.path.abspath(path)
         self._create_directory(path)
-        if not is_truthy(persist):
+        if is_falsy(persist):
             self._screenshot_path_stack.append(self.screenshot_root_directory)
             # Restore after current scope ends
             events.on('scope_end', 'current',

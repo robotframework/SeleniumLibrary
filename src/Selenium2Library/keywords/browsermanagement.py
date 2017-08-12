@@ -9,7 +9,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from Selenium2Library.base import LibraryComponent, keyword
 from Selenium2Library.locators.windowmanager import WindowManager
-from Selenium2Library.utils import is_truthy
+from Selenium2Library.utils import is_truthy, is_falsy
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -573,7 +573,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     def _make_ff(self, remote, desired_capabilites, profile_dir):
 
-        if not is_truthy(profile_dir):
+        if is_falsy(profile_dir):
             profile_dir = FIREFOX_PROFILE_DIR
         profile = webdriver.FirefoxProfile(profile_dir)
         if is_truthy(remote):
@@ -630,7 +630,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def _generic_make_browser(self, webdriver_type , desired_cap_type, remote_url, desired_caps):
         '''most of the make browser functions just call this function which creates the
         appropriate web-driver'''
-        if not is_truthy(remote_url):
+        if is_falsy(remote_url):
             browser = webdriver_type()
         else:
             browser = self._create_remote_web_driver(desired_cap_type,
@@ -657,7 +657,7 @@ class BrowserManagementKeywords(LibraryComponent):
         '''
         desired_capabilities = {}
 
-        if not is_truthy(capabilities_string):
+        if is_falsy(capabilities_string):
             return desired_capabilities
 
         for cap in capabilities_string.split(","):

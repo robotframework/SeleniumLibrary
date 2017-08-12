@@ -5,7 +5,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from .customlocator import CustomLocator
 from Selenium2Library.base import ContextAware
 from Selenium2Library.utils import escape_xpath_value, events
-from Selenium2Library.utils import is_truthy
+from Selenium2Library.utils import is_falsy
 
 
 class ElementFinder(ContextAware):
@@ -64,7 +64,7 @@ class ElementFinder(ContextAware):
                              loglevel='INFO'):
         element_name = tag if tag else 'element'
         if not self.find(locator, tag, required=False):
-            if not is_truthy(message):
+            if is_falsy(message):
                 message = ("Page should have contained %s '%s' but did not"
                            % (element_name, locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
@@ -75,7 +75,7 @@ class ElementFinder(ContextAware):
                                  loglevel='INFO'):
         element_name = tag if tag else 'element'
         if self.find(locator, tag, required=False):
-            if not is_truthy(message):
+            if is_falsy(message):
                 message = ("Page should not have contained %s '%s'"
                            % (element_name, locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
@@ -94,7 +94,7 @@ class ElementFinder(ContextAware):
                                "A locator of that name already exists."
                                % strategy.name)
         self._strategies[strategy.name] = strategy.find
-        if not is_truthy(persist):
+        if is_falsy(persist):
             # Unregister after current scope ends
             events.on('scope_end', 'current', self.unregister, strategy.name)
 
