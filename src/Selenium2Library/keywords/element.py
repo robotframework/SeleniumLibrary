@@ -217,6 +217,23 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError("Element '%s' is disabled." % (locator))
 
     @keyword
+    def element_should_be_focused(self, locator):
+        """Verifies that element identified with `locator` is focused.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+
+        New in SeleniumLibrary 3.0.0.
+        """
+        element = self.find_element(locator)
+        if self.browser.capabilities['browserName'] != "firefox":
+            focused = self.browser.switch_to.active_element
+        else:
+            focused = self.browser.execute_script('return document.activeElement;')
+        if element != focused:
+            raise AssertionError("Element '%s' is not with focus." % (locator))
+
+    @keyword
     def element_should_be_visible(self, locator, message=''):
         """Verifies that the element identified by `locator` is visible.
 
