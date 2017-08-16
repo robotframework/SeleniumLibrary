@@ -347,14 +347,15 @@ class BrowserManagementKeywords(LibraryComponent):
             pass
         finally:
             self._window_manager.select(self._current_browser(), locator)
-            
+    
+    @keyword      
     def get_log(self, log_type):
         """Get the log for a given selenium log type
 
         The `log_type` argument defines which logs to get. Possible values are:
         `browser`, `driver`, `client` or `server`
         """
-        return self._current_browser().get_log(log_type)
+        return self.browser.get_log(log_type)
 
 
     @keyword
