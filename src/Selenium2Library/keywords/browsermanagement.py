@@ -346,7 +346,7 @@ class BrowserManagementKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            self._window_manager.select(self._current_browser(), locator)
+            self._window_manager.select(self.browser, locator)
     
     @keyword      
     def get_log(self, log_type):
