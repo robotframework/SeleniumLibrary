@@ -1,7 +1,10 @@
-from event import Event
 from robot.libraries.BuiltIn import BuiltIn
 
+from .event import Event
+
+
 class ScopeEvent(Event):
+
     def __init__(self, scope, action, *args, **kwargs):
         self.scope = scope
         self.action = action
@@ -10,15 +13,17 @@ class ScopeEvent(Event):
 
         if scope == 'current':
             suite = BuiltIn().get_variable_value('${SUITE NAME}')
-            test  = BuiltIn().get_variable_value('${TEST NAME}', '')
+            test = BuiltIn().get_variable_value('${TEST NAME}', '')
             self.scope = suite + '.' + test if test != '' else suite
 
     def trigger(self, *args, **kwargs):
         if args[0] == self.scope:
             self.action(*self.action_args, **self.action_kwargs)
 
+
 class ScopeStart(ScopeEvent):
     name = 'scope_start'
+
 
 class ScopeEnd(ScopeEvent):
     name = 'scope_end'

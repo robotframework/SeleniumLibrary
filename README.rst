@@ -12,12 +12,12 @@ Selenium 2 (WebDriver) library for Robot Framework
 
 .. image:: https://img.shields.io/pypi/l/robotframework-selenium2library.svg
     :target: http://www.apache.org/licenses/LICENSE-2.0
-    
+
 .. image:: https://coveralls.io/repos/robotframework/Selenium2Library/badge.svg?branch=master&service=github
 	:target: https://coveralls.io/github/robotframework/Selenium2Library?branch=master
 
-.. image:: https://robotframework-slack.herokuapp.com/badge.svg
-	:target: https://robotframework-slack.herokuapp.com
+.. image:: https://robotframework-slack-invite.herokuapp.com/badge.svg
+	:target: https://robotframework-slack-invite.herokuapp.com/
 	:alt: Slack channel
 
 
@@ -39,73 +39,12 @@ but re-implemented to use Selenium 2 and WebDriver technologies.
 Installation
 ------------
 
-Using ``pip``
-'''''''''''''
-
 The recommended installation method is using
 `pip <http://pip-installer.org>`__::
 
     pip install robotframework-selenium2library
 
-The main benefit of using ``pip`` is that it automatically installs all
-dependencies needed by the library. Other nice features are easy upgrading
-and support for un-installation::
-
-    pip install --upgrade robotframework-selenium2library
-    pip uninstall robotframework-selenium2library
-
-Notice that using ``--upgrade`` above updates both the library and all
-its dependencies to the latest version. If you want, you can also install
-a specific version or upgrade only the Selenium tool used by the library::
-
-    pip install robotframework-selenium2library==1.4.1
-    pip install --upgrade selenium
-    pip install selenium==2.34
-
-Proxy configuration
-'''''''''''''''''''
-
-If you are behind a proxy, you can use ``--proxy`` command line option
-or set ``http_proxy`` and/or ``https_proxy`` environment variables to
-configure ``pip`` to use it. If you are behind an authenticating NTLM proxy,
-you may want to consider installing `CNTML <http://cntlm.sourceforge.net>`__
-to handle communicating with it.
-
-For more information about ``--proxy`` option and using pip with proxies
-in general see:
-
-- http://pip-installer.org/en/latest/usage.html
-- http://stackoverflow.com/questions/9698557/how-to-use-pip-on-windows-behind-an-authenticating-proxy
-- http://stackoverflow.com/questions/14149422/using-pip-behind-a-proxy
-
-Manual installation
-'''''''''''''''''''
-
-If you do not have network connection or cannot make proxy to work, you need
-to resort to manual installation. This requires installing both the library
-and its dependencies yourself.
-
-1) Make sure you have `Robot Framework installed
-   <http://code.google.com/p/robotframework/wiki/Installation>`__.
-
-2) Download source distributions (``*.tar.gz``) for the library and its
-   dependencies:
-
-   - https://pypi.python.org/pypi/robotframework-selenium2library
-   - https://pypi.python.org/pypi/selenium
-   - https://pypi.python.org/pypi/decorator
-
-3) Extract each source distribution to a temporary location.
-
-4) Go each created directory from the command line and install each project
-   using::
-
-       python setup.py install
-
-If you are on Windows, and there are Windows installers available for
-certain projects, you can use them instead of source distributions.
-Just download 32bit or 64bit installer depending on your system,
-double-click it, and follow the instructions.
+For more information about installation and please see `INSTALL.rst`_.
 
 Usage
 -----
@@ -117,7 +56,7 @@ See `Robot Framework User Guide`_ for more information.
 
 Demo project
 ------------
-A demo project illustrating how to use this library can be found from: 
+A demo project illustrating how to use this library can be found from:
 https://bitbucket.org/robotframework/webdemo
 
 Please see the usage instructions from the demo project pages.
@@ -128,15 +67,16 @@ The `user group for Robot Framework`_ is the best place to get help. Consider in
 
 - Full description of what you are trying to do and expected outcome
 - Version number of Selenium2Library, Robot Framework, and Selenium
+- Version number of browser and the browser driver
 - Traceback or other debug output containing error information
 
 .. _Robot Framework: http://robotframework.org
-.. _Selenium: http://selenium.openqa.org
+.. _Selenium: http://seleniumhq.org
 .. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
-.. _SeleniumLibrary: http://code.google.com/p/robotframework-seleniumlibrary/
+.. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary/
 .. _Wiki: https://github.com/robotframework/Selenium2Library/wiki
 .. _Keyword Documentation: http://robotframework.org/Selenium2Library/Selenium2Library.html
 .. _INSTALL.rst: https://github.com/robotframework/Selenium2Library/blob/master/INSTALL.rst
 .. _BUILD.rst: https://github.com/robotframework/Selenium2Library/blob/master/BUILD.rst
-.. _Robot Framework User Guide: http://code.google.com/p/robotframework/wiki/UserGuide
+.. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _user group for Robot Framework: http://groups.google.com/group/robotframework-users

@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 
+import re
 from os.path import abspath, dirname, join
-
 from setuptools import setup
 
 
 CURDIR = dirname(abspath(__file__))
 
-execfile(join(CURDIR, 'src', 'Selenium2Library', 'version.py'))
+with open(join(CURDIR, 'src', 'Selenium2Library', '__init__.py')) as f:
+    VERSION = re.search("\n__version__ = '(.*)'\n", f.read()).group(1)
 
 DESCRIPTION = """
 Selenium2Library is a web testing library for Robot Framework
@@ -32,7 +33,10 @@ setup(name         = 'robotframework-selenium2library',
                         "License :: OSI Approved :: Apache Software License",
                         "Operating System :: OS Independent",
                         "Programming Language :: Python",
-                        "Topic :: Software Development :: Testing"
+                        "Programming Language :: Python :: 2",
+                        "Programming Language :: Python :: 3",
+                        "Topic :: Software Development :: Testing",
+                        "Framework :: Robot Framework"
                      ],
       install_requires = REQUIREMENTS,
       package_dir  = {'' : 'src'},

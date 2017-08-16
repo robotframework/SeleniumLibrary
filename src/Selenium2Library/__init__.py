@@ -1,26 +1,28 @@
-import os
-from keywords import *
-from version import VERSION
-from utils import LibraryListener
+import warnings
 
-__version__ = VERSION
+from .base import DynamicCore
+from .keywords import AlertKeywords
+from .keywords import BrowserManagementKeywords
+from .keywords import CookieKeywords
+from .keywords import ElementKeywords
+from .keywords import FormElementKeywords
+from .keywords import JavaScriptKeywords
+from .keywords import RunOnFailureKeywords
+from .keywords import ScreenshotKeywords
+from .keywords import SelectElementKeywords
+from .keywords import TableElementKeywords
+from .keywords import WaitingKeywords
+from .locators import ElementFinder
+from .utils import BrowserCache
+from .utils import LibraryListener
 
-class Selenium2Library(
-    _LoggingKeywords,
-    _RunOnFailureKeywords,
-    _BrowserManagementKeywords,
-    _ElementKeywords,
-    _TableElementKeywords,
-    _FormElementKeywords,
-    _SelectElementKeywords,
-    _JavaScriptKeywords,
-    _CookieKeywords,
-    _ScreenshotKeywords,
-    _WaitingKeywords,
-    _AlertKeywords
-):
+
+__version__ = '3.0.0.dev1'
+
+
+class Selenium2Library(DynamicCore):
     """Selenium2Library is a web testing library for Robot Framework.
-    
+
     This document is about using Selenium2Library. For information about
     installation, support, and more please visit the
     [https://github.com/robotframework/Selenium2Library|project page].
@@ -50,16 +52,24 @@ class Selenium2Library(
 
     *Using locators*
     ---------------
-    By default, when a locator value is provided, it is matched against the
-    key attributes of the particular element type. For example, `id` and
-    `name` are key attributes to all elements, and locating elements is easy
-    using just the `id` as a `locator`. For example:
+    The locator can be used in two ways. In explicit way, where the strategy
+    of the locator is defined as prefix in the locator or in implicit way,
+    where there strategy is determined from the locator.
 
-    | Click Element    my_element
+    The implicit way supports two strategies: `xpath` and matching against
+    `id` and `name` attributes. If locator starts with `//` or `(//` then
+    `xpath` strategy will be used. Determining `(//`  as xpath is supported
+    from release 3.0.0 onwards. If locator does not start with `//` or `(//`,
+    then it is matched against the `id` and `name` key attributes of
+    elements. Example
 
-    It is also possible to specify the approach Selenium2Library should take
-    to find an element by specifying a lookup strategy with a locator
-    prefix. Supported strategies are:
+    | Click Element    my_element    # id and name attribute matching
+    | Click Element    //div         # xpath
+    | Click Element    (//div)[2]    # xpath
+
+    In the explicit way, it is possible to specify the approach
+    Selenium2Library should take to find an element by specifying a lookup
+    strategy with a locator prefix. Supported strategies are:
 
     | *Strategy* | *Example*                               | *Description*                                   |
     | identifier | Click Element `|` identifier=my_element | Matches by @id or @name attribute               |
@@ -82,6 +92,10 @@ class Selenium2Library(
     | Click Link    page?a=b
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
+
+    Please note that jQuery is not provided by Selenium2Library
+    and if there is need to use jQuery locators, the system
+    under test must provide the jQuery library.
 
     *Using webelements*
     ------------------
@@ -140,14 +154,13 @@ class Selenium2Library(
     """
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
-    ROBOT_LIBRARY_VERSION = VERSION
+    ROBOT_LIBRARY_VERSION = __version__
 
     def __init__(self,
                  timeout=5.0,
                  implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None
-    ):
+                 screenshot_root_directory=None):
 
         """Selenium2Library can be imported with optional arguments.
 
@@ -179,10 +192,74 @@ class Selenium2Library(
         | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
         | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
-        for base in Selenium2Library.__bases__:
-            base.__init__(self)
+        self._run_on_failure_keyword = None
+        self._running_on_failure_routine = False
+        self._speed_in_secs = 0.0
+        self._timeout_in_secs = 5.0
+        self._implicit_wait_in_secs = 5.0
+        libraries = [
+            AlertKeywords(self),
+            BrowserManagementKeywords(self),
+            RunOnFailureKeywords(self),
+            ElementKeywords(self),
+            TableElementKeywords(self),
+            FormElementKeywords(self),
+            SelectElementKeywords(self),
+            JavaScriptKeywords(self),
+            CookieKeywords(self),
+            ScreenshotKeywords(self),
+            WaitingKeywords(self)
+        ]
+        self._browsers = BrowserCache()
+        DynamicCore.__init__(self, libraries)
         self.screenshot_root_directory = screenshot_root_directory
         self.set_selenium_timeout(timeout)
         self.set_selenium_implicit_wait(implicit_wait)
         self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
+        self.element_finder = ElementFinder(self)
+
+    def run_keyword(self, name, args, kwargs):
+        try:
+            return DynamicCore.run_keyword(self, name, args, kwargs)
+        except Exception:
+            self.run_on_failure()
+            raise
+
+    def register_browser(self, browser, alias):
+        return self._browsers.register(browser, alias)
+
+    def run_on_failure(self):
+        """Executes the registered run on failure keyword.
+
+        This is designed as an API when writing library which extends the
+        SeleniumLibrary with new functionality. If that new functionality
+        does not (always) relay on SeleniumLibrary keyword methods, then the
+        new functionality can use this method to execute the run on failure
+        functionality in SeleniumLibrary"""
+        RunOnFailureKeywords(self).run_on_failure()
+
+    @property
+    def _browser(self):
+        """Current active browser"""
+        if not self._browsers.current:
+            raise RuntimeError('No browser is open')
+        return self._browsers.current
+
+    @property
+    def _cache(self):
+        warnings.warn('"Selenium2Library._cache" is deprecated, '
+                      'use public API instead.', DeprecationWarning)
+        return self._browsers
+
+    def _current_browser(self):
+        warnings.warn('"Selenium2Library._current_browser" is deprecated, '
+                      'use "Selenium2Library._browser" instead.',
+                      DeprecationWarning)
+        return self._browser
+
+    def _run_on_failure(self):
+        warnings.warn('"Selenium2Library._run_on_failure" is deprecated, '
+                      'use "Selenium2Library.run_on_failure" instead.',
+                      DeprecationWarning)
+        self.run_on_failure()

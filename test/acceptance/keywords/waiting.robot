@@ -2,6 +2,7 @@
 Documentation     Tests waiting
 Test Setup        Go To Page "javascript/delayed_events.html"
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Wait For Condition
@@ -48,6 +49,12 @@ Wait Until Element Is Visible
     Run Keyword And Expect Error
     ...    User error message    Wait Until Element Is Visible    invalid    0.1
     ...    User error message
+
+Wait Until Element Is Visible with locator and error arguments
+    Wait Until Element Is Visible    hidden    error=My error message
+
+Wait Until Element Is Visible with locator only
+    Wait Until Element Is Visible    hidden
 
 Wait Until Element Is Enabled
     [Documentation]    Wait Until Element Is Enabled

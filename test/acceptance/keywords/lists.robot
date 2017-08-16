@@ -2,6 +2,7 @@
 Documentation     Tests lists
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
+Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Get List Items From Single-Select List
@@ -15,6 +16,18 @@ Get List Items From Multi-Select List
     ${items}=    Get List Items    interests
     ${expected}=    Create List    Males    Females    Others
     Should Be Equal    ${items}    ${expected}
+
+Get List Values From Single-Select List
+    [Documentation]    Get List Values From Single-Select List
+    ${values}=    Get List Items    preferred_channel    value=${True}
+    ${expected}=    Create List    email    phone    directmail
+    Should Be Equal    ${values}    ${expected}
+
+Get List Values From Multi-Select List
+    [Documentation]    Get List Values From Multi-Select List
+    ${values}=    Get List Items    interests    value=True
+    ${expected}=    Create List    males    females    others
+    Should Be Equal    ${values}    ${expected}
 
 Get Selected List Value
     [Documentation]    Get Selected List Value

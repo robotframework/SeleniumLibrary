@@ -1,11 +1,17 @@
-from Selenium2Library import utils
 from robot.api import logger
 from robot.utils import NormalizedDict
+from selenium.webdriver.remote.webelement import WebElement
+
+from .customlocator import CustomLocator
+from Selenium2Library.base import ContextAware
+from Selenium2Library.utils import escape_xpath_value, events
+from Selenium2Library.utils import is_falsy
 
 
-class ElementFinder(object):
+class ElementFinder(ContextAware):
 
-    def __init__(self):
+    def __init__(self, ctx):
+        ContextAware.__init__(self, ctx)
         strategies = {
             'identifier': self._find_by_identifier,
             'id': self._find_by_id,
@@ -22,143 +28,188 @@ class ElementFinder(object):
             'scLocator': self._find_by_sc_locator,
             'default': self._find_by_default
         }
-        self._strategies = NormalizedDict(initial=strategies, caseless=True, spaceless=True)
-        self._default_strategies = list(strategies.keys())
+        self._strategies = NormalizedDict(initial=strategies, caseless=True,
+                                          spaceless=True)
+        self._default_strategies = list(strategies)
+        self._key_attrs = {
+            None: ['@id', '@name'],
+            'a': ['@id', '@name', '@href',
+                  'normalize-space(descendant-or-self::text())'],
+            'img': ['@id', '@name', '@src', '@alt'],
+            'input': ['@id', '@name', '@value', '@src'],
+            'button': ['@id', '@name', '@value',
+                       'normalize-space(descendant-or-self::text())']
+        }
 
-    def find(self, browser, locator, tag=None):
-        assert browser is not None
-        assert locator is not None and len(locator) > 0
-
-        (prefix, criteria) = self._parse_locator(locator)
-        prefix = 'default' if prefix is None else prefix
+    def find(self, locator, tag=None, first_only=True, required=True):
+        if isinstance(locator, WebElement):
+            return locator
+        prefix, criteria = self._parse_locator(locator)
+        if prefix not in self._strategies:
+            raise ValueError("Element locator with prefix '%s' "
+                             "is not supported." % prefix)
         strategy = self._strategies.get(prefix)
-        if strategy is None:
-            raise ValueError("Element locator with prefix '" + prefix + "' is not supported")
-        (tag, constraints) = self._get_tag_and_constraints(tag)
-        return strategy(browser, criteria, tag, constraints)
+        tag, constraints = self._get_tag_and_constraints(tag)
+        elements = strategy(criteria, tag, constraints)
+        if required and not elements:
+            raise ValueError("Element locator '{}' did not match any "
+                             "elements.".format(locator))
+        if first_only:
+            if not elements:
+                return None
+            return elements[0]
+        return elements
 
-    def register(self, strategy, persist):
+    def assert_page_contains(self, locator, tag=None, message=None,
+                             loglevel='INFO'):
+        element_name = tag if tag else 'element'
+        if not self.find(locator, tag, required=False):
+            if is_falsy(message):
+                message = ("Page should have contained %s '%s' but did not"
+                           % (element_name, locator))
+            self.ctx.log_source(loglevel)  # TODO: Could this moved to base
+            raise AssertionError(message)
+        logger.info("Current page contains %s '%s'." % (element_name, locator))
+
+    def assert_page_not_contains(self, locator, tag=None, message=None,
+                                 loglevel='INFO'):
+        element_name = tag if tag else 'element'
+        if self.find(locator, tag, required=False):
+            if is_falsy(message):
+                message = ("Page should not have contained %s '%s'"
+                           % (element_name, locator))
+            self.ctx.log_source(loglevel)  # TODO: Could this moved to base
+            raise AssertionError(message)
+        logger.info("Current page does not contain %s '%s'."
+                    % (element_name, locator))
+
+    def get_value(self, locator, tag=None):
+        element = self.find(locator, tag, required=False)
+        return element.get_attribute('value') if element else None
+
+    def register(self, strategy_name, strategy_keyword, persist=False):
+        strategy = CustomLocator(self.ctx, strategy_name, strategy_keyword)
         if strategy.name in self._strategies:
-            raise AttributeError("The custom locator '" + strategy.name +
-            "' cannot be registered. A locator of that name already exists.")
+            raise RuntimeError("The custom locator '%s' cannot be registered. "
+                               "A locator of that name already exists."
+                               % strategy.name)
         self._strategies[strategy.name] = strategy.find
-
-        if not persist:
+        if is_falsy(persist):
             # Unregister after current scope ends
-            utils.events.on('scope_end', 'current', self.unregister, strategy.name)
+            events.on('scope_end', 'current', self.unregister, strategy.name)
 
     def unregister(self, strategy_name):
         if strategy_name in self._default_strategies:
-            raise AttributeError("Cannot unregister the default strategy '" + strategy_name + "'")
+            raise RuntimeError("Cannot unregister the default strategy '%s'."
+                               % strategy_name)
         elif strategy_name not in self._strategies:
-            logger.info("Cannot unregister the non-registered strategy '" + strategy_name + "'")
+            logger.info("Cannot unregister the non-registered strategy '%s'."
+                        % strategy_name)
         else:
             del self._strategies[strategy_name]
 
     def has_strategy(self, strategy_name):
         return strategy_name in self.strategies
 
-    # Strategy routines, private
-
-    def _find_by_identifier(self, browser, criteria, tag, constraints):
-        elements = self._normalize_result(browser.find_elements_by_id(criteria))
-        elements.extend(self._normalize_result(browser.find_elements_by_name(criteria)))
+    def _find_by_identifier(self, criteria, tag, constraints):
+        elements = self._normalize_result(
+            self.browser.find_elements_by_id(criteria))
+        elements.extend(self._normalize_result(
+            self.browser.find_elements_by_name(criteria)))
         return self._filter_elements(elements, tag, constraints)
 
-    def _find_by_id(self, browser, criteria, tag, constraints):
+    def _find_by_id(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_id(criteria),
+            self.browser.find_elements_by_id(criteria),
             tag, constraints)
 
-    def _find_by_name(self, browser, criteria, tag, constraints):
+    def _find_by_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_name(criteria),
+            self.browser.find_elements_by_name(criteria),
             tag, constraints)
 
-    def _find_by_xpath(self, browser, criteria, tag, constraints):
+    def _find_by_xpath(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_xpath(criteria),
+            self.browser.find_elements_by_xpath(criteria),
             tag, constraints)
 
-    def _find_by_dom(self, browser, criteria, tag, constraints):
-        result = browser.execute_script("return %s;" % criteria)
+    def _find_by_dom(self, criteria, tag, constraints):
+        result = self.browser.execute_script("return %s;" % criteria)
         if result is None:
             return []
         if not isinstance(result, list):
             result = [result]
         return self._filter_elements(result, tag, constraints)
 
-    def _find_by_sizzle_selector(self, browser, criteria, tag, constraints):
+    def _find_by_sizzle_selector(self, criteria, tag, constraints):
         js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
         return self._filter_elements(
-            browser.execute_script(js),
+            self.browser.execute_script(js),
             tag, constraints)
 
-    def _find_by_link_text(self, browser, criteria, tag, constraints):
+    def _find_by_link_text(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_link_text(criteria),
+            self.browser.find_elements_by_link_text(criteria),
             tag, constraints)
 
-    def _find_by_partial_link_text(self, browser, criteria, tag, constraints):
+    def _find_by_partial_link_text(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_partial_link_text(criteria),
+            self.browser.find_elements_by_partial_link_text(criteria),
             tag, constraints)
 
-    def _find_by_css_selector(self, browser, criteria, tag, constraints):
+    def _find_by_css_selector(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_css_selector(criteria),
+            self.browser.find_elements_by_css_selector(criteria),
             tag, constraints)
 
-    def _find_by_class_name(self, browser, criteria, tag, constraints):
+    def _find_by_class_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_class_name(criteria),
+            self.browser.find_elements_by_class_name(criteria),
             tag, constraints)
 
-    def _find_by_tag_name(self, browser, criteria, tag, constraints):
+    def _find_by_tag_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            browser.find_elements_by_tag_name(criteria),
+            self.browser.find_elements_by_tag_name(criteria),
             tag, constraints)
 
-    def _find_by_sc_locator(self, browser, criteria, tag, constraints):
+    def _find_by_sc_locator(self, criteria, tag, constraints):
         js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
-        return self._filter_elements([browser.execute_script(js)], tag, constraints)
+        return self._filter_elements([self.browser.execute_script(js)],
+                                     tag, constraints)
 
-    def _find_by_default(self, browser, criteria, tag, constraints):
-        if criteria.startswith('//'):
-            return self._find_by_xpath(browser, criteria, tag, constraints)
-        return self._find_by_key_attrs(browser, criteria, tag, constraints)
-
-    def _find_by_key_attrs(self, browser, criteria, tag, constraints):
-        key_attrs = self._key_attrs.get(None)
-        if tag is not None:
-            key_attrs = self._key_attrs.get(tag, key_attrs)
-
-        xpath_criteria = utils.escape_xpath_value(criteria)
+    def _find_by_default(self, criteria, tag, constraints):
+        if tag in self._key_attrs:
+            key_attrs = self._key_attrs[tag]
+        else:
+            key_attrs = self._key_attrs[None]
+        xpath_criteria = escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
-        xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
+        xpath_constraints = self._get_xpath_constraints(constraints)
         xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
-        xpath_searchers.extend(
-            self._get_attrs_with_url(key_attrs, criteria, browser))
-        xpath = "//%s[%s(%s)]" % (
+        xpath_searchers.extend(self._get_attrs_with_url(key_attrs, criteria))
+        xpath = "//%s[%s%s(%s)]" % (
             xpath_tag,
-            ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
-            ' or '.join(xpath_searchers))
+            ' and '.join(xpath_constraints),
+            ' and ' if xpath_constraints else '',
+            ' or '.join(xpath_searchers)
+        )
+        return self._normalize_result(
+            self.browser.find_elements_by_xpath(xpath))
 
-        return self._normalize_result(browser.find_elements_by_xpath(xpath))
+    def _get_xpath_constraints(self, constraints):
+        xpath_constraints = [self._get_xpath_constraint(name, value)
+                             for name, value in constraints.items()]
+        return xpath_constraints
 
-    # Private
-
-    _key_attrs = {
-        None: ['@id', '@name'],
-        'a': ['@id', '@name', '@href', 'normalize-space(descendant-or-self::text())'],
-        'img': ['@id', '@name', '@src', '@alt'],
-        'input': ['@id', '@name', '@value', '@src'],
-        'button': ['@id', '@name', '@value', 'normalize-space(descendant-or-self::text())']
-    }
+    def _get_xpath_constraint(self, name, value):
+        if isinstance(value, list):
+            return "@%s[. = '%s']" % (name, "' or . = '".join(value))
+        else:
+            return "@%s='%s'" % (name, value)
 
     def _get_tag_and_constraints(self, tag):
-        if tag is None: return None, {}
-
+        if tag is None:
+            return None, {}
         tag = tag.lower()
         constraints = {}
         if tag == 'link':
@@ -177,7 +228,9 @@ class ElementFinder(object):
             constraints['type'] = 'checkbox'
         elif tag == 'text field':
             tag = 'input'
-            constraints['type'] = 'text'
+            constraints['type'] = ['date', 'datetime-local', 'email', 'month',
+                                   'number', 'password', 'search', 'tel',
+                                   'text', 'time', 'url', 'week']
         elif tag == 'file upload':
             tag = 'input'
             constraints['type'] = 'file'
@@ -185,46 +238,48 @@ class ElementFinder(object):
             tag = 'textarea'
         return tag, constraints
 
+    def _parse_locator(self, locator):
+        if locator.startswith(('//', '(//')):
+            return 'xpath', locator
+        if '=' not in locator:
+            return 'default', locator
+        prefix, criteria = locator.split('=', 1)
+        return prefix.strip(), criteria.lstrip()
+
     def _element_matches(self, element, tag, constraints):
         if not element.tag_name.lower() == tag:
             return False
         for name in constraints:
-            if not element.get_attribute(name) == constraints[name]:
+            if isinstance(constraints[name], list):
+                if element.get_attribute(name) not in constraints[name]:
+                    return False
+            elif element.get_attribute(name) != constraints[name]:
                 return False
         return True
 
     def _filter_elements(self, elements, tag, constraints):
         elements = self._normalize_result(elements)
-        if tag is None: return elements
+        if tag is None:
+            return elements
         return [element for element in elements if self._element_matches(element, tag, constraints)]
 
-    def _get_attrs_with_url(self, key_attrs, criteria, browser):
+    def _get_attrs_with_url(self, key_attrs, criteria):
         attrs = []
         url = None
         xpath_url = None
         for attr in ['@src', '@href']:
             if attr in key_attrs:
                 if url is None or xpath_url is None:
-                    url = self._get_base_url(browser) + "/" + criteria
-                    xpath_url = utils.escape_xpath_value(url)
+                    url = self._get_base_url() + "/" + criteria
+                    xpath_url = escape_xpath_value(url)
                 attrs.append("%s=%s" % (attr, xpath_url))
         return attrs
 
-    def _get_base_url(self, browser):
-        url = browser.get_current_url()
+    def _get_base_url(self):
+        url = self.browser.current_url
         if '/' in url:
             url = '/'.join(url.split('/')[:-1])
         return url
-
-    def _parse_locator(self, locator):
-        prefix = None
-        criteria = locator
-        if not locator.startswith('//'):
-            locator_parts = locator.partition('=')
-            if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0]
-                criteria = locator_parts[2].strip()
-        return (prefix, criteria)
 
     def _normalize_result(self, elements):
         if not isinstance(elements, list):

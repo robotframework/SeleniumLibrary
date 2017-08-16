@@ -1,25 +1,53 @@
-addons:
-  firefox: latest-esr
 language: python
-sudo: false
-python:
-  - "2.7"
+sudo: required
+dist: trusty
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+before_install:
+  - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+  - wget http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - sudo chmod u+x chromedriver
+  - sudo mv chromedriver /usr/bin/
 install:
-  #- pip install pep8 --use-mirrors
-  #- pip install pyflakes --use-mirrors
-  - pip install robotframework
-  - pip install selenium==2.53.6
-  - pip install decorator
-  - pip install mockito
-  #- "if [[ ${BROWSER} == 'ie' ]]; then pip install ie_only_pkg; fi"
+  - pip install .
+  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
+matrix:
+  include:
+    - python: "3.6" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=3.5.0
+        - ROBOTFRAMEWORK=3.0.2
+    - python: "2.7" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=2.53.6
+        - ROBOTFRAMEWORK=2.9.2
+    - python: "2.7" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=3.5.0
+        - ROBOTFRAMEWORK=2.8.7
+    - python: "3.3" # For PR and cron
+      env:
+        - BROWSER=chrome
+        - SELENIUM=2.53.6
+        - ROBOTFRAMEWORK=3.0.2
+    - python: "3.3" # For cron only
+      env:
+        - BROWSER=firefox
+        - SELENIUM=3.5.0
+        - ROBOTFRAMEWORK=3.0.2
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - pip install selenium==$SELENIUM
+  - pip install robotframework==$ROBOTFRAMEWORK
 script:
-  - "firefox --version"
-  - "python test/run_tests.py python $BROWSER --noncritical known_issue_-_travisci"
-env:
-  matrix:
-  - BROWSER=firefox
-  #- BROWSER=ie # will be added when we have completed SauceLabs CI
-  #- BROWSER=safari # will be added after #247 merged
+  - python test/run_tests.py $BROWSER

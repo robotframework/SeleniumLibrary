@@ -1,3 +1,2 @@
-decorator >= 3.3.2
-selenium >= 2.32.0
-robotframework >= 2.6.0
+selenium >= 2.53.6
+robotframework >= 2.8.7

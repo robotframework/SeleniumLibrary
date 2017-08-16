@@ -1,19 +1,25 @@
-import robot
-import os, errno
+import errno
+import os
+import re
 
-from Selenium2Library import utils
-from keywordgroup import KeywordGroup
+from robot.libraries.BuiltIn import BuiltIn
+from robot.libraries.BuiltIn import RobotNotRunningError
+from robot.utils import get_link_path
+
+from Selenium2Library.base import LibraryComponent, keyword
+from Selenium2Library.utils import events
+from Selenium2Library.utils import is_falsy
 
 
-class _ScreenshotKeywords(KeywordGroup):
+class ScreenshotKeywords(LibraryComponent):
 
-    def __init__(self):
+    def __init__(self, ctx):
+        LibraryComponent.__init__(self, ctx)
         self._screenshot_index = {}
         self._screenshot_path_stack = []
         self.screenshot_root_directory = None
 
-    # Public
-
+    @keyword
     def set_screenshot_directory(self, path, persist=False):
         """Sets the root output directory for captured screenshots.
 
@@ -25,14 +31,14 @@ class _ScreenshotKeywords(KeywordGroup):
         """
         path = os.path.abspath(path)
         self._create_directory(path)
-        if persist is False:
+        if is_falsy(persist):
             self._screenshot_path_stack.append(self.screenshot_root_directory)
             # Restore after current scope ends
-            utils.events.on('scope_end', 'current',
-                            self._restore_screenshot_directory)
-
+            events.on('scope_end', 'current',
+                      self._restore_screenshot_directory)
         self.screenshot_root_directory = path
 
+    @keyword
     def capture_page_screenshot(self,
                                 filename='selenium-screenshot-{index}.png'):
         """Takes a screenshot of the current page and embeds it into the log.
@@ -62,6 +68,13 @@ class _ScreenshotKeywords(KeywordGroup):
         If there is a need to write literal _{index}_ or if ``filename``
         contains _{_ or _}_ characters, then the braces must be doubled.
 
+        If _{index}_ is used, the computed filename will not overwrite
+        an existing file. The number chosen will be the first number
+        that results in a unique filename. For example, if the
+        computed name is screenshot-1.png but screenshot-1.png already
+        exists, screenshot-2.png will be tried, and so on, until a
+        unique name is found.
+
         Example 1:
         | ${file1} = | Capture Page Screenshot |
         | File Should Exist | ${OUTPUTDIR}${/}selenium-screenshot-1.png |
@@ -84,21 +97,24 @@ class _ScreenshotKeywords(KeywordGroup):
         Example 3:
         | Capture Page Screenshot | ${OTHER_DIR}${/}sc-{index:06}.png |
         | File Should Exist | ${OTHER_DIR}${/}sc-000001.png |
+
         """
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
-        if hasattr(self._current_browser(), 'get_screenshot_as_file'):
-            if not self._current_browser().get_screenshot_as_file(path):
+        if hasattr(self.browser, 'get_screenshot_as_file'):
+            if not self.browser.get_screenshot_as_file(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         else:
-            if not self._current_browser().save_screenshot(path):
+            if not self.browser.save_screenshot(path):
                 raise RuntimeError('Failed to save screenshot ' + link)
         # Image is shown on its own row and thus prev row is closed on purpose
-        self._html('</td></tr><tr><td colspan="3"><a href="%s">'
-                   '<img src="%s" width="800px"></a>' % (link, link))
+        msg = (
+            '</td></tr><tr><td colspan="3"><a href="{}">'
+            '<img src="{}" width="800px"></a>'.format(link, link)
+        )
+        self.info(msg, html=True)
         return path
 
-    # Private
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
         if not os.path.exists(target_dir):
@@ -123,14 +139,26 @@ class _ScreenshotKeywords(KeywordGroup):
     def _restore_screenshot_directory(self):
         self.screenshot_root_directory = self._screenshot_path_stack.pop()
 
-    def _get_screenshot_paths(self, filename):
-        filename = filename.format(
-            index=self._get_screenshot_index(filename))
-        filename = filename.replace('/', os.sep)
+    def _get_screenshot_paths(self, filename_template):
         screenshotdir = self._get_screenshot_directory()
+
+        filename = filename_template.format(
+            index=self._get_screenshot_index(filename_template))
+
+        # try to match {index} but not {{index}} (plus handle
+        # other variants like {index!r})
+        if re.search(r'(?<!{){index(![rs])?(:.*?)?}(?!})', filename_template):
+            # make sure the computed filename doesn't exist. We only
+            # do this if the template had the {index} formatting
+            # sequence (or one of it's variations)
+            while os.path.exists(os.path.join(screenshotdir, filename)):
+                filename = filename_template.format(
+                    index=self._get_screenshot_index(filename_template))
+
+        filename = filename.replace('/', os.sep)
         logdir = self._get_log_dir()
         path = os.path.join(screenshotdir, filename)
-        link = robot.utils.get_link_path(path, logdir)
+        link = get_link_path(path, logdir)
         return path, link
 
     def _get_screenshot_index(self, filename):
@@ -138,3 +166,14 @@ class _ScreenshotKeywords(KeywordGroup):
             self._screenshot_index[filename] = 0
         self._screenshot_index[filename] += 1
         return self._screenshot_index[filename]
+
+    def _get_log_dir(self):
+        try:
+            logfile = BuiltIn().get_variable_value('${LOG FILE}')
+        except RobotNotRunningError:
+            logfile = os.getcwd()
+        if logfile != 'NONE':
+            logdir = os.path.dirname(logfile)
+        else:
+            logdir = BuiltIn().get_variable_value('${OUTPUTDIR}')
+        return logdir
