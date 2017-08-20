@@ -354,6 +354,8 @@ class BrowserManagementKeywords(LibraryComponent):
 
         The `log_type` argument defines which logs to get. Possible values are:
         `browser`, `driver`, `client` or `server`
+        
+        New in SeleniumLibrary 3.0
         """
         return self.browser.get_log(log_type)
 
