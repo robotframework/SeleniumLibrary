@@ -151,6 +151,32 @@ class Selenium2Library(DynamicCore):
     or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
     For more information about the time syntax see the
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
+
+    = Boolean arguments =
+
+    Some keywords accept arguments that are handled as Boolean values true or
+    false. If such an argument is given as a string, it is considered false if
+    it is either empty or case-insensitively equal to ``false``, ``no`` or
+    ``none``. Other strings are considered true regardless their value, and
+    other argument types are tested using same
+    [https://docs.python.org/2/library/stdtypes.html#truth-value-testing|rules as in Python].
+
+    True examples:
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=True    | # Strings are generally true.    |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=yes     | # Same as the above.             |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${TRUE} | # Python True is true.           |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${42}   | # Numbers other than 0 are true. |
+
+    False examples:
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=False    | # String false is false.        |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=no       | # Also string no is false.      |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=NONE     | # String NONE is false.         |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${EMPTY} | # Empty string is false.        |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${FALSE} | # Python False is false.        |
+    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${NONE}  | # Python None is false.         |
+
+    Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
+    ``false``, ``no`` and ``none``, were considered true.
     """
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
