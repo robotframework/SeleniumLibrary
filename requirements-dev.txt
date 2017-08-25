@@ -1,2 +1,3 @@
 mockito >= 1.0.0
 robotstatuschecker
+invoke > 0.13.0
