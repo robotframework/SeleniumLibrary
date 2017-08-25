@@ -18,15 +18,26 @@ the popular Selenium_ tool internally. See the `keyword documentation`_
 for available keywords and `wiki`_ for some more general information
 about the library.
 
-SeleniumLibrary is based on the `old SeleniumLibrary` that was forked to
+SeleniumLibrary is based on the `old SeleniumLibrary`_ that was forked to
 Selenium2Library and then later renamed back to SeleniumLibrary.
+
+The new SeleniumLibrary is currently in pre-release phase. The final
+SeleniumLibrary 3.0 release is planned for early September.
 
 Installation
 ------------
 
 The recommended installation method is using pip_::
 
-    pip install robotframework-seleniumlibrary
+    pip install --pre robotframework-seleniumlibrary
+
+Notice that ``--pre`` is needed to get the current SeleniumLibrary,
+not the `old SeleniumLibrary`_, until the final SeleniumLibrary 3.0
+is released.
+
+To install the old Selenium2Library, use this command instead::
+
+    pip install robotframework-selenium2library
 
 See `INSTALL.rst`_ for more details about installation.
 
