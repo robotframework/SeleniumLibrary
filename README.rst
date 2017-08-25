@@ -24,6 +24,8 @@ Selenium2Library and then later renamed back to SeleniumLibrary.
 The new SeleniumLibrary is currently in pre-release phase. The final
 SeleniumLibrary 3.0 release is planned for early September.
 
+The Selenium2Library 1.8.0 keyword `documentation is also available`_
+
 Installation
 ------------
 
@@ -78,3 +80,4 @@ information:
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _robotframework-users: http://groups.google.com/group/robotframework-users
 .. _Robot Framework Slack: https://robotframework-slack-invite.herokuapp.com/
+.. _documentation is also available: http://robotframework.org/SeleniumLibrary/Selenium2Library.html
