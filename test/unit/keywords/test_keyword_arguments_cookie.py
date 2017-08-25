@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock, unstub, verify
 
-from Selenium2Library.keywords import CookieKeywords
+from SeleniumLibrary.keywords import CookieKeywords
 
 
 class KeywordArgumentsCookieTest(unittest.TestCase):

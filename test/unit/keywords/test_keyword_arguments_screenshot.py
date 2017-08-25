@@ -3,8 +3,8 @@ import unittest
 from mockito import mock, unstub, when, verify
 from mockito.matchers import ANY
 
-from Selenium2Library.keywords import ScreenshotKeywords
-from Selenium2Library.utils import events
+from SeleniumLibrary.keywords import ScreenshotKeywords
+from SeleniumLibrary.utils import events
 
 
 class KeywordArgumentsElementTest(unittest.TestCase):

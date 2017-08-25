@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock
 
-from Selenium2Library.locators.elementfinder import ElementFinder
+from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 
 class LocatorParserTests(unittest.TestCase):

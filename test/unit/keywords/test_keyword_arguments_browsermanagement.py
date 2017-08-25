@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock, unstub, when
 
-from Selenium2Library.keywords import BrowserManagementKeywords
+from SeleniumLibrary.keywords import BrowserManagementKeywords
 
 
 class KeywordArgumentsElementTest(unittest.TestCase):

@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.locators import TableElementFinder
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.locators import TableElementFinder
 
 
 class TableElementKeywords(LibraryComponent):

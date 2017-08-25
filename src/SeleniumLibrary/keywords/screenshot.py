@@ -22,9 +22,9 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.libraries.BuiltIn import RobotNotRunningError
 from robot.utils import get_link_path
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.utils import events
-from Selenium2Library.utils import is_falsy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.utils import events
+from SeleniumLibrary.utils import is_falsy
 
 
 class ScreenshotKeywords(LibraryComponent):
@@ -67,7 +67,7 @@ class ScreenshotKeywords(LibraryComponent):
         given in absolute format. If an absolute or relative path is given
         but the path does not exist it will be created.
 
-        Starting from Selenium2Library 1.8 if ``filename`` contains _{index}_
+        Starting from SeleniumLibrary 1.8 if ``filename`` contains _{index}_
         characters, it will be automatically replaced with running index.
         The running index is unique for each different filename. The absolute
         path of the saved screenshot is always returned and it does not depend

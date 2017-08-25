@@ -23,9 +23,9 @@ from robot.utils import secs_to_timestr, timestr_to_secs
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.locators.windowmanager import WindowManager
-from Selenium2Library.utils import is_truthy, is_falsy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.locators.windowmanager import WindowManager
+from SeleniumLibrary.utils import is_truthy, is_falsy
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -343,7 +343,7 @@ class BrowserManagementKeywords(LibraryComponent):
         string 'new': select the last-indexed window assuming it is the newest opened window
         window list: select the first window not in given list (See 'List Windows' to get the list)
 
-        It is also possible to specify the approach Selenium2Library should take
+        It is also possible to specify the approach SeleniumLibrary should take
         to find a window by specifying a locator strategy:
 
         | *Strategy* | *Example*                               | *Description*                        |

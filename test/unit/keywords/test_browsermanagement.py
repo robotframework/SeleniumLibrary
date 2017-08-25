@@ -3,7 +3,7 @@ import unittest
 from mockito import when, mock, verify, verifyNoMoreInteractions, unstub
 from selenium import webdriver
 
-from Selenium2Library.keywords.browsermanagement import BrowserManagementKeywords
+from SeleniumLibrary.keywords.browsermanagement import BrowserManagementKeywords
 
 
 class BrowserManagementTests(unittest.TestCase):

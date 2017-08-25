@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock, unstub, when
 
-from Selenium2Library.keywords import FormElementKeywords
+from SeleniumLibrary.keywords import FormElementKeywords
 
 
 FALSES = ['False', False, '', None, 'NONE']

@@ -11,7 +11,7 @@ Before running the test, install the dependencies::
 Unit and Acceptance Tests
 -------------------------
 
-The test directory contains everything needed to run Selenium2Library
+The test directory contains everything needed to run SeleniumLibrary
 tests with Robot Framework. This includes:
 
 - Unit tests under `unit` directory.
@@ -41,7 +41,7 @@ system settings, which python is used by default. It is possible to run test
 by using different interpreter by using the `--interpreter` command line
 argument.
 
-Starting from version 2.0 onwards the Selenium2Library is tested by using 
+Starting from version 2.0 onwards the SeleniumLibrary is tested by using 
 Python 2 and 3. Other interpreters are not tested by the development team.
 
 

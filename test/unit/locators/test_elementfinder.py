@@ -2,7 +2,7 @@ import unittest
 
 from mockito import any, mock, verify, when, unstub
 
-from Selenium2Library.locators.elementfinder import ElementFinder
+from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 
 class ElementFinderTests(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 
-from Selenium2Library.utils import escape_xpath_value
+from SeleniumLibrary.utils import escape_xpath_value
 
 
 class UtilsPackageTests(unittest.TestCase):

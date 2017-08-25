@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from Selenium2Library.base import ContextAware
+from SeleniumLibrary.base import ContextAware
 
 from .elementfinder import ElementFinder
 
