@@ -7,26 +7,26 @@ from setuptools import setup
 
 CURDIR = dirname(abspath(__file__))
 
-with open(join(CURDIR, 'src', 'Selenium2Library', '__init__.py')) as f:
+with open(join(CURDIR, 'src', 'SeleniumLibrary', '__init__.py')) as f:
     VERSION = re.search("\n__version__ = '(.*)'\n", f.read()).group(1)
 
 DESCRIPTION = """
-Selenium2Library is a web testing library for Robot Framework
-that leverages the Selenium 2 (WebDriver) libraries.
+SeleniumLibrary is a web testing library for Robot Framework
+that utilizes the Selenium tool internally.
 """[1:-1]
 
 with open(join(CURDIR, 'requirements.txt')) as f:
     REQUIREMENTS = f.read().splitlines()
 
-setup(name         = 'robotframework-selenium2library',
+setup(name         = 'robotframework-seleniumlibrary',
       version      = VERSION,
       description  = 'Web testing library for Robot Framework',
       long_description = DESCRIPTION,
       author       = 'Ryan Tomac , Ed Manlove , Jeremy Johnson',
       author_email = '<ryan@tomacfamily.com> ,  <devPyPlTw@verizon.net> ,  <jeremy@softworks.com.my>',
-      url          = 'https://github.com/robotframework/Selenium2Library',
+      url          = 'https://github.com/robotframework/SeleniumLibrary',
       license      = 'Apache License 2.0',
-      keywords     = 'robotframework testing testautomation selenium selenium2 webdriver web',
+      keywords     = 'robotframework testing testautomation selenium webdriver web',
       platforms    = 'any',
       classifiers  = [
                         "Development Status :: 5 - Production/Stable",
@@ -40,7 +40,7 @@ setup(name         = 'robotframework-selenium2library',
                      ],
       install_requires = REQUIREMENTS,
       package_dir  = {'' : 'src'},
-      packages     = ['Selenium2Library','Selenium2Library.keywords','Selenium2Library.locators',
-                      'Selenium2Library.utils'],
+      packages     = ['SeleniumLibrary', 'SeleniumLibrary.keywords',
+                      'SeleniumLibrary.locators', 'SeleniumLibrary.utils'],
       include_package_data = True,
       )
