@@ -8,7 +8,7 @@ from setuptools import setup
 CURDIR = dirname(abspath(__file__))
 
 with open(join(CURDIR, 'src', 'SeleniumLibrary', '__init__.py')) as f:
-    VERSION = re.search("\n__version__ = '(.*)'\n", f.read()).group(1)
+    VERSION = re.search("\n__version__ = '(.*)'", f.read()).group(1)
 
 DESCRIPTION = """
 SeleniumLibrary is a web testing library for Robot Framework
