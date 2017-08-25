@@ -1,82 +1,69 @@
-Selenium 2 (WebDriver) library for Robot Framework
-==================================================
+SeleniumLibrary
+===============
 
-.. image:: https://api.travis-ci.org/robotframework/Selenium2Library.png
-    :target: http://travis-ci.org/robotframework/Selenium2Library
+.. image:: https://api.travis-ci.org/robotframework/SeleniumLibrary.png
+    :target: http://travis-ci.org/robotframework/SeleniumLibrary
 
-.. image:: https://img.shields.io/pypi/v/robotframework-selenium2library.svg
-    :target: https://pypi.python.org/pypi/robotframework-selenium2library
+.. image:: https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version
+    :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 
-.. image:: https://img.shields.io/pypi/dm/robotframework-selenium2library.svg
-    :target: https://pypi.python.org/pypi/robotframework-selenium2library
-
-.. image:: https://img.shields.io/pypi/l/robotframework-selenium2library.svg
+.. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
     :target: http://www.apache.org/licenses/LICENSE-2.0
-
-.. image:: https://coveralls.io/repos/robotframework/Selenium2Library/badge.svg?branch=master&service=github
-	:target: https://coveralls.io/github/robotframework/Selenium2Library?branch=master
-
-.. image:: https://robotframework-slack-invite.herokuapp.com/badge.svg
-	:target: https://robotframework-slack-invite.herokuapp.com/
-	:alt: Slack channel
-
 
 Introduction
 ------------
 
-Selenium2Library is a web testing library for `Robot Framework`_
-that leverages the `Selenium 2 (WebDriver)`_ libraries from the
-Selenium_ project.
+SeleniumLibrary is a web testing library for `Robot Framework`_ that utilizes
+the popular Selenium_ tool internally. See the `keyword documentation`_
+for available keywords and `wiki`_ for some more general information
+about the library.
 
-It is modeled after (and forked from) the SeleniumLibrary_ library,
-but re-implemented to use Selenium 2 and WebDriver technologies.
-
-- More information about this library can be found on the Wiki_ and in the `Keyword Documentation`_.
-- Installation information is found in the `INSTALL.rst`_ file.
-- Developer information is found in `BUILD.rst`_ file.
-
+SeleniumLibrary is based on the `old SeleniumLibrary` that was forked to
+Selenium2Library and then later renamed back to SeleniumLibrary.
 
 Installation
 ------------
 
-The recommended installation method is using
-`pip <http://pip-installer.org>`__::
+The recommended installation method is using pip_::
 
-    pip install robotframework-selenium2library
+    pip install robotframework-seleniumlibrary
 
-For more information about installation and please see `INSTALL.rst`_.
+See `INSTALL.rst`_ for more details about installation.
 
 Usage
 -----
 
-To write tests with Robot Framework and Selenium2Library,
-Selenium2Library must be imported into your Robot test suite.
+To write tests with Robot Framework and SeleniumLibrary,
+SeleniumLibrary must be imported into your Robot test suite.
 See `Robot Framework User Guide`_ for more information.
 
-
-Demo project
-------------
 A demo project illustrating how to use this library can be found from:
 https://bitbucket.org/robotframework/webdemo
 
-Please see the usage instructions from the demo project pages.
+Support
+-------
 
-Getting Help
-------------
-The `user group for Robot Framework`_ is the best place to get help. Consider including in the post:
+Best places to ask for support:
+
+- `robotframework-users`_ mailing list
+- ``#seleniumlibrary`` channel on `Robot Framework Slack`_
+
+When asking for help or reporting problems, please include the following
+information:
 
 - Full description of what you are trying to do and expected outcome
-- Version number of Selenium2Library, Robot Framework, and Selenium
-- Version number of browser and the browser driver
+- Version number of SeleniumLibrary, Selenium, and Robot Framework
+- Version number of the browser and the browser driver
 - Traceback or other debug output containing error information
 
 .. _Robot Framework: http://robotframework.org
 .. _Selenium: http://seleniumhq.org
-.. _Selenium 2 (WebDriver): http://seleniumhq.org/docs/03_webdriver.html
-.. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary/
-.. _Wiki: https://github.com/robotframework/Selenium2Library/wiki
-.. _Keyword Documentation: http://robotframework.org/Selenium2Library/Selenium2Library.html
-.. _INSTALL.rst: https://github.com/robotframework/Selenium2Library/blob/master/INSTALL.rst
-.. _BUILD.rst: https://github.com/robotframework/Selenium2Library/blob/master/BUILD.rst
+.. _Old SeleniumLibrary: https://github.com/robotframework/OldSeleniumLibrary/
+.. _pip: http://pip-installer.org
+.. _Wiki: https://github.com/robotframework/SeleniumLibrary/wiki
+.. _Keyword Documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
+.. _INSTALL.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/INSTALL.rst
+.. _BUILD.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/BUILD.rst
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
-.. _user group for Robot Framework: http://groups.google.com/group/robotframework-users
+.. _robotframework-users: http://groups.google.com/group/robotframework-users
+.. _Robot Framework Slack: https://robotframework-slack-invite.herokuapp.com/
