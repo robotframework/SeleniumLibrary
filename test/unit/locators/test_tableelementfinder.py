@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock, verify, when, unstub
 
-from Selenium2Library.locators.tableelementfinder import TableElementFinder
+from SeleniumLibrary.locators.tableelementfinder import TableElementFinder
 
 
 class ElementFinderTests(unittest.TestCase):

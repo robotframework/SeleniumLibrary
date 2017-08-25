@@ -17,10 +17,10 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.keywords.formelement import FormElementKeywords
-from Selenium2Library.utils import escape_xpath_value
-from Selenium2Library.utils import is_truthy, is_falsy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.keywords.formelement import FormElementKeywords
+from SeleniumLibrary.utils import escape_xpath_value
+from SeleniumLibrary.utils import is_truthy, is_falsy
 
 
 class ElementKeywords(LibraryComponent):

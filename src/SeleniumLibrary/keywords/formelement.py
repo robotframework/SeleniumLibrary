@@ -16,8 +16,8 @@
 
 import os
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.utils import is_falsy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.utils import is_falsy
 
 
 class FormElementKeywords(LibraryComponent):

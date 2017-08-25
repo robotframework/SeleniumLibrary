@@ -20,9 +20,9 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from Selenium2Library.base import keyword
-from Selenium2Library.base import LibraryComponent
-from Selenium2Library.utils import is_truthy
+from SeleniumLibrary.base import keyword
+from SeleniumLibrary.base import LibraryComponent
+from SeleniumLibrary.utils import is_truthy
 
 
 class AlertKeywords(LibraryComponent):

@@ -17,8 +17,8 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.utils import is_truthy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.utils import is_truthy
 
 
 class SelectElementKeywords(LibraryComponent):

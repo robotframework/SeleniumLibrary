@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.utils import is_truthy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.utils import is_truthy
 
 
 class CookieKeywords(LibraryComponent):

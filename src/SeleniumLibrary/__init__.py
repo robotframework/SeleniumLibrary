@@ -36,23 +36,23 @@ from .utils import LibraryListener
 __version__ = '3.0.0.dev1'
 
 
-class Selenium2Library(DynamicCore):
-    """Selenium2Library is a web testing library for Robot Framework.
+class SeleniumLibrary(DynamicCore):
+    """SeleniumLibrary is a web testing library for Robot Framework.
 
-    This document is about using Selenium2Library. For information about
+    This document is about using SeleniumLibrary. For information about
     installation, support, and more please visit the
-    [https://github.com/robotframework/Selenium2Library|project page].
+    [https://github.com/robotframework/SeleniumLibrary|project page].
 
-    Selenium2Library uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
+    SeleniumLibrary uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
     See http://seleniumhq.org/docs/03_webdriver.html for more information on Selenium 2
     and WebDriver.
 
-    Selenium2Library runs tests in a real browser instance. It should work in
+    SeleniumLibrary runs tests in a real browser instance. It should work in
     most modern browsers and can be used with both Python and Jython interpreters.
 
     = Before running tests =
 
-    Prior to running test cases using Selenium2Library, Selenium2Library must be
+    Prior to running test cases using SeleniumLibrary, SeleniumLibrary must be
     imported into your Robot test suite (see `importing` section), and the
     `Open Browser` keyword must be used to open a browser to the desired location.
 
@@ -60,7 +60,7 @@ class Selenium2Library(DynamicCore):
     *--- Note important change starting with Version 1.7.0 release ---*
     = Locating or specifying elements =
 
-    All keywords in Selenium2Library that need to find an element on the page
+    All keywords in SeleniumLibrary that need to find an element on the page
     take an argument, either a `locator` or now a `webelement`. `locator`
     is a string that describes how to locate an element using a syntax
     specifying different location strategies. `webelement` is a variable that
@@ -84,7 +84,7 @@ class Selenium2Library(DynamicCore):
     | Click Element    (//div)[2]    # xpath
 
     In the explicit way, it is possible to specify the approach
-    Selenium2Library should take to find an element by specifying a lookup
+    SeleniumLibrary should take to find an element by specifying a lookup
     strategy with a locator prefix. Supported strategies are:
 
     | *Strategy* | *Example*                               | *Description*                                   |
@@ -109,13 +109,13 @@ class Selenium2Library(DynamicCore):
     This can be fixed by changing the locator to:
     | Click Link    default=page?a=b
 
-    Please note that jQuery is not provided by Selenium2Library
+    Please note that jQuery is not provided by SeleniumLibrary
     and if there is need to use jQuery locators, the system
     under test must provide the jQuery library.
 
     *Using webelements*
     ------------------
-    Starting with version 1.7 of the Selenium2Library, one can pass an argument
+    Starting with version 1.7 of the SeleniumLibrary, one can pass an argument
     that contains a WebElement instead of a string locator. To get a WebElement,
     use the new `Get WebElements` keyword.  For example:
 
@@ -204,7 +204,7 @@ class Selenium2Library(DynamicCore):
                  run_on_failure='Capture Page Screenshot',
                  screenshot_root_directory=None):
 
-        """Selenium2Library can be imported with optional arguments.
+        """SeleniumLibrary can be imported with optional arguments.
 
         `timeout` is the default timeout used to wait for all waiting actions.
         It can be later set with `Set Selenium Timeout`.
@@ -218,7 +218,7 @@ class Selenium2Library(DynamicCore):
         __ http://seleniumhq.org/docs/04_webdriver_advanced.html#explicit-and-implicit-waits
 
         `run_on_failure` specifies the name of a keyword (from any available
-        libraries) to execute when a Selenium2Library keyword fails. By default
+        libraries) to execute when a SeleniumLibrary keyword fails. By default
         `Capture Page Screenshot` will be used to take a screenshot of the current page.
         Using the value "Nothing" will disable this feature altogether. See
         `Register Keyword To Run On Failure` keyword for more information about this
@@ -228,11 +228,11 @@ class Selenium2Library(DynamicCore):
         stored in. If not provided the default directory will be where robotframework places its logfile.
 
         Examples:
-        | Library `|` Selenium2Library `|` 15                                            | # Sets default timeout to 15 seconds                                       |
-        | Library `|` Selenium2Library `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
-        | Library `|` Selenium2Library `|` 5 `|` run_on_failure=Log Source               | # Sets default timeout to 5 seconds and runs `Log Source` on failure       |
-        | Library `|` Selenium2Library `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
-        | Library `|` Selenium2Library `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
+        | Library `|` SeleniumLibrary `|` 15                                            | # Sets default timeout to 15 seconds                                       |
+        | Library `|` SeleniumLibrary `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
+        | Library `|` SeleniumLibrary `|` 5 `|` run_on_failure=Log Source               | # Sets default timeout to 5 seconds and runs `Log Source` on failure       |
+        | Library `|` SeleniumLibrary `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
+        | Library `|` SeleniumLibrary `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
         self._run_on_failure_keyword = None
         self._running_on_failure_routine = False
@@ -290,18 +290,18 @@ class Selenium2Library(DynamicCore):
 
     @property
     def _cache(self):
-        warnings.warn('"Selenium2Library._cache" is deprecated, '
+        warnings.warn('"SeleniumLibrary._cache" is deprecated, '
                       'use public API instead.', DeprecationWarning)
         return self._browsers
 
     def _current_browser(self):
-        warnings.warn('"Selenium2Library._current_browser" is deprecated, '
-                      'use "Selenium2Library._browser" instead.',
+        warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '
+                      'use "SeleniumLibrary._browser" instead.',
                       DeprecationWarning)
         return self._browser
 
     def _run_on_failure(self):
-        warnings.warn('"Selenium2Library._run_on_failure" is deprecated, '
-                      'use "Selenium2Library.run_on_failure" instead.',
+        warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '
+                      'use "SeleniumLibrary.run_on_failure" instead.',
                       DeprecationWarning)
         self.run_on_failure()

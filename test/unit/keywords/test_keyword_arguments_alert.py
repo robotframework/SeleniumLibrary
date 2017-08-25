@@ -2,7 +2,7 @@ import unittest
 
 from mockito import when, mock, verify, unstub
 
-from Selenium2Library.keywords import AlertKeywords
+from SeleniumLibrary.keywords import AlertKeywords
 
 
 TRUES = ['True', True, '1', 1, 'text']

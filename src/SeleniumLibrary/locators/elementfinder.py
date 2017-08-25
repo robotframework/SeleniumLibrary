@@ -19,9 +19,9 @@ from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 
 from .customlocator import CustomLocator
-from Selenium2Library.base import ContextAware
-from Selenium2Library.utils import escape_xpath_value, events
-from Selenium2Library.utils import is_falsy
+from SeleniumLibrary.base import ContextAware
+from SeleniumLibrary.utils import escape_xpath_value, events
+from SeleniumLibrary.utils import is_falsy
 
 
 class ElementFinder(ContextAware):

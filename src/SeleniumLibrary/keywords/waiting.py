@@ -18,9 +18,9 @@ import time
 
 from robot.utils import secs_to_timestr, timestr_to_secs
 
-from Selenium2Library.base import LibraryComponent, keyword
-from Selenium2Library.keywords.element import ElementKeywords
-from Selenium2Library.utils import is_truthy, is_falsy
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.keywords.element import ElementKeywords
+from SeleniumLibrary.utils import is_truthy, is_falsy
 
 
 class WaitingKeywords(LibraryComponent):

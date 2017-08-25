@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Script to run Selenium2Library acceptance tests.
+"""Script to run SeleniumLibrary acceptance tests.
 
 Tests are executed using Robot Framework and results verified automatically
 afterwards using `robotstatuschecker` tool. The tool can be installed using
@@ -65,7 +65,7 @@ SAUCE_USERNAME = os.environ.get("SAUCE_USERNAME", None)
 SAUCE_ACCESS_KEY = os.environ.get("SAUCE_ACCESS_KEY", None)
 
 ROBOT_OPTIONS = [
-    '--doc', 'Selenium2Library acceptance tests with {browser}',
+    '--doc', 'SeleniumLibrary acceptance tests with {browser}',
     '--outputdir', RESULTS_DIR,
     '--variable', 'BROWSER:{browser}',
     '--report', 'NONE',
@@ -221,7 +221,7 @@ if __name__ == '__main__':
         print(
             'Can not run test with browser "{}" from SauceLabs with PR.\n'
             'SauceLabs can be used only when running with cron and from '
-            'Selenium2Library master branch, but your event type '
+            'SeleniumLibrary master branch, but your event type '
             'was "{}". Only Chrome is supported with PR and when using '
             'Travis'.format(browser, TRAVIS_EVENT_TYPE)
         )

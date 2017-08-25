@@ -16,17 +16,17 @@
 
 from robot.libraries.BuiltIn import BuiltIn
 
-from Selenium2Library.base import LibraryComponent, keyword
+from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class RunOnFailureKeywords(LibraryComponent):
 
     @keyword
     def register_keyword_to_run_on_failure(self, keyword):
-        """Sets the keyword to execute when a Selenium2Library keyword fails.
+        """Sets the keyword to execute when a SeleniumLibrary keyword fails.
 
         `keyword_name` is the name of a keyword (from any available
-        libraries) that  will be executed if a Selenium2Library keyword fails.
+        libraries) that  will be executed if a SeleniumLibrary keyword fails.
         It is not possible to use a keyword that requires arguments.
         Using the value "Nothing" will disable this feature altogether.
 

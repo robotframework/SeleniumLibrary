@@ -1,6 +1,6 @@
 import unittest
 
-from Selenium2Library.utils import is_string, is_truthy, is_falsy
+from SeleniumLibrary.utils import is_string, is_truthy, is_falsy
 
 
 class IsstringTests(unittest.TestCase):

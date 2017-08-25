@@ -16,7 +16,7 @@
 
 import os
 
-from Selenium2Library.base import LibraryComponent, keyword
+from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class JavaScriptKeywords(LibraryComponent):

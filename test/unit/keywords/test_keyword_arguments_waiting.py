@@ -3,7 +3,7 @@ import unittest
 from mockito import mock, unstub, when
 from mockito.matchers import ANY
 
-from Selenium2Library.keywords import WaitingKeywords
+from SeleniumLibrary.keywords import WaitingKeywords
 
 
 class KeywordArgumentsWaitingKeywordsTest(unittest.TestCase):
