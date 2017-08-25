@@ -1,6 +1,18 @@
 Selenium2Library Installation
 =============================
 
+
+This document is currently out of date. If you need to install the latest
+stable version, then run::
+
+    pip install robotframework-selenium2library
+
+If you need the alpha release, which supports Python 2 and 3, then run::
+    pip uninstall -U --pre robotframework-seleniumlibrary
+
+THe documentation will be fixed when the robotframework-seleniumlibrary
+is released.
+
 Preconditions
 -------------
 
