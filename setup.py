@@ -10,10 +10,8 @@ CURDIR = dirname(abspath(__file__))
 with open(join(CURDIR, 'src', 'SeleniumLibrary', '__init__.py')) as f:
     VERSION = re.search("\n__version__ = '(.*)'", f.read()).group(1)
 
-DESCRIPTION = """
-SeleniumLibrary is a web testing library for Robot Framework
-that utilizes the Selenium tool internally.
-"""[1:-1]
+with open(join(CURDIR, 'README.rst')) as f:
+    DESCRIPTION = f.read()
 
 with open(join(CURDIR, 'requirements.txt')) as f:
     REQUIREMENTS = f.read().splitlines()
