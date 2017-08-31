@@ -1,143 +1,192 @@
 SeleniumLibrary
 ===============
 
-.. image:: https://api.travis-ci.org/robotframework/SeleniumLibrary.png
-    :target: http://travis-ci.org/robotframework/SeleniumLibrary
-
-.. image:: https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version
-    :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
-
-.. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
-    :target: http://www.apache.org/licenses/LICENSE-2.0
+.. contents::
+   :local:
 
 Introduction
 ------------
 
-SeleniumLibrary is a web testing library for `Robot Framework`_ that utilizes
-the popular Selenium_ tool internally. See the `keyword documentation`_
-for available keywords and `wiki`_ for some more general information
-about the library.
+SeleniumLibrary_ is a web testing library for `Robot Framework`_
+that utilizes the Selenium_ tool internally. See `keyword documentation`_
+for available keywords and more information about the library in general.
+
+SeleniumLibrary requires Selenium 2.53.6 or newer. It works with Python 2.7
+as well as with Python 3.3 or newer.
 
 SeleniumLibrary is based on the `old SeleniumLibrary`_ that was forked to
-Selenium2Library and then later renamed back to SeleniumLibrary.
+Selenium2Library_ and then later renamed back to SeleniumLibrary.
+See the `History`_ section below for more information about different
+versions.
 
 The new SeleniumLibrary is currently in pre-release phase. The final
 SeleniumLibrary 3.0 release is planned for early September.
 
-The Selenium2Library 1.8.0 keyword `documentation is also available`_
+.. image:: https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version
+   :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
+
+.. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
+   :target: http://www.apache.org/licenses/LICENSE-2.0
+
+.. image:: https://api.travis-ci.org/robotframework/SeleniumLibrary.png
+   :target: http://travis-ci.org/robotframework/SeleniumLibrary
 
 Installation
 ------------
 
 The recommended installation method is using pip_::
 
-    pip install --pre robotframework-seleniumlibrary
+    pip install --pre --upgrade robotframework-seleniumlibrary
 
-Notice that ``--pre`` is needed to get the current SeleniumLibrary,
-not the `old SeleniumLibrary`_, until the final SeleniumLibrary 3.0
-is released.
+Notice that the ``--pre`` option is needed to get the current SeleniumLibrary,
+not the `old SeleniumLibrary`_, until the final SeleniumLibrary 3.0 is
+released. The ``--upgrade`` option can be omitted when installing the
+library for the first time.
 
-To install the old Selenium2Library, use this command instead::
+Those migrating from Selenium2Library_ can install SeleniumLibrary so that
+it is exposed also as Selenium2Library::
 
-    pip install robotframework-selenium2library
+    pip install --pre --upgrade robotframework-selenium2library
+
+The above command installs the normal SeleniumLibrary as well as a new
+Selenium2Library version that is just a thin wrapper to SeleniumLibrary.
+That allows importing Selenium2Library in tests while migrating to
+SeleniumLibrary.
+
+To install the last legacy Selenium2Library_ version, use this command instead::
+
+    pip install robotframework-selenium2library==1.8.0
 
 See `INSTALL.rst`_ for more details about installation.
 
 Usage
 -----
 
-To write tests with Robot Framework and SeleniumLibrary,
-SeleniumLibrary must be imported into your Robot test suite.
-See `Robot Framework User Guide`_ for more information.
+To use SeleniumLibrary in Robot Framework tests, the library needs to
+first be imported using the ``Library`` setting as any other library.
+The library accepts some import time arguments, which are documented
+in the `keyword documentation`_ along with all the keywords provided
+by the library.
 
-A demo project illustrating how to use this library can be found from:
-https://bitbucket.org/robotframework/webdemo
+When using Robot Framework, it is generally recommended to write as
+easy-to-understand tests as possible. The keywords provided by
+SeleniumLibrary are pretty low level, though, and often require
+implementation specific arguments like element locators to be passed
+as arguments. It is thus typically a good idea to write tests using
+Robot Framework's higher level keywords that utilize SeleniumLibrary
+keywords internally. This is illustrated by the following example
+where SeleniumLibrary keywords like ``Input Text`` are primarily
+used by higher level keywords like ``Input Username``.
 
-Differences between SeleniumLibrary versions
-============================================
+.. code:: robotframework
 
-Selenium versions
------------------
+    *** Settings ***
+    Documentation     Simple example using SeleniumLibrary.
+    Library           SeleniumLibrary
 
-There are three main version of Selenium: `Selenium Remote Control`_ (RC or Selenium
-1), `Selenium 2`_ and `Selenium 3`_.
+    *** Variables ***
+    ${LOGIN URL}      http://localhost:7272
+    ${BROWSER}        Chrome
 
-The Selenium RC works only with major browsers that has JavaScript enabled. It
-also requires a selenium server which automatically launches and kills browsers.
-The Selenium RC is not anymore maintained by the Selenium.
+    *** Test Cases ***
+    Valid Login
+        Open Browser To Login Page
+        Input Username    demo
+        Input Password    mode
+        Submit Credentials
+        Welcome Page Should Be Open
+        [Teardown]    Close Browser
 
-The Selenium 2 supports Selenium RC and Selenium WebDirver. Selenium WebDriver
-does not need separate server to launch and kill servers and it has simpler
-and more concise API then Selenium RC.
+    *** Keywords ***
+    Open Browser To Login Page
+        Open Browser    ${LOGIN URL}    ${BROWSER}
+        Title Should Be    Login Page
 
-The Selenium 3 supports only Selenium WebDirver and has started to adopt
-the `W3C WebDriver`_ specification. If excluding the dropped Selenium RC
-support, Selenium 3 is a drop in replacement for Selenium 2.
+    Input Username
+        [Arguments]    ${username}
+        Input Text    username_field    ${username}
 
-Selenium support in Robot Framework
------------------------------------
+    Input Password
+        [Arguments]    ${password}
+        Input Text    password_field    ${password}
 
-The SeleniumLibrary version up to 2.9.2 supports only the Selenium RC.
+    Submit Credentials
+        Click Button    login_button
 
-The Selenium2Library versions up to 1.8.0 and from SeleniumLibrary 3.0.0
-version onwards supports Selenium 2 and 3
+    Welcome Page Should Be Open
+        Title Should Be    Welcome Page
 
-Python support
---------------
 
-The SeleniumLibrary version up to 2.9.2 and the Selenium2Library
-versions up to 1.8.0 supports only Python 2
-
-Starting from SeleniumLibrary 3.0.0 version onwards Python 2 and Python 3.3+ are
-supported.
-
-History
--------
-
-The SeleniumLibrary up to 2.9.2 version was actively developed by using the
-Selenium RC. When the Selenium 2 reached mature enough state, the Selenium2Library
-was forked from SeleniumLibary and modified to use the Selenium WebDriver. The
-SeleniumLibrary, with Selenium RC support, active development ended
-when Selenium RC was deprecated.
-
-When Selenium 3 was released it was adopted by the Selenium2Library
-because Selenium 3 is a drop in replacement for Selenium 2. Also the
-Selenium2Library relies only on the WebDriver technology and it did not
-need any changes to support Selenium 3.
-
-In release 3.0.0, it was decided to rename the Selenium2Library back to
-SeleniumLibrary. This was done because the name more resembles what the library
-supports and enables.
+The above example is a slightly modified version of an example in a
+`demo project`_ that illustrates using Robot Framework and SeleniumLibrary.
+See the demo for more examples that you can also execute on your own
+machine. For more information about Robot Framework test data syntax in
+general see `Robot Framework User Guide`_.
 
 Support
 -------
 
-Best places to ask for support:
+If the provided documentation is not enough, there are various support forums
+available:
 
 - `robotframework-users`_ mailing list
-- ``#seleniumlibrary`` channel on `Robot Framework Slack`_
+- ``#seleniumlibrary`` and ``#seleniumlibrary-dev`` channels in
+  Robot Framework `Slack community`_
+- SeleniumLibrary `issue tracker`_ for bug reports and concrete enhancement
+  requests
+- `Other support forums`_ including paid support
 
-When asking for help or reporting problems, please include the following
-information:
+History
+-------
 
-- Full description of what you are trying to do and expected outcome
-- Version number of SeleniumLibrary, Selenium, and Robot Framework
-- Version number of the browser and the browser driver
-- Traceback or other debug output containing error information
+SeleniumLibrary originally used the Selenium Remote Controller (RC) API.
+When Selenium 2 was introduced with the new but backwards incompatible
+WebDriver API, SeleniumLibrary kept using Selenium RC and separate
+Selenium2Library using WebDriver was forked. These projects contained
+mostly the same keywords and in most cases Selenium2Library was a drop-in
+replacement for SeleniumLibrary.
+
+Over the years development of the old SeleniumLibrary stopped and also
+the Selenium RC API it used was deprecated. Selenium2Library was developed
+further and replaced the old library as the de facto web testing library
+for Robot Framework.
+
+When Selenium 3 was released in 2016, it was otherwise backwards compatible
+with Selenium 2, but the deprecated Selenium RC API was removed. This had two
+important effects:
+
+- The old SeleniumLibrary could not anymore be used with new Selenium versions.
+  This project was pretty much dead.
+- Selenium2Library was badly named as it supported Selenium 3 just fine.
+  This project needed a new name.
+
+At the same time when Selenium 3 was released, Selenium2Library was going
+through larger architecture changes in order to ease future maintenance and
+to make adding Python 3 support easier. With all these big internal and
+external changes, it made sense to rename Selenium2Library back to
+SeleniumLibrary. This decision basically meant following changes:
+
+- Create separate repository for the `old SeleniumLibrary`_ to preserve
+  its history since Selenium2Library was forked.
+- Rename Selenium2Library project and the library itself to SeleniumLibrary.
+- Add new Selenium2Library_ project to ease transitioning from Selenium2Library
+  to SeleniumLibrary.
+
+Going forward, all new development will happen in the new SeleniumLibrary
+project.
 
 .. _Robot Framework: http://robotframework.org
 .. _Selenium: http://seleniumhq.org
-.. _Old SeleniumLibrary: https://github.com/robotframework/OldSeleniumLibrary/
+.. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary
+.. _Selenium2Library: https://github.com/robotframework/Selenium2Library
+.. _Old SeleniumLibrary: https://github.com/robotframework/OldSeleniumLibrary
 .. _pip: http://pip-installer.org
-.. _Wiki: https://github.com/robotframework/SeleniumLibrary/wiki
 .. _Keyword Documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
 .. _INSTALL.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/INSTALL.rst
 .. _BUILD.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/BUILD.rst
+.. _demo project: https://bitbucket.org/robotframework/webdemo
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
-.. _Selenium Remote Control: http://www.seleniumhq.org/projects/remote-control/
-.. _Selenium 2: http://www.seleniumhq.org/projects/webdriver/
-.. _Selenium 3: http://www.seleniumhq.org/projects/webdriver/
-.. _W3C WebDriver: https://www.w3.org/TR/webdriver/
 .. _robotframework-users: http://groups.google.com/group/robotframework-users
-.. _Robot Framework Slack: https://robotframework-slack-invite.herokuapp.com/
-.. _documentation is also available: http://robotframework.org/SeleniumLibrary/Selenium2Library.html
+.. _Slack community: https://robotframework-slack-invite.herokuapp.com
+.. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
+.. _Other support forums: http://robotframework.org/#support
