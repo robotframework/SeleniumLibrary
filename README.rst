@@ -60,6 +60,27 @@ To install the last legacy Selenium2Library_ version, use this command instead::
 
 See `INSTALL.rst`_ for more details about installation.
 
+Browser drivers
+---------------
+
+After installing the library, you still need to install browser and
+operating system specific browser drivers for all those browsers you
+want to use in tests. These are the exact same drivers you need to use with
+Selenium also when not using SeleniumLibrary. More information about
+drivers can be found from `Selenium documentation`__.
+
+The general approach to install a browser driver is downloading a right
+driver, such as ``chromedriver`` for Chrome, and placing it into
+a directory that is in PATH__. Drivers for different browsers
+can be found via Selenium documentation or by using your favorite
+search engine with a search term like ``selenium chrome browser driver``.
+New browser driver versions are released to support features in
+new browsers, fix bug, or otherwise, and you need to keep an eye on them
+to know when to update drivers you use.
+
+__ https://seleniumhq.github.io/selenium/docs/api/py/index.html#drivers
+__ https://en.wikipedia.org/wiki/PATH_(variable)
+
 Usage
 -----
 
