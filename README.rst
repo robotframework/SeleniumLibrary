@@ -7,8 +7,9 @@ SeleniumLibrary
 Introduction
 ------------
 
-SeleniumLibrary_ is a web testing library for `Robot Framework`_
-that utilizes the Selenium_ tool internally. See `keyword documentation`_
+SeleniumLibrary_ is a web testing library for `Robot Framework`_ that
+utilizes the Selenium_ tool internally. The project is hosted on GitHub_
+and downloads can be found from PyPI_. See `keyword documentation`_
 for available keywords and more information about the library in general.
 
 SeleniumLibrary works with Selenium 2.53.6 or newer, including Selenium 3.
@@ -38,7 +39,8 @@ The recommended installation method is using pip_::
 
     pip install --pre --upgrade robotframework-seleniumlibrary
 
-Running this command installs also the latest Selenium version.
+Running this command installs also the latest Selenium and Robot Framework
+versions, but you still need to install `browser drivers`_ separately.
 Notice that the ``--pre`` option is needed to get the current SeleniumLibrary,
 not the `old SeleniumLibrary`_, until the final SeleniumLibrary 3.0 is
 released. The ``--upgrade`` option can be omitted when installing the
@@ -58,7 +60,15 @@ To install the last legacy Selenium2Library_ version, use this command instead::
 
     pip install robotframework-selenium2library==1.8.0
 
-See `INSTALL.rst`_ for more details about installation.
+An alternative to using ``pip`` is getting the project source code either
+from a source distribution at PyPI_ or by cloning the GitHub_ repository,
+and installing the code using ``python setup.py install``. This approach
+does not install Selenium or other dependencies, so they need to be installed
+separately.
+
+See `Robot Framework installation instructions`_ for detailed information
+about installing Python and Robot Framework itself. For more details about
+using ``pip`` see `its own documentation <pip_>`__.
 
 Browser drivers
 ---------------
@@ -223,11 +233,12 @@ project.
 .. _Selenium2Library: https://github.com/robotframework/Selenium2Library
 .. _Old SeleniumLibrary: https://github.com/robotframework/OldSeleniumLibrary
 .. _pip: http://pip-installer.org
+.. _PyPI: https://pypi.python.org
+.. _GitHub: https://github.com/robotframework/SeleniumLibrary
 .. _Keyword Documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
-.. _INSTALL.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/INSTALL.rst
-.. _BUILD.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/BUILD.rst
 .. _demo project: https://bitbucket.org/robotframework/webdemo
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
+.. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
 .. _robotframework-users: http://groups.google.com/group/robotframework-users
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
