@@ -7,5 +7,5 @@ exclude */*.rst # limit previous command to include only *.rst files in root fol
 include docs/Selenium2Library.html
 
 recursive-include src *.py
-graft src/Selenium2Library/resources
+graft src/SeleniumLibrary/resources
 recursive-exclude src *.pyc
