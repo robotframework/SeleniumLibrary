@@ -33,7 +33,7 @@ from .utils import BrowserCache
 from .utils import LibraryListener
 
 
-__version__ = '3.0.0a2'
+__version__ = '3.0.0b1'
 
 
 class SeleniumLibrary(DynamicCore):
