@@ -186,8 +186,6 @@ SeleniumLibrary 3.0 and newer       Selenium 2 and 3  Python 2.7 and 3.3+  Selen
 Selenium2Library 3.0 and newer      Selenium 2 and 3  Python 2.7 and 3.3+  Thin wrapper for SeleniumLibrary 3.0 to ease transition.
 ==================================  ================  ===================  ===============
 
-The only project that is developed further is SeleniumLibrary 3.
-
 History
 -------
 
