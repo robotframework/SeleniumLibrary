@@ -22,7 +22,7 @@ class ContextAware(object):
 
     @property
     def browser(self):
-        return self.ctx._browser
+        return self.ctx.browser
 
     @property
     def browsers(self):

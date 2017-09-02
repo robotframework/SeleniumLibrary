@@ -297,7 +297,7 @@ class SeleniumLibrary(DynamicCore):
             self._running_on_failure_keyword = False
 
     @property
-    def _browser(self):
+    def browser(self):
         """Current active browser"""
         if not self._browsers.current:
             raise RuntimeError('No browser is open')
@@ -311,9 +311,9 @@ class SeleniumLibrary(DynamicCore):
 
     def _current_browser(self):
         warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '
-                      'use "SeleniumLibrary._browser" instead.',
+                      'use "SeleniumLibrary.browser" instead.',
                       DeprecationWarning)
-        return self._browser
+        return self.browser
 
     def _run_on_failure(self):
         warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '
