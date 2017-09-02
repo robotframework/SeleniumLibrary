@@ -16,11 +16,10 @@
 
 import time
 
-from robot.utils import secs_to_timestr, timestr_to_secs
-
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.keywords.element import ElementKeywords
-from SeleniumLibrary.utils import is_truthy, is_falsy
+from SeleniumLibrary.utils import (is_truthy, is_falsy,
+                                   secs_to_timestr, timestr_to_secs)
 
 
 class WaitingKeywords(LibraryComponent):

@@ -19,13 +19,13 @@ import time
 import types
 
 from robot.errors import DataError
-from robot.utils import secs_to_timestr, timestr_to_secs
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators.windowmanager import WindowManager
-from SeleniumLibrary.utils import is_truthy, is_falsy
+from SeleniumLibrary.utils import (is_truthy, is_falsy,
+                                   secs_to_timestr, timestr_to_secs)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

@@ -17,20 +17,19 @@
 import warnings
 
 from .base import DynamicCore
-from .keywords import AlertKeywords
-from .keywords import BrowserManagementKeywords
-from .keywords import CookieKeywords
-from .keywords import ElementKeywords
-from .keywords import FormElementKeywords
-from .keywords import JavaScriptKeywords
-from .keywords import RunOnFailureKeywords
-from .keywords import ScreenshotKeywords
-from .keywords import SelectElementKeywords
-from .keywords import TableElementKeywords
-from .keywords import WaitingKeywords
+from .keywords import (AlertKeywords,
+                       BrowserManagementKeywords,
+                       CookieKeywords,
+                       ElementKeywords,
+                       FormElementKeywords,
+                       JavaScriptKeywords,
+                       RunOnFailureKeywords,
+                       ScreenshotKeywords,
+                       SelectElementKeywords,
+                       TableElementKeywords,
+                       WaitingKeywords)
 from .locators import ElementFinder
-from .utils import BrowserCache
-from .utils import LibraryListener
+from .utils import BrowserCache, LibraryListener
 
 
 __version__ = '3.0.0b1'
