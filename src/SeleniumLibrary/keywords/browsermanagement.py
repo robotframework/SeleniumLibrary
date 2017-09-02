@@ -614,11 +614,9 @@ class BrowserManagementKeywords(LibraryComponent):
             browser = self._create_remote_web_driver(
                 webdriver.DesiredCapabilities.FIREFOX, remote,
                 desired_capabilites, profile)
-        elif self._geckodriver_used:  # For selenium 3.0.0 or newer
+        else:
             browser = webdriver.Firefox(firefox_profile=profile,
-                                        log_path=self._geckodriver_log)
-        else:  # For selenium 2.53.6 or older
-            browser = webdriver.Firefox(firefox_profile=profile)
+                                        **self._geckodriver_log_config)
         return browser
 
     def _make_ie(self, remote, desired_capabilities, profile_dir):
@@ -728,10 +726,11 @@ class BrowserManagementKeywords(LibraryComponent):
         return items
 
     @property
-    def _geckodriver_used(self):
-        arg_spec = inspect.getargspec(webdriver.Firefox.__init__)[0]
-        return True if 'log_path' in arg_spec else False
+    def _geckodriver_log_path(self):
+        return os.path.join(self.log_dir, 'geckodriver.log')
 
     @property
-    def _geckodriver_log(self):
-        return os.path.join(self.log_dir, 'geckodriver.log')
+    def _geckodriver_log_config(self):
+        if 'log_path' in inspect.getargspec(webdriver.Firefox.__init__).args:
+            return {'log_path': self._geckodriver_log_path}
+        return {}
