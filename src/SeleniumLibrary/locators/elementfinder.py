@@ -18,10 +18,10 @@ from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 
-from .customlocator import CustomLocator
 from SeleniumLibrary.base import ContextAware
-from SeleniumLibrary.utils import escape_xpath_value, events
-from SeleniumLibrary.utils import is_falsy
+from SeleniumLibrary.utils import escape_xpath_value, events, is_falsy
+
+from .customlocator import CustomLocator
 
 
 class ElementFinder(ContextAware):

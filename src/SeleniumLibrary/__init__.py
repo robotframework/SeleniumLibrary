@@ -19,20 +19,20 @@ import warnings
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 
-from .base import DynamicCore
-from .keywords import (AlertKeywords,
-                       BrowserManagementKeywords,
-                       CookieKeywords,
-                       ElementKeywords,
-                       FormElementKeywords,
-                       JavaScriptKeywords,
-                       RunOnFailureKeywords,
-                       ScreenshotKeywords,
-                       SelectElementKeywords,
-                       TableElementKeywords,
-                       WaitingKeywords)
-from .locators import ElementFinder
-from .utils import BrowserCache, LibraryListener
+from SeleniumLibrary.base import DynamicCore
+from SeleniumLibrary.keywords import (AlertKeywords,
+                                      BrowserManagementKeywords,
+                                      CookieKeywords,
+                                      ElementKeywords,
+                                      FormElementKeywords,
+                                      JavaScriptKeywords,
+                                      RunOnFailureKeywords,
+                                      ScreenshotKeywords,
+                                      SelectElementKeywords,
+                                      TableElementKeywords,
+                                      WaitingKeywords)
+from SeleniumLibrary.locators import ElementFinder
+from SeleniumLibrary.utils import BrowserCache, LibraryListener
 
 
 __version__ = '3.0.0b1'
