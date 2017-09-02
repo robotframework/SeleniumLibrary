@@ -127,7 +127,11 @@ class BrowserManagementKeywords(LibraryComponent):
         (created with 'Create Dictionary') to allow for more complex configurations.
 
         Optional 'ff_profile_dir' is the path to the firefox profile dir if you
-        wish to overwrite the default.
+        wish to overwrite the default. Starting from SeleniumLibrary 3.0.0
+        the SeleniumLibrary does not anymore contain own profile, instead
+        Selenium
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|webdriver.FirefoxProfile()]
+        is used.
         """
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
