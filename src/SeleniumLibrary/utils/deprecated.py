@@ -14,18 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from robot.utils import secs_to_timestr, timestr_to_secs
-
-from .browsercache import BrowserCache
-from .deprecated import Deprecated
-from .librarylistener import LibraryListener
-from .types import is_string, is_truthy, is_falsy
+import warnings
 
 
-def escape_xpath_value(value):
-    if '"' in value and '\'' in value:
-        parts_wo_apos = value.split('\'')
-        return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
-    if '\'' in value:
-        return "\"%s\"" % value
-    return "'%s'" % value
+class Deprecated(object):
+
+    def __init__(self, old_name, new_name):
+        self.old_name = old_name
+        self.new_name = new_name
+
+    def __get__(self, instance, owner):
+        self._warn()
+        return getattr(instance, self.new_name)
+
+    def __set__(self, instance, value):
+        self._warn()
+        setattr(instance, self.new_name, value)
+
+    def _warn(self):
+        warnings.warn('"SeleniumLibrary.%s" is deprecated, use '
+                      '"SeleniumLibrary.%s" instead.'
+                      % (self.old_name, self.new_name),
+                      DeprecationWarning)

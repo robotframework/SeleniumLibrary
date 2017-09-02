@@ -263,7 +263,7 @@ class WaitingKeywords(LibraryComponent):
         self._wait_until_no_error(timeout, wait_func)
 
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx.timeout
         maxtime = time.time() + timeout
         while True:
             timeout_error = wait_func(*args)
@@ -274,5 +274,5 @@ class WaitingKeywords(LibraryComponent):
             time.sleep(0.2)
 
     def _format_timeout(self, timeout):
-        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx._timeout_in_secs
+        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx.timeout
         return secs_to_timestr(timeout)

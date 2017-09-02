@@ -32,7 +32,8 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       TableElementKeywords,
                                       WaitingKeywords)
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import BrowserCache, LibraryListener
+from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
+                                   timestr_to_secs)
 
 
 __version__ = '3.0.0b1'
@@ -235,11 +236,13 @@ class SeleniumLibrary(DynamicCore):
         | Library `|` SeleniumLibrary `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
         | Library `|` SeleniumLibrary `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
-        self._run_on_failure_keyword = None
+        self.timeout = timestr_to_secs(timeout)
+        self.implicit_wait = timestr_to_secs(implicit_wait)
+        self.speed = 0.0
+        self.run_on_failure_keyword \
+            = RunOnFailureKeywords.resolve_keyword(run_on_failure)
         self._running_on_failure_keyword = False
-        self._speed_in_secs = 0.0
-        self._timeout_in_secs = 5.0
-        self._implicit_wait_in_secs = 5.0
+        self.screenshot_root_directory = screenshot_root_directory
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -255,12 +258,15 @@ class SeleniumLibrary(DynamicCore):
         ]
         self._browsers = BrowserCache()
         DynamicCore.__init__(self, libraries)
-        self.screenshot_root_directory = screenshot_root_directory
-        self.set_selenium_timeout(timeout)
-        self.set_selenium_implicit_wait(implicit_wait)
-        self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self.element_finder = ElementFinder(self)
+
+    _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
+    _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
+    _implicit_wait_in_secs = Deprecated('_implicit_wait_in_secs',
+                                        'implicit_wait')
+    _run_on_failure_keyword = Deprecated('_run_on_failure_keyword',
+                                         'run_on_failure_keyword')
 
     def run_keyword(self, name, args, kwargs):
         try:
@@ -279,14 +285,14 @@ class SeleniumLibrary(DynamicCore):
         Libraries extending SeleniumLibrary can overwrite this hook
         method if they want to provide custom functionality instead.
         """
-        if self._running_on_failure_keyword or not self._run_on_failure_keyword:
+        if self._running_on_failure_keyword or not self.run_on_failure_keyword:
             return
         try:
             self._running_on_failure_keyword = True
-            BuiltIn().run_keyword(self._run_on_failure_keyword)
+            BuiltIn().run_keyword(self.run_on_failure_keyword)
         except Exception as err:
             logger.warn("Keyword '%s' could not be run on failure: %s"
-                        % (self._run_on_failure_keyword, err))
+                        % (self.run_on_failure_keyword, err))
         finally:
             self._running_on_failure_keyword = False
 

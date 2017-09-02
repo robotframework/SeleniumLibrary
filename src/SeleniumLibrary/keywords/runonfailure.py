@@ -55,10 +55,14 @@ class RunOnFailureKeywords(LibraryComponent):
           In previous versions special value "No Keyword" was returned and
           it could not be used to restore the original state.
         """
-        old_keyword = self.ctx._run_on_failure_keyword
-        if is_falsy(keyword) \
-                or is_string(keyword) and keyword.upper() == 'NOTHING':
-            keyword = None
-        self.ctx._run_on_failure_keyword = keyword
+        old_keyword = self.ctx.run_on_failure_keyword
+        keyword = self.resolve_keyword(keyword)
+        self.ctx.run_on_failure_keyword = keyword
         self.info('%s will be run on failure.' % (keyword or 'No keyword'))
         return old_keyword
+
+    @staticmethod
+    def resolve_keyword(name):
+        if is_falsy(name) or is_string(name) and name.upper() == 'NOTHING':
+            return None
+        return name
