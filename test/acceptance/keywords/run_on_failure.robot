@@ -28,19 +28,28 @@ Log Title On Failure
     ...    needle    loglevel=None
 
 Disable Run on Failure
-    [Documentation]    LOG 1 No keyword will be run on failure. LOG 2.1:2 NONE
+    [Documentation]
+    ...    LOG 1 No keyword will be run on failure.
+    ...    LOG 2.1:2 NONE
+    ...    LOG 3 No keyword will be run on failure.
+    ...    LOG 4.1:2 NONE
     Register Keyword to Run On Failure    Nothing
+    Run Keyword And Expect Error    ${FAILURE MESSAGE}    Page Should Not Contain
+    ...    needle    loglevel=None
+    Register Keyword to Run On Failure    ${NONE}
     Run Keyword And Expect Error    ${FAILURE MESSAGE}    Page Should Not Contain
     ...    needle    loglevel=None
 
 Run on Failure Returns Previous Value
-    [Documentation]    Run on Failure Returns Previous Value
+    [Documentation]    Also tests that previous value always works as input.
     ${old}=    Register Keyword to Run on Failure    Log Title
-    Should Be Equal    ${old}    No keyword
-    ${old}=    Register Keyword to Run on Failure    Log Source
+    Should Be Equal    ${old}    ${NONE}
+    ${old}=    Register Keyword to Run on Failure    ${old}
     Should Be Equal    ${old}    Log Title
     ${old}=    Register Keyword to Run on Failure    ${old}
-    Should Be Equal    ${old}    Log Source
+    Should Be Equal    ${old}    ${NONE}
+    ${old}=    Register Keyword to Run on Failure    ${old}
+    Should Be Equal    ${old}    Log Title
 
 Run On Failure also fails
     Register Keyword to Run on Failure    Failure During Run On failure

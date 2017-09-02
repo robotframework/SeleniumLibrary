@@ -14,9 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from robot.libraries.BuiltIn import BuiltIn
-
 from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.utils import is_falsy, is_string
 
 
 class RunOnFailureKeywords(LibraryComponent):
@@ -25,53 +24,41 @@ class RunOnFailureKeywords(LibraryComponent):
     def register_keyword_to_run_on_failure(self, keyword):
         """Sets the keyword to execute when a SeleniumLibrary keyword fails.
 
-        `keyword_name` is the name of a keyword (from any available
-        libraries) that  will be executed if a SeleniumLibrary keyword fails.
-        It is not possible to use a keyword that requires arguments.
-        Using the value "Nothing" will disable this feature altogether.
+        `keyword` is the name of a keyword that will be executed if a
+        SeleniumLibrary keyword fails. It is possible to use any available
+        keyword, including user keywords or keywords from other libraries,
+        but the keyword must not take any arguments.
 
         The initial keyword to use is set in `importing`, and the
         keyword that is used by default is `Capture Page Screenshot`.
         Taking a screenshot when something failed is a very useful
         feature, but notice that it can slow down the execution.
 
+        It is possible to use string "Nothing" or "None", case-insensitively,
+        as well as any value considered false in Python to disable this
+        feature altogether.
+
         This keyword returns the name of the previously registered
-        failure keyword. It can be used to restore the original
-        value later.
+        failure keyword or Python ``None`` if this functionality was
+        previously disabled. The return value can be always used to
+        restore the original value later.
 
         Example:
         | Register Keyword To Run On Failure  | Log Source | # Run `Log Source` on failure. |
         | ${previous kw}= | Register Keyword To Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
         | Register Keyword To Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
+
+        Changes in version 3.0.0:
+        - Possible to use string "NONE" or any falsy value to disable the
+          feature.
+        - Return Python ``None`` when the functionality was disabled earlier.
+          In previous versions special value "No Keyword" was returned and
+          it could not be used to restore the original state.
         """
         old_keyword = self.ctx._run_on_failure_keyword
-        old_keyword_text = old_keyword if old_keyword else "No keyword"
-
-        new_keyword = keyword if keyword.strip().lower() != "nothing" else None
-        new_keyword_text = new_keyword if new_keyword else "No keyword"
-
-        self.ctx._run_on_failure_keyword = new_keyword
-        self.info('%s will be run on failure.' % new_keyword_text)
-
-        return old_keyword_text
-
-    def run_on_failure(self):
-        if not self.ctx._run_on_failure_keyword:
-            return
-        if self.ctx._running_on_failure_routine:
-            return
-        self.ctx._running_on_failure_routine = True
-        try:
-            BuiltIn().run_keyword(self.ctx._run_on_failure_keyword)
-        except Exception as err:
-            self.run_on_failure_error(err)
-        finally:
-            self.ctx._running_on_failure_routine = False
-
-    def run_on_failure_error(self, err):
-        err = ("Keyword '%s' could not be run on failure: %s"
-               % (self.ctx._run_on_failure_keyword, err))
-        if hasattr(self, 'warn'):
-            self.warn(err)
-            return
-        raise Exception(err)
+        if is_falsy(keyword) \
+                or is_string(keyword) and keyword.upper() == 'NOTHING':
+            keyword = None
+        self.ctx._run_on_failure_keyword = keyword
+        self.info('%s will be run on failure.' % (keyword or 'No keyword'))
+        return old_keyword

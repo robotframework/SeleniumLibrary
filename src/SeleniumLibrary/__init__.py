@@ -16,6 +16,9 @@
 
 import warnings
 
+from robot.api import logger
+from robot.libraries.BuiltIn import BuiltIn
+
 from .base import DynamicCore
 from .keywords import (AlertKeywords,
                        BrowserManagementKeywords,
@@ -193,7 +196,6 @@ class SeleniumLibrary(DynamicCore):
     Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
     ``false``, ``no`` and ``none``, were considered true.
     """
-
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
 
@@ -234,7 +236,7 @@ class SeleniumLibrary(DynamicCore):
         | Library `|` SeleniumLibrary `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
         self._run_on_failure_keyword = None
-        self._running_on_failure_routine = False
+        self._running_on_failure_keyword = False
         self._speed_in_secs = 0.0
         self._timeout_in_secs = 5.0
         self._implicit_wait_in_secs = 5.0
@@ -264,21 +266,29 @@ class SeleniumLibrary(DynamicCore):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
-            self.run_on_failure()
+            self.failure_occurred()
             raise
 
     def register_browser(self, browser, alias):
         return self._browsers.register(browser, alias)
 
-    def run_on_failure(self):
-        """Executes the registered run on failure keyword.
+    def failure_occurred(self):
+        """Method that is executed when a SeleniumLibrary keyword fails.
 
-        This is designed as an API when writing library which extends the
-        SeleniumLibrary with new functionality. If that new functionality
-        does not (always) relay on SeleniumLibrary keyword methods, then the
-        new functionality can use this method to execute the run on failure
-        functionality in SeleniumLibrary"""
-        RunOnFailureKeywords(self).run_on_failure()
+        By default executes the registered run-on-failure keyword.
+        Libraries extending SeleniumLibrary can overwrite this hook
+        method if they want to provide custom functionality instead.
+        """
+        if self._running_on_failure_keyword or not self._run_on_failure_keyword:
+            return
+        try:
+            self._running_on_failure_keyword = True
+            BuiltIn().run_keyword(self._run_on_failure_keyword)
+        except Exception as err:
+            logger.warn("Keyword '%s' could not be run on failure: %s"
+                        % (self._run_on_failure_keyword, err))
+        finally:
+            self._running_on_failure_keyword = False
 
     @property
     def _browser(self):
@@ -301,6 +311,6 @@ class SeleniumLibrary(DynamicCore):
 
     def _run_on_failure(self):
         warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '
-                      'use "SeleniumLibrary.run_on_failure" instead.',
+                      'use "SeleniumLibrary.failure_occurred" instead.',
                       DeprecationWarning)
-        self.run_on_failure()
+        self.failure_occurred()
