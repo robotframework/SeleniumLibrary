@@ -19,8 +19,7 @@ Alert Should Be Present
     Click Link    Click Me Too!
     Alert Should Be Present    MULTILINE ALERT!
     Click Link    Click Me!
-    Run Keyword And Expect Error    Alert text should have been 'foo bar' but was 'ALERT!'
-    ...    Alert Should Be Present    foo bar
+    Run Keyword And Expect Error    Alert text should have been 'foo bar' but was 'ALERT!'    Alert Should Be Present    foo bar
 
 Get Alert Message
     [Documentation]    Get Alert Message
@@ -52,7 +51,7 @@ Input Text Into Prompt
 
 Mouse Down On Link
     [Documentation]    Mouse Down On Link
-    [Tags]    Known Issue Safari    Known Issue Firefox
+    [Tags]    Known Issue Safari
     [Setup]    Go To Page "javascript/mouse_events.html"
     Mouse Down On Image    image_mousedown
     Text Field Should Contain    textfield    onmousedown
@@ -94,13 +93,13 @@ Execute Javascript from File
 
 Open Context Menu
     [Documentation]    Open Context Menu
-    [Tags]    Known Issue Safari    Known Issue Firefox
+    [Tags]    Known Issue Safari
     Go To Page "javascript/context_menu.html"
     Open Context Menu    myDiv
 
 Drag and Drop
     [Documentation]    Drag and Drop
-    [Tags]  Known Issue Internet Explorer    Known Issue Safari
+    [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop    id=draggable    id=droppable
@@ -108,7 +107,7 @@ Drag and Drop
 
 Drag and Drop by Offset
     [Documentation]    Drag and Drop by Offset
-    [Tags]  Known Issue Internet Explorer    Known Issue Safari
+    [Tags]    Known Issue Firefox    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${1}    ${1}
@@ -117,9 +116,9 @@ Drag and Drop by Offset
     Element Text Should Be    id=droppable    Dropped!
 
 Verify Console Log Can be Caught
-   [Tags]    Known Issue - Firefox
-   ${message}  Set Variable   Sample Console Error
-   Execute Javascript  console.error('${message}')
-   ${logs}=  Get Log  browser
-   ${err}=  Convert To string  ${logs}
-   Should Contain  ${err}  ${message}
+    [Tags]    Known Issue Firefox
+    ${message}    Set Variable    Sample Console Error
+    Execute Javascript    console.error('${message}')
+    ${logs}=    Get Log    browser
+    ${err}=    Convert To string    ${logs}
+    Should Contain    ${err}    ${message}
