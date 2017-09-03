@@ -2,6 +2,7 @@ language: python
 sudo: required
 dist: trusty
 addons:
+  firefox: latest
   apt:
     sources:
       - google-chrome
@@ -13,6 +14,12 @@ before_install:
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
+  - FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
+  - VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
+  - wget $VFILE
+  - tar xzf geckodriver*-linux64.tar.gz
+  - sudo chmod u+x geckodriver
+  - sudo mv geckodriver /usr/bin/
 install:
   - pip install .
   - pip install -r requirements.txt
@@ -39,11 +46,16 @@ matrix:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
-    - python: "3.3" # For cron only
+    - python: "3.6" # For PR and cron
       env:
         - BROWSER=firefox
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=3.0.2
+    - python: "2.7" # For PR and cron
+      env:
+        - BROWSER=firefox
+        - SELENIUM=3.5.0
+        - ROBOTFRAMEWORK=2.8.7
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
