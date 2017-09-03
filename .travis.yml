@@ -2,7 +2,8 @@ language: python
 sudo: required
 dist: trusty
 addons:
-  firefox: latest
+        # firefox: latest
+  firefox: latest-esr
   apt:
     sources:
       - google-chrome
@@ -14,8 +15,11 @@ before_install:
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
-  - FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
-  - VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
+    # Firefox latest
+    #- FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
+    #- VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
+    # Firefox latest-esr
+  - VFILE=https://github.com//mozilla/geckodriver/releases/download/v0.16.1/geckodriver-v0.16.1-linux64.tar.gz
   - wget $VFILE
   - tar xzf geckodriver*-linux64.tar.gz
   - sudo chmod u+x geckodriver
