@@ -11,14 +11,14 @@ class SeleniumLibraryRunOnFailureTest(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_run_on_failure(self):
-        when(RunOnFailureKeywords).run_on_failure().thenReturn(True)
+    def test_failure_occurred(self):
+        when(SeleniumLibrary).failure_occurred().thenReturn(True)
         sl = SeleniumLibrary()
-        sl.run_on_failure()
-        verify(RunOnFailureKeywords, times=1).run_on_failure()
+        sl.failure_occurred()
+        verify(SeleniumLibrary, times=1).failure_occurred()
 
-    def test_underscore_run_on_failure(self):
-        when(RunOnFailureKeywords).run_on_failure().thenReturn(True)
+    def test_deprecated_run_on_failure(self):
+        when(SeleniumLibrary).failure_occurred().thenReturn(True)
         sl = SeleniumLibrary()
         sl._run_on_failure()
-        verify(RunOnFailureKeywords, times=1).run_on_failure()
+        verify(SeleniumLibrary, times=1).failure_occurred()

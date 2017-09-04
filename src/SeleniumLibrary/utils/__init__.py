@@ -14,7 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from robot.utils import secs_to_timestr, timestr_to_secs
+
 from .browsercache import BrowserCache
+from .deprecated import Deprecated
 from .librarylistener import LibraryListener
 from .types import is_string, is_truthy, is_falsy
 

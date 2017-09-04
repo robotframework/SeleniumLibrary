@@ -1,7 +1,6 @@
 import unittest
 
 from mockito import mock, unstub, when
-from mockito.matchers import ANY
 
 from SeleniumLibrary.keywords import WaitingKeywords
 
@@ -9,11 +8,10 @@ from SeleniumLibrary.keywords import WaitingKeywords
 class KeywordArgumentsWaitingKeywordsTest(unittest.TestCase):
 
     def setUp(self):
-        ctx = mock()
-        ctx._browser = mock()
-        ctx._timeout_in_secs = 0.01
-        self.waiting = WaitingKeywords(ctx)
-        self.ctx = ctx
+        self.ctx = mock()
+        self.ctx.browser = mock()
+        self.ctx.timeout = 0.01
+        self.waiting = WaitingKeywords(self.ctx)
 
     def tearDown(self):
         unstub()

@@ -19,13 +19,13 @@ import time
 import types
 
 from robot.errors import DataError
-from robot.utils import secs_to_timestr, timestr_to_secs
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators.windowmanager import WindowManager
-from SeleniumLibrary.utils import is_truthy, is_falsy
+from SeleniumLibrary.utils import (is_truthy, is_falsy,
+                                   secs_to_timestr, timestr_to_secs)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -479,22 +479,25 @@ class BrowserManagementKeywords(LibraryComponent):
     def get_selenium_speed(self):
         """Gets the delay in seconds that is waited after each Selenium command.
 
-        See `Set Selenium Speed` for an explanation."""
-        return secs_to_timestr(self.ctx._speed_in_secs)
+        See `Set Selenium Speed` for an explanation.
+        """
+        return secs_to_timestr(self.ctx.speed)
 
     @keyword
     def get_selenium_timeout(self):
         """Gets the timeout in seconds that is used by various keywords.
 
-        See `Set Selenium Timeout` for an explanation."""
-        return secs_to_timestr(self.ctx._timeout_in_secs)
+        See `Set Selenium Timeout` for an explanation.
+        """
+        return secs_to_timestr(self.ctx.timeout)
 
     @keyword
     def get_selenium_implicit_wait(self):
         """Gets the wait in seconds that is waited by Selenium.
 
-        See `Set Selenium Implicit Wait` for an explanation."""
-        return secs_to_timestr(self.ctx._implicit_wait_in_secs)
+        See `Set Selenium Implicit Wait` for an explanation.
+        """
+        return secs_to_timestr(self.ctx.implicit_wait)
 
     @keyword
     def set_selenium_speed(self, seconds):
@@ -514,10 +517,10 @@ class BrowserManagementKeywords(LibraryComponent):
         Example:
         | Set Selenium Speed | .5 seconds |
         """
-        old_speed = self.ctx._speed_in_secs
-        self.ctx._speed_in_secs = timestr_to_secs(seconds)
+        old_speed = self.ctx.speed
+        self.ctx.speed = timestr_to_secs(seconds)
         for browser in self.browsers.browsers:
-            browser._speed = self.ctx._speed_in_secs
+            browser._speed = self.ctx.speed
             self._monkey_patch_speed(browser)
         return old_speed
 
@@ -540,9 +543,9 @@ class BrowserManagementKeywords(LibraryComponent):
         | Set Selenium Timeout | ${orig timeout} |
         """
         old_timeout = self.get_selenium_timeout()
-        self.ctx._timeout_in_secs = timestr_to_secs(seconds)
+        self.ctx.timeout = timestr_to_secs(seconds)
         for browser in self.browsers.get_open_browsers():
-            browser.set_script_timeout(self.ctx._timeout_in_secs)
+            browser.set_script_timeout(self.ctx.timeout)
         return old_timeout
 
     @keyword
@@ -560,9 +563,9 @@ class BrowserManagementKeywords(LibraryComponent):
         | Set Selenium Implicit Wait | ${orig wait} |
         """
         old_wait = self.get_selenium_implicit_wait()
-        self.ctx._implicit_wait_in_secs = timestr_to_secs(seconds)
+        self.ctx.implicit_wait = timestr_to_secs(seconds)
         for browser in self.browsers.get_open_browsers():
-            browser.implicitly_wait(self.ctx._implicit_wait_in_secs)
+            browser.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
 
     @keyword
@@ -578,8 +581,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
         See also `Set Selenium Implicit Wait`.
         """
-        implicit_wait_in_secs = timestr_to_secs(seconds)
-        self.browser.implicitly_wait(implicit_wait_in_secs)
+        self.browser.implicitly_wait(timestr_to_secs(seconds))
 
     def _get_browser_creation_function(self, browser_name):
         func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))
@@ -593,8 +595,8 @@ class BrowserManagementKeywords(LibraryComponent):
             raise ValueError(browser_name + " is not a supported browser.")
 
         browser = creation_func(remote, desired_capabilities, profile_dir)
-        browser.set_script_timeout(self.ctx._timeout_in_secs)
-        browser.implicitly_wait(self.ctx._implicit_wait_in_secs)
+        browser.set_script_timeout(self.ctx.timeout)
+        browser.implicitly_wait(self.ctx.implicit_wait)
 
         return browser
 

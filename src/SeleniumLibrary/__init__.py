@@ -16,21 +16,24 @@
 
 import warnings
 
-from .base import DynamicCore
-from .keywords import AlertKeywords
-from .keywords import BrowserManagementKeywords
-from .keywords import CookieKeywords
-from .keywords import ElementKeywords
-from .keywords import FormElementKeywords
-from .keywords import JavaScriptKeywords
-from .keywords import RunOnFailureKeywords
-from .keywords import ScreenshotKeywords
-from .keywords import SelectElementKeywords
-from .keywords import TableElementKeywords
-from .keywords import WaitingKeywords
-from .locators import ElementFinder
-from .utils import BrowserCache
-from .utils import LibraryListener
+from robot.api import logger
+from robot.libraries.BuiltIn import BuiltIn
+
+from SeleniumLibrary.base import DynamicCore
+from SeleniumLibrary.keywords import (AlertKeywords,
+                                      BrowserManagementKeywords,
+                                      CookieKeywords,
+                                      ElementKeywords,
+                                      FormElementKeywords,
+                                      JavaScriptKeywords,
+                                      RunOnFailureKeywords,
+                                      ScreenshotKeywords,
+                                      SelectElementKeywords,
+                                      TableElementKeywords,
+                                      WaitingKeywords)
+from SeleniumLibrary.locators import ElementFinder
+from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
+                                   timestr_to_secs)
 
 
 __version__ = '3.0.0b1'
@@ -194,7 +197,6 @@ class SeleniumLibrary(DynamicCore):
     Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
     ``false``, ``no`` and ``none``, were considered true.
     """
-
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
 
@@ -234,11 +236,13 @@ class SeleniumLibrary(DynamicCore):
         | Library `|` SeleniumLibrary `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
         | Library `|` SeleniumLibrary `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
         """
-        self._run_on_failure_keyword = None
-        self._running_on_failure_routine = False
-        self._speed_in_secs = 0.0
-        self._timeout_in_secs = 5.0
-        self._implicit_wait_in_secs = 5.0
+        self.timeout = timestr_to_secs(timeout)
+        self.implicit_wait = timestr_to_secs(implicit_wait)
+        self.speed = 0.0
+        self.run_on_failure_keyword \
+            = RunOnFailureKeywords.resolve_keyword(run_on_failure)
+        self._running_on_failure_keyword = False
+        self.screenshot_root_directory = screenshot_root_directory
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -254,35 +258,46 @@ class SeleniumLibrary(DynamicCore):
         ]
         self._browsers = BrowserCache()
         DynamicCore.__init__(self, libraries)
-        self.screenshot_root_directory = screenshot_root_directory
-        self.set_selenium_timeout(timeout)
-        self.set_selenium_implicit_wait(implicit_wait)
-        self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self.element_finder = ElementFinder(self)
+
+    _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
+    _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
+    _implicit_wait_in_secs = Deprecated('_implicit_wait_in_secs',
+                                        'implicit_wait')
+    _run_on_failure_keyword = Deprecated('_run_on_failure_keyword',
+                                         'run_on_failure_keyword')
 
     def run_keyword(self, name, args, kwargs):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
-            self.run_on_failure()
+            self.failure_occurred()
             raise
 
     def register_browser(self, browser, alias):
         return self._browsers.register(browser, alias)
 
-    def run_on_failure(self):
-        """Executes the registered run on failure keyword.
+    def failure_occurred(self):
+        """Method that is executed when a SeleniumLibrary keyword fails.
 
-        This is designed as an API when writing library which extends the
-        SeleniumLibrary with new functionality. If that new functionality
-        does not (always) relay on SeleniumLibrary keyword methods, then the
-        new functionality can use this method to execute the run on failure
-        functionality in SeleniumLibrary"""
-        RunOnFailureKeywords(self).run_on_failure()
+        By default executes the registered run-on-failure keyword.
+        Libraries extending SeleniumLibrary can overwrite this hook
+        method if they want to provide custom functionality instead.
+        """
+        if self._running_on_failure_keyword or not self.run_on_failure_keyword:
+            return
+        try:
+            self._running_on_failure_keyword = True
+            BuiltIn().run_keyword(self.run_on_failure_keyword)
+        except Exception as err:
+            logger.warn("Keyword '%s' could not be run on failure: %s"
+                        % (self.run_on_failure_keyword, err))
+        finally:
+            self._running_on_failure_keyword = False
 
     @property
-    def _browser(self):
+    def browser(self):
         """Current active browser"""
         if not self._browsers.current:
             raise RuntimeError('No browser is open')
@@ -296,12 +311,12 @@ class SeleniumLibrary(DynamicCore):
 
     def _current_browser(self):
         warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '
-                      'use "SeleniumLibrary._browser" instead.',
+                      'use "SeleniumLibrary.browser" instead.',
                       DeprecationWarning)
-        return self._browser
+        return self.browser
 
     def _run_on_failure(self):
         warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '
-                      'use "SeleniumLibrary.run_on_failure" instead.',
+                      'use "SeleniumLibrary.failure_occurred" instead.',
                       DeprecationWarning)
-        self.run_on_failure()
+        self.failure_occurred()

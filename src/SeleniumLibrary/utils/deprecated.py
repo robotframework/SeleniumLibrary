@@ -14,16 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import warnings
 
-class ContextAware(object):
 
-    def __init__(self, ctx):
-        self.ctx = ctx
+class Deprecated(object):
 
-    @property
-    def browser(self):
-        return self.ctx.browser
+    def __init__(self, old_name, new_name):
+        self.old_name = old_name
+        self.new_name = new_name
 
-    @property
-    def browsers(self):
-        return self.ctx._browsers
+    def __get__(self, instance, owner):
+        self._warn()
+        return getattr(instance, self.new_name)
+
+    def __set__(self, instance, value):
+        self._warn()
+        setattr(instance, self.new_name, value)
+
+    def _warn(self):
+        warnings.warn('"SeleniumLibrary.%s" is deprecated, use '
+                      '"SeleniumLibrary.%s" instead.'
+                      % (self.old_name, self.new_name),
+                      DeprecationWarning)

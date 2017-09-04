@@ -19,8 +19,7 @@ from selenium.webdriver.common.keys import Keys
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.keywords.formelement import FormElementKeywords
-from SeleniumLibrary.utils import escape_xpath_value
-from SeleniumLibrary.utils import is_truthy, is_falsy
+from SeleniumLibrary.utils import escape_xpath_value, is_falsy, is_truthy
 
 
 class ElementKeywords(LibraryComponent):

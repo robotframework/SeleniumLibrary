@@ -18,13 +18,11 @@ import errno
 import os
 import re
 
-from robot.libraries.BuiltIn import BuiltIn
-from robot.libraries.BuiltIn import RobotNotRunningError
+from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 from robot.utils import get_link_path
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import events
-from SeleniumLibrary.utils import is_falsy
+from SeleniumLibrary.utils import events, is_falsy
 
 
 class ScreenshotKeywords(LibraryComponent):
