@@ -726,11 +726,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return items
 
     @property
-    def _geckodriver_log_path(self):
-        return os.path.join(self.log_dir, 'geckodriver.log')
-
-    @property
     def _geckodriver_log_config(self):
         if selenium_version.major == '3':
-            return {'log_path': self._geckodriver_log_path}
+            return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
         return {}
