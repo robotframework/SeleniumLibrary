@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import inspect
 import os.path
 import time
 import types
@@ -26,7 +25,8 @@ from selenium.common.exceptions import NoSuchWindowException
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators.windowmanager import WindowManager
 from SeleniumLibrary.utils import (is_truthy, is_falsy,
-                                   secs_to_timestr, timestr_to_secs)
+                                   secs_to_timestr, timestr_to_secs,
+                                   selenium_version)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -731,6 +731,6 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @property
     def _geckodriver_log_config(self):
-        if 'log_path' in inspect.getargspec(webdriver.Firefox.__init__).args:
+        if selenium_version.major == '3':
             return {'log_path': self._geckodriver_log_path}
         return {}
