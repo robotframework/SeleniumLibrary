@@ -489,7 +489,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """Gets the timeout in seconds that is used by various keywords.
 
         See `Set Selenium Timeout` for an explanation.
-        q"""
+        """
         return secs_to_timestr(self.ctx.timeout)
 
     @keyword
