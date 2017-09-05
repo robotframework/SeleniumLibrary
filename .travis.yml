@@ -35,35 +35,41 @@ matrix:
         - BROWSER=chrome
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=3.0.2
+        - ROBOT_OPTIONS=
     - python: "2.7" # For PR and cron
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=2.9.2
+        - ROBOT_OPTIONS=
     - python: "2.7" # For PR and cron
       env:
         - BROWSER=chrome
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=2.8.7
+        - ROBOT_OPTIONS=
     - python: "3.3" # For PR and cron
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
+        - ROBOT_OPTIONS=
     - python: "3.6" # For PR and cron
       env:
         - BROWSER=firefox
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=3.0.2
+        - ROBOT_OPTIONS="--exclude known_issue_$BROWSER"
     - python: "2.7" # For PR and cron
       env:
         - BROWSER=firefox
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=2.8.7
+        - ROBOT_OPTIONS="--exclude known_issue_$BROWSER"
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - pip install selenium==$SELENIUM
   - pip install robotframework==$ROBOTFRAMEWORK
 script:
-  - python test/run_tests.py $BROWSER
+  - python test/run_tests.py $BROWSER $ROBOT_OPTIONS
