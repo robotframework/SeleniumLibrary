@@ -19,7 +19,7 @@ before_install:
     #- FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
     #- VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
     # Firefox latest-esr
-  - VFILE=https://github.com//mozilla/geckodriver/releases/download/v0.16.1/geckodriver-v0.16.1-linux64.tar.gz
+  - VFILE=https://github.com//mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
   - wget $VFILE
   - tar xzf geckodriver*-linux64.tar.gz
   - sudo chmod u+x geckodriver
