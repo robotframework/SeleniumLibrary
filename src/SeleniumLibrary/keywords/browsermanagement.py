@@ -26,7 +26,7 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators.windowmanager import WindowManager
 from SeleniumLibrary.utils import (is_truthy, is_falsy,
                                    secs_to_timestr, timestr_to_secs,
-                                   selenium_version)
+                                   SELENIUM_VERSION)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -727,6 +727,6 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @property
     def _geckodriver_log_config(self):
-        if selenium_version.major == '3':
+        if SELENIUM_VERSION.major == '3':
             return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
         return {}

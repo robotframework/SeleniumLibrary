@@ -20,6 +20,7 @@ from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
 from .context import ContextAware
+from .robotlibcore import PY2
 
 
 LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
@@ -64,10 +65,8 @@ class LibraryComponent(ContextAware):
     def log_dir(self):
         try:
             logfile = BuiltIn().get_variable_value('${LOG FILE}')
+            if logfile == 'NONE':
+                return BuiltIn().get_variable_value('${OUTPUTDIR}')
+            return os.path.dirname(logfile)
         except RobotNotRunningError:
-            logfile = os.getcwd()
-        if logfile != 'NONE':
-            logdir = os.path.dirname(logfile)
-        else:
-            logdir = BuiltIn().get_variable_value('${OUTPUTDIR}')
-        return logdir
+            return os.getcwdu() if PY2 else os.getcwd()

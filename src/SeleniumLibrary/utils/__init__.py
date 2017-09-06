@@ -19,7 +19,7 @@ from robot.utils import secs_to_timestr, timestr_to_secs
 from .browsercache import BrowserCache
 from .deprecated import Deprecated
 from .librarylistener import LibraryListener
-from .seleniumversion import selenium_version
+from .seleniumversion import SELENIUM_VERSION
 from .types import is_string, is_truthy, is_falsy
 
 
