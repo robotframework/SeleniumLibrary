@@ -25,7 +25,8 @@ from selenium.common.exceptions import NoSuchWindowException
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators.windowmanager import WindowManager
 from SeleniumLibrary.utils import (is_truthy, is_falsy,
-                                   secs_to_timestr, timestr_to_secs)
+                                   secs_to_timestr, timestr_to_secs,
+                                   SELENIUM_VERSION)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -126,7 +127,11 @@ class BrowserManagementKeywords(LibraryComponent):
         (created with 'Create Dictionary') to allow for more complex configurations.
 
         Optional 'ff_profile_dir' is the path to the firefox profile dir if you
-        wish to overwrite the default.
+        wish to overwrite the default. Starting from SeleniumLibrary 3.0.0
+        the SeleniumLibrary does not anymore contain own profile, instead
+        Selenium
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|webdriver.FirefoxProfile()]
+        is used.
         """
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
@@ -601,16 +606,17 @@ class BrowserManagementKeywords(LibraryComponent):
         return browser
 
     def _make_ff(self, remote, desired_capabilites, profile_dir):
-
         if is_falsy(profile_dir):
-            profile_dir = FIREFOX_PROFILE_DIR
-        profile = webdriver.FirefoxProfile(profile_dir)
+            profile = webdriver.FirefoxProfile()
+        else:
+            profile = webdriver.FirefoxProfile(profile_dir)
         if is_truthy(remote):
             browser = self._create_remote_web_driver(
                 webdriver.DesiredCapabilities.FIREFOX, remote,
                 desired_capabilites, profile)
         else:
-            browser = webdriver.Firefox(firefox_profile=profile)
+            browser = webdriver.Firefox(firefox_profile=profile,
+                                        **self._geckodriver_log_config)
         return browser
 
     def _make_ie(self, remote, desired_capabilities, profile_dir):
@@ -718,3 +724,9 @@ class BrowserManagementKeywords(LibraryComponent):
             msg.append('{}: {}'.format(index + 1, item))
         self.info('\n'.join(msg))
         return items
+
+    @property
+    def _geckodriver_log_config(self):
+        if SELENIUM_VERSION.major == '3':
+            return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
+        return {}

@@ -14,19 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from robot.utils import secs_to_timestr, timestr_to_secs
+from collections import namedtuple
 
-from .browsercache import BrowserCache
-from .deprecated import Deprecated
-from .librarylistener import LibraryListener
-from .seleniumversion import SELENIUM_VERSION
-from .types import is_string, is_truthy, is_falsy
+import selenium
 
-
-def escape_xpath_value(value):
-    if '"' in value and '\'' in value:
-        parts_wo_apos = value.split('\'')
-        return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
-    if '\'' in value:
-        return "\"%s\"" % value
-    return "'%s'" % value
+SeleniumVersion = namedtuple('SeleniumVersion', 'major minor micro')
+major, minor, micro = (selenium.__version__.split('.') + ['0', '0'])[:3]
+SELENIUM_VERSION = SeleniumVersion(major=major, minor=minor, micro=micro)

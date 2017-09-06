@@ -18,7 +18,6 @@ import errno
 import os
 import re
 
-from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 from robot.utils import get_link_path
 
 from SeleniumLibrary.base import LibraryComponent, keyword
@@ -147,7 +146,7 @@ class ScreenshotKeywords(LibraryComponent):
             return self.screenshot_root_directory
 
         # Otherwise use RF's log directory
-        return self._get_log_dir()
+        return self.log_dir
 
     # should only be called by set_screenshot_directory
     def _restore_screenshot_directory(self):
@@ -170,9 +169,8 @@ class ScreenshotKeywords(LibraryComponent):
                     index=self._get_screenshot_index(filename_template))
 
         filename = filename.replace('/', os.sep)
-        logdir = self._get_log_dir()
         path = os.path.join(screenshotdir, filename)
-        link = get_link_path(path, logdir)
+        link = get_link_path(path, self.log_dir)
         return path, link
 
     def _get_screenshot_index(self, filename):
@@ -180,14 +178,3 @@ class ScreenshotKeywords(LibraryComponent):
             self._screenshot_index[filename] = 0
         self._screenshot_index[filename] += 1
         return self._screenshot_index[filename]
-
-    def _get_log_dir(self):
-        try:
-            logfile = BuiltIn().get_variable_value('${LOG FILE}')
-        except RobotNotRunningError:
-            logfile = os.getcwd()
-        if logfile != 'NONE':
-            logdir = os.path.dirname(logfile)
-        else:
-            logdir = BuiltIn().get_variable_value('${OUTPUTDIR}')
-        return logdir

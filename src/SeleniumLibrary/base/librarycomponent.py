@@ -14,9 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 from robot.api import logger
+from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
 from .context import ContextAware
+from .robotlibcore import PY2
 
 
 LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
@@ -56,3 +60,13 @@ class LibraryComponent(ContextAware):
                                  loglevel='INFO'):
         self.element_finder.assert_page_not_contains(locator, tag, message,
                                                      loglevel)
+
+    @property
+    def log_dir(self):
+        try:
+            logfile = BuiltIn().get_variable_value('${LOG FILE}')
+            if logfile == 'NONE':
+                return BuiltIn().get_variable_value('${OUTPUTDIR}')
+            return os.path.dirname(logfile)
+        except RobotNotRunningError:
+            return os.getcwdu() if PY2 else os.getcwd()
