@@ -57,7 +57,7 @@ RESULTS_DIR = os.path.join(ROOT_DIR, "results")
 SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, "..", "src"))
 TEST_LIBS_DIR = os.path.join(RESOURCES_DIR, "testlibs")
 HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, "testserver", "testserver.py")
-# Travis settins for pull request
+# Travis settings for pull request
 TRAVIS = os.environ.get("TRAVIS", False)
 TRAVIS_EVENT_TYPE = os.environ.get("TRAVIS_EVENT_TYPE", None)
 TRAVIS_JOB_NUMBER = os.environ.get("TRAVIS_JOB_NUMBER", "localtunnel")
@@ -146,7 +146,7 @@ def log_start(command_list, *hiddens):
 
 
 def get_sauce_conf(browser, sauce_username, sauce_key):
-    if browser == 'chrome' and TRAVIS:
+    if browser in ['chrome', 'firefox'] and TRAVIS:
         return []
     return [
         '--variable', 'SAUCE_USERNAME:{}'.format(sauce_username),
@@ -208,21 +208,21 @@ if __name__ == '__main__':
     parser.add_argument(
         '--sauceusername',
         '-U',
-        help='Username to order browser from SaucuLabs'
+        help='Username to order browser from SauceLabs'
     )
     parser.add_argument(
         '--saucekey',
         '-K',
-        help='Access key to order browser from SaucuLabs'
+        help='Access key to order browser from SauceLabs'
     )
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
-    if TRAVIS and browser != 'chrome' and TRAVIS_EVENT_TYPE != 'cron':
+    if TRAVIS and browser not in ['chrome', 'firefox'] and TRAVIS_EVENT_TYPE != 'cron':
         print(
             'Can not run test with browser "{}" from SauceLabs with PR.\n'
             'SauceLabs can be used only when running with cron and from '
             'SeleniumLibrary master branch, but your event type '
-            'was "{}". Only Chrome is supported with PR and when using '
+            'was "{}". Only Chrome and Firefox are supported with PR and when using '
             'Travis'.format(browser, TRAVIS_EVENT_TYPE)
         )
         sys.exit(0)
