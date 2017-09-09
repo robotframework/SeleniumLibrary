@@ -2,8 +2,8 @@ import sys
 from pathlib import Path
 
 from invoke import task
-from rellu import (initialize_labels, get_version, git_commit, set_version,
-                   ReleaseNotesGenerator)
+from rellu import initialize_labels, ReleaseNotesGenerator, Version
+from rellu.tasks import clean
 from robot.libdoc import libdoc
 
 
@@ -14,7 +14,32 @@ REPOSITORY = 'robotframework/SeleniumLibrary'
 VERSION_PATH = Path('src/SeleniumLibrary/__init__.py')
 RELEASE_NOTES_PATH = Path('docs/SeleniumLibrary-{version}.rst')
 RELEASE_NOTES_TITLE = 'SeleniumLibrary {version}'
-RELEASE_NOTES_INTRO = '''TODO
+RELEASE_NOTES_INTRO = '''
+SeleniumLibrary_ is a web testing library for `Robot Framework`_ that utilizes
+the Selenium_ tool internally. SeleniumLibrary {version} is a new release with
+**UPDATE** enhancements and bug fixes. **ADD more intro stuff...**
+
+**REMOVE this section with final releases or otherwise if release notes contain
+all issues.**
+All issues targeted for SeleniumLibrary {version.milestone} can be found
+from the `issue tracker`_.
+
+**REMOVE ``--pre`` from the next command with final releases.**
+If you have pip_ installed, just run
+``pip install --pre --upgrade robotframework-seleniumlibrary``
+to install the latest release or use
+``pip install robotframework-seleniumlibrary=={version}``
+to install exactly this version. Alternatively you can download the source
+distribution from PyPI_ and install it manually.
+
+Rellu {version} was released on {date}.
+
+.. _Robot Framework: http://robotframework.org
+.. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary
+.. _Selenium: http://seleniumhq.org
+.. _pip: http://pip-installer.org
+.. _PyPI: https://pypi.python.org/pypi/robotframework-seleniumlibrary
+.. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues?q=milestone%3A{version.milestone}
 '''
 
 
@@ -29,23 +54,20 @@ def keyword_documentation(ctx):
 
 
 @task
-def version(ctx, number, push=False):
-    number = set_version(number, path=VERSION_PATH)
-    print(f'Version set to {number!r}.')
-    if push:
-        # TODO: Handle pushing to upstream. Or remove pushing altogether.
-        git_commit(VERSION_PATH, f'Updated version to {number}', push=True)
+def set_version(ctx, version):
+    version = Version(version, VERSION_PATH)
+    version.write()
+    print(version)
 
 
 @task
 def print_version(ctx):
-    print(get_version(VERSION_PATH))
+    print(Version(path=VERSION_PATH))
 
 
 @task
 def release_notes(ctx, version=None, username=None, password=None, write=False):
-    if not version:
-        version = get_version(VERSION_PATH)
+    version = Version(version, VERSION_PATH)
     file = RELEASE_NOTES_PATH if write else sys.stdout
     generator = ReleaseNotesGenerator(REPOSITORY, RELEASE_NOTES_TITLE,
                                       RELEASE_NOTES_INTRO)
