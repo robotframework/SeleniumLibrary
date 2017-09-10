@@ -13,18 +13,29 @@ be copied and executed on the command line.
 Preconditions
 -------------
 
-Installations
-~~~~~~~~~~~~~
+Operating system and Python requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Creating releases is only supported with Python 3.6 or newer and it must thus
-be installed. The ``pip`` and ``invoke`` commands below are expected to run
-on Python 3.6+ too. Alternatively, it's possible to use the ``python3.6 -m pip``
-approach to run these commands.
+Generating releases has only been tested on Linux, but it ought to work the
+same way also on OSX and other unixes. Generating releases on Windows may
+work but is not tested, supported, or recommended.
+
+Creating releases is only supported with Python 3.6 or newer. If you are
+using Ubuntu or one of its derivatives and don't have Python 3.6 in the
+official package repository, you may consider using the
+`Dead Snakes PPA <https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa>`_.
+
+The ``pip`` and ``invoke`` commands below are also expected to run on Python
+3.6+. Alternatively, it's possible to use the ``python3.6 -m pip`` approach
+to run these commands.
+
+Python dependencies
+~~~~~~~~~~~~~~~~~~~
 
 Many steps are automated using the generic `Invoke <http://pyinvoke.org>`_
 tool with a help by our `rellu <https://github.com/robotframework/rellu>`_
-utilities, but also other tools/modules are needed. A pre-condition is
-installing all these tools, and that's easiest done using `pip
+utilities, but also other tools and modules are needed. A pre-condition is
+installing all these, and that's easiest done using `pip
 <http://pip-installer.org>`_ and the provided `<requirements-build.txt>`_ file::
 
     pip install -r requirements-build.txt
@@ -39,6 +50,15 @@ the command line like::
 
 Run ``invoke`` without arguments for help. All tasks can be listed using
 ``invoke --list`` and each task's usage with ``invoke --help task``.
+
+Different Git workflows
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Git commands used below always expect that ``origin`` is the project main
+repository. If that's not the case, and instead ``origin`` is your personal
+fork, you probably still want to push to the main repository. In that case
+you need to add ``upstream`` or similar to ``git push`` commands before
+running them.
 
 Testing
 -------
@@ -94,11 +114,28 @@ Release notes
 
 2. Fill the missing details in the generated release notes template.
 
-3. Add, commit and push::
+3. Make sure that issues have correct information:
+
+   - All issues should have type (bug, enhancement or task) and priority set.
+     Notice that issues with the task type are automatically excluded from
+     the release notes.
+   - Issue priorities should be consistent.
+   - Issue titles should be informative. Consistency is good here too, but
+     no need to overdo it.
+
+   If information needs to be added or edited, its better to edit it in the
+   issue tracker than in the generated release notes. This allows re-generating
+   the list of issues later if more issues are added.
+
+4. Add, commit and push::
 
       git add doc/SeleniumLibrary-$VERSION.rst
       git commit -m "Release notes for $VERSION" doc/SeleniumLibrary-$VERSION.rst
       git push
+
+5. Update later if necessary. Writing release notes is typically the biggest
+   task when generating releases, and getting everything done in one go is
+   often impossible.
 
 Set version
 -----------
