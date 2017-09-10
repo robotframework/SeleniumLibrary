@@ -1,10 +1,8 @@
 # Requirements needed for SeleniumLibrary development but not by end users.
+# Creating releases has its own requirements listed in requirements-build.txt.
+
 mockito >= 1.0.0
 robotstatuschecker
-invoke >= 0.20
-rellu >= 0.4
-twine
-wheel
 
 # Include normal dependencies from requirements.txt. Makes it possible to use
 # requirements-dev.txt as a single requirement file in PyCharm and other IDEs.

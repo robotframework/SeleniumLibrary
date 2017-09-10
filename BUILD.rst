@@ -25,9 +25,9 @@ Many steps are automated using the generic `Invoke <http://pyinvoke.org>`_
 tool with a help by our `rellu <https://github.com/robotframework/rellu>`_
 utilities, but also other tools/modules are needed. A pre-condition is
 installing all these tools, and that's easiest done using `pip
-<http://pip-installer.org>`_ and the provided `<requirements-dev.txt>`_ file::
+<http://pip-installer.org>`_ and the provided `<requirements-build.txt>`_ file::
 
-    pip install -r requirements-dev.txt
+    pip install -r requirements-build.txt
 
 Using Invoke
 ~~~~~~~~~~~~
