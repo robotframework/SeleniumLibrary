@@ -2,7 +2,7 @@
 
 import re
 from os.path import abspath, dirname, join
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 CURDIR = dirname(abspath(__file__))
@@ -38,8 +38,6 @@ setup(
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
     install_requires = REQUIREMENTS,
-    package_dir      = {'' : 'src'},
-    packages         = ['SeleniumLibrary', 'SeleniumLibrary.keywords',
-                        'SeleniumLibrary.locators', 'SeleniumLibrary.utils'],
-    include_package_data = True,
+    package_dir      = {'': 'src'},
+    packages         = find_packages('src')
 )
