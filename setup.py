@@ -34,7 +34,8 @@ setup(name         = 'robotframework-seleniumlibrary',
                         "Programming Language :: Python :: 2",
                         "Programming Language :: Python :: 3",
                         "Topic :: Software Development :: Testing",
-                        "Framework :: Robot Framework"
+                        "Framework :: Robot Framework",
+                        "Framework :: Robot Framework :: Library"
                      ],
       install_requires = REQUIREMENTS,
       package_dir  = {'' : 'src'},
