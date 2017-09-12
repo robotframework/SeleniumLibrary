@@ -1,10 +1,3 @@
-include MANIFEST.in
-include *.txt
-include *.rst
-exclude */*.txt # limit previous command to include only *.txt files in root folder
-exclude */*.rst # limit previous command to include only *.rst files in root folder
-
+include COPYRIGHT.txt
+include LICENSE.txt
 include docs/SeleniumLibrary.html
-
-recursive-include src *.py
-recursive-exclude src *.pyc
