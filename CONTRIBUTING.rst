@@ -127,11 +127,11 @@ individual keywords.
 
 -  All new enhancements or changes should have a note telling when the
    change was introduced. Often adding something like
-   ``New in Selenium2Libray 1.8.`` is enough.
+   ``New in SeleniumLibray 1.8.`` is enough.
 
 Keyword documentation can be easily created using `invoke`_ task::
 
-    inv generate-documentation
+    inv keyword_documentation
 
 Resulting docs should be verified before the code is committed.
 
@@ -168,7 +168,7 @@ Continuous integration
 
 SeleniumLibrary's continuous integration (CI) servers are visible through
 `Travis CI`_. They automatically test all new pull request to the repository with
-Chrome on Python 2.7, Python 3.3 and Python 3.6. Acceptance test are also run
+Chrome and Firefox on Python 2.7, Python 3.3 and Python 3.6. Acceptance test are also run
 by using Selenium 2.53.6 and latest available Selenium 3 version. The used
 Robot Framework versions are: 2.8.7, 2.9.2 and 3.0.2.
 
