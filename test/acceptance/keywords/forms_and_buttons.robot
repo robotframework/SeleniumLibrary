@@ -59,12 +59,10 @@ Click button created with <button> by tag content
 
 Choose File
     [Documentation]    Choose File
+    [Tags]    Known Issue Firefox    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Navigate To File Upload Form And Create Temp File To Upload
-    [Tags]  Known Issue Internet Explorer    Known Issue Safari
     Choose File    file_to_upload    ${CURDIR}${/}temp.txt
-    ${dep_browser}=    Set Variable If
-    ...    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'
-    ...    temp.txt    C:\\fakepath\\temp.txt    #Needs to be checked in Windows and OS X
+    ${dep_browser}=    Set Variable If    '${BROWSER}'.lower() == 'ff' or '${BROWSER}'.lower() == 'firefox'    temp.txt    C:\\fakepath\\temp.txt    #Needs to be checked in Windows and OS X
     Textfield Value Should Be    name= file_to_upload    ${dep_browser}
     [Teardown]    Remove File    ${CURDIR}${/}temp.txt
 
