@@ -417,24 +417,6 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Clicking element '%s'." % locator)
         self.find_element(locator).click()
-
-    @keyword
-    def open_in_new_tab(self, locator):
-        """Click element identified by `locator` and open in new tab.
-
-        Key attributes for arbitrary elements are `id` and `name`. See
-        `introduction` for details about locating elements.
-        """
-        self.info("Clicking element '%s'." % locator)
-        element = self.find_element(locator)
-        action = ActionChains(self.browser)
-
-        'Control+CONTROL works on Unix,Windows machine, COMMAND+Click works on MAC machines'
-        try:
-            action.key_down(Keys.COMMAND).click(element).key_up(Keys.COMMAND).perform()
-        except:
-            action.key_down(Keys.CONTROL).click(element).key_up(Keys.CONTROL).perform()
-
      
     @keyword   
     def open_in_new_window(self, locator):
