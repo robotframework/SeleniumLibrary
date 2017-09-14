@@ -22,6 +22,7 @@ from SeleniumLibrary.keywords.formelement import FormElementKeywords
 from SeleniumLibrary.utils import escape_xpath_value, is_falsy, is_truthy
 
 
+
 class ElementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
@@ -416,6 +417,20 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Clicking element '%s'." % locator)
         self.find_element(locator).click()
+     
+    @keyword   
+    def open_in_new_window(self, locator):
+        """Click element identified by `locator` and open in new window.
+
+        Key attributes for arbitrary elements are `id` and `name`. See
+        `introduction` for details about locating elements.
+        """
+        self.info("Clicking element '%s'." % locator)
+        element = self.find_element(locator)
+        action = ActionChains(self.browser)
+        
+        action.key_down(Keys.SHIFT).click(element).key_up(Keys.SHIFT).perform()
+        
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
