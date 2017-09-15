@@ -167,10 +167,8 @@ Continuous integration
 ----------------------
 
 SeleniumLibrary's continuous integration (CI) servers are visible through
-`Travis CI`_. They automatically test all new pull request to the repository with
-Chrome and Firefox on Python 2.7, Python 3.3 and Python 3.6. Acceptance test are also run
-by using Selenium 2.53.6 and latest available Selenium 3 version. The used
-Robot Framework versions are: 2.8.7, 2.9.2 and 3.0.2.
+`Travis CI`_. For more details about how to run test and how `Travis CI`_
+integration is implemented can be found from the `test/README.rst`_.
 
 Finalizing pull requests
 ------------------------
@@ -209,6 +207,7 @@ The most common conflicting file is the aforementioned
 .. _PEP-257: https://www.python.org/dev/peps/pep-0257/
 .. _invoke: http://www.pyinvoke.org/
 .. _Travis CI: https://travis-ci.org/robotframework/SeleniumLibrary
+.. _test/README.rst`: https://github.com/robotframework/SeleniumLibrary/blob/master/test/README.rst
 .. _CHANGES.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/CHANGES.rst
 .. _sync your fork: https://help.github.com/articles/syncing-a-fork/
 .. _resolve conflicts: https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line
