@@ -27,11 +27,16 @@ To run unit and acceptance tests, run::
 
     python test/run_tests.py <browser>
 
-Tests are executed using Robot Framework and results verified automatically
-afterwards using `robotstatuschecker` tool. The tool can be installed using
-`pip install robotstatuschecker` and more information about it can be found
-from: https://github.com/robotframework/statuschecker/. Notice that initially
-some tests fail.
+Acceptance tests are executed using Robot Framework and results verified
+automatically afterwards using `robotstatuschecker`_ tool. Please visit
+`robotstatuschecker`_ for more details how the tool can be used. Notice that
+initially some tests fail.
+
+Units tests are written by using the Python default `unittest`_ framework.
+Unit test can be executed separately by running::
+
+    python test/run_unit_tests.py
+
 
 Running test with different interpreter
 ---------------------------------------
@@ -41,7 +46,7 @@ system settings, which python is used by default. It is possible to run test
 by using different interpreter by using the `--interpreter` command line
 argument.
 
-Starting from version 2.0 onwards the SeleniumLibrary is tested by using 
+Starting from version 3.0.0 onwards the SeleniumLibrary is tested by using
 Python 2 and 3. Other interpreters are not tested by the development team.
 
 
@@ -83,3 +88,16 @@ Examples::
 To run just the unit tests, run::
 
     python test/run_unit_tests.py
+
+Travis CI integration
+---------------------
+
+`Travis CI`_ is used to automatically test all new pull request to the
+repository. Test are automatically run by using Chrome and Firefox  browsers,
+by using on Python 2.7, Python 3.3 and Python 3.6. Acceptance test are also run
+by using Selenium 2.53.6 and latest available Selenium 3 version and
+acceptance test uses Robot Framework versions are: 2.8.7, 2.9.2 and 3.0.2.
+
+.. _unittest: https://docs.python.org/3/library/unittest.html
+.. _robotstatuschecker: https://github.com/robotframework/statuschecker/
+.. _Travis CI: https://travis-ci.org/robotframework/SeleniumLibrary
