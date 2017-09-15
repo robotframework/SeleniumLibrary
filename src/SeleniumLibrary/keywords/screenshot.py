@@ -112,10 +112,10 @@ class ScreenshotKeywords(LibraryComponent):
         | File Should Exist | ${OTHER_DIR}${/}sc-000001.png |
 
         """
-		if not self.browser:
-			self.info("Couldn't capture page screenshot because no browser is opened")
-			return
-		
+        if not self.browser:
+            self.info("Couldn't capture page screenshot because no browser is opened")
+            return
+        
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
         if hasattr(self.browser, 'get_screenshot_as_file'):
