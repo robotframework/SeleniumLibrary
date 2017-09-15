@@ -113,13 +113,13 @@ class ScreenshotKeywords(LibraryComponent):
 
         """
         try:
-			# try to access the browser property
-			b = self.browser
-			
-		except RuntimeError:
-			# we got an error, just exit
-			self.info("Couldn't capture page screenshot because no browser is opened")
-			return
+            # try to access the browser property
+            b = self.browser
+            
+        except RuntimeError:
+            # we got an error, just exit
+            self.info("Couldn't capture page screenshot because no browser is opened")
+            return
         
         path, link = self._get_screenshot_paths(filename)
         self._create_directory(path)
