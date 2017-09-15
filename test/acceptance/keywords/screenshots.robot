@@ -139,7 +139,7 @@ Capture page screenshot explicit name will overwrite
     ...  msg=Expected to find one screenshot file, found ${count}
     File Should Exist    ${OUTPUTDIR}/explicit-screenshot-1.png
 
-Capture Page Screenshot With Closed Browser
+Capture page screenshot with closed browser
     [Documentation]    LOG 1    Couldn't capture page screenshot because no browser is opened
     [Setup]    Close All Browsers
     Capture Page Screenshot
