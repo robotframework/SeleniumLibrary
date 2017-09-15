@@ -30,41 +30,35 @@ install:
   - pip install -r requirements-dev.txt
 matrix:
   include:
-    - python: "3.6" # For PR and cron
+    - python: "3.6"
       env:
         - BROWSER=chrome
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=
-    - python: "2.7" # For PR and cron
+    - python: "2.7"
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=2.9.2
         - ROBOT_OPTIONS=
-    - python: "2.7" # For PR and cron
+    - python: "2.7"
       env:
         - BROWSER=chrome
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=2.8.7
         - ROBOT_OPTIONS=
-    - python: "3.3" # For PR and cron
+    - pypy: "pypy3"
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=
-    - python: "3.6" # For PR and cron
+    - python: "3.3"
       env:
         - BROWSER=firefox
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=3.0.2
-        - ROBOT_OPTIONS="--exclude Known_Issue_Firefox"
-    - python: "2.7" # For PR and cron
-      env:
-        - BROWSER=firefox
-        - SELENIUM=3.5.0
-        - ROBOTFRAMEWORK=2.8.7
         - ROBOT_OPTIONS="--exclude Known_Issue_Firefox"
 before_script:
   - "export DISPLAY=:99.0"
