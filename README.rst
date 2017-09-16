@@ -13,7 +13,10 @@ and downloads can be found from PyPI_. See `keyword documentation`_
 for available keywords and more information about the library in general.
 
 SeleniumLibrary works with Selenium 2.53.6 or newer, including Selenium 3.
-It supports Python 2.7 as well as Python 3.3 or newer.
+It supports Python 2.7 as well as Python 3.3 or newer. In addition to the
+normal Python_ interpreter, it works also with PyPy_ and Jython_. Unfortunately
+Selenium_ isn't currently supported by IronPython_ and thus this library
+doesn't work with IronPython_ either.
 
 SeleniumLibrary is based on the `old SeleniumLibrary`_ that was forked to
 Selenium2Library_ and then later renamed back to SeleniumLibrary.
@@ -234,6 +237,10 @@ project.
 .. _PyPI: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 .. _GitHub: https://github.com/robotframework/SeleniumLibrary
 .. _Keyword Documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
+.. _Python: http://python.org
+.. _PyPy: http://pypy.org
+.. _Jython: http://jython.org
+.. _IronPython: http://ironpython.net
 .. _demo project: https://bitbucket.org/robotframework/webdemo
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
