@@ -48,7 +48,7 @@ matrix:
         - SELENIUM=3.5.0
         - ROBOTFRAMEWORK=2.8.7
         - ROBOT_OPTIONS=
-    - pypy: "pypy3"
+    - python: "3.3"
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
