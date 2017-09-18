@@ -408,14 +408,22 @@ class ElementKeywords(LibraryComponent):
         return element.location['y']
 
     @keyword
-    def click_element(self, locator):
+    def click_element(self, locator, new_window=False):
         """Click element identified by `locator`.
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        new_window(optional) : If Element need to be opened in new window then we can set this as True
         """
         self.info("Clicking element '%s'." % locator)
-        self.find_element(locator).click()
+        
+        if(new_window):
+            element = self.find_element(locator)
+            action = ActionChains(self.browser)
+            action.key_down(Keys.SHIFT).click(element).key_up(Keys.SHIFT).perform()
+        else:
+            self.find_element(locator).click()
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):

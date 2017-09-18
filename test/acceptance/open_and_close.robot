@@ -63,3 +63,14 @@ Closing all browsers clears cache
     Run Keyword And Expect Error
     ...    No browser with index or alias 'Browser 2' found.
     ...    Switch Browser    Browser 2
+
+Open Option In New Window Keyword
+    Open Browser    ${ROOT}/jquery.html    ${BROWSER}
+    Set Selenium Implicit Wait    60s
+    Click Element    link=Link with id    new_window=True
+    Sleep    5s
+    @{windows}=    List Windows
+    Log To Console    ${windows}       
+    Select Window    ${windows[1]}
+    Location Should Be    ${ROOT}/broken.html
+    
