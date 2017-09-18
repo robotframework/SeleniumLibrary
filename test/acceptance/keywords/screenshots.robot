@@ -140,7 +140,7 @@ Capture page screenshot explicit name will overwrite
     File Should Exist    ${OUTPUTDIR}/explicit-screenshot-1.png
 
 Capture page screenshot with closed browser
-    [Documentation]    LOG 1    Couldn't capture page screenshot because no browser is opened
+    [Documentation]    LOG 2:1    Couldn't capture page screenshot because no browser is opened
     [Setup]    Close All Browsers
     Capture Page Screenshot
     [Teardown]    Open Browser To Start Page
