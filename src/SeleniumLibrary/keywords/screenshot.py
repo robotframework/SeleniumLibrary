@@ -113,29 +113,27 @@ class ScreenshotKeywords(LibraryComponent):
 
         """
         try:
-            # try to access the browser property
-            b = self.browser
+            self.browser
             
         except RuntimeError:
-            # we got an error, just exit
             self.info("Couldn't capture page screenshot because no browser is opened")
-            return
         
-        path, link = self._get_screenshot_paths(filename)
-        self._create_directory(path)
-        if hasattr(self.browser, 'get_screenshot_as_file'):
-            if not self.browser.get_screenshot_as_file(path):
-                raise RuntimeError('Failed to save screenshot ' + link)
         else:
-            if not self.browser.save_screenshot(path):
-                raise RuntimeError('Failed to save screenshot ' + link)
-        # Image is shown on its own row and thus prev row is closed on purpose
-        msg = (
-            '</td></tr><tr><td colspan="3"><a href="{}">'
-            '<img src="{}" width="800px"></a>'.format(link, link)
-        )
-        self.info(msg, html=True)
-        return path
+            path, link = self._get_screenshot_paths(filename)
+            self._create_directory(path)
+            if hasattr(self.browser, 'get_screenshot_as_file'):
+                if not self.browser.get_screenshot_as_file(path):
+                    raise RuntimeError('Failed to save screenshot ' + link)
+            else:
+                if not self.browser.save_screenshot(path):
+                    raise RuntimeError('Failed to save screenshot ' + link)
+            # Image is shown on its own row and thus prev row is closed on purpose
+            msg = (
+                '</td></tr><tr><td colspan="3"><a href="{}">'
+                '<img src="{}" width="800px"></a>'.format(link, link)
+            )
+            self.info(msg, html=True)
+            return path
 
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
