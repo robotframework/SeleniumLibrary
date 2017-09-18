@@ -1,6 +1,6 @@
 # Requirements needed when generating releases. See BUILD.rst for details.
 invoke >= 0.20
-rellu >= 0.4
+rellu >= 0.5
 twine
 wheel
 
