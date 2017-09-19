@@ -5,6 +5,28 @@ from mockito import any, mock, verify, when, unstub
 from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 
+class ParseLocatorTests(unittest.TestCase):
+
+    def test_implicit_xpath(self):
+        self._verify_parse_locator('//foo', 'xpath', '//foo')
+        self._verify_parse_locator('(//foo)', 'xpath', '(//foo)')
+
+    def test_no_separator(self):
+        self._verify_parse_locator('foo', 'default', 'foo')
+
+    def test_equal_sign_as_separator(self):
+        self._verify_parse_locator('class=foo', 'class', 'foo')
+        self._verify_parse_locator('id=foo=bar', 'id', 'foo=bar')
+
+    def test_ignore_whitespace(self):
+        self._verify_parse_locator('class = foo', 'class', 'foo')
+        self._verify_parse_locator('  id  = foo = bar  ', 'id', 'foo = bar  ')
+
+    def _verify_parse_locator(self, locator, prefix, criteria):
+        parse_locator = ElementFinder(None)._parse_locator
+        self.assertEqual(parse_locator(locator), (prefix, criteria))
+
+
 class ElementFinderTests(unittest.TestCase):
 
     def setUp(self):
