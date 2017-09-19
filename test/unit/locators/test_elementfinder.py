@@ -10,6 +10,7 @@ class ParseLocatorTests(unittest.TestCase):
     def test_implicit_xpath(self):
         self._verify_parse_locator('//foo', 'xpath', '//foo')
         self._verify_parse_locator('(//foo)', 'xpath', '(//foo)')
+        self._verify_parse_locator('//id=bar', 'xpath', '//id=bar')
 
     def test_no_separator(self):
         self._verify_parse_locator('foo', 'default', 'foo')
@@ -18,9 +19,19 @@ class ParseLocatorTests(unittest.TestCase):
         self._verify_parse_locator('class=foo', 'class', 'foo')
         self._verify_parse_locator('id=foo=bar', 'id', 'foo=bar')
 
+    def test_colon_as_separator(self):
+        self._verify_parse_locator('class:foo', 'class', 'foo')
+        self._verify_parse_locator('id:foo:bar', 'id', 'foo:bar')
+
+    def test_use_first_separator_when_both_are_used(self):
+        self._verify_parse_locator('id:foo=bar', 'id', 'foo=bar')
+        self._verify_parse_locator('id=foo:bar', 'id', 'foo:bar')
+
     def test_ignore_whitespace(self):
         self._verify_parse_locator('class = foo', 'class', 'foo')
+        self._verify_parse_locator('class : foo', 'class', 'foo')
         self._verify_parse_locator('  id  = foo = bar  ', 'id', 'foo = bar  ')
+        self._verify_parse_locator('  id  : foo : bar  ', 'id', 'foo : bar  ')
 
     def _verify_parse_locator(self, locator, prefix, criteria):
         parse_locator = ElementFinder(None)._parse_locator

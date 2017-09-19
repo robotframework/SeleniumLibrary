@@ -257,10 +257,19 @@ class ElementFinder(ContextAware):
     def _parse_locator(self, locator):
         if locator.startswith(('//', '(//')):
             return 'xpath', locator
-        if '=' not in locator:
+        index = self._get_locator_separator_index(locator)
+        if index == -1:
             return 'default', locator
-        prefix, criteria = locator.split('=', 1)
-        return prefix.strip(), criteria.lstrip()
+        prefix = locator[:index].strip()
+        criteria = locator[index+1:].lstrip()
+        return prefix, criteria
+
+    def _get_locator_separator_index(self, locator):
+        if '=' not in locator:
+            return locator.find(':')
+        if ':' not in locator:
+            return locator.find('=')
+        return min(locator.find('='), locator.find(':'))
 
     def _element_matches(self, element, tag, constraints):
         if not element.tag_name.lower() == tag:
