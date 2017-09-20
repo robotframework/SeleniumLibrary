@@ -14,6 +14,7 @@ class ParseLocatorTests(unittest.TestCase):
 
     def test_no_separator(self):
         self._verify_parse_locator('foo', 'default', 'foo')
+        self._verify_parse_locator('', 'default', '')
 
     def test_equal_sign_as_separator(self):
         self._verify_parse_locator('class=foo', 'class', 'foo')
@@ -27,7 +28,11 @@ class ParseLocatorTests(unittest.TestCase):
         self._verify_parse_locator('id:foo=bar', 'id', 'foo=bar')
         self._verify_parse_locator('id=foo:bar', 'id', 'foo:bar')
 
-    def test_ignore_whitespace(self):
+    def test_preserve_trailing_whitespace(self):
+        self._verify_parse_locator('//foo/bar  ', 'xpath', '//foo/bar  ')
+        self._verify_parse_locator('class=foo  ', 'class', 'foo  ')
+
+    def test_remove_whitespace_around_prefix_and_separator(self):
         self._verify_parse_locator('class = foo', 'class', 'foo')
         self._verify_parse_locator('class : foo', 'class', 'foo')
         self._verify_parse_locator('  id  = foo = bar  ', 'id', 'foo = bar  ')
