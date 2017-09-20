@@ -18,8 +18,7 @@ Selenium speed should affect execution
     ${start} =    Get Time    epoch
     Click Element    xpath=//input[@name="email"]
     ${end} =    Get Time    epoch
-    ${total} =    Evaluate    ${end} - ${start}
-    Should Be True     ${total} >= ${2}
+    Should Be True     ${end} - ${start} >= ${2}
 
 Selenium speed should affect before browser is opened
     [Documentation]    Click Element executes two selenium commands and
@@ -30,8 +29,7 @@ Selenium speed should affect before browser is opened
     ${start} =    Get Time    epoch
     Click Element    xpath=//input[@name="email"]
     ${end} =    Get Time    epoch
-    ${total} =    Evaluate    ${end} - ${start}
-    Should Be True     ${total} >= ${2}
+    Should Be True     ${end} - ${start} >= ${2}
 
 Selenium speed should affect all browsers
     [Documentation]    Click Element executes two selenium commands and
@@ -43,14 +41,12 @@ Selenium speed should affect all browsers
     ${start} =    Get Time    epoch
     Click Element    xpath=//input[@name="email"]
     ${end} =    Get Time    epoch
-    ${total} =    Evaluate    ${end} - ${start}
-    Should Be True     ${total} >= ${2}
+    Should Be True     ${end} - ${start} >= ${2}
     Switch Browser    ${2}
     ${start} =    Get Time    epoch
     Click Element    xpath=//input[@name="email"]
     ${end} =    Get Time    epoch
-    ${total} =    Evaluate    ${end} - ${start}
-    Should Be True     ${total} >= ${2}
+    Should Be True     ${end} - ${start} >= ${2}
 
 *** Keywords ***
 Open Browser To "forms/prefilled_email_form.html"
