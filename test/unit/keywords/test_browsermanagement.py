@@ -3,7 +3,7 @@ import unittest
 from mockito import when, mock, verify, verifyNoMoreInteractions, unstub
 from selenium import webdriver
 
-from SeleniumLibrary.keywords.browsermanagement import BrowserManagementKeywords
+from SeleniumLibrary.keywords import BrowserManagementKeywords
 
 
 class BrowserManagementTests(unittest.TestCase):
@@ -142,6 +142,26 @@ class BrowserManagementTests(unittest.TestCase):
             verify(ctx).register_browser(driver, 'fake2')
         finally:
             del webdriver.FakeWebDriver
+        unstub()
+
+    def test_open_browser_speed(self):
+        ctx = mock()
+        ctx.speed = 5.0
+        browser = mock()
+        when(webdriver).Chrome().thenReturn(browser)
+        bm = BrowserManagementKeywords(ctx)
+        bm.open_browser('http://robotframework.org/', 'chrome')
+        self.assertEqual(browser._speed, 5.0)
+        unstub()
+
+    def test_create_webdriver_speed(self):
+        ctx = mock()
+        ctx.speed = 0.0
+        browser = mock()
+        when(webdriver).Chrome().thenReturn(browser)
+        bm = BrowserManagementKeywords(ctx)
+        bm.open_browser('http://robotframework.org/', 'chrome')
+        verify(browser, times=0).__call__('_speed')
         unstub()
 
     def verify_browser(self, webdriver_type, browser_name, **kw):
