@@ -143,7 +143,7 @@ class BrowserManagementKeywords(LibraryComponent):
                                      ff_profile_dir, remote_url)
         try:
             browser.get(url)
-        except:
+        except Exception:
             self.ctx.register_browser(browser, alias)
             self.debug("Opened browser with session id %s but failed "
                        "to open url '%s'" % (browser.session_id, url))
@@ -525,7 +525,6 @@ class BrowserManagementKeywords(LibraryComponent):
         old_speed = self.ctx.speed
         self.ctx.speed = timestr_to_secs(seconds)
         for browser in self.browsers.browsers:
-            browser._speed = self.ctx.speed
             self._monkey_patch_speed(browser)
         return old_speed
 
@@ -595,14 +594,13 @@ class BrowserManagementKeywords(LibraryComponent):
     def _make_browser(self, browser_name, desired_capabilities=None,
                       profile_dir=None, remote=None):
         creation_func = self._get_browser_creation_function(browser_name)
-
         if not creation_func:
             raise ValueError(browser_name + " is not a supported browser.")
-
         browser = creation_func(remote, desired_capabilities, profile_dir)
         browser.set_script_timeout(self.ctx.timeout)
         browser.implicitly_wait(self.ctx.implicit_wait)
-
+        if self.ctx.speed:
+            self._monkey_patch_speed(browser)
         return browser
 
     def _make_ff(self, remote, desired_capabilites, profile_dir):
@@ -714,6 +712,7 @@ class BrowserManagementKeywords(LibraryComponent):
         if not hasattr(browser, '_base_execute'):
             browser._base_execute = browser.execute
             browser.execute = types.MethodType(execute, browser)
+        browser._speed = self.ctx.speed
 
     def _log_list(self, items, what='item'):
         msg = [

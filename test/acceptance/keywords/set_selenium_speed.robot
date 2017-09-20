@@ -13,10 +13,47 @@ Settimg selenium speed is possible multiple times
 
 Selenium speed should affect execution
     [Documentation]    Click Element executes two selenium commands and
-    ...    therefore total time is 6 seconds
-    Set Selenium Speed    3
+    ...    therefore total time is 2 seconds
+    Set Selenium Speed    1
     ${start} =    Get Time    epoch
     Click Element    xpath=//input[@name="email"]
     ${end} =    Get Time    epoch
     ${total} =    Evaluate    ${end} - ${start}
-    Should Be True     ${total} > ${5}
+    Should Be True     ${total} >= ${2}
+
+Selenium speed should affect before browser is opened
+    [Documentation]    Click Element executes two selenium commands and
+    ...    therefore total time is 2 seconds
+    Close All Browsers
+    Set Selenium Speed    1
+    Open Browser To "forms/prefilled_email_form.html"
+    ${start} =    Get Time    epoch
+    Click Element    xpath=//input[@name="email"]
+    ${end} =    Get Time    epoch
+    ${total} =    Evaluate    ${end} - ${start}
+    Should Be True     ${total} >= ${2}
+
+Selenium speed should affect all browsers
+    [Documentation]    Click Element executes two selenium commands and
+    ...    therefore total time is 2 seconds
+    Close All Browsers
+    Open Browser To "forms/prefilled_email_form.html"
+    Open Browser To "forms/prefilled_email_form.html"
+    Set Selenium Speed    1
+    ${start} =    Get Time    epoch
+    Click Element    xpath=//input[@name="email"]
+    ${end} =    Get Time    epoch
+    ${total} =    Evaluate    ${end} - ${start}
+    Should Be True     ${total} >= ${2}
+    Switch Browser    ${2}
+    ${start} =    Get Time    epoch
+    Click Element    xpath=//input[@name="email"]
+    ${end} =    Get Time    epoch
+    ${total} =    Evaluate    ${end} - ${start}
+    Should Be True     ${total} >= ${2}
+
+*** Keywords ***
+Open Browser To "forms/prefilled_email_form.html"
+    ${index} =    Open Browser    ${FRONT PAGE}    ${BROWSER}
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Go To    ${ROOT}/forms/prefilled_email_form.html
