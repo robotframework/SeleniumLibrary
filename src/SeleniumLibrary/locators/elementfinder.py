@@ -124,9 +124,6 @@ class ElementFinder(ContextAware):
         else:
             del self._strategies[strategy_name]
 
-    def has_strategy(self, strategy_name):
-        return strategy_name in self.strategies
-
     def _find_by_identifier(self, criteria, tag, constraints):
         elements = self._normalize_result(
             self.browser.find_elements_by_id(criteria))
