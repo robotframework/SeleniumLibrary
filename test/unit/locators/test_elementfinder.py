@@ -7,6 +7,9 @@ from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 class ParseLocatorTests(unittest.TestCase):
 
+    def setUp(self):
+        self.finder = ElementFinder(None)
+
     def test_implicit_xpath(self):
         self._verify_parse_locator('//foo', 'xpath', '//foo')
         self._verify_parse_locator('(//foo)', 'xpath', '(//foo)')
@@ -38,8 +41,19 @@ class ParseLocatorTests(unittest.TestCase):
         self._verify_parse_locator('  id  = foo = bar  ', 'id', 'foo = bar  ')
         self._verify_parse_locator('  id  : foo : bar  ', 'id', 'foo : bar  ')
 
+    def test_separator_without_matching_prefix_is_ignored(self):
+        self._verify_parse_locator('no=match', 'default', 'no=match')
+        self._verify_parse_locator('no:match', 'default', 'no:match')
+
+    def test_registered_strategy_can_be_used_as_prefix(self):
+        self._verify_parse_locator('registered=no', 'default', 'registered=no')
+        self._verify_parse_locator('registered:no', 'default', 'registered:no')
+        self.finder.register('registered', lambda *args: None, persist=True)
+        self._verify_parse_locator('registered=yes!!', 'registered', 'yes!!')
+        self._verify_parse_locator('registered:yes!!', 'registered', 'yes!!')
+
     def _verify_parse_locator(self, locator, prefix, criteria):
-        parse_locator = ElementFinder(None)._parse_locator
+        parse_locator = self.finder._parse_locator
         self.assertEqual(parse_locator(locator), (prefix, criteria))
 
 
