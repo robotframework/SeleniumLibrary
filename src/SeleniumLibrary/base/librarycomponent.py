@@ -35,6 +35,10 @@ class LibraryComponent(ContextAware):
     def element_finder(self):
         return self.ctx.element_finder
 
+    @property
+    def table_element_finder(self):
+        return self.ctx.table_element_finder
+
     def info(self, msg, html=False):
         logger.info(msg, html)
 
