@@ -61,10 +61,7 @@ class ElementFinder(ContextAware):
         if isinstance(locator, WebElement):
             return locator
         prefix, criteria = self._parse_locator(locator)
-        if prefix not in self._strategies:
-            raise ValueError("Element locator with prefix '%s' "
-                             "is not supported." % prefix)
-        strategy = self._strategies.get(prefix)
+        strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
         elements = strategy(criteria, tag, constraints)
         if required and not elements:
@@ -123,9 +120,6 @@ class ElementFinder(ContextAware):
                         % strategy_name)
         else:
             del self._strategies[strategy_name]
-
-    def has_strategy(self, strategy_name):
-        return strategy_name in self.strategies
 
     def _find_by_identifier(self, criteria, tag, constraints):
         elements = self._normalize_result(
@@ -257,10 +251,19 @@ class ElementFinder(ContextAware):
     def _parse_locator(self, locator):
         if locator.startswith(('//', '(//')):
             return 'xpath', locator
+        index = self._get_locator_separator_index(locator)
+        if index != -1:
+            prefix = locator[:index].strip()
+            if prefix in self._strategies:
+                return prefix, locator[index+1:].lstrip()
+        return 'default', locator
+
+    def _get_locator_separator_index(self, locator):
         if '=' not in locator:
-            return 'default', locator
-        prefix, criteria = locator.split('=', 1)
-        return prefix.strip(), criteria.lstrip()
+            return locator.find(':')
+        if ':' not in locator:
+            return locator.find('=')
+        return min(locator.find('='), locator.find(':'))
 
     def _element_matches(self, element, tag, constraints):
         if not element.tag_name.lower() == tag:
