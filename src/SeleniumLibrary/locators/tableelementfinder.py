@@ -16,15 +16,11 @@
 
 from SeleniumLibrary.base import ContextAware
 
-from .elementfinder import ElementFinder
-
 
 class TableElementFinder(ContextAware):
 
     def __init__(self, ctx):
         ContextAware.__init__(self, ctx)
-        self.element_finder = ElementFinder(ctx)
-
         self._locator_suffixes = {
             ('css', 'default'): [''],
             ('css', 'content'): [''],

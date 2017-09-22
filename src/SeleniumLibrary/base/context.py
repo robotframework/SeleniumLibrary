@@ -27,3 +27,11 @@ class ContextAware(object):
     @property
     def browsers(self):
         return self.ctx._browsers
+
+    @property
+    def element_finder(self):
+        return self.ctx.element_finder
+
+    @property
+    def table_element_finder(self):
+        return self.ctx._table_element_finder

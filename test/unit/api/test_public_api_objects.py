@@ -9,7 +9,7 @@ class TableElementFinderInAPITest(unittest.TestCase):
 
     def test_table_finder(self):
         sl = SeleniumLibrary()
-        self.assertIsInstance(sl.table_element_finder, TableElementFinder)
+        self.assertIsInstance(sl._table_element_finder, TableElementFinder)
 
 
 class ElementFinderInAPITest(unittest.TestCase):
