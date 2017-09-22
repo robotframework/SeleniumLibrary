@@ -13,6 +13,7 @@ from .keywords import SelectElementKeywords
 from .keywords import TableElementKeywords
 from .keywords import WaitingKeywords
 from .locators import ElementFinder
+from .locators import TableElementFinder
 from .utils import BrowserCache
 from .utils import LibraryListener
 
@@ -218,6 +219,7 @@ class Selenium2Library(DynamicCore):
         self.register_keyword_to_run_on_failure(run_on_failure)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self.element_finder = ElementFinder(self)
+        self.table_element_finder = TableElementFinder(self)
 
     def run_keyword(self, name, args, kwargs):
         try:
