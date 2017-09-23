@@ -31,10 +31,6 @@ class LibraryComponent(ContextAware):
     def __init__(self, ctx):
         ContextAware.__init__(self, ctx)
 
-    @property
-    def element_finder(self):
-        return self.ctx.element_finder
-
     def info(self, msg, html=False):
         logger.info(msg, html)
 
