@@ -1,8 +1,7 @@
 import unittest
 
 from SeleniumLibrary import SeleniumLibrary
-from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.locators import TableElementFinder
+from SeleniumLibrary.locators import ElementFinder, TableElementFinder
 
 
 class TableElementFinderInAPITest(unittest.TestCase):
