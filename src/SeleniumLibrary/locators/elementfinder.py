@@ -57,21 +57,12 @@ class ElementFinder(ContextAware):
                        'normalize-space(descendant-or-self::text())']
         }
 
-    def find(self, locator, tag=None, first_only=True, required=True):
-        if isinstance(locator, WebElement):
-            return locator
-        prefix, criteria = self._parse_locator(locator)
-        strategy = self._strategies[prefix]
-        tag, constraints = self._get_tag_and_constraints(tag)
-        elements = strategy(criteria, tag, constraints)
-        if required and not elements:
-            raise ValueError("Element locator '{}' did not match any "
-                             "elements.".format(locator))
-        if first_only:
-            if not elements:
-                return None
-            return elements[0]
-        return elements
+    def find(self, locator, tag=None, first_only=True, required=True,
+             parent=None):
+        self.webfinder = self.browser
+        if parent:
+            self.webfinder = self._find(parent, tag, first_only, required)
+        return self._find(locator, tag, first_only, required)
 
     def assert_page_contains(self, locator, tag=None, message=None,
                              loglevel='INFO'):
@@ -121,26 +112,45 @@ class ElementFinder(ContextAware):
         else:
             del self._strategies[strategy_name]
 
+    def _find(self, locator, tag=None, first_only=True, required=True):
+        if self._is_webelement(locator):
+            return locator
+        prefix, criteria = self._parse_locator(locator)
+        strategy = self._strategies[prefix]
+        tag, constraints = self._get_tag_and_constraints(tag)
+        elements = strategy(criteria, tag, constraints)
+        if required and not elements:
+            raise ValueError("Element locator '{}' did not match any "
+                             "elements.".format(locator))
+        if first_only:
+            if not elements:
+                return None
+            return elements[0]
+        return elements
+
+    def _is_webelement(self, element):
+        return isinstance(element, WebElement)
+
     def _find_by_identifier(self, criteria, tag, constraints):
         elements = self._normalize_result(
-            self.browser.find_elements_by_id(criteria))
+            self.webfinder.find_elements_by_id(criteria))
         elements.extend(self._normalize_result(
-            self.browser.find_elements_by_name(criteria)))
+            self.webfinder.find_elements_by_name(criteria)))
         return self._filter_elements(elements, tag, constraints)
 
     def _find_by_id(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_id(criteria),
+            self.webfinder.find_elements_by_id(criteria),
             tag, constraints)
 
     def _find_by_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_name(criteria),
+            self.webfinder.find_elements_by_name(criteria),
             tag, constraints)
 
     def _find_by_xpath(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_xpath(criteria),
+            self.webfinder.find_elements_by_xpath(criteria),
             tag, constraints)
 
     def _find_by_dom(self, criteria, tag, constraints):
@@ -159,27 +169,27 @@ class ElementFinder(ContextAware):
 
     def _find_by_link_text(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_link_text(criteria),
+            self.webfinder.find_elements_by_link_text(criteria),
             tag, constraints)
 
     def _find_by_partial_link_text(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_partial_link_text(criteria),
+            self.webfinder.find_elements_by_partial_link_text(criteria),
             tag, constraints)
 
     def _find_by_css_selector(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_css_selector(criteria),
+            self.webfinder.find_elements_by_css_selector(criteria),
             tag, constraints)
 
     def _find_by_class_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_class_name(criteria),
+            self.webfinder.find_elements_by_class_name(criteria),
             tag, constraints)
 
     def _find_by_tag_name(self, criteria, tag, constraints):
         return self._filter_elements(
-            self.browser.find_elements_by_tag_name(criteria),
+            self.webfinder.find_elements_by_tag_name(criteria),
             tag, constraints)
 
     def _find_by_sc_locator(self, criteria, tag, constraints):
@@ -204,7 +214,7 @@ class ElementFinder(ContextAware):
             ' or '.join(xpath_searchers)
         )
         return self._normalize_result(
-            self.browser.find_elements_by_xpath(xpath))
+            self.webfinder.find_elements_by_xpath(xpath))
 
     def _get_xpath_constraints(self, constraints):
         xpath_constraints = [self._get_xpath_constraint(name, value)
@@ -255,7 +265,7 @@ class ElementFinder(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index+1:].lstrip()
+                return prefix, locator[index + 1:].lstrip()
         return 'default', locator
 
     def _get_locator_separator_index(self, locator):

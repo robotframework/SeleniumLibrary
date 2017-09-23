@@ -57,6 +57,41 @@ class ParseLocatorTests(unittest.TestCase):
         self.assertEqual(parse_locator(locator), (prefix, criteria))
 
 
+class ElementFinderParentTests(unittest.TestCase):
+
+    def setUp(self):
+        self.ctx = mock()
+        self.ctx.browser = self.browser = mock()
+        self.finder = ElementFinder(self.ctx)
+
+    def tearDown(self):
+        unstub()
+
+    def test_find_with_parent_webelement(self):
+        webelement = mock()
+        when(self.finder)._is_webelement(webelement).thenReturn(True)
+        when(self.finder)._is_webelement('//div').thenReturn(False)
+        when(webelement).find_elements_by_xpath('//div').thenReturn([mock()])
+        self.finder.find("//div", parent=webelement)
+        verify(webelement).find_elements_by_xpath("//div")
+
+    def test_find_with_parent_identifier(self):
+        parent = mock()
+        when(self.finder)._is_webelement(any(str)).thenReturn(False)
+        when(self.browser).find_elements_by_id('idname').thenReturn([parent])
+        when(self.browser).find_elements_by_name('idname').thenReturn([])
+        when(parent).find_elements_by_xpath('//div').thenReturn([mock()])
+        self.finder.find("//div", parent='identifier=idname')
+
+    def test_find_with_parent_xpath(self):
+        locator = '//table'
+        parent = mock()
+        when(self.finder)._is_webelement(any(str)).thenReturn(False)
+        when(self.browser).find_elements_by_xpath(locator).thenReturn([parent])
+        when(parent).find_elements_by_xpath('//div').thenReturn([mock()])
+        self.finder.find("//div", parent=locator)
+
+
 class ElementFinderTests(unittest.TestCase):
 
     def setUp(self):
@@ -87,12 +122,12 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_with_no_tag(self):
         self.finder.find("test1", required=False)
         verify(self.browser).find_elements_by_xpath("//*[(@id='test1' or "
-                                                         "@name='test1')]")
+                                                    "@name='test1')]")
 
     def test_find_with_explicit_default_strategy(self):
         self.finder.find("default=test1", required=False)
         verify(self.browser).find_elements_by_xpath("//*[(@id='test1' or "
-                                                         "@name='test1')]")
+                                                    "@name='test1')]")
 
     def test_find_with_explicit_default_strategy_and_equals(self):
         self.browser.current_url = "http://localhost/mypage.html"
