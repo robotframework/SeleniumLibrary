@@ -53,9 +53,9 @@ class SeleniumLibrary(DynamicCore):
 
     == Table of contents ==
 
-    - ` Locating elements`
-    - ` Timeouts`
-    - ` Boolean arguments`
+    - `Locating elements`
+    - `Timeouts`
+    - `Boolean arguments`
     - `Shortcuts`
     - `Keywords`
 
@@ -153,10 +153,10 @@ class SeleniumLibrary(DynamicCore):
 
     Examples:
 
-    | `Click Element` | name:foo         | # Find element with class ``foo``.               |
-    | `Click Element` | default:name:foo | # Use default strategy with value ``class:foo``. |
-    | `Click Element` | //foo            | # Find element using XPath ``//foo``.            |
-    | `Click Element` | //foo            | # Use default strategy with value ``//foo``.     |
+    | `Click Element` | name:foo         | # Find element with name ``foo``.               |
+    | `Click Element` | default:name:foo | # Use default strategy with value ``name:foo``. |
+    | `Click Element` | //foo            | # Find element using XPath ``//foo``.           |
+    | `Click Element` | default://foo    | # Use default strategy with value ``//foo``.    |
 
     == Using WebElements ==
 
@@ -221,7 +221,8 @@ class SeleniumLibrary(DynamicCore):
     There are several ``Wait ...`` keywords that take timeout as an
     argument. All of these timeout arguments are optional. The timeout
     used by all of them can be set globally using the `Set Selenium Timeout`
-    keyword. The same timeout also applies to `Execute Async Javascript`.
+    keyword or when `importing` the library. The same timeout also applies
+    to `Execute Async Javascript`.
 
     All timeouts can be given as numbers considered seconds (e.g. ``0.5`` or
     ``42``) or in Robot Framework's time syntax (e.g. ``1.5 seconds`` or
