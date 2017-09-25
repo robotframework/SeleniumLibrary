@@ -270,7 +270,7 @@ class SeleniumLibrary(DynamicCore):
         `timeout` is the default timeout used to wait for all waiting actions.
         It can be later set with `Set Selenium Timeout`.
 
-        'implicit_wait' is the implicit timeout that Selenium waits when
+        `implicit_wait` is the implicit timeout that Selenium waits when
         looking for elements.
         It can be later set with `Set Selenium Implicit Wait`.
         See `WebDriver: Advanced Usage`__ section of the SeleniumHQ documentation
