@@ -202,7 +202,7 @@ class SeleniumLibrary(DynamicCore):
 
     - The default strategy is to search only by ``id``, not by ``name``.
     - Implicit XPath strategies using format ``//example`` is not supported.
-    - Only explicit strategies that are supported are ``xpath``, `css``
+    - Only explicit strategies that are supported are ``xpath``, ``css``
       and ``sizzle/jquery``.
     - Spaces are not allowed around the separator between the strategy and
       the value.
