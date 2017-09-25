@@ -42,133 +42,190 @@ __version__ = '3.0.0b1'
 class SeleniumLibrary(DynamicCore):
     """SeleniumLibrary is a web testing library for Robot Framework.
 
-    This document is about using SeleniumLibrary. For information about
-    installation, support, and more please visit the
-    [https://github.com/robotframework/SeleniumLibrary|project page].
+    This document explains how to use keywords provided by SeleniumLibrary.
+    For information about installation, support, and more, please visit the
+    [https://github.com/robotframework/SeleniumLibrary|project pages].
+    For more information about Robot Framework, see http://robotframework.org.
 
-    SeleniumLibrary uses the Selenium 2 (WebDriver) libraries internally to control a web browser.
-    See http://seleniumhq.org/docs/03_webdriver.html for more information on Selenium 2
-    and WebDriver.
+    SeleniumLibrary uses the Selenium WebDriver modules internally to
+    control a web browser. See http://seleniumhq.org for more information
+    about Selenium in general.
 
-    SeleniumLibrary runs tests in a real browser instance. It should work in
-    most modern browsers and can be used with both Python and Jython interpreters.
+    == Table of contents ==
 
-    = Before running tests =
+    - ` Locating elements`
+    - ` Timeouts`
+    - ` Boolean arguments`
+    - `Shortcuts`
+    - `Keywords`
 
-    Prior to running test cases using SeleniumLibrary, SeleniumLibrary must be
-    imported into your Robot test suite (see `importing` section), and the
-    `Open Browser` keyword must be used to open a browser to the desired location.
+    = Locating elements =
 
+    All keywords in SeleniumLibrary that need to interact with an element
+    on a web page take an argument named ``locator`` that specifies how
+    to find the element. Most often the locator is given as a string using
+    the locator syntax described below, but `using WebElements` is possible
+    too.
 
-    *--- Note important change starting with Version 1.7.0 release ---*
-    = Locating or specifying elements =
+    == Locator syntax ==
 
-    All keywords in SeleniumLibrary that need to find an element on the page
-    take an argument, either a `locator` or now a `webelement`. `locator`
-    is a string that describes how to locate an element using a syntax
-    specifying different location strategies. `webelement` is a variable that
-    holds a WebElement instance, which is a representation of the element.
+    SeleniumLibrary supports finding elements based on different strategies
+    such as the element id, XPath expressions, or CSS selectors. The strategy
+    can either be explicitly specified with a prefix or the strategy can be
+    implicit.
 
-    *Using locators*
-    ---------------
-    The locator can be used in two ways. In explicit way, where the strategy
-    of the locator is defined as prefix in the locator or in implicit way,
-    where there strategy is determined from the locator.
+    === Explicit locator strategy ===
 
-    The implicit way supports two strategies: `xpath` and matching against
-    `id` and `name` attributes. If locator starts with `//` or `(//` then
-    `xpath` strategy will be used. Determining `(//`  as xpath is supported
-    from release 3.0.0 onwards. If locator does not start with `//` or `(//`,
-    then it is matched against the `id` and `name` key attributes of
-    elements. Example
+    The explicit locator strategy is specified with a prefix using either
+    syntax ``strategy:value`` or ``strategy=value``. The former syntax
+    is preferred, because the latter is identical to Robot Framework's
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#named-argument-syntax|
+    named argument syntax] and that can cause problems. Notice that the
+    ``strategy:value`` syntax is olny supported by SeleniumLibrary 3.0 and
+    newer, though.
 
-    | Click Element    my_element    # id and name attribute matching
-    | Click Element    //div         # xpath
-    | Click Element    (//div)[2]    # xpath
+    Locator strategies that are supported by default are listed in the table
+    below. In addition to them, it is possible to register `custom locators`.
 
-    In the explicit way, it is possible to specify the approach
-    SeleniumLibrary should take to find an element by specifying a lookup
-    strategy with a locator prefix. Supported strategies are:
+    | = Strategy = |          = Match based on =         |         = Example =            |
+    | id           | Element ``id``.                     | ``id:example``                 |
+    | name         | ``name`` attribute.                 | ``name:example``               |
+    | identifier   | Either ``id`` or ``name``.          | ``identifier:example``         |
+    | class        | Element ``class``.                  | ``class:example``              |
+    | tag          | Tag name.                           | ``tag:div``                    |
+    | xpath        | XPath expression.                   | ``xpath://div[@id="example"]`` |
+    | css          | CSS selector.                       | ``css:div#example``            |
+    | dom          | DOM expression.                     | ``dom:document.images[5]``     |
+    | link         | Exact text a link has.              | ``link:The example``           |
+    | partial link | Partial link text.                  | ``partial link:he ex``         |
+    | sizzle       | Sizzle selector provided by jQuery. | ``sizzle:div.example``         |
+    | jquery       | Same as the above.                  | ``jquery:div.example``         |
+    | default      | Keyword specific default behavior.  | ``default:example``            |
 
-    | *Strategy* | *Example*                               | *Description*                                   |
-    | identifier | Click Element `|` identifier=my_element | Matches by @id or @name attribute               |
-    | id         | Click Element `|` id=my_element         | Matches by @id attribute                        |
-    | name       | Click Element `|` name=my_element       | Matches by @name attribute                      |
-    | xpath      | Click Element `|` xpath=//div[@id='my_element'] | Matches with arbitrary XPath expression |
-    | dom        | Click Element `|` dom=document.images[56] | Matches with arbitrary DOM express            |
-    | link       | Click Element `|` link=My Link          | Matches anchor elements by their link text      |
-    | partial link | Click Element `|` partial link=y Lin  | Matches anchor elements by their partial link text |
-    | css        | Click Element `|` css=div.my_class      | Matches by CSS selector                         |
-    | class      | Click Element `|` class=my_class       | Matches by class name selector                  |
-    | jquery     | Click Element `|` jquery=div.my_class   | Matches by jQuery/sizzle selector                         |
-    | sizzle     | Click Element `|` sizzle=div.my_class   | Matches by jQuery/sizzle selector                         |
-    | tag        | Click Element `|` tag=div               | Matches by HTML tag name                        |
-    | default*   | Click Link    `|` default=page?a=b      | Matches key attributes with value after first '=' |
-    * Explicitly specifying the default strategy is only necessary if locating
-    elements by matching key attributes is desired and an attribute value
-    contains a '='. The following would fail because it appears as if _page?a_
-    is the specified lookup strategy:
-    | Click Link    page?a=b
-    This can be fixed by changing the locator to:
-    | Click Link    default=page?a=b
+    See the `Default locator strategy` section below for more information
+    about how the default strategy works. Using the explicit ``default``
+    prefix is only necessary if the locator value itself accidentally
+    matches some of the explicit strategies.
 
-    Please note that jQuery is not provided by SeleniumLibrary
-    and if there is need to use jQuery locators, the system
-    under test must provide the jQuery library.
+    Spaces around the separator are ignored, so ``id : foo``, ``id: foo``
+    and ``id:foo`` are all equivalent.
 
-    *Using webelements*
-    ------------------
-    Starting with version 1.7 of the SeleniumLibrary, one can pass an argument
-    that contains a WebElement instead of a string locator. To get a WebElement,
-    use the new `Get WebElements` keyword.  For example:
+    Examples:
 
-    | ${elem} =      | Get WebElement | id=my_element |
-    | Click Element  | ${elem} |                      |
+    | `Click Element` | id:container                      |
+    | `Click Element` | css:div#container h1              |
+    | `Click Element` | xpath: //div[@id="container"]//h1 |
 
-    Locating Tables, Table Rows, Columns, etc.
-    ------------------------------------------
-    Table related keywords, such as `Table Should Contain`, work differently.
-    By default, when a table locator value is provided, it will search for
-    a table with the specified `id` attribute. For example:
+    Notice that using the ``sizzle`` strategy or its alias ``jquery``
+    requires that the system under test contains the jQuery library.
 
-    | Table Should Contain    my_table    text
+    === Implicit XPath strategy ===
 
-    More complex table lookup strategies are also supported:
+    If the locator starts with ``//`` or ``(//``, the locator is considered
+    to be an XPath expression. In other words, using ``//div`` is equivalent
+    to using explicit ``xpath://div``.
 
-    | *Strategy* | *Example*                                                          | *Description*                     |
-    | css        | Table Should Contain `|` css=table.my_class `|` text               | Matches by @id or @name attribute |
-    | xpath      | Table Should Contain `|` xpath=//table/[@name="my_table"] `|` text | Matches by @id or @name attribute |
+    Examples:
 
-    = Custom Locators =
+    | `Click Element` | //div[@id="container"] |
+    | `Click Element` | (//div)[2]             |
 
-    If more complex lookups are required than what is provided through the default locators, custom lookup strategies can
-    be created. Using custom locators is a two part process. First, create a keyword that returns the WebElement
-    that should be acted on.
+    The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
 
-    | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
-    |   | ${retVal}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
-    |   | [Return] | ${retVal} |
+    === Default locator strategy ===
 
-    This keyword is a reimplementation of the basic functionality of the `id` locator where `${browser}` is a reference
-    to the WebDriver instance and `${criteria}` is the text of the locator (i.e. everything that comes after the = sign).
-    To use this locator it must first be registered with `Add Location Strategy`.
+    By default locators are considered to use the keyword specific default
+    locator strategy. All keywords support finding elements based on ``id``
+    and ``name`` attributes, but some keywords support additional _key
+    attributes_ that make sense in their context. For example, `Click Link`
+    supports the link text and the ``href`` attribute in addition to the
+    normal ``id`` and ``name``.
 
-    | Add Location Strategy    custom    Custom Locator Strategy
+    Examples:
 
-    The first argument of `Add Location Strategy` specifies the name of the lookup strategy (which must be unique). After
-    registration of the lookup strategy, the usage is the same as other locators. See `Add Location Strategy` for more details.
+    | `Click Element` | example | # Match based on ``id`` or ``name``.            |
+    | `Click Link`    | example | # Match also based on link text and ``href``.   |
+    | `Click Button`  | example | # Match based on ``id``, ``name`` or ``value``. |
+
+    If the locator accidentally starts with some of the explicit locator
+    prefixes or with the implicit XPath prefixes, it is possible to use
+    the explicit ``default`` prefix to enable the default strategy.
+
+    Examples:
+
+    | `Click Element` | name:foo         | # Find element with class ``foo``.               |
+    | `Click Element` | default:name:foo | # Use default strategy with value ``class:foo``. |
+    | `Click Element` | //foo            | # Find element using XPath ``//foo``.            |
+    | `Click Element` | //foo            | # Use default strategy with value ``//foo``.     |
+
+    == Using WebElements ==
+
+    In addition to specifying a locator as a string, it is possible to use
+    Selenium's WebElement objects. This requires first getting a WebElement,
+    for example, by using the `Get WebElement` keyword.
+
+    | ${elem} =       | `Get WebElement` | id=example |
+    | `Click Element` | ${elem}          |            |
+
+    == Custom locators ==
+
+    If more complex lookups are required than what is provided through the
+    default locators, custom lookup strategies can be created. Using custom
+    locators is a two part process. First, create a keyword that returns
+    a WebElement that should be acted on:
+
+    | Custom Locator Strategy | [Arguments] | ${browser} | ${strategy} | ${tag} | ${constraints} |
+    |   | ${element}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+    |   | [Return] | ${element} |
+
+    This keyword is a reimplementation of the basic functionality of the
+    ``id`` locator where ``${browser}`` is a reference to a WebDriver
+    instance and ``${strategy}`` is name of the locator strategy. To use
+    this locator it must first be registered by using the
+    `Add Location Strategy` keyword:
+
+    | `Add Location Strategy` | custom | Custom Locator Strategy |
+
+    The first argument of `Add Location Strategy` specifies the name of
+    the strategy and it must be unique. After registering the strategy,
+    the usage is the same as with other locators:
+
+    | `Click Element` | custom:example |
+
+    See the `Add Location Strategy` keyword for more details.
+
+    == Locating tables ==
+
+    Locating tables when using table related keywords, such as
+    `Table Should Contain`, works differently than locating other elements.
+    The main differences are:
+
+    - The default strategy is to search only by ``id``, not by ``name``.
+    - Implicit XPath strategies using format ``//example`` is not supported.
+    - Only explicit strategies that are supported are ``xpath``, `css``
+      and ``sizzle/jquery``.
+    - Spaces are not allowed around the separator between the strategy and
+      the value.
+
+    Examples:
+
+    | `Table Should Contain` | example                         | text | # Match based on ``id``.        |
+    | `Table Should Contain` | css=table.example               | text | # Match using CSS selector.     |
+    | `Table Should Contain` | xpath=//table/[@name="example"] | text | # Match using XPath expression. |
+
+    The plan is to uniform locating tables and locating other elements in
+    the future.
 
     = Timeouts =
 
-    There are several `Wait ...` keywords that take timeout as an
+    There are several ``Wait ...`` keywords that take timeout as an
     argument. All of these timeout arguments are optional. The timeout
-    used by all of them can be set globally using the
-    `Set Selenium Timeout` keyword. The same timeout also applies to
-    `Execute Async Javascript`.
+    used by all of them can be set globally using the `Set Selenium Timeout`
+    keyword. The same timeout also applies to `Execute Async Javascript`.
 
-    All timeouts can be given as numbers considered seconds (e.g. 0.5 or 42)
-    or in Robot Framework's time syntax (e.g. '1.5 seconds' or '1 min 30 s').
-    For more information about the time syntax see the
+    All timeouts can be given as numbers considered seconds (e.g. ``0.5`` or
+    ``42``) or in Robot Framework's time syntax (e.g. ``1.5 seconds`` or
+    ``1 min 30 s``). For more information about the time syntax see the
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
 
     = Boolean arguments =
@@ -181,18 +238,20 @@ class SeleniumLibrary(DynamicCore):
     [https://docs.python.org/2/library/stdtypes.html#truth-value-testing|rules as in Python].
 
     True examples:
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=True    | # Strings are generally true.    |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=yes     | # Same as the above.             |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${TRUE} | # Python True is true.           |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${42}   | # Numbers other than 0 are true. |
+
+    | `Set Screenshot Directory` | ${RESULTS} | persist=True    | # Strings are generally true.    |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=yes     | # Same as the above.             |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=${TRUE} | # Python True is true.           |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=${42}   | # Numbers other than 0 are true. |
 
     False examples:
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=False    | # String false is false.        |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=no       | # Also string no is false.      |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=NONE     | # String NONE is false.         |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${EMPTY} | # Empty string is false.        |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${FALSE} | # Python False is false.        |
-    | Set Screenshot Directory | ${OUTPUT_DIR}/screenshots | persist=${NONE}  | # Python None is false.         |
+
+    | `Set Screenshot Directory` | ${RESULTS} | persist=False    | # String false is false.        |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=no       | # Also string no is false.      |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=NONE     | # String NONE is false.         |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=${EMPTY} | # Empty string is false.        |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=${FALSE} | # Python False is false.        |
+    | `Set Screenshot Directory` | ${RESULTS} | persist=${NONE}  | # Python None is false.         |
 
     Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
     ``false``, ``no`` and ``none``, were considered true.
