@@ -45,16 +45,24 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator, first_only=False)
 
     @keyword
-    def current_frame_contains(self, text, loglevel='INFO'):
+    def current_frame_should_contain(self, text, loglevel='INFO'):
         """Verifies that current frame contains `text`.
 
         See `Page Should Contain ` for explanation about `loglevel` argument.
+
+        Prior to SeleniumLibrary 3.0 this keyword was named
+        `Current Frame Contains`.
         """
         if not self.is_text_present(text):
             self.ctx.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not" % text)
         self.info("Current page contains text '%s'." % text)
+
+    @keyword
+    def current_frame_contains(self, text, loglevel='INFO'):
+        """Deprecated. Use `Current Frame Should Contain` instead."""
+        self.current_frame_should_contain(text, loglevel)
 
     @keyword
     def current_frame_should_not_contain(self, text, loglevel='INFO'):
@@ -448,10 +456,18 @@ class ElementKeywords(LibraryComponent):
         action.double_click(element).perform()
 
     @keyword
-    def focus(self, locator):
-        """Sets focus to element identified by `locator`."""
+    def set_focus_to_element(self, locator):
+        """Sets focus to element identified by `locator`.
+
+        Prior to SeleniumLibrary 3.0 this keyword was named `Focus`.
+        """
         element = self.find_element(locator)
         self.browser.execute_script("arguments[0].focus();", element)
+
+    @keyword
+    def focus(self, locator):
+        """Deprecated. Use `Set Focus To Element` instead."""
+        self.set_focus_to_element(locator)
 
     @keyword
     def drag_and_drop(self, source, target):
@@ -558,13 +574,15 @@ class ElementKeywords(LibraryComponent):
         action.context_click(element).perform()
 
     @keyword
-    def simulate(self, locator, event):
+    def simulate_event(self, locator, event):
         """Simulates `event` on element identified by `locator`.
 
         This keyword is useful if element has OnEvent handler that needs to be
         explicitly invoked.
 
         See `introduction` for details about locating elements.
+
+        Prior to SeleniumLibrary 3.0 this keyword was named `Simulate`.
         """
         element = self.find_element(locator)
         script = """
@@ -578,6 +596,12 @@ evt.initEvent(eventName, true, true);
 return !element.dispatchEvent(evt);
         """
         self.browser.execute_script(script, element, event)
+
+    @keyword
+    def simulate(self, locator, event):
+        """Deprecated. Use `Simulate Event` instead."""
+        self.simulate_event(locator, event)
+
 
     @keyword
     def press_key(self, locator, key):
