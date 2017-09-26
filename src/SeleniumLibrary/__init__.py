@@ -54,8 +54,10 @@ class SeleniumLibrary(DynamicCore):
     == Table of contents ==
 
     - `Locating elements`
-    - `Timeouts`
+    - `Timeouts, waits and delays`
+    - `Run-on-failure functionality`
     - `Boolean arguments`
+    - `Importing`
     - `Shortcuts`
     - `Keywords`
 
@@ -216,18 +218,61 @@ class SeleniumLibrary(DynamicCore):
     The plan is to uniform locating tables and locating other elements in
     the future.
 
-    = Timeouts =
+    = Timeouts, waits and delays =
 
-    There are several ``Wait ...`` keywords that take timeout as an
-    argument. All of these timeout arguments are optional. The timeout
-    used by all of them can be set globally using the `Set Selenium Timeout`
-    keyword or when `importing` the library. The same timeout also applies
-    to `Execute Async Javascript`.
+    This section discusses different ways how to wait for elements to
+    appear on web pages and to slow down execution speed otherwise.
+    It also explains the `time format` that can be used when setting various
+    timeouts, waits and delays.
 
-    All timeouts can be given as numbers considered seconds (e.g. ``0.5`` or
-    ``42``) or in Robot Framework's time syntax (e.g. ``1.5 seconds`` or
-    ``1 min 30 s``). For more information about the time syntax see the
+    == Timeouts ==
+
+    SeleniumLibrary contains various ``Wait ...`` keywords that can be used
+    to wait, for example, for a dynamically created elements to appear on
+    a page. All these keywords accept an optional ``timeout`` argument that
+    tells the maximum time to wait.
+
+    The default timeout these keywords use can be set globally either by
+    using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
+    when `importing` the library. The same timeout also applies to the
+    `Execute Async Javascript` keyword.
+
+    == Implicit wait ==
+
+    Implicit wait specifies the maximum time how long Selenium waits when
+    searching for elements. It can be set by using the `Set Selenium Implicit
+    Wait` keyword or with the ``implicit_wait`` argument when `importing`
+    the library. See [http://seleniumhq.org/docs/04_webdriver_advanced.html|
+    Selenium documentation] for more information about this functionality.
+
+    == Selenium speed ==
+
+    Selenium execution speed can be slowed down globally by using `Set
+    Selenium speed` keyword. This functionality is designed to be used for
+    demonstrating or debugging purposes. Using it to make sure that elements
+    appear on a page is not a good idea, and the above explained timeouts
+    and waits should be used instead.
+
+    == Time format ==
+
+    All timeouts and waits can be given as numbers considered seconds
+    (e.g. ``0.5`` or ``42``) or in Robot Framework's time syntax
+    (e.g. ``1.5 seconds`` or ``1 min 30 s``). For more information about
+    the time syntax see the
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].
+
+    = Run-on-failure functionality =
+
+    SeleniumLibrary has a handy feature that it can automatically execute
+    a keyword if any of its own keywords fails. By default it uses the
+    `Capture Page Screenshot` keyword, but this can be changed either by
+    using the `Register Keyword To Run On Failure` keyword or with the
+    ``run_on_failure`` argument when `importing` the library. It is
+    possible to use any keyword from any imported library or resource file.
+
+    The run-on-failure functionality can be disabled by using a special
+    value ``NOTHING`` or anything considered false (see `Boolean arguments`)
+    such as ``NONE``.
 
     = Boolean arguments =
 
@@ -260,41 +305,21 @@ class SeleniumLibrary(DynamicCore):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
 
-    def __init__(self,
-                 timeout=5.0,
-                 implicit_wait=0.0,
+    def __init__(self, timeout=5.0, implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
                  screenshot_root_directory=None):
 
-        """SeleniumLibrary can be imported with optional arguments.
+        """SeleniumLibrary can be imported with several optional arguments.
 
-        `timeout` is the default timeout used to wait for all waiting actions.
-        It can be later set with `Set Selenium Timeout`.
-
-        `implicit_wait` is the implicit timeout that Selenium waits when
-        looking for elements.
-        It can be later set with `Set Selenium Implicit Wait`.
-        See `WebDriver: Advanced Usage`__ section of the SeleniumHQ documentation
-        for more information about WebDriver's implicit wait functionality.
-
-        __ http://seleniumhq.org/docs/04_webdriver_advanced.html#explicit-and-implicit-waits
-
-        `run_on_failure` specifies the name of a keyword (from any available
-        libraries) to execute when a SeleniumLibrary keyword fails. By default
-        `Capture Page Screenshot` will be used to take a screenshot of the current page.
-        Using the value "Nothing" will disable this feature altogether. See
-        `Register Keyword To Run On Failure` keyword for more information about this
-        functionality.
-
-        `screenshot_root_directory` specifies the default root directory that screenshots should be
-        stored in. If not provided the default directory will be where robotframework places its logfile.
-
-        Examples:
-        | Library `|` SeleniumLibrary `|` 15                                            | # Sets default timeout to 15 seconds                                       |
-        | Library `|` SeleniumLibrary `|` 0 `|` 5                                       | # Sets default timeout to 0 seconds and default implicit_wait to 5 seconds |
-        | Library `|` SeleniumLibrary `|` 5 `|` run_on_failure=Log Source               | # Sets default timeout to 5 seconds and runs `Log Source` on failure       |
-        | Library `|` SeleniumLibrary `|` implicit_wait=5 `|` run_on_failure=Log Source | # Sets default implicit_wait to 5 seconds and runs `Log Source` on failure |
-        | Library `|` SeleniumLibrary `|` timeout=10      `|` run_on_failure=Nothing    | # Sets default timeout to 10 seconds and does nothing on failure           |
+        - ``timeout``:
+          Default value for `timeouts` used with ``Wait ...`` keywords.
+        - ``implicit_wait``:
+          Default value for `implicit wait` used when locating elements.
+        - ``run_on_failure``:
+          Default action for the `run-on-failure functionality`.
+        - ``screenshot_root_directory``:
+          Location where possible screenshots are created. If not given,
+          the directory where the log file is written is used.
         """
         self.timeout = timestr_to_secs(timeout)
         self.implicit_wait = timestr_to_secs(implicit_wait)
