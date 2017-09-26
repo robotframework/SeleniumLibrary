@@ -18,6 +18,11 @@
 class ContextAware(object):
 
     def __init__(self, ctx):
+        """Base class exposing attributes from the common context.
+
+        :param SeleniumLibrary.SeleniumLibrary ctx:
+            The library itself as a context object.
+        """
         self.ctx = ctx
 
     @property
