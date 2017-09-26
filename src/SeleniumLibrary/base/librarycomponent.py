@@ -44,9 +44,6 @@ class LibraryComponent(ContextAware):
     def warn(self, msg, html=False):
         logger.warn(msg, html)
 
-    def find_element(self, locator, tag=None, first_only=True, required=True):
-        return self.element_finder.find(locator, tag, first_only, required)
-
     def assert_page_contains(self, locator, tag=None, message=None,
                              loglevel='INFO'):
         self.element_finder.assert_page_contains(locator, tag, message,

@@ -39,7 +39,7 @@ class TableElementKeywords(LibraryComponent):
         column_index = column
         if column > 0:
             column_index = column - 1
-        table = self.table_element_finder.find(table_locator)
+        table = self.element_finder.find(table_locator)
         if table:
             rows = table.find_elements_by_xpath("./thead/tr")
             if row_index >= len(rows) or row_index < 0:

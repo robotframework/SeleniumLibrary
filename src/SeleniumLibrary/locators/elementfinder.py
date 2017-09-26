@@ -80,26 +80,25 @@ class ElementFinder(ContextAware):
 
     def assert_page_contains(self, locator, tag=None, message=None,
                              loglevel='INFO'):
-        element_name = tag if tag else 'element'
         if not self.find(locator, tag, required=False):
             if is_falsy(message):
                 message = ("Page should have contained %s '%s' but did not"
-                           % (element_name, locator))
+                           % (tag or 'element', locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
             raise AssertionError(message)
-        logger.info("Current page contains %s '%s'." % (element_name, locator))
+        logger.info("Current page contains %s '%s'."
+                    % (tag or 'element', locator))
 
     def assert_page_not_contains(self, locator, tag=None, message=None,
                                  loglevel='INFO'):
-        element_name = tag if tag else 'element'
         if self.find(locator, tag, required=False):
             if is_falsy(message):
                 message = ("Page should not have contained %s '%s'"
-                           % (element_name, locator))
+                           % (tag or 'element', locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
             raise AssertionError(message)
         logger.info("Current page does not contain %s '%s'."
-                    % (element_name, locator))
+                    % (tag or 'element', locator))
 
     def get_value(self, locator, tag=None):
         element = self.find(locator, tag, required=False)
@@ -132,7 +131,7 @@ class ElementFinder(ContextAware):
 
     def _disallow_webelement_parent(self, element):
         if self._is_webelement(element):
-            raise ValueError('This method does not allow webelement as parent')
+            raise ValueError('This method does not allow WebElement as parent')
 
     def _find_by_identifier(self, criteria, tag, constraints, parent):
         elements = self._normalize_result(parent.find_elements_by_id(criteria))

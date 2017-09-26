@@ -32,6 +32,11 @@ class ContextAware(object):
     def element_finder(self):
         return self.ctx.element_finder
 
+    def find_element(self, locator, tag=None, first_only=True, required=True,
+                     parent=None):
+        return self.element_finder.find(locator, tag, first_only,
+                                        required, parent)
+
     @property
     def table_element_finder(self):
         return self.ctx._table_element_finder

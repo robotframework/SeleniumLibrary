@@ -5,7 +5,7 @@ from mockito import mock, verify, when, unstub
 from SeleniumLibrary.locators.tableelementfinder import TableElementFinder
 
 
-class ElementFinderTests(unittest.TestCase):
+class ElementFinder:  # TODO: Write better test.
 
     def setUp(self):
         self.ctx = mock()
