@@ -131,9 +131,8 @@ class ElementFinder(ContextAware):
         return isinstance(element, WebElement)
 
     def _disallow_webelement_parent(self, element):
-        if isinstance(element, WebElement):
+        if self._is_webelement(element):
             raise ValueError('This method does not allow webelement as parent')
-        return True
 
     def _find_by_identifier(self, criteria, tag, constraints, parent):
         elements = self._normalize_result(parent.find_elements_by_id(criteria))
@@ -150,9 +149,8 @@ class ElementFinder(ContextAware):
                                      tag, constraints)
 
     def _find_by_xpath(self, criteria, tag, constraints, parent):
-        return self._filter_elements(
-            parent.find_elements_by_xpath(criteria),
-            tag, constraints)
+        return self._filter_elements(parent.find_elements_by_xpath(criteria),
+                                     tag, constraints)
 
     def _find_by_dom(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
