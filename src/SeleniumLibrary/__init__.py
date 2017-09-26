@@ -198,25 +198,10 @@ class SeleniumLibrary(DynamicCore):
 
     == Locating tables ==
 
-    Locating tables when using table related keywords, such as
-    `Table Should Contain`, works differently than locating other elements.
-    The main differences are:
-
-    - The default strategy is to search only by ``id``, not by ``name``.
-    - Implicit XPath strategies using format ``//example`` is not supported.
-    - Only explicit strategies that are supported are ``xpath``, ``css``
-      and ``sizzle/jquery``.
-    - Spaces are not allowed around the separator between the strategy and
-      the value.
-
-    Examples:
-
-    | `Table Should Contain` | example                         | text | # Match based on ``id``.        |
-    | `Table Should Contain` | css=table.example               | text | # Match using CSS selector.     |
-    | `Table Should Contain` | xpath=//table/[@name="example"] | text | # Match using XPath expression. |
-
-    The plan is to uniform locating tables and locating other elements in
-    the future.
+    Starting from release 3.0.0, it is possible to locate table using all
+    strategies supported by the library. Prior the release 3.0 tables
+    could have been located with limited set of strategies and with
+    limitations in the strategy.
 
     = Timeouts, waits and delays =
 
