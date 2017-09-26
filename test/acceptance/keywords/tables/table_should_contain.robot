@@ -4,7 +4,6 @@ Resource          table_resource.robot
 
 *** Test Cases ***
 Should Find Text In Table Content
-    [Documentation]    Should Find Text In Table Content
     [Template]    Verify Table Contains With CSS And XPath Locators
     simpleTable    simpleTable_A1
     simpleTable    simpleTable_C3
@@ -28,29 +27,24 @@ Should Find Text In Table Content
     formattedTable    äöü€&äöü€&
 
 Should Find Text In Table Content with CSS Specific Mechanics
-    [Documentation]    Should Find Text In Table Content with CSS Specific Mechanics
     Table Should Contain    formattedTable    formattedTable_D1
 
 Should Give Error Message When Content Not Found In Table
-    [Documentation]    Should Give Error Message When Content Not Found In Table
     [Template]    Table Should Contain Fails With CSS And XPath Locators
     simpleTable    Not here
 
 *** Keywords ***
 Verify Table Contains With CSS And XPath Locators
-    [Documentation]    Verify Table Contains With CSS And XPath Locators
     [Arguments]    ${table id}    ${expected}
     Run Table Keyword With CSS And XPath Locators    Table Should Contain
     ...    ${table id}    ${expected}
 
 Table Should Contain Fails With CSS And XPath Locators
-    [Documentation]    Table Should Contain Fails With CSS And XPath Locators
     [Arguments]    ${table id}    ${expected}
     Run Table Keyword With CSS And XPath Locators    Table Should Contain Fails
     ...    ${table id}    ${expected}
 
 Table Should Contain Fails
-    [Documentation]    Table Should Contain Fails
     [Arguments]    ${locator}    ${expected}
     ${err}=    Set Variable
     ...    Table identified by '${locator}' should have contained text '${expected}'.
