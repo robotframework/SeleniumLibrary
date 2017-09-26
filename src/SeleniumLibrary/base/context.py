@@ -39,4 +39,4 @@ class ContextAware(object):
 
     @property
     def table_element_finder(self):
-        return self.ctx._table_element_finder
+        return self.ctx.table_element_finder
