@@ -32,13 +32,13 @@ class CustomLocator(ContextAware):
         self.name = name
         self.finder = finder
 
-    def find(self, criteria, tag, constraints):
+    def find(self, criteria, tag, constraints, parent):
         # Allow custom locators to be keywords or normal methods
         if isinstance(self.finder, basestring):
-            element = BuiltIn().run_keyword(self.finder, self.browser,
+            element = BuiltIn().run_keyword(self.finder, parent,
                                             criteria, tag, constraints)
         elif hasattr(self.finder, '__call__'):
-            element = self.finder(self.browser, criteria, tag, constraints)
+            element = self.finder(parent, criteria, tag, constraints)
         else:
             raise AttributeError('Invalid type provided for Custom Locator %s'
                                  % self.name)
