@@ -345,7 +345,7 @@ class SeleniumLibrary(DynamicCore):
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self.element_finder = ElementFinder(self)
-        self._table_element_finder = TableElementFinder(self)
+        self.table_element_finder = TableElementFinder(self)
 
     _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
     _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
