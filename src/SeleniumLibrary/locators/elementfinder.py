@@ -61,13 +61,14 @@ class ElementFinder(ContextAware):
              parent=None):
         if parent and not self._is_webelement(parent):
             raise ValueError('Parent must be Selenium WebElement but it '
-                             'was {}'.format(parent))
+                             'was {}'.format(type(parent)))
         if self._is_webelement(locator):
             return locator
         prefix, criteria = self._parse_locator(locator)
         strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
-        elements = strategy(criteria, tag, constraints, parent)
+        elements = strategy(criteria, tag, constraints,
+                            parent=parent or self.browser)
         if required and not elements:
             raise ValueError("Element locator '{}' did not match any "
                              "elements.".format(locator))
@@ -126,34 +127,35 @@ class ElementFinder(ContextAware):
             del self._strategies[strategy_name]
 
     def _is_webelement(self, element):
-        return True if isinstance(element, WebElement) else False
+        # Hook for unit tests
+        return isinstance(element, WebElement)
+
+    def _disallow_webelement_parent(self, element):
+        if isinstance(element, WebElement):
+            raise ValueError('This method does not allow webelement as parent')
+        return True
 
     def _find_by_identifier(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         elements = self._normalize_result(parent.find_elements_by_id(criteria))
         elements.extend(self._normalize_result(
             parent.find_elements_by_name(criteria)))
         return self._filter_elements(elements, tag, constraints)
 
     def _find_by_id(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(parent.find_elements_by_id(criteria),
                                      tag, constraints)
 
     def _find_by_name(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(parent.find_elements_by_name(criteria),
                                      tag, constraints)
 
     def _find_by_xpath(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(
             parent.find_elements_by_xpath(criteria),
             tag, constraints)
 
     def _find_by_dom(self, criteria, tag, constraints, parent):
-        if parent:
-            raise ValueError('dom strategy does not support parent element')
+        self._disallow_webelement_parent(parent)
         result = self.browser.execute_script("return %s;" % criteria)
         if result is None:
             return []
@@ -162,52 +164,44 @@ class ElementFinder(ContextAware):
         return self._filter_elements(result, tag, constraints)
 
     def _find_by_sizzle_selector(self, criteria, tag, constraints, parent):
-        if parent:
-            raise ValueError('sizzle strategy does not support parent element')
+        self._disallow_webelement_parent(parent)
         js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
         return self._filter_elements(
             self.browser.execute_script(js),
             tag, constraints)
 
     def _find_by_link_text(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(
             parent.find_elements_by_link_text(criteria),
             tag, constraints)
 
     def _find_by_partial_link_text(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(
             parent.find_elements_by_partial_link_text(criteria),
             tag, constraints)
 
     def _find_by_css_selector(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(
             parent.find_elements_by_css_selector(criteria),
             tag, constraints)
 
     def _find_by_class_name(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(
             parent.find_elements_by_class_name(criteria),
             tag, constraints)
 
     def _find_by_tag_name(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         return self._filter_elements(
             parent.find_elements_by_tag_name(criteria),
             tag, constraints)
 
     def _find_by_sc_locator(self, criteria, tag, constraints, parent):
-        if parent:
-            raise ValueError('scLocator strategy does not support parent element')
+        self._disallow_webelement_parent(parent)
         js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
         return self._filter_elements([self.browser.execute_script(js)],
                                      tag, constraints)
 
     def _find_by_default(self, criteria, tag, constraints, parent):
-        parent = parent if parent else self.browser
         if tag in self._key_attrs:
             key_attrs = self._key_attrs[tag]
         else:

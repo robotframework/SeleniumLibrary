@@ -109,14 +109,18 @@ class ElementFinderParentTests(unittest.TestCase):
         webelement = mock()
         when(self.finder)._is_webelement(webelement).thenReturn(True)
         when(self.finder)._is_webelement('dom=value').thenReturn(False)
-        with self.assertRaisesRegexp(ValueError, 'dom strategy does not'):
+        when(self.finder)._disallow_webelement_parent(webelement).thenRaise(
+            ValueError('This method does not allow webelement as parent'))
+        with self.assertRaisesRegexp(ValueError, 'not allow webelement as parent'):
             self.finder.find('dom=value', parent=webelement)
 
     def test_find_by_sizzle_parent_is_webelement(self):
         webelement = mock()
         when(self.finder)._is_webelement(webelement).thenReturn(True)
         when(self.finder)._is_webelement('sizzle=div.class').thenReturn(False)
-        with self.assertRaisesRegexp(ValueError, 'sizzle strategy does not'):
+        when(self.finder)._disallow_webelement_parent(webelement).thenRaise(
+            ValueError('This method does not allow webelement as parent'))
+        with self.assertRaisesRegexp(ValueError, 'not allow webelement as parent'):
             self.finder.find('sizzle=div.class', parent=webelement)
 
     def test_find_by_link_text_parent_is_webelement(self):
@@ -168,7 +172,9 @@ class ElementFinderParentTests(unittest.TestCase):
         webelement = mock()
         when(self.finder)._is_webelement(webelement).thenReturn(True)
         when(self.finder)._is_webelement('scLocator=div').thenReturn(False)
-        with self.assertRaisesRegexp(ValueError, 'scLocator strategy does not'):
+        when(self.finder)._disallow_webelement_parent(webelement).thenRaise(
+            ValueError('This method does not allow webelement as parent'))
+        with self.assertRaisesRegexp(ValueError, 'not allow webelement as parent'):
             self.finder.find('scLocator=div', parent=webelement)
 
     def test_find_by_default_parent_is_webelement(self):
@@ -180,30 +186,6 @@ class ElementFinderParentTests(unittest.TestCase):
             xpath).thenReturn([mock()])
         self.finder.find('default=name', parent=webelement)
         verify(webelement).find_elements_by_xpath(xpath)
-
-    # def test_find_with_parent_webelement(self):
-    #     webelement = mock()
-    #     when(self.finder)._is_webelement(webelement).thenReturn(True)
-    #     when(self.finder)._is_webelement('//div').thenReturn(False)
-    #     when(webelement).find_elements_by_xpath('//div').thenReturn([mock()])
-    #     self.finder.find("//div", parent=webelement)
-    #     verify(webelement).find_elements_by_xpath("//div")
-
-    # def test_find_with_parent_identifier(self):
-    #     parent = mock()
-    #     when(self.finder)._is_webelement(any(str)).thenReturn(False)
-    #     when(self.browser).find_elements_by_id('idname').thenReturn([parent])
-    #     when(self.browser).find_elements_by_name('idname').thenReturn([])
-    #     when(parent).find_elements_by_xpath('//div').thenReturn([mock()])
-    #     self.finder.find("//div", parent='identifier=idname')
-
-    # def test_find_with_parent_xpath(self):
-    #     locator = '//table'
-    #     parent = mock()
-    #     when(self.finder)._is_webelement(any(str)).thenReturn(False)
-    #     when(self.browser).find_elements_by_xpath(locator).thenReturn([parent])
-    #     when(parent).find_elements_by_xpath('//div').thenReturn([mock()])
-    #     self.finder.find("//div", parent=locator)
 
 
 class ElementFinderTests(unittest.TestCase):
