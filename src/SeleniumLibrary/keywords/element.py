@@ -41,8 +41,12 @@ class ElementKeywords(LibraryComponent):
         """Returns list of WebElement objects matching locator.
 
         See `introduction` for details about locating elements.
+
+        New in SeleniumLibrary 3.0.0: If element is not found, keyword
+        does not anymore fail. In previous releases keyword did fail if
+        element is not found.
         """
-        return self.find_element(locator, first_only=False)
+        return self.find_element(locator, first_only=False, required=False)
 
     @keyword
     def current_frame_should_contain(self, text, loglevel='INFO'):
