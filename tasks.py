@@ -26,9 +26,17 @@ from the `issue tracker`_.
 
 **REMOVE ``--pre`` from the next command with final releases.**
 If you have pip_ installed, just run
-``pip install --pre --upgrade robotframework-seleniumlibrary``
-to install the latest release or use
-``pip install robotframework-seleniumlibrary=={version}``
+
+::
+
+   pip install --pre --upgrade robotframework-seleniumlibrary
+
+to install the latest available release or use
+
+::
+
+   pip install robotframework-seleniumlibrary=={version}
+
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
