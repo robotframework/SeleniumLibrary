@@ -102,7 +102,7 @@ class AlertKeywords(LibraryComponent):
         | Confirm Action |    | # Chooses Cancel |
         """
         text = self._handle_alert(self._next_alert_dismiss_type)
-        self._next_alert_dismiss_type = self.DISMISS_ALERT
+        self._next_alert_dismiss_type = self.ACCEPT_ALERT
         return text
 
     @keyword
@@ -128,9 +128,10 @@ class AlertKeywords(LibraryComponent):
         dismissed by this keyword or another like `Get Alert Message`.
         """
         if is_truthy(accept):
-            return self._handle_alert(self.ACCEPT_ALERT)
-        else:
-            return self._handle_alert()
+            self._handle_alert(self.ACCEPT_ALERT)
+            return True
+        self._handle_alert(self.DISMISS_ALERT)
+        return False
 
     def _handle_alert(self, dismiss_type=None):
         """Alert re-try for Chrome

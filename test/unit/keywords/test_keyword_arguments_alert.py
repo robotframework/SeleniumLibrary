@@ -47,9 +47,9 @@ class KeywordArgumentsAlertTest(unittest.TestCase):
         verify(AlertKeywords, times=count)._handle_alert('accept')
 
     def test_dismiss_alert_false(self):
-        when(AlertKeywords)._handle_alert().thenReturn('text')
+        when(AlertKeywords)._handle_alert('dismiss').thenReturn('text')
         count = 1
         for false in FALSES:
             self.alert.dismiss_alert(false)
-            verify(AlertKeywords, times=count)._handle_alert()
+            verify(AlertKeywords, times=count)._handle_alert('dismiss')
             count += 1
