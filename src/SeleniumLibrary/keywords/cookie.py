@@ -53,11 +53,22 @@ class CookieKeywords(LibraryComponent):
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
-    def add_cookie(self, name, value, path=None, domain=None, secure=None):
+    def get_cookie_expiry(self, name):
+        """Returns expiry of cookie found with `name`.
+
+        If no cookie is found with `name`, this keyword fails.
+        """
+        cookie = self.browser.get_cookie(name)
+        if cookie is not None:
+            return cookie['expiry']
+        raise ValueError("Cookie with name %s not found." % name)
+
+    @keyword
+    def add_cookie(self, name, value, path=None, domain=None, secure=None, expiry=None):
         """Adds a cookie to your current session.
 
-        "name" and "value" are required, "path", "domain" and "secure" are
-        optional
+        "name" and "value" are required, "path", "domain", "secure" and "expiry" are
+        optional.  Expiry must be in Unix epoch time format.
         """
         new_cookie = {'name': name, 'value': value}
         if is_truthy(path):
@@ -67,4 +78,6 @@ class CookieKeywords(LibraryComponent):
         # Secure should be True or False
         if is_truthy(secure):
             new_cookie['secure'] = secure
+        if is_truthy(expiry):
+            new_cookie['expiry'] = int(expiry)
         self.browser.add_cookie(new_cookie)

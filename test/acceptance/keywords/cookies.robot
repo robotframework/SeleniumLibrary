@@ -48,9 +48,14 @@ Get Cookies When There Are None
     ${cookies}=    Get Cookies
     Should Be Equal    ${cookies}    ${EMPTY}
 
+Get Cookie Expiry Set By Selenium
+    [Documentation]    Get Cookie Value Set By Selenium
+    ${expiry}=    Get Cookie Expiry    another
+    Should Be Equal As Integers   ${expiry}    1822085003
+
 *** Keyword ***
 Add Cookies
     [Documentation]    Add Cookies
     Delete All Cookies
     Add Cookie    test    seleniumlibrary
-    Add Cookie    another    value
+    Add Cookie    another    value   expiry=1822085003
