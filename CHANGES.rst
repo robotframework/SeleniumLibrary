@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-1.8.1
+3.0.0
 -----
 - Added 'Get Locations' keyword [thaffenden]
 - Fix getting window information and switching windows on browsers that do not
