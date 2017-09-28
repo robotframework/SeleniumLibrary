@@ -16,6 +16,7 @@
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_truthy
+from datetime import datetime
 
 
 class CookieKeywords(LibraryComponent):
@@ -53,14 +54,14 @@ class CookieKeywords(LibraryComponent):
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
-    def get_cookie_expiry(self, name):
-        """Returns expiry of cookie found with `name`.
+    def get_cookie(self, name):
+        """Returns as a dictionary the cookie found with `name`.
 
         If no cookie is found with `name`, this keyword fails.
         """
         cookie = self.browser.get_cookie(name)
         if cookie is not None:
-            return cookie['expiry']
+            return cookie
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
@@ -68,7 +69,7 @@ class CookieKeywords(LibraryComponent):
         """Adds a cookie to your current session.
 
         "name" and "value" are required, "path", "domain", "secure" and "expiry" are
-        optional.  Expiry must be in Unix epoch time format.
+        optional.  Expiry must be in datetime format for UTC time zone (Example: '2027-09-28 16:21:35').
         """
         new_cookie = {'name': name, 'value': value}
         if is_truthy(path):
@@ -79,5 +80,7 @@ class CookieKeywords(LibraryComponent):
         if is_truthy(secure):
             new_cookie['secure'] = secure
         if is_truthy(expiry):
-            new_cookie['expiry'] = int(expiry)
+            expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d %H:%M:%S')
+            expiry_epoch = (expiry_datetime - datetime(1970,1,1)).total_seconds()
+            new_cookie['expiry'] = int(expiry_epoch)
         self.browser.add_cookie(new_cookie)
