@@ -36,7 +36,7 @@ from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
                                    timestr_to_secs)
 
 
-__version__ = '3.0.0b2.dev1'
+__version__ = '3.0.0b3'
 
 
 class SeleniumLibrary(DynamicCore):
