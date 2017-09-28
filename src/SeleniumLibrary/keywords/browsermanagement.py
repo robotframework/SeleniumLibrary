@@ -522,7 +522,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Example:
         | Set Selenium Speed | .5 seconds |
         """
-        old_speed = self.ctx.speed
+        old_speed = self.get_selenium_speed()
         self.ctx.speed = timestr_to_secs(seconds)
         for browser in self.browsers.browsers:
             self._monkey_patch_speed(browser)
