@@ -84,7 +84,7 @@ Click Element Open In New Window
 Click Element With Incorrect Keys
     Open Browser    ${ROOT}/jquery.html    ${BROWSER}
     Set Selenium Implicit Wait    60s
-    ${error_message}=    Set Variable    KeyError: u"'SHIFT+' click is not allowed with this keyword"
+    ${error_message}=    Set Variable    KeyError: "'SHIFT+' click is not allowed with this keyword"
     Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+
-    ${error_message}=    Set Variable    KeyError: u"'SHIFT+ALT' click is not allowed with this keyword"
+    ${error_message}=    Set Variable    KeyError: "'SHIFT+ALT' click is not allowed with this keyword"
     Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+ALT
