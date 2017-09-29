@@ -4,7 +4,7 @@ Suite Setup       Go To Page "cookies.html"
 Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
 Resource          ../resource.robot
-Library           Collections
+
 
 *** Test Cases ***
 Get Cookies
@@ -54,7 +54,7 @@ Get Cookie Expiry Set By Selenium
     [Tags]  Known Issue Firefox
     ${cookie_dict}=    Get Cookie    another
     ${expiry} =  Convert To Integer  1822148495
-    Dictionary Should Contain Value   ${cookie_dict}  ${expiry}
+    should be equal   ${cookie_dict.expiry}  ${expiry}
 
 *** Keyword ***
 Add Cookies

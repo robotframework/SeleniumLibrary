@@ -55,13 +55,15 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookie(self, name):
-        """Returns as a dictionary the cookie found with `name`.
+        """Returns the cookie found with `name` in extended variable format.
 
         If no cookie is found with `name`, this keyword fails.
         """
         cookie = self.browser.get_cookie(name)
         if cookie is not None:
-            return cookie
+            cookie_information = CookieInformation(cookie['name'], cookie['value'], cookie['domain'], cookie['path'],
+                                                   cookie['expiry'], cookie['httpOnly'], cookie['secure'])
+            return cookie_information
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
@@ -81,6 +83,20 @@ class CookieKeywords(LibraryComponent):
             new_cookie['secure'] = secure
         if is_truthy(expiry):
             expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d %H:%M:%S')
-            expiry_epoch = (expiry_datetime - datetime(1970,1,1)).total_seconds()
+            expiry_epoch = (expiry_datetime - datetime(1970, 1, 1)).total_seconds()
             new_cookie['expiry'] = int(expiry_epoch)
         self.browser.add_cookie(new_cookie)
+
+
+class CookieInformation(object):
+    def __init__(self, name, value, domain, path, expiry, http, secure):
+        self.name = name
+        self.value = value
+        self.domain = domain
+        self.path = path
+        self.expiry = expiry
+        self.http = http
+        self.secure = secure
+
+    def __str__(self):
+        return '{}={}'.format(self.name, self.value)
