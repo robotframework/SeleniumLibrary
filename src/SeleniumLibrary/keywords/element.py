@@ -420,14 +420,40 @@ class ElementKeywords(LibraryComponent):
         return element.location['y']
 
     @keyword
-    def click_element(self, locator):
+    def click_element(self, locator, modifier=None):
         """Click element identified by `locator`.
 
         Key attributes for arbitrary elements are `id` and `name`. See
         `introduction` for details about locating elements.
+        
+        modifier(optional) : If Element need to be opened in new window
+        
+        eg Click Element    <element_locator>    SHIFT              ----> Opens Element in new Window
+           Click Element    <element_locator>    SHIFT+CTRL         ----> Opens Element in new tab
+           CLick Element    <element_locator>                       ----> Opens Element in same window
+           
+        Note : Attempt to open element in new tab in firefox might not get window handles of all open windows, however
+        opening element in window in any browser can return window handles of all opened windows.
         """
-        self.info("Clicking element '%s'." % locator)
-        self.find_element(locator).click()
+
+        if(modifier!=None):
+            element = self.find_element(locator)
+            action = ActionChains(self.browser)
+            
+            modifier = modifier.strip()
+            keys = [key.strip().encode() for key in modifier.lower().split('+') ]
+
+            if ("ctrl" or "control") in keys and "shift" in keys and '' not in keys:
+                self.info("Opening element in new tab..")
+                action.key_down(Keys.SHIFT).key_down(Keys.CONTROL).click(element).key_up(Keys.SHIFT).perform()
+            elif(modifier.lower()=='shift'):
+                self.info("Opening element in new window..")
+                action.key_down(Keys.SHIFT).click(element).key_up(Keys.SHIFT).perform()
+            else:
+                raise KeyError("'%s' click is not allowed with this keyword" % modifier)
+        else:
+            self.find_element(locator).click()    
+
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
