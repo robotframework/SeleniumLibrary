@@ -64,13 +64,27 @@ Closing all browsers clears cache
     ...    No browser with index or alias 'Browser 2' found.
     ...    Switch Browser    Browser 2
 
-Open Option In New Window Keyword
+Click Element Without Modifier
     Open Browser    ${ROOT}/jquery.html    ${BROWSER}
     Set Selenium Implicit Wait    60s
-    Click Element    link=Link with id    new_window=True
+    Click Element    link=Link with id
+    Sleep    5s
+    Location Should Be    ${ROOT}/broken.html
+
+Click Element Open In New Window
+    Open Browser    ${ROOT}/jquery.html    ${BROWSER}
+    Set Selenium Implicit Wait    60s
+    Click Element    link=Link with id    SHIFT
     Sleep    5s
     @{windows}=    List Windows
     Log To Console    ${windows}       
     Select Window    ${windows[1]}
     Location Should Be    ${ROOT}/broken.html
-    
+
+Click Element With Incorrect Keys
+    Open Browser    ${ROOT}/jquery.html    ${BROWSER}
+    Set Selenium Implicit Wait    60s
+    ${error_message}=    Set Variable    KeyError: u"'SHIFT+' click is not allowed with this keyword"
+    Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+
+    ${error_message}=    Set Variable    KeyError: u"'SHIFT+ALT' click is not allowed with this keyword"
+    Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+ALT
