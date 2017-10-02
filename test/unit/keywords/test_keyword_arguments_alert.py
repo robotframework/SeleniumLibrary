@@ -7,6 +7,9 @@ from SeleniumLibrary.keywords import AlertKeywords
 
 TRUES = ['True', True, '1', 1, 'text']
 FALSES = ['False', False, '', None, 'NONE']
+ACCEPT = AlertKeywords.ACCEPT
+DISMISS = AlertKeywords.DISMISS
+LEAVE = AlertKeywords.LEAVE
 
 
 class KeywordArgumentsAlertTest(unittest.TestCase):
@@ -19,37 +22,37 @@ class KeywordArgumentsAlertTest(unittest.TestCase):
         unstub()
 
     def test_get_alert_message_dismiss_true(self):
-        when(AlertKeywords)._handle_alert('dismiss').thenReturn('text')
+        when(AlertKeywords).handle_alert(DISMISS).thenReturn('text')
         count = 1
         for true in TRUES:
             self.alert.get_alert_message(true)
-            verify(AlertKeywords, times=count)._handle_alert('dismiss')
+            verify(AlertKeywords, times=count).handle_alert(DISMISS)
             count += 1
         self.alert.get_alert_message()
-        verify(AlertKeywords, times=count)._handle_alert('dismiss')
+        verify(AlertKeywords, times=count).handle_alert(DISMISS)
 
     def test_get_alert_message_dismiss_false(self):
-        when(AlertKeywords)._handle_alert().thenReturn('text')
+        when(AlertKeywords).handle_alert(LEAVE).thenReturn('text')
         count = 1
         for false in FALSES:
             self.alert.get_alert_message(false)
-            verify(AlertKeywords, times=count)._handle_alert()
+            verify(AlertKeywords, times=count).handle_alert(LEAVE)
             count += 1
 
     def test_dismiss_alert_true(self):
-        when(AlertKeywords)._handle_alert('accept').thenReturn('text')
+        when(AlertKeywords).handle_alert(ACCEPT).thenReturn('text')
         count = 1
         for true in TRUES:
             self.alert.dismiss_alert(true)
-            verify(AlertKeywords, times=count)._handle_alert('accept')
+            verify(AlertKeywords, times=count).handle_alert(ACCEPT)
             count += 1
         self.alert.dismiss_alert()
-        verify(AlertKeywords, times=count)._handle_alert('accept')
+        verify(AlertKeywords, times=count).handle_alert(ACCEPT)
 
     def test_dismiss_alert_false(self):
-        when(AlertKeywords)._handle_alert('dismiss').thenReturn('text')
+        when(AlertKeywords).handle_alert(DISMISS).thenReturn('text')
         count = 1
         for false in FALSES:
             self.alert.dismiss_alert(false)
-            verify(AlertKeywords, times=count)._handle_alert('dismiss')
+            verify(AlertKeywords, times=count).handle_alert(DISMISS)
             count += 1

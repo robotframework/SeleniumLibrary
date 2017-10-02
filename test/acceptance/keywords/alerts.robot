@@ -4,7 +4,63 @@ Test Setup        Go To Page "javascript/alert.html"
 Resource          ../resource.robot
 
 *** Test Cases ***
+Handle Alert accepts alert by default
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    Handle Alert
+    Alert Should Not Be Present
+    Title Should Be    Original Changed!
+
+Handle Alert can dismiss
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    Handle Alert    action=DISMISS
+    Alert Should Not Be Present
+    Title Should Be    Original
+
+Handle Alert can leave open
+    Click Link    Click Me!
+    Handle Alert    Leave
+    Alert Should Be Present
+
+Handler Alert with invalid action
+    Click Link    Click Me!
+    Run Keyword And Expect Error
+    ...    ValueError: Invalid alert action 'INVALID'.
+    ...    Handle Alert    INVALID
+    Alert Should Be Present
+
+Handle Alert returns message
+    Click Link    Click Me!
+    ${message} =    Handle Alert
+    Should Be Equal    ${message}    ALERT!
+    Click Link    Click Me Too!
+    ${message} =    Handle Alert    action=LEAVE
+    Should Be Equal    ${message}    MULTILINE ALERT!
+    Alert Should Be Present
+
+Alert Should Not Be Present
+    Alert Should Not Be Present
+    Click Link    Click Me!
+    Run Keyword And Expect Error
+    ...    Alert with message 'ALERT!' present.
+    ...    Alert Should Not Be Present
+
+Alert Should Not Be Present with custom actions
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    Run Keyword And Expect Error
+    ...    Alert with message 'Really change the title?' present.
+    ...    Alert Should Not Be Present    action=LEAVE
+    Run Keyword And Expect Error
+    ...    Alert with message 'Really change the title?' present.
+    ...    Alert Should Not Be Present    action=DISmiss
+    Title Should Be    Original
+
 Alert Should Be Present
+    Run Keyword And Expect Error
+    ...    Expected alert not present.
+    ...    Alert Should Be Present
     Click Link    Click Me!
     Alert Should Be Present
 
@@ -15,15 +71,31 @@ Alert Should Be Present with message validation
     Alert Should Be Present    MULTILINE ALERT!
     Click Link    Click Me!
     Run Keyword And Expect Error
-    ...    Alert text should have been 'foo bar' but was 'ALERT!'
+    ...    Alert message should have been 'foo bar' but it was 'ALERT!'.
     ...    Alert Should Be Present    foo bar
 
-Alert Should Be Present when there is none
-    Run Keyword And Expect Error
-    ...    There were no alerts
-    ...    Alert Should Be Present
+Alert Should Be Present accepts by default
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    Alert Should Be Present    Really change the title?
+    Title Should Be    Original Changed!
+    Alert Should Not Be Present
+
+Alert Should Be Present can dismiss
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    Alert Should Be Present    Really change the title?    action=DISMISS
+    Title Should Be    Original
+    Alert Should Not Be Present
+
+Alert Should Be Present can leave alert open
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    Alert Should Be Present    action=LEAVE
+    Alert Should Be Present
 
 Get Alert Message
+    [Documentation]    DEPRECATED!
     Click Link    Click Me!
     ${msg} =    Get Alert Message
     Should Be Equal    ${msg}    ALERT!
@@ -31,17 +103,46 @@ Get Alert Message
     ${msg} =    Get Alert Message
     Should Be Equal    ${msg}    MULTILINE ALERT!
     Run Keyword And Expect Error
-    ...    There were no alerts
+    ...    Expected alert not present.
     ...    Get Alert Message
 
+Get Alet Message dismisses by default
+    [Setup]    Go To Page "javascript/dynamic_content.html"
+    Click Button    Change the title
+    ${msg} =    Get Alert Message
+    Should Be Equal    ${msg}    Really change the title?
+    Title Should Be    Original
+
 Get Alert Message can leave alert open
+    [Documentation]    DEPRECATED!
     Click Link    Click Me!
     ${msg} =    Get Alert Message    ${FALSE}
     Should Be Equal    ${msg}    ALERT!
     Alert Should Be Present
 
+Input Text Into Alert
+    [Setup]    Go To Page "javascript/alert_prompt.html"
+    Click Button    css=button
+    Input Text Into Alert    Robot
+    Alert Should Not Be Present
+    Page Should Contain    Hello Robot! How are you today?
+
+Input Text Into Alert can leave alert open
+    [Setup]    Go To Page "javascript/alert_prompt.html"
+    Click Button    css=button
+    Input Text Into Alert    Robot    action=LEAVE
+    Alert Should Be Present
+    Page Should Contain    Hello Robot! How are you today?
+
+Input Text Into Alert can dismiss
+    [Setup]    Go To Page "javascript/alert_prompt.html"
+    Click Button    css=button
+    Input Text Into Alert    Robot    action=DISMISS
+    Alert Should Not Be Present
+    Page Should Not Contain    Robot
+
 Input Text Into Prompt
-    [Documentation]    Always leaves the alert open
+    [Documentation]    DEPRECATED! Always leaves the alert open.
     [Setup]    Go To Page "javascript/alert_prompt.html"
     Click Button    css=button
     Input Text Into Prompt    Robot
@@ -49,6 +150,7 @@ Input Text Into Prompt
     Page Should Contain    Hello Robot! How are you today?
 
 Confirm Action
+    [Documentation]    DEPRECATED!
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     ${msg}=    Confirm Action
@@ -56,32 +158,35 @@ Confirm Action
     Title Should Be    Original Changed!
 
 Confirm Action multiple times
+    [Documentation]    DEPRECATED!
     [Setup]    Go To Page "javascript/alert_prompt.html"
     Click Button    css=button
-    Input Text Into Prompt    Robot    # Leaves the alert open
+    Input Text Into Alert    Robot    action=LEAVE
     Confirm Action
     Page Should Contain    Hello Robot! How are you today?
     Click Button    css=button
-    Input Text Into Prompt    Mr. Robot
+    Input Text Into Alert    Mr. Roboto    action=LEAVE
     Confirm Action
-    Page Should Contain    Hello Mr. Robot! How are you today?
+    Page Should Contain    Hello Mr. Roboto! How are you today?
 
 Cancel Action
+    [Documentation]    DEPRECATED!
     [Setup]    Go To Page "javascript/alert_prompt.html"
     Choose Cancel On Next Confirmation
     Click Button    css=button
-    Input Text Into Prompt    Robot    # Leaves the alert open
+    Input Text Into Alert    Robot    action=LEAVE
     Confirm Action
     Page Should Not Contain    Robot
 
 Dismiss Alert
+    [Documentation]    DEPRECATED!
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     ${accepted} =    Dismiss Alert    # This actually accepts the alert
     Should Be Equal    ${accepted}    ${TRUE}
     Title Should Be    Original Changed!
     Click Button    Change the title
-    ${accepted} =    Dismiss Alert    ${FALSE}    # and this dismisses....
+    ${accepted} =    Dismiss Alert    accept=${FALSE}
     Title Should Be    Original Changed!
     Should Be Equal    ${accepted}    ${FALSE}
     Click Button    Change the title
