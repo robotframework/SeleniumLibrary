@@ -88,3 +88,4 @@ Click Element With Incorrect Keys
     Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+
     ${error_message}=    Set Variable    KeyError: "'SHIFT+ALT' click is not allowed with this keyword"
     Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+ALT
+
