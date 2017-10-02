@@ -53,8 +53,8 @@ Get Cookie Expiry Set By Selenium
     [Documentation]    Get Cookie Value Set By Selenium
     [Tags]  Known Issue Firefox
     ${cookie}=    Get Cookie    another
-    ${expiry} =  Convert To Integer  1822166495
-    should be equal   ${cookie.expiry}  ${expiry}
+    ${date}=  Convert Date  2027-09-28 16:21:35  epoch
+    should be equal as integers   ${cookie.expiry}  ${date}
 
 *** Keyword ***
 Add Cookies
