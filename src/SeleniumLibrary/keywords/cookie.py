@@ -16,7 +16,7 @@
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_truthy
-from datetime import datetime
+from robot.libraries.DateTime import convert_date
 
 
 class CookieKeywords(LibraryComponent):
@@ -60,18 +60,22 @@ class CookieKeywords(LibraryComponent):
         If no cookie is found with `name`, this keyword fails.
         """
         cookie = self.browser.get_cookie(name)
-        if cookie is not None:
-            cookie_information = CookieInformation(cookie['name'], cookie['value'], cookie['domain'], cookie['path'],
-                                                   cookie['expiry'], cookie['httpOnly'], cookie['secure'])
+        if cookie:
+            cookie_information = CookieInformation(
+                cookie['name'],cookie['value'], cookie['domain'],
+                cookie['path'],cookie['expiry'], cookie['httpOnly'],
+                cookie['secure'])
             return cookie_information
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
-    def add_cookie(self, name, value, path=None, domain=None, secure=None, expiry=None):
+    def add_cookie(self, name, value, path=None, domain=None, secure=None,
+                   expiry=None):
         """Adds a cookie to your current session.
 
-        "name" and "value" are required, "path", "domain", "secure" and "expiry" are
-        optional.  Expiry must be in datetime format for UTC time zone (Example: '2027-09-28 16:21:35').
+        "name" and "value" are required, "path", "domain", "secure" and
+         "expiry" are optional.  Expiry supports the same formats as
+         the DateTime library.
         """
         new_cookie = {'name': name, 'value': value}
         if is_truthy(path):
@@ -82,9 +86,8 @@ class CookieKeywords(LibraryComponent):
         if is_truthy(secure):
             new_cookie['secure'] = secure
         if is_truthy(expiry):
-            expiry_datetime = datetime.strptime(expiry, '%Y-%m-%d %H:%M:%S')
-            expiry_epoch = (expiry_datetime - datetime(1970, 1, 1)).total_seconds()
-            new_cookie['expiry'] = int(expiry_epoch)
+            expiry_datetime = int(convert_date(expiry, result_format='epoch'))
+            new_cookie['expiry'] = expiry_datetime
         self.browser.add_cookie(new_cookie)
 
 

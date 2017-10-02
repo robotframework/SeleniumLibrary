@@ -52,9 +52,9 @@ Get Cookies When There Are None
 Get Cookie Expiry Set By Selenium
     [Documentation]    Get Cookie Value Set By Selenium
     [Tags]  Known Issue Firefox
-    ${cookie_dict}=    Get Cookie    another
-    ${expiry} =  Convert To Integer  1822148495
-    should be equal   ${cookie_dict.expiry}  ${expiry}
+    ${cookie}=    Get Cookie    another
+    ${expiry} =  Convert To Integer  1822166495
+    should be equal   ${cookie.expiry}  ${expiry}
 
 *** Keyword ***
 Add Cookies
