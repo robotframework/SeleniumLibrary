@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from SeleniumLibrary.base import keyword, LibraryComponent
-from SeleniumLibrary.utils import is_truthy
+from SeleniumLibrary.utils import is_truthy, secs_to_timestr, timestr_to_secs
 
 
 class AlertKeywords(LibraryComponent):
@@ -38,20 +38,23 @@ class AlertKeywords(LibraryComponent):
         self.input_text_into_alert(text, self.LEAVE)
 
     @keyword
-    def input_text_into_alert(self, text, action=ACCEPT):
+    def input_text_into_alert(self, text, action=ACCEPT, timeout=None):
         """Types the given ``text`` into an input field in an alert.
 
         The alert is accepted by default, but that behavior can be controlled
         by using the ``action`` argument same way as with `Handle Alert`.
 
+        ``timeout`` specifies how long to wait for the alert to appear.
+        If it is not given, the global default `timeout` is used instead.
+
         New in SeleniumLibrary 3.0.
         """
-        alert = self._wait_alert()
+        alert = self._wait_alert(timeout)
         alert.send_keys(text)
         self._handle_alert(alert, action)
 
     @keyword
-    def alert_should_be_present(self, text='', action=ACCEPT):
+    def alert_should_be_present(self, text='', action=ACCEPT, timeout=None):
         """Verifies that an alert is present and, by default, accepts it.
 
         Fails if no alert is present. If ``text`` is a non-empty string,
@@ -59,25 +62,34 @@ class AlertKeywords(LibraryComponent):
         by default, but that behavior can be controlled by using the
         ``action`` argument same way as with `Handle Alert`.
 
-        The ``action`` argument is new in SeleniumLibrary 3.0. In earlier
-        versions the alert was always accepted.
+        ``timeout`` specifies how long to wait for the alert to appear.
+        If it is not given, the global default `timeout` is used instead.
+
+        ``action`` and ``timeout`` arguments are new in SeleniumLibrary 3.0.
+        In earlier versions the alert was always accepted and timeout was
+        hard coded to one second.
         """
-        message = self.handle_alert(action)
+        message = self.handle_alert(action, timeout)
         if text and text != message:
             raise AssertionError("Alert message should have been '%s' but it "
                                  "was '%s'." % (text, message))
 
     @keyword
-    def alert_should_not_be_present(self, action=ACCEPT):
+    def alert_should_not_be_present(self, action=ACCEPT, timeout=0):
         """Verifies that no alert is present.
 
         If the alert actually exists, ``action`` argument determines
         how it should be handled same way as with `Handle Alert`.
 
+        ``timeout`` specifies how long to wait for the alert to appear.
+        By default the alert is not waited at all, but a custom time can
+        be given if alert may be delayed. See the `time format` section
+        for information about the syntax.
+
         New in SeleniumLibrary 3.0.
         """
         try:
-            alert = self._wait_alert(timeout=0)
+            alert = self._wait_alert(timeout)
         except AssertionError:
             return
         text = self._handle_alert(alert, action)
@@ -152,7 +164,7 @@ class AlertKeywords(LibraryComponent):
         return False
 
     @keyword
-    def handle_alert(self, action=ACCEPT):
+    def handle_alert(self, action=ACCEPT, timeout=None):
         """Handles the current alert and returns its message.
 
         By default the alert is accepted, but this can be controlled
@@ -163,18 +175,21 @@ class AlertKeywords(LibraryComponent):
         - ``DISMISS``: Dismiss the alert i.e. press ``Cancel``.
         - ``LEAVE``: Leave the alert open.
 
-        Notice that alerts must be closed using this or some other keyword
-        before further actions can be done on the page.
+        The ``timeout`` argument specifies how long to wait for the alert
+        to appear. If it is not given, the global default `timeout` is used
+        instead.
 
         Examples:
         | Handle Alert |                |       | # Accept alert.  |
         | Handle Alert | action=DISMISS |       | # Dismiss alert. |
+        | Handle Alert | timeout=10 s   |       | # Use custom timeout and accept alert.  |
+        | Handle Alert | DISMISS        | 1 min | # Use custom timeout and dismiss alert. |
         | ${message} = | Handle Alert   |       | # Accept alert and get its message.     |
         | ${message} = | Handle Alert   | LEAVE | # Leave alert open and get its message. |
 
         New in SeleniumLibrary 3.0.
         """
-        alert = self._wait_alert()
+        alert = self._wait_alert(timeout)
         return self._handle_alert(alert, action)
 
     def _handle_alert(self, alert, action):
@@ -188,9 +203,11 @@ class AlertKeywords(LibraryComponent):
             raise ValueError("Invalid alert action '%s'." % action)
         return text
 
-    def _wait_alert(self, timeout=5):
+    def _wait_alert(self, timeout=None):
+        timeout = self.get_timeout(timeout)
         wait = WebDriverWait(self.browser, timeout)
         try:
             return wait.until(EC.alert_is_present())
         except WebDriverException:
-            raise AssertionError('Expected alert not present.')
+            raise AssertionError('Alert not found in %s.'
+                                 % secs_to_timestr(timeout))

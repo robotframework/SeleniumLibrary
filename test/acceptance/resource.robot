@@ -72,3 +72,11 @@ Set ${level} Loglevel
 Verify Location Is "${relative url}"
     [Documentation]    Verifies location
     Wait Until Keyword Succeeds    5    1    Location Should Be    ${ROOT}/${relative url}
+
+Set Global Timeout
+    [Arguments]    ${timeout}
+    ${previous} =    Set Selenium timeout    ${timeout}
+    Set Suite Variable    ${PREVIOUS TIMEOUT}    ${previous}
+
+Restore Global Timeout
+    Set Selenium timeout    ${PREVIOUS TIMEOUT}

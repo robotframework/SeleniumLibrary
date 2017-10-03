@@ -1,10 +1,12 @@
 *** Settings ***
 Force Tags        Known Issue Safari
+Suite Setup       Set Global Timeout    1 second
 Test Setup        Go To Page "javascript/alert.html"
+Suite Teardown    Restore Global Timeout
 Resource          ../resource.robot
 
 *** Test Cases ***
-Handle Alert accepts alert by default
+Handle Alert accepts by default
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     Handle Alert
@@ -23,7 +25,7 @@ Handle Alert can leave open
     Handle Alert    Leave
     Alert Should Be Present
 
-Handler Alert with invalid action
+Handle Alert with invalid action
     Click Link    Click Me!
     Run Keyword And Expect Error
     ...    ValueError: Invalid alert action 'INVALID'.
@@ -38,6 +40,15 @@ Handle Alert returns message
     ${message} =    Handle Alert    action=LEAVE
     Should Be Equal    ${message}    MULTILINE ALERT!
     Alert Should Be Present
+
+Handle Alert with custom timeout
+    Click Link    Slow alert
+    Handle Alert    timeout=1s
+    Click Link    Slow alert
+    Run Keyword And Expect Error
+    ...    Alert not found in 1 millisecond.
+    ...    Handle Alert    ACCEPT    1 ms
+    Handle Alert    timeout=3.14 seconds
 
 Alert Should Not Be Present
     Alert Should Not Be Present
@@ -57,9 +68,17 @@ Alert Should Not Be Present with custom actions
     ...    Alert Should Not Be Present    action=DISmiss
     Title Should Be    Original
 
+Alert Should Not Be Present with custom timeout
+    Alert Should Not Be Present    timeout=0.1s
+    Click Link    Slow alert
+    Alert Should Not Be Present    DISMISS    ${0.001}
+    Run Keyword And Expect Error
+    ...    Alert with message 'Alert after 200ms!' present.
+    ...    Alert Should Not Be Present    timeout=0.2
+
 Alert Should Be Present
     Run Keyword And Expect Error
-    ...    Expected alert not present.
+    ...    Alert not found in 1 second.
     ...    Alert Should Be Present
     Click Link    Click Me!
     Alert Should Be Present
@@ -94,6 +113,13 @@ Alert Should Be Present can leave alert open
     Alert Should Be Present    action=LEAVE
     Alert Should Be Present
 
+Alert Should Be Present with custom timeout
+    Click Link    Slow alert
+    Run Keyword And Expect Error
+    ...    Alert not found in 1 millisecond.
+    ...    Alert Should Be Present    timeout=1ms
+    Alert Should Be Present    Alert after 200ms!    ACCEPT    0.2s
+
 Get Alert Message
     [Documentation]    DEPRECATED!
     Click Link    Click Me!
@@ -103,10 +129,11 @@ Get Alert Message
     ${msg} =    Get Alert Message
     Should Be Equal    ${msg}    MULTILINE ALERT!
     Run Keyword And Expect Error
-    ...    Expected alert not present.
+    ...    Alert not found in 1 second.
     ...    Get Alert Message
 
 Get Alet Message dismisses by default
+    [Documentation]    DEPRECATED!
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     ${msg} =    Get Alert Message
@@ -140,6 +167,12 @@ Input Text Into Alert can dismiss
     Input Text Into Alert    Robot    action=DISMISS
     Alert Should Not Be Present
     Page Should Not Contain    Robot
+
+Input Text Into Alert with custom timeout
+    [Setup]    Go To Page "javascript/alert_prompt.html"
+    Run Keyword And Expect Error
+    ...    Alert not found in 7 milliseconds.
+    ...    Input Text Into Alert    This is not found    timeout=007ms
 
 Input Text Into Prompt
     [Documentation]    DEPRECATED! Always leaves the alert open.
