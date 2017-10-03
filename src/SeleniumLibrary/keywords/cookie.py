@@ -61,10 +61,7 @@ class CookieKeywords(LibraryComponent):
         """
         cookie = self.browser.get_cookie(name)
         if cookie:
-            cookie_information = CookieInformation(
-                cookie['name'],cookie['value'], cookie['domain'],
-                cookie['path'],cookie['expiry'], cookie['httpOnly'],
-                cookie['secure'])
+            cookie_information = CookieInformation(cookie)
             return cookie_information
         raise ValueError("Cookie with name %s not found." % name)
 
@@ -92,14 +89,20 @@ class CookieKeywords(LibraryComponent):
 
 
 class CookieInformation(object):
-    def __init__(self, name, value, domain, path, expiry, http, secure):
-        self.name = name
-        self.value = value
-        self.domain = domain
-        self.path = path
-        self.expiry = expiry
-        self.http = http
-        self.secure = secure
+    def __init__(self, cookie):
+        self.domain = cookie['domain'] if 'domain' in cookie else None
+        self.expiry = cookie['expiry'] if 'expiry' in cookie else None
+        self.httpOnly = cookie['httpOnly'] if 'httpOnly' in cookie else None
+        self.name = cookie['name'] if 'name' in cookie else None
+        self.path = cookie['path'] if 'path' in cookie else None
+        self.secure = cookie['secure'] if 'secure' in cookie else None
+        self.value = cookie['value'] if 'value' in cookie else None
+
+    @property
+    def full_info(self):
+        cookie_info = ', '.join("{}={}".format(key, value) for
+                                (key, value) in self.__dict__.items())
+        return cookie_info
 
     def __str__(self):
         return '{}={}'.format(self.name, self.value)

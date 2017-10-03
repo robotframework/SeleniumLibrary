@@ -50,11 +50,11 @@ Get Cookies When There Are None
     Should Be Equal    ${cookies}    ${EMPTY}
 
 Get Cookie Expiry Set By Selenium
-    [Documentation]    Get Cookie Value Set By Selenium
+    [Documentation]    Get Cookie Expiry Set By Selenium
     [Tags]  Known Issue Firefox
     ${cookie}=    Get Cookie    another
     ${date}=  Convert Date  2027-09-28 16:21:35  epoch
-    should be equal as integers   ${cookie.expiry}  ${date}
+    Should Be Equal As Integers   ${cookie.expiry}  ${date}
 
 *** Keyword ***
 Add Cookies
