@@ -42,9 +42,9 @@ Handle Alert returns message
     Alert Should Be Present
 
 Handle Alert with custom timeout
-    Click Link    Slow alert
+    Click Button    Slow alert
     Handle Alert    timeout=1s
-    Click Link    Slow alert
+    Click Button    Slow alert
     Run Keyword And Expect Error
     ...    Alert not found in 1 millisecond.
     ...    Handle Alert    ACCEPT    1 ms
@@ -70,11 +70,11 @@ Alert Should Not Be Present with custom actions
 
 Alert Should Not Be Present with custom timeout
     Alert Should Not Be Present    timeout=0.1s
-    Click Link    Slow alert
+    Click Button    Slow alert
     Alert Should Not Be Present    DISMISS    ${0.001}
     Run Keyword And Expect Error
-    ...    Alert with message 'Alert after 200ms!' present.
-    ...    Alert Should Not Be Present    timeout=0.2
+    ...    Alert with message 'Alert after 500ms!' present.
+    ...    Alert Should Not Be Present    timeout=0.99999
 
 Alert Should Be Present
     Run Keyword And Expect Error
@@ -114,11 +114,11 @@ Alert Should Be Present can leave alert open
     Alert Should Be Present
 
 Alert Should Be Present with custom timeout
-    Click Link    Slow alert
+    Click Button    Slow alert
     Run Keyword And Expect Error
     ...    Alert not found in 1 millisecond.
     ...    Alert Should Be Present    timeout=1ms
-    Alert Should Be Present    Alert after 200ms!    ACCEPT    0.2s
+    Alert Should Be Present    Alert after 500ms!    ACCEPT    3s
 
 Get Alert Message
     [Documentation]    DEPRECATED!
