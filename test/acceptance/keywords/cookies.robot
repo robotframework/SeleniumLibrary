@@ -49,20 +49,41 @@ Get Cookie Expiry Set By Selenium
     Should Be Equal As Integers   ${cookie.expiry}  ${date}
     [Teardown]    Delete All Cookies
 
-Test Get Cookie Object
+Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie    another
     ${date} =  Convert Date  2027-09-28 16:21:35  epoch
+    Should Be Equal As Integers    ${cookie.expiry}       ${date}
+
+Test Get Cookie Object Domain
+    ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.domain}       localhost
-    Should Be Equal    ${cookie.expiry}       ${date}
+
+Test Get Cookie Object HttpOnly
+    ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.httpOnly}     ${False}
+
+Test Get Cookie Object Name
+    ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.name}         another
+
+Test Get Cookie Object Path
+    ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.path}         /
+
+Test Get Cookie Object Secure
+    ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.secure}       ${False}
+
+Test Get Cookie Object Value
+    ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.value}        value
+
+Test Get Cookie Object Full_info
+    ${cookie} =    Get Cookie    another
     Should Contain     ${cookie.full_info}    domain=localhost
     Should Contain     ${cookie.full_info}    secure=False
     Should Contain     ${cookie.full_info}    value=value
-    Should Contain     ${cookie.full_info}    expiry=1822137695
+    Should Contain     ${cookie.full_info}    expiry=
     Should Contain     ${cookie.full_info}    path=/
     Should Contain     ${cookie.full_info}    httpOnly=False
     Should Contain     ${cookie.full_info}    name=another
