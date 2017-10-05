@@ -28,7 +28,7 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def delete_cookie(self, name):
-        """Deletes cookie matching `name`.
+        """Deletes cookie matching ``name``.
 
         If the cookie is not found, nothing happens.
         """
@@ -44,9 +44,9 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookie_value(self, name):
-        """Returns value of cookie found with `name`.
+        """Returns value of cookie found with ``name``.
 
-        If no cookie is found with `name`, this keyword fails.
+        If no cookie is found with ``name``, this keyword fails.
         """
         cookie = self.browser.get_cookie(name)
         if cookie is not None:
@@ -55,14 +55,29 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookie(self, name):
-        """Returns the cookie found with `name` in extended variable format.
+        """Returns a cookie object found with ``name``.
 
-        If no cookie is found with `name`, this keyword fails.
+        The cookie object contains details about the cookie.
+        Attributes available in the object are documented in the table below.
+        | = Attribute = |             = Explanation =                            |
+        | domain        | Specifies hosts to which the cookie will be sent       |
+        | expiry        | The maximum lifetime of the cookie as EPOCH            |
+        | httpOnly      | HttpOnly cookie cannot be accessed by client-side APIs |
+        | name          | The name of a cookie                                   |
+        | path          | Indicates a URL path, usually /                        |
+        | secure        | Cookie will be send only by using secure connection    |
+        | value         | Value of the cookie                                    |
+        | full_info     | All the above attributes joined as string              |
+
+        If no cookie is found with ``name``, this keyword fails.
         """
         cookie = self.browser.get_cookie(name)
         if cookie:
-            cookie_information = CookieInformation(cookie)
-            return cookie_information
+            return CookieInformation(
+                cookie.get('domain', None), cookie.get('expiry', None),
+                cookie.get('httpOnly', None), cookie['name'],
+                cookie.get('path', None), cookie.get('secure', None),
+                cookie['value'])
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
@@ -70,9 +85,10 @@ class CookieKeywords(LibraryComponent):
                    expiry=None):
         """Adds a cookie to your current session.
 
-        "name" and "value" are required, "path", "domain", "secure" and
-         "expiry" are optional.  Expiry supports the same formats as
-         the DateTime library.
+        ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``
+        and ``expiry`` are optional.  Expiry supports the same formats as
+        the DateTime library and is converted to EPOCH which is supported
+        by the Selenium.
         """
         new_cookie = {'name': name, 'value': value}
         if is_truthy(path):
@@ -89,20 +105,19 @@ class CookieKeywords(LibraryComponent):
 
 
 class CookieInformation(object):
-    def __init__(self, cookie):
-        self.domain = cookie['domain'] if 'domain' in cookie else None
-        self.expiry = cookie['expiry'] if 'expiry' in cookie else None
-        self.httpOnly = cookie['httpOnly'] if 'httpOnly' in cookie else None
-        self.name = cookie['name'] if 'name' in cookie else None
-        self.path = cookie['path'] if 'path' in cookie else None
-        self.secure = cookie['secure'] if 'secure' in cookie else None
-        self.value = cookie['value'] if 'value' in cookie else None
+    def __init__(self, domain, expiry, httpOnly, name, path, secure, value):
+        self.domain = domain
+        self.expiry = expiry
+        self.httpOnly = httpOnly
+        self.name = name
+        self.path = path
+        self.secure = secure
+        self.value = value
 
     @property
     def full_info(self):
-        cookie_info = ', '.join("{}={}".format(key, value) for
-                                (key, value) in self.__dict__.items())
-        return cookie_info
+        return ', '.join("{}={}".format(key, value) for
+                         (key, value) in self.__dict__.items())
 
     def __str__(self):
-        return '{}={}'.format(self.name, self.value)
+        return self.full_info
