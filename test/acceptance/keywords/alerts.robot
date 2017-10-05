@@ -11,14 +11,14 @@ Handle Alert accepts by default
     Click Button    Change the title
     Handle Alert
     Alert Should Not Be Present
-    Title Should Be    Original Changed!
+    Wait For Title Change    Original Changed!
 
 Handle Alert can dismiss
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     Handle Alert    action=DISMISS
     Alert Should Not Be Present
-    Title Should Be    Original
+    Wait For Title Change    Original
 
 Handle Alert can leave open
     Click Link    Click Me!
@@ -66,7 +66,7 @@ Alert Should Not Be Present with custom actions
     Run Keyword And Expect Error
     ...    Alert with message 'Really change the title?' present.
     ...    Alert Should Not Be Present    action=DISmiss
-    Title Should Be    Original
+    Wait For Title Change    Original
 
 Alert Should Not Be Present with custom timeout
     Alert Should Not Be Present    timeout=0.1s
@@ -97,14 +97,14 @@ Alert Should Be Present accepts by default
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     Alert Should Be Present    Really change the title?
-    Title Should Be    Original Changed!
+    Wait For Title Change    Original Changed!
     Alert Should Not Be Present
 
 Alert Should Be Present can dismiss
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Click Button    Change the title
     Alert Should Be Present    Really change the title?    action=DISMISS
-    Title Should Be    Original
+    Wait For Title Change    Original
     Alert Should Not Be Present
 
 Alert Should Be Present can leave alert open
@@ -138,7 +138,7 @@ Get Alet Message dismisses by default
     Click Button    Change the title
     ${msg} =    Get Alert Message
     Should Be Equal    ${msg}    Really change the title?
-    Title Should Be    Original
+    Wait For Title Change    Original
 
 Get Alert Message can leave alert open
     [Documentation]    DEPRECATED!
@@ -188,7 +188,7 @@ Confirm Action
     Click Button    Change the title
     ${msg}=    Confirm Action
     Should Be Equal    ${msg}    Really change the title?
-    Title Should Be    Original Changed!
+    Wait For Title Change    Original Changed!
 
 Confirm Action multiple times
     [Documentation]    DEPRECATED!
@@ -217,11 +217,16 @@ Dismiss Alert
     Click Button    Change the title
     ${accepted} =    Dismiss Alert    # This actually accepts the alert
     Should Be Equal    ${accepted}    ${TRUE}
-    Title Should Be    Original Changed!
+    Wait For Title Change    Original Changed!
     Click Button    Change the title
     ${accepted} =    Dismiss Alert    accept=${FALSE}
-    Title Should Be    Original Changed!
+    Wait For Title Change    Original Changed!
     Should Be Equal    ${accepted}    ${FALSE}
     Click Button    Change the title
     Dismiss Alert    true
-    Title Should Be    Original Changed! Changed!
+    Wait For Title Change    Original Changed! Changed!
+
+*** Keywords ***
+Wait For Title Change
+    [Arguments]    ${expected}
+    Wait For Condition    return document.title == '${expected}'
