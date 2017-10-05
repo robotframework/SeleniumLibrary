@@ -78,8 +78,10 @@ class AlertKeywords(LibraryComponent):
     def alert_should_not_be_present(self, action=ACCEPT, timeout=0):
         """Verifies that no alert is present.
 
-        If the alert actually exists, ``action`` argument determines
-        how it should be handled same way as with `Handle Alert`.
+        If the alert actually exists, the ``action`` argument determines
+        how it should be handled. By default the alert is accepted, but
+        it can be also dismissed or left open the same way as with the
+        `Handle Alert` keyword.
 
         ``timeout`` specifies how long to wait for the alert to appear.
         By default the alert is not waited at all, but a custom time can
