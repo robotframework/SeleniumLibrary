@@ -51,7 +51,7 @@ Get Cookie Expiry Set By Selenium
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie    another
-    ${date} =  Convert Date  2027-09-28 16:21:35  epoch
+    ${date} =    Convert Date  2027-09-28 16:21:35  epoch
     Should Be Equal As Integers    ${cookie.expiry}       ${date}
 
 Test Get Cookie Object Domain
@@ -80,10 +80,12 @@ Test Get Cookie Object Value
 
 Test Get Cookie Object Full_info
     ${cookie} =    Get Cookie    another
+    ${date} =    Convert Date  2027-09-28 16:21:35  epoch
+    ${date} =    Convert To Integer    ${date}
     Should Contain     ${cookie.full_info}    domain=localhost
     Should Contain     ${cookie.full_info}    secure=False
     Should Contain     ${cookie.full_info}    value=value
-    Should Contain     ${cookie.full_info}    expiry=
+    Should Contain     ${cookie.full_info}    expiry=${date}
     Should Contain     ${cookie.full_info}    path=/
     Should Contain     ${cookie.full_info}    httpOnly=False
     Should Contain     ${cookie.full_info}    name=another
