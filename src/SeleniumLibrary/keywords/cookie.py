@@ -70,6 +70,8 @@ class CookieKeywords(LibraryComponent):
         | full_info     | All the above attributes joined as string              |
 
         If no cookie is found with ``name``, this keyword fails.
+
+        New in SeleniumLibrary 3.0
         """
         cookie = self.browser.get_cookie(name)
         if cookie:
@@ -87,8 +89,16 @@ class CookieKeywords(LibraryComponent):
 
         ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``
         and ``expiry`` are optional.  Expiry supports the same formats as
-        the DateTime library and is converted to EPOCH which is supported
-        by the Selenium.
+        the [http://robotframework.org/robotframework/latest/libraries/DateTime.html|DateTime]
+        library and is converted to EPOCH timestamp which is supported by the
+        Selenium.
+
+        Prior SeleniumLibry 3.0 setting the expiry did not work.
+
+        Example:
+        | Add Cookie | foo | bar |                            | # Adds cookie with name foo and value bar     |
+        | Add Cookie | foo | bar | domain=example.com         | # Adds cookie with example.com domain defined |
+        | Add Cookie | foo | bar | expiry=2027-09-28 16:21:35 | # Adds cookie with expiry time defined        |
         """
         new_cookie = {'name': name, 'value': value}
         if is_truthy(path):
