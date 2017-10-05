@@ -2,6 +2,7 @@
 Library           SeleniumLibrary    run_on_failure=Nothing    implicit_wait=0
 Library           Collections
 Library           OperatingSystem
+Library           DateTime
 
 *** Variable ***
 ${SERVER}=         localhost:7000

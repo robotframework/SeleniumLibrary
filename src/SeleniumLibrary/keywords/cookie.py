@@ -16,6 +16,7 @@
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_truthy
+from robot.libraries.DateTime import convert_date
 
 
 class CookieKeywords(LibraryComponent):
@@ -53,11 +54,25 @@ class CookieKeywords(LibraryComponent):
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
-    def add_cookie(self, name, value, path=None, domain=None, secure=None):
+    def get_cookie(self, name):
+        """Returns the cookie found with `name` in extended variable format.
+
+        If no cookie is found with `name`, this keyword fails.
+        """
+        cookie = self.browser.get_cookie(name)
+        if cookie:
+            cookie_information = CookieInformation(cookie)
+            return cookie_information
+        raise ValueError("Cookie with name %s not found." % name)
+
+    @keyword
+    def add_cookie(self, name, value, path=None, domain=None, secure=None,
+                   expiry=None):
         """Adds a cookie to your current session.
 
-        "name" and "value" are required, "path", "domain" and "secure" are
-        optional
+        "name" and "value" are required, "path", "domain", "secure" and
+         "expiry" are optional.  Expiry supports the same formats as
+         the DateTime library.
         """
         new_cookie = {'name': name, 'value': value}
         if is_truthy(path):
@@ -67,4 +82,27 @@ class CookieKeywords(LibraryComponent):
         # Secure should be True or False
         if is_truthy(secure):
             new_cookie['secure'] = secure
+        if is_truthy(expiry):
+            expiry_datetime = int(convert_date(expiry, result_format='epoch'))
+            new_cookie['expiry'] = expiry_datetime
         self.browser.add_cookie(new_cookie)
+
+
+class CookieInformation(object):
+    def __init__(self, cookie):
+        self.domain = cookie['domain'] if 'domain' in cookie else None
+        self.expiry = cookie['expiry'] if 'expiry' in cookie else None
+        self.httpOnly = cookie['httpOnly'] if 'httpOnly' in cookie else None
+        self.name = cookie['name'] if 'name' in cookie else None
+        self.path = cookie['path'] if 'path' in cookie else None
+        self.secure = cookie['secure'] if 'secure' in cookie else None
+        self.value = cookie['value'] if 'value' in cookie else None
+
+    @property
+    def full_info(self):
+        cookie_info = ', '.join("{}={}".format(key, value) for
+                                (key, value) in self.__dict__.items())
+        return cookie_info
+
+    def __str__(self):
+        return '{}={}'.format(self.name, self.value)

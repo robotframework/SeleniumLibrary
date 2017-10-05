@@ -6,6 +6,8 @@ Release Notes
 - Added 'Get Locations' keyword [thaffenden]
 - Fix getting window information and switching windows on browsers that do not
   support javascript
+- Added 'Get Cookie' keyword [wappowers]
+- Added 'expiry' as value that can be set with 'Add Cookie' keyword [wappowers]
 
 1.8.0
 -----
