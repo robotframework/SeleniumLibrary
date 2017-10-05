@@ -11,6 +11,11 @@ Wait For Condition
     ...    Condition 'return window.document.title == "Invalid"' did not become true in 100 milliseconds
     ...    Wait For Condition    return window.document.title == "Invalid"    ${0.1}
 
+Wait For Condition requires `return`
+    Run Keyword And Expect Error
+    ...    ValueError: Condition 'window.document.title == "Changed"' did not have mandatory 'return'.
+    ...    Wait For Condition    window.document.title == "Changed"
+
 Wait Until Page Contains
     Wait Until Page Contains    New Content    2 s
     Run Keyword And Expect Error    Text 'invalid' did not appear in 100 milliseconds
