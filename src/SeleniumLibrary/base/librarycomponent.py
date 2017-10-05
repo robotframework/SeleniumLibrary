@@ -19,6 +19,8 @@ import os
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
+from SeleniumLibrary.utils import is_noney, timestr_to_secs
+
 from .context import ContextAware
 from .robotlibcore import PY2
 
@@ -53,6 +55,11 @@ class LibraryComponent(ContextAware):
                                  loglevel='INFO'):
         self.element_finder.assert_page_not_contains(locator, tag, message,
                                                      loglevel)
+
+    def get_timeout(self, timeout=None):
+        if is_noney(timeout):
+            return self.ctx.timeout
+        return timestr_to_secs(timeout)
 
     @property
     def log_dir(self):

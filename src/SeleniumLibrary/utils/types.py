@@ -37,3 +37,7 @@ def is_truthy(item):
 
 def is_falsy(item):
     return not is_truthy(item)
+
+
+def is_noney(item):
+    return item is None or is_string(item) and item.upper() == 'NONE'

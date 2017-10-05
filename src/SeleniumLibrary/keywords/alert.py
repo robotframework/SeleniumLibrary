@@ -14,152 +14,202 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import time
-
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from SeleniumLibrary.base import keyword
-from SeleniumLibrary.base import LibraryComponent
-from SeleniumLibrary.utils import is_truthy
+from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.utils import is_truthy, secs_to_timestr, timestr_to_secs
 
 
 class AlertKeywords(LibraryComponent):
-
-    ACCEPT_ALERT = 'accept'
-    DISMISS_ALERT = 'dismiss'
-
-    def __init__(self, ctx):
-        LibraryComponent.__init__(self, ctx)
-        self._next_alert_dismiss_type = self.ACCEPT_ALERT
+    ACCEPT = 'ACCEPT'
+    DISMISS = 'DISMISS'
+    LEAVE = 'LEAVE'
+    _next_alert_action = ACCEPT
 
     @keyword
     def input_text_into_prompt(self, text):
-        """Types the given `text` into alert box.  """
-        try:
-            alert = self._wait_alert()
-            alert.send_keys(text)
-        except WebDriverException:
-            raise RuntimeError('There were no alerts')
+        """Deprecated. Use `Input Text Into Alert` instead.
+
+        Types the given ``text`` into an input field in an alert.
+        Leaves the alert open.
+        """
+        self.input_text_into_alert(text, self.LEAVE)
 
     @keyword
-    def alert_should_be_present(self, text=''):
-        """Verifies an alert is present and dismisses it.
+    def input_text_into_alert(self, text, action=ACCEPT, timeout=None):
+        """Types the given ``text`` into an input field in an alert.
 
-        If `text` is a non-empty string, then it is also verified that the
-        message of the alert equals to `text`.
+        The alert is accepted by default, but that behavior can be controlled
+        by using the ``action`` argument same way as with `Handle Alert`.
 
-        Will fail if no alert is present. Note that following keywords
-        will fail unless the alert is dismissed by this
-        keyword or another like `Get Alert Message`.
+        ``timeout`` specifies how long to wait for the alert to appear.
+        If it is not given, the global default `timeout` is used instead.
+
+        New in SeleniumLibrary 3.0.
         """
-        alert_text = self._handle_alert(self.ACCEPT_ALERT)
-        if text and alert_text != text:
-            raise AssertionError("Alert text should have been "
-                                 "'%s' but was '%s'"
-                                 % (text, alert_text))
+        alert = self._wait_alert(timeout)
+        alert.send_keys(text)
+        self._handle_alert(alert, action)
+
+    @keyword
+    def alert_should_be_present(self, text='', action=ACCEPT, timeout=None):
+        """Verifies that an alert is present and, by default, accepts it.
+
+        Fails if no alert is present. If ``text`` is a non-empty string,
+        then it is used to verify alert's message. The alert is accepted
+        by default, but that behavior can be controlled by using the
+        ``action`` argument same way as with `Handle Alert`.
+
+        ``timeout`` specifies how long to wait for the alert to appear.
+        If it is not given, the global default `timeout` is used instead.
+
+        ``action`` and ``timeout`` arguments are new in SeleniumLibrary 3.0.
+        In earlier versions the alert was always accepted and timeout was
+        hard coded to one second.
+        """
+        message = self.handle_alert(action, timeout)
+        if text and text != message:
+            raise AssertionError("Alert message should have been '%s' but it "
+                                 "was '%s'." % (text, message))
+
+    @keyword
+    def alert_should_not_be_present(self, action=ACCEPT, timeout=0):
+        """Verifies that no alert is present.
+
+        If the alert actually exists, the ``action`` argument determines
+        how it should be handled. By default the alert is accepted, but
+        it can be also dismissed or left open the same way as with the
+        `Handle Alert` keyword.
+
+        ``timeout`` specifies how long to wait for the alert to appear.
+        By default the alert is not waited at all, but a custom time can
+        be given if alert may be delayed. See the `time format` section
+        for information about the syntax.
+
+        New in SeleniumLibrary 3.0.
+        """
+        try:
+            alert = self._wait_alert(timeout)
+        except AssertionError:
+            return
+        text = self._handle_alert(alert, action)
+        raise AssertionError("Alert with message '%s' present." % text)
 
     @keyword
     def choose_cancel_on_next_confirmation(self):
-        """Cancel will be selected the next time `Confirm Action` is used."""
-        self._next_alert_dismiss_type = self.DISMISS_ALERT
+        """Deprecated. Use `Handle Alert` directly instead.
+
+        In versions prior to SeleniumLibrary 3.0, the alert handling
+        approach needed to be set separately before using the `Confirm
+        Action` keyword. New `Handle Alert` keyword accepts the action how
+        to handle the alert as a normal argument and should be used instead.
+        """
+        self._next_alert_action = self.DISMISS
 
     @keyword
     def choose_ok_on_next_confirmation(self):
-        """Undo the effect of using keywords `Choose Cancel On Next Confirmation`. Note
-        that Selenium's overridden window.confirm() function will normally
-        automatically return true, as if the user had manually clicked OK, so
-        you shouldn't need to use this command unless for some reason you need
-        to change your mind prior to the next confirmation. After any
-        confirmation, Selenium will resume using the default behavior for
-        future confirmations, automatically returning true (OK) unless/until
-        you explicitly use `Choose Cancel On Next Confirmation` for each
-        confirmation.
+        """Deprecated. Use `Handle Alert` directly instead.
 
-        Note that every time a confirmation comes up, you must
-        consume it by using a keywords such as `Get Alert Message`, or else
-        the following selenium operations will fail.
+        In versions prior to SeleniumLibrary 3.0, the alert handling
+        approach needed to be set separately before using the `Confirm
+        Action` keyword. New `Handle Alert` keyword accepts the action how
+        to handle the alert as a normal argument and should be used instead.
         """
-        self._next_alert_dismiss_type = self.ACCEPT_ALERT
+        self._next_alert_action = self.ACCEPT
 
     @keyword
     def confirm_action(self):
-        """Dismisses currently shown confirmation dialog and returns it's message.
+        """Deprecated. Use `Handle Alert` instead.
 
-        By default, this keyword chooses 'OK' option from the dialog. If
-        'Cancel' needs to be chosen, keyword `Choose Cancel On Next
-        Confirmation` must be called before the action that causes the
-        confirmation dialog to be shown.
-
-        Examples:
-        | Click Button | Send | # Shows a confirmation dialog |
-        | ${message}= | Confirm Action | # Chooses Ok |
-        | Should Be Equal | ${message} | Are your sure? |
-        |                |    |              |
-        | Choose Cancel On Next Confirmation | | |
-        | Click Button | Send | # Shows a confirmation dialog |
-        | Confirm Action |    | # Chooses Cancel |
+        By default accepts an alert, but this behavior can be altered
+        with `Choose Cancel On Next Confirmation` and `Choose Ok On Next
+        Confirmation` keywords. New `Handle Alert` keyword accepts the action
+        how to handle the alert as a normal argument and should be used
+        instead.
         """
-        text = self._handle_alert(self._next_alert_dismiss_type)
-        self._next_alert_dismiss_type = self.DISMISS_ALERT
+        text = self.handle_alert(self._next_alert_action)
+        self._next_alert_action = self.ACCEPT
         return text
 
     @keyword
     def get_alert_message(self, dismiss=True):
-        """Returns the text of current JavaScript alert.
+        """Deprecated. Use `Handle Alert` instead.
 
-        By default the current JavaScript alert will be dismissed.
-        This keyword will fail if no alert is present. Note that
-        following keywords will fail unless the alert is
-        dismissed by this keyword or another like `Dismiss Alert`.
+        Returns the message the alert has. Dismisses the alert by default
+        (i.e. presses ``Cancel``) and setting ``dismiss`` to false leaves
+        the alert open. There is no support to accept the alert (i.e. to
+        press ``Ok``).
+
+        `Handle Alert` has better support for controlling should the alert
+        be accepted, dismissed, or left open.
         """
-        if is_truthy(dismiss):
-            return self._handle_alert(self.DISMISS_ALERT)
-        else:
-            return self._handle_alert()
+        action = self.DISMISS if is_truthy(dismiss) else self.LEAVE
+        return self.handle_alert(action)
 
     @keyword
     def dismiss_alert(self, accept=True):
-        """ Returns true if alert was confirmed, false if it was dismissed
+        """Deprecated. Use `Handle Alert` instead.
 
-        This keyword will fail if no alert is present. Note that
-        following keywords will fail unless the alert is
-        dismissed by this keyword or another like `Get Alert Message`.
+        Contrary to its name, this keyword accepts the alert by default
+        (i.e. presses ``Ok``). ``accept`` can be set to a false value
+        to dismiss the alert (i.e. to press ``Cancel``).
+
+        `Handle Alert` has better support for controlling should the alert
+        be accepted, dismissed, or left open.
         """
         if is_truthy(accept):
-            return self._handle_alert(self.ACCEPT_ALERT)
-        else:
-            return self._handle_alert()
+            self.handle_alert(self.ACCEPT)
+            return True
+        self.handle_alert(self.DISMISS)
+        return False
 
-    def _handle_alert(self, dismiss_type=None):
-        """Alert re-try for Chrome
+    @keyword
+    def handle_alert(self, action=ACCEPT, timeout=None):
+        """Handles the current alert and returns its message.
 
-        Because Chrome has difficulties to handle alerts, like::
+        By default the alert is accepted, but this can be controlled
+        with the ``action`` argument that supports the following
+        case-insensitive values:
 
-        alert.text
-        alert.dismiss
+        - ``ACCEPT``: Accept the alert i.e. press ``Ok``. Default.
+        - ``DISMISS``: Dismiss the alert i.e. press ``Cancel``.
+        - ``LEAVE``: Leave the alert open.
 
-        This function creates a re-try functionality to better support
-        alerts in Chrome.
+        The ``timeout`` argument specifies how long to wait for the alert
+        to appear. If it is not given, the global default `timeout` is used
+        instead.
+
+        Examples:
+        | Handle Alert |                |       | # Accept alert.  |
+        | Handle Alert | action=DISMISS |       | # Dismiss alert. |
+        | Handle Alert | timeout=10 s   |       | # Use custom timeout and accept alert.  |
+        | Handle Alert | DISMISS        | 1 min | # Use custom timeout and dismiss alert. |
+        | ${message} = | Handle Alert   |       | # Accept alert and get its message.     |
+        | ${message} = | Handle Alert   | LEAVE | # Leave alert open and get its message. |
+
+        New in SeleniumLibrary 3.0.
         """
-        retry = 0
-        while retry < 4:
-            try:
-                return self._alert_worker(dismiss_type)
-            except WebDriverException:
-                time.sleep(0.2)
-                retry += 1
-        raise RuntimeError('There were no alerts')
+        alert = self._wait_alert(timeout)
+        return self._handle_alert(alert, action)
 
-    def _alert_worker(self, dismiss_type=None):
-        alert = self._wait_alert()
+    def _handle_alert(self, alert, action):
+        action = action.upper()
         text = ' '.join(alert.text.splitlines())
-        if dismiss_type == self.DISMISS_ALERT:
-            alert.dismiss()
-        elif dismiss_type == self.ACCEPT_ALERT:
+        if action == self.ACCEPT:
             alert.accept()
+        elif action == self.DISMISS:
+            alert.dismiss()
+        elif action != self.LEAVE:
+            raise ValueError("Invalid alert action '%s'." % action)
         return text
 
-    def _wait_alert(self):
-        return WebDriverWait(self.browser, 1).until(EC.alert_is_present())
+    def _wait_alert(self, timeout=None):
+        timeout = self.get_timeout(timeout)
+        wait = WebDriverWait(self.browser, timeout)
+        try:
+            return wait.until(EC.alert_is_present())
+        except WebDriverException:
+            raise AssertionError('Alert not found in %s.'
+                                 % secs_to_timestr(timeout))

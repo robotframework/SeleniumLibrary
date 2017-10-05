@@ -210,17 +210,17 @@ class SeleniumLibrary(DynamicCore):
     It also explains the `time format` that can be used when setting various
     timeouts, waits and delays.
 
-    == Timeouts ==
+    == Timeout ==
 
-    SeleniumLibrary contains various ``Wait ...`` keywords that can be used
-    to wait, for example, for a dynamically created elements to appear on
-    a page. All these keywords accept an optional ``timeout`` argument that
-    tells the maximum time to wait.
+    SeleniumLibrary contains various keywords that have an optional
+    ``timeout`` argument that specifies how long these keywords should
+    wait for certain events or actions. These keywords include, for example,
+    ``Wait ...`` keywords and keywords related to alerts.
 
     The default timeout these keywords use can be set globally either by
     using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
-    when `importing` the library. The same timeout also applies to the
-    `Execute Async Javascript` keyword.
+    when `importing` the library. See `time format` below for supported
+    timeout syntax.
 
     == Implicit wait ==
 
@@ -230,6 +230,8 @@ class SeleniumLibrary(DynamicCore):
     the library. See [http://seleniumhq.org/docs/04_webdriver_advanced.html|
     Selenium documentation] for more information about this functionality.
 
+    See `time format` below for supported syntax.
+
     == Selenium speed ==
 
     Selenium execution speed can be slowed down globally by using `Set
@@ -237,6 +239,8 @@ class SeleniumLibrary(DynamicCore):
     demonstrating or debugging purposes. Using it to make sure that elements
     appear on a page is not a good idea, and the above explained timeouts
     and waits should be used instead.
+
+    See `time format` below for supported syntax.
 
     == Time format ==
 

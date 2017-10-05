@@ -97,7 +97,7 @@ def acceptance_tests(interpreter, browser, rf_options=[],
     with http_server():
         execute_tests(interpreter, browser, rf_options,
                       sauce_username, sauce_key)
-    failures = process_output(browser, rf_options)
+    failures = process_output(browser)
     if failures:
         print('\n{} critical test{} failed.'
               .format(failures, 's' if failures != 1 else ''))
@@ -162,13 +162,12 @@ def get_sauce_conf(browser, sauce_username, sauce_key):
     ]
 
 
-def process_output(browser, rf_options):
+def process_output(browser):
     print('Verifying results...')
     options = []
     output = os.path.join(RESULTS_DIR, 'output.xml')
     robotstatuschecker.process_output(output, verbose=False)
     options.extend([opt.format(browser=browser) for opt in REBOT_OPTIONS])
-    options += rf_options
     try:
         rebot_cli(options + [output])
     except SystemExit as exit:
