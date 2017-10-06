@@ -1,6 +1,6 @@
 /* Additional styles to use with style.css. */
 
-#contents p, table p {
+.contents li p, table p {
     margin: 0;
 }
 th, td {

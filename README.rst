@@ -2,7 +2,6 @@ SeleniumLibrary
 ===============
 
 .. contents::
-   :local:
 
 Introduction
 ------------
