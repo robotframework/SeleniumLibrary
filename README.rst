@@ -15,8 +15,8 @@ for available keywords and more information about the library in general.
 SeleniumLibrary works with Selenium 2.53.6 or newer, including Selenium 3.
 It supports Python 2.7 as well as Python 3.3 or newer. In addition to the
 normal Python_ interpreter, it works also with PyPy_ and Jython_. Unfortunately
-Selenium_ isn't currently supported by IronPython_ and thus this library
-doesn't work with IronPython_ either.
+Selenium_ is not currently supported by IronPython_ and thus this library
+does not work with IronPython either.
 
 SeleniumLibrary is based on the `old SeleniumLibrary`_ that was forked to
 Selenium2Library_ and then later renamed back to SeleniumLibrary.
@@ -24,7 +24,7 @@ See the Versions_ and History_ sections below for more information about
 different versions and the overall project history.
 
 The new SeleniumLibrary is currently in pre-release phase. The final
-SeleniumLibrary 3.0 release is planned for early September.
+SeleniumLibrary 3.0 release is planned for October.
 
 .. image:: https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version
    :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
@@ -156,7 +156,7 @@ The above example is a slightly modified version of an example in a
 `demo project`_ that illustrates using Robot Framework and SeleniumLibrary.
 See the demo for more examples that you can also execute on your own
 machine. For more information about Robot Framework test data syntax in
-general see `Robot Framework User Guide`_.
+general see the `Robot Framework User Guide`_.
 
 Support
 -------
@@ -221,7 +221,7 @@ SeleniumLibrary. This decision basically meant following changes:
 
 - Create separate repository for the `old SeleniumLibrary`_ to preserve
   its history since Selenium2Library was forked.
-- Rename Selenium2Library project and the library itself to SeleniumLibrary.
+- Rename Selenium2Library project and the library itself to SeleniumLibrary_.
 - Add new Selenium2Library_ project to ease transitioning from Selenium2Library
   to SeleniumLibrary.
 
