@@ -327,23 +327,11 @@ class BrowserManagementKeywords(LibraryComponent):
         
         Please note that the frame search always start from the document root or main frame.
         
-        Examples:
-        | # Two frame elements with equal names | | |
-        | Select Frame   | xpath=`/``/`frame[@name='left']`/`iframe[@name='left'] | # Selects the 'left' iframe |
-        | Click Link     | foo                                                    | # Clicks link 'foo' in 'left' iframe |
-        | Unselect Frame |                                                        | # Returns to main frame |
-        | Select Frame   | left                                                   | # Selects the 'left' frame |
-  
-        | # Multiple frames with unique names or id | | |
-        | Select Frame   | third  | # Selects the 'third' frame |
-        | Click Link     | bar    | # Clicks link 'bar' in 'third' frame |
-        | Unselect Frame |        | # Returns to main frame |
-        | Select Frame   | first  | # Selects the 'first' frame |
-        | Click Link     | bar    | # Clicks link 'bar' in 'first' frame |
-        | Unselect Frame |        | # Returns to main frame |
-        | Select Frame   | second | # Selects the 'second' frame |
-        | Click Link     | bar    | # Clicks link 'bar' in 'second' frame |        
-        
+        Example:
+        | Select Frame   | xpath=`/``/`frame[@name='top]`/`iframe[@name='left'] | # Selects the 'left' iframe |
+        | Click Link     | foo                                                  | # Clicks link 'foo' in 'left' iframe |
+        | Unselect Frame |                                                      | # Returns to main frame |
+        | Select Frame   | left                                                 | # Selects the 'top' frame |        
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.find_element(locator)
@@ -411,7 +399,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def unselect_frame(self):
         """Sets the top frame as the current frame.
         
-        It does the same as `Select Window` without arguments, returning to the Main frame.
+        Cancels a previous `Select Frame` call, returning to the Main frame.
         """
         self.browser.switch_to.default_content()
 
