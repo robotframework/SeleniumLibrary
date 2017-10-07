@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_truthy
+from SeleniumLibrary.utils import is_truthy, is_noney
 from robot.libraries.DateTime import convert_date
 
 
@@ -106,14 +106,14 @@ class CookieKeywords(LibraryComponent):
         | Add Cookie | foo | bar | expiry=2027-09-28 16:21:35 | # Adds cookie with expiry time defined        |
         """
         new_cookie = {'name': name, 'value': value}
-        if is_truthy(path):
+        if not is_noney(path):
             new_cookie['path'] = path
-        if is_truthy(domain):
+        if not is_noney(domain):
             new_cookie['domain'] = domain
-        # Secure should be True or False
-        if is_truthy(secure):
-            new_cookie['secure'] = secure
-        if is_truthy(expiry):
+        # Secure must be True or False
+        if not is_noney(secure):
+            new_cookie['secure'] = is_truthy(secure)
+        if not is_noney(expiry):
             expiry_datetime = int(convert_date(expiry, result_format='epoch'))
             new_cookie['expiry'] = expiry_datetime
         self.browser.add_cookie(new_cookie)
