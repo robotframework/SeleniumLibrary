@@ -171,12 +171,12 @@ class ElementKeywords(LibraryComponent):
         `Locator Should Match X Times`.
 
         Examples assumes that locator matches to three elements
-        | ${count} =                 | Get Matching Locator Count | xpath:`/``/`*[@name="div_name"] |
-        | Should Be Equal As Numbers | ${count}                   | 3                           |
-        | ${count} =                 | Get Matching Locator Count | name:div_name               |
-        | Should Be Equal As Numbers | ${count}                   | 3                           |
-        | ${count} =                 | Get Matching Locator Count | div_name                    |
-        | Should Be Equal As Numbers | ${count}                   | 3                           |
+        | ${count} =                 | Get Matching Locator Count | xpath: //*[@name="div_name"] |
+        | Should Be Equal As Numbers | ${count}                   | 3                            |
+        | ${count} =                 | Get Matching Locator Count | name:div_name                |
+        | Should Be Equal As Numbers | ${count}                   | 3                            |
+        | ${count} =                 | Get Matching Locator Count | div_name                     |
+        | Should Be Equal As Numbers | ${count}                   | 3                            |
 
         New in SeleniumLibrary 3.0
         """
@@ -193,9 +193,9 @@ class ElementKeywords(LibraryComponent):
         `loglevel` arguments.
 
         Examples assumes that locator matches to three elements
-        | Locator Should Match X Times | xpath:`/``/`*[@name="div_name"] | 3 |
-        | locator_should_match_x_times | name:div_name                   | 3 |
-        | locator_should_match_x_times | div_name                        | 3 |
+        | Locator Should Match X Times | xpath: //*[@name="div_name"] | 3 |
+        | locator_should_match_x_times | name:div_name                | 3 |
+        | locator_should_match_x_times | div_name                     | 3 |
         """
         actual_locator_count = len(self.find_element(
             locator, first_only=False, required=False)
