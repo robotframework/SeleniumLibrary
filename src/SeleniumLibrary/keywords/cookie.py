@@ -57,21 +57,26 @@ class CookieKeywords(LibraryComponent):
     def get_cookie(self, name):
         """Returns a cookie object found with ``name``.
 
-        The cookie object contains details about the cookie.
-        Attributes available in the object are documented in the table below.
+        If no cookie is found with ``name``, keyword fails. The cookie object
+        contains details about the cookie. Attributes available in the object
+        are documented in the table below.
         | = Attribute = |             = Explanation =                            |
         | domain        | Specifies hosts to which the cookie will be sent       |
         | expiry        | The maximum lifetime of the cookie as EPOCH            |
         | httpOnly      | HttpOnly cookie cannot be accessed by client-side APIs |
         | name          | The name of a cookie                                   |
-        | path          | Indicates a URL path, usually /                        |
+        | path          | Indicates a URL path, example /                        |
         | secure        | Cookie will be send only by using secure connection    |
         | value         | Value of the cookie                                    |
         | full_info     | All the above attributes joined as string              |
 
-        If no cookie is found with ``name``, this keyword fails.
-
         New in SeleniumLibrary 3.0
+
+        Example:
+        | Add Cookie      | foo             | bar |
+        | ${cookie} =     | Get Cookie      | foo |
+        | Should Be Equal | ${cookie.value} | foo |
+        | Should Be Equal | ${cookie.name}  | bar |
         """
         cookie = self.browser.get_cookie(name)
         if cookie:
