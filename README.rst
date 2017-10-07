@@ -8,8 +8,7 @@ Introduction
 
 SeleniumLibrary_ is a web testing library for `Robot Framework`_ that
 utilizes the Selenium_ tool internally. The project is hosted on GitHub_
-and downloads can be found from PyPI_. See `keyword documentation`_
-for available keywords and more information about the library in general.
+and downloads can be found from PyPI_.
 
 SeleniumLibrary works with Selenium 2.53.6 or newer, including Selenium 3.
 It supports Python 2.7 as well as Python 3.3 or newer. In addition to the
@@ -33,6 +32,11 @@ SeleniumLibrary 3.0 release is planned for October.
 
 .. image:: https://api.travis-ci.org/robotframework/SeleniumLibrary.png
    :target: http://travis-ci.org/robotframework/SeleniumLibrary
+
+Keyword documentation
+---------------------
+See `keyword documentation`_ for available keywords and more information
+about the library in general.
 
 Installation
 ------------
