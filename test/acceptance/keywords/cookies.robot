@@ -26,6 +26,19 @@ App Sees Cookie Set By Selenium
     Click Link    Check cookie
     Element Text Should Be    output    Cookie found with value 'true'!
 
+Add Cookie When Secure Is Default
+    [Documentation]    Setting secure to True is tested in unit tests
+    ...   because chrome raises WebDriverException when http is used with
+    ...   secure. Currently our test server supports only http
+    Add Cookie    Cookie1    value1
+    ${cookie} =    Get Cookie    Cookie1
+    Should Be Equal    ${cookie.secure}       ${False}
+
+Add Cookie When Secure Is False
+    Add Cookie    Cookie1    value1    secure=False
+    ${cookie} =    Get Cookie    Cookie1
+    Should Be Equal    ${cookie.secure}       ${False}
+
 Delete Cookie
     [Tags]    Known Issue Safari
     Delete Cookie    test
@@ -43,7 +56,6 @@ Get Cookies When There Are None
     Should Be Equal    ${cookies}    ${EMPTY}
 
 Get Cookie Expiry Set By Selenium
-    [Tags]  Known Issue Firefox
     ${cookie} =    Get Cookie    another
     ${date} =  Convert Date  2027-09-28 16:21:35  epoch
     Should Be Equal As Integers   ${cookie.expiry}  ${date}
