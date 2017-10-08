@@ -171,12 +171,8 @@ class ElementKeywords(LibraryComponent):
         `Locator Should Match X Times`.
 
         Examples assumes that locator matches to three elements
-        | ${count} =                 | Get Matching Locator Count | xpath: //*[@name="div_name"] |
-        | Should Be Equal As Numbers | ${count}                   | 3                            |
-        | ${count} =                 | Get Matching Locator Count | name:div_name                |
-        | Should Be Equal As Numbers | ${count}                   | 3                            |
-        | ${count} =                 | Get Matching Locator Count | div_name                     |
-        | Should Be Equal As Numbers | ${count}                   | 3                            |
+        | ${count} =      | Get Matching Locator Count | name:div_name  |
+        | Should Be True  | ${count} > 2               |                |
 
         New in SeleniumLibrary 3.0
         """
@@ -193,9 +189,7 @@ class ElementKeywords(LibraryComponent):
         `loglevel` arguments.
 
         Examples assumes that locator matches to three elements
-        | Locator Should Match X Times | xpath: //*[@name="div_name"] | 3 |
-        | locator_should_match_x_times | name:div_name                | 3 |
-        | locator_should_match_x_times | div_name                     | 3 |
+        | locator_should_match_x_times | name:div_name | 3 |
         """
         actual_locator_count = len(self.find_element(
             locator, first_only=False, required=False)
@@ -758,25 +752,16 @@ return !element.dispatchEvent(evt);
     @keyword
     def get_matching_xpath_count(self, xpath, return_str=True):
         """Deprecated. Use `Get Matching Locator Count` instead."""
-        count = len(self.find_element("xpath=" + xpath, first_only=False,
-                                      required=False))
+        count = self.get_matching_locator_count("xpath=" + xpath)
         return str(count) if is_truthy(return_str) else count
 
     @keyword
     def xpath_should_match_x_times(self, xpath, expected_xpath_count,
                                    message='', loglevel='INFO'):
         """Deprecated. Use `Locator Should Match X Times` instead."""
-        actual_xpath_count = len(self.find_element(
-            "xpath=" + xpath, first_only=False, required=False))
-        if int(actual_xpath_count) != int(expected_xpath_count):
-            if is_falsy(message):
-                message = ("Xpath %s should have matched %s times but "
-                           "matched %s times"
-                           % (xpath, expected_xpath_count, actual_xpath_count))
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
-        self.info("Current page contains %s elements matching '%s'."
-                  % (actual_xpath_count, xpath))
+        self.locator_should_match_x_times("xpath=" + xpath,
+                                          expected_xpath_count, message,
+                                          loglevel)
 
     @keyword
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
