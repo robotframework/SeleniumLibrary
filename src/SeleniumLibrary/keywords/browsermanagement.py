@@ -328,10 +328,10 @@ class BrowserManagementKeywords(LibraryComponent):
         Please note that the frame search always start from the document root or main frame.
         
         Example:
-        | Select Frame   | xpath=`/``/`frame[@name='top]`/`iframe[@name='left'] | # Selects the 'left' iframe |
-        | Click Link     | foo                                                  | # Clicks link 'foo' in 'left' iframe |
-        | Unselect Frame |                                                      | # Returns to main frame |
-        | Select Frame   | left                                                 | # Selects the 'top' frame |        
+        | Select Frame   | xpath: //frame[@name='top]/iframe[@name='left'] | # Selects the 'left' iframe |
+        | Click Link     | foo                                             | # Clicks link 'foo' in 'left' iframe |
+        | Unselect Frame |                                                 | # Returns to main frame |
+        | Select Frame   | left                                            | # Selects the 'top' frame |        
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.find_element(locator)
