@@ -168,7 +168,7 @@ class ElementKeywords(LibraryComponent):
         """Returns number of elements matching ``locator``
 
         If you wish to assert the number of matching elements, use
-        `Locator Should Match X Times`.
+        `Locator Should Match X Times`. Keyword will always return an integer.
 
         Examples assumes that locator matches to three elements
         | ${count} =      | Get Matching Locator Count | name:div_name  |
@@ -751,7 +751,12 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def get_matching_xpath_count(self, xpath, return_str=True):
-        """Deprecated. Use `Get Matching Locator Count` instead."""
+        """Deprecated. Use `Get Matching Locator Count` instead.
+
+        In the `Get Matching Locator Count` keyword, the return value type
+        is changed to integer and it's not anymore possible change the
+        return value type between string and integer.
+        """
         count = self.get_matching_locator_count("xpath=" + xpath)
         return str(count) if is_truthy(return_str) else count
 
