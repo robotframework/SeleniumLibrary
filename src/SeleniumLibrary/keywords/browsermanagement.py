@@ -322,6 +322,16 @@ class BrowserManagementKeywords(LibraryComponent):
 
         Key attributes for frames are `id` and `name.` See `introduction` for
         details about locating elements.
+        
+        See `Unselect Frame` to cancel the frame selection and return to the Main frame.
+        
+        Please note that the frame search always start from the document root or main frame.
+        
+        Example:
+        | Select Frame   | xpath: //frame[@name='top]/iframe[@name='left'] | # Selects the 'left' iframe |
+        | Click Link     | foo                                             | # Clicks link 'foo' in 'left' iframe |
+        | Unselect Frame |                                                 | # Returns to main frame |
+        | Select Frame   | left                                            | # Selects the 'top' frame |        
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.find_element(locator)
@@ -387,7 +397,10 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def unselect_frame(self):
-        """Sets the top frame as the current frame."""
+        """Sets the top frame as the current frame.
+        
+        Cancels a previous `Select Frame` call, returning to the Main frame.
+        """
         self.browser.switch_to.default_content()
 
     @keyword
