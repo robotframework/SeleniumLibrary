@@ -121,11 +121,6 @@ class SeleniumLibrary(DynamicCore):
     Notice that using the ``sizzle`` strategy or its alias ``jquery``
     requires that the system under test contains the jQuery library.
 
-    xpath can also be used to click element contains text
-    
-    Example:
-        
-    | `Click Element` | xpath=//*[contains(text(),'ABC')] |
     
     This will Click Element containing ABC text. Notice that this approach can be error prone 
     and you should use other locators when possible.
@@ -138,8 +133,10 @@ class SeleniumLibrary(DynamicCore):
 
     Examples:
 
-    | `Click Element` | //div[@id="container"] |
-    | `Click Element` | (//div)[2]             |
+    | `Click Element` | //div[@id="container"] | Click Div With id : container |
+    | `Click Element` | (//div)[2]             | Click the second div in the document |
+    | `Click Element` | xpath=//*[contains(text(),'ABC')] | Click element containint text ABC | 
+    
 
     The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
 
