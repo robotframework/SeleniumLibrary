@@ -292,7 +292,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | Should Be Equal | ${width}  | ${800}    |
         | Should Be Equal | ${height} | ${600}    |
         """
-        return self.browser.set_window_size(width, height)
+        return self.browser.set_window_size(int(width), int(height))
 
     @keyword
     def get_window_position(self):
@@ -314,7 +314,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | Should Be Equal     | ${x}    | ${8}                |
         | Should Be Equal     | ${y}    | ${10}               |
         """
-        return self.browser.set_window_position(x, y)
+        self.browser.set_window_position(int(x), int(y))
 
     @keyword
     def select_frame(self, locator):
