@@ -90,17 +90,9 @@ Test Get Cookie Object Value
     ${cookie} =    Get Cookie    another
     Should Be Equal    ${cookie.value}        value
 
-Test Get Cookie Object Full_info
-    ${cookie} =    Get Cookie    another
-    ${date} =    Convert Date  2027-09-28 16:21:35  epoch
-    ${date} =    Convert To Integer    ${date}
-    Should Contain     ${cookie.full_info}    domain=localhost
-    Should Contain     ${cookie.full_info}    secure=False
-    Should Contain     ${cookie.full_info}    value=value
-    Should Contain     ${cookie.full_info}    expiry=${date}
-    Should Contain     ${cookie.full_info}    path=/
-    Should Contain     ${cookie.full_info}    httpOnly=False
-    Should Contain     ${cookie.full_info}    name=another
+Test Get Cookie Keyword Logging
+    [Documentation]    LOG 2:3 REGEXP: (?m)\\${cookie} = domain=localhost,\\s+secure=False,\\s+value=value,\\s+expiry=1822137695,\\s+path=/,\\s+httpOnly=False,\\s+name=another
+    ${cookie} =    Get Cookie     another
 
 *** Keyword ***
 Add Cookies
