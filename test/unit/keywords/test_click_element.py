@@ -1,9 +1,9 @@
-import unittest
-
-from mockito import mock, unstub, when
-
+# 
+# 
 from SeleniumLibrary.keywords import ElementKeywords
-
+from mockito import mock, unstub, when
+import unittest
+from selenium.webdriver.common.action_chains import ActionChains
 
 class KeywordArgumentsElementTest(unittest.TestCase):
 
@@ -18,4 +18,4 @@ class KeywordArgumentsElementTest(unittest.TestCase):
     def test_click_element(self):
         element = mock()
         when(self.element).find_element('//div').thenReturn(element)
-        self.element.click_element('//div')
+        self.element.click_element('//div','SHIFT+CTRL')

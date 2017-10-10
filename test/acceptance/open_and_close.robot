@@ -66,16 +66,12 @@ Closing all browsers clears cache
 
 Click Element Without Modifier
     Open Browser    ${ROOT}/jquery.html    ${BROWSER}
-    Set Selenium Implicit Wait    60s
     Click Element    link=Link with id
-    Sleep    5s
-    Location Should Be    ${ROOT}/broken.html
+    Wait Until Keyword Succeeds    60s    5s    Location Should Be    ${ROOT}/broken.html
 
 Click Element Open In New Window
     Open Browser    ${ROOT}/jquery.html    ${BROWSER}
-    Set Selenium Implicit Wait    60s
     Click Element    link=Link with id    SHIFT
-    Sleep    5s
     @{windows}=    List Windows
     Log To Console    ${windows}       
     Select Window    ${windows[1]}
@@ -83,9 +79,7 @@ Click Element Open In New Window
 
 Click Element With Incorrect Keys
     Open Browser    ${ROOT}/jquery.html    ${BROWSER}
-    Set Selenium Implicit Wait    60s
     ${error_message}=    Set Variable    KeyError: "'SHIFT+' click is not allowed with this keyword"
     Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+
     ${error_message}=    Set Variable    KeyError: "'SHIFT+ALT' click is not allowed with this keyword"
     Run Keyword And Expect Error    ${error_message}    Click Element    link=Link with id    SHIFT+ALT
-
