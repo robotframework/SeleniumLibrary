@@ -1,26 +1,27 @@
 *** Settings ***
-Documentation     Tests waiting
 Test Setup        Go To Page "javascript/delayed_events.html"
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Wait For Condition
-    [Documentation]    Wait For Condition
     Title Should Be    Original
     Wait For Condition    return window.document.title == "Changed"
     Run Keyword And Expect Error
     ...    Condition 'return window.document.title == "Invalid"' did not become true in 100 milliseconds
     ...    Wait For Condition    return window.document.title == "Invalid"    ${0.1}
 
+Wait For Condition requires `return`
+    Run Keyword And Expect Error
+    ...    ValueError: Condition 'window.document.title == "Changed"' did not have mandatory 'return'.
+    ...    Wait For Condition    window.document.title == "Changed"
+
 Wait Until Page Contains
-    [Documentation]    Wait Until Page Contains
     Wait Until Page Contains    New Content    2 s
     Run Keyword And Expect Error    Text 'invalid' did not appear in 100 milliseconds
     ...    Wait Until Page Contains    invalid    0.1
 
 Wait Until Page Does Not Contain
-    [Documentation]    Wait Until Page Does Not Contain
     Wait Until Page Does Not Contain    This is content    2 s
     Run Keyword And Expect Error    Text 'Initially hidden' did not disappear in 100 milliseconds
     ...    Wait Until Page Does Not Contain    Initially hidden    0.1
@@ -32,14 +33,12 @@ Wait Until Page Contains Element
     ...    Wait Until Page Contains Element    %cnon-existent    0.1 seconds
 
 Wait Until Page Does Not Contain Element
-    [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error
-    ...    messages
+    [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
     Wait Until Page Does Not Contain Element    not_present    2 seconds
     Run Keyword And Expect Error    Element 'content' did not disappear in 100 milliseconds
     ...    Wait Until Page Does Not Contain Element    content    0.1 seconds
 
 Wait Until Element Is Visible
-    [Documentation]    Wait Until Element Is Visible
     Run Keyword And Expect Error    Element 'hidden' was not visible in 100 milliseconds
     ...    Wait Until Element Is Visible    hidden    0.1
     Wait Until Element Is Visible    hidden    2 s
@@ -57,7 +56,6 @@ Wait Until Element Is Visible with locator only
     Wait Until Element Is Visible    hidden
 
 Wait Until Element Is Enabled
-    [Documentation]    Wait Until Element Is Enabled
     Run Keyword And Expect Error    Element 'id=disabled' was not enabled in 100 milliseconds
     ...    Wait Until Element Is Enabled    id=disabled    0.1
     Wait Until Element Is Enabled    id=disabled    2 s
@@ -68,7 +66,6 @@ Wait Until Element Is Enabled
     ...    id=invalid    0.1    User error message
 
 Wait Until Element Contains
-    [Documentation]    Wait Until Element Contains
     Run Keyword And Expect Error
     ...    Text 'New' did not appear in 100 milliseconds to element 'id=content'. Its text was 'This is content'.
     ...    Wait Until Element Contains    id=content    New    0.1
@@ -82,7 +79,6 @@ Wait Until Element Contains
     ...    Wait Until Element Contains    id=invalid    content    0.1
 
 Wait Until Element Does Not Contain
-    [Documentation]    Wait Until Element Does Not Contain
     Run Keyword And Expect Error
     ...    Text 'This is' did not disappear in 100 milliseconds from element 'id=content'.
     ...    Wait Until Element Does Not Contain    id=content    This is    0.1
@@ -90,3 +86,11 @@ Wait Until Element Does Not Contain
     Wait Until Element Does Not Contain    id=content    content    2 s
     Run Keyword And Expect Error    User error message    Wait Until Element Does Not Contain
     ...    content    New Content    0.1    User error message
+
+Timeout can be zero
+    Run Keyword And Expect Error
+    ...    Text 'New Content' did not appear in 0 seconds to element 'content'. Its text was 'This is content'.
+    ...    Wait Until Element Contains    content    New Content    0
+    Run Keyword And Expect Error
+    ...    Text 'New Content' did not appear in 0 seconds to element 'content'. Its text was 'This is content'.
+    ...    Wait Until Element Contains    content    New Content    ${0}

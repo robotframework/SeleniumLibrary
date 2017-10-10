@@ -20,7 +20,7 @@ from .browsercache import BrowserCache
 from .deprecated import Deprecated
 from .librarylistener import LibraryListener
 from .seleniumversion import SELENIUM_VERSION
-from .types import is_string, is_truthy, is_falsy
+from .types import is_falsy, is_noney, is_string, is_truthy
 
 
 def escape_xpath_value(value):

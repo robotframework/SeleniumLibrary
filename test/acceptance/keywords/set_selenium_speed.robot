@@ -1,15 +1,15 @@
 *** Settings ***
 Suite Setup       Go To Page "forms/prefilled_email_form.html"
-Suite Teardown    Set Selenium Speed    0
+Test Teardown     Set Selenium Speed    0
 Resource          ../resource.robot
 
 *** Test Cases ***
 Settimg selenium speed is possible multiple times
     Set Selenium Speed    10
-    ${speed} =    Set Selenium Speed    5
-    Should Be Equal     ${speed}    ${10}
-    ${speed} =    Set Selenium Speed    1
-    Should Be Equal     ${speed}    ${5}
+    ${old} =    Set Selenium Speed    1
+    Should Be Equal     ${old}    10 seconds
+    ${old} =    Set Selenium Speed    100
+    Should Be Equal     ${old}    1 second
 
 Selenium speed should affect execution
     [Documentation]    Click Element executes two selenium commands and

@@ -5,6 +5,7 @@ Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
 Resource          ../resource.robot
 
+
 *** Test Cases ***
 Get Cookies
     [Documentation]    Get Cookies
@@ -48,9 +49,16 @@ Get Cookies When There Are None
     ${cookies}=    Get Cookies
     Should Be Equal    ${cookies}    ${EMPTY}
 
+Get Cookie Expiry Set By Selenium
+    [Documentation]    Get Cookie Expiry Set By Selenium
+    [Tags]  Known Issue Firefox
+    ${cookie}=    Get Cookie    another
+    ${date}=  Convert Date  2027-09-28 16:21:35  epoch
+    Should Be Equal As Integers   ${cookie.expiry}  ${date}
+
 *** Keyword ***
 Add Cookies
     [Documentation]    Add Cookies
     Delete All Cookies
     Add Cookie    test    seleniumlibrary
-    Add Cookie    another    value
+    Add Cookie    another    value   expiry=2027-09-28 16:21:35

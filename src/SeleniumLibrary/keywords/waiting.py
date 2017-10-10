@@ -30,22 +30,24 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_for_condition(self, condition, timeout=None, error=None):
-        """Waits until the given `condition` is true or `timeout` expires.
+        """Waits until the given ``condition`` is true or ``timeout`` expires.
 
-        The `condition` can be arbitrary JavaScript expression but must contain a
-        return statement (with the value to be returned) at the end.
-        See `Execute JavaScript` for information about accessing the
-        actual contents of the window through JavaScript.
+        The ``condition`` can be arbitrary JavaScript expression but it
+        must return a value to be evaluated. See `Execute JavaScript` for
+        information about accessing content on pages.
 
-        `error` can be used to override the default error message.
+        ``error`` can be used to override the default error message.
 
-        See `introduction` for more information about `timeout` and its
+        See `timeouts` for more information about using timeouts and their
         default value.
 
         See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait Until Element Is Visible` and BuiltIn keyword
         `Wait Until Keyword Succeeds`.
         """
+        if 'return' not in condition:
+            raise ValueError("Condition '%s' did not have mandatory 'return'."
+                             % condition)
         if is_falsy(error):
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
         self._wait_until(
@@ -263,8 +265,7 @@ class WaitingKeywords(LibraryComponent):
         self._wait_until_no_error(timeout, wait_func)
 
     def _wait_until_no_error(self, timeout, wait_func, *args):
-        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx.timeout
-        maxtime = time.time() + timeout
+        maxtime = time.time() + self.get_timeout(timeout)
         while True:
             timeout_error = wait_func(*args)
             if not timeout_error:
@@ -274,5 +275,4 @@ class WaitingKeywords(LibraryComponent):
             time.sleep(0.2)
 
     def _format_timeout(self, timeout):
-        timeout = timestr_to_secs(timeout) if is_truthy(timeout) else self.ctx.timeout
-        return secs_to_timestr(timeout)
+        return secs_to_timestr(self.get_timeout(timeout))

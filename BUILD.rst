@@ -149,19 +149,22 @@ Set version
       git commit -m "Updated version to $VERSION" src/SeleniumLibrary/__init__.py
       git push
 
-Keyword documentation
----------------------
+Documentation
+-------------
 
 1. Generate keyword documentation::
 
-      invoke keyword-documentation
+      invoke kw-docs
+      git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary.html
+      git push
 
    Note that this *must* be done after`setting version <Set version>`_ above
    or docs will have wrong version number.
 
-2. Commit and push changes::
+2. If README.rst has changed, generate project documentation based on it::
 
-      git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary.html
+      invoke project-docs
+      git commit -m "Regenerated project docs" docs/index.html
       git push
 
 Tagging
