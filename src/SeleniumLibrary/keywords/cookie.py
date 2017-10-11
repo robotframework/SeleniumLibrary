@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from datetime import datetime
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_truthy, is_noney
 from robot.libraries.DateTime import convert_date
@@ -44,8 +46,7 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookie_value(self, name):
-        """Deprecated. Use `Get Cookie` instead.
-        """
+        """Deprecated. Use `Get Cookie` instead."""
         cookie = self.browser.get_cookie(name)
         if cookie is not None:
             return cookie['value']
@@ -59,16 +60,16 @@ class CookieKeywords(LibraryComponent):
         contains details about the cookie. Attributes available in the object
         are documented in the table below.
 
-        | = Attribute = |             = Explanation =                                  |
-        | name          | The name of a cookie.                                        |
-        | value         | Value of the cookie.                                         |
-        | domain        | The domain the cookie is visible to.                         |
-        | expiry        | Python datetime object indicates when the cookie expires.    |
-        | httpOnly      | Boolean flag to indicate is cookie used in HTTP connections. |
-        | path          | Indicates a URL path, example /.                             |
-        | secure        | Boolean flag will be send only by using secure connection.   |
+        New in SeleniumLibrary 3.0.
 
-        New in SeleniumLibrary 3.0
+        | = Attribute = |             = Explanation =                                            |
+        | name          | The name of a cookie.                                                  |
+        | value         | Value of the cookie.                                                   |
+        | path          | Indicates a URL path, example /.                                       |
+        | domain        | The domain the cookie is visible to.                                   |
+        | httpOnly      | Boolean flag to indicate is cookie used in HTTP connections.           |
+        | secure        | Boolean flag, which  will be set to True when using secure connection. |
+        | expiry        | Python datetime object indicating when the cookie expires.             |
 
         Example:
         | Add Cookie      | foo             | bar |
@@ -79,9 +80,9 @@ class CookieKeywords(LibraryComponent):
         cookie = self.browser.get_cookie(name)
         if cookie:
             return CookieInformation(
-                cookie.get('domain'), cookie.get('expiry'),
-                cookie.get('httpOnly'), cookie['name'], cookie.get('path'),
-                cookie.get('secure'), cookie['value'])
+                cookie['name'], cookie['value'], cookie.get('path'),
+                cookie.get('domain'), cookie.get('httpOnly'),
+                cookie.get('secure'), cookie.get('expiry'))
         raise ValueError("Cookie with name %s not found." % name)
 
     @keyword
@@ -92,15 +93,15 @@ class CookieKeywords(LibraryComponent):
         ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``
         and ``expiry`` are optional.  Expiry supports the same formats as
         the [http://robotframework.org/robotframework/latest/libraries/DateTime.html|DateTime]
-        library and is converted to EPOCH timestamp which is supported by the
-        Selenium.
+        library or an epoch time stamp.
 
         Prior SeleniumLibry 3.0 setting the expiry did not work.
 
         Example:
-        | Add Cookie | foo | bar |                            | # Adds cookie with name foo and value bar     |
-        | Add Cookie | foo | bar | domain=example.com         | # Adds cookie with example.com domain defined |
-        | Add Cookie | foo | bar | expiry=2027-09-28 16:21:35 | # Adds cookie with expiry time defined        |
+        | Add Cookie | foo | bar |                            | # Adds cookie with name foo and value bar       |
+        | Add Cookie | foo | bar | domain=example.com         | # Adds cookie with example.com domain defined   |
+        | Add Cookie | foo | bar | expiry=2027-09-28 16:21:35 | # Adds cookie with expiry time defined          |
+        | Add Cookie | foo | bar | expiry=1822137695          | # Adds cookie with expiry time defined as epoch |
         """
         new_cookie = {'name': name, 'value': value}
         if not is_noney(path):
@@ -111,20 +112,25 @@ class CookieKeywords(LibraryComponent):
         if not is_noney(secure):
             new_cookie['secure'] = is_truthy(secure)
         if not is_noney(expiry):
-            expiry_datetime = int(convert_date(expiry, result_format='epoch'))
-            new_cookie['expiry'] = expiry_datetime
+            new_cookie['expiry'] = self._expiry(expiry)
         self.browser.add_cookie(new_cookie)
+
+    def _expiry(self, expiry):
+        try:
+            return int(expiry)
+        except ValueError:
+            return int(convert_date(expiry, result_format='epoch'))
 
 
 class CookieInformation(object):
-    def __init__(self, domain, expiry, httpOnly, name, path, secure, value):
-        self.domain = domain
-        self.expiry = expiry
-        self.httpOnly = httpOnly
+    def __init__(self, name, value, path, domain, httpOnly, secure, expiry):
         self.name = name
-        self.path = path
-        self.secure = secure
         self.value = value
+        self.path = path
+        self.domain = domain
+        self.httpOnly = httpOnly
+        self.secure = secure
+        self.expiry = datetime.fromtimestamp(expiry)
 
     def __str__(self):
         return ',\n '.join("{}={}".format(key, value) for

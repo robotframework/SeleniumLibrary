@@ -13,13 +13,13 @@ Get Cookies
     ...    ^(test=seleniumlibrary; another=value)|(another=value; test=seleniumlibrary)$
 
 Get Cookie Value Set By Selenium
-    ${value}=    Get Cookie Value    another
-    Should Be Equal    ${value}    value
+    ${value} =    Get Cookie Value    another
+    Should Be Equal    ${value}       value
 
 Get Cookie Value Set By App
     Click Link    Add cookie
     ${cookie}=    Get Cookie Value    spam
-    Should Be Equal    ${cookie}    eggs
+    Should Be Equal    ${cookie}      eggs
 
 App Sees Cookie Set By Selenium
     Add Cookie    setbyselenium    true
@@ -39,6 +39,16 @@ Add Cookie When Secure Is False
     ${cookie} =    Get Cookie    Cookie1
     Should Be Equal    ${cookie.secure}       ${False}
 
+Add Cookie When Expiry Is Epoch
+    Add Cookie    Cookie1    value1    expiry=1822137695
+    ${cookie} =    Get Cookie    Cookie1
+    Should Be Equal As Strings    ${cookie.expiry}    2027-09-28 16:21:35
+
+Add Cookie When Expiry Is Human Readable Data&Time
+    Add Cookie    Cookie12    value12    expiry=2027-09-28 16:21:35
+    ${cookie} =    Get Cookie    Cookie12
+    Should Be Equal As Strings    ${cookie.expiry}    2027-09-28 16:21:35
+
 Delete Cookie
     [Tags]    Known Issue Safari
     Delete Cookie    test
@@ -47,24 +57,23 @@ Delete Cookie
 
 Non-existent Cookie
     Run Keyword And Expect Error    ValueError: Cookie with name missing not found.
-    ...    Get Cookie Value    missing
+    ...    Get Cookie    missing
 
 Get Cookies When There Are None
     [Tags]    Known Issue Safari
     Delete All Cookies
-    ${cookies}=    Get Cookies
+    ${cookies} =    Get Cookies
     Should Be Equal    ${cookies}    ${EMPTY}
 
-Get Cookie Expiry Set By Selenium
-    ${cookie} =    Get Cookie    another
-    ${date} =  Convert Date  2027-09-28 16:21:35  epoch
-    Should Be Equal As Integers   ${cookie.expiry}  ${date}
-    [Teardown]    Delete All Cookies
-
 Test Get Cookie Object Expiry
-    ${cookie} =    Get Cookie    another
-    ${date} =    Convert Date  2027-09-28 16:21:35  epoch
-    Should Be Equal As Integers    ${cookie.expiry}       ${date}
+    ${cookie} =    Get Cookie      another
+    Should Be Equal As Integers    ${cookie.expiry.year}           2027
+    Should Be Equal As Integers    ${cookie.expiry.month}          09
+    Should Be Equal As Integers    ${cookie.expiry.day}            28
+    Should Be Equal As Integers    ${cookie.expiry.hour}           16
+    Should Be Equal As Integers    ${cookie.expiry.minute}         21
+    Should Be Equal As Integers    ${cookie.expiry.second}         35
+    Should Be Equal As Integers    ${cookie.expiry.microsecond}    0
 
 Test Get Cookie Object Domain
     ${cookie} =    Get Cookie    another
@@ -97,5 +106,5 @@ Test Get Cookie Keyword Logging
 *** Keyword ***
 Add Cookies
     Delete All Cookies
-    Add Cookie    test    seleniumlibrary
+    Add Cookie    test       seleniumlibrary
     Add Cookie    another    value   expiry=2027-09-28 16:21:35
