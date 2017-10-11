@@ -76,6 +76,32 @@ class SeleniumLibrary(DynamicCore):
     can either be explicitly specified with a prefix or the strategy can be
     implicit.
 
+    === Default locator strategy ===
+
+    By default locators are considered to use the keyword specific default
+    locator strategy. All keywords support finding elements based on ``id``
+    and ``name`` attributes, but some keywords support additional _key
+    attributes_ that make sense in their context. For example, `Click Link`
+    supports the link text and the ``href`` attribute in addition to the
+    normal ``id`` and ``name``.
+
+    Examples:
+
+    | `Click Element` | example | # Match based on ``id`` or ``name``.            |
+    | `Click Link`    | example | # Match also based on link text and ``href``.   |
+    | `Click Button`  | example | # Match based on ``id``, ``name`` or ``value``. |
+
+    If a locator accidentally starts with a prefix recognized as `explicit
+    locator strategy` or `implicit XPath strategy`, it is possible to use
+    the explicit ``default`` prefix to enable the default strategy.
+
+    Examples:
+
+    | `Click Element` | name:foo         | # Find element with name ``foo``.               |
+    | `Click Element` | default:name:foo | # Use default strategy with value ``name:foo``. |
+    | `Click Element` | //foo            | # Find element using XPath ``//foo``.           |
+    | `Click Element` | default://foo    | # Use default strategy with value ``//foo``.    |
+
     === Explicit locator strategy ===
 
     The explicit locator strategy is specified with a prefix using either
@@ -109,8 +135,8 @@ class SeleniumLibrary(DynamicCore):
     prefix is only necessary if the locator value itself accidentally
     matches some of the explicit strategies.
 
-    Spaces around the separator are ignored, so ``id : foo``, ``id: foo``
-    and ``id:foo`` are all equivalent.
+    Spaces around the separator are ignored, so ``id:foo``, ``id: foo``
+    and ``id : foo`` are all equivalent.
 
     Examples:
 
@@ -120,6 +146,9 @@ class SeleniumLibrary(DynamicCore):
 
     Notice that using the ``sizzle`` strategy or its alias ``jquery``
     requires that the system under test contains the jQuery library.
+
+    Notice also that prior to SeleniumLibrary 3.0, table related keywords
+    only supported ``xpath``, ``css`` and ``sizzle/jquery`` strategies.
 
     === Implicit XPath strategy ===
 
@@ -133,32 +162,6 @@ class SeleniumLibrary(DynamicCore):
     | `Click Element` | (//div)[2]             |
 
     The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
-
-    === Default locator strategy ===
-
-    By default locators are considered to use the keyword specific default
-    locator strategy. All keywords support finding elements based on ``id``
-    and ``name`` attributes, but some keywords support additional _key
-    attributes_ that make sense in their context. For example, `Click Link`
-    supports the link text and the ``href`` attribute in addition to the
-    normal ``id`` and ``name``.
-
-    Examples:
-
-    | `Click Element` | example | # Match based on ``id`` or ``name``.            |
-    | `Click Link`    | example | # Match also based on link text and ``href``.   |
-    | `Click Button`  | example | # Match based on ``id``, ``name`` or ``value``. |
-
-    If the locator accidentally starts with some of the explicit locator
-    prefixes or with the implicit XPath prefixes, it is possible to use
-    the explicit ``default`` prefix to enable the default strategy.
-
-    Examples:
-
-    | `Click Element` | name:foo         | # Find element with name ``foo``.               |
-    | `Click Element` | default:name:foo | # Use default strategy with value ``name:foo``. |
-    | `Click Element` | //foo            | # Find element using XPath ``//foo``.           |
-    | `Click Element` | default://foo    | # Use default strategy with value ``//foo``.    |
 
     == Using WebElements ==
 
@@ -195,13 +198,6 @@ class SeleniumLibrary(DynamicCore):
     | `Click Element` | custom:example |
 
     See the `Add Location Strategy` keyword for more details.
-
-    == Locating tables ==
-
-    Starting from release 3.0.0, it is possible to locate table using all
-    strategies supported by the library. Prior the release 3.0 tables
-    could have been located with limited set of strategies and with
-    limitations in the strategy.
 
     = Timeouts, waits and delays =
 
