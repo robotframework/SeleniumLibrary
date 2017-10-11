@@ -42,7 +42,8 @@ Add Cookie When Secure Is False
 Add Cookie When Expiry Is Epoch
     Add Cookie    Cookie1    value1    expiry=1822137695
     ${cookie} =    Get Cookie    Cookie1
-    Should Be Equal As Strings    ${cookie.expiry}    2027-09-28 16:21:35
+    ${expiry} =    Convert Date    ${1822137695}    exclude_millis=True
+    Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
     Add Cookie    Cookie12    value12    expiry=2027-09-28 16:21:35
