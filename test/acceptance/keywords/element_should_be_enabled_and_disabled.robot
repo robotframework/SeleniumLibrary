@@ -46,9 +46,11 @@ Disabled with different syntaxes
 
 Not Input nor Editable Element
     [Documentation]    Not Input nor Editable Element
-    Run Keyword And Expect Error    ERROR: Element table1 is not an input.
+    Run Keyword And Expect Error
+    ...    ValueError: Element 'table1' is 'table', not an input element.
     ...    Element Should Be Enabled    table1
-    Run Keyword And Expect Error    ERROR: Element table1 is not an input.
+    Run Keyword And Expect Error
+    ...    ValueError: Element 'table1' is 'table', not an input element.
     ...    Element Should Be Disabled    table1
 
 *** Keywords ***

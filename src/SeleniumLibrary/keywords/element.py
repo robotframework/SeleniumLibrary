@@ -18,15 +18,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.keywords.formelement import FormElementKeywords
 from SeleniumLibrary.utils import escape_xpath_value, is_falsy, is_truthy
 
 
 class ElementKeywords(LibraryComponent):
-
-    def __init__(self, ctx):
-        LibraryComponent.__init__(self, ctx)
-        self.form_element = FormElementKeywords(ctx)
 
     @keyword
     def get_webelement(self, locator):
@@ -828,12 +823,13 @@ return !element.dispatchEvent(evt);
 
     def _is_enabled(self, locator):
         element = self.find_element(locator)
-        if not self.form_element._is_form_element(element):
-            raise AssertionError("ERROR: Element %s is not an input." % locator)
+        if element.tag_name.lower() not in {'input', 'select', 'textarea',
+                                            'button', 'option'}:
+            raise ValueError("Element '%s' is '%s', not an input element."
+                             % (locator, element.tag_name))
         if not element.is_enabled():
             return False
-        read_only = element.get_attribute('readonly')
-        if read_only == 'readonly' or read_only == 'true':
+        if element.get_attribute('readonly') in {'readonly', 'true'}:
             return False
         return True
 

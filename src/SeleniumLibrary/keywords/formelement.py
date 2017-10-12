@@ -22,9 +22,6 @@ from SeleniumLibrary.utils import is_falsy
 
 class FormElementKeywords(LibraryComponent):
 
-    def __init__(self, ctx):
-        LibraryComponent.__init__(self, ctx)
-
     @keyword
     def submit_form(self, locator=None):
         """Submits a form identified by `locator`.
@@ -399,9 +396,3 @@ class FormElementKeywords(LibraryComponent):
         element = self.find_element(locator)
         element.clear()
         element.send_keys(text)
-
-    def _is_form_element(self, element):
-        if element is None:
-            return False
-        tag = element.tag_name.lower()
-        return tag == 'input' or tag == 'select' or tag == 'textarea' or tag == 'button' or tag == 'option'
