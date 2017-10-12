@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from datetime import datetime
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_truthy, is_noney
 from robot.libraries.DateTime import convert_date
@@ -128,8 +130,11 @@ class CookieInformation(object):
         self.domain = domain
         self.httpOnly = httpOnly
         self.secure = secure
-        self.expiry = convert_date(expiry, 'datetime')
+        self.expiry = datetime.fromtimestamp(expiry)
 
     def __str__(self):
-        return ',\n '.join("{}={}".format(key, value) for
-                           (key, value) in self.__dict__.items())
+        return ('name={name},\nvalue={value},\npath={path},\ndomain={domain}'
+                ',\nsecure={secure},\nhttpOnly={httpOnly},\nexpiry={expiry}'
+                .format(name=self.name, value=self.value, path=self.path,
+                        domain=self.domain, secure=self.secure,
+                        httpOnly=self.httpOnly, expiry=self.expiry))
