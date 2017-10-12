@@ -43,7 +43,7 @@ Get Locations
 
 Get Window Names
     [Documentation]    Get Window Names
-    ${exp_names}=    Create List    selenium_main_app_window    myName
+    ${exp_names}=    Create List    undefined    myName
     Click Link    my popup
     Wait Until Keyword Succeeds    5    1    Wait Until Window Is Open
     ${names}=    Get Window Names

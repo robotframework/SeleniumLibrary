@@ -249,23 +249,20 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def get_window_identifiers(self):
         """Returns and logs id attributes of all windows known to the browser."""
-        return self._log_list(self._window_manager.get_window_ids())
+        ids = [info.id for info in self._window_manager.get_window_infos()]
+        return self._log_list(ids)
 
     @keyword
     def get_window_names(self):
         """Returns and logs names of all windows known to the browser."""
-        values = self._window_manager.get_window_names()
-        # for backward compatibility, since Selenium 1 would always
-        # return this constant value for the main window
-        if len(values) and values[0] == 'undefined':
-            values[0] = 'selenium_main_app_window'
-
-        return self._log_list(values)
+        names = [info.name for info in self._window_manager.get_window_infos()]
+        return self._log_list(names)
 
     @keyword
     def get_window_titles(self):
         """Returns and logs titles of all windows known to the browser."""
-        return self._log_list(self._window_manager.get_window_titles())
+        titles = [info.title for info in self._window_manager.get_window_infos()]
+        return self._log_list(titles)
 
     @keyword
     def maximize_browser_window(self):
@@ -411,9 +408,8 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def get_locations(self):
         """Returns and logs current locations of all windows known to the browser."""
-        return self._log_list(
-            [window_info[4] for window_info in
-             self._window_manager._get_window_infos(self.browser)])
+        urls = [info.url for info in self._window_manager.get_window_infos()]
+        return self._log_list(urls)
 
     @keyword
     def get_source(self):

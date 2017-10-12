@@ -213,33 +213,20 @@ class WindowManagerTests(unittest.TestCase):
         manager.select(" name  =win2")
         self.assertEqual(manager.browser.current_window.name, 'win2')
 
-    def test_get_window_ids(self):
+    def test_get_window_infos(self):
         manager = WindowManagerWithMockBrowser(
-            {'id': 'win_id1', 'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html'},
-            {'id': 'win_id2', 'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html'},
-            {'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html'}
+            {'id': 'id1', 'name': 'win1', 'title': "Title 1", 'url': 'http://url.1'},
+            {'id': 'id2', 'name': 'win2', 'title': "Title 2", 'url': 'http://url.2'},
+            {'name': 'win3', 'title': "Title 3", 'url': 'http://url.3'}
         )
-        self.assertEqual(manager.get_window_ids(),
-                        ['win_id1', 'win_id2', 'undefined'])
-
-    def test_get_window_names(self):
-        manager = WindowManagerWithMockBrowser(
-            {'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html'},
-            {'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html'},
-            {'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html'}
-        )
-        self.assertEqual(manager.get_window_names(),
+        self.assertEqual([info.id for info in manager.get_window_infos()],
+                         ['id1', 'id2', 'undefined'])
+        self.assertEqual([info.name for info in manager.get_window_infos()],
                          ['win1', 'win2', 'win3'])
-
-    def test_get_window_titles(self):
-        manager = WindowManagerWithMockBrowser(
-            {'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html'},
-            {'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html'},
-            {'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html'}
-        )
-        self.assertEqual(manager.get_window_titles(),
-                         ['Title 1', 'Title 2', 'Title 3']
-        )
+        self.assertEqual([info.title for info in manager.get_window_infos()],
+                         ['Title 1', 'Title 2', 'Title 3'])
+        self.assertEqual([info.url for info in manager.get_window_infos()],
+                         ['http://url.1', 'http://url.2', 'http://url.3'])
 
 
 class WindowManagerWithMockBrowser(WindowManager):

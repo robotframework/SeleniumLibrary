@@ -14,10 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections import namedtuple
+
 from selenium.common.exceptions import (NoSuchWindowException,
                                         WebDriverException)
 
 from SeleniumLibrary.base import ContextAware
+
+
+WindowInfo = namedtuple('WindowInfo', 'handle, id, name, title, url')
 
 
 class WindowManager(ContextAware):
@@ -31,14 +36,20 @@ class WindowManager(ContextAware):
         }
         ContextAware.__init__(self, ctx)
 
-    def get_window_ids(self):
-        return [info[1] for info in self._get_window_infos(self.browser)]
-
-    def get_window_names(self):
-        return [info[2] for info in self._get_window_infos(self.browser)]
-
-    def get_window_titles(self):
-        return [info[3] for info in self._get_window_infos(self.browser)]
+    def get_window_infos(self):
+        infos = []
+        try:
+            starting_handle = self.browser.current_window_handle
+        except NoSuchWindowException:
+            starting_handle = None
+        try:
+            for handle in self.browser.window_handles:
+                self.browser.switch_to.window(handle)
+                infos.append(self._get_current_window_info(self.browser))
+        finally:
+            if starting_handle:
+                self.browser.switch_to.window(starting_handle)
+        return infos
 
     def select(self, locator):
         if locator is not None:
@@ -125,21 +136,6 @@ class WindowManager(ContextAware):
                 criteria = ''
         return (prefix, criteria)
 
-    def _get_window_infos(self, browser):
-        window_infos = []
-        try:
-            starting_handle = browser.current_window_handle
-        except NoSuchWindowException:
-            starting_handle = None
-        try:
-            for handle in browser.window_handles:
-                browser.switch_to.window(handle)
-                window_infos.append(self._get_current_window_info(browser))
-        finally:
-            if starting_handle:
-                browser.switch_to.window(starting_handle)
-        return window_infos
-
     def _select_matching(self, browser, matcher, error):
         try:
             starting_handle = browser.current_window_handle
@@ -155,18 +151,13 @@ class WindowManager(ContextAware):
 
     def _get_current_window_info(self, browser):
         try:
-            id_, name = browser.execute_script("return [ window.id, window.name ];")
+            id, name = browser.execute_script("return [ window.id, window.name ];")
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
-            id_ = None
-            name = ''
-
-        title = browser.title
-        url = browser.current_url
-
-        id_ = id_ if id_ is not None else 'undefined'
-        name, title, url = (
-            att if att else 'undefined' for att in (name, title, url)
-        )
-        return browser.current_window_handle, id_, name, title, url
+            id = name = None
+        return WindowInfo(browser.current_window_handle,
+                          id if id is not None else 'undefined',
+                          name or 'undefined',
+                          browser.title or 'undefined',
+                          browser.current_url or 'undefined')
