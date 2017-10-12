@@ -392,17 +392,6 @@ class BrowserManagementKeywords(LibraryComponent):
             self._window_manager.select(self.browser, locator)
 
     @keyword
-    def get_log(self, log_type):
-        """Get the specified Selenium log.
-
-        The ``log_type` argument defines which log to get. Possible values
-        are ``browser``, ``driver``, ``client``, and ``server``.
-
-        New in SeleniumLibrary 3.0.
-        """
-        return self.browser.get_log(log_type)
-
-    @keyword
     def list_windows(self):
         """Return all current window handles as a list."""
         return self.browser.window_handles
