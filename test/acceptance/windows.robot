@@ -38,7 +38,8 @@ Get Locations
     Lists Should Be Equal   ${urls}     ${expected_urls}
 
 Get Window Names
-    ${exp_names}=    Create List    selenium_main_app_window    myName
+    ${exp_names}=    Create List    undefined    myName
+    Click Link    my popup
     Wait Until New Window Is Open
     ${names}=    Get Window Names
     Should Be Equal    ${names}    ${exp_names}
