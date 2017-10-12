@@ -17,7 +17,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         driver.current_url = url
 
     def test_window_info_values_are_strings(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         self.mock_window_info(driver, 'id', 'name', 'title', 'url')
         driver.current_window_handle = HANDLE
@@ -26,7 +26,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_window_info_values_are_none(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         self.mock_window_info(driver, None, None, None, None)
         driver.current_window_handle = HANDLE
@@ -37,7 +37,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_window_info_values_are_empty_strings(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         self.mock_window_info(driver, '', '', '', '')
         driver.current_window_handle = HANDLE
@@ -48,7 +48,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_window_id_is_bool(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         self.mock_window_info(driver, True, '', '', '')
         driver.current_window_handle = HANDLE
@@ -60,7 +60,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_window_id_is_web_element(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         elem = mock()
         self.mock_window_info(driver, *[elem, '', '', ''])
@@ -70,7 +70,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_window_id_is_container(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         self.mock_window_info(driver, *[['1'], '', '', ''])
         driver.current_window_handle = HANDLE
@@ -83,7 +83,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_window_id_is_empty_container(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         self.mock_window_info(driver, *[[], '', '', ''])
         driver.current_window_handle = HANDLE
@@ -95,7 +95,7 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         unstub()
 
     def test_no_javascript_support(self):
-        manager = WindowManager()
+        manager = WindowManager(None)
         driver = mock()
         elem = mock()
         when(driver).execute_script(SCRIPT).thenRaise(WebDriverException)

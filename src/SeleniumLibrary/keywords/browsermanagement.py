@@ -54,7 +54,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
-        self._window_manager = WindowManager()
+        self._window_manager = WindowManager(ctx)
 
     @keyword
     def close_all_browsers(self):
@@ -247,12 +247,12 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def get_window_identifiers(self):
         """Returns and logs id attributes of all known browser windows."""
-        return self._log_list(self._window_manager.get_window_ids(self.browser))
+        return self._log_list(self._window_manager.get_window_ids())
 
     @keyword
     def get_window_names(self):
         """Returns and logs names of all known browser windows."""
-        values = self._window_manager.get_window_names(self.browser)
+        values = self._window_manager.get_window_names()
         # for backward compatibility, since Selenium 1 would always
         # return this constant value for the main window
         if len(values) and values[0] == 'undefined':
@@ -263,7 +263,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def get_window_titles(self):
         """Returns and logs titles of all known browser windows."""
-        return self._log_list(self._window_manager.get_window_titles(self.browser))
+        return self._log_list(self._window_manager.get_window_titles())
 
     @keyword
     def maximize_browser_window(self):
@@ -389,7 +389,7 @@ class BrowserManagementKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            self._window_manager.select(self.browser, locator)
+            self._window_manager.select(locator)
 
     @keyword
     def get_log(self, log_type):
