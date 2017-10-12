@@ -19,6 +19,7 @@ import time
 import types
 
 from robot.errors import DataError
+from robot.utils import NormalizedDict
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
@@ -31,7 +32,7 @@ from SeleniumLibrary.utils import (is_truthy, is_falsy,
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 FIREFOX_PROFILE_DIR = os.path.join(ROOT_DIR, 'resources', 'firefoxprofile')
-BROWSER_NAMES = {
+BROWSER_NAMES = NormalizedDict({
     'ff': "_make_ff",
     'firefox': "_make_ff",
     'ie': "_make_ie",
@@ -47,7 +48,7 @@ BROWSER_NAMES = {
     'iphone': "_make_iphone",
     'safari': "_make_safari",
     'edge': "_make_edge"
-}
+})
 
 
 class BrowserManagementKeywords(LibraryComponent):
@@ -138,8 +139,7 @@ class BrowserManagementKeywords(LibraryComponent):
                       "remote server at '%s'" % (browser, url, remote_url))
         else:
             self.info("Opening browser '%s' to base url '%s'" % (browser, url))
-        browser_name = browser
-        browser = self._make_browser(browser_name, desired_capabilities,
+        browser = self._make_browser(browser, desired_capabilities,
                                      ff_profile_dir, remote_url)
         try:
             browser.get(url)
@@ -601,14 +601,15 @@ class BrowserManagementKeywords(LibraryComponent):
         self.browser.implicitly_wait(timestr_to_secs(seconds))
 
     def _get_browser_creation_function(self, browser_name):
-        func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))
-        return getattr(self, func_name) if func_name else None
+        try:
+            func_name = BROWSER_NAMES[browser_name]
+        except KeyError:
+            raise ValueError(browser_name + " is not a supported browser.")
+        return getattr(self, func_name)
 
     def _make_browser(self, browser_name, desired_capabilities=None,
                       profile_dir=None, remote=None):
         creation_func = self._get_browser_creation_function(browser_name)
-        if not creation_func:
-            raise ValueError(browser_name + " is not a supported browser.")
         browser = creation_func(remote, desired_capabilities, profile_dir)
         browser.set_script_timeout(self.ctx.timeout)
         browser.implicitly_wait(self.ctx.implicit_wait)
