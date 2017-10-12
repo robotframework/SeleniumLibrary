@@ -18,7 +18,9 @@ Location Should Contain
 Title Should Be
     [Documentation]    LOG 2:3 Page title is '(root)/index.html'.
     Title Should Be    (root)/index.html
-    Run Keyword And Expect Error    Title should have been 'not a title' but was '(root)/index.html'    Title Should Be    not a title
+    Run Keyword And Expect Error
+    ...    Title should have been 'not a title' but was '(root)/index.html'.
+    ...    Title Should Be    not a title
 
 Page Should Contain
     [Documentation]    LOG 2:5 Current page contains text 'needle'.
