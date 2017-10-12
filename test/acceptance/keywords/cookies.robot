@@ -101,7 +101,7 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
-    [Documentation]    LOG 2:3 REGEXP: (?m)\\${cookie} = domain=localhost,\\s+secure=False,\\s+value=value,\\s+expiry=1822137695,\\s+path=/,\\s+httpOnly=False,\\s+name=another
+    [Documentation]    LOG 2:3 REGEXP: (?m)\\${cookie} = name=another,\\nvalue=value,\\npath=/,\\ndomain=localhost,\\nsecure=False,\\nhttpOnly=False,\\nexpiry=2027-09-28 16:21:35
     ${cookie} =    Get Cookie     another
 
 *** Keyword ***
