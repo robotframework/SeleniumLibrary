@@ -14,47 +14,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from selenium.common.exceptions import NoSuchWindowException
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (NoSuchWindowException,
+                                        WebDriverException)
+
+from SeleniumLibrary.base import ContextAware
 
 
-class WindowManager(object):
+class WindowManager(ContextAware):
 
-    def __init__(self):
+    def __init__(self, ctx):
         self._strategies = {
             'title': self._select_by_title,
             'name': self._select_by_name,
             'url': self._select_by_url,
             None: self._select_by_default
         }
+        ContextAware.__init__(self, ctx)
 
-    def get_window_ids(self, browser):
-        return [ window_info[1] for window_info in self._get_window_infos(browser) ]
+    def get_window_ids(self):
+        return [info[1] for info in self._get_window_infos(self.browser)]
 
-    def get_window_names(self, browser):
-        return [ window_info[2] for window_info in self._get_window_infos(browser) ]
+    def get_window_names(self):
+        return [info[2] for info in self._get_window_infos(self.browser)]
 
-    def get_window_titles(self, browser):
-        return [ window_info[3] for window_info in self._get_window_infos(browser) ]
+    def get_window_titles(self):
+        return [info[3] for info in self._get_window_infos(self.browser)]
 
-    def select(self, browser, locator):
-        assert browser is not None
+    def select(self, locator):
         if locator is not None:
             if isinstance(locator, list):
-                self._select_by_excludes(browser, locator)
+                self._select_by_excludes(self.browser, locator)
                 return
             if locator.lower() == "self" or locator.lower() == "current":
                 return
             if locator.lower() == "new" or locator.lower() == "popup":
-                self._select_by_last_index(browser)
+                self._select_by_last_index(self.browser)
                 return
         (prefix, criteria) = self._parse_locator(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError("Window locator with prefix '" + prefix + "' is not supported")
-        return strategy(browser, criteria)
-
-    # Strategy routines, private
+        return strategy(self.browser, criteria)
 
     def _select_by_title(self, browser, criteria):
         self._select_matching(
@@ -111,8 +111,6 @@ class WindowManager(object):
                 browser.switch_to.window(handle)
                 return
         raise ValueError("Unable to locate new window")
-
-    # Private
 
     def _parse_locator(self, locator):
         prefix = None
