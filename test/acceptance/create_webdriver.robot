@@ -5,8 +5,9 @@ Library           Collections
 
 *** Test Cases ***
 Create Webdriver Creates Functioning WebDriver
-    [Documentation]    LOG 2:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver
-    ...    LOG 2:4 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+
+    [Documentation]
+    ...    LOG 2:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver.
+    ...    LOG 2:4 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
     [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
@@ -16,7 +17,7 @@ Create Webdriver Creates Functioning WebDriver
 
 Create Webdriver With Bad Driver Name
     [Documentation]    Invalid browser name
-    Run Keyword And Expect Error    'Fireox' is not a valid WebDriver name
+    Run Keyword And Expect Error    'Fireox' is not a valid WebDriver name.
     ...    Create Webdriver    Fireox
 
 Create Webdriver With Duplicate Arguments
