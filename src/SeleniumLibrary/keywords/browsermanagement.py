@@ -22,11 +22,10 @@ from robot.errors import DataError
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
 
-from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.locators.windowmanager import WindowManager
-from SeleniumLibrary.utils import (is_truthy, is_falsy,
-                                   secs_to_timestr, timestr_to_secs,
-                                   SELENIUM_VERSION)
+from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.locators import WindowManager
+from SeleniumLibrary.utils import (is_falsy, is_truthy, secs_to_timestr,
+                                   timestr_to_secs, SELENIUM_VERSION)
 
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -66,78 +65,82 @@ class BrowserManagementKeywords(LibraryComponent):
         This keyword should be used in test or suite teardown to make sure
         all browsers are closed.
         """
-        self.debug('Closing all browsers')
+        self.debug('Closing all browsers.')
         self.browsers.close_all()
 
     @keyword
     def close_browser(self):
         """Closes the current browser."""
         if self.browsers.current:
-            self.debug('Closing browser with session '
-                       'id {}'.format(self.browsers.current.session_id))
+            self.debug('Closing browser with session id {}.'
+                       .format(self.browser.session_id))
             self.browsers.close()
 
     @keyword
-    def open_browser(
-            self, url, browser='firefox', alias=None, remote_url=False,
-            desired_capabilities=None, ff_profile_dir=None):
-        """Opens a new browser instance to given URL.
+    def open_browser(self, url, browser='firefox', alias=None,
+                     remote_url=False, desired_capabilities=None,
+                     ff_profile_dir=None):
+        """Opens a new browser instance to the given ``url``.
 
-        Returns the index of this browser instance which can be used later to
-        switch back to it. Index starts from 1 and is reset back to it when
-        `Close All Browsers` keyword is used. See `Switch Browser` for
-        example.
+        The ``browser`` argument specifies which browser to use, and the
+        supported browser are listed in the table below. The browser names
+        are case-insensitive and some browsers have multiple supported names.
 
-        Optional alias is an alias for the browser instance and it can be used
-        for switching between browsers (just as index can be used). See `Switch
-        Browser` for more details.
+        |    = Browser =    |        = Name(s) =       |
+        | Firefox           | firefox, ff              |
+        | Google Chrome     | googlechrome, chrome, gc |
+        | Internet Explorer | internetexplorer, ie     |
+        | Edge              | edge                     |
+        | Safari            | safari                   |
+        | Opera             | opera                    |
+        | Android           | android                  |
+        | Iphone            | iphone                   |
+        | PhantomJS         | phantomjs                |
+        | HTMLUnit          | htmlunit                 |
+        | HTMLUnit with Javascript | htmlunitwithjs    |
 
-        Possible values for `browser` are as follows:
+        To be able to actually use one of these browsers, you need to have
+        a matching Selenium browser driver available. See the
+        [https://github.com/robotframework/SeleniumLibrary#browser-drivers|
+        project documentation] for more details.
 
-        | firefox          | FireFox   |
-        | ff               | FireFox   |
-        | internetexplorer | Internet Explorer |
-        | ie               | Internet Explorer |
-        | googlechrome     | Google Chrome |
-        | gc               | Google Chrome |
-        | chrome           | Google Chrome |
-        | opera            | Opera         |
-        | phantomjs        | PhantomJS     |
-        | htmlunit         | HTMLUnit      |
-        | htmlunitwithjs   | HTMLUnit with Javascipt support |
-        | android          | Android       |
-        | iphone           | Iphone        |
-        | safari           | Safari        |
-        | edge             | Edge          |
+        Optional ``alias`` is an alias given for this browser instance and
+        it can be used for switching between browsers. An alternative
+        approach for switching is using an index returned by this keyword.
+        These indices start from 1, are incremented when new browsers are
+        opened, and reset back to 1 when `Close All Browsers` is called.
+        See `Switch Browser` for more information and examples.
 
+        Optional ``remote_url`` is the URL for a remote Selenium server. If
+        you specify a value for a remote, you can also specify
+        ``desired_capabilities`` to configure, for example, a proxy server
+        for Internet Explorer or a browser and operating system when using
+        [http://saucelabs.com|Sauce Labs]. Desired capabilities can be given
+        either as a Python dictionary or as a string in format
+        ``key1:value1,key2:value2``.
+        [https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities|
+        Selenium documentation] lists possible capabilities that can be
+        enabled.
 
-        Note, that you will encounter strange behavior, if you open
-        multiple Internet Explorer browser instances. That is also why
-        `Switch Browser` only works with one IE browser at most.
-        For more information see:
-        http://selenium-grid.seleniumhq.org/faq.html#i_get_some_strange_errors_when_i_run_multiple_internet_explorer_instances_on_the_same_machine
+        Optional ``ff_profile_dir`` is the path to the Firefox profile
+        directory if you wish to overwrite the default profile Selenium
+        uses. Notice that prior to SeleniumLibrary 3.0, the library
+        contained its own profile that was used by default.
 
-        Optional 'remote_url' is the url for a remote selenium server for example
-        http://127.0.0.1:4444/wd/hub. If you specify a value for remote you can
-        also specify 'desired_capabilities' which is a string in the form
-        key1:val1,key2:val2 that will be used to specify desired_capabilities
-        to the remote server. This is useful for doing things like specify a
-        proxy server for internet explorer or for specify browser and os if your
-        using saucelabs.com. 'desired_capabilities' can also be a dictonary
-        (created with 'Create Dictionary') to allow for more complex configurations.
+        Examples:
+        | `Open Browser` | http://example.com | Chrome  |
+        | `Open Browser` | http://example.com | Firefox | alias=Firefox |
+        | `Open Browser` | http://example.com | Edge    | remote_url=http://127.0.0.1:4444/wd/hub |
 
-        Optional 'ff_profile_dir' is the path to the firefox profile dir if you
-        wish to overwrite the default. Starting from SeleniumLibrary 3.0.0
-        the SeleniumLibrary does not anymore contain own profile, instead
-        Selenium
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|webdriver.FirefoxProfile()]
-        is used.
+        If the provided configuration options are not enough, it is possible
+        to use `Create Webdriver` to customize browser initialization even
+        more.
         """
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
-                      "remote server at '%s'" % (browser, url, remote_url))
+                      "remote server at '%s'." % (browser, url, remote_url))
         else:
-            self.info("Opening browser '%s' to base url '%s'" % (browser, url))
+            self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         browser_name = browser
         browser = self._make_browser(browser_name, desired_capabilities,
                                      ff_profile_dir, remote_url)
@@ -146,50 +149,42 @@ class BrowserManagementKeywords(LibraryComponent):
         except Exception:
             self.ctx.register_browser(browser, alias)
             self.debug("Opened browser with session id %s but failed "
-                       "to open url '%s'" % (browser.session_id, url))
+                       "to open url '%s'." % (browser.session_id, url))
             raise
-        self.debug('Opened browser with session id %s' % browser.session_id)
+        self.debug('Opened browser with session id %s.' % browser.session_id)
         return self.ctx.register_browser(browser, alias)
 
     @keyword
     def create_webdriver(self, driver_name, alias=None, kwargs={},
                          **init_kwargs):
-        """Creates an instance of a WebDriver.
+        """Creates an instance of Selenium WebDriver.
 
-        Like `Open Browser`, but allows passing arguments to a WebDriver's
-        __init__. _Open Browser_ is preferred over _Create Webdriver_ when
-        feasible.
+        Like `Open Browser`, but allows passing arguments to the created
+        WebDriver instance directly. This keyword should only be used if
+        functionality provided by `Open Browser` is not adequate.
+
+        ``driver_name`` must be an WebDriver implementation name like Firefox,
+        Chrome, Ie, Opera, Safari, PhantomJS, or Remote.
+
+        The initialized WebDriver can be configured either with a Python
+        dictionary ``kwargs`` or by using keyword arguments ``**init_kwargs``.
+        These arguments are passed directly to WebDriver without any
+        processing. See [https://seleniumhq.github.io/selenium/docs/api/py/api.html|
+        Selenium API documentation] for details about the supported arguments.
+
+        Examples:
+        | # Use proxy with Firefox   |                |                                           |                         |
+        | ${proxy}=                  | `Evaluate`     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |
+        | ${proxy.http_proxy}=       | `Set Variable` | localhost:8888                            |                         |
+        | `Create Webdriver`         | Firefox        | proxy=${proxy}                            |                         |
+        | # Use proxy with PhantomJS |                |                                           |                         |
+        | ${service args}=           | `Create List`  | --proxy=192.168.132.104:8888              |                         |
+        | `Create Webdriver`         | PhantomJS      | service_args=${service args}              |                         |
 
         Returns the index of this browser instance which can be used later to
         switch back to it. Index starts from 1 and is reset back to it when
-        `Close All Browsers` keyword is used. See `Switch Browser` for
+        `Close All Browsers` keyword is used. See `Switch Browser` for an
         example.
-
-        `driver_name` must be the exact name of a WebDriver in
-        _selenium.webdriver_ to use. WebDriver names include: Firefox, Chrome,
-        Ie, Opera, Safari, PhantomJS, and Remote.
-
-        Use keyword arguments to specify the arguments you want to pass to
-        the WebDriver's __init__. The values of the arguments are not
-        processed in any way before being passed on. For Robot Framework
-        < 2.8, which does not support keyword arguments, create a keyword
-        dictionary and pass it in as argument `kwargs`. See the
-        [http://selenium.googlecode.com/git/docs/api/py/api.html|Selenium API Documentation]
-        for information about argument names and appropriate argument values.
-
-        Examples:
-        | # use proxy for Firefox     |              |                                           |                         |
-        | ${proxy}=                   | Evaluate     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |
-        | ${proxy.http_proxy}=        | Set Variable | localhost:8888                            |                         |
-        | Create Webdriver            | Firefox      | proxy=${proxy}                            |                         |
-        | # use a proxy for PhantomJS |              |                                           |                         |
-        | ${service args}=            | Create List  | --proxy=192.168.132.104:8888              |                         |
-        | Create Webdriver            | PhantomJS    | service_args=${service args}              |                         |
-
-        Example for Robot Framework < 2.8:
-        | # debug IE driver |                   |                  |                                |
-        | ${kwargs}=        | Create Dictionary | log_level=DEBUG  | log_file=%{HOMEPATH}${/}ie.log |
-        | Create Webdriver  | Ie                | kwargs=${kwargs} |                                |
         """
         if not isinstance(kwargs, dict):
             raise RuntimeError("kwargs must be a dictionary.")
@@ -201,45 +196,47 @@ class BrowserManagementKeywords(LibraryComponent):
         try:
             creation_func = getattr(webdriver, driver_name)
         except AttributeError:
-            raise RuntimeError("'%s' is not a valid WebDriver name" % driver_name)
-        self.info("Creating an instance of the %s WebDriver" % driver_name)
+            raise RuntimeError("'%s' is not a valid WebDriver name." % driver_name)
+        self.info("Creating an instance of the %s WebDriver." % driver_name)
         driver = creation_func(**init_kwargs)
-        self.debug("Created %s WebDriver instance with session id %s" % (driver_name, driver.session_id))
+        self.debug("Created %s WebDriver instance with session id %s."
+                   % (driver_name, driver.session_id))
         return self.ctx.register_browser(driver, alias)
 
     @keyword
     def switch_browser(self, index_or_alias):
-        """Switches between active browsers using index or alias.
+        """Switches between active browsers using ``index_or_alias``.
 
-        Index is returned from `Open Browser` and alias can be given to it.
+        Indices are returned by the `Open Browser` keyword and aliases can
+        be given to it explicitly. Indices start from 1.
 
         Example:
-        | Open Browser        | http://google.com | ff       |
-        | Location Should Be  | http://google.com |          |
-        | Open Browser        | http://yahoo.com  | ie       | 2nd conn |
-        | Location Should Be  | http://yahoo.com  |          |
-        | Switch Browser      | 1                 | # index  |
-        | Page Should Contain | I'm feeling lucky |          |
-        | Switch Browser      | 2nd conn          | # alias  |
-        | Page Should Contain | More Yahoo!       |          |
-        | Close All Browsers  |                   |          |
+        | `Open Browser`        | http://google.com | ff       |
+        | `Location Should Be`  | http://google.com |          |
+        | `Open Browser`        | http://yahoo.com  | ie       | alias=second |
+        | `Location Should Be`  | http://yahoo.com  |          |
+        | `Switch Browser`      | 1                 | # index  |
+        | `Page Should Contain` | I'm feeling lucky |          |
+        | `Switch Browser`      | second            | # alias  |
+        | `Page Should Contain` | More Yahoo!       |          |
+        | `Close All Browsers`  |                   |          |
 
         Above example expects that there was no other open browsers when
-        opening the first one because it used index '1' when switching to it
-        later. If you aren't sure about that you can store the index into
-        a variable as below.
+        opening the first one because it used index ``1`` when switching to
+        it later. If you are not sure about that, you can store the index
+        into a variable as below.
 
-        | ${id} =            | Open Browser  | http://google.com | *firefox |
-        | # Do something ... |
-        | Switch Browser     | ${id}         |                   |          |
+        | ${index} =         | `Open Browser` | http://google.com |
+        | # Do something ... |                |                   |
+        | `Switch Browser`   | ${index}       |                   |
         """
         try:
             self.browsers.switch(index_or_alias)
-            self.debug('Switched to browser with Selenium session id %s'
-                       % self.browser.session_id)
-        except (RuntimeError, DataError):  # RF 2.6 uses RE, earlier DE
+        except RuntimeError:
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
+        self.debug('Switched to browser with Selenium session id %s.'
+                   % self.browser.session_id)
 
     @keyword
     def close_window(self):
@@ -248,12 +245,12 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_window_identifiers(self):
-        """Returns and logs id attributes of all windows known to the browser."""
+        """Returns and logs id attributes of all known browser windows."""
         return self._log_list(self._window_manager.get_window_ids(self.browser))
 
     @keyword
     def get_window_names(self):
-        """Returns and logs names of all windows known to the browser."""
+        """Returns and logs names of all known browser windows."""
         values = self._window_manager.get_window_names(self.browser)
         # for backward compatibility, since Selenium 1 would always
         # return this constant value for the main window
@@ -264,7 +261,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_window_titles(self):
-        """Returns and logs titles of all windows known to the browser."""
+        """Returns and logs titles of all known browser windows."""
         return self._log_list(self._window_manager.get_window_titles(self.browser))
 
     @keyword
@@ -274,51 +271,65 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_window_size(self):
-        """Returns current window size as `width` then `height`.
+        """Returns current window width and height as integers.
+
+        See also `Set Window Size`.
 
         Example:
-        | ${width} | ${height}= | Get Window Size |
+        | ${width} | ${height}= | `Get Window Size` |
         """
         size = self.browser.get_window_size()
         return size['width'], size['height']
 
     @keyword
     def set_window_size(self, width, height):
-        """Sets the `width` and `height` of the current window to the specified values.
+        """Sets current windows size to given ``width`` and ``height``.
+
+        Values can be given using strings containing numbers or by using
+        actual numbers. See also `Get Window Size`.
+
+        Browsers have a limit how small they can be set. Trying to set them
+        smaller will cause the actual size to be bigger than the requested
+        size.
 
         Example:
-        | Set Window Size | ${800} | ${600}       |
-        | ${width} | ${height}= | Get Window Size |
-        | Should Be Equal | ${width}  | ${800}    |
-        | Should Be Equal | ${height} | ${600}    |
+        | `Set Window Size` | 800 | 600 |
         """
         return self.browser.set_window_size(int(width), int(height))
 
     @keyword
     def get_window_position(self):
-        """Returns current window position as `x` then `y` (relative to the left and top of the screen).
+        """Returns current window position.
+
+        Position is relative to the top left corner of the screen. Returned
+        values are integers. See also `Set Window Position`.
 
         Example:
-        | ${x} | ${y}= | Get Window Position |
+        | ${x} | ${y}= | `Get Window Position` |
         """
         position = self.browser.get_window_position()
         return position['x'], position['y']
 
     @keyword
     def set_window_position(self, x, y):
-        """Sets the position x and y of the current window (relative to the left and top of the screen) to the specified values.
+        """Sets window position using ``x`` and ``y`` coordinates.
+
+        The position is relative to the top left corner of the screen,
+        but some browsers exclude possible task bar set by the operating
+        system from the calculation. The actual position may thus be
+        different with different browsers.
+
+        Values can be given using strings containing numbers or by using
+        actual numbers. See also `Get Window Position`.
 
         Example:
-        | Set Window Position | ${8}    | ${10}               |
-        | ${x}                | ${y}=   | Get Window Position |
-        | Should Be Equal     | ${x}    | ${8}                |
-        | Should Be Equal     | ${y}    | ${10}               |
+        | `Set Window Position` | 100 | 200 |
         """
         self.browser.set_window_position(int(x), int(y))
 
     @keyword
     def select_frame(self, locator):
-        """Sets frame identified by `locator` as current frame.
+        """Sets frame identified by ``locator`` as the current frame.
 
         Key attributes for frames are `id` and `name.` See `introduction` for
         details about locating elements.
@@ -381,53 +392,53 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_log(self, log_type):
-        """Get the log for a given selenium log type
+        """Get the specified Selenium log.
 
-        The `log_type` argument defines which logs to get. Possible values are:
-        `browser`, `driver`, `client` or `server`
+        The ``log_type` argument defines which log to get. Possible values
+        are ``browser``, ``driver``, ``client``, and ``server``.
 
-        New in SeleniumLibrary 3.0.0
+        New in SeleniumLibrary 3.0.
         """
         return self.browser.get_log(log_type)
 
     @keyword
     def list_windows(self):
-        """Return all current window handles as a list"""
+        """Return all current window handles as a list."""
         return self.browser.window_handles
 
     @keyword
     def unselect_frame(self):
         """Sets the top frame as the current frame.
         
-        Cancels a previous `Select Frame` call, returning to the Main frame.
+        In practice cancels a previous `Select Frame` call.
         """
         self.browser.switch_to.default_content()
 
     @keyword
     def get_location(self):
-        """Returns the current location."""
+        """Returns the current browser URL."""
         return self.browser.current_url
 
     @keyword
     def get_locations(self):
-        """Returns and logs current locations of all windows known to the browser."""
+        """Returns and logs URLs of all known browser windows."""
         return self._log_list(
             [window_info[4] for window_info in
              self._window_manager._get_window_infos(self.browser)])
 
     @keyword
     def get_source(self):
-        """Returns the entire html source of the current page or frame."""
+        """Returns the entire HTML source of the current page or frame."""
         return self.browser.page_source
 
     @keyword
     def get_title(self):
-        """Returns title of current page."""
+        """Returns the title of current page."""
         return self.browser.title
 
     @keyword
     def location_should_be(self, url):
-        """Verifies that current URL is exactly `url`."""
+        """Verifies that current URL is exactly ``url``."""
         actual = self.get_location()
         if actual != url:
             raise AssertionError("Location should have been '%s' but was '%s'"
@@ -436,7 +447,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def location_should_contain(self, expected):
-        """Verifies that current URL contains `expected`."""
+        """Verifies that current URL contains ``expected``."""
         actual = self.get_location()
         if expected not in actual:
             raise AssertionError("Location should have contained '%s' "
@@ -445,17 +456,18 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def log_location(self):
-        """Logs and returns the current location."""
+        """Logs and returns the current URL."""
         url = self.get_location()
         self.info(url)
         return url
 
     @keyword
     def log_source(self, loglevel='INFO'):
-        """Logs and returns the entire html source of the current page or frame.
+        """Logs and returns the HTML source of the current page or frame.
 
-        The `loglevel` argument defines the used log level. Valid log levels
-        are WARN, INFO (default), DEBUG, and NONE (no logging).
+        The ``loglevel`` argument defines the used log level. Valid log
+        levels are ``WARN``, ``INFO`` (default), ``DEBUG``, and ``NONE``
+        (no logging).
         """
         source = self.get_source()
         self.log(source, loglevel.upper())
@@ -470,21 +482,21 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def title_should_be(self, title):
-        """Verifies that current page title equals `title`."""
+        """Verifies that current page title equals ``title``."""
         actual = self.get_title()
         if actual != title:
-            raise AssertionError("Title should have been '%s' but was '%s'"
+            raise AssertionError("Title should have been '%s' but was '%s'."
                                  % (title, actual))
         self.info("Page title is '%s'." % title)
 
     @keyword
     def go_back(self):
-        """Simulates the user clicking the "back" button on their browser."""
+        """Simulates the user clicking the back button on their browser."""
         self.browser.back()
 
     @keyword
     def go_to(self, url):
-        """Navigates the active browser instance to the provided URL."""
+        """Navigates the active browser instance to the provided ``url``."""
         self.info("Opening url '%s'" % url)
         self.browser.get(url)
 
@@ -495,110 +507,110 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_selenium_speed(self):
-        """Gets the delay in seconds that is waited after each Selenium command.
+        """Gets the delay that is waited after each Selenium command.
 
-        See `Set Selenium Speed` for an explanation.
+        The value is returned as a human readable string like ``1 second``.
+
+        See the `Selenium Speed` section above for more information.
         """
         return secs_to_timestr(self.ctx.speed)
 
     @keyword
     def get_selenium_timeout(self):
-        """Gets the timeout in seconds that is used by various keywords.
+        """Gets the timeout that is used by various keywords.
 
-        See `Set Selenium Timeout` for an explanation.
+        The value is returned as a human readable string like ``1 second``.
+
+        See the `Timeout` section above for more information.
         """
         return secs_to_timestr(self.ctx.timeout)
 
     @keyword
     def get_selenium_implicit_wait(self):
-        """Gets the wait in seconds that is waited by Selenium.
+        """Gets the implicit wait value used by Selenium.
 
-        See `Set Selenium Implicit Wait` for an explanation.
+        The value is returned as a human readable string like ``1 second``.
+
+        See the `Implicit wait` section above for more information.
         """
         return secs_to_timestr(self.ctx.implicit_wait)
 
     @keyword
-    def set_selenium_speed(self, seconds):
-        """Sets the delay in seconds that is waited after each Selenium command.
+    def set_selenium_speed(self, value):
+        """Sets the delay that is waited after each Selenium command.
 
-        This is useful mainly in slowing down the test execution to be able to
-        view the execution. `seconds` may be given in Robot Framework time
-        format. Returns the previous speed value in seconds.
+        The value can be given as a number that is considered to be
+        seconds or as a human readable string like ``1 second``.
+        The previous value is returned and can be used to restore
+        the original value later if needed.
 
-        One keyword may execute one or many Selenium commands and therefore
-        one keyword may slow down more than the ``seconds`` argument defines.
-        Example if delay is set to 1 second and because `Click Element`
-        executes two Selenium commands, then the total delay will be 2 seconds.
-        But because `Page Should Contain Element` executes only one selenium
-        command, then the total delay will be 1 second.
+        See the `Selenium Speed` section above for more information.
 
         Example:
-        | Set Selenium Speed | .5 seconds |
+        | `Set Selenium Speed` | 0.5 seconds |
         """
         old_speed = self.get_selenium_speed()
-        self.ctx.speed = timestr_to_secs(seconds)
+        self.ctx.speed = timestr_to_secs(value)
         for browser in self.browsers.browsers:
             self._monkey_patch_speed(browser)
         return old_speed
 
     @keyword
-    def set_selenium_timeout(self, seconds):
-        """Sets the timeout in seconds used by various keywords.
+    def set_selenium_timeout(self, value):
+        """Sets the timeout that is used by various keywords.
 
-        There are several `Wait ...` keywords that take timeout as an
-        argument. All of these timeout arguments are optional. The timeout
-        used by all of them can be set globally using this keyword.
-        See `Timeouts` for more information about timeouts.
+        The value can be given as a number that is considered to be
+        seconds or as a human readable string like ``1 second``.
+        The previous value is returned and can be used to restore
+        the original value later if needed.
 
-        The previous timeout value is returned by this keyword and can
-        be used to set the old value back later. The default timeout
-        is 5 seconds, but it can be altered in `importing`.
+        See the `Timeout` section above for more information.
 
         Example:
-        | ${orig timeout} = | Set Selenium Timeout | 15 seconds |
-        | Open page that loads slowly |
-        | Set Selenium Timeout | ${orig timeout} |
+        | ${orig timeout} = | `Set Selenium Timeout` | 15 seconds |
+        | `Open page that loads slowly` |
+        | `Set Selenium Timeout` | ${orig timeout} |
         """
         old_timeout = self.get_selenium_timeout()
-        self.ctx.timeout = timestr_to_secs(seconds)
+        self.ctx.timeout = timestr_to_secs(value)
         for browser in self.browsers.get_open_browsers():
             browser.set_script_timeout(self.ctx.timeout)
         return old_timeout
 
     @keyword
-    def set_selenium_implicit_wait(self, seconds):
-        """Sets Selenium 2's default implicit wait in seconds and
-        sets the implicit wait for all open browsers.
+    def set_selenium_implicit_wait(self, value):
+        """Sets the implicit wait value used by Selenium.
 
-        From selenium 2 function 'Sets a sticky timeout to implicitly
-            wait for an element to be found, or a command to complete.
-            This method only needs to be called one time per session.'
+        The value can be given as a number that is considered to be
+        seconds or as a human readable string like ``1 second``.
+        The previous value is returned and can be used to restore
+        the original value later if needed.
+
+        This keyword sets the implicit wait for all opened browsers.
+        Use `Set Browser Implicit Wait` to set it only to the current
+        browser.
+
+        See the `Implicit wait` section above for more information.
 
         Example:
-        | ${orig wait} = | Set Selenium Implicit Wait | 10 seconds |
-        | Perform AJAX call that is slow |
-        | Set Selenium Implicit Wait | ${orig wait} |
+        | ${orig wait} = | `Set Selenium Implicit Wait` | 10 seconds |
+        | `Perform AJAX call that is slow` |
+        | `Set Selenium Implicit Wait` | ${orig wait} |
         """
         old_wait = self.get_selenium_implicit_wait()
-        self.ctx.implicit_wait = timestr_to_secs(seconds)
+        self.ctx.implicit_wait = timestr_to_secs(value)
         for browser in self.browsers.get_open_browsers():
             browser.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
 
     @keyword
-    def set_browser_implicit_wait(self, seconds):
-        """Sets current browser's implicit wait in seconds.
+    def set_browser_implicit_wait(self, value):
+        """Sets the implicit wait value used by Selenium.
 
-        From selenium 2 function 'Sets a sticky timeout to implicitly
-            wait for an element to be found, or a command to complete.
-            This method only needs to be called one time per session.'
-
-        Example:
-        | Set Browser Implicit Wait | 10 seconds |
-
-        See also `Set Selenium Implicit Wait`.
+        Same as `Set Selenium Implicit Wait` but only affects the current
+        browser.
         """
-        self.browser.implicitly_wait(timestr_to_secs(seconds))
+        self.browser.implicitly_wait(timestr_to_secs(value))
 
     def _get_browser_creation_function(self, browser_name):
         func_name = BROWSER_NAMES.get(browser_name.lower().replace(' ', ''))
@@ -616,7 +628,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self._monkey_patch_speed(browser)
         return browser
 
-    def _make_ff(self, remote, desired_capabilites, profile_dir):
+    def _make_ff(self, remote, desired_capabilities, profile_dir):
         if is_falsy(profile_dir):
             profile = webdriver.FirefoxProfile()
         else:
@@ -624,7 +636,7 @@ class BrowserManagementKeywords(LibraryComponent):
         if is_truthy(remote):
             browser = self._create_remote_web_driver(
                 webdriver.DesiredCapabilities.FIREFOX, remote,
-                desired_capabilites, profile)
+                desired_capabilities, profile)
         else:
             browser = webdriver.Firefox(firefox_profile=profile,
                                         **self._geckodriver_log_config)
