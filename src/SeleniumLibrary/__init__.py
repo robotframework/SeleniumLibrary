@@ -100,7 +100,7 @@ class SeleniumLibrary(DynamicCore):
     | `Click Element` | name:foo         | # Find element with name ``foo``.               |
     | `Click Element` | default:name:foo | # Use default strategy with value ``name:foo``. |
     | `Click Element` | //foo            | # Find element using XPath ``//foo``.           |
-    | `Click Element` | default://foo    | # Use default strategy with value ``//foo``.    |
+    | `Click Element` | default: //foo   | # Use default strategy with value ``//foo``.    |
 
     === Explicit locator strategy ===
 
@@ -108,9 +108,9 @@ class SeleniumLibrary(DynamicCore):
     syntax ``strategy:value`` or ``strategy=value``. The former syntax
     is preferred, because the latter is identical to Robot Framework's
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#named-argument-syntax|
-    named argument syntax] and that can cause problems. Notice that the
-    ``strategy:value`` syntax is olny supported by SeleniumLibrary 3.0 and
-    newer, though.
+    named argument syntax] and that can cause problems. Spaces around
+    the separator are ignored, so ``id:foo``, ``id: foo`` and ``id : foo``
+    are all equivalent.
 
     Locator strategies that are supported by default are listed in the table
     below. In addition to them, it is possible to register `custom locators`.
@@ -135,20 +135,33 @@ class SeleniumLibrary(DynamicCore):
     prefix is only necessary if the locator value itself accidentally
     matches some of the explicit strategies.
 
-    Spaces around the separator are ignored, so ``id:foo``, ``id: foo``
-    and ``id : foo`` are all equivalent.
+    Different locator strategies have different pros and cons. Using ids,
+    either explicitly like ``id:foo`` or by using the `default locator
+    strategy` simply like ``foo``, is recommended when possible, because
+    the syntax is simple and locating elements by an id is fast for browsers.
+    If an element does not have an id or the id is not stable, other
+    solutions need to be used. If an element has a unique tag name or class,
+    using ``tag``, ``class`` or ``css`` strategy like ``tag:h1``,
+    ``class:example`` or ``css:h1.example`` is often an easy solution. In
+    more complex cases using XPath expressions is typically the best
+    approach. They are very powerful but a downside is that they can also
+    get complex.
 
     Examples:
 
-    | `Click Element` | id:container                      |
-    | `Click Element` | css:div#container h1              |
-    | `Click Element` | xpath: //div[@id="container"]//h1 |
+    | `Click Element` | id:foo                      | # Element with id 'foo'. |
+    | `Click Element` | css:div#foo h1              | # h1 element under div with id 'foo'. |
+    | `Click Element` | xpath: //div[@id="foo"]//h1 | # Same as the above using XPath, not CSS. |
+    | `Click Element` | xpath: //*[contains(text(), "example")] | # Element containing text 'example'. |
 
-    Notice that using the ``sizzle`` strategy or its alias ``jquery``
-    requires that the system under test contains the jQuery library.
+    *NOTE:*
 
-    Notice also that prior to SeleniumLibrary 3.0, table related keywords
-    only supported ``xpath``, ``css`` and ``sizzle/jquery`` strategies.
+    - The ``strategy:value`` syntax is only supported by SeleniumLibrary 3.0
+      and newer.
+    - Using the ``sizzle`` strategy or its alias ``jquery`` requires that
+      the system under test contains the jQuery library.
+    - Prior to SeleniumLibrary 3.0, table related keywords only supported
+      ``xpath``, ``css`` and ``sizzle/jquery`` strategies.
 
     === Implicit XPath strategy ===
 
@@ -158,8 +171,8 @@ class SeleniumLibrary(DynamicCore):
 
     Examples:
 
-    | `Click Element` | //div[@id="container"] |
-    | `Click Element` | (//div)[2]             |
+    | `Click Element` | //div[@id="foo"]//h1 |
+    | `Click Element` | (//div)[2]           |
 
     The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
 
