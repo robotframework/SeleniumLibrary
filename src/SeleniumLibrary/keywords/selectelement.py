@@ -23,9 +23,6 @@ from SeleniumLibrary.utils import is_truthy
 
 class SelectElementKeywords(LibraryComponent):
 
-    def __init__(self, ctx):
-        LibraryComponent.__init__(self, ctx)
-
     @keyword
     def get_list_items(self, locator, value=False):
         """Returns the labels or values in the select list identified by `locator`.
@@ -68,8 +65,9 @@ class SelectElementKeywords(LibraryComponent):
         locating elements.
         """
         select, options = self._get_select_list_options_selected(locator)
-        if len(options) == 0:
-            raise ValueError("Select list with locator '%s' does not have any selected values")
+        if not options:
+            raise ValueError("List '%s' does not have any selected values."
+                             % locator)
         return self._get_labels_for_options(options)
 
     @keyword
@@ -96,7 +94,8 @@ class SelectElementKeywords(LibraryComponent):
         locating elements.
         """
         select, options = self._get_select_list_options_selected(locator)
-        if len(options) == 0:
+        # TODO: Should return an empty list, not fail
+        if not options:
             raise ValueError("Select list with locator '%s' does not have any selected values")
         return self._get_values_for_options(options)
 
@@ -145,7 +144,7 @@ class SelectElementKeywords(LibraryComponent):
                                  "(selection was [ %s ])" % (locator, items_str))
 
     @keyword
-    def page_should_contain_list(self, locator, message='', loglevel='INFO'):
+    def page_should_contain_list(self, locator, message=None, loglevel='INFO'):
         """Verifies select list identified by `locator` is found from current page.
 
         See `Page Should Contain Element` for explanation about `message` and
@@ -157,7 +156,7 @@ class SelectElementKeywords(LibraryComponent):
         self.assert_page_contains(locator, 'list', message, loglevel)
 
     @keyword
-    def page_should_not_contain_list(self, locator, message='', loglevel='INFO'):
+    def page_should_not_contain_list(self, locator, message=None, loglevel='INFO'):
         """Verifies select list identified by `locator` is not found from current page.
 
         See `Page Should Contain Element` for explanation about `message` and

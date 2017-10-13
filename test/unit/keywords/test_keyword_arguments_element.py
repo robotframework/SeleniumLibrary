@@ -46,8 +46,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_locator_should_match_x_times(self):
         locator = '//div'
-        when(self.element).find_element(locator, required=False,
-                                        first_only=False).thenReturn([])
+        when(self.element).find_elements(locator).thenReturn([])
         with self.assertRaisesRegexp(AssertionError, 'should have matched'):
             self.element.locator_should_match_x_times(locator, 1)
 
@@ -87,8 +86,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         locator = '//div'
         attrib = 'id'
         element = mock()
-        when(self.element).find_element(locator,
-                                        required=False).thenReturn(element)
+        when(self.element).find_element(locator).thenReturn(element)
         when(element).get_attribute(attrib).thenReturn('value')
         value = self.element.get_element_attribute(locator, attrib)
         self.assertEqual(value, 'value')
@@ -100,7 +98,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
     def test_get_matching_xpath_count(self):
         locator = '//div'
         when(self.element).find_element(
-            'xpath={}'.format(locator), first_only=False,
+            'xpath:{}'.format(locator), first_only=False,
             required=False).thenReturn([])
         count = self.element.get_matching_xpath_count(locator)
         self.assertEqual(count, '0')
@@ -112,9 +110,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_xpath_should_match_x_times(self):
         locator = '//div'
-        when(self.element).find_element(
-            'xpath={}'.format(locator), first_only=False,
-            required=False).thenReturn([])
+        when(self.element).find_elements('xpath:{}'.format(locator)).thenReturn([])
         with self.assertRaisesRegexp(AssertionError, 'should have matched'):
             self.element.xpath_should_match_x_times(locator, 1)
 

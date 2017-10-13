@@ -9,25 +9,33 @@ Mouse Over
     [Tags]    Known Issue Safari
     Mouse Over    el_for_mouseover
     Textfield Value Should Be    el_for_mouseover    mouseover el_for_mouseover
-    Run Keyword And Expect Error    ERROR: Element not_there not found.    Mouse Over    not_there
+    Run Keyword And Expect Error
+    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Mouse Over    not_there
 
 Mouse Out
     [Tags]    Known Issue Safari
     Mouse Out    el_for_mouseout
     Textfield Value Should Be    el_for_mouseout    mouseout el_for_mouseout
-    Run Keyword And Expect Error    ERROR: Element not_there not found.    Mouse Out    not_there
+    Run Keyword And Expect Error
+    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Mouse Out    not_there
 
 Mouse Down
     [Tags]    Known Issue Safari
     Mouse Down    el_for_mousedown
     Textfield Value Should Be    el_for_mousedown    mousedown el_for_mousedown
-    Run Keyword And Expect Error    ERROR: Element not_there not found.    Mouse Down    not_there
+    Run Keyword And Expect Error
+    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Mouse Down    not_there
 
 Mouse Up
     [Tags]    Known Issue Safari    Known Issue Firefox
     Mouse Up    el_for_mouseup
     Textfield Value Should Be    el_for_mouseup    mouseup el_for_mouseup
-    Run Keyword And Expect Error    ERROR: Element not_there not found.    Mouse Up    not_there
+    Run Keyword And Expect Error
+    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Mouse Up    not_there
 
 Simulate Event
     Simulate event    el_for_blur    blur

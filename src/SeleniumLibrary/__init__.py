@@ -64,10 +64,10 @@ class SeleniumLibrary(DynamicCore):
     = Locating elements =
 
     All keywords in SeleniumLibrary that need to interact with an element
-    on a web page take an argument named ``locator`` that specifies how
-    to find the element. Most often the locator is given as a string using
-    the locator syntax described below, but `using WebElements` is possible
-    too.
+    on a web page take an argument typically named ``locator`` that specifies
+    how to find the element. Most often the locator is given as a string
+    using the locator syntax described below, but `using WebElements` is
+    possible too.
 
     == Locator syntax ==
 

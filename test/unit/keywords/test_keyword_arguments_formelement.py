@@ -21,8 +21,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_submit_form_false(self):
         element = mock()
-        when(self.form).find_element('xpath=//form',
-                                     tag='form').thenReturn(element)
+        when(self.form).find_element('tag:form', tag='form').thenReturn(element)
         for false in FALSES:
             self.form.submit_form()
         self.form.submit_form()

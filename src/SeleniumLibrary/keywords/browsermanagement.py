@@ -431,8 +431,8 @@ class BrowserManagementKeywords(LibraryComponent):
         """Verifies that current URL is exactly ``url``."""
         actual = self.get_location()
         if actual != url:
-            raise AssertionError("Location should have been '%s' but was '%s'"
-                                 % (url, actual))
+            raise AssertionError("Location should have been '%s' but was "
+                                 "'%s'." % (url, actual))
         self.info("Current location is '%s'." % url)
 
     @keyword

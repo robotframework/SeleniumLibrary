@@ -19,7 +19,8 @@ from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import ContextAware
-from SeleniumLibrary.utils import escape_xpath_value, events, is_falsy
+from SeleniumLibrary.utils import (escape_xpath_value, events, is_falsy,
+                                   is_noney)
 
 from .customlocator import CustomLocator
 
@@ -81,8 +82,8 @@ class ElementFinder(ContextAware):
     def assert_page_contains(self, locator, tag=None, message=None,
                              loglevel='INFO'):
         if not self.find(locator, tag, required=False):
-            if is_falsy(message):
-                message = ("Page should have contained %s '%s' but did not"
+            if is_noney(message):
+                message = ("Page should have contained %s '%s' but did not."
                            % (tag or 'element', locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
             raise AssertionError(message)
@@ -92,8 +93,8 @@ class ElementFinder(ContextAware):
     def assert_page_not_contains(self, locator, tag=None, message=None,
                                  loglevel='INFO'):
         if self.find(locator, tag, required=False):
-            if is_falsy(message):
-                message = ("Page should not have contained %s '%s'"
+            if is_noney(message):
+                message = ("Page should not have contained %s '%s'."
                            % (tag or 'element', locator))
             self.ctx.log_source(loglevel)  # TODO: Could this moved to base
             raise AssertionError(message)

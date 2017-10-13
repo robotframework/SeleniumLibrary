@@ -14,50 +14,66 @@ Should Not Be Focused
     [Documentation]    Verify that element is not Focused
     [Setup]    Go To Page "mouse/index.html"
     Click Element    el_for_focus
-    Run Keyword And Expect Error    Element 'el_for_blur' is not with focus.    Element Should Be Focused    el_for_blur
+    Run Keyword And Expect Error
+    ...    Element 'el_for_blur' does not have focus.
+    ...    Element Should Be Focused    el_for_blur
     Element Should Be Focused    el_for_focus
 
 Unexistent Element Not Focused
     [Documentation]    Missing element returns locator error
     [Setup]    Go To Page "mouse/index.html"
     Click Element    el_for_focus
-    Run Keyword And Expect Error    ValueError: Element locator 'Unexistent_element' did not match any elements.    Element Should Be Focused    Unexistent_element
+    Run Keyword And Expect Error
+    ...    ValueError: Element locator 'Unexistent_element' did not match any elements.
+    ...    Element Should Be Focused    Unexistent_element
     Element Should Be Focused    el_for_focus
 
 Span Element Not Focused
     [Documentation]    Focus on not Focusable Span
     [Setup]    Go To Page "/"
     Click Element    some_id
-    Run Keyword And Expect Error    Element 'some_id' is not with focus.    Element Should Be Focused    some_id
+    Run Keyword And Expect Error
+    ...    Element 'some_id' does not have focus.
+    ...    Element Should Be Focused    some_id
 
 Table Element Not Focused
     [Documentation]    Focus on not Focusable Table
     [Setup]    Go To Page "tables/tables.html"
     Click Element    simpleTable
-    Run Keyword And Expect Error    Element 'simpleTable' is not with focus.    Element Should Be Focused    simpleTable
+    Run Keyword And Expect Error
+    ...    Element 'simpleTable' does not have focus.
+    ...    Element Should Be Focused    simpleTable
 
 Radio Button Should Be Focused
     [Documentation]    Radio Button with xpath should be focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Click Element    xpath=//input[@name='sex' and @value='male']
     Element Should Be Focused    xpath=//input[@name='sex' and @value='male']
-    Run Keyword And Expect Error    Element 'xpath=//input[@name=\'sex\' and @value=\'female\']' is not with focus.    Element Should Be Focused    xpath=//input[@name='sex' and @value='female']
+    Run Keyword And Expect Error
+    ...    Element 'xpath=//input[@name=\'sex\' and @value=\'female\']' does not have focus.
+    ...    Element Should Be Focused    xpath=//input[@name='sex' and @value='female']
 
 Checkbox Should Be Focused
     [Documentation]    Checkbox with xpath should be focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Click Element    xpath=//input[@name='can_send_sms']
     Element Should Be Focused    xpath=//input[@name='can_send_sms']
-    Run Keyword And Expect Error    Element 'xpath=//input[@name=\'can_send_email\']' is not with focus.    Element Should Be Focused    xpath=//input[@name='can_send_email']
+    Run Keyword And Expect Error
+    ...    Element 'xpath=//input[@name=\'can_send_email\']' does not have focus.
+    ...    Element Should Be Focused    xpath=//input[@name='can_send_email']
 
 Select Button Should Be Focused
     [Documentation]    Select Button with xpath should be focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Mouse Down    xpath=//select[@name='preferred_channel']
     Element Should Be Focused    xpath=//select[@name='preferred_channel']
-    Run Keyword And Expect Error    Element 'xpath=//select[@name=\'preferred_channel\']/option[@value=\'phone\']' is not with focus.    Element Should Be Focused    xpath=//select[@name='preferred_channel']/option[@value='phone']
+    Run Keyword And Expect Error
+    ...    Element 'xpath=//select[@name=\'preferred_channel\']/option[@value=\'phone\']' does not have focus.
+    ...    Element Should Be Focused    xpath=//select[@name='preferred_channel']/option[@value='phone']
     Click Element    xpath=//option[@value='email']
-    Run Keyword And Expect Error    Element 'xpath=//option[@value=\'email\']' is not with focus.    Element Should Be Focused    xpath=//option[@value='email']
+    Run Keyword And Expect Error
+    ...    Element 'xpath=//option[@value=\'email\']' does not have focus.
+    ...    Element Should Be Focused    xpath=//option[@value='email']
 
 Submit Button Should Be Focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"

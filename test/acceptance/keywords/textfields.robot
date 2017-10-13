@@ -1,32 +1,33 @@
 *** Setting ***
 Documentation     Test textfields
 Test Setup        Go To Page "forms/prefilled_email_form.html"
-Variables         variables.py
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
 Get Value From Text Field
-    [Documentation]    Get Value From Text Field
     ${text} =    Get Value    name
     Should Be Equal    ${text}    Prefilled Name
     Clear Element Text    name
     ${text} =    Get Value    name
     Should Be Equal    ${text}    ${EMPTY}
 
-Input Unicode In Text Field
-    [Documentation]    Input Unicode In Text Field
-    Input Text    name    ${unic_text}
-    ${text} =    Get Value    name
-    Should Be Equal    ${text}    ${unic_text}
-
-Input Password
-    [Documentation]    LOG 3 Typing password into text field 'password_field'
+Input Text and Input Password
+    [Documentation]
+    ...    LOG 2 Typing text 'username' into text field 'username_field'.
+    ...    LOG 3 Typing password into text field 'password_field'.
     [Setup]    Go To Page "forms/login.html"
     Input Text    username_field    username
     Input Password    password_field    password
     Submit Form
     Verify Location Is "forms/submit.html"
+
+Input Non-ASCII Text
+    [Documentation]
+    ...    LOG 2 Typing text 'Yrjö Ärje' into text field 'name'.
+    Input Text    name    Yrjö Ärje
+    ${text} =    Get Value    name
+    Should Be Equal    ${text}    Yrjö Ärje
 
 Press Key
   [Setup]  Go To Page "forms/login.html"
