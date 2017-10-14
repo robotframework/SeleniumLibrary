@@ -28,12 +28,12 @@ class ContextAware(object):
         self.ctx = ctx
 
     @property
-    def browser(self):
-        return self.ctx.browser
+    def driver(self):
+        return self.ctx.driver
 
     @property
-    def browsers(self):
-        return self.ctx._browsers
+    def drivers(self):
+        return self.ctx._drivers
 
     @property
     def element_finder(self):

@@ -49,31 +49,31 @@ class WindowManager(ContextAware):
     def get_window_infos(self):
         infos = []
         try:
-            starting_handle = self.browser.current_window_handle
+            starting_handle = self.driver.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
         try:
-            for handle in self.browser.window_handles:
-                self.browser.switch_to.window(handle)
-                infos.append(self._get_current_window_info(self.browser))
+            for handle in self.driver.window_handles:
+                self.driver.switch_to.window(handle)
+                infos.append(self._get_current_window_info(self.driver))
         finally:
             if starting_handle:
-                self.browser.switch_to.window(starting_handle)
+                self.driver.switch_to.window(starting_handle)
         return infos
 
     def select(self, locator):
         locator = self._handle_deprecated_locators(locator)
         if not is_string(locator):
-            self._select_by_excludes(self.browser, locator)
+            self._select_by_excludes(self.driver, locator)
         elif locator.upper() == 'CURRENT':
             pass
         elif locator.upper() == 'MAIN':
-            self._select_main_window(self.browser)
+            self._select_main_window(self.driver)
         elif locator.upper() == 'NEW':
-            self._select_by_last_index(self.browser)
+            self._select_by_last_index(self.driver)
         else:
             strategy, locator = self._parse_locator(locator)
-            self._strategies[strategy](self.browser, locator)
+            self._strategies[strategy](self.driver, locator)
 
     def _handle_deprecated_locators(self, locator):
         if not (is_string(locator) or locator is None):
@@ -101,85 +101,85 @@ class WindowManager(ContextAware):
             return locator.find('=')
         return min(locator.find('='), locator.find(':'))
 
-    def _select_by_title(self, browser, title):
+    def _select_by_title(self, driver, title):
         self._select_matching(
-            browser,
+            driver,
             lambda window_info: window_info.title == title,
             "Unable to locate window with title '%s'." % title
         )
 
-    def _select_by_name(self, browser, name):
+    def _select_by_name(self, driver, name):
         self._select_matching(
-            browser,
+            driver,
             lambda window_info: window_info.name == name,
             "Unable to locate window with name '%s'." % name
         )
 
-    def _select_by_url(self, browser, url):
+    def _select_by_url(self, driver, url):
         self._select_matching(
-            browser,
+            driver,
             lambda window_info: window_info.url == url,
             "Unable to locate window with URL '%s'." % url
         )
 
-    def _select_main_window(self, browser):
-        handles = browser.window_handles
-        browser.switch_to.window(handles[0])
+    def _select_main_window(self, driver):
+        handles = driver.window_handles
+        driver.switch_to.window(handles[0])
 
-    def _select_by_default(self, browser, criteria):
+    def _select_by_default(self, driver, criteria):
         try:
-            starting_handle = browser.current_window_handle
+            starting_handle = driver.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
-        for handle in browser.window_handles:
-            browser.switch_to.window(handle)
+        for handle in driver.window_handles:
+            driver.switch_to.window(handle)
             if criteria == handle:
                 return
-            for item in self._get_current_window_info(browser)[2:4]:
+            for item in self._get_current_window_info(driver)[2:4]:
                 if item == criteria:
                     return
         if starting_handle:
-            browser.switch_to.window(starting_handle)
+            driver.switch_to.window(starting_handle)
         raise WindowNotFound("No window matching handle, name, title or URL "
                              "'%s' found." % criteria)
 
-    def _select_by_last_index(self, browser):
-        handles = browser.window_handles
-        if handles[-1] == browser.current_window_handle:
+    def _select_by_last_index(self, driver):
+        handles = driver.window_handles
+        if handles[-1] == driver.current_window_handle:
             raise WindowNotFound('Window with last index is same as '
                                  'the current window.')
-        browser.switch_to.window(handles[-1])
+        driver.switch_to.window(handles[-1])
 
-    def _select_by_excludes(self, browser, excludes):
-        for handle in browser.window_handles:
+    def _select_by_excludes(self, driver, excludes):
+        for handle in driver.window_handles:
             if handle not in excludes:
-                browser.switch_to.window(handle)
+                driver.switch_to.window(handle)
                 return
         raise WindowNotFound('No window not matching excludes %s found.'
                              % excludes)
 
-    def _select_matching(self, browser, matcher, error):
+    def _select_matching(self, driver, matcher, error):
         try:
-            starting_handle = browser.current_window_handle
+            starting_handle = driver.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
-        for handle in browser.window_handles:
-            browser.switch_to.window(handle)
-            if matcher(self._get_current_window_info(browser)):
+        for handle in driver.window_handles:
+            driver.switch_to.window(handle)
+            if matcher(self._get_current_window_info(driver)):
                 return
         if starting_handle:
-            browser.switch_to.window(starting_handle)
+            driver.switch_to.window(starting_handle)
         raise WindowNotFound(error)
 
-    def _get_current_window_info(self, browser):
+    def _get_current_window_info(self, driver):
         try:
-            id, name = browser.execute_script("return [ window.id, window.name ];")
+            id, name = driver.execute_script("return [ window.id, window.name ];")
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
             id = name = None
-        return WindowInfo(browser.current_window_handle,
+        return WindowInfo(driver.current_window_handle,
                           id if id is not None else 'undefined',
                           name or 'undefined',
-                          browser.title or 'undefined',
-                          browser.current_url or 'undefined')
+                          driver.title or 'undefined',
+                          driver.current_url or 'undefined')

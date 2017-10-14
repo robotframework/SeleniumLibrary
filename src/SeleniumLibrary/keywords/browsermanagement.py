@@ -65,15 +65,15 @@ class BrowserManagementKeywords(LibraryComponent):
         all browsers are closed.
         """
         self.debug('Closing all browsers.')
-        self.browsers.close_all()
+        self.drivers.close_all()
 
     @keyword
     def close_browser(self):
         """Closes the current browser."""
-        if self.browsers.current:
+        if self.drivers.current:
             self.debug('Closing browser with session id {}.'
-                       .format(self.browser.session_id))
-            self.browsers.close()
+                       .format(self.driver.session_id))
+            self.drivers.close()
 
     @keyword
     def open_browser(self, url, browser='firefox', alias=None,
@@ -141,17 +141,17 @@ class BrowserManagementKeywords(LibraryComponent):
         else:
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         browser_name = browser
-        browser = self._make_browser(browser_name, desired_capabilities,
-                                     ff_profile_dir, remote_url)
+        driver = self._make_browser(browser_name, desired_capabilities,
+                                    ff_profile_dir, remote_url)
         try:
-            browser.get(url)
+            driver.get(url)
         except Exception:
-            self.ctx.register_browser(browser, alias)
+            self.ctx.register_driver(driver, alias)
             self.debug("Opened browser with session id %s but failed "
-                       "to open url '%s'." % (browser.session_id, url))
+                       "to open url '%s'." % (driver.session_id, url))
             raise
-        self.debug('Opened browser with session id %s.' % browser.session_id)
-        return self.ctx.register_browser(browser, alias)
+        self.debug('Opened browser with session id %s.' % driver.session_id)
+        return self.ctx.register_driver(driver, alias)
 
     @keyword
     def create_webdriver(self, driver_name, alias=None, kwargs={},
@@ -200,7 +200,7 @@ class BrowserManagementKeywords(LibraryComponent):
         driver = creation_func(**init_kwargs)
         self.debug("Created %s WebDriver instance with session id %s."
                    % (driver_name, driver.session_id))
-        return self.ctx.register_browser(driver, alias)
+        return self.ctx.register_driver(driver, alias)
 
     @keyword
     def switch_browser(self, index_or_alias):
@@ -230,28 +230,27 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Switch Browser`   | ${index}       |                   |
         """
         try:
-            self.browsers.switch(index_or_alias)
+            self.drivers.switch(index_or_alias)
         except RuntimeError:
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
         self.debug('Switched to browser with Selenium session id %s.'
-                   % self.browser.session_id)
+                   % self.driver.session_id)
 
     @keyword
     def get_source(self):
         """Returns the entire HTML source of the current page or frame."""
-        return self.browser.page_source
+        return self.driver.page_source
 
     @keyword
     def get_title(self):
         """Returns the title of current page."""
-        return self.browser.title
+        return self.driver.title
 
     @keyword
     def get_location(self):
         """Returns the current browser URL."""
         return self.browser.current_url
-
 
     @keyword
     def location_should_be(self, url):
@@ -309,18 +308,18 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def go_back(self):
         """Simulates the user clicking the back button on their browser."""
-        self.browser.back()
+        self.driver.back()
 
     @keyword
     def go_to(self, url):
         """Navigates the active browser instance to the provided ``url``."""
         self.info("Opening url '%s'" % url)
-        self.browser.get(url)
+        self.driver.get(url)
 
     @keyword
     def reload_page(self):
         """Simulates user reloading page."""
-        self.browser.refresh()
+        self.driver.refresh()
 
     @keyword
     def get_selenium_speed(self):
@@ -368,7 +367,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_speed = self.get_selenium_speed()
         self.ctx.speed = timestr_to_secs(value)
-        for browser in self.browsers.browsers:
+        for browser in self.drivers.browsers:
             self._monkey_patch_speed(browser)
         return old_speed
 
@@ -390,7 +389,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_timeout = self.get_selenium_timeout()
         self.ctx.timeout = timestr_to_secs(value)
-        for browser in self.browsers.get_open_browsers():
+        for browser in self.drivers.get_open_drivers():
             browser.set_script_timeout(self.ctx.timeout)
         return old_timeout
 
@@ -416,7 +415,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_wait = self.get_selenium_implicit_wait()
         self.ctx.implicit_wait = timestr_to_secs(value)
-        for browser in self.browsers.get_open_browsers():
+        for browser in self.drivers.get_open_drivers():
             browser.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
 
@@ -427,7 +426,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Same as `Set Selenium Implicit Wait` but only affects the current
         browser.
         """
-        self.browser.implicitly_wait(timestr_to_secs(value))
+        self.driver.implicitly_wait(timestr_to_secs(value))
 
     def _get_browser_creation_function(self, browser_name):
         try:
