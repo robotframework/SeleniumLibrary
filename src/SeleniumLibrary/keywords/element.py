@@ -165,16 +165,15 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_matching_locator_count(self, locator):
-        """Returns number of elements matching ``locator``
+        """Returns number of elements matching ``locator``.
 
         If you wish to assert the number of matching elements, use
         `Locator Should Match X Times`. Keyword will always return an integer.
+        New in SeleniumLibrary 3.0.
 
-        Examples assumes that locator matches to three elements
+        Example:
         | ${count} =      | Get Matching Locator Count | name:div_name  |
         | Should Be True  | ${count} > 2               |                |
-
-        New in SeleniumLibrary 3.0
         """
         return len(self.find_element(locator, first_only=False,
                                      required=False))
@@ -185,11 +184,8 @@ class ElementKeywords(LibraryComponent):
 
         See `introduction` for details about locating elements.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
-
-        Examples assumes that locator matches to three elements
-        | locator_should_match_x_times | name:div_name | 3 |
+        See `Page Should Contain Element` for explanation about ``message`` and
+        ``loglevel`` arguments.
         """
         actual_locator_count = len(self.find_element(
             locator, first_only=False, required=False)
