@@ -2,62 +2,62 @@ import unittest
 
 from mockito import mock, verify
 
-from SeleniumLibrary.utils import BrowserCache
+from SeleniumLibrary.utils import DriverCache
 
 
-class BrowserCacheTests(unittest.TestCase):
+class DriverCacheTests(unittest.TestCase):
 
     def test_no_current_message(self):
-        cache = BrowserCache()
+        cache = DriverCache()
         try:
             self.assertRaises(RuntimeError, cache.current.anyMember())
         except RuntimeError as e:
-            self.assertEqual(str(e), "No current browser")
+            self.assertEqual(str(e), "No current driver")
 
     def test_browsers_property(self):
-        cache = BrowserCache()
+        cache = DriverCache()
 
-        browser1 = mock()
-        browser2 = mock()
-        browser3 = mock()
+        driver1 = mock()
+        driver2 = mock()
+        driver3 = mock()
 
-        index1 = cache.register(browser1)
-        index2 = cache.register(browser2)
-        index3 = cache.register(browser3)
+        index1 = cache.register(driver1)
+        index2 = cache.register(driver2)
+        index3 = cache.register(driver3)
 
-        self.assertEqual(len(cache.browsers), 3)
-        self.assertEqual(cache.browsers[0], browser1)
-        self.assertEqual(cache.browsers[1], browser2)
-        self.assertEqual(cache.browsers[2], browser3)
+        self.assertEqual(len(cache.drivers), 3)
+        self.assertEqual(cache.drivers[0], driver1)
+        self.assertEqual(cache.drivers[1], driver2)
+        self.assertEqual(cache.drivers[2], driver3)
         self.assertEqual(index1, 1)
         self.assertEqual(index2, 2)
         self.assertEqual(index3, 3)
 
     def test_get_open_browsers(self):
-        cache = BrowserCache()
+        cache = DriverCache()
 
-        browser1 = mock()
-        browser2 = mock()
-        browser3 = mock()
+        driver1 = mock()
+        driver2 = mock()
+        driver3 = mock()
 
-        cache.register(browser1)
-        cache.register(browser2)
-        cache.register(browser3)
+        cache.register(driver1)
+        cache.register(driver2)
+        cache.register(driver3)
 
-        browsers = cache.get_open_browsers()
-        self.assertEqual(len(browsers), 3)
-        self.assertEqual(browsers[0], browser1)
-        self.assertEqual(browsers[1], browser2)
-        self.assertEqual(browsers[2], browser3)
+        drivers = cache.get_open_drivers()
+        self.assertEqual(len(drivers), 3)
+        self.assertEqual(drivers[0], driver1)
+        self.assertEqual(drivers[1], driver2)
+        self.assertEqual(drivers[2], driver3)
 
         cache.close()
-        browsers = cache.get_open_browsers()
-        self.assertEqual(len(browsers), 2)
-        self.assertEqual(browsers[0], browser1)
-        self.assertEqual(browsers[1], browser2)
+        drivers = cache.get_open_drivers()
+        self.assertEqual(len(drivers), 2)
+        self.assertEqual(drivers[0], driver1)
+        self.assertEqual(drivers[1], driver2)
 
     def test_close(self):
-        cache = BrowserCache()
+        cache = DriverCache()
         browser = mock()
         cache.register(browser)
 
@@ -66,7 +66,7 @@ class BrowserCacheTests(unittest.TestCase):
         verify(browser, times=1).quit()
 
     def test_close_only_called_once(self):
-        cache = BrowserCache()
+        cache = DriverCache()
 
         browser1 = mock()
         browser2 = mock()
