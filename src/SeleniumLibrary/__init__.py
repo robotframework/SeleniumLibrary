@@ -34,7 +34,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WaitingKeywords,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder, TableElementFinder
-from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
+from SeleniumLibrary.utils import (Deprecated, DriverCache, LibraryListener,
                                    timestr_to_secs)
 
 
@@ -342,7 +342,7 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
-        self._browsers = BrowserCache()
+        self._browsers = DriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self._element_finder = ElementFinder(self)

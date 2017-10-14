@@ -16,8 +16,8 @@
 
 from robot.utils import plural_or_not, secs_to_timestr, timestr_to_secs
 
-from .browsercache import BrowserCache
 from .deprecated import Deprecated
+from .drivercache import DriverCache
 from .librarylistener import LibraryListener
 from .seleniumversion import SELENIUM_VERSION
 from .types import is_falsy, is_noney, is_string, is_truthy
