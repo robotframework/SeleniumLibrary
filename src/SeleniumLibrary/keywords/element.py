@@ -164,13 +164,28 @@ class ElementKeywords(LibraryComponent):
         self.assert_page_contains(locator, message=message, loglevel=loglevel)
 
     @keyword
+    def get_matching_locator_count(self, locator):
+        """Returns number of elements matching ``locator``.
+
+        If you wish to assert the number of matching elements, use
+        `Locator Should Match X Times`. Keyword will always return an integer.
+        New in SeleniumLibrary 3.0.
+
+        Example:
+        | ${count} =      | Get Matching Locator Count | name:div_name  |
+        | Should Be True  | ${count} > 2               |                |
+        """
+        return len(self.find_element(locator, first_only=False,
+                                     required=False))
+
+    @keyword
     def locator_should_match_x_times(self, locator, expected_locator_count, message='', loglevel='INFO'):
-        """Verifies that the page contains the given number of elements located by the given `locator`.
+        """Verifies that the page contains the given number of elements located by the given ``locator``.
 
         See `introduction` for details about locating elements.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message`` and
+        ``loglevel`` arguments.
         """
         actual_locator_count = len(self.find_element(
             locator, first_only=False, required=False)
@@ -178,7 +193,8 @@ class ElementKeywords(LibraryComponent):
         if int(actual_locator_count) != int(expected_locator_count):
             if is_falsy(message):
                 message = "Locator %s should have matched %s times but matched %s times"\
-                            %(locator, expected_locator_count, actual_locator_count)
+                          % (locator, expected_locator_count,
+                             actual_locator_count)
             self.ctx.log_source(loglevel)
             raise AssertionError(message)
         self.info("Current page contains %s elements matching '%s'."
@@ -731,50 +747,22 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def get_matching_xpath_count(self, xpath, return_str=True):
-        """Returns number of elements matching `xpath`
+        """Deprecated. Use `Get Matching Locator Count` instead.
 
-        The default return type is `str` but it can changed to `int` by setting
-        the ``return_str`` argument to Python False.
-
-        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-
-        Correct:
-        | count = | Get Matching Xpath Count | //div[@id='sales-pop']
-        Incorrect:
-        | count = | Get Matching Xpath Count | xpath=//div[@id='sales-pop']
-
-        If you wish to assert the number of matching elements, use
-        `Xpath Should Match X Times`.
+        In the `Get Matching Locator Count` keyword, the return value type
+        is changed to integer and it's not anymore possible change the
+        return value type between string and integer.
         """
-        count = len(self.find_element("xpath=" + xpath, first_only=False,
-                                      required=False))
+        count = self.get_matching_locator_count("xpath=" + xpath)
         return str(count) if is_truthy(return_str) else count
 
     @keyword
-    def xpath_should_match_x_times(self, xpath, expected_xpath_count, message='', loglevel='INFO'):
-        """Verifies that the page contains the given number of elements located by the given `xpath`.
-
-        One should not use the xpath= prefix for 'xpath'. XPath is assumed.
-
-        Correct:
-        | Xpath Should Match X Times | //div[@id='sales-pop'] | 1
-        Incorrect:
-        | Xpath Should Match X Times | xpath=//div[@id='sales-pop'] | 1
-
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
-        """
-        actual_xpath_count = len(self.find_element(
-            "xpath=" + xpath, first_only=False, required=False))
-        if int(actual_xpath_count) != int(expected_xpath_count):
-            if is_falsy(message):
-                message = ("Xpath %s should have matched %s times but "
-                           "matched %s times"
-                           % (xpath, expected_xpath_count, actual_xpath_count))
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
-        self.info("Current page contains %s elements matching '%s'."
-                  % (actual_xpath_count, xpath))
+    def xpath_should_match_x_times(self, xpath, expected_xpath_count,
+                                   message='', loglevel='INFO'):
+        """Deprecated. Use `Locator Should Match X Times` instead."""
+        self.locator_should_match_x_times("xpath=" + xpath,
+                                          expected_xpath_count, message,
+                                          loglevel)
 
     @keyword
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
