@@ -326,7 +326,7 @@ class SeleniumLibrary(DynamicCore):
             ScreenshotKeywords(self),
             WaitingKeywords(self)
         ]
-        self._browsers = DriverCache()
+        self._drivers = DriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self.element_finder = ElementFinder(self)
@@ -346,8 +346,8 @@ class SeleniumLibrary(DynamicCore):
             self.failure_occurred()
             raise
 
-    def register_browser(self, browser, alias):
-        return self._browsers.register(browser, alias)
+    def register_driver(self, driver, alias):
+        return self._drivers.register(driver, alias)
 
     def failure_occurred(self):
         """Method that is executed when a SeleniumLibrary keyword fails.
@@ -368,11 +368,11 @@ class SeleniumLibrary(DynamicCore):
             self._running_on_failure_keyword = False
 
     @property
-    def browser(self):
-        """Current active browser"""
-        if not self._browsers.current:
-            raise RuntimeError('No browser is open')
-        return self._browsers.current
+    def driver(self):
+        """Current active driver"""
+        if not self._drivers.current:
+            raise RuntimeError('No driver is open')
+        return self._drivers.current
 
     @property
     def _cache(self):

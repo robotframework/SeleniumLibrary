@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from SeleniumLibrary.base import keyword, LibraryComponent
-from SeleniumLibrary.utils import is_truthy, secs_to_timestr, timestr_to_secs
+from SeleniumLibrary.utils import is_truthy, secs_to_timestr
 
 
 class AlertKeywords(LibraryComponent):
@@ -207,7 +207,7 @@ class AlertKeywords(LibraryComponent):
 
     def _wait_alert(self, timeout=None):
         timeout = self.get_timeout(timeout)
-        wait = WebDriverWait(self.browser, timeout)
+        wait = WebDriverWait(self.driver, timeout)
         try:
             return wait.until(EC.alert_is_present())
         except WebDriverException:

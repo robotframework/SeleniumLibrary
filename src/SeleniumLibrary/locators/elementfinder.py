@@ -68,7 +68,7 @@ class ElementFinder(ContextAware):
         strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
         elements = strategy(criteria, tag, constraints,
-                            parent=parent or self.browser)
+                            parent=parent or self.driver)
         if required and not elements:
             raise ValueError("Element locator '{}' did not match any "
                              "elements.".format(locator))
@@ -153,7 +153,7 @@ class ElementFinder(ContextAware):
 
     def _find_by_dom(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
-        result = self.browser.execute_script("return %s;" % criteria)
+        result = self.driver.execute_script("return %s;" % criteria)
         if result is None:
             return []
         if not isinstance(result, list):
@@ -164,7 +164,7 @@ class ElementFinder(ContextAware):
         self._disallow_webelement_parent(parent)
         js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
         return self._filter_elements(
-            self.browser.execute_script(js),
+            self.driver.execute_script(js),
             tag, constraints)
 
     def _find_by_link_text(self, criteria, tag, constraints, parent):
@@ -195,7 +195,7 @@ class ElementFinder(ContextAware):
     def _find_by_sc_locator(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
         js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
-        return self._filter_elements([self.browser.execute_script(js)],
+        return self._filter_elements([self.driver.execute_script(js)],
                                      tag, constraints)
 
     def _find_by_default(self, criteria, tag, constraints, parent):
@@ -305,7 +305,7 @@ class ElementFinder(ContextAware):
         return attrs
 
     def _get_base_url(self):
-        url = self.browser.current_url
+        url = self.driver.current_url
         if '/' in url:
             url = '/'.join(url.split('/')[:-1])
         return url

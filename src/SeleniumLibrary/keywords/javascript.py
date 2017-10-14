@@ -51,7 +51,7 @@ class JavaScriptKeywords(LibraryComponent):
         """
         js = self._get_javascript_to_execute(''.join(code))
         self.info("Executing JavaScript:\n%s" % js)
-        return self.browser.execute_script(js)
+        return self.driver.execute_script(js)
 
     @keyword
     def execute_async_javascript(self, *code):
@@ -76,7 +76,7 @@ class JavaScriptKeywords(LibraryComponent):
         """
         js = self._get_javascript_to_execute(''.join(code))
         self.info("Executing Asynchronous JavaScript:\n%s" % js)
-        return self.browser.execute_async_script(js)
+        return self.driver.execute_async_script(js)
 
     def _get_javascript_to_execute(self, code):
         codepath = code.replace('/', os.sep)

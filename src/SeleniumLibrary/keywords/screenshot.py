@@ -113,19 +113,18 @@ class ScreenshotKeywords(LibraryComponent):
 
         """
         try:
-            self.browser
-            
+            self.driver
         except RuntimeError:
             self.info("Couldn't capture page screenshot because no browser is opened")
-        
+
         else:
             path, link = self._get_screenshot_paths(filename)
             self._create_directory(path)
-            if hasattr(self.browser, 'get_screenshot_as_file'):
-                if not self.browser.get_screenshot_as_file(path):
+            if hasattr(self.driver, 'get_screenshot_as_file'):
+                if not self.driver.get_screenshot_as_file(path):
                     raise RuntimeError('Failed to save screenshot ' + link)
             else:
-                if not self.browser.save_screenshot(path):
+                if not self.driver.save_screenshot(path):
                     raise RuntimeError('Failed to save screenshot ' + link)
             # Image is shown on its own row and thus prev row is closed on purpose
             msg = (

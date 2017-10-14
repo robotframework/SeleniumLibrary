@@ -18,8 +18,7 @@ import time
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.keywords.element import ElementKeywords
-from SeleniumLibrary.utils import (is_truthy, is_falsy,
-                                   secs_to_timestr, timestr_to_secs)
+from SeleniumLibrary.utils import is_falsy, secs_to_timestr
 
 
 class WaitingKeywords(LibraryComponent):
@@ -52,7 +51,7 @@ class WaitingKeywords(LibraryComponent):
             error = "Condition '%s' did not become true in <TIMEOUT>" % condition
         self._wait_until(
             timeout, error,
-            lambda: self.browser.execute_script(condition) is True)
+            lambda: self.driver.execute_script(condition) is True)
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):

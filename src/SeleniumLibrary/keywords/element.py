@@ -222,7 +222,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Assigning temporary id '%s' to element '%s'" % (id, locator))
         element = self.find_element(locator)
-        self.browser.execute_script("arguments[0].id = '%s';" % id, element)
+        self.driver.execute_script("arguments[0].id = '%s';" % id, element)
 
     @keyword
     def element_should_be_disabled(self, locator):
@@ -254,10 +254,10 @@ class ElementKeywords(LibraryComponent):
         New in SeleniumLibrary 3.0.0.
         """
         element = self.find_element(locator)
-        if self.browser.capabilities['browserName'] != "firefox":
-            focused = self.browser.switch_to.active_element
+        if self.driver.capabilities['browserName'] != "firefox":
+            focused = self.driver.switch_to.active_element
         else:
-            focused = self.browser.execute_script('return document.activeElement;')
+            focused = self.driver.execute_script('return document.activeElement;')
         if element != focused:
             raise AssertionError("Element '%s' is not with focus." % (locator))
 
@@ -441,7 +441,7 @@ class ElementKeywords(LibraryComponent):
         self.info("Click clicking element '%s' in coordinates "
                   "'%s', '%s'." % (locator, xoffset, yoffset))
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
@@ -456,7 +456,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Double clicking element '%s'." % locator)
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.double_click(element).perform()
 
     @keyword
@@ -466,7 +466,7 @@ class ElementKeywords(LibraryComponent):
         Prior to SeleniumLibrary 3.0 this keyword was named `Focus`.
         """
         element = self.find_element(locator)
-        self.browser.execute_script("arguments[0].focus();", element)
+        self.driver.execute_script("arguments[0].focus();", element)
 
     @keyword
     def focus(self, locator):
@@ -488,7 +488,7 @@ class ElementKeywords(LibraryComponent):
         """
         src_elem = self.find_element(source)
         trg_elem = self.find_element(target)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.drag_and_drop(src_elem, trg_elem).perform()
 
     @keyword
@@ -502,7 +502,7 @@ class ElementKeywords(LibraryComponent):
         | Drag And Drop By Offset | myElem | 50 | -35 | # Move myElem 50px right and 35px down. |
         """
         src_elem = self.find_element(source)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.drag_and_drop_by_offset(src_elem, xoffset, yoffset)
         action.perform()
 
@@ -522,7 +522,7 @@ class ElementKeywords(LibraryComponent):
         element = self.find_element(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -539,7 +539,7 @@ class ElementKeywords(LibraryComponent):
         size = element.size
         offsetx = (size['width'] / 2) + 1
         offsety = (size['height'] / 2) + 1
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.move_to_element(element).move_by_offset(offsetx, offsety)
         action.perform()
 
@@ -554,7 +554,7 @@ class ElementKeywords(LibraryComponent):
         element = self.find_element(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.move_to_element(element).perform()
 
     @keyword
@@ -568,13 +568,13 @@ class ElementKeywords(LibraryComponent):
         element = self.find_element(locator, required=False)
         if element is None:
             raise AssertionError("ERROR: Element %s not found." % (locator))
-        ActionChains(self.browser).release(element).perform()
+        ActionChains(self.driver).release(element).perform()
 
     @keyword
     def open_context_menu(self, locator):
         """Opens context menu on element identified by `locator`."""
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.context_click(element).perform()
 
     @keyword
@@ -599,7 +599,7 @@ var evt = document.createEvent("HTMLEvents");
 evt.initEvent(eventName, true, true);
 return !element.dispatchEvent(evt);
         """
-        self.browser.execute_script(script, element, event)
+        self.driver.execute_script(script, element, event)
 
     @keyword
     def simulate(self, locator, event):
@@ -654,7 +654,7 @@ return !element.dispatchEvent(evt);
         `introduction` for details about locating elements.
         """
         element = self.find_element(locator, tag='link')
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -703,7 +703,7 @@ return !element.dispatchEvent(evt);
         `introduction` for details about locating elements.
         """
         element = self.find_element(locator, tag='image')
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -814,10 +814,10 @@ return !element.dispatchEvent(evt);
 
     def _frame_contains(self, locator, text):
         element = self.find_element(locator)
-        self.browser.switch_to.frame(element)
+        self.driver.switch_to.frame(element)
         self.info("Searching for text from frame '%s'." % locator)
         found = self.is_text_present(text)
-        self.browser.switch_to.default_content()
+        self.driver.switch_to.default_content()
         return found
 
     def _get_text(self, locator):
@@ -889,7 +889,7 @@ return !element.dispatchEvent(evt);
         return parts[0], parts[2]
 
     def _page_contains(self, text):
-        self.browser.switch_to.default_content()
+        self.driver.switch_to.default_content()
 
         if self.is_text_present(text):
             return True
@@ -899,9 +899,9 @@ return !element.dispatchEvent(evt);
                                       required=False)
         self.debug('Current frame has %d subframes' % len(subframes))
         for frame in subframes:
-            self.browser.switch_to.frame(frame)
+            self.driver.switch_to.frame(frame)
             found_text = self.is_text_present(text)
-            self.browser.switch_to.default_content()
+            self.driver.switch_to.default_content()
             if found_text:
                 return True
         return False

@@ -97,17 +97,17 @@ class BrowserManagementTests(unittest.TestCase):
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         ctx = mock()
         ctx.timeout = 5.0
-        _browsers = mock()
-        ctx._browsers = _browsers
+        _drivers = mock()
+        ctx._drivers = _drivers
         first_browser, second_browser = mock(), mock()
-        when(_browsers).get_open_browsers().thenReturn(
+        when(_drivers).get_open_drivers().thenReturn(
             [first_browser, second_browser]
         )
         bm = BrowserManagementKeywords(ctx)
         bm.set_selenium_timeout("10 seconds")
         verify(first_browser).set_script_timeout(10.0)
         verify(second_browser).set_script_timeout(10.0)
-        when(_browsers).get_open_browsers().thenReturn(
+        when(_drivers).get_open_drivers().thenReturn(
             []
         )
         bm.set_selenium_timeout("20 seconds")
@@ -131,15 +131,15 @@ class BrowserManagementTests(unittest.TestCase):
         driver = mock()
         when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
         when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
-        when(ctx).register_browser(driver, 'fake1').thenReturn(0)
+        when(ctx).register_driver(driver, 'fake1').thenReturn(0)
         webdriver.FakeWebDriver = FakeWebDriver
         try:
             index = bm.create_webdriver('FakeWebDriver', 'fake1', some_arg=1)
-            verify(ctx).register_browser(driver, 'fake1')
+            verify(ctx).register_driver(driver, 'fake1')
             self.assertEqual(index, 0)
             my_kwargs = {'some_arg': 2}
             bm.create_webdriver('FakeWebDriver', 'fake2', kwargs=my_kwargs)
-            verify(ctx).register_browser(driver, 'fake2')
+            verify(ctx).register_driver(driver, 'fake2')
         finally:
             del webdriver.FakeWebDriver
         unstub()
