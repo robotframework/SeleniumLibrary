@@ -14,47 +14,58 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from selenium.common.exceptions import NoSuchWindowException
-from selenium.common.exceptions import WebDriverException
+from collections import namedtuple
+
+from selenium.common.exceptions import (NoSuchWindowException,
+                                        WebDriverException)
+
+from SeleniumLibrary.base import ContextAware
 
 
-class WindowManager(object):
+WindowInfo = namedtuple('WindowInfo', 'handle, id, name, title, url')
 
-    def __init__(self):
+
+class WindowManager(ContextAware):
+
+    def __init__(self, ctx):
         self._strategies = {
             'title': self._select_by_title,
             'name': self._select_by_name,
             'url': self._select_by_url,
             None: self._select_by_default
         }
+        ContextAware.__init__(self, ctx)
 
-    def get_window_ids(self, browser):
-        return [ window_info[1] for window_info in self._get_window_infos(browser) ]
+    def get_window_infos(self):
+        infos = []
+        try:
+            starting_handle = self.browser.current_window_handle
+        except NoSuchWindowException:
+            starting_handle = None
+        try:
+            for handle in self.browser.window_handles:
+                self.browser.switch_to.window(handle)
+                infos.append(self._get_current_window_info(self.browser))
+        finally:
+            if starting_handle:
+                self.browser.switch_to.window(starting_handle)
+        return infos
 
-    def get_window_names(self, browser):
-        return [ window_info[2] for window_info in self._get_window_infos(browser) ]
-
-    def get_window_titles(self, browser):
-        return [ window_info[3] for window_info in self._get_window_infos(browser) ]
-
-    def select(self, browser, locator):
-        assert browser is not None
+    def select(self, locator):
         if locator is not None:
             if isinstance(locator, list):
-                self._select_by_excludes(browser, locator)
+                self._select_by_excludes(self.browser, locator)
                 return
             if locator.lower() == "self" or locator.lower() == "current":
                 return
             if locator.lower() == "new" or locator.lower() == "popup":
-                self._select_by_last_index(browser)
+                self._select_by_last_index(self.browser)
                 return
         (prefix, criteria) = self._parse_locator(locator)
         strategy = self._strategies.get(prefix)
         if strategy is None:
             raise ValueError("Window locator with prefix '" + prefix + "' is not supported")
-        return strategy(browser, criteria)
-
-    # Strategy routines, private
+        return strategy(self.browser, criteria)
 
     def _select_by_title(self, browser, criteria):
         self._select_matching(
@@ -112,8 +123,6 @@ class WindowManager(object):
                 return
         raise ValueError("Unable to locate new window")
 
-    # Private
-
     def _parse_locator(self, locator):
         prefix = None
         criteria = locator
@@ -126,21 +135,6 @@ class WindowManager(object):
             if criteria is None or criteria.lower() == 'main':
                 criteria = ''
         return (prefix, criteria)
-
-    def _get_window_infos(self, browser):
-        window_infos = []
-        try:
-            starting_handle = browser.current_window_handle
-        except NoSuchWindowException:
-            starting_handle = None
-        try:
-            for handle in browser.window_handles:
-                browser.switch_to.window(handle)
-                window_infos.append(self._get_current_window_info(browser))
-        finally:
-            if starting_handle:
-                browser.switch_to.window(starting_handle)
-        return window_infos
 
     def _select_matching(self, browser, matcher, error):
         try:
@@ -157,18 +151,13 @@ class WindowManager(object):
 
     def _get_current_window_info(self, browser):
         try:
-            id_, name = browser.execute_script("return [ window.id, window.name ];")
+            id, name = browser.execute_script("return [ window.id, window.name ];")
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
-            id_ = None
-            name = ''
-
-        title = browser.title
-        url = browser.current_url
-
-        id_ = id_ if id_ is not None else 'undefined'
-        name, title, url = (
-            att if att else 'undefined' for att in (name, title, url)
-        )
-        return browser.current_window_handle, id_, name, title, url
+            id = name = None
+        return WindowInfo(browser.current_window_handle,
+                          id if id is not None else 'undefined',
+                          name or 'undefined',
+                          browser.title or 'undefined',
+                          browser.current_url or 'undefined')
