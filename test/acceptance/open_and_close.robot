@@ -16,7 +16,7 @@ Browser Open With Implicit Wait Should Not Override Default
 
 There Should Be A Good Error Message If Browser Is Not Opened
     [Documentation]    Tests error message
-    Run Keyword And Expect Error    No browser is open    Title Should Be    foo
+    Run Keyword And Expect Error    No driver is open    Title Should Be    foo
 
 Close Browser Does Nothing When No Browser Is Opened
     [Documentation]    Close already closed browser
