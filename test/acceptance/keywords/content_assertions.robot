@@ -115,7 +115,7 @@ Element Should Contain
     ...    Element 'some_id' should have contained text 'non existing text' but its text was 'This text is inside an identified element'.
     ...    Element Should Contain    some_id    non existing text
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'missing_id' did not match any elements.
+    ...    Element with locator 'missing_id' not found.
     ...    Element Should Contain    missing_id    This should report missing element.
 
 Element Should Not Contain
@@ -125,7 +125,7 @@ Element Should Not Contain
     ...    Element 'some_id' should not contain text 'This text is inside an identified element' but it did.
     ...    Element Should Not Contain    some_id    This text is inside an identified element
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'missing_id' did not match any elements.
+    ...    Element with locator 'missing_id' not found.
     ...    Element Should Not Contain    missing_id    This should report missing element.
 
 Element Text Should Be
@@ -138,7 +138,7 @@ Get Text
     ${str} =    Get Text    some_id
     Should Match    ${str}    This text is inside an identified element
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'missing_id' did not match any elements.
+    ...    Element with locator 'missing_id' not found.
     ...    Get Text    missing_id
 
 Element Should Be Visible
@@ -287,7 +287,7 @@ TextArea Should Contain
     TextArea Should Contain    comment    ${EMPTY}
     Input Text    comment    This is a comment.
     Run Keyword And Expect Error
-    ...    Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'.
+    ...    Text area 'comment' should have contained text 'Hello World!' but it had 'This is a comment.'.
     ...    TextArea Should Contain    comment    Hello World!
 
 TextArea Value Should Be
@@ -295,7 +295,7 @@ TextArea Value Should Be
     TextArea Value Should Be    comment    ${EMPTY}
     Input Text    comment    This is a comment.
     Run Keyword And Expect Error
-    ...    Text field 'comment' should have contained text 'Hello World!' but it contained 'This is a comment.'.
+    ...    Text area 'comment' should have had text 'Hello World!' but it had 'This is a comment.'.
     ...    TextArea Value Should Be    comment    Hello World!
     Clear Element Text    comment
     TextArea Value Should Be    comment    ${EMPTY}

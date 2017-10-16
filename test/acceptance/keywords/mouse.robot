@@ -10,7 +10,7 @@ Mouse Over
     Mouse Over    el_for_mouseover
     Textfield Value Should Be    el_for_mouseover    mouseover el_for_mouseover
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Element with locator 'not_there' not found.
     ...    Mouse Over    not_there
 
 Mouse Out
@@ -18,7 +18,7 @@ Mouse Out
     Mouse Out    el_for_mouseout
     Textfield Value Should Be    el_for_mouseout    mouseout el_for_mouseout
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Element with locator 'not_there' not found.
     ...    Mouse Out    not_there
 
 Mouse Down
@@ -26,7 +26,7 @@ Mouse Down
     Mouse Down    el_for_mousedown
     Textfield Value Should Be    el_for_mousedown    mousedown el_for_mousedown
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Element with locator 'not_there' not found.
     ...    Mouse Down    not_there
 
 Mouse Up
@@ -34,7 +34,7 @@ Mouse Up
     Mouse Up    el_for_mouseup
     Textfield Value Should Be    el_for_mouseup    mouseup el_for_mouseup
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'not_there' did not match any elements.
+    ...    Element with locator 'not_there' not found.
     ...    Mouse Up    not_there
 
 Simulate Event

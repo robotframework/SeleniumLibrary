@@ -258,7 +258,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        actual = self.element_finder.get_value(locator, 'text field')
+        actual = self._get_value(locator, 'text field')
         if expected not in actual:
             if is_noney(message):
                 message = "Text field '%s' should have contained text '%s' "\
@@ -275,11 +275,7 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text fields are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        element = self.find_element(locator, tag='text field', required=False)
-        if not element:
-            element = self.find_element(locator, tag='file upload',
-                                        required=False)
-        actual = element.get_attribute('value') if element else None
+        actual = self._get_value(locator, 'text field')
         if actual != expected:
             if is_noney(message):
                 message = "Value of text field '%s' should have been '%s' "\
@@ -296,16 +292,12 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text areas are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        actual = self.element_finder.get_value(locator, 'text area')
-        if actual is not None:
-            if expected not in actual:
-                if is_noney(message):
-                    message = "Text field '%s' should have contained text '%s' "\
-                              "but it contained '%s'." % (locator, expected, actual)
-                raise AssertionError(message)
-        else:
-            raise ValueError("Element locator '%s' did not match any "
-                             "elements." % locator)
+        actual = self._get_value(locator, 'text area')
+        if expected not in actual:
+            if is_noney(message):
+                message = "Text area '%s' should have contained text '%s' " \
+                          "but it had '%s'." % (locator, expected, actual)
+            raise AssertionError(message)
         self.info("Text area '%s' contains text '%s'." % (locator, expected))
 
     @keyword
@@ -317,16 +309,12 @@ class FormElementKeywords(LibraryComponent):
         Key attributes for text areas are `id` and `name`. See `introduction`
         for details about locating elements.
         """
-        actual = self.element_finder.get_value(locator, 'text area')
-        if actual is not None:
-            if expected != actual:
-                if is_noney(message):
-                    message = "Text field '%s' should have contained text '%s' "\
-                              "but it contained '%s'." % (locator, expected, actual)
-                raise AssertionError(message)
-        else:
-            raise ValueError("Element locator '%s' did not match any "
-                             "elements." % locator)
+        actual = self._get_value(locator, 'text area')
+        if expected != actual:
+            if is_noney(message):
+                message = "Text area '%s' should have had text '%s' " \
+                          "but it had '%s'." % (locator, expected, actual)
+            raise AssertionError(message)
         self.info("Content of text area '%s' is '%s'." % (locator, expected))
 
     @keyword
@@ -373,6 +361,9 @@ class FormElementKeywords(LibraryComponent):
         """
         self.assert_page_not_contains(locator, 'button', message, loglevel)
         self.assert_page_not_contains(locator, 'input', message, loglevel)
+
+    def _get_value(self, locator, tag):
+        return self.find_element(locator, tag).get_attribute('value')
 
     def _get_checkbox(self, locator):
         return self.find_element(locator, tag='input')

@@ -2,6 +2,7 @@ import unittest
 
 from mockito import any, mock, verify, when, unstub
 
+from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 
@@ -198,22 +199,11 @@ class ElementFinderTests(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_find_with_invalid_prefix(self):
-        with self.assertRaises(ValueError) as error:
+    def test_non_exisisting_prefix(self):
+        with self.assertRaises(ElementNotFound):
             self.finder.find("something=test1")
-            self.assertEqual(str(error),
-                             "Element locator with prefix 'something' "
-                             "is not supported.")
-        with self.assertRaises(ValueError) as error:
-            self.finder.find(" by ID =test1")
-            self.assertEqual(str(error),
-                             "Element locator with prefix 'by ID' is "
-                             "not supported.")
-
-    def test_find_with_null_browser(self):
-        ctx = mock()
-        finder = ElementFinder(ctx)
-        self.assertRaises(AttributeError, finder.find, None, "id=test1")
+        with self.assertRaises(ElementNotFound):
+            self.finder.find("foo:bar")
 
     def test_find_with_no_tag(self):
         self.finder.find("test1", required=False)
@@ -322,7 +312,7 @@ class ElementFinderTests(unittest.TestCase):
         verify(self.browser).find_elements_by_xpath(
             "//input[@type[. = 'date' or . = 'datetime-local' or . = 'email' or "
             ". = 'month' or . = 'number' or . = 'password' or . = 'search' or "
-            ". = 'tel' or . = 'text' or . = 'time' or . = 'url' or . = 'week'] and "
+            ". = 'tel' or . = 'text' or . = 'time' or . = 'url' or . = 'week' or . = 'file'] and "
             "(@id='test1' or @name='test1' or @value='test1' or @src='test1' or "
             "@src='http://localhost/test1')]")
 
@@ -499,13 +489,15 @@ class ElementFinderTests(unittest.TestCase):
         self.assertEqual(result, [elements[3]])
         result = self.finder.find("id=test1", tag='text field',
                                   first_only=False)
-        self.assertEqual(result, [elements[5], elements[8]])
+        self.assertEqual(result, [elements[5], elements[7], elements[8]])
         result = self.finder.find("id=test1", tag='file upload',
                                   first_only=False)
         self.assertEqual(result, [elements[7]])
 
     def test_find_returns_bad_values(self):
         # selenium.webdriver.ie.webdriver.WebDriver sometimes returns these
+        # and ChromeDriver has also returned None:
+        # https://github.com/SeleniumHQ/selenium/issues/4555
         locators = ('find_elements_by_id', 'find_elements_by_name',
                     'find_elements_by_xpath', 'find_elements_by_link_text',
                     'find_elements_by_css_selector',

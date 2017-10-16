@@ -15,35 +15,6 @@ class KeywordArgumentsElementTest(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_element_should_contain(self):
-        locator = '//div'
-        actual = 'bar'
-        expected = 'foo'
-        when(self.element)._get_text(locator).thenReturn(actual)
-        message = ("Element '%s' should have contained text '%s' but "
-                   "its text was '%s'." % (locator, expected, actual))
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_contain('//div', expected)
-            self.assertEqual(str(error), message)
-
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_contain('//div', expected, 'foobar')
-            self.assertEqual(str(error), 'foobar')
-
-    def test_element_should_not_contain(self):
-        locator = '//div'
-        actual = 'bar'
-        when(self.element)._get_text(locator).thenReturn(actual)
-        message = ("Element '%s' should not contain text '%s' but "
-                   "it did." % (locator, actual))
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_not_contain('//div', actual)
-            self.assertEqual(str(error), message)
-
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_not_contain('//div', actual, 'foobar')
-            self.assertEqual(str(error), 'foobar')
-
     def test_locator_should_match_x_times(self):
         locator = '//div'
         when(self.element).find_elements(locator).thenReturn([])
@@ -52,24 +23,6 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
         with self.assertRaisesRegexp(AssertionError, 'foobar'):
             self.element.locator_should_match_x_times(locator, 1, 'foobar')
-
-    def test_element_should_be_visible(self):
-        locator = '//div'
-        when(self.element).is_visible(locator).thenReturn(None)
-        with self.assertRaisesRegexp(AssertionError, 'should be visible'):
-            self.element.element_should_be_visible(locator)
-
-        with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.element.element_should_be_visible(locator, 'foobar')
-
-    def test_element_should_not_be_visible(self):
-        locator = '//div'
-        when(self.element).is_visible(locator).thenReturn(True)
-        with self.assertRaisesRegexp(AssertionError, 'should not be visible'):
-            self.element.element_should_not_be_visible(locator)
-
-        with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.element.element_should_not_be_visible(locator, 'foobar')
 
     def test_element_text_should_be(self):
         locator = '//div'

@@ -5,13 +5,11 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Should Be Focused
-    [Documentation]    Verify that element is Focused
     [Setup]    Go To Page "mouse/index.html"
     Click Element    el_for_focus
     Element Should Be Focused    el_for_focus
 
 Should Not Be Focused
-    [Documentation]    Verify that element is not Focused
     [Setup]    Go To Page "mouse/index.html"
     Click Element    el_for_focus
     Run Keyword And Expect Error
@@ -20,13 +18,11 @@ Should Not Be Focused
     Element Should Be Focused    el_for_focus
 
 Unexistent Element Not Focused
-    [Documentation]    Missing element returns locator error
     [Setup]    Go To Page "mouse/index.html"
     Click Element    el_for_focus
     Run Keyword And Expect Error
-    ...    ValueError: Element locator 'Unexistent_element' did not match any elements.
+    ...    Element with locator 'Unexistent_element' not found.
     ...    Element Should Be Focused    Unexistent_element
-    Element Should Be Focused    el_for_focus
 
 Span Element Not Focused
     [Documentation]    Focus on not Focusable Span
@@ -45,7 +41,6 @@ Table Element Not Focused
     ...    Element Should Be Focused    simpleTable
 
 Radio Button Should Be Focused
-    [Documentation]    Radio Button with xpath should be focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Click Element    xpath=//input[@name='sex' and @value='male']
     Element Should Be Focused    xpath=//input[@name='sex' and @value='male']
@@ -54,7 +49,6 @@ Radio Button Should Be Focused
     ...    Element Should Be Focused    xpath=//input[@name='sex' and @value='female']
 
 Checkbox Should Be Focused
-    [Documentation]    Checkbox with xpath should be focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Click Element    xpath=//input[@name='can_send_sms']
     Element Should Be Focused    xpath=//input[@name='can_send_sms']
@@ -63,7 +57,6 @@ Checkbox Should Be Focused
     ...    Element Should Be Focused    xpath=//input[@name='can_send_email']
 
 Select Button Should Be Focused
-    [Documentation]    Select Button with xpath should be focused
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Mouse Down    xpath=//select[@name='preferred_channel']
     Element Should Be Focused    xpath=//select[@name='preferred_channel']

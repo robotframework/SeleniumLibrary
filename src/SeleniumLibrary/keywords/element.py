@@ -18,8 +18,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import (escape_xpath_value, is_falsy, is_noney,
-                                   is_truthy, plural_or_not as s)
+from SeleniumLibrary.utils import (is_falsy, is_noney, is_truthy,
+                                   plural_or_not as s)
 
 
 class ElementKeywords(LibraryComponent):
@@ -44,7 +44,7 @@ class ElementKeywords(LibraryComponent):
         list if there are no matching elements. In previous releases the
         keyword failed in this case.
         """
-        return self.find_element(locator, first_only=False, required=False)
+        return self.find_elements(locator)
 
     @keyword
     def current_frame_should_contain(self, text, loglevel='INFO'):
@@ -93,14 +93,13 @@ class ElementKeywords(LibraryComponent):
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
         """
-        self.info("Verifying element '%s' contains text '%s'."
-                  % (locator, expected))
-        actual = self._get_text(locator)
+        actual = self.find_element(locator).text
         if expected not in actual:
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
                           "its text was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
+        self.info("Element '%s' contains text '%s'." % (locator, expected))
 
     @keyword
     def element_should_not_contain(self, locator, expected, message=None):
@@ -112,14 +111,14 @@ class ElementKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
         """
-        self.info("Verifying element '%s' does not contain text '%s'."
-                  % (locator, expected))
-        actual = self._get_text(locator)
+        actual = self.find_element(locator).text
         if expected in actual:
             if is_noney(message):
                 message = "Element '%s' should not contain text '%s' but " \
                           "it did." % (locator, expected)
             raise AssertionError(message)
+        self.info("Element '%s' does not contain text '%s'."
+                  % (locator, expected))
 
     @keyword
     def frame_should_contain(self, locator, text, loglevel='INFO'):
@@ -287,23 +286,26 @@ class ElementKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
         """
-        self.info("Verifying element '%s' is visible." % locator)
-        visible = self.is_visible(locator)
-        if not visible:
+        if not self.find_element(locator).is_displayed():
             if is_noney(message):
                 message = ("The element '%s' should be visible, but it "
                            "is not." % locator)
             raise AssertionError(message)
+        self.info("Element '%s' is displayed." % locator)
 
     @keyword
     def element_should_not_be_visible(self, locator, message=None):
         """Verifies that the element identified by ``locator`` is NOT visible.
 
-        This is the opposite of `Element Should Be Visible`.
+        Passes if element does not exists. See `Element Should Be Visible`
+        for more information about visibility and supported arguments.
         """
-        self.info("Verifying element '%s' is not visible." % locator)
-        visible = self.is_visible(locator)
-        if visible:
+        element = self.find_element(locator, required=False)
+        if element is None:
+            self.info("Element '%s' did not exist." % locator)
+        elif not element.is_displayed():
+            self.info("Element '%s' exists but is not displayed." % locator)
+        else:
             if is_noney(message):
                 message = ("The element '%s' should not be visible, "
                            "but it is." % locator)
@@ -323,12 +325,12 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Verifying element '%s' contains exact text '%s'."
                   % (locator, expected))
-        element = self.find_element(locator)
-        if element.text != expected:
+        text = self.find_element(locator).text
+        if text != expected:
             if is_noney(message):
                 message = ("The text of element '%s' should have been '%s' "
                            "but it was '%s'."
-                           % (locator, expected, element.text))
+                           % (locator, expected, text))
             raise AssertionError(message)
 
     @keyword
@@ -387,7 +389,7 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        return self.ctx.element_finder.get_value(locator)
+        return self.get_element_attribute(locator, 'value')
 
     @keyword
     def get_text(self, locator):
@@ -396,7 +398,7 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        return self._get_text(locator)
+        return self.find_element(locator).text
 
     @keyword
     def clear_element_text(self, locator):
@@ -786,12 +788,6 @@ return !element.dispatchEvent(evt);
         self.browser.switch_to.default_content()
         return found
 
-    def _get_text(self, locator):
-        element = self.find_element(locator)
-        if element is not None:
-            return element.text
-        return None
-
     def _is_enabled(self, locator):
         element = self.find_element(locator)
         if element.tag_name.lower() not in {'input', 'select', 'textarea',
@@ -803,16 +799,6 @@ return !element.dispatchEvent(evt);
         if element.get_attribute('readonly') in {'readonly', 'true'}:
             return False
         return True
-
-    def is_text_present(self, text):
-        locator = "xpath://*[contains(., %s)]" % escape_xpath_value(text)
-        return self.find_element(locator, required=False)
-
-    def is_visible(self, locator):
-        element = self.find_element(locator, required=False)
-        if element is not None:
-            return element.is_displayed()
-        return None
 
     def _map_ascii_key_code_to_key(self, key_code):
         map = {

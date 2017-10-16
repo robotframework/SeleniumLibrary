@@ -18,7 +18,6 @@ import os.path
 import time
 import types
 
-from robot.errors import DataError
 from robot.utils import NormalizedDict
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException

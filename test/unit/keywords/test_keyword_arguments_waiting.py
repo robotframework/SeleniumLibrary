@@ -26,7 +26,7 @@ class KeywordArgumentsWaitingKeywordsTest(unittest.TestCase):
 
     def test_wait_until_page_contains(self):
         text = 'text'
-        when(self.waiting.element).is_text_present(text).thenReturn(None)
+        when(self.waiting).is_text_present(text).thenReturn(None)
         with self.assertRaisesRegexp(AssertionError, "Text 'text' did not"):
             self.waiting.wait_until_page_contains(text)
         with self.assertRaisesRegexp(AssertionError, "error"):
