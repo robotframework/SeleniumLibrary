@@ -459,7 +459,7 @@ class BrowserManagementKeywords(LibraryComponent):
         (no logging).
         """
         source = self.get_source()
-        self.log(source, loglevel.upper())
+        self.log(source, loglevel)
         return source
 
     @keyword

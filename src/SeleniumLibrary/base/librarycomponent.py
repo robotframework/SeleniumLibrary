@@ -25,9 +25,6 @@ from .context import ContextAware
 from .robotlibcore import PY2
 
 
-LOG_LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
-
-
 class LibraryComponent(ContextAware):
 
     def info(self, msg, html=False):
@@ -37,8 +34,8 @@ class LibraryComponent(ContextAware):
         logger.debug(msg, html)
 
     def log(self, msg, level='INFO', html=False):
-        if level.upper() in LOG_LEVELS:
-            logger.write(msg, level, html)
+        if not is_noney(level):
+            logger.write(msg, level.upper(), html)
 
     def warn(self, msg, html=False):
         logger.warn(msg, html)
