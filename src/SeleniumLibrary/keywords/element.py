@@ -47,40 +47,6 @@ class ElementKeywords(LibraryComponent):
         return self.find_elements(locator)
 
     @keyword
-    def current_frame_should_contain(self, text, loglevel='INFO'):
-        """Verifies that current frame contains ``text``.
-
-        See `Page Should Contain` for explanation about the ``loglevel``
-        argument.
-
-        Prior to SeleniumLibrary 3.0 this keyword was named
-        `Current Frame Contains`.
-        """
-        if not self.is_text_present(text):
-            self.ctx.log_source(loglevel)
-            raise AssertionError("Frame should have contained text '%s' "
-                                 "but did not." % text)
-        self.info("Current frame contains text '%s'." % text)
-
-    @keyword
-    def current_frame_contains(self, text, loglevel='INFO'):
-        """Deprecated. Use `Current Frame Should Contain` instead."""
-        self.current_frame_should_contain(text, loglevel)
-
-    @keyword
-    def current_frame_should_not_contain(self, text, loglevel='INFO'):
-        """Verifies that current frame contains ``text``.
-
-        See `Page Should Contain` for explanation about the ``loglevel``
-        argument.
-        """
-        if self.is_text_present(text):
-            self.ctx.log_source(loglevel)
-            raise AssertionError("Frame should not have contained text '%s' "
-                                 "but it did." % text)
-        self.info("Current frame did not contain text '%s'." % text)
-
-    @keyword
     def element_should_contain(self, locator, expected, message=None):
         """Verifies that element ``locator`` contains text ``expected``.
 
@@ -119,22 +85,6 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
         self.info("Element '%s' does not contain text '%s'."
                   % (locator, expected))
-
-    @keyword
-    def frame_should_contain(self, locator, text, loglevel='INFO'):
-        """Verifies that frame identified by ``locator`` contains ``text``.
-
-        See the `Locating elements` section for details about the locator
-        syntax.
-
-        See `Page Should Contain` for explanation about the ``loglevel``
-        argument.
-        """
-        if not self._frame_contains(locator, text):
-            self.ctx.log_source(loglevel)
-            raise AssertionError("Frame '%s' should have contained text '%s' "
-                                 "but did not." % (locator, text))
-        self.info("Frame '%s' contains text '%s'." % (locator, text))
 
     @keyword
     def page_should_contain(self, text, loglevel='INFO'):
@@ -779,14 +729,6 @@ return !element.dispatchEvent(evt);
         custom strategies.
         """
         self.element_finder.unregister(strategy_name)
-
-    def _frame_contains(self, locator, text):
-        element = self.find_element(locator)
-        self.browser.switch_to.frame(element)
-        self.info("Searching for text from frame '%s'." % locator)
-        found = self.is_text_present(text)
-        self.browser.switch_to.default_content()
-        return found
 
     def _is_enabled(self, locator):
         element = self.find_element(locator)

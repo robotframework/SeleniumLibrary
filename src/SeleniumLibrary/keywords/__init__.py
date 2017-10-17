@@ -19,6 +19,7 @@ from .browsermanagement import BrowserManagementKeywords
 from .cookie import CookieKeywords
 from .element import ElementKeywords
 from .formelement import FormElementKeywords
+from .frames import FrameKeywords
 from .javascript import JavaScriptKeywords
 from .runonfailure import RunOnFailureKeywords
 from .screenshot import ScreenshotKeywords

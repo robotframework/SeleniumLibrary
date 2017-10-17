@@ -328,27 +328,6 @@ class BrowserManagementKeywords(LibraryComponent):
         self.browser.set_window_position(int(x), int(y))
 
     @keyword
-    def select_frame(self, locator):
-        """Sets frame identified by ``locator`` as the current frame.
-
-        Key attributes for frames are `id` and `name.` See `introduction` for
-        details about locating elements.
-        
-        See `Unselect Frame` to cancel the frame selection and return to the Main frame.
-        
-        Please note that the frame search always start from the document root or main frame.
-        
-        Example:
-        | Select Frame   | xpath: //frame[@name='top]/iframe[@name='left'] | # Selects the 'left' iframe |
-        | Click Link     | foo                                             | # Clicks link 'foo' in 'left' iframe |
-        | Unselect Frame |                                                 | # Returns to main frame |
-        | Select Frame   | left                                            | # Selects the 'top' frame |        
-        """
-        self.info("Selecting frame '%s'." % locator)
-        element = self.find_element(locator)
-        self.browser.switch_to.frame(element)
-
-    @keyword
     def select_window(self, locator=None):
         """Selects the window matching locator and return previous window handle.
 
@@ -394,14 +373,6 @@ class BrowserManagementKeywords(LibraryComponent):
     def list_windows(self):
         """Return all current window handles as a list."""
         return self.browser.window_handles
-
-    @keyword
-    def unselect_frame(self):
-        """Sets the top frame as the current frame.
-        
-        In practice cancels a previous `Select Frame` call.
-        """
-        self.browser.switch_to.default_content()
 
     @keyword
     def get_location(self):
