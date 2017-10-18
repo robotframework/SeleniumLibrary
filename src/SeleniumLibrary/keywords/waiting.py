@@ -169,8 +169,9 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
         """Waits until element specified with `locator` is enabled.
 
-        Fails if `timeout` expires before the element is enabled. See
-        `introduction` for more information about `timeout` and its
+        Fails if `timeout` expires before the element is enabled. Element
+        is considered enabled if it is not disabled nor read-only.
+        See `introduction` for more information about `timeout` and its
         default value.
 
         `error` can be used to override the default error message.
@@ -178,6 +179,9 @@ class WaitingKeywords(LibraryComponent):
         See also `Wait Until Page Contains`, `Wait Until Page Contains
         Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
         Succeeds`.
+
+        Considering read-only elements to be disabled is a new feature
+        in SeleniumLibrary 3.0.
         """
         self._wait_until(
             lambda: self.is_element_enabled(locator),

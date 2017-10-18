@@ -188,6 +188,9 @@ class ElementKeywords(LibraryComponent):
     def element_should_be_disabled(self, locator):
         """Verifies that element identified with ``locator`` is disabled.
 
+        This keyword considers also elements that are read-only to be
+        disabled.
+
         See the `Locating elements` section for details about the locator
         syntax.
         """
@@ -197,6 +200,9 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def element_should_be_enabled(self, locator):
         """Verifies that element identified with ``locator`` is enabled.
+
+        This keyword considers also elements that are read-only to be
+        disabled.
 
         See the `Locating elements` section for details about the locator
         syntax.
