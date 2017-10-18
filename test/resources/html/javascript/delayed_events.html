@@ -9,6 +9,7 @@
         setTimeout('changeTitle()', 1000)
         setTimeout('unhideContent()', 1000)
         setTimeout('enableContent()', 1000)
+        setTimeout('readwriteContent()', 1000)
     }
     
     function addElement() {
@@ -26,7 +27,7 @@
         document.title = "Changed"
         document.bgColor = '#FF00FF'
     }
-    
+
     function changeContent() {
         document.getElementById("content").firstChild.nodeValue = "New Content"
     }
@@ -34,8 +35,13 @@
     function unhideContent() {
         document.getElementById("hidden").style.display = "block"
     }
+
     function enableContent() {
         document.getElementById("disabled").disabled = false;
+    }
+
+    function readwriteContent() {
+        document.getElementById("readonly").readOnly = false;
     }
     </script>
     </head>
@@ -46,5 +52,6 @@
     <div id="not_present">Element that should disappear</div>
     <div id="hidden" style="display:none;">Initially hidden content</div>
     <button id="disabled" disabled>Initially disabled content</button>
+    <input id="readonly" value="Initially readonly" readonly>
     </body>
 </html>

@@ -77,3 +77,8 @@ class ContextAware(object):
     def is_text_present(self, text):
         locator = "xpath://*[contains(., %s)]" % escape_xpath_value(text)
         return self.find_element(locator, required=False) is not None
+
+    def is_element_enabled(self, locator, tag=None):
+        element = self.find_element(locator, tag)
+        return (element.is_enabled() and
+                element.get_attribute('readonly') is None)

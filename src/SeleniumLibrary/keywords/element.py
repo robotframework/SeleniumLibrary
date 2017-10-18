@@ -191,7 +191,7 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        if self._is_enabled(locator):
+        if self.is_element_enabled(locator):
             raise AssertionError("Element '%s' is enabled." % locator)
 
     @keyword
@@ -201,7 +201,7 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        if not self._is_enabled(locator):
+        if not self.is_element_enabled(locator):
             raise AssertionError("Element '%s' is disabled." % locator)
 
     @keyword
@@ -729,18 +729,6 @@ return !element.dispatchEvent(evt);
         custom strategies.
         """
         self.element_finder.unregister(strategy_name)
-
-    def _is_enabled(self, locator):
-        element = self.find_element(locator)
-        if element.tag_name.lower() not in {'input', 'select', 'textarea',
-                                            'button', 'option'}:
-            raise ValueError("Element '%s' is '%s', not an input element."
-                             % (locator, element.tag_name))
-        if not element.is_enabled():
-            return False
-        if element.get_attribute('readonly') in {'readonly', 'true'}:
-            return False
-        return True
 
     def _map_ascii_key_code_to_key(self, key_code):
         map = {

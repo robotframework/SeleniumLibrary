@@ -180,7 +180,7 @@ class WaitingKeywords(LibraryComponent):
         Succeeds`.
         """
         self._wait_until(
-            lambda: not self.find_element(locator).get_attribute('disabled'),
+            lambda: self.is_element_enabled(locator),
             "Element '%s' was not enabled in <TIMEOUT>." % locator,
             timeout, error
         )

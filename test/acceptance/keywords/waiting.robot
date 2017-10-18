@@ -72,6 +72,12 @@ Wait Until Element Is Enabled
     ...    Element with locator 'id=invalid' not found.
     ...    Wait Until Element Is Enabled    id=invalid    0.1
 
+Wait Until Element Is Enabled with readonly element
+    Run Keyword And Expect Error
+    ...    Element 'readonly' was not enabled in 2 milliseconds.
+    ...    Wait Until Element Is Enabled    readonly    2ms
+    Wait Until Element Is Enabled    readonly    2 s
+
 Wait Until Element Contains
     Run Keyword And Expect Error
     ...    Element 'id=content' did not get text 'New' in 1 millisecond.
