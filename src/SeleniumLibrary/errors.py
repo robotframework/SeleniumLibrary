@@ -15,5 +15,9 @@
 # limitations under the License.
 
 
-class ElementNotFound(Exception):
+class SeleniumLibraryException(Exception):
     ROBOT_SUPPRESS_NAME = True
+
+
+class ElementNotFound(SeleniumLibraryException):
+    pass
