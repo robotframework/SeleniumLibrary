@@ -16,10 +16,14 @@ Ensure Locator Auto Unregisters
     Setup Custom Locator
 
 Ensure Attempting to Unregister a Default Locator Fails
-    Run Keyword And Expect Error    *    Remove Location Strategy    id
+    Run Keyword And Expect Error
+    ...    Cannot unregister the default strategy 'id'.
+    ...    Remove Location Strategy    id
 
-Ensure Unregistering a Non-Existent Locator Does Not Fail
-    Teardown Custom Locator
+Ensure Unregistering Non-Existent Locator Fails
+    Run Keyword And Expect Error
+    ...    Cannot unregister the non-registered strategy 'non-existing'.
+    ...    Remove Location Strategy    non-existing
 
 Ensure a Custom Locator can be Unregistered
     Setup Custom Locator    persist

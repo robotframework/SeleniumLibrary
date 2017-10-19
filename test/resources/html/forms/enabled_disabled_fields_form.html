@@ -11,11 +11,11 @@
 	</tr>
 	<tr>
 	  <td>Readonly input:</td>
-	  <td><input type="text" name="readonly_input" value="" readonly="true"/></td>
+	  <td><input type="text" name="readonly_input" value="" readonly></td>
 	</tr>
 	<tr>
 	  <td>Disabled input:</td>
-	  <td><input type="text" name="disabled_input" value="" disabled="disabled"/></td>
+	  <td><input type="text" name="disabled_input" value="" disabled></td>
 	</tr>
 	<tr>
 	  <td>Enabled password:</td>
@@ -23,7 +23,7 @@
 	</tr>
 	<tr>
 	  <td>Readonly password:</td>
-	  <td><input type="password" name="readonly_password" value="" readonly="true"/></td>
+	  <td><input type="password" name="readonly_password" value="" readonly="readonly"/></td>
 	</tr>
 	<tr>
 	  <td>Disabled password:</td>
@@ -38,7 +38,7 @@
         <tr>
           <td colspan="2"><select name="select">
             <option id="enabled_option" value="enabled">Enabled</option>
-            <option id="disabled_option" value="disabled" disabled="disabled>Disabled</option>
+            <option id="disabled_option" value="disabled" disabled="disabled">Disabled</option>
           </select></td>
         </tr>
       </table>
@@ -70,7 +70,7 @@
       </tr>
       <tr>
 	<td>disabled=</td>
-	<td><button name="disabled_with_equals_sign" disabled="">Disabled</button></td>
+	<td><button name="disabled_with_equals_only" disabled=>Disabled</button></td>
       </tr>
       <tr>
 	<td>disabled=""</td>
@@ -79,6 +79,20 @@
       <tr>
 	<td>disabled="kekkonen"</td>
 	<td><button name="disabled_invalid_value" disabled="kekkonen">Disabled</button></td>
+	<td>readonly</td>
+	<td><input name="readonly_only" value="Readonly" readonly></td>
+      </tr>
+      <tr>
+	<td>readonly=</td>
+	<td><input name="readonly_with_equals_only" value="Readonly" readonly=></td>
+      </tr>
+      <tr>
+	<td>readonly=""</td>
+	<td><input name="readonly_empty" value="Readonly" readonly=""></td>
+      </tr>
+      <tr>
+	<td>readonly="kekkonen"</td>
+	<td><input name="readonly_invalid_value" value="Readonly" readonly="kekkonen"></td>
       </tr>
     </table>
   </body>

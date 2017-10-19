@@ -18,7 +18,6 @@ import os.path
 import time
 import types
 
-from robot.errors import DataError
 from robot.utils import NormalizedDict
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchWindowException
@@ -326,27 +325,6 @@ class BrowserManagementKeywords(LibraryComponent):
         self.browser.set_window_position(int(x), int(y))
 
     @keyword
-    def select_frame(self, locator):
-        """Sets frame identified by ``locator`` as the current frame.
-
-        Key attributes for frames are `id` and `name.` See `introduction` for
-        details about locating elements.
-        
-        See `Unselect Frame` to cancel the frame selection and return to the Main frame.
-        
-        Please note that the frame search always start from the document root or main frame.
-        
-        Example:
-        | Select Frame   | xpath: //frame[@name='top]/iframe[@name='left'] | # Selects the 'left' iframe |
-        | Click Link     | foo                                             | # Clicks link 'foo' in 'left' iframe |
-        | Unselect Frame |                                                 | # Returns to main frame |
-        | Select Frame   | left                                            | # Selects the 'top' frame |        
-        """
-        self.info("Selecting frame '%s'." % locator)
-        element = self.find_element(locator)
-        self.browser.switch_to.frame(element)
-
-    @keyword
     def select_window(self, locator=None):
         """Selects the window matching locator and return previous window handle.
 
@@ -394,14 +372,6 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.browser.window_handles
 
     @keyword
-    def unselect_frame(self):
-        """Sets the top frame as the current frame.
-        
-        In practice cancels a previous `Select Frame` call.
-        """
-        self.browser.switch_to.default_content()
-
-    @keyword
     def get_location(self):
         """Returns the current browser URL."""
         return self.browser.current_url
@@ -427,8 +397,8 @@ class BrowserManagementKeywords(LibraryComponent):
         """Verifies that current URL is exactly ``url``."""
         actual = self.get_location()
         if actual != url:
-            raise AssertionError("Location should have been '%s' but was '%s'"
-                                 % (url, actual))
+            raise AssertionError("Location should have been '%s' but was "
+                                 "'%s'." % (url, actual))
         self.info("Current location is '%s'." % url)
 
     @keyword
@@ -456,7 +426,7 @@ class BrowserManagementKeywords(LibraryComponent):
         (no logging).
         """
         source = self.get_source()
-        self.log(source, loglevel.upper())
+        self.log(source, loglevel)
         return source
 
     @keyword

@@ -33,5 +33,5 @@ Locator with separator and with matchign prefix cannot be used as-is
     Page Should Contain Element    id:id:problematic
     Page Should Contain Element    id=id:problematic
     Run Keyword And Expect Error
-    ...    Page should have contained element 'id:problematic' but did not
+    ...    Page should have contained element 'id:problematic' but did not.
     ...    Page Should Contain Element    id:problematic

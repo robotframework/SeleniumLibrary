@@ -15,62 +15,14 @@ class KeywordArgumentsElementTest(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_element_should_contain(self):
-        locator = '//div'
-        actual = 'bar'
-        expected = 'foo'
-        when(self.element)._get_text(locator).thenReturn(actual)
-        message = ("Element '%s' should have contained text '%s' but "
-                   "its text was '%s'." % (locator, expected, actual))
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_contain('//div', expected)
-            self.assertEqual(str(error), message)
-
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_contain('//div', expected, 'foobar')
-            self.assertEqual(str(error), 'foobar')
-
-    def test_element_should_not_contain(self):
-        locator = '//div'
-        actual = 'bar'
-        when(self.element)._get_text(locator).thenReturn(actual)
-        message = ("Element '%s' should not contain text '%s' but "
-                   "it did." % (locator, actual))
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_not_contain('//div', actual)
-            self.assertEqual(str(error), message)
-
-        with self.assertRaises(AssertionError) as error:
-            self.element.element_should_not_contain('//div', actual, 'foobar')
-            self.assertEqual(str(error), 'foobar')
-
     def test_locator_should_match_x_times(self):
         locator = '//div'
-        when(self.element).find_element(locator, required=False,
-                                        first_only=False).thenReturn([])
+        when(self.element).find_elements(locator).thenReturn([])
         with self.assertRaisesRegexp(AssertionError, 'should have matched'):
             self.element.locator_should_match_x_times(locator, 1)
 
         with self.assertRaisesRegexp(AssertionError, 'foobar'):
             self.element.locator_should_match_x_times(locator, 1, 'foobar')
-
-    def test_element_should_be_visible(self):
-        locator = '//div'
-        when(self.element).is_visible(locator).thenReturn(None)
-        with self.assertRaisesRegexp(AssertionError, 'should be visible'):
-            self.element.element_should_be_visible(locator)
-
-        with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.element.element_should_be_visible(locator, 'foobar')
-
-    def test_element_should_not_be_visible(self):
-        locator = '//div'
-        when(self.element).is_visible(locator).thenReturn(True)
-        with self.assertRaisesRegexp(AssertionError, 'should not be visible'):
-            self.element.element_should_not_be_visible(locator)
-
-        with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.element.element_should_not_be_visible(locator, 'foobar')
 
     def test_element_text_should_be(self):
         locator = '//div'
@@ -87,8 +39,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         locator = '//div'
         attrib = 'id'
         element = mock()
-        when(self.element).find_element(locator,
-                                        required=False).thenReturn(element)
+        when(self.element).find_element(locator).thenReturn(element)
         when(element).get_attribute(attrib).thenReturn('value')
         value = self.element.get_element_attribute(locator, attrib)
         self.assertEqual(value, 'value')
@@ -99,9 +50,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_get_matching_xpath_count(self):
         locator = '//div'
-        when(self.element).find_element(
-            'xpath={}'.format(locator), first_only=False,
-            required=False).thenReturn([])
+        when(self.element).find_elements('xpath:' + locator).thenReturn([])
         count = self.element.get_matching_xpath_count(locator)
         self.assertEqual(count, '0')
         count = self.element.get_matching_xpath_count(locator, 'True')
@@ -112,9 +61,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_xpath_should_match_x_times(self):
         locator = '//div'
-        when(self.element).find_element(
-            'xpath={}'.format(locator), first_only=False,
-            required=False).thenReturn([])
+        when(self.element).find_elements('xpath:{}'.format(locator)).thenReturn([])
         with self.assertRaisesRegexp(AssertionError, 'should have matched'):
             self.element.xpath_should_match_x_times(locator, 1)
 

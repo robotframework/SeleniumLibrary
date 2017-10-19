@@ -19,6 +19,7 @@ from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import ContextAware
+from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.utils import escape_xpath_value, events, is_falsy
 
 from .customlocator import CustomLocator
@@ -70,39 +71,13 @@ class ElementFinder(ContextAware):
         elements = strategy(criteria, tag, constraints,
                             parent=parent or self.browser)
         if required and not elements:
-            raise ValueError("Element locator '{}' did not match any "
-                             "elements.".format(locator))
+            raise ElementNotFound("Element with locator '{}' not found."
+                                  .format(locator))
         if first_only:
             if not elements:
                 return None
             return elements[0]
         return elements
-
-    def assert_page_contains(self, locator, tag=None, message=None,
-                             loglevel='INFO'):
-        if not self.find(locator, tag, required=False):
-            if is_falsy(message):
-                message = ("Page should have contained %s '%s' but did not"
-                           % (tag or 'element', locator))
-            self.ctx.log_source(loglevel)  # TODO: Could this moved to base
-            raise AssertionError(message)
-        logger.info("Current page contains %s '%s'."
-                    % (tag or 'element', locator))
-
-    def assert_page_not_contains(self, locator, tag=None, message=None,
-                                 loglevel='INFO'):
-        if self.find(locator, tag, required=False):
-            if is_falsy(message):
-                message = ("Page should not have contained %s '%s'"
-                           % (tag or 'element', locator))
-            self.ctx.log_source(loglevel)  # TODO: Could this moved to base
-            raise AssertionError(message)
-        logger.info("Current page does not contain %s '%s'."
-                    % (tag or 'element', locator))
-
-    def get_value(self, locator, tag=None):
-        element = self.find(locator, tag, required=False)
-        return element.get_attribute('value') if element else None
 
     def register(self, strategy_name, strategy_keyword, persist=False):
         strategy = CustomLocator(self.ctx, strategy_name, strategy_keyword)
@@ -119,11 +94,10 @@ class ElementFinder(ContextAware):
         if strategy_name in self._default_strategies:
             raise RuntimeError("Cannot unregister the default strategy '%s'."
                                % strategy_name)
-        elif strategy_name not in self._strategies:
-            logger.info("Cannot unregister the non-registered strategy '%s'."
-                        % strategy_name)
-        else:
-            del self._strategies[strategy_name]
+        if strategy_name not in self._strategies:
+            raise RuntimeError("Cannot unregister the non-registered strategy '%s'."
+                               % strategy_name)
+        del self._strategies[strategy_name]
 
     def _is_webelement(self, element):
         # Hook for unit tests
@@ -134,9 +108,8 @@ class ElementFinder(ContextAware):
             raise ValueError('This method does not allow WebElement as parent')
 
     def _find_by_identifier(self, criteria, tag, constraints, parent):
-        elements = self._normalize_result(parent.find_elements_by_id(criteria))
-        elements.extend(self._normalize_result(
-            parent.find_elements_by_name(criteria)))
+        elements = self._normalize(parent.find_elements_by_id(criteria)) \
+            + self._normalize(parent.find_elements_by_name(criteria))
         return self._filter_elements(elements, tag, constraints)
 
     def _find_by_id(self, criteria, tag, constraints, parent):
@@ -214,7 +187,7 @@ class ElementFinder(ContextAware):
             ' and ' if xpath_constraints else '',
             ' or '.join(xpath_searchers)
         )
-        return self._normalize_result(parent.find_elements_by_xpath(xpath))
+        return self._normalize(parent.find_elements_by_xpath(xpath))
 
     def _get_xpath_constraints(self, constraints):
         xpath_constraints = [self._get_xpath_constraint(name, value)
@@ -250,7 +223,7 @@ class ElementFinder(ContextAware):
             tag = 'input'
             constraints['type'] = ['date', 'datetime-local', 'email', 'month',
                                    'number', 'password', 'search', 'tel',
-                                   'text', 'time', 'url', 'week']
+                                   'text', 'time', 'url', 'week', 'file']
         elif tag == 'file upload':
             tag = 'input'
             constraints['type'] = 'file'
@@ -287,10 +260,11 @@ class ElementFinder(ContextAware):
         return True
 
     def _filter_elements(self, elements, tag, constraints):
-        elements = self._normalize_result(elements)
+        elements = self._normalize(elements)
         if tag is None:
             return elements
-        return [element for element in elements if self._element_matches(element, tag, constraints)]
+        return [element for element in elements
+                if self._element_matches(element, tag, constraints)]
 
     def _get_attrs_with_url(self, key_attrs, criteria):
         attrs = []
@@ -310,7 +284,10 @@ class ElementFinder(ContextAware):
             url = '/'.join(url.split('/')[:-1])
         return url
 
-    def _normalize_result(self, elements):
+    def _normalize(self, elements):
+        # Apparently IEDriver has returned invalid data earlier and recently
+        # ChromeDriver has done sometimes returned None:
+        # https://github.com/SeleniumHQ/selenium/issues/4555
         if not isinstance(elements, list):
             logger.debug("WebDriver find returned %s" % elements)
             return []

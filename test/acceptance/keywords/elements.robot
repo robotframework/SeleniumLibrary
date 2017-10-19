@@ -16,7 +16,7 @@ Get Web Element
     ${link}=    Get WebElement    //div[@id="div_id"]/a
     Should Be Equal    @{links}[0]    ${link}
     Run Keyword and Expect Error
-    ...    ValueError: Element locator 'id=non_existing_elem' did not match any elements.
+    ...    Element with locator 'id=non_existing_elem' not found.
     ...    Get WebElement    id=non_existing_elem
 
 More Get Elements
@@ -69,23 +69,27 @@ Get Matching XPath Count
 
 Get Horizontal Position
     ${pos}=    Get Horizontal Position    link=Link
-    Should Be True    ${pos} > ${0}
-    Run Keyword And Expect Error    Could not determine position for 'non-existent'
+    Should Be True    ${pos} > 0
+    Run Keyword And Expect Error
+    ...    Element with locator 'non-existent' not found.
     ...    Get Horizontal Position    non-existent
 
 Get Vertical Position
     ${pos}=    Get Vertical Position    link=Link
-    Should Be True    ${pos} > ${0}
-    Run Keyword And Expect Error    Could not determine position for 'non-existent'
+    Should Be True    ${pos} > 0
+    Run Keyword And Expect Error
+    ...    Element with locator 'non-existent' not found.
     ...    Get Horizontal Position    non-existent
 
 Get Element Size
     ${width}  ${height}=  Get Element Size  link=Link
-    Should be True  ${height} > ${0}
-    Should be True  ${width} > ${0}
-    Run Keyword And Expect Error  ValueError: Element locator 'non-existent' did not match any elements.  Get Element Size  non-existent
+    Should be True  ${height} > 0
+    Should be True  ${width} > 0
+    Run Keyword And Expect Error
+    ...    Element with locator 'non-existent' not found.
+    ...    Get Element Size  non-existent
 
 Get Empty Element Size
     [Tags]  Known Issue Internet Explorer
     ${width}  ${height}=  Get Element Size  id=emptyDiv
-    Should be True  ${height} == 0
+    Should be Equal    ${height}    ${0}

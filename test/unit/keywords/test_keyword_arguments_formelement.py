@@ -21,8 +21,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_submit_form_false(self):
         element = mock()
-        when(self.form).find_element('xpath=//form',
-                                     tag='form').thenReturn(element)
+        when(self.form).find_element('tag:form', tag='form').thenReturn(element)
         for false in FALSES:
             self.form.submit_form()
         self.form.submit_form()
@@ -34,20 +33,18 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_textfield_should_contain(self):
         locator = '//input'
-        self.ctx.element_finder = mock()
-        when(self.ctx.element_finder).get_value(locator,
-                                                'text field').thenReturn('no')
+        element = mock()
+        when(self.form).find_element(locator, 'text field').thenReturn(element)
+        when(element).get_attribute('value').thenReturn('no')
         with self.assertRaisesRegexp(AssertionError, 'should have contained'):
             self.form.textfield_should_contain(locator, 'text')
-
         with self.assertRaisesRegexp(AssertionError, 'foobar'):
             self.form.textfield_should_contain(locator, 'text', 'foobar')
 
     def test_textfield_value_should_be(self):
         locator = '//input'
         element = mock()
-        when(self.form).find_element(locator, tag='text field',
-                                     required=False).thenReturn(element)
+        when(self.form).find_element(locator, 'text field').thenReturn(element)
         when(element).get_attribute('value').thenReturn('no')
         with self.assertRaisesRegexp(AssertionError, 'text field'):
             self.form.textfield_value_should_be(locator, 'value')
@@ -56,9 +53,9 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_textarea_should_contain(self):
         locator = '//input'
-        self.ctx.element_finder = mock()
-        when(self.ctx.element_finder).get_value(locator,
-                                                'text area').thenReturn('no')
+        element = mock()
+        when(self.form).find_element(locator, 'text area').thenReturn(element)
+        when(element).get_attribute('value').thenReturn('no')
         with self.assertRaisesRegexp(AssertionError, 'should have contained'):
             self.form.textarea_should_contain(locator, 'value')
         with self.assertRaisesRegexp(AssertionError, 'foobar error'):
@@ -66,10 +63,10 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_textarea_value_should_be(self):
         locator = '//input'
-        self.ctx.element_finder = mock()
-        when(self.ctx.element_finder).get_value(locator,
-                                                'text area').thenReturn('no')
-        with self.assertRaisesRegexp(AssertionError, 'should have been'):
-            self.form.textfield_value_should_be(locator, 'value')
+        element = mock()
+        when(self.form).find_element(locator, 'text area').thenReturn(element)
+        when(element).get_attribute('value').thenReturn('no')
+        with self.assertRaisesRegexp(AssertionError, 'should have had'):
+            self.form.textarea_value_should_be(locator, 'value')
         with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.form.textfield_value_should_be(locator, 'value', 'foobar')
+            self.form.textarea_value_should_be(locator, 'value', 'foobar')

@@ -14,15 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .alert import AlertKeywords
-from .browsermanagement import BrowserManagementKeywords
-from .cookie import CookieKeywords
-from .element import ElementKeywords
-from .formelement import FormElementKeywords
-from .frames import FrameKeywords
-from .javascript import JavaScriptKeywords
-from .runonfailure import RunOnFailureKeywords
-from .screenshot import ScreenshotKeywords
-from .selectelement import SelectElementKeywords
-from .tableelement import TableElementKeywords
-from .waiting import WaitingKeywords
+
+class SeleniumLibraryException(Exception):
+    ROBOT_SUPPRESS_NAME = True
+
+
+class ElementNotFound(SeleniumLibraryException):
+    pass

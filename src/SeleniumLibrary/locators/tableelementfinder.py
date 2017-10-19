@@ -18,30 +18,27 @@ from SeleniumLibrary.base import ContextAware
 
 
 class TableElementFinder(ContextAware):
-
-    def __init__(self, ctx):
-        ContextAware.__init__(self, ctx)
-        self._locators = {
-            'content': ['//*'],
-            'header': ['//th'],
-            'footer': ['//tfoot//td'],
-            'row': ['//tr[{row}]//*'],
-            'last-row': ['//tbody/tr[position()=last()-({row}-1)]'],
-            'col': ['//tr//*[self::td or self::th][{col}]'],
-            'last-col': ['//tbody/tr/td[position()=last()-({col}-1)]',
-                         '//tbody/tr/td[position()=last()-({col}-1)]']
-        }
+    locators = {
+        'content': ['//*'],
+        'header': ['//th'],
+        'footer': ['//tfoot//td'],
+        'row': ['//tr[{row}]//*'],
+        'last-row': ['//tbody/tr[position()=last()-({row}-1)]'],
+        'col': ['//tr//*[self::td or self::th][{col}]'],
+        'last-col': ['//tbody/tr/td[position()=last()-({col}-1)]',
+                     '//tbody/tr/td[position()=last()-({col}-1)]']
+    }
 
     def find_by_content(self, table_locator, content):
-        locators = self._locators['content']
+        locators = self.locators['content']
         return self._search_in_locators(table_locator, locators, content)
 
     def find_by_header(self, table_locator, content):
-        locators = self._locators['header']
+        locators = self.locators['header']
         return self._search_in_locators(table_locator, locators, content)
 
     def find_by_footer(self, table_locator, content):
-        locators = self._locators['footer']
+        locators = self.locators['footer']
         return self._search_in_locators(table_locator, locators, content)
 
     def find_by_row(self, table_locator, row, content):
@@ -51,7 +48,7 @@ class TableElementFinder(ContextAware):
             row = row[1:]
             location_method = "last-row"
         locators = [locator.format(row=row)
-                    for locator in self._locators[location_method]]
+                    for locator in self.locators[location_method]]
         return self._search_in_locators(table_locator, locators, content)
 
     def find_by_col(self, table_locator, col, content):
@@ -61,14 +58,13 @@ class TableElementFinder(ContextAware):
             col = col[1:]
             location_method = "last-col"
         locators = [locator.format(col=col)
-                    for locator in self._locators[location_method]]
+                    for locator in self.locators[location_method]]
         return self._search_in_locators(table_locator, locators, content)
 
     def _search_in_locators(self, table_locator, locators, content):
         table = self.find_element(table_locator)
         for locator in locators:
-            elements = self.find_element(locator, first_only=False,
-                                         required=False, parent=table)
+            elements = self.find_elements(locator, parent=table)
             for element in elements:
                 if content is None:
                     return element
