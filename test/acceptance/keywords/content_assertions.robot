@@ -35,6 +35,11 @@ Page Should Contain
     ...    Page should have contained text 'non existing text' but did not.
     ...    Page Should Contain    non existing text
 
+Page Should Contain with text having internal elements
+    Page Should Contain    This is the haystack and somewhere on this page is a needle.
+    Go to page "links.html"
+    Page Should Contain    Relative with text after
+
 Page Should Contain With Custom Log Level
     [Documentation]    LOG 2.1:10 DEBUG REGEXP: (?i)<html.*</html>
     Run Keyword And Expect Error
