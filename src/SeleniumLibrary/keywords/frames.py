@@ -71,7 +71,7 @@ class FrameKeywords(LibraryComponent):
 
     @keyword
     def current_frame_should_not_contain(self, text, loglevel='INFO'):
-        """Verifies that current frame contains ``text``.
+        """Verifies that current frame does not contains ``text``.
 
         See `Page Should Contain` for explanation about the ``loglevel``
         argument.

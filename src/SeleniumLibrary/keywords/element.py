@@ -439,7 +439,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def drag_and_drop(self, locator, target):
-        """Drags ``source`` element into ``target`` element.
+        """Drags element identified by ``locator`` into ``target`` element.
 
         The ``locator`` argument is the locator of the dragged element
         and the ``target`` is the locator of the target. See the
@@ -631,7 +631,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def page_should_not_contain_link(self, locator, message=None, loglevel='INFO'):
-        """Verifies image identified by ``locator`` is not found from current page.
+        """Verifies link identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
         syntax. Key attributes for links are ``id``, ``name``, ``href`` and
