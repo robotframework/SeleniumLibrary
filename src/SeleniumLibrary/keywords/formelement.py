@@ -17,6 +17,7 @@
 import os
 
 from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.utils import is_noney
 
 
@@ -369,15 +370,23 @@ class FormElementKeywords(LibraryComponent):
         return self.find_element(locator, tag='input')
 
     def _get_radio_buttons(self, group_name):
-        xpath = "xpath=//input[@type='radio' and @name='%s']" % group_name
+        xpath = "xpath://input[@type='radio' and @name='%s']" % group_name
         self.debug('Radio group locator: ' + xpath)
-        return self.find_element(xpath, first_only=False)
+        elements = self.find_elements(xpath)
+        if not elements:
+            raise ElementNotFound("No radio button with name '%s' found."
+                                  % group_name)
+        return elements
 
     def _get_radio_button_with_value(self, group_name, value):
-        xpath = "xpath=//input[@type='radio' and @name='%s' and (@value='%s' or @id='%s')]" \
-                 % (group_name, value, value)
+        xpath = "xpath://input[@type='radio' and @name='%s' and " \
+                "(@value='%s' or @id='%s')]" % (group_name, value, value)
         self.debug('Radio group locator: ' + xpath)
-        return self.find_element(xpath)
+        try:
+            return self.find_element(xpath)
+        except ElementNotFound:
+            raise ElementNotFound("No radio button with name '%s' and "
+                                  "value '%s' found." % (group_name, value))
 
     def _get_value_from_radio_buttons(self, elements):
         for element in elements:

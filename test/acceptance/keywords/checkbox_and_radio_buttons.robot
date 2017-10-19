@@ -54,7 +54,14 @@ Radio Button Should Not Be Selected
     ...    Radio Button Should Not Be Selected    sex
 
 Clicking Radio Button Should Trigger Onclick Event
-    [Documentation]    Clicking Radio Button Should Trigger Onclick Event
     [Setup]    Go To Page "javascript/dynamic_content.html"
     Select Radio Button    group    title
     Title Should Be    Changed by Button
+
+Radio button not found
+    Run Keyword And Expect Error
+    ...    No radio button with name 'nonex' and value 'whatever' found.
+    ...    Select Radio Button    nonex    whatever
+    Run Keyword And Expect Error
+    ...    No radio button with name 'nonex' found.
+    ...    Radio button should be set to    nonex    whatever

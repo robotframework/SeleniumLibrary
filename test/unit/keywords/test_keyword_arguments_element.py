@@ -50,9 +50,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_get_matching_xpath_count(self):
         locator = '//div'
-        when(self.element).find_element(
-            'xpath:{}'.format(locator), first_only=False,
-            required=False).thenReturn([])
+        when(self.element).find_elements('xpath:' + locator).thenReturn([])
         count = self.element.get_matching_xpath_count(locator)
         self.assertEqual(count, '0')
         count = self.element.get_matching_xpath_count(locator, 'True')

@@ -703,8 +703,7 @@ return !element.dispatchEvent(evt);
         Example:
         | count = | `Get Matching Xpath Count` | //div[@id='sales-pop'] |
         """
-        count = len(self.find_element("xpath:" + xpath, first_only=False,
-                                      required=False))
+        count = len(self.find_elements('xpath:' + xpath))
         return str(count) if is_truthy(return_str) else count
 
     @keyword
