@@ -55,7 +55,6 @@ Page Should Contain With Disabling Source Logging
     [Teardown]    Set Log Level    DEBUG
 
 Page Should Contain With Frames
-    [Documentation]    Page Should Contain With Frames
     [Setup]    Go To Page "frames/frameset.html"
     Page Should Contain    You're looking at right.
 
@@ -338,23 +337,3 @@ Get All Links
     ${links}=    Get All Links
     Length Should Be    ${links}    19
     List Should Contain Value    ${links}    bold_id
-
-Xpath Should Match X Times
-    [Setup]    Go To Page "forms/login.html"
-    Xpath Should Match X Times    //input[@type="text"]    1
-    Xpath Should Match X Times    //input[@type="text"]    ${1}
-    Run Keyword And Expect Error
-    ...    Locator 'xpath://input[@type="text"]' should have matched 2 times but matched 1 time.
-    ...    Xpath Should Match X Times    //input[@type="text"]    2
-
-Locator Should Match X Times
-    [Setup]    Go To Page "forms/login.html"
-    Locator Should Match X Times    //input[@type="text"]    1
-    Locator Should Match X Times    css:input    ${3}
-    Locator Should Match X Times    link:Missing Link    0
-    Run Keyword And Expect Error
-    ...    Locator '//input[@type="text"]' should have matched 2 times but matched 1 time.
-    ...    Locator Should Match X Times    //input[@type="text"]    2
-    Run Keyword And Expect Error
-    ...    Locator 'css:input' should have matched 1 time but matched 3 times.
-    ...    Locator Should Match X Times    css:input    1
