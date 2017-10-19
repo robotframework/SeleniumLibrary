@@ -693,23 +693,28 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def get_matching_xpath_count(self, xpath, return_str=True):
-        """Returns number of elements matching ``xpath``.
-
-        The default return type is string, but it can changed to an integer
-        by setting the ``return_str`` argument to a false value.
-
-        The ``xpath`` should not contain ``xpath:`` prefix.
-
-        Example:
-        | count = | `Get Matching Xpath Count` | //div[@id='sales-pop'] |
-        """
-        count = len(self.find_elements('xpath:' + xpath))
+        """Deprecated. Use `Get Element Count` instead."""
+        count = self.get_element_count('xpath:' + xpath)
         return str(count) if is_truthy(return_str) else count
 
     @keyword
     def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='INFO'):
         """Deprecated. Use `Locator Should Match X Times` instead."""
         self.locator_should_match_x_times('xpath:'+xpath, x, message, loglevel)
+
+    @keyword
+    def get_element_count(self, locator):
+        """Returns number of elements matching ``locator``.
+
+        If you wish to assert the number of matching elements, use
+        `Locator Should Match X Times`. Keyword will always return an integer.
+        New in SeleniumLibrary 3.0.
+
+        Example:
+        | ${count} =      | Get Matching Locator Count | name:div_name  |
+        | Should Be True  | ${count} > 2               |                |
+        """
+        return len(self.find_elements(locator))
 
     @keyword
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
