@@ -389,6 +389,31 @@ class SeleniumLibrary(DynamicCore):
             raise RuntimeError('No browser is open')
         return self._browsers.current
 
+    def find_element(self, locator, parent=None):
+        """Find element matching ``locator``.
+
+        This method and :meth:`find_elements` form the recommended
+        public API for external tools to get elements via SeleniumLibrary.
+
+        :param locator: Locator to use when searching the element.
+            See library documentation for the supported locator syntax.
+        :param parent: Optional parent ``WebElememt`` to search child elements
+            from. By default search starts from the root using ``WebDriver``.
+        :rtype: selenium.webdriver.remote.webelement.WebElement
+        :raises SeleniumLibrary.errors.ElementNotFound: If element not found.
+        """
+        return self.element_finder.find(locator, parent=parent)
+
+    def find_elements(self, locator, parent=None):
+        """Find all elements matching ``locator``.
+
+        Returns a list of ``WebElement`` objects. If no matching elements
+        are found, the list is empty. Otherwise semantics are exactly same
+        as with the :meth:`find_element` method.
+        """
+        return self.element_finder.find(locator, first_only=False,
+                                        required=False, parent=parent)
+
     @property
     def _cache(self):
         warnings.warn('"SeleniumLibrary._cache" is deprecated, '

@@ -21,3 +21,11 @@ class CustomSeleniumKeywords(SeleniumLibrary):
     @keyword
     def custom_selenium_keyword_inner(self):
         raise AssertionError
+
+    @keyword
+    def use_find_element(self, locator, parent=None):
+        return self.find_element(locator, parent)
+
+    @keyword
+    def use_find_elements(self, locator, parent=None):
+        return self.find_elements(locator, parent)
