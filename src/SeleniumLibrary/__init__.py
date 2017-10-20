@@ -344,8 +344,8 @@ class SeleniumLibrary(DynamicCore):
         self._browsers = BrowserCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
-        self.element_finder = ElementFinder(self)
-        self.table_element_finder = TableElementFinder(self)
+        self._element_finder = ElementFinder(self)
+        self._table_element_finder = TableElementFinder(self)
 
     _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
     _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
@@ -402,7 +402,7 @@ class SeleniumLibrary(DynamicCore):
         :rtype: selenium.webdriver.remote.webelement.WebElement
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found.
         """
-        return self.element_finder.find(locator, parent=parent)
+        return self._element_finder.find(locator, parent=parent)
 
     def find_elements(self, locator, parent=None):
         """Find all elements matching ``locator``.
@@ -411,8 +411,8 @@ class SeleniumLibrary(DynamicCore):
         are found, the list is empty. Otherwise semantics are exactly same
         as with the :meth:`find_element` method.
         """
-        return self.element_finder.find(locator, first_only=False,
-                                        required=False, parent=parent)
+        return self._element_finder.find(locator, first_only=False,
+                                         required=False, parent=parent)
 
     @property
     def _cache(self):

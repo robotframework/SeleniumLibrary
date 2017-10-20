@@ -37,11 +37,11 @@ class ContextAware(object):
 
     @property
     def element_finder(self):
-        return self.ctx.element_finder
+        return self.ctx._element_finder
 
     @property
     def table_element_finder(self):
-        return self.ctx.table_element_finder
+        return self.ctx._table_element_finder
 
     def find_element(self, locator, tag=None, required=True, parent=None):
         """Find element matching `locator`.
