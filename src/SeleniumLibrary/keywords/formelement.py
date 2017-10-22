@@ -367,7 +367,7 @@ class FormElementKeywords(LibraryComponent):
         return self.find_element(locator, tag).get_attribute('value')
 
     def _get_checkbox(self, locator):
-        return self.find_element(locator, tag='input')
+        return self.find_element(locator, tag='checkbox')
 
     def _get_radio_buttons(self, group_name):
         xpath = "xpath://input[@type='radio' and @name='%s']" % group_name

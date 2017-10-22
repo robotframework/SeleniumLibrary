@@ -593,7 +593,7 @@ return !element.dispatchEvent(evt);
         link text.
         """
         self.info("Clicking link '%s'." % locator)
-        self.find_element(locator, tag='a').click()
+        self.find_element(locator, tag='link').click()
 
     @keyword
     def get_all_links(self):
@@ -601,7 +601,7 @@ return !element.dispatchEvent(evt);
 
         If a link has no id, an empty string will be in the list instead.
         """
-        links = self.find_elements("tag=a", tag='a')
+        links = self.find_elements("tag=a")
         return [link.get_attribute('id') for link in links]
 
     @keyword
@@ -612,7 +612,7 @@ return !element.dispatchEvent(evt);
         syntax. Key attributes for links are ``id``, ``name``, ``href`` and
         link text.
         """
-        element = self.find_element(locator, tag='a')
+        element = self.find_element(locator, tag='link')
         action = ActionChains(self.browser)
         action.click_and_hold(element).perform()
 

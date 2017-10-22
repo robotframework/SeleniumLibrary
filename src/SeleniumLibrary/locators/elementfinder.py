@@ -60,6 +60,7 @@ class ElementFinder(ContextAware):
 
     def find(self, locator, tag=None, first_only=True, required=True,
              parent=None):
+        element_type = 'Element' if not tag else tag.capitalize()
         if parent and not self._is_webelement(parent):
             raise ValueError('Parent must be Selenium WebElement but it '
                              'was {}'.format(type(parent)))
@@ -71,8 +72,8 @@ class ElementFinder(ContextAware):
         elements = strategy(criteria, tag, constraints,
                             parent=parent or self.browser)
         if required and not elements:
-            raise ElementNotFound("Element with locator '{}' not found."
-                                  .format(locator))
+            raise ElementNotFound("{} with locator '{}' not found."
+                                  .format(element_type, locator))
         if first_only:
             if not elements:
                 return None

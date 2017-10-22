@@ -395,7 +395,7 @@ class SelectElementKeywords(LibraryComponent):
         return labels
 
     def _get_select_list(self, locator):
-        el = self.find_element(locator, tag='select')
+        el = self.find_element(locator, tag='list')
         return Select(el)
 
     def _get_select_list_options(self, select_list_or_locator):
