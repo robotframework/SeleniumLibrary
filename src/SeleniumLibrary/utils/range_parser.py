@@ -14,10 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections import namedtuple
+
 
 def parse_range(range_string):
+    Range = namedtuple('Range', 'minimum maximum')
     try:
-        return int(range_string)
+        integer = int(range_string)
+        return Range(minimum=integer, maximum=integer)
     except ValueError:
         number1, number2 = _sprint_range(range_string)
         number1 = _convert_to_int(number1)
@@ -25,8 +29,8 @@ def parse_range(range_string):
         if number1 < 0 or number2 < 0:
             raise ValueError('Invalid range definition')
         if number1 < number2:
-            return (number1, number2)
-        return (number2, number1)
+            return Range(minimum=number1, maximum=number2)
+        return Range(minimum=number2, maximum=number1)
 
 
 def _sprint_range(range_string):

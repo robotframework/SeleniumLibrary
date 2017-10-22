@@ -6,12 +6,20 @@ from SeleniumLibrary.utils import parse_range
 class RangeMatcherTests(unittest.TestCase):
 
     def test_range_as_number(self):
-        self.assertEqual(parse_range(1), 1)
-        self.assertEqual(parse_range('1'), 1)
+        value = parse_range(1)
+        self.assertEqual(value.minimum, 1)
+        self.assertEqual(value.maximum, 1)
+        value = parse_range('1')
+        self.assertEqual(value.minimum, 1)
+        self.assertEqual(value.maximum, 1)
 
     def test_range_as_range(self):
-        self.assertEqual(parse_range('1..2'), (1, 2))
-        self.assertEqual(parse_range('7..5'), (5, 7))
+        value = parse_range('1..2')
+        self.assertEqual(value.minimum, 1)
+        self.assertEqual(value.maximum, 2)
+        value = parse_range('7..5')
+        self.assertEqual(value.minimum, 5)
+        self.assertEqual(value.maximum, 7)
 
     def test_invalid_range(self):
         with self.assertRaisesRegexp(ValueError, 'Invalid range definition'):
