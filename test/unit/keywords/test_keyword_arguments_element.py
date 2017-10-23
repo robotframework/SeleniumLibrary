@@ -1,6 +1,7 @@
 import unittest
 
 from mockito import mock, unstub, when
+from robot.api import logger
 
 from SeleniumLibrary.keywords import ElementKeywords
 
@@ -31,7 +32,6 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         when(self.element).find_element(locator).thenReturn(element)
         with self.assertRaisesRegexp(AssertionError, 'should have been'):
             self.element.element_text_should_be(locator, 'not text')
-
         with self.assertRaisesRegexp(AssertionError, 'foobar'):
             self.element.element_text_should_be(locator, 'not text', 'foobar')
 
@@ -44,8 +44,9 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         value = self.element.get_element_attribute(locator, attrib)
         self.assertEqual(value, 'value')
 
-        locator = '//div@id'
-        value = self.element.get_element_attribute(locator, 'None')
+        when(logger).warn("Using 'Get Element Attribute' without explicit "
+                          "attribute is deprecated.", False).thenReturn(None)
+        value = self.element.get_element_attribute('//div@id', 'None')
         self.assertEqual(value, 'value')
 
     def test_get_matching_xpath_count(self):
