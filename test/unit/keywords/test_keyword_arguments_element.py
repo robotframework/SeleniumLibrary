@@ -16,15 +16,6 @@ class KeywordArgumentsElementTest(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_locator_should_match_x_times(self):
-        locator = '//div'
-        when(self.element).find_elements(locator).thenReturn([])
-        with self.assertRaisesRegexp(AssertionError, 'should have matched'):
-            self.element.locator_should_match_x_times(locator, 1)
-
-        with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.element.locator_should_match_x_times(locator, 1, 'foobar')
-
     def test_element_text_should_be(self):
         locator = '//div'
         element = mock()
@@ -59,12 +50,3 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
         count = self.element.get_matching_xpath_count(locator, 'False')
         self.assertEqual(count, 0)
-
-    def test_xpath_should_match_x_times(self):
-        locator = '//div'
-        when(self.element).find_elements('xpath:{}'.format(locator)).thenReturn([])
-        with self.assertRaisesRegexp(AssertionError, 'should have matched'):
-            self.element.xpath_should_match_x_times(locator, 1)
-
-        with self.assertRaisesRegexp(AssertionError, 'foobar'):
-            self.element.xpath_should_match_x_times(locator, 1, 'foobar')

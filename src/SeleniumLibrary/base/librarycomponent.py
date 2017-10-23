@@ -19,7 +19,7 @@ import os
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
-from SeleniumLibrary.utils import is_noney, timestr_to_secs
+from SeleniumLibrary.utils import is_noney, timestr_to_secs, parse_range
 
 from .context import ContextAware
 from .robotlibcore import PY2
@@ -64,6 +64,21 @@ class LibraryComponent(ContextAware):
             raise AssertionError(message)
         logger.info("Current page does not contain %s '%s'."
                     % (tag or 'element', locator))
+
+    def assert_page_contains_elements(self, locator, tag=None, message=None,
+                                      range_=None, loglevel='INFO'):
+        count = len(self.find_elements(locator, tag, parent=None))
+        range_ = parse_range(range_)
+        if range_.minimum > count or range_.maximum < count:
+            self.log_source(loglevel)
+            if is_noney(message):
+                message = ('Page contained {count} element(s), but element '
+                           'count should have been between {min} and {max}.'
+                           .format(count=count, min=range_.minimum,
+                                   max=range_.maximum))
+            raise AssertionError(message)
+        self.info('Current page contains {min} <= {count} <= {max} elements.'
+                  .format(min=range_.minimum, count=count, max=range_.maximum))
 
     def get_timeout(self, timeout=None):
         if is_noney(timeout):
