@@ -37,33 +37,29 @@ class ContextAware(object):
 
     @property
     def element_finder(self):
-        return self.ctx.element_finder
+        return self.ctx._element_finder
 
     @property
     def table_element_finder(self):
-        return self.ctx.table_element_finder
+        return self.ctx._table_element_finder
 
-    def find_element(self, locator, tag=None, first_only=True, required=True,
-                     parent=None):
+    def find_element(self, locator, tag=None, required=True, parent=None):
         """Find element matching `locator`.
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
         :param tag: Limit searching only to these elements.
-        :param first_only: Return only first matching element if true,
-            a list of elements otherwise.
         :param required: Raise `ElementNotFound` if element not found when
             true, return `None` otherwise.
-        :param parent: Possible parent `WebElememt` element to search
-            elements from. By default search starts from `WebDriver`.
+        :param parent: Optional parent `WebElememt` to search child elements
+            from. By default search starts from the root using `WebDriver`.
         :return: Found `WebElement` or `None` if element not found and
             `required` is false.
         :rtype: selenium.webdriver.remote.webelement.WebElement
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found
             and `required` is true.
         """
-        return self.element_finder.find(locator, tag, first_only,
-                                        required, parent)
+        return self.element_finder.find(locator, tag, True, required, parent)
 
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.
@@ -72,7 +68,7 @@ class ContextAware(object):
         is found, the list is empty. Otherwise semantics are exactly same
         as with :meth:`find_element`.
         """
-        return self.find_element(locator, tag, False, False, parent)
+        return self.element_finder.find(locator, tag, False, False, parent)
 
     def is_text_present(self, text):
         locator = "xpath://*[contains(., %s)]" % escape_xpath_value(text)

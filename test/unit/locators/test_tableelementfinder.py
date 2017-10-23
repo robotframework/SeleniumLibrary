@@ -9,7 +9,7 @@ class ElementFinderTest(unittest.TestCase):
 
     def setUp(self):
         self.ctx = mock()
-        self.ctx.element_finder = mock()
+        self.ctx._element_finder = mock()
         self.finder = TableElementFinder(self.ctx)
 
     def tearDown(self):
@@ -48,8 +48,8 @@ class ElementFinderTest(unittest.TestCase):
         element1.text = 'not here'
         element2.text = 'content'
         table_elements = [element1, element2]
-        when(self.ctx.element_finder).find(
+        when(self.ctx._element_finder).find(
             'css=table', None, True, True, None).thenReturn(table)
-        when(self.ctx.element_finder).find(
+        when(self.ctx._element_finder).find(
             xpath[0], None, False, False, table).thenReturn(table_elements)
         self.finder._search_in_locators('css=table', xpath, 'content')
