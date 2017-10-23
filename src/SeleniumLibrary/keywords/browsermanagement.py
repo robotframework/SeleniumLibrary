@@ -325,39 +325,74 @@ class BrowserManagementKeywords(LibraryComponent):
         self.browser.set_window_position(int(x), int(y))
 
     @keyword
-    def select_window(self, locator='main'):
-        """Selects the window matching locator and return previous window handle.
+    def select_window(self, locator='MAIN'):
+        """Selects browser window matching ``locator``.
 
-        locator: any of name, title, url, window handle, excluded handle's list, or special words.
-        return: either current window handle before selecting, or None if no current window.
+        If the window is found, all subsequent commands use the selected
+        window, until this keyword is used again. If the window is not
+        found, this keyword fails. The previous window handle is returned,
+        and can be used to return back to it later.
 
-        If the window is found, all subsequent commands use that window, until
-        this keyword is used again. If the window is not found, this keyword fails.
+        Notice that in this context _window_ means a pop-up window opened
+        when doing something on an existing window. It is not possible to
+        select windows opened with `Open Browser`, `Switch Browser` must
+        be used instead. Notice also that alerts should be handled with
+        `Handle Alert` or other alert related keywords.
 
-        By default, when a locator value is provided,
-        it is matched against the title of the window and the
-        javascript name of the window. If multiple windows with
-        same identifier are found, the first one is selected.
+        The ``locator`` can be specified using different strategies somewhat
+        similarly as when `locating elements` on pages.
 
-        There are some special locators for searching target window:
-        string 'main' (default): select the main window;
-        string 'self': only return current window handle;
-        string 'new': select the last-indexed window assuming it is the newest opened window
-        window list: select the first window not in given list (See 'List Windows' to get the list)
+        - By default the ``locator`` is matched against window handle, name,
+          title, and URL. Matching is done in that order and the the first
+          matching window is selected.
 
-        It is also possible to specify the approach SeleniumLibrary should take
-        to find a window by specifying a locator strategy:
+        - The ``locator`` can specify an explicit strategy by using format
+          ``strategy:value`` (recommended) or ``strategy=value``. Supported
+          strategies are ``name``, ``title`` and ``url``, which match windows
+          using name, title, and URL, respectively. Additionally, ``default``
+          can be used to explicitly use the default strategy explained above.
 
-        | *Strategy* | *Example*                               | *Description*                        |
-        | title      | Select Window `|` title=My Document     | Matches by window title              |
-        | name       | Select Window `|` name=${name}          | Matches by window javascript name    |
-        | url        | Select Window `|` url=http://google.com | Matches by window's current URL      |
+        - If the ``locator`` is ``NEW`` (case-insensitive), the latest
+          opened window is selected. It is an error if this is the same
+          as the current window.
+
+        - If the ``locator`` is ``MAIN`` (default, case-insensitive),
+          the main window is selected.
+
+        - If the ``locator`` is ``CURRENT`` (case-insensitive), nothing is
+          done. This effectively just returns the current window handle.
+
+        - If the ``locator`` is not a string, it is expected to be a list
+          of window handles _to exclude_. Such a list of excluded windows
+          can be get from `Get Window Handles` prior to doing an action that
+          opens a new window.
 
         Example:
-        | Click Link | popup_link | # opens new window |
-        | Select Window | popupName |
-        | Title Should Be | Popup Title |
-        | Select Window |  | | # Chooses the main window again |
+        | `Click Link`      | popup1      |      | # Open new window |
+        | `Select Window`   | example     |      | # Select window using default strategy |
+        | `Title Should Be` | Pop-up 1    |      |
+        | `Click Button`    | popup2      |      | # Open another window |
+        | ${handle} = | `Select Window`   | NEW  | # Select latest opened window |
+        | `Title Should Be` | Pop-up 2    |      |
+        | `Select Window`   | ${handle}   |      | # Select window using handle |
+        | `Title Should Be` | Pop-up 1    |      |
+        | `Select Window`   | MAIN        |      | # Select the main window |
+        | `Title Should Be` | Main        |      |
+        | ${excludes} = | `Get Window Handles` | | # Get list of current windows |
+        | `Click Link`      | popup3      |      | # Open one more window |
+        | `Select Window`   | ${excludes} |      | # Select window using excludes |
+        | `Title Should Be` | Pop-up 3    |      |
+
+        *NOTE:*
+
+        - The ``strategy:value`` syntax is only supported by SeleniumLibrary
+          3.0 and newer.
+        - Earlier versions supported aliases ``None``, ``null`` and the
+          empty string for selecting the main window, and alias ``self``
+          for selecting the current window. These aliases were deprecated
+          in SeleniumLibrary 3.0.
+        - Prior to SeleniumLibrary 3.0 matching windows by name, title
+          and URL was case-insensitive.
         """
         try:
             return self.browser.current_window_handle
