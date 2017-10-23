@@ -367,12 +367,19 @@ class BrowserManagementKeywords(LibraryComponent):
             self._window_manager.select(locator)
 
     @keyword
-    def list_windows(self):
+    def get_window_handles(self):
         """Return all current window handles as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
+
+        Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.
         """
         return self.browser.window_handles
+
+    @keyword
+    def list_windows(self):
+        """Deprecated. Use `Get Window Handles` instead."""
+        return self.get_window_handles()
 
     @keyword
     def get_location(self):
