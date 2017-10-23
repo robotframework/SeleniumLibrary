@@ -20,7 +20,6 @@ import types
 
 from robot.utils import NormalizedDict
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
@@ -239,195 +238,6 @@ class BrowserManagementKeywords(LibraryComponent):
                    % self.browser.session_id)
 
     @keyword
-    def close_window(self):
-        """Closes currently opened pop-up window."""
-        self.browser.close()
-
-    @keyword
-    def get_window_identifiers(self):
-        """Returns and logs id attributes of all known browser windows."""
-        ids = [info.id for info in self._window_manager.get_window_infos()]
-        return self._log_list(ids)
-
-    @keyword
-    def get_window_names(self):
-        """Returns and logs names of all known browser windows."""
-        names = [info.name for info in self._window_manager.get_window_infos()]
-        return self._log_list(names)
-
-    @keyword
-    def get_window_titles(self):
-        """Returns and logs titles of all known browser windows."""
-        titles = [info.title for info in self._window_manager.get_window_infos()]
-        return self._log_list(titles)
-
-    @keyword
-    def maximize_browser_window(self):
-        """Maximizes current browser window."""
-        self.browser.maximize_window()
-
-    @keyword
-    def get_window_size(self):
-        """Returns current window width and height as integers.
-
-        See also `Set Window Size`.
-
-        Example:
-        | ${width} | ${height}= | `Get Window Size` |
-        """
-        size = self.browser.get_window_size()
-        return size['width'], size['height']
-
-    @keyword
-    def set_window_size(self, width, height):
-        """Sets current windows size to given ``width`` and ``height``.
-
-        Values can be given using strings containing numbers or by using
-        actual numbers. See also `Get Window Size`.
-
-        Browsers have a limit how small they can be set. Trying to set them
-        smaller will cause the actual size to be bigger than the requested
-        size.
-
-        Example:
-        | `Set Window Size` | 800 | 600 |
-        """
-        return self.browser.set_window_size(int(width), int(height))
-
-    @keyword
-    def get_window_position(self):
-        """Returns current window position.
-
-        Position is relative to the top left corner of the screen. Returned
-        values are integers. See also `Set Window Position`.
-
-        Example:
-        | ${x} | ${y}= | `Get Window Position` |
-        """
-        position = self.browser.get_window_position()
-        return position['x'], position['y']
-
-    @keyword
-    def set_window_position(self, x, y):
-        """Sets window position using ``x`` and ``y`` coordinates.
-
-        The position is relative to the top left corner of the screen,
-        but some browsers exclude possible task bar set by the operating
-        system from the calculation. The actual position may thus be
-        different with different browsers.
-
-        Values can be given using strings containing numbers or by using
-        actual numbers. See also `Get Window Position`.
-
-        Example:
-        | `Set Window Position` | 100 | 200 |
-        """
-        self.browser.set_window_position(int(x), int(y))
-
-    @keyword
-    def select_window(self, locator='MAIN'):
-        """Selects browser window matching ``locator``.
-
-        If the window is found, all subsequent commands use the selected
-        window, until this keyword is used again. If the window is not
-        found, this keyword fails. The previous window handle is returned,
-        and can be used to return back to it later.
-
-        Notice that in this context _window_ means a pop-up window opened
-        when doing something on an existing window. It is not possible to
-        select windows opened with `Open Browser`, `Switch Browser` must
-        be used instead. Notice also that alerts should be handled with
-        `Handle Alert` or other alert related keywords.
-
-        The ``locator`` can be specified using different strategies somewhat
-        similarly as when `locating elements` on pages.
-
-        - By default the ``locator`` is matched against window handle, name,
-          title, and URL. Matching is done in that order and the the first
-          matching window is selected.
-
-        - The ``locator`` can specify an explicit strategy by using format
-          ``strategy:value`` (recommended) or ``strategy=value``. Supported
-          strategies are ``name``, ``title`` and ``url``, which match windows
-          using name, title, and URL, respectively. Additionally, ``default``
-          can be used to explicitly use the default strategy explained above.
-
-        - If the ``locator`` is ``NEW`` (case-insensitive), the latest
-          opened window is selected. It is an error if this is the same
-          as the current window.
-
-        - If the ``locator`` is ``MAIN`` (default, case-insensitive),
-          the main window is selected.
-
-        - If the ``locator`` is ``CURRENT`` (case-insensitive), nothing is
-          done. This effectively just returns the current window handle.
-
-        - If the ``locator`` is not a string, it is expected to be a list
-          of window handles _to exclude_. Such a list of excluded windows
-          can be get from `Get Window Handles` prior to doing an action that
-          opens a new window.
-
-        Example:
-        | `Click Link`      | popup1      |      | # Open new window |
-        | `Select Window`   | example     |      | # Select window using default strategy |
-        | `Title Should Be` | Pop-up 1    |      |
-        | `Click Button`    | popup2      |      | # Open another window |
-        | ${handle} = | `Select Window`   | NEW  | # Select latest opened window |
-        | `Title Should Be` | Pop-up 2    |      |
-        | `Select Window`   | ${handle}   |      | # Select window using handle |
-        | `Title Should Be` | Pop-up 1    |      |
-        | `Select Window`   | MAIN        |      | # Select the main window |
-        | `Title Should Be` | Main        |      |
-        | ${excludes} = | `Get Window Handles` | | # Get list of current windows |
-        | `Click Link`      | popup3      |      | # Open one more window |
-        | `Select Window`   | ${excludes} |      | # Select window using excludes |
-        | `Title Should Be` | Pop-up 3    |      |
-
-        *NOTE:*
-
-        - The ``strategy:value`` syntax is only supported by SeleniumLibrary
-          3.0 and newer.
-        - Earlier versions supported aliases ``None``, ``null`` and the
-          empty string for selecting the main window, and alias ``self``
-          for selecting the current window. These aliases were deprecated
-          in SeleniumLibrary 3.0.
-        - Prior to SeleniumLibrary 3.0 matching windows by name, title
-          and URL was case-insensitive.
-        """
-        try:
-            return self.browser.current_window_handle
-        except NoSuchWindowException:
-            pass
-        finally:
-            self._window_manager.select(locator)
-
-    @keyword
-    def get_window_handles(self):
-        """Return all current window handles as a list.
-
-        Can be used as a list of windows to exclude with `Select Window`.
-
-        Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.
-        """
-        return self.browser.window_handles
-
-    @keyword
-    def list_windows(self):
-        """Deprecated. Use `Get Window Handles` instead."""
-        return self.get_window_handles()
-
-    @keyword
-    def get_location(self):
-        """Returns the current browser URL."""
-        return self.browser.current_url
-
-    @keyword
-    def get_locations(self):
-        """Returns and logs URLs of all known browser windows."""
-        urls = [info.url for info in self._window_manager.get_window_infos()]
-        return self._log_list(urls)
-
-    @keyword
     def get_source(self):
         """Returns the entire HTML source of the current page or frame."""
         return self.browser.page_source
@@ -436,6 +246,12 @@ class BrowserManagementKeywords(LibraryComponent):
     def get_title(self):
         """Returns the title of current page."""
         return self.browser.title
+
+    @keyword
+    def get_location(self):
+        """Returns the current browser URL."""
+        return self.browser.current_url
+
 
     @keyword
     def location_should_be(self, url):
@@ -740,16 +556,6 @@ class BrowserManagementKeywords(LibraryComponent):
             browser._base_execute = browser.execute
             browser.execute = types.MethodType(execute, browser)
         browser._speed = self.ctx.speed
-
-    def _log_list(self, items, what='item'):
-        msg = [
-            'Altogether {} {}.'.format(
-                len(items), what if len(items) == 1 else '{}s'.format(what))
-        ]
-        for index, item in enumerate(items):
-            msg.append('{}: {}'.format(index + 1, item))
-        self.info('\n'.join(msg))
-        return items
 
     @property
     def _geckodriver_log_config(self):

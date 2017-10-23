@@ -26,3 +26,4 @@ from .screenshot import ScreenshotKeywords
 from .selectelement import SelectElementKeywords
 from .tableelement import TableElementKeywords
 from .waiting import WaitingKeywords
+from .window import WindowKeywords

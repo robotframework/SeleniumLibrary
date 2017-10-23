@@ -31,7 +31,8 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       ScreenshotKeywords,
                                       SelectElementKeywords,
                                       TableElementKeywords,
-                                      WaitingKeywords)
+                                      WaitingKeywords,
+                                      WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder, TableElementFinder
 from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
                                    timestr_to_secs)
@@ -339,7 +340,8 @@ class SeleniumLibrary(DynamicCore):
             ScreenshotKeywords(self),
             SelectElementKeywords(self),
             TableElementKeywords(self),
-            WaitingKeywords(self)
+            WaitingKeywords(self),
+            WindowKeywords(self)
         ]
         self._browsers = BrowserCache()
         DynamicCore.__init__(self, libraries)
