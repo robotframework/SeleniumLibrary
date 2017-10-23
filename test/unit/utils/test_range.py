@@ -34,3 +34,5 @@ class RangeMatcherTests(unittest.TestCase):
             parse_range('1..A')
         with self.assertRaisesRegexp(ValueError, 'Invalid range definition'):
             parse_range('1A2')
+        with self.assertRaisesRegexp(ValueError, 'Invalid range definition'):
+            parse_range('1..C')

@@ -103,7 +103,8 @@ class ElementKeywords(LibraryComponent):
         self.info("Current page contains text '%s'." % text)
 
     @keyword
-    def page_should_contain_element(self, locator, message=None, loglevel='INFO'):
+    def page_should_contain_element(self, locator, message=None,
+                                    loglevel='INFO', range_=None):
         """Verifies that element ``locator`` is found on the current page.
 
         See the `Locating elements` section for details about the locator
@@ -112,32 +113,35 @@ class ElementKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
+        The ``range_`` argument can be used to define how many
+        elements the page should contain. The ``range_`` can be None, number
+        or a range in `x..y` format. When ``range_`` is None
+        (case-insensitively), page must contain, one or more elements matching
+        to the ``locator``. When ``range_`` is a number, then the element(s)
+        found by ``locator`` must match to the ``range_``.
+
+        When ``range_`` is in `x..y` format, then `x` and `y` must be positives
+        numbers. The `x` and `y` must be separated with two dots. In this
+        format then element count must be between the ``range_`` definitions.
+        In practice, it must follow this rule: `x <= count <= y`.
+
+        The ``range_`` argument is new in SeleniumLibrary 3.0.
+
         See `Page Should Contain` for explanation about the ``loglevel``
         argument.
         """
-        self.assert_page_contains(locator, message=message, loglevel=loglevel)
+        if is_noney(range_):
+            self.assert_page_contains(locator, message=message,
+                                      loglevel=loglevel)
+        else:
+            self.assert_page_contains_elements(locator, message=message,
+                                               loglevel=loglevel, range_=range_)
 
     @keyword
     def locator_should_match_x_times(self, locator, x, message=None, loglevel='INFO'):
-        """Verifies that ``locator`` matches ``x`` number of elements.
-
-        See the `Locating elements` section for details about the locator
-        syntax.
-
-        See `Page Should Contain Element` for explanation about ``message``
-        and ``loglevel`` arguments.
-        """
-        count = len(self.find_elements(locator))
-        x = int(x)
-        if count != x:
-            if is_falsy(message):
-                message = ("Locator '%s' should have matched %s time%s but "
-                           "matched %s time%s."
-                           % (locator, x, s(x), count, s(count)))
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
-        self.info("Current page contains %s elements matching '%s'."
-                  % (count, locator))
+        """Deprecated use `Page Should Contain Element` instead"""
+        self.page_should_contain_element(locator, message=message,
+                                         loglevel=loglevel, range_=x)
 
     @keyword
     def page_should_not_contain(self, text, loglevel='INFO'):

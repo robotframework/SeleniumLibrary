@@ -25,7 +25,7 @@ Xpath Should Match X Times
     Xpath Should Match X Times      //input[@type="text"]    1
     Xpath Should Match X Times      //input[@type="text"]    ${1}
     Run Keyword And Expect Error
-    ...    Locator 'xpath://input[@type="text"]' should have matched 2 times but matched 1 time.
+    ...    Page contained 1 element(s), but element count should have been between 2 and 2.
     ...    Xpath Should Match X Times    //input[@type="text"]    2
 
 Locator Should Match X Times
@@ -40,7 +40,7 @@ Locator Should Match X Times Error
     [Documentation]    Deprecated
     [Setup]    Go To Page "links.html"
     Run Keyword And Expect Error
-    ...    Locator 'name: div_name' should have matched 3 times but matched 2 times.
+    ...    Page contained 2 element(s), but element count should have been between 3 and 3.
     ...    Locator Should Match X Times    name: div_name    3
     Run Keyword And Expect Error
     ...    Custom error
@@ -67,3 +67,64 @@ Get Element Count Should Not Fail When Zero Elements Is Found
     [Setup]    Go To Page "links.html"
     ${count} =     Get Element Count    name:not_exist
     Should Be Equal    ${count}    ${0}
+
+Page Should Contain Element With Range_ None
+    [Documentation]
+    ...    LOG 2:3    INFO Current page contains element 'xpath://*[@name="div_name"]'.
+    ...    LOG 3:3    INFO Current page contains element 'xpath://*[@name="div_name"]'.
+    ...    LOG 4:3    INFO Current page contains element 'xpath://*[@name="div_name"]'.
+    [Setup]    Go To Page "links.html"
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=None
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=${None}
+    Page Should Contain Element    xpath://*[@name="div_name"]
+
+Page Should Contain Element With Range_ Number
+    [Documentation]
+    ...    LOG 2:3    INFO Current page contains 2 <= 2 <= 2 elements.
+    [Setup]    Go To Page "links.html"
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=2
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=${2}
+
+Page Should Contain Element With Range_ Using Range Definition
+    [Documentation]
+    ...    LOG 2:3    INFO Current page contains 1 <= 2 <= 3 elements.
+    ...    LOG 4:3    INFO Current page contains 2 <= 2 <= 2 elements.
+    ...    LOG 5:3    INFO Current page contains 1 <= 2 <= 3 elements.
+    [Setup]    Go To Page "links.html"
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=1..3
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=1..2
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=2..2
+    Page Should Contain Element    xpath://*[@name="div_name"]    range_=3..1
+
+Page Should Contain Element With Range_ Number And Error
+    [Setup]    Go To Page "links.html"
+    Run Keyword And Expect Error    Page contained 2 element(s), but element count should have been between 1 and 1.
+    ...    Page Should Contain Element    xpath://*[@name="div_name"]    range_=1
+
+Page Should Contain Element With Range_ None And Error
+    [Setup]    Go To Page "links.html"
+    Run Keyword And Expect Error    Page should have contained element 'name: not_exist' but did not.
+    ...    Page Should Contain Element    name: not_exist
+    Run Keyword And Expect Error    Page should have contained element 'name: not_exist' but did not.
+    ...    Page Should Contain Element    name: not_exist    range_=None
+
+Page Should Contain Element With Range_ Using Range Definition And Error
+    [Setup]    Go To Page "links.html"
+    Run Keyword And Expect Error    Page contained 2 element(s), but element count should have been between 0 and 0.
+    ...    Page Should Contain Element    xpath://*[@name="div_name"]
+    ...    range_=0..0
+    Run Keyword And Expect Error    Page contained 2 element(s), but element count should have been between 5 and 10.
+    ...    Page Should Contain Element    xpath://*[@name="div_name"]
+    ...    range_=5..10
+
+Page Should Contain Element With Range_ Using Range Definition And Invalid Range
+    [Setup]    Go To Page "links.html"
+    Run Keyword And Expect Error    ValueError: Invalid range definition
+    ...    Page Should Contain Element    xpath://*[@name="div_name"]
+    ...    range_=-15..10
+    Run Keyword And Expect Error    ValueError: Invalid range definition
+    ...    Page Should Contain Element    xpath://*[@name="div_name"]
+    ...    range_=1..-3
+    Run Keyword And Expect Error    ValueError: Invalid range definition
+    ...    Page Should Contain Element    xpath://*[@name="div_name"]
+    ...    range_=1...3
