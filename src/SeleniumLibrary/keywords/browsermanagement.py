@@ -325,7 +325,7 @@ class BrowserManagementKeywords(LibraryComponent):
         self.browser.set_window_position(int(x), int(y))
 
     @keyword
-    def select_window(self, locator=None):
+    def select_window(self, locator='main'):
         """Selects the window matching locator and return previous window handle.
 
         locator: any of name, title, url, window handle, excluded handle's list, or special words.
@@ -368,7 +368,10 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def list_windows(self):
-        """Return all current window handles as a list."""
+        """Return all current window handles as a list.
+
+        Can be used as a list of windows to exclude with `Select Window`.
+        """
         return self.browser.window_handles
 
     @keyword

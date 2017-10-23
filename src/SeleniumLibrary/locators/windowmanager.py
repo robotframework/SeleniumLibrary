@@ -16,25 +16,35 @@
 
 from collections import namedtuple
 
+from robot.api import logger
 from selenium.common.exceptions import (NoSuchWindowException,
                                         WebDriverException)
 
 from SeleniumLibrary.base import ContextAware
+from SeleniumLibrary.errors import WindowNotFound
+from SeleniumLibrary.utils import is_string
 
 
 WindowInfo = namedtuple('WindowInfo', 'handle, id, name, title, url')
 
 
 class WindowManager(ContextAware):
+    _deprecated_locators = {
+        None: 'main',
+        'null': 'main',
+        '': 'main',
+        'popup': 'new',
+        'self': 'current'
+    }
 
     def __init__(self, ctx):
+        ContextAware.__init__(self, ctx)
         self._strategies = {
             'title': self._select_by_title,
             'name': self._select_by_name,
             'url': self._select_by_url,
-            None: self._select_by_default
+            'default': self._select_by_default
         }
-        ContextAware.__init__(self, ctx)
 
     def get_window_infos(self):
         infos = []
@@ -52,44 +62,71 @@ class WindowManager(ContextAware):
         return infos
 
     def select(self, locator):
-        if locator is not None:
-            if isinstance(locator, list):
-                self._select_by_excludes(self.browser, locator)
-                return
-            if locator.lower() == "self" or locator.lower() == "current":
-                return
-            if locator.lower() == "new" or locator.lower() == "popup":
-                self._select_by_last_index(self.browser)
-                return
-        (prefix, criteria) = self._parse_locator(locator)
-        strategy = self._strategies.get(prefix)
-        if strategy is None:
-            raise ValueError("Window locator with prefix '" + prefix + "' is not supported")
-        return strategy(self.browser, criteria)
+        locator = self._handle_deprecated_locators(locator)
+        if not is_string(locator):
+            self._select_by_excludes(self.browser, locator)
+        elif locator.upper() == 'CURRENT':
+            pass
+        elif locator.upper() == 'MAIN':
+            self._select_main_window(self.browser)
+        elif locator.upper() == 'NEW':
+            self._select_by_last_index(self.browser)
+        else:
+            strategy, locator = self._parse_locator(locator)
+            self._strategies[strategy](self.browser, locator)
 
-    def _select_by_title(self, browser, criteria):
+    def _handle_deprecated_locators(self, locator):
+        if not (is_string(locator) or locator is None):
+            return locator
+        normalized = locator.lower() if is_string(locator) else locator
+        if normalized in self._deprecated_locators:
+            new = self._deprecated_locators[normalized]
+            logger.warn("Using '%s' as window locator is deprecated. "
+                        "Use '%s' instead." % (locator, new))
+            return new
+        return locator
+
+    def _parse_locator(self, locator):
+        index = self._get_locator_separator_index(locator)
+        if index != -1:
+            prefix = locator[:index].strip()
+            if prefix in self._strategies:
+                return prefix, locator[index+1:].lstrip()
+        return 'default', locator
+
+    def _get_locator_separator_index(self, locator):
+        if '=' not in locator:
+            return locator.find(':')
+        if ':' not in locator:
+            return locator.find('=')
+        return min(locator.find('='), locator.find(':'))
+
+    def _select_by_title(self, browser, title):
         self._select_matching(
             browser,
-            lambda window_info: window_info[3].strip().lower() == criteria.lower(),
-            "Unable to locate window with title '" + criteria + "'")
+            lambda window_info: window_info.title == title,
+            "Unable to locate window with title '%s'." % title
+        )
 
-    def _select_by_name(self, browser, criteria):
+    def _select_by_name(self, browser, name):
         self._select_matching(
             browser,
-            lambda window_info: window_info[2].strip().lower() == criteria.lower(),
-            "Unable to locate window with name '" + criteria + "'")
+            lambda window_info: window_info.name == name,
+            "Unable to locate window with name '%s'." % name
+        )
 
-    def _select_by_url(self, browser, criteria):
+    def _select_by_url(self, browser, url):
         self._select_matching(
             browser,
-            lambda window_info: window_info[4].strip().lower() == criteria.lower(),
-            "Unable to locate window with URL '" + criteria + "'")
+            lambda window_info: window_info.url == url,
+            "Unable to locate window with URL '%s'." % url
+        )
+
+    def _select_main_window(self, browser):
+        handles = browser.window_handles
+        browser.switch_to.window(handles[0])
 
     def _select_by_default(self, browser, criteria):
-        if criteria is None or len(criteria) == 0 or criteria.lower() == "null":
-            handles = browser.window_handles
-            browser.switch_to.window(handles[0])
-            return
         try:
             starting_handle = browser.current_window_handle
         except NoSuchWindowException:
@@ -99,21 +136,18 @@ class WindowManager(ContextAware):
             if criteria == handle:
                 return
             for item in self._get_current_window_info(browser)[2:4]:
-                if item.strip().lower() == criteria.lower():
+                if item == criteria:
                     return
         if starting_handle:
             browser.switch_to.window(starting_handle)
-        raise ValueError("Unable to locate window with handle or name or title or URL '" + criteria + "'")
+        raise WindowNotFound("No window matching handle, name, title or URL "
+                             "'%s' found." % criteria)
 
     def _select_by_last_index(self, browser):
         handles = browser.window_handles
-        try:
-            if handles[-1] == browser.current_window_handle:
-                raise AssertionError("No new window at last index. Please use '@{ex}= | List Windows' + new window trigger + 'Select Window | ${ex}' to find it.")
-        except IndexError:
-            raise AssertionError("No window found")
-        except NoSuchWindowException:
-            raise AssertionError("Currently no focus window. where are you making a popup window?")
+        if handles[-1] == browser.current_window_handle:
+            raise WindowNotFound('Window with last index is same as '
+                                 'the current window.')
         browser.switch_to.window(handles[-1])
 
     def _select_by_excludes(self, browser, excludes):
@@ -121,20 +155,8 @@ class WindowManager(ContextAware):
             if handle not in excludes:
                 browser.switch_to.window(handle)
                 return
-        raise ValueError("Unable to locate new window")
-
-    def _parse_locator(self, locator):
-        prefix = None
-        criteria = locator
-        if locator is not None and len(locator) > 0:
-            locator_parts = locator.partition('=')
-            if len(locator_parts[1]) > 0:
-                prefix = locator_parts[0].strip().lower()
-                criteria = locator_parts[2].strip()
-        if prefix is None or prefix == 'name':
-            if criteria is None or criteria.lower() == 'main':
-                criteria = ''
-        return (prefix, criteria)
+        raise WindowNotFound('No window not matching excludes %s found.'
+                             % excludes)
 
     def _select_matching(self, browser, matcher, error):
         try:
@@ -147,7 +169,7 @@ class WindowManager(ContextAware):
                 return
         if starting_handle:
             browser.switch_to.window(starting_handle)
-        raise ValueError(error)
+        raise WindowNotFound(error)
 
     def _get_current_window_info(self, browser):
         try:
