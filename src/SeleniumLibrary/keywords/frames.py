@@ -23,18 +23,17 @@ class FrameKeywords(LibraryComponent):
     def select_frame(self, locator):
         """Sets frame identified by ``locator`` as the current frame.
 
-        Key attributes for frames are `id` and `name.` See `introduction` for
-        details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
 
-        See `Unselect Frame` to cancel the frame selection and return to the Main frame.
-
-        Please note that the frame search always start from the document root or main frame.
+        Works both with frames and iframes. Use `Unselect Frame` to cancel
+        the frame selection and return to the main frame.
 
         Example:
-        | Select Frame   | xpath: //frame[@name='top]/iframe[@name='left'] | # Selects the 'left' iframe |
-        | Click Link     | foo                                             | # Clicks link 'foo' in 'left' iframe |
-        | Unselect Frame |                                                 | # Returns to main frame |
-        | Select Frame   | left                                            | # Selects the 'top' frame |
+        | `Select Frame`   | top-frame | # Select frame with id or name 'top-frame'   |
+        | `Click Link`     | example   | # Click link 'example' in the selected frame |
+        | `Unselect Frame` |           | # Back to main frame.                        |
+        | `Select Frame`   | //iframe[@name='xxx'] | # Select frame using xpath       |
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.find_element(locator)
@@ -42,9 +41,9 @@ class FrameKeywords(LibraryComponent):
 
     @keyword
     def unselect_frame(self):
-        """Sets the top frame as the current frame.
+        """Sets the main frame as the current frame.
 
-        In practice cancels a previous `Select Frame` call.
+        In practice cancels the previous `Select Frame` call.
         """
         self.browser.switch_to.default_content()
 
