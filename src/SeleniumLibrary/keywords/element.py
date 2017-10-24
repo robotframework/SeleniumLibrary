@@ -148,14 +148,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def locator_should_match_x_times(self, locator, x, message=None, loglevel='INFO'):
-        """Verifies that ``locator`` matches ``x`` number of elements.
-
-        See the `Locating elements` section for details about the locator
-        syntax.
-
-        See `Page Should Contain Element` for explanation about ``message``
-        and ``loglevel`` arguments.
-        """
+        """Deprecated, use `Page Should Contain Element` instead."""
         count = len(self.find_elements(locator))
         x = int(x)
         if count != x:
