@@ -114,9 +114,9 @@ class ElementKeywords(LibraryComponent):
         message.
 
         The ``limit`` argument can used to define how many elements the
-        page should contain. When ``limit`` is `None`, case-insensitively,
-        page can contain one or more elements. When limit is a number,
-        page must contain same number of elements.
+        page should contain. When ``limit`` is `None` page can contain one or
+        more elements. When limit is a number, page must contain same number
+        of elements.
 
         See `Page Should Contain` for explanation about the ``loglevel``
         argument.
@@ -148,7 +148,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def locator_should_match_x_times(self, locator, x, message=None, loglevel='INFO'):
-        """Deprecated, use `Page Should Contain Element` instead."""
+        """Deprecated, use `Page Should Contain Element` with `limit` argument instead."""
         count = len(self.find_elements(locator))
         x = int(x)
         if count != x:
@@ -721,7 +721,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='INFO'):
-        """Deprecated. Use `Locator Should Match X Times` instead."""
+        """Deprecated, use `Page Should Contain Element` with `limit` argument instead."""
         self.locator_should_match_x_times('xpath:'+xpath, x, message, loglevel)
 
     @keyword
@@ -729,7 +729,8 @@ return !element.dispatchEvent(evt);
         """Returns number of elements matching ``locator``.
 
         If you wish to assert the number of matching elements, use
-        `Locator Should Match X Times`. Keyword will always return an integer.
+        `Page Should Contain Element` with `limit` argument. Keyword will
+        always return an integer.
         New in SeleniumLibrary 3.0.
 
         Example:
