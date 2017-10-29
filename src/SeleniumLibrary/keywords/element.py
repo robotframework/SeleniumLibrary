@@ -114,41 +114,39 @@ class ElementKeywords(LibraryComponent):
         message.
 
         The ``limit`` argument can used to define how many elements the
-        page should contain. When ``limit`` is `None` page can contain one or
-        more elements. When limit is a number, page must contain same number
-        of elements.
+        page should contain. When ``limit`` is ``None`` (default) page can
+        contain one or more elements. When limit is a number, page must
+        contain same number of elements.
 
         See `Page Should Contain` for explanation about the ``loglevel``
         argument.
 
-        The ``limit`` argument is new in SeleniumLibrary 3.0
-
         Examples assumes that locator matches to two elements.
-        | Page Should Contain Element | name: div_name | limit=1    | # Keyword fails.                  |
-        | Page Should Contain Element | name: div_name | limit=2    | # Keyword passes.                 |
-        | Page Should Contain Element | name: div_name | limit=none | # None is considered one or more. |
-        | Page Should Contain Element | name: div_name |            | # Same as above.                  |
+        | `Page Should Contain Element` | div_name | limit=1    | # Keyword fails.                  |
+        | `Page Should Contain Element` | div_name | limit=2    | # Keyword passes.                 |
+        | `Page Should Contain Element` | div_name | limit=none | # None is considered one or more. |
+        | `Page Should Contain Element` | div_name |            | # Same as above.                  |
+
+        The ``limit`` argument is new in SeleniumLibrary 3.0.
         """
         if is_noney(limit):
-            self.assert_page_contains(locator, message=message,
-                                      loglevel=loglevel)
+            return self.assert_page_contains(locator, message=message,
+                                             loglevel=loglevel)
+        limit = int(limit)
+        count = len(self.find_elements(locator))
+        if count == limit:
+            self.info('Current page contains {} element(s).'.format(count))
         else:
-            limit = int(limit)
-            count = len(self.find_elements(locator))
-            if count == limit:
-                self.info('Current page contains {} element(s).'
-                          .format(count))
-            else:
-                if is_noney(message):
-                    message = ('Page should have contained "{}" element(s), '
-                               'but it did contain "{}" element(s).'
-                               .format(limit, count))
-                self.ctx.log_source(loglevel)
-                raise AssertionError(message)
+            if is_noney(message):
+                message = ('Page should have contained "{}" element(s), '
+                           'but it did contain "{}" element(s).'
+                           .format(limit, count))
+            self.ctx.log_source(loglevel)
+            raise AssertionError(message)
 
     @keyword
     def locator_should_match_x_times(self, locator, x, message=None, loglevel='INFO'):
-        """Deprecated, use `Page Should Contain Element` with `limit` argument instead."""
+        """Deprecated, use `Page Should Contain Element` with ``limit`` argument instead."""
         count = len(self.find_elements(locator))
         x = int(x)
         if count != x:
@@ -721,7 +719,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='INFO'):
-        """Deprecated, use `Page Should Contain Element` with `limit` argument instead."""
+        """Deprecated, use `Page Should Contain Element` with ``limit`` argument instead."""
         self.locator_should_match_x_times('xpath:'+xpath, x, message, loglevel)
 
     @keyword
@@ -729,13 +727,14 @@ return !element.dispatchEvent(evt);
         """Returns number of elements matching ``locator``.
 
         If you wish to assert the number of matching elements, use
-        `Page Should Contain Element` with `limit` argument. Keyword will
+        `Page Should Contain Element` with ``limit`` argument. Keyword will
         always return an integer.
-        New in SeleniumLibrary 3.0.
 
         Example:
         | ${count} =      | Get Matching Locator Count | name:div_name  |
         | Should Be True  | ${count} > 2               |                |
+
+        New in SeleniumLibrary 3.0.
         """
         return len(self.find_elements(locator))
 
