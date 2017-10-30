@@ -122,7 +122,7 @@ Select Popup Window By Excluded List
 Select Window By Special Locator
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
-    ${start}=    Select Window    self
+    ${start}=    Select Window    current
     Click Link    my popup
     Wait Until New Window Is Open
     ${parent}=    Select Window    new
