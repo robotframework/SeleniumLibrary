@@ -117,7 +117,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         bm = BrowserManagementKeywords(ctx)
         try:
-            bm._make_browser("fireox")
+            bm._make_driver("fireox")
             self.fail("Exception not raised")
         except ValueError as e:
             self.assertEquals(str(e), "fireox is not a supported browser.")
@@ -171,7 +171,7 @@ class BrowserManagementTests(unittest.TestCase):
 
         try:
             self.was_called = False
-            bm._make_browser(browser_name, **kw)
+            bm._make_driver(browser_name, **kw)
         except AttributeError:
             pass  #kinda dangerous but I'm too lazy to mock out all the set_timeout calls
         finally:
