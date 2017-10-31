@@ -34,8 +34,8 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WaitingKeywords,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder, TableElementFinder
-from SeleniumLibrary.utils import (Deprecated, DriverCache, LibraryListener,
-                                   timestr_to_secs)
+from SeleniumLibrary.utils import (Deprecated, LibraryListener, timestr_to_secs,
+                                   WebDriverCache)
 
 
 __version__ = '3.0.0b4.dev1'
@@ -342,7 +342,7 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
-        self._drivers = DriverCache()
+        self._webdrivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self._element_finder = ElementFinder(self)
@@ -363,7 +363,7 @@ class SeleniumLibrary(DynamicCore):
             raise
 
     def register_driver(self, driver, alias):
-        return self._drivers.register(driver, alias)
+        return self._webdrivers.register(driver, alias)
 
     def failure_occurred(self):
         """Method that is executed when a SeleniumLibrary keyword fails.
@@ -386,9 +386,9 @@ class SeleniumLibrary(DynamicCore):
     @property
     def driver(self):
         """Current active driver"""
-        if not self._drivers.current:
+        if not self._webdrivers.current:
             raise RuntimeError('No driver is open')
-        return self._drivers.current
+        return self._webdrivers.current
 
     def find_element(self, locator, parent=None):
         """Find element matching ``locator``.
@@ -423,9 +423,9 @@ class SeleniumLibrary(DynamicCore):
 
     def _current_browser(self):
         warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '
-                      'use "SeleniumLibrary.browser" instead.',
+                      'use "SeleniumLibrary.driver" instead.',
                       DeprecationWarning)
-        return self.browser
+        return self.driver
 
     def _run_on_failure(self):
         warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '

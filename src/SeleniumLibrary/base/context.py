@@ -32,8 +32,8 @@ class ContextAware(object):
         return self.ctx.driver
 
     @property
-    def drivers(self):
-        return self.ctx._drivers
+    def webdrivers(self):
+        return self.ctx._webdrivers
 
     @property
     def element_finder(self):

@@ -97,19 +97,17 @@ class BrowserManagementTests(unittest.TestCase):
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         ctx = mock()
         ctx.timeout = 5.0
-        _drivers = mock()
-        ctx._drivers = _drivers
+        _webdrivers = mock()
+        ctx._webdrivers = _webdrivers
         first_browser, second_browser = mock(), mock()
-        when(_drivers).get_open_drivers().thenReturn(
+        when(_webdrivers).get_open_drivers().thenReturn(
             [first_browser, second_browser]
         )
         bm = BrowserManagementKeywords(ctx)
         bm.set_selenium_timeout("10 seconds")
         verify(first_browser).set_script_timeout(10.0)
         verify(second_browser).set_script_timeout(10.0)
-        when(_drivers).get_open_drivers().thenReturn(
-            []
-        )
+        when(_webdrivers).get_open_drivers().thenReturn([])
         bm.set_selenium_timeout("20 seconds")
         verifyNoMoreInteractions(first_browser)
         verifyNoMoreInteractions(second_browser)

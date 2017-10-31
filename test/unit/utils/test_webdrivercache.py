@@ -2,20 +2,20 @@ import unittest
 
 from mockito import mock, verify
 
-from SeleniumLibrary.utils import DriverCache
+from SeleniumLibrary.utils import WebDriverCache
 
 
-class DriverCacheTests(unittest.TestCase):
+class WebDriverCacheTests(unittest.TestCase):
 
     def test_no_current_message(self):
-        cache = DriverCache()
+        cache = WebDriverCache()
         try:
             self.assertRaises(RuntimeError, cache.current.anyMember())
         except RuntimeError as e:
             self.assertEqual(str(e), "No current driver")
 
     def test_browsers_property(self):
-        cache = DriverCache()
+        cache = WebDriverCache()
 
         driver1 = mock()
         driver2 = mock()
@@ -34,7 +34,7 @@ class DriverCacheTests(unittest.TestCase):
         self.assertEqual(index3, 3)
 
     def test_get_open_browsers(self):
-        cache = DriverCache()
+        cache = WebDriverCache()
 
         driver1 = mock()
         driver2 = mock()
@@ -57,7 +57,7 @@ class DriverCacheTests(unittest.TestCase):
         self.assertEqual(drivers[1], driver2)
 
     def test_close(self):
-        cache = DriverCache()
+        cache = WebDriverCache()
         browser = mock()
         cache.register(browser)
 
@@ -66,7 +66,7 @@ class DriverCacheTests(unittest.TestCase):
         verify(browser, times=1).quit()
 
     def test_close_only_called_once(self):
-        cache = DriverCache()
+        cache = WebDriverCache()
 
         browser1 = mock()
         browser2 = mock()

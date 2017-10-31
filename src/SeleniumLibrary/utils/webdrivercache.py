@@ -17,7 +17,7 @@
 from robot.utils import ConnectionCache
 
 
-class DriverCache(ConnectionCache):
+class WebDriverCache(ConnectionCache):
 
     def __init__(self):
         ConnectionCache.__init__(self, no_current_msg='No current driver')

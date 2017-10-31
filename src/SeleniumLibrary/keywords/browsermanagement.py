@@ -65,15 +65,15 @@ class BrowserManagementKeywords(LibraryComponent):
         all browsers are closed.
         """
         self.debug('Closing all browsers.')
-        self.drivers.close_all()
+        self.webdrivers.close_all()
 
     @keyword
     def close_browser(self):
         """Closes the current browser."""
-        if self.drivers.current:
+        if self.webdrivers.current:
             self.debug('Closing browser with session id {}.'
                        .format(self.driver.session_id))
-            self.drivers.close()
+            self.webdrivers.close()
 
     @keyword
     def open_browser(self, url, browser='firefox', alias=None,
@@ -230,7 +230,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Switch Browser`   | ${index}       |                   |
         """
         try:
-            self.drivers.switch(index_or_alias)
+            self.webdrivers.switch(index_or_alias)
         except RuntimeError:
             raise RuntimeError("No browser with index or alias '%s' found."
                                % index_or_alias)
@@ -250,7 +250,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def get_location(self):
         """Returns the current browser URL."""
-        return self.browser.current_url
+        return self.driver.current_url
 
     @keyword
     def location_should_be(self, url):
@@ -367,7 +367,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_speed = self.get_selenium_speed()
         self.ctx.speed = timestr_to_secs(value)
-        for driver in self.drivers.drivers:
+        for driver in self.webdrivers.drivers:
             self._monkey_patch_speed(driver)
         return old_speed
 
@@ -389,7 +389,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_timeout = self.get_selenium_timeout()
         self.ctx.timeout = timestr_to_secs(value)
-        for driver in self.drivers.get_open_drivers():
+        for driver in self.webdrivers.get_open_drivers():
             driver.set_script_timeout(self.ctx.timeout)
         return old_timeout
 
@@ -415,7 +415,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_wait = self.get_selenium_implicit_wait()
         self.ctx.implicit_wait = timestr_to_secs(value)
-        for driver in self.drivers.get_open_drivers():
+        for driver in self.webdrivers.get_open_drivers():
             driver.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
 
