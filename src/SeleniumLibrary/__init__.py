@@ -385,10 +385,21 @@ class SeleniumLibrary(DynamicCore):
 
     @property
     def driver(self):
-        """Current active driver"""
+        """Current active driver
+
+        :rtype: selenium.webdriver.remote.webdriver.WebDriver
+        :raises RuntimeError if driver is not created
+        """
         if not self._webdrivers.current:
             raise RuntimeError('No driver is open')
         return self._webdrivers.current
+
+    @property
+    def browser(self):
+        # TODO: Remove after 3.0 RC1 release.
+        warnings.warn('"SeleniumLibrary.browser" is deprecated, '
+                      'use "SeleniumLibrary.driver".', DeprecationWarning)
+        return self.driver
 
     def find_element(self, locator, parent=None):
         """Find element matching ``locator``.
