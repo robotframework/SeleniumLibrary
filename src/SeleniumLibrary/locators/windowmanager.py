@@ -55,7 +55,7 @@ class WindowManager(ContextAware):
         try:
             for handle in self.driver.window_handles:
                 self.driver.switch_to.window(handle)
-                infos.append(self._get_current_window_info(self.driver))
+                infos.append(self._get_current_window_info())
         finally:
             if starting_handle:
                 self.driver.switch_to.window(starting_handle)
@@ -64,16 +64,16 @@ class WindowManager(ContextAware):
     def select(self, locator):
         locator = self._handle_deprecated_locators(locator)
         if not is_string(locator):
-            self._select_by_excludes(self.driver, locator)
+            self._select_by_excludes(locator)
         elif locator.upper() == 'CURRENT':
             pass
         elif locator.upper() == 'MAIN':
-            self._select_main_window(self.driver)
+            self._select_main_window()
         elif locator.upper() == 'NEW':
-            self._select_by_last_index(self.driver)
+            self._select_by_last_index()
         else:
             strategy, locator = self._parse_locator(locator)
-            self._strategies[strategy](self.driver, locator)
+            self._strategies[strategy](locator)
 
     def _handle_deprecated_locators(self, locator):
         if not (is_string(locator) or locator is None):
@@ -91,7 +91,7 @@ class WindowManager(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index+1:].lstrip()
+                return prefix, locator[index + 1:].lstrip()
         return 'default', locator
 
     def _get_locator_separator_index(self, locator):
@@ -101,85 +101,83 @@ class WindowManager(ContextAware):
             return locator.find('=')
         return min(locator.find('='), locator.find(':'))
 
-    def _select_by_title(self, driver, title):
+    def _select_by_title(self, title):
         self._select_matching(
-            driver,
             lambda window_info: window_info.title == title,
             "Unable to locate window with title '%s'." % title
         )
 
-    def _select_by_name(self, driver, name):
+    def _select_by_name(self, name):
         self._select_matching(
-            driver,
             lambda window_info: window_info.name == name,
             "Unable to locate window with name '%s'." % name
         )
 
-    def _select_by_url(self, driver, url):
+    def _select_by_url(self, url):
         self._select_matching(
-            driver,
             lambda window_info: window_info.url == url,
             "Unable to locate window with URL '%s'." % url
         )
 
-    def _select_main_window(self, driver):
-        handles = driver.window_handles
-        driver.switch_to.window(handles[0])
+    def _select_main_window(self):
+        handles = self.driver.window_handles
+        self.driver.switch_to.window(handles[0])
 
-    def _select_by_default(self, driver, criteria):
+    def _select_by_default(self, criteria):
         try:
-            starting_handle = driver.current_window_handle
+            starting_handle = self.driver.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
-        for handle in driver.window_handles:
-            driver.switch_to.window(handle)
+        for handle in self.driver.window_handles:
+            self.driver.switch_to.window(handle)
             if criteria == handle:
                 return
-            for item in self._get_current_window_info(driver)[2:4]:
+            for item in self._get_current_window_info()[2:4]:
                 if item == criteria:
                     return
         if starting_handle:
-            driver.switch_to.window(starting_handle)
+            self.driver.switch_to.window(starting_handle)
         raise WindowNotFound("No window matching handle, name, title or URL "
                              "'%s' found." % criteria)
 
-    def _select_by_last_index(self, driver):
-        handles = driver.window_handles
-        if handles[-1] == driver.current_window_handle:
+    def _select_by_last_index(self):
+        handles = self.driver.window_handles
+        if handles[-1] == self.driver.current_window_handle:
             raise WindowNotFound('Window with last index is same as '
                                  'the current window.')
-        driver.switch_to.window(handles[-1])
+        self.driver.switch_to.window(handles[-1])
 
-    def _select_by_excludes(self, driver, excludes):
-        for handle in driver.window_handles:
+    def _select_by_excludes(self, excludes):
+        for handle in self.driver.window_handles:
             if handle not in excludes:
-                driver.switch_to.window(handle)
+                self.driver.switch_to.window(handle)
                 return
         raise WindowNotFound('No window not matching excludes %s found.'
                              % excludes)
 
-    def _select_matching(self, driver, matcher, error):
+    def _select_matching(self, matcher, error):
         try:
-            starting_handle = driver.current_window_handle
+            starting_handle = self.driver.current_window_handle
         except NoSuchWindowException:
             starting_handle = None
-        for handle in driver.window_handles:
-            driver.switch_to.window(handle)
-            if matcher(self._get_current_window_info(driver)):
+        for handle in self.driver.window_handles:
+            self.driver.switch_to.window(handle)
+            if matcher(self._get_current_window_info()):
                 return
         if starting_handle:
-            driver.switch_to.window(starting_handle)
+            self.driver.switch_to.window(starting_handle)
         raise WindowNotFound(error)
 
-    def _get_current_window_info(self, driver):
+    def _get_current_window_info(self):
         try:
-            id, name = driver.execute_script("return [ window.id, window.name ];")
+            id, name = self.driver.execute_script(
+                "return [ window.id, window.name ];")
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
             id = name = None
-        return WindowInfo(driver.current_window_handle,
+        return WindowInfo(self.driver.current_window_handle,
                           id if id is not None else 'undefined',
                           name or 'undefined',
-                          driver.title or 'undefined',
-                          driver.current_url or 'undefined')
+                          self.driver.title or 'undefined',
+                          self.driver.current_url or 'undefined')
