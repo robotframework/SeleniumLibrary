@@ -57,7 +57,8 @@ Delete Cookie
     Should Be Equal    ${cookies}    another=value
 
 Non-existent Cookie
-    Run Keyword And Expect Error    ValueError: Cookie with name missing not found.
+    Run Keyword And Expect Error
+    ...    Cookie with name 'missing' not found.
     ...    Get Cookie    missing
 
 Get Cookies When There Are None
@@ -101,7 +102,14 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
-    [Documentation]    LOG 2:3 REGEXP: (?m)\\${cookie} = name=another,\\nvalue=value,\\npath=/,\\ndomain=localhost,\\nsecure=False,\\nhttpOnly=False,\\nexpiry=2027-09-28 16:21:35
+    [Documentation]
+    ...    LOG 2:3 ${cookie} = name=another
+    ...    value=value
+    ...    path=/
+    ...    domain=localhost
+    ...    secure=False
+    ...    httpOnly=False
+    ...    expiry=2027-09-28 16:21:35
     ${cookie} =    Get Cookie     another
 
 *** Keyword ***

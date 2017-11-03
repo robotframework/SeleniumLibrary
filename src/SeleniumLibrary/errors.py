@@ -25,3 +25,7 @@ class ElementNotFound(SeleniumLibraryException):
 
 class WindowNotFound(SeleniumLibraryException):
     pass
+
+
+class CookieNotFound(SeleniumLibraryException):
+    pass
