@@ -16,9 +16,11 @@
 
 from datetime import datetime
 
-from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_truthy, is_noney
 from robot.libraries.DateTime import convert_date
+
+from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.errors import CookieNotFound
+from SeleniumLibrary.utils import is_truthy, is_noney
 
 
 class CookieKeywords(LibraryComponent):
@@ -38,7 +40,13 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookies(self):
-        """Returns all cookies of the current page."""
+        """Returns all cookies of the current page.
+
+        The cookie information is returned as a single string in format
+        ``name1=value1; name2=value2; name3=value3``. It can be used,
+        for example, for logging purposes or in headers when sending
+        HTTP requests.
+        """
         pairs = []
         for cookie in self.browser.get_cookies():
             pairs.append(cookie['name'] + "=" + cookie['value'])
@@ -54,36 +62,41 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookie(self, name):
-        """Returns a cookie object found with ``name``.
+        """Returns information of cookie with ``name`` as an object.
 
         If no cookie is found with ``name``, keyword fails. The cookie object
         contains details about the cookie. Attributes available in the object
         are documented in the table below.
 
-        New in SeleniumLibrary 3.0.
+        | = Attribute = |             = Explanation =                                |
+        | name          | The name of a cookie.                                      |
+        | value         | Value of the cookie.                                       |
+        | path          | Indicates a URL path, for example ``/``.                   |
+        | domain        | The domain the cookie is visible to.                       |
+        | secure        | When true, cookie is only used with HTTPS connections.     |
+        | httpOnly      | When true, cookie is not accessible via JavaScript.        |
+        | expiry        | Python datetime object indicating when the cookie expires. |
 
-        | = Attribute = |             = Explanation =                                            |
-        | name          | The name of a cookie.                                                  |
-        | value         | Value of the cookie.                                                   |
-        | path          | Indicates a URL path, example /.                                       |
-        | domain        | The domain the cookie is visible to.                                   |
-        | httpOnly      | Boolean flag to indicate is cookie used in HTTP connections.           |
-        | secure        | Boolean flag, which  will be set to True when using secure connection. |
-        | expiry        | Python datetime object indicating when the cookie expires.             |
+        See the [https://w3c.github.io/webdriver/webdriver-spec.html#cookies
+        WebDriver specification] for details about the cookie information.
+        Notice that ``expiry`` is specified as a
+        [https://docs.python.org/3/library/datetime.html#datetime.datetime
+        datetime object], not as seconds since Unix Epoch like WebDriver
+        natively does.
 
         Example:
-        | Add Cookie      | foo             | bar |
-        | ${cookie} =     | Get Cookie      | foo |
-        | Should Be Equal | ${cookie.value} | foo |
-        | Should Be Equal | ${cookie.name}  | bar |
+        | `Add Cookie       | foo             | bar |
+        | ${cookie} =       | `Get Cookie`    | foo |
+        | `Should Be Equal` | ${cookie.name}  | bar |
+        | `Should Be Equal` | ${cookie.value} | foo |
+        | `Should Be True`  | ${cookie.expiry.year} > 2016 |
+
+        New in SeleniumLibrary 3.0.
         """
         cookie = self.browser.get_cookie(name)
-        if cookie:
-            return CookieInformation(
-                cookie['name'], cookie['value'], cookie.get('path'),
-                cookie.get('domain'), cookie.get('httpOnly'),
-                cookie.get('secure'), cookie.get('expiry'))
-        raise ValueError("Cookie with name %s not found." % name)
+        if not cookie:
+            raise CookieNotFound("Cookie with name '%s' not found." % name)
+        return CookieInformation(**cookie)
 
     @keyword
     def add_cookie(self, name, value, path=None, domain=None, secure=None,
@@ -95,13 +108,13 @@ class CookieKeywords(LibraryComponent):
         the [http://robotframework.org/robotframework/latest/libraries/DateTime.html|DateTime]
         library or an epoch time stamp.
 
-        Prior SeleniumLibry 3.0 setting the expiry did not work.
-
         Example:
         | Add Cookie | foo | bar |                            | # Adds cookie with name foo and value bar       |
         | Add Cookie | foo | bar | domain=example.com         | # Adds cookie with example.com domain defined   |
         | Add Cookie | foo | bar | expiry=2027-09-28 16:21:35 | # Adds cookie with expiry time defined          |
         | Add Cookie | foo | bar | expiry=1822137695          | # Adds cookie with expiry time defined as epoch |
+
+        Prior to SeleniumLibrary 3.0 setting the expiry did not work.
         """
         new_cookie = {'name': name, 'value': value}
         if not is_noney(path):
@@ -123,18 +136,18 @@ class CookieKeywords(LibraryComponent):
 
 
 class CookieInformation(object):
-    def __init__(self, name, value, path, domain, httpOnly, secure, expiry):
+
+    def __init__(self, name, value, path=None, domain=None, secure=False,
+                 httpOnly=False, expiry=None):
         self.name = name
         self.value = value
         self.path = path
         self.domain = domain
-        self.httpOnly = httpOnly
         self.secure = secure
-        self.expiry = datetime.fromtimestamp(expiry)
+        self.httpOnly = httpOnly
+        self.expiry = datetime.fromtimestamp(expiry) if expiry else None
 
     def __str__(self):
-        return ('name={name},\nvalue={value},\npath={path},\ndomain={domain}'
-                ',\nsecure={secure},\nhttpOnly={httpOnly},\nexpiry={expiry}'
-                .format(name=self.name, value=self.value, path=self.path,
-                        domain=self.domain, secure=self.secure,
-                        httpOnly=self.httpOnly, expiry=self.expiry))
+        items = 'name value path domain secure httpOnly expiry'.split()
+        return '\n'.join('{}={}'.format(item, getattr(self, item))
+                         for item in items)
