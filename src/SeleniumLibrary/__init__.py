@@ -83,10 +83,10 @@ class SeleniumLibrary(DynamicCore):
 
     By default locators are considered to use the keyword specific default
     locator strategy. All keywords support finding elements based on ``id``
-    and ``name`` attributes, but some keywords support additional _key
-    attributes_ that make sense in their context. For example, `Click Link`
-    supports the link text and the ``href`` attribute in addition to the
-    normal ``id`` and ``name``.
+    and ``name`` attributes, but some keywords support additional attributes
+    or other values that make sense in their context. For example, `Click
+    Link` supports the ``href`` attribute and the link text and addition
+    to the normal ``id`` and ``name``.
 
     Examples:
 
