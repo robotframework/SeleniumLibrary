@@ -25,20 +25,17 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_for_condition(self, condition, timeout=None, error=None):
-        """Waits until the given ``condition`` is true or ``timeout`` expires.
+        """Waits until ``condition`` is true or ``timeout`` expires.
 
-        The ``condition`` can be arbitrary JavaScript expression but it
+        The condition can be arbitrary JavaScript expression but it
         must return a value to be evaluated. See `Execute JavaScript` for
         information about accessing content on pages.
 
+        Fails if the timeout expires before the condition becomes true. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
+
         ``error`` can be used to override the default error message.
-
-        See `timeouts` for more information about using timeouts and their
-        default value.
-
-        See also `Wait Until Page Contains`, `Wait Until Page Contains
-        Element`, `Wait Until Element Is Visible` and BuiltIn keyword
-        `Wait Until Keyword Succeeds`.
         """
         if 'return' not in condition:
             raise ValueError("Condition '%s' did not have mandatory 'return'."
@@ -51,53 +48,44 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
-        """Waits until `text` appears on current page.
+        """Waits until ``text`` appears on current page.
 
-        Fails if `timeout` expires before the text appears. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the text appears. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains Element`, `Wait For Condition`,
-        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
-        Keyword Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(lambda: self.is_text_present(text),
                          "Text '%s' did not appear in <TIMEOUT>." % text,
                          timeout, error)
 
     @keyword
-    def wait_until_page_does_not_contain(self, text, timeout=None, error=None):
-        """Waits until `text` disappears from current page.
+    def wait_until_page_does_not_contain(self, text, timeout=None,
+                                         error=None):
+        """Waits until ``text`` disappears from current page.
 
-        Fails if `timeout` expires before the `text` disappears. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the text disappears. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait For Condition`,
-        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
-        Keyword Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(lambda: not self.is_text_present(text),
                          "Text '%s' did not disappear in <TIMEOUT>." % text,
                          timeout, error)
 
     @keyword
-    def wait_until_page_contains_element(self, locator, timeout=None, error=None):
-        """Waits until element specified with `locator` appears on current page.
+    def wait_until_page_contains_element(self, locator, timeout=None,
+                                         error=None):
+        """Waits until element ``locator`` appears on current page.
 
-        Fails if `timeout` expires before the element appears. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the element appears. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait For Condition`,
-        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
-        Keyword Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(
             lambda: self.find_element(locator, required=False) is not None,
@@ -106,18 +94,16 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_page_does_not_contain_element(self, locator, timeout=None, error=None):
-        """Waits until element specified with `locator` disappears from current page.
+    def wait_until_page_does_not_contain_element(self, locator, timeout=None,
+                                                 error=None):
+        """Waits until element ``locator`` disappears from current page.
 
-        Fails if `timeout` expires before the element disappears. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the element disappears. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait For Condition`,
-        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
-        Keyword Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(
             lambda: self.find_element(locator, required=False) is None,
@@ -126,18 +112,16 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_is_visible(self, locator, timeout=None, error=None):
-        """Waits until element specified with `locator` is visible.
+    def wait_until_element_is_visible(self, locator, timeout=None,
+                                      error=None):
+        """Waits until element ``locator`` is visible.
 
-        Fails if `timeout` expires before the element is visible. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the element is visible. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait Until Page Contains
-        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
-        Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(
             lambda: self.find_element(locator).is_displayed(),
@@ -146,18 +130,16 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
-        """Waits until element specified with `locator` is not visible.
+    def wait_until_element_is_not_visible(self, locator, timeout=None,
+                                          error=None):
+        """Waits until element ``locator`` is not visible.
 
-        Fails if `timeout` expires before the element is not visible. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the element is not visible. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait Until Page Contains
-        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
-        Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(
             lambda: not self.find_element(locator).is_displayed(),
@@ -166,19 +148,18 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
-        """Waits until element specified with `locator` is enabled.
+    def wait_until_element_is_enabled(self, locator, timeout=None,
+                                      error=None):
+        """Waits until element ``locator`` is enabled.
 
-        Fails if `timeout` expires before the element is enabled. Element
-        is considered enabled if it is not disabled nor read-only.
-        See `introduction` for more information about `timeout` and its
-        default value.
+        Element is considered enabled if it is not disabled nor read-only.
 
-        `error` can be used to override the default error message.
+        Fails if ``timeout`` expires before the element is enabled. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        See also `Wait Until Page Contains`, `Wait Until Page Contains
-        Element`, `Wait For Condition` and BuiltIn keyword `Wait Until Keyword
-        Succeeds`.
+        ``error`` can be used to override the default error message.
 
         Considering read-only elements to be disabled is a new feature
         in SeleniumLibrary 3.0.
@@ -190,18 +171,16 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_contains(self, locator, text, timeout=None, error=None):
-        """Waits until given element contains `text`.
+    def wait_until_element_contains(self, locator, text, timeout=None,
+                                    error=None):
+        """Waits until element ``locator`` contains ``text``.
 
-        Fails if `timeout` expires before the text appears on given element. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the text appears. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait Until Page Contains Element`, `Wait For Condition`,
-        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
-        Keyword Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(
             lambda: text in self.find_element(locator).text,
@@ -210,18 +189,16 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_does_not_contain(self, locator, text, timeout=None, error=None):
-        """Waits until given element does not contain `text`.
+    def wait_until_element_does_not_contain(self, locator, text, timeout=None,
+                                            error=None):
+        """Waits until element ``locator`` does not contain ``text``.
 
-        Fails if `timeout` expires before the text disappears from given element. See
-        `introduction` for more information about `timeout` and its
-        default value.
+        Fails if ``timeout`` expires before the text disappears. See
+        the `Timeouts` section for more information about using timeouts and
+        their default value and the `Locating elements` section for details
+        about the locator syntax.
 
-        `error` can be used to override the default error message.
-
-        See also `Wait Until Page Contains`, `Wait Until Page Contains Element`, `Wait For Condition`,
-        `Wait Until Element Is Visible` and BuiltIn keyword `Wait Until
-        Keyword Succeeds`.
+        ``error`` can be used to override the default error message.
         """
         self._wait_until(
             lambda: text not in self.find_element(locator).text,
