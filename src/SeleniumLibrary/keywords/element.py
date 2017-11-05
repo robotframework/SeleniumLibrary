@@ -609,8 +609,8 @@ return !element.dispatchEvent(evt);
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
         """
         self.info("Clicking link '%s'." % locator)
         self.find_element(locator, tag='link').click()
@@ -629,8 +629,8 @@ return !element.dispatchEvent(evt);
         """Simulates a mouse down event on a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
         """
         element = self.find_element(locator, tag='link')
         action = ActionChains(self.browser)
@@ -641,8 +641,8 @@ return !element.dispatchEvent(evt);
         """Verifies link identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -654,8 +654,8 @@ return !element.dispatchEvent(evt);
         """Verifies link identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -667,7 +667,8 @@ return !element.dispatchEvent(evt);
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
         """
         self.info("Clicking image '%s'." % locator)
         element = self.find_element(locator, tag='image', required=False)
@@ -681,7 +682,8 @@ return !element.dispatchEvent(evt);
         """Simulates a mouse down event on an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
         """
         element = self.find_element(locator, tag='image')
         action = ActionChains(self.browser)
@@ -692,7 +694,8 @@ return !element.dispatchEvent(evt);
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -704,7 +707,8 @@ return !element.dispatchEvent(evt);
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.

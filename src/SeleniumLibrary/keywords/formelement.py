@@ -25,11 +25,12 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def submit_form(self, locator=None):
-        """Submits a form identified by `locator`.
+        """Submits a form identified by ``locator``.
 
-        If `locator` is empty, first form in the page will be submitted.
-        Key attributes for forms are `id` and `name`. See `introduction` for
-        details about locating elements.
+        If ``locator`` is not given, first form on the page is submitted.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Submitting form '%s'." % locator)
         if is_noney(locator):
@@ -39,10 +40,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def checkbox_should_be_selected(self, locator):
-        """Verifies checkbox identified by `locator` is selected/checked.
+        """Verifies checkbox ``locator`` is selected/checked.
 
-        Key attributes for checkboxes are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Verifying checkbox '%s' is selected." % locator)
         element = self._get_checkbox(locator)
@@ -52,10 +53,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def checkbox_should_not_be_selected(self, locator):
-        """Verifies checkbox identified by `locator` is not selected/checked.
+        """Verifies checkbox ``locator`` is not selected/checked.
 
-        Key attributes for checkboxes are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax..
         """
         self.info("Verifying checkbox '%s' is not selected." % locator)
         element = self._get_checkbox(locator)
@@ -65,35 +66,36 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_checkbox(self, locator, message=None, loglevel='INFO'):
-        """Verifies checkbox identified by `locator` is found from current page.
+        """Verifies checkbox ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for checkboxes are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.assert_page_contains(locator, 'checkbox', message, loglevel)
 
     @keyword
     def page_should_not_contain_checkbox(self, locator, message=None, loglevel='INFO'):
-        """Verifies checkbox identified by `locator` is not found from current page.
+        """Verifies checkbox ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for checkboxes are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.assert_page_not_contains(locator, 'checkbox', message, loglevel)
 
     @keyword
     def select_checkbox(self, locator):
-        """Selects checkbox identified by `locator`.
+        """Selects checkbox identified by ``locator``.
 
-        Does nothing if checkbox is already selected. Key attributes for
-        checkboxes are `id` and `name`. See `introduction` for details about
-        locating elements.
+        Does nothing if checkbox is already selected.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Selecting checkbox '%s'." % locator)
         element = self._get_checkbox(locator)
@@ -102,11 +104,12 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_checkbox(self, locator):
-        """Removes selection of checkbox identified by `locator`.
+        """Removes selection of checkbox identified by ``locator``.
 
-        Does nothing if the checkbox is not checked. Key attributes for
-        checkboxes are `id` and `name`. See `introduction` for details about
-        locating elements.
+        Does nothing if the checkbox is not selected.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Unselecting checkbox '%s'." % locator)
         element = self._get_checkbox(locator)
@@ -115,35 +118,36 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_radio_button(self, locator, message=None, loglevel='INFO'):
-        """Verifies radio button identified by `locator` is found from current page.
+        """Verifies radio button ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for radio buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax. When using the default locator strategy, radio buttons are
+        searched using ``id``, ``name`` and ``value``.
         """
         self.assert_page_contains(locator, 'radio button', message, loglevel)
 
     @keyword
     def page_should_not_contain_radio_button(self, locator, message=None, loglevel='INFO'):
-        """Verifies radio button identified by `locator` is not found from current page.
+        """Verifies radio button ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for radio buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax. When using the default locator strategy, radio buttons are
+        searched using ``id``, ``name`` and ``value``.
         """
         self.assert_page_not_contains(locator, 'radio button', message,
                                       loglevel)
 
     @keyword
     def radio_button_should_be_set_to(self, group_name, value):
-        """Verifies radio button group identified by `group_name` has its selection set to `value`.
+        """Verifies radio button group ``group_name`` is set to ``value``.
 
-        See `Select Radio Button` for information about how radio buttons are
-        located.
+        ``group_name`` is the ``name`` of the radio button group.
         """
         self.info("Verifying radio button '%s' has selection '%s'."
                   % (group_name, value))
@@ -156,10 +160,9 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def radio_button_should_not_be_selected(self, group_name):
-        """Verifies radio button group identified by `group_name` has no selection.
+        """Verifies radio button group ``group_name`` has no selection.
 
-        See `Select Radio Button` for information about how radio buttons are
-        located.
+        ``group_name`` is the ``name`` of the radio button group.
         """
         self.info("Verifying radio button '%s' has no selection." % group_name)
         elements = self._get_radio_buttons(group_name)
@@ -171,18 +174,16 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def select_radio_button(self, group_name, value):
-        """Sets selection of radio button group identified by `group_name` to `value`.
+        """Sets radio button group ``group_name`` to ``value``.
 
         The radio button to be selected is located by two arguments:
-        - `group_name` is used as the name of the radio input
-        - `value` is used for the value attribute or for the id attribute
-
-        The XPath used to locate the correct radio button then looks like this:
-        //input[@type='radio' and @name='group_name' and (@value='value' or @id='value')]
+        - ``group_name`` is the name of the radio button group.
+        - ``value`` is the ``id`` or ``value`` attribute of the actual
+          radio button.
 
         Examples:
-        | Select Radio Button | size | XL | # Matches HTML like <input type="radio" name="size" value="XL">XL</input> |
-        | Select Radio Button | size | sizeXL | # Matches HTML like <input type="radio" name="size" value="XL" id="sizeXL">XL</input> |
+        | `Select Radio Button` | size    | XL    |
+        | `Select Radio Button` | contact | email |
         """
         self.info("Selecting '%s' from radio button '%s'."
                   % (value, group_name))
@@ -192,14 +193,14 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def choose_file(self, locator, file_path):
-        """Inputs the `file_path` into file input field found by `locator`.
+        """Inputs the ``file_path`` into file input field ``locator``.
 
         This keyword is most often used to input files into upload forms.
-        The file specified with `file_path` must be available on the same host
-        where the Selenium Server is running.
+        The file specified with ``file_path`` must be available on machine
+        where tests are executed.
 
         Example:
-        | Choose File | my_upload_field | /home/user/files/trades.csv |
+        | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |
         """
         if not os.path.isfile(file_path):
             raise ValueError("File '%s' does not exist on the local file "
@@ -207,57 +208,63 @@ class FormElementKeywords(LibraryComponent):
         self.find_element(locator).send_keys(file_path)
 
     @keyword
-    def input_password(self, locator, text):
-        """Types the given password into text field identified by `locator`.
+    def input_password(self, locator, password):
+        """Types the given password into text field identified by ``locator``.
 
         Difference between this keyword and `Input Text` is that this keyword
-        does not log the given password. See `introduction` for details about
-        locating elements.
+        does not log the given password.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Typing password into text field '%s'." % locator)
-        self._input_text_into_text_field(locator, text)
+        self._input_text_into_text_field(locator, password)
 
     @keyword
     def input_text(self, locator, text):
-        """Types the given `text` into text field identified by `locator`.
+        """Types the given ``text`` into text field identified by ``locator``.
 
-        See `introduction` for details about locating elements.
+        Use `Input Password` if you do not want the given ``text`` to be
+        logged.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Typing text '%s' into text field '%s'." % (text, locator))
         self._input_text_into_text_field(locator, text)
 
     @keyword
     def page_should_contain_textfield(self, locator, message=None, loglevel='INFO'):
-        """Verifies text field identified by `locator` is found from current page.
+        """Verifies text field ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for text fields are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.assert_page_contains(locator, 'text field', message, loglevel)
 
     @keyword
     def page_should_not_contain_textfield(self, locator, message=None, loglevel='INFO'):
-        """Verifies text field identified by `locator` is not found from current page.
+        """Verifies text field ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for text fields are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.assert_page_not_contains(locator, 'text field', message, loglevel)
 
     @keyword
     def textfield_should_contain(self, locator, expected, message=None):
-        """Verifies text field identified by `locator` contains text `expected`.
+        """Verifies text field ``locator`` contains text ``expected``.
 
-        `message` can be used to override default error message.
+        ``message`` can be used to override the default error message.
 
-        Key attributes for text fields are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         actual = self._get_value(locator, 'text field')
         if expected not in actual:
@@ -269,12 +276,12 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textfield_value_should_be(self, locator, expected, message=None):
-        """Verifies the value in text field identified by `locator` is exactly `expected`.
+        """Verifies text field ``locator`` has exactly text ``expected``.
 
-        `message` can be used to override default error message.
+        ``message`` can be used to override default error message.
 
-        Key attributes for text fields are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         actual = self._get_value(locator, 'text field')
         if actual != expected:
@@ -286,12 +293,12 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textarea_should_contain(self, locator, expected, message=None):
-        """Verifies text area identified by `locator` contains text `expected`.
+        """Verifies text area ``locator`` contains text ``expected``.
 
-        `message` can be used to override default error message.
+        ``message`` can be used to override default error message.
 
-        Key attributes for text areas are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         actual = self._get_value(locator, 'text area')
         if expected not in actual:
@@ -303,12 +310,12 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textarea_value_should_be(self, locator, expected, message=None):
-        """Verifies the value in text area identified by `locator` is exactly `expected`.
+        """Verifies text area ``locator`` has exactly text ``expected``.
 
-        `message` can be used to override default error message.
+        ``message`` can be used to override default error message.
 
-        Key attributes for text areas are `id` and `name`. See `introduction`
-        for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         actual = self._get_value(locator, 'text area')
         if expected != actual:
@@ -320,10 +327,11 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def click_button(self, locator):
-        """Clicks a button identified by `locator`.
+        """Clicks button identified by ``locator``.
 
-        Key attributes for buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax. When using the default locator strategy, buttons are
+        searched using ``id``, ``name`` and ``value``.
         """
         self.info("Clicking button '%s'." % locator)
         element = self.find_element(locator, tag='input', required=False)
@@ -333,15 +341,14 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_button(self, locator, message=None, loglevel='INFO'):
-        """Verifies button identified by `locator` is found from current page.
+        """Verifies button ``locator`` is found from current page.
 
-        This keyword searches for buttons created with either `input` or `button` tag.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
-
-        Key attributes for buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax. When using the default locator strategy, buttons are
+        searched using ``id``, ``name`` and ``value``.
         """
         try:
             self.assert_page_contains(locator, 'input', message, loglevel)
@@ -350,15 +357,14 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_button(self, locator, message=None, loglevel='INFO'):
-        """Verifies button identified by `locator` is not found from current page.
+        """Verifies button ``locator`` is not found from current page.
 
-        This keyword searches for buttons created with either `input` or `button` tag.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
-
-        Key attributes for buttons are `id`, `name` and `value`. See
-        `introduction` for details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax. When using the default locator strategy, buttons are
+        searched using ``id``, ``name`` and ``value``.
         """
         self.assert_page_not_contains(locator, 'button', message, loglevel)
         self.assert_page_not_contains(locator, 'input', message, loglevel)
