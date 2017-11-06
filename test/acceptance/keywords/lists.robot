@@ -48,19 +48,22 @@ Get Selected List Labels
     Should Be Equal    ${selected}    ${expected}
 
 List Selection Should Be
-    [Documentation]    LOG 2 Verifying list 'interests' has no options selected.
-    ...    LOG 5 Verifying list 'possible_channels' has option(s) [ email | Telephone ] selected.
+    [Documentation]
+    ...    LOG 2 Verifying list 'interests' has options [${SPACE*2}] selected.
+    ...    LOG 5 Verifying list 'possible_channels' has options [ Email | Telephone ] selected.
     List Selection Should Be    interests
     List Selection Should Be    preferred_channel    Telephone
     List Selection Should Be    preferred_channel    phone
-    List Selection Should Be    possible_channels    email    Telephone
+    List Selection Should Be    possible_channels    Email    Telephone
+    List Selection Should Be    possible_channels    Telephone    Email
+    List Selection Should Be    possible_channels    phone    email
     Run Keyword And Expect Error
-    ...    List 'possible_channels' should have had selection [ email | Telephone | Direct mail ] but it was [ Email | Telephone ]
-    ...    List Selection Should Be    possible_channels    email    Telephone    Direct mail
+    ...    List 'possible_channels' should have had selection [ Email | Telephone | Direct mail ] but selection was [ Email (email) | Telephone (phone) ].
+    ...    List Selection Should Be    possible_channels    Email    Telephone    Direct mail
 
 List Selection Should Be When Extraneous Options Are Selected
     Run Keyword And Expect Error
-    ...    List 'possible_channels' should have had selection [ email ] but it was [ Email | Telephone ]
+    ...    List 'possible_channels' should have had selection [ email ] but selection was [ Email (email) | Telephone (phone) ].
     ...    List Selection Should Be    possible_channels    email
 
 List Selection Should Be When List Does Not Exist
@@ -125,27 +128,28 @@ Unselect Non-Existing Item From List
     Unselect From List    possible_channels    Tin Can Phone    Smoke Signals    Email
 
 Select From Multiselect List
-    [Documentation]    LOG 5 Selecting option(s) 'Direct mail, phone' from list 'possible_channels'.
-    Select And verify selection    possible_channels    email    email    Telephone
-    Select And verify selection    possible_channels
-    ...    Direct mail    Direct mail    email    Telephone
+    [Documentation]    LOG 6 Selecting option(s) 'Direct mail, phone' from list 'possible_channels'.
+    Select And verify selection    possible_channels    Email    Email    Telephone
+    Select And verify selection    possible_channels    email    email    phone
+    Select And verify selection    possible_channels    Direct mail    Direct mail    Email    Telephone
     Unselect from List    possible_channels
     Select From List    possible_channels    Direct mail    phone
-    List Selection Should Be    possible_channels    Telephone    directmail
+    List Selection Should Be    possible_channels    Telephone    Direct mail
 
 Select All From List
     [Documentation]    LOG 2 Selecting all options from list 'interests'.
     Select All From List    interests
     List Selection Should Be    interests    Males    Females    Others
-    Run Keyword And Expect Error    Keyword 'Select all from list' works only for multiselect lists.
+    Run Keyword And Expect Error
+    ...    'Select All From List' works only with multi-selection lists.
     ...    Select All From List    preferred_channel
 
 List Should Have No Selections
-    [Documentation]    LOG 2 Verifying list 'interests' has no selection.
+    [Documentation]    LOG 2 Verifying list 'interests' has no selections.
     List Should Have No Selections    interests
     Select All From List    interests
     Run Keyword And Expect Error
-    ...    List 'interests' should have had no selection (selection was [ Males | Females | Others ])
+    ...    List 'interests' should have had no selection but selection was [ Males (males) | Females (females) | Others (others) ].
     ...    List Should Have No Selections    interests
 
 *** Keywords ***

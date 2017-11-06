@@ -18,175 +18,185 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_truthy
+from SeleniumLibrary.utils import is_truthy, plural_or_not as s
 
 
 class SelectElementKeywords(LibraryComponent):
 
     @keyword
-    def get_list_items(self, locator, value=False):
-        """Returns the labels or values in the select list identified by `locator`.
+    def get_list_items(self, locator, values=False):
+        """Returns all labels or values of selection list ``locator``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        Returns visible labels by default, but values can be returned by
+        setting the ``values`` argument to a true value (see `Boolean
+        arguments`).
 
         Example:
-        | ${labels1} = | Get List Items | xpath=//h1 |
-        | ${labels2} = | Get List Items | xpath=//h1 | value=${False} |
-        | ${values} = | Get List Items | xpath=//h1 | value=True |
-        | Should Be Equal | ${labels1} | ${labels2} |
+        | ${labels} = | Get List Items | mylist                |             |
+        | ${values} = | Get List Items | css:#container select | values=True |
+
+        Support to return values is new in SeleniumLibrary 3.0.
         """
-        select, options = self._get_select_list_options(locator)
-        if is_truthy(value):
-            return self._get_values_for_options(options)
+        options = self._get_options(locator)
+        if is_truthy(values):
+            return self._get_values(options)
         else:
-            return self._get_labels_for_options(options)
+            return self._get_labels(options)
 
     @keyword
     def get_selected_list_label(self, locator):
-        """Returns the visible label of the selected element from the select list identified by `locator`.
+        """Returns label of selected option from selection list ``locator``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        If there are multiple selected options, label of the first option
+        is returned.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         select = self._get_select_list(locator)
         return select.first_selected_option.text
 
     @keyword
     def get_selected_list_labels(self, locator):
-        """Returns the visible labels of selected elements (as a list) from the select list identified by `locator`.
+        """Returns labels of selected options from selection list ``locator``.
 
         Fails if there is no selection.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
-        select, options = self._get_select_list_options_selected(locator)
+        # FIXME: Should return an empty list, not fail, if no selections.
+        options = self._get_selected_options(locator)
         if not options:
             raise ValueError("List '%s' does not have any selected values."
                              % locator)
-        return self._get_labels_for_options(options)
+        return self._get_labels(options)
 
     @keyword
     def get_selected_list_value(self, locator):
-        """Returns the value of the selected element from the select list identified by `locator`.
+        """Returns value of selected option from selection list ``locator``.
 
-        Return value is read from `value` attribute of the selected element.
+        If there are multiple selected options, value of the first option
+        is returned.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         select = self._get_select_list(locator)
         return select.first_selected_option.get_attribute('value')
 
     @keyword
     def get_selected_list_values(self, locator):
-        """Returns the values of selected elements (as a list) from the select list identified by `locator`.
+        """Returns values of selected options from selection list ``locator``.
 
         Fails if there is no selection.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
-        select, options = self._get_select_list_options_selected(locator)
-        # TODO: Should return an empty list, not fail
+        # FIXME: Should return an empty list, not fail, if no selections.
+        options = self._get_selected_options(locator)
         if not options:
             raise ValueError("Select list with locator '%s' does not have any selected values")
-        return self._get_values_for_options(options)
+        return self._get_values(options)
 
     @keyword
-    def list_selection_should_be(self, locator, *items):
-        """Verifies the selection of select list identified by `locator` is exactly `*items`.
+    def list_selection_should_be(self, locator, *expected):
+        """Verifies selection list ``locator`` has ``expected`` options selected.
 
-        If you want to test that no option is selected, simply give no `items`.
+        It is possible to give expected options both as visible labels and
+        as values. Starting from SeleniumLibrary 3.0, mixing labels and
+        values is not possible. Order of the selected options is not
+        validated.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        If no expected options are given, validates that the list has
+        no selections. A more explicit alternative is using `List Should
+        Have No Selections`.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        Examples:
+        | `List Selection Should Be` | gender    | Female          |        |
+        | `List Selection Should Be` | interests | Test Automation | Python |
         """
-        items_str = items and "option(s) [ %s ]" % " | ".join(items) or "no options"
-        self.info("Verifying list '%s' has %s selected." % (locator, items_str))
-        items = list(items)
+        self.info("Verifying list '%s' has option%s [ %s ] selected."
+                  % (locator, s(expected), ' | '.join(expected)))
         self.page_should_contain_list(locator)
-        select, options = self._get_select_list_options_selected(locator)
-        if not items and len(options) == 0:
-            return
-        selected_values = self._get_values_for_options(options)
-        selected_labels = self._get_labels_for_options(options)
-        err = "List '%s' should have had selection [ %s ] but it was [ %s ]" \
-            % (locator, ' | '.join(items), ' | '.join(selected_labels))
-        for item in items:
-            if item not in selected_values + selected_labels:
-                raise AssertionError(err)
-        for selected_value, selected_label in zip(selected_values, selected_labels):
-            if selected_value not in items and selected_label not in items:
-                raise AssertionError(err)
+        options = self._get_selected_options(locator)
+        labels = self._get_labels(options)
+        values = self._get_values(options)
+        if sorted(expected) not in [sorted(labels), sorted(values)]:
+            raise AssertionError("List '%s' should have had selection [ %s ] "
+                                 "but selection was [ %s ]."
+                                 % (locator, ' | '.join(expected),
+                                    self._format_selection(labels, values)))
+
+    def _format_selection(self, labels, values):
+        return ' | '.join('%s (%s)' % (label, value)
+                          for label, value in zip(labels, values))
 
     @keyword
     def list_should_have_no_selections(self, locator):
-        """Verifies select list identified by `locator` has no selections.
+        """Verifies selection list ``locator`` has no options selected.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
-        self.info("Verifying list '%s' has no selection." % locator)
-        select, options = self._get_select_list_options_selected(locator)
+        self.info("Verifying list '%s' has no selections." % locator)
+        options = self._get_selected_options(locator)
         if options:
-            selected_labels = self._get_labels_for_options(options)
-            items_str = " | ".join(selected_labels)
+            selection = self._format_selection(self._get_labels(options),
+                                               self._get_values(options))
             raise AssertionError("List '%s' should have had no selection "
-                                 "(selection was [ %s ])" % (locator, items_str))
+                                 "but selection was [ %s ]."
+                                 % (locator, selection))
 
     @keyword
     def page_should_contain_list(self, locator, message=None, loglevel='INFO'):
-        """Verifies select list identified by `locator` is found from current page.
+        """Verifies selection list ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.assert_page_contains(locator, 'list', message, loglevel)
 
     @keyword
     def page_should_not_contain_list(self, locator, message=None, loglevel='INFO'):
-        """Verifies select list identified by `locator` is not found from current page.
+        """Verifies selection list ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about `message` and
-        `loglevel` arguments.
+        See `Page Should Contain Element` for explanation about ``message``
+        and ``loglevel`` arguments.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.assert_page_not_contains(locator, 'list', message, loglevel)
 
     @keyword
     def select_all_from_list(self, locator):
-        """Selects all values from multi-select list identified by `id`.
+        """Selects all options from multi-selection list ``locator``.
 
-        Key attributes for lists are `id` and `name`. See `introduction` for
-        details about locating elements.
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         self.info("Selecting all options from list '%s'." % locator)
-
         select = self._get_select_list(locator)
         if not select.is_multiple:
-            raise RuntimeError("Keyword 'Select all from list' works only for "
-                               "multiselect lists.")
-
+            raise RuntimeError("'Select All From List' works only with "
+                               "multi-selection lists.")
         for i in range(len(select.options)):
             select.select_by_index(i)
 
     @keyword
-    def select_from_list(self, locator, *items):
-        """Selects `*items` from list identified by `locator`
+    def select_from_list(self, locator, *options):
+        """Selects ``options`` from selection list ``locator``.
 
         If more than one value is given for a single-selection list, the last
         value will be selected. If the target list is a multi-selection list,
@@ -205,19 +215,20 @@ class SelectElementKeywords(LibraryComponent):
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
+        # FIXME: Should this be deprecated?
         non_existing_items = []
 
-        items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
+        items_str = options and "option(s) '%s'" % ", ".join(options) or "all options"
         self.info("Selecting %s from list '%s'." % (items_str, locator))
 
         select = self._get_select_list(locator)
 
-        if not items:
+        if not options:
             for i in range(len(select.options)):
                 select.select_by_index(i)
             return
 
-        for item in items:
+        for item in options:
             try:
                 select.select_by_value(item)
             except:
@@ -234,63 +245,75 @@ class SelectElementKeywords(LibraryComponent):
                 if any (non_existing_items[:-1]):
                     items_str = non_existing_items[:-1] and "Option(s) '%s'" % ", ".join(non_existing_items[:-1])
                     self.warn("%s not found within list '%s'." % (items_str, locator))
-                if items and items[-1] in non_existing_items:
-                    raise ValueError("Option '%s' not in list '%s'." % (items[-1], locator))
+                if options and options[-1] in non_existing_items:
+                    raise ValueError("Option '%s' not in list '%s'." % (options[-1], locator))
 
     @keyword
     def select_from_list_by_index(self, locator, *indexes):
-        """Selects `*indexes` from list identified by `locator`
+        """Selects options from selection list ``locator`` by ``indexes``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        Indexes of list options start from 0.
+
+        If more than one option is given for a single-selection list,
+        the last value will be selected. With multi-selection lists all
+        specified options are selected, but possible old selections are
+        not cleared.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         if not indexes:
-            raise ValueError("No index given.")
-        items_str = "index(es) '%s'" % ", ".join(indexes)
-        self.info("Selecting %s from list '%s'." % (items_str, locator))
-
+            raise ValueError("No indexes given.")
+        self.info("Selecting options from selection list '%s' by index%s %s."
+                  % (locator, '' if len(indexes) == 1 else 'es',
+                     ', '.join(indexes)))
         select = self._get_select_list(locator)
         for index in indexes:
             select.select_by_index(int(index))
 
     @keyword
     def select_from_list_by_value(self, locator, *values):
-        """Selects `*values` from list identified by `locator`
+        """Selects options from selection list ``locator`` by ``values``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        If more than one option is given for a single-selection list,
+        the last value will be selected. With multi-selection lists all
+        specified options are selected, but possible old selections are
+        not cleared.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         if not values:
-            raise ValueError("No value given.")
-        items_str = "value(s) '%s'" % ", ".join(values)
-        self.info("Selecting %s from list '%s'." % (items_str, locator))
-
+            raise ValueError("No values given.")
+        self.info("Selecting options from selection list '%s' by value%s %s."
+                  % (locator, s(values), ', '.join(values)))
         select = self._get_select_list(locator)
         for value in values:
             select.select_by_value(value)
 
     @keyword
     def select_from_list_by_label(self, locator, *labels):
-        """Selects `*labels` from list identified by `locator`
+        """Selects options from selection list ``locator`` by ``labels``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        If more than one option is given for a single-selection list,
+        the last value will be selected. With multi-selection lists all
+        specified options are selected, but possible old selections are
+        not cleared.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         if not labels:
-            raise ValueError("No value given.")
-        items_str = "label(s) '%s'" % ", ".join(labels)
-        self.info("Selecting %s from list '%s'." % (items_str, locator))
-
+            raise ValueError("No labels given.")
+        self.info("Selecting options from selection list '%s' by label%s %s."
+                  % (locator, s(labels), ', '.join(labels)))
         select = self._get_select_list(locator)
         for label in labels:
             select.select_by_visible_text(label)
 
     @keyword
     def unselect_from_list(self, locator, *items):
-        """Unselects given values from select list identified by locator.
+        """Un-selects given values from selection list ``locator``.
 
         As a special case, giving empty list as `*items` will remove all
         selections.
@@ -303,6 +326,7 @@ class SelectElementKeywords(LibraryComponent):
         select lists are `id` and `name`. See `introduction` for details about
         locating elements.
         """
+        # FIXME: Should this be deprecated?
         items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
         self.info("Unselecting %s from list '%s'." % (items_str, locator))
 
@@ -314,7 +338,6 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_all()
             return
 
-        select, options = self._get_select_list_options(select)
         for item in items:
             # Only Selenium 2.52 and newer raise exceptions when there is no match.
             # For backwards compatibility reasons we want to ignore them.
@@ -329,102 +352,78 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list_by_index(self, locator, *indexes):
-        """Unselects `*indexes` from list identified by `locator`
+        """Un-selects options from selection list ``locator`` by ``indexes``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        Indexes of list options start from 0. This keyword works only with
+        multi-selection lists.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         if not indexes:
-            raise ValueError("No index given.")
-
-        items_str = "index(es) '%s'" % ", ".join(indexes)
-        self.info("Unselecting %s from list '%s'." % (items_str, locator))
-
+            raise ValueError("No indexes given.")
+        self.info("Un-selecting options from selection list '%s' by index%s "
+                  "%s." % (locator, '' if len(indexes) == 1 else 'es',
+                           ', '.join(indexes)))
         select = self._get_select_list(locator)
         if not select.is_multiple:
-            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
-
+            raise RuntimeError("Un-selecting options works only with "
+                               "multi-selection lists.")
         for index in indexes:
             select.deselect_by_index(int(index))
 
     @keyword
     def unselect_from_list_by_value(self, locator, *values):
-        """Unselects `*values` from list identified by `locator`
+        """Un-selects options from selection list ``locator`` by ``values``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        This keyword works only with multi-selection lists.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         if not values:
-            raise ValueError("No value given.")
-        items_str = "value(s) '%s'" % ", ".join(values)
-        self.info("Unselecting %s from list '%s'." % (items_str, locator))
-
+            raise ValueError("No values given.")
+        self.info("Un-selecting options from selection list '%s' by value%s "
+                  "%s." % (locator, s(values), ', '.join(values)))
         select = self._get_select_list(locator)
         if not select.is_multiple:
-            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
-
+            raise RuntimeError("Un-selecting options works only with "
+                               "multi-selection lists.")
         for value in values:
             select.deselect_by_value(value)
 
     @keyword
     def unselect_from_list_by_label(self, locator, *labels):
-        """Unselects `*labels` from list identified by `locator`
+        """Un-selects options from selection list ``locator`` by ``labels``.
 
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        This keyword works only with multi-selection lists.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
         """
         if not labels:
-            raise ValueError("No value given.")
-        items_str = "label(s) '%s'" % ", ".join(labels)
-        self.info("Unselecting %s from list '%s'." % (items_str, locator))
-
+            raise ValueError("No labels given.")
+        self.info("Un-selecting options from selection list '%s' by label%s "
+                  "%s." % (locator, s(labels), ', '.join(labels)))
         select = self._get_select_list(locator)
         if not select.is_multiple:
-            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
-
+            raise RuntimeError("Un-selecting options works only with "
+                               "multi-selection lists.")
         for label in labels:
             select.deselect_by_visible_text(label)
-
-    def _get_labels_for_options(self, options):
-        labels = []
-        for option in options:
-            labels.append(option.text)
-        return labels
 
     def _get_select_list(self, locator):
         el = self.find_element(locator, tag='list')
         return Select(el)
 
-    def _get_select_list_options(self, select_list_or_locator):
-        if isinstance(select_list_or_locator, Select):
-            select = select_list_or_locator
-        else:
-            select = self._get_select_list(select_list_or_locator)
-        return select, select.options
+    def _get_options(self, locator):
+        return self._get_select_list(locator).options
 
-    def _get_select_list_options_selected(self, locator):
-        select = self._get_select_list(locator)
-        # TODO: Handle possible exception thrown by all_selected_options
-        return select, select.all_selected_options
+    def _get_selected_options(self, locator):
+        return self._get_select_list(locator).all_selected_options
 
-    def _get_values_for_options(self, options):
-        values = []
-        for option in options:
-            values.append(option.get_attribute('value'))
-        return values
+    def _get_labels(self, options):
+        return [opt.text for opt in options]
 
-    def _is_multiselect_list(self, select):
-        multiple_value = select.get_attribute('multiple')
-        if multiple_value is not None and (multiple_value == 'true' or multiple_value == 'multiple'):
-            return True
-        return False
-
-    def _unselect_all_options_from_multi_select_list(self, select):
-        self.browser.execute_script("arguments[0].selectedIndex = -1;", select)
-
-    def _unselect_option_from_multi_select_list(self, select, options, index):
-        if options[index].is_selected():
-            options[index].click()
+    def _get_values(self, options):
+        return [opt.get_attribute('value') for opt in options]
