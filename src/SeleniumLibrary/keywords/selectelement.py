@@ -63,16 +63,13 @@ class SelectElementKeywords(LibraryComponent):
     def get_selected_list_labels(self, locator):
         """Returns labels of selected options from selection list ``locator``.
 
-        Fails if there is no selection.
+        Starting from SeleniumLibrary 3.0, returns an empty list if there
+        are no selections. In earlier versions this caused an error.
 
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        # FIXME: Should return an empty list, not fail, if no selections.
         options = self._get_selected_options(locator)
-        if not options:
-            raise ValueError("List '%s' does not have any selected values."
-                             % locator)
         return self._get_labels(options)
 
     @keyword
@@ -92,15 +89,13 @@ class SelectElementKeywords(LibraryComponent):
     def get_selected_list_values(self, locator):
         """Returns values of selected options from selection list ``locator``.
 
-        Fails if there is no selection.
+        Starting from SeleniumLibrary 3.0, returns an empty list if there
+        are no selections. In earlier versions this caused an error.
 
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        # FIXME: Should return an empty list, not fail, if no selections.
         options = self._get_selected_options(locator)
-        if not options:
-            raise ValueError("Select list with locator '%s' does not have any selected values")
         return self._get_values(options)
 
     @keyword

@@ -1,5 +1,4 @@
 *** Settings ***
-Documentation     Tests lists
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
@@ -33,6 +32,8 @@ Get Selected List Values
     ${selected}=    Get Selected List Values    preferred_channel
     ${expected}=    Create List    phone
     Should Be Equal    ${selected}    ${expected}
+    ${selected}=    Get Selected List Values    interests
+    Should Be Empty    ${selected}
 
 Get Selected List Label
     ${selected}=    Get Selected List Label    preferred_channel
@@ -42,10 +43,11 @@ Get Selected List Label
     Should Be Equal    ${selected}    Males
 
 Get Selected List Labels
-    [Documentation]    Get Selected List Labels
     ${selected}=    Get Selected List Labels    possible_channels
     ${expected}=    Create List    Email    Telephone
     Should Be Equal    ${selected}    ${expected}
+    ${selected}=    Get Selected List Labels    interests
+    Should Be Empty    ${selected}
 
 List Selection Should Be
     [Documentation]
@@ -154,13 +156,11 @@ List Should Have No Selections
 
 *** Keywords ***
 Unselect And Verify Selection
-    [Documentation]    Unselect And Verify Selection
     [Arguments]    ${list_id}    ${unselection}    @{exp_selection}
     Unselect From List    ${list_id}    ${unselection}
     List Selection Should Be    ${list_id}    @{exp_selection}
 
 Select And Verify Selection
-    [Documentation]    Select And Verify Selection
     [Arguments]    ${list_id}    ${selection}    @{exp_selection}
     Select From list    ${list_id}    ${selection}
     List Selection Should Be    ${list_id}    @{exp_selection}
