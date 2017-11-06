@@ -83,10 +83,20 @@ UnSelect Single Value From List
     ...    Keyword 'Unselect from list' works only for multiselect lists.
     ...    Unselect From List    preferred_channel
 
-UnSelect All From List
+Unselect all options using Unselect From List
     [Documentation]    LOG 2 Unselecting all options from list 'possible_channels'.
     Unselect From List    possible_channels
-    List Selection Should Be    possible_channels
+    List Should Have No Selections    possible_channels
+
+Unselect All From List
+    [Documentation]    LOG 2 Unselecting all options from list 'possible_channels'.
+    Unselect All From List    possible_channels
+    List Should Have No Selections    possible_channels
+    Unselect All From List    interests
+    List Should Have No Selections    interests
+    Select All From List    interests
+    Unselect All From List    interests
+    List Should Have No Selections    interests
 
 Select From Single Selection List
     [Documentation]    LOG 2.1 Selecting option(s) 'Email' from list 'preferred_channel'.

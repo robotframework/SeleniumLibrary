@@ -290,6 +290,22 @@ class SelectElementKeywords(LibraryComponent):
             select.select_by_visible_text(label)
 
     @keyword
+    def unselect_all_from_list(self, locator):
+        """Unselects all options from multi-selection list ``locator``.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        New in SeleniumLibrary 3.0.
+        """
+        self.info("Unselecting all options from list '%s'." % locator)
+        select = self._get_select_list(locator)
+        if not select.is_multiple:
+            raise RuntimeError("Un-selecting options works only with "
+                               "multi-selection lists.")
+        select.deselect_all()
+
+    @keyword
     def unselect_from_list(self, locator, *items):
         """Deprecated. Use `Unselect From List By Label/Value/Index` instead.
 
@@ -321,7 +337,7 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list_by_index(self, locator, *indexes):
-        """Un-selects options from selection list ``locator`` by ``indexes``.
+        """Unselects options from selection list ``locator`` by ``indexes``.
 
         Indexes of list options start from 0. This keyword works only with
         multi-selection lists.
@@ -343,7 +359,7 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list_by_value(self, locator, *values):
-        """Un-selects options from selection list ``locator`` by ``values``.
+        """Unselects options from selection list ``locator`` by ``values``.
 
         This keyword works only with multi-selection lists.
 
@@ -363,7 +379,7 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list_by_label(self, locator, *labels):
-        """Un-selects options from selection list ``locator`` by ``labels``.
+        """Unselects options from selection list ``locator`` by ``labels``.
 
         This keyword works only with multi-selection lists.
 
