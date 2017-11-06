@@ -19,41 +19,46 @@ import os
 from robot.utils import get_link_path
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import events, is_falsy
+from SeleniumLibrary.utils import is_noney
 
 
 class ScreenshotKeywords(LibraryComponent):
 
-    def __init__(self, ctx):
-        LibraryComponent.__init__(self, ctx)
-        self._screenshot_dirs = []
-
     @keyword
-    def set_screenshot_directory(self, path, persist=False):
+    def set_screenshot_directory(self, path, persist='DEPRECATED'):
         """Sets the directory for captured screenshots.
 
-        ``path`` argument specifies the absolute path where the screenshots
-        should be written to. If the specified ``path`` does not exist,
-        it will be created. Setting ``persist`` specifies that the given
-        ``path`` should be used for the rest of the test execution, otherwise
-        the path will be restored at the end of the currently executing scope.
+        ``path`` argument specifies the absolute path to a directory where
+        the screenshots should be written to. If the directory does not
+        exist, it will be created. The directory can also be set when
+        `importing` the library. If it is not configured anywhere,
+        screenshots are saved to the same directory where Robot Framework's
+        log file is written.
+
+        ``persist`` argument is deprecated and has no effect.
+
+        The previous value is returned and can be used to restore
+        the original value later if needed.
+
+        Deprecating ``persist`` and returning the previous value are new
+        in SeleniumLibrary 3.0.
         """
-        path = os.path.abspath(path)
-        self._create_directory(path)
-        if is_falsy(persist):
-            self._screenshot_dirs.append(self.ctx.screenshot_root_directory)
-            # Restore after current scope ends
-            events.on('scope_end', 'current',
-                      self._restore_screenshot_directory)
+        if is_noney(path):
+            path = None
+        else:
+            path = os.path.abspath(path)
+            self._create_directory(path)
+        if persist != 'DEPRECATED':
+            self.warn("'persist' argument to 'Set Screenshot Directory' "
+                      "keyword is deprecated and has no effect.")
+        previous = self.ctx.screenshot_root_directory
         self.ctx.screenshot_root_directory = path
+        return previous
 
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
-
-    def _restore_screenshot_directory(self):
-        self.ctx.screenshot_root_directory = self._screenshot_dirs.pop()
 
     @keyword
     def capture_page_screenshot(self,
