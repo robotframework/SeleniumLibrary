@@ -211,11 +211,25 @@ class FormElementKeywords(LibraryComponent):
     def input_password(self, locator, password):
         """Types the given password into text field identified by ``locator``.
 
-        Difference between this keyword and `Input Text` is that this keyword
-        does not log the given password.
-
         See the `Locating elements` section for details about the locator
         syntax.
+
+        Difference compared to `Input Text` is that this keyword does not
+        log the given password on the INFO level. Notice that if you use
+        the keyword like
+
+        | Input Password | password_field | password |
+
+        the password is shown as a normal keyword argument. A way to avoid
+        that is using variables like
+
+        | Input Password | password_field | ${PASSWORD} |
+
+        Notice also that SeleniumLibrary logs all the communication with
+        browser drivers using the DEBUG level, and the actual password can
+        be seen there. Additionally Robot Framework logs all arguments using
+        the TRACE level. Tests must thus not be executed using level below
+        INFO if password should not be logged in any format.
         """
         self.info("Typing password into text field '%s'." % locator)
         self._input_text_into_text_field(locator, password)
