@@ -26,8 +26,7 @@ class ScreenshotKeywords(LibraryComponent):
 
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
-        self._screenshot_path_stack = []
-        self.screenshot_root_directory = None
+        self._screenshot_dirs = []
 
     @keyword
     def set_screenshot_directory(self, path, persist=False):
@@ -42,11 +41,11 @@ class ScreenshotKeywords(LibraryComponent):
         path = os.path.abspath(path)
         self._create_directory(path)
         if is_falsy(persist):
-            self._screenshot_path_stack.append(self.screenshot_root_directory)
+            self._screenshot_dirs.append(self.ctx.screenshot_root_directory)
             # Restore after current scope ends
             events.on('scope_end', 'current',
                       self._restore_screenshot_directory)
-        self.screenshot_root_directory = path
+        self.ctx.screenshot_root_directory = path
 
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
@@ -54,7 +53,7 @@ class ScreenshotKeywords(LibraryComponent):
             os.makedirs(target_dir)
 
     def _restore_screenshot_directory(self):
-        self.screenshot_root_directory = self._screenshot_path_stack.pop()
+        self.ctx.screenshot_root_directory = self._screenshot_dirs.pop()
 
     @keyword
     def capture_page_screenshot(self,
@@ -105,7 +104,7 @@ class ScreenshotKeywords(LibraryComponent):
         return path
 
     def _get_screenshot_path(self, filename):
-        directory = self.screenshot_root_directory or self.log_dir
+        directory = self.ctx.screenshot_root_directory or self.log_dir
         filename = filename.replace('/', os.sep)
         index = 0
         while True:

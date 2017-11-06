@@ -138,3 +138,15 @@ Capture page screenshot with closed browser
     [Setup]    Close All Browsers
     Capture Page Screenshot
     [Teardown]    Open Browser To Start Page
+
+Set screenshot directory when importing
+    [Setup]    Remove Files    ${TEMPDIR}/selenium-screenshot-*.png
+    Import Library    SeleniumLibrary    screenshot_root_directory=${TEMPDIR}    WITH NAME    SL2
+    Set Library Search Order    SL2
+    Open Browser To Start Page
+    Capture Page Screenshot
+    File Should Exist    ${TEMPDIR}/selenium-screenshot-1.png
+    Set Screenshot Directory    ${OUTPUTDIR}/screenshots
+    Capture Page Screenshot    custom-name-{index}.png
+    File Should Exist    ${OUTPUTDIR}/screenshots/custom-name-1.png
+    [Teardown]    Close Browser
