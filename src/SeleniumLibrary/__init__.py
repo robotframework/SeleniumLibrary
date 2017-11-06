@@ -342,7 +342,7 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
-        self._webdrivers = WebDriverCache()
+        self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self._element_finder = ElementFinder(self)
@@ -363,7 +363,7 @@ class SeleniumLibrary(DynamicCore):
             raise
 
     def register_driver(self, driver, alias):
-        return self._webdrivers.register(driver, alias)
+        return self._drivers.register(driver, alias)
 
     def failure_occurred(self):
         """Method that is executed when a SeleniumLibrary keyword fails.
@@ -390,9 +390,9 @@ class SeleniumLibrary(DynamicCore):
         :rtype: selenium.webdriver.remote.webdriver.WebDriver
         :raises RuntimeError if driver is not created
         """
-        if not self._webdrivers.current:
+        if not self._drivers.current:
             raise RuntimeError('No driver is open')
-        return self._webdrivers.current
+        return self._drivers.current
 
     @property
     def browser(self):
