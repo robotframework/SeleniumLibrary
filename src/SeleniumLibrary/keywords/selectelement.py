@@ -191,38 +191,22 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def select_from_list(self, locator, *options):
-        """Selects ``options`` from selection list ``locator``.
+        """Deprecated. Use `Select From List By Label/Value/Index` instead.
 
-        If more than one value is given for a single-selection list, the last
-        value will be selected. If the target list is a multi-selection list,
-        and `*items` is an empty list, all values of the list will be selected.
-
-        *items try to select by value then by label.
-
-        It's faster to use 'by index/value/label' functions.
-
-        An exception is raised for a single-selection list if the last
-        value does not exist in the list and a warning for all other non-
-        existing items. For a multi-selection list, an exception is raised
-        for any and all non-existing values.
-
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        This keyword selects options based on labels or values, which makes
+        it very complicated and slow. It has been deprecated in
+        SeleniumLibrary 3.0, and dedicated keywords `Select From List By
+        Label`, `Select From List By Value` and `Select From List By Index`
+        should be used instead.
         """
-        # FIXME: Should this be deprecated?
         non_existing_items = []
-
         items_str = options and "option(s) '%s'" % ", ".join(options) or "all options"
         self.info("Selecting %s from list '%s'." % (items_str, locator))
-
         select = self._get_select_list(locator)
-
         if not options:
             for i in range(len(select.options)):
                 select.select_by_index(i)
             return
-
         for item in options:
             try:
                 select.select_by_value(item)
@@ -232,7 +216,6 @@ class SelectElementKeywords(LibraryComponent):
                 except:
                     non_existing_items = non_existing_items + [item]
                     continue
-
         if any(non_existing_items):
             if select.is_multiple:
                 raise ValueError("Options '%s' not in list '%s'." % (", ".join(non_existing_items), locator))
@@ -308,31 +291,22 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list(self, locator, *items):
-        """Un-selects given values from selection list ``locator``.
+        """Deprecated. Use `Unselect From List By Label/Value/Index` instead.
 
-        As a special case, giving empty list as `*items` will remove all
-        selections.
-
-        *items try to unselect by value AND by label.
-
-        It's faster to use 'by index/value/label' functions.
-
-        Select list keywords work on both lists and combo boxes. Key attributes for
-        select lists are `id` and `name`. See `introduction` for details about
-        locating elements.
+        This keyword unselects options based on labels or values, which makes
+        it very complicated and slow. It has been deprecated in
+        SeleniumLibrary 3.0, and dedicated keywords `Unselect From List By
+        Label`, `Unselect From List By Value` and `Unselect From List By
+        Index` should be used instead.
         """
-        # FIXME: Should this be deprecated?
         items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
         self.info("Unselecting %s from list '%s'." % (items_str, locator))
-
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
-
         if not items:
             select.deselect_all()
             return
-
         for item in items:
             # Only Selenium 2.52 and newer raise exceptions when there is no match.
             # For backwards compatibility reasons we want to ignore them.
