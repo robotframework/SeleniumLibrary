@@ -21,15 +21,22 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def get_table_cell(self, locator, row, column, loglevel='INFO'):
-        """Returns the content from a table cell.
+        """Returns contents of table cell.
 
-        Row and column number start from 1. Header and footer rows are
-        included in the count. A negative row or column number can be used
-        to get rows counting from the end (end: -1). Cell content from header
-        or footer rows can be obtained with this keyword. To understand how
-        tables are identified, please take a look at the `introduction`.
+        The table is located using the ``locator`` argument and its cell
+        found using ``row`` and ``column``. See the `Locating elements`
+        section for details about the locator syntax.
 
-        See `Page Should Contain` for explanation about `loglevel` argument.
+        Both row and column indexes start from 1, and header and footer
+        rows are included in the count. It is possible to refer to rows
+        and columns from the end by using negative indexes so that -1
+        is the last row/column, -2 is the second last, and so on.
+
+        All ``<th>`` and ``<td>`` elements anywhere in the table are
+        considered to be cells.
+
+        See `Page Should Contain` for explanation about the ``loglevel``
+        argument.
         """
         row = int(row)
         column = int(column)
@@ -70,19 +77,10 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_cell_should_contain(self, locator, row, column, expected, loglevel='INFO'):
-        """Verifies that a certain cell in a table contains `expected`.
+        """Verifies table cell contains text ``expected``.
 
-        Row and column number start from 1. This keyword passes if the
-        specified cell contains the given content. If you want to test
-        that the cell content matches exactly, or that it e.g. starts
-        with some text, use `Get Table Cell` keyword in combination
-        with built-in keywords such as `Should Be Equal` or `Should
-        Start With`.
-
-        To understand how tables are identified, please take a look at
-        the `introduction`.
-
-        See `Page Should Contain` for explanation about `loglevel` argument.
+        See `Get Table Cell` that this keyword uses internally for
+        explanation about accepted arguments.
         """
         content = self.get_table_cell(locator, row, column, loglevel)
         if expected not in content:
@@ -95,24 +93,21 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_column_should_contain(self, locator, column, expected, loglevel='INFO'):
-        """Verifies that a specific column contains `expected`.
+        """Verifies table column contains text ``expected``.
 
-        The first leftmost column is column number 1. A negative column
-        number can be used to get column counting from the end of the row (end: -1).
-        If the table contains cells that span multiple columns, those merged cells
-        count as a single column. For example both tests below work,
-        if in one row columns A and B are merged with colspan="2", and
-        the logical third column contains "C".
+        The table is located using the ``locator`` argument and its column
+        found using ``column``. See the `Locating elements` section for
+        details about the locator syntax.
 
-        Example:
-        | Table Column Should Contain | tableId | 3 | C |
-        | Table Column Should Contain | tableId | 2 | C |
+        Column indexes start from 1. It is possible to refer to columns
+        from the end by using negative indexes so that -1 is the last column,
+        -2 is the second last, and so on.
 
-        To understand how tables are identified, please take a look at
-        the `introduction`.
+        If a table contains cells that span multiple columns, those merged
+        cells count as a single column.
 
-        See `Page Should Contain Element` for explanation about
-        `loglevel` argument.
+        See `Page Should Contain Element` for explanation about the
+        ``loglevel`` argument.
         """
         element = self.table_element_finder.find_by_column(locator, column, expected)
         if element is None:
@@ -122,14 +117,16 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_footer_should_contain(self, locator, expected, loglevel='INFO'):
-        """Verifies that the table footer contains `expected`.
+        """Verifies table footer contains text ``expected``.
 
-        With table footer can be described as any <td>-element that is
-        child of a <tfoot>-element.  To understand how tables are
-        identified, please take a look at the `introduction`.
+        Any ``<td>`` element inside ``<tfoot>`` element is considered to
+        be part of the footer.
 
-        See `Page Should Contain Element` for explanation about
-        `loglevel` argument.
+        The table is located using the ``locator`` argument. See the
+        `Locating elements` section for details about the locator syntax.
+
+        See `Page Should Contain Element` for explanation about the
+        ``loglevel`` argument.
         """
         element = self.table_element_finder.find_by_footer(locator, expected)
         if element is None:
@@ -139,13 +136,16 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_header_should_contain(self, locator, expected, loglevel='INFO'):
-        """Verifies that the table header, i.e. any <th>...</th> element, contains `expected`.
+        """Verifies table header contains text ``expected``.
 
-        To understand how tables are identified, please take a look at
-        the `introduction`.
+        Any ``<th>`` element anywhere in the table is considered to be
+        part of the header.
 
-        See `Page Should Contain Element` for explanation about
-        `loglevel` argument.
+        The table is located using the ``locator`` argument. See the
+        `Locating elements` section for details about the locator syntax.
+
+        See `Page Should Contain Element` for explanation about the
+        ``loglevel`` argument.
         """
         element = self.table_element_finder.find_by_header(locator, expected)
         if element is None:
@@ -155,21 +155,21 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_row_should_contain(self, locator, row, expected, loglevel='INFO'):
-        """Verifies that a specific table row contains `expected`.
+        """Verifies that table row contains text ``expected``.
 
-        The uppermost row is row number 1. A negative column
-        number can be used to get column counting from the end of the row
-        (end: -1). For tables that are structured with thead, tbody and tfoot,
-        only the tbody section is searched. Please use `Table Header Should Contain`
-        or `Table Footer Should Contain` for tests against the header or
-        footer content.
+        The table is located using the ``locator`` argument and its column
+        found using ``column``. See the `Locating elements` section for
+        details about the locator syntax.
 
-        If the table contains cells that span multiple rows, a match
-        only occurs for the uppermost row of those merged cells. To
-        understand how tables are identified, please take a look at
-        the `introduction`.
+        Row indexes start from 1. It is possible to refer to rows
+        from the end by using negative indexes so that -1 is the last row,
+        -2 is the second last, and so on.
 
-        See `Page Should Contain Element` for explanation about `loglevel` argument.
+        If a table contains cells that span multiple rows, a match
+        only occurs for the uppermost row of those merged cells.
+
+        See `Page Should Contain Element` for explanation about the
+        ``loglevel`` argument.
         """
         element = self.table_element_finder.find_by_row(locator, row, expected)
         if element is None:
@@ -179,13 +179,13 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_should_contain(self, locator, expected, loglevel='INFO'):
-        """Verifies that `expected` can be found somewhere in the table.
+        """Verifies table contains text ``expected``.
 
-        To understand how tables are identified, please take a look at
-        the `introduction`.
+        The table is located using the ``locator`` argument. See the
+        `Locating elements` section for details about the locator syntax.
 
-        See `Page Should Contain Element` for explanation about
-        `loglevel` argument.
+        See `Page Should Contain Element` for explanation about the
+        ``loglevel`` argument.
         """
         element = self.table_element_finder.find_by_content(locator, expected)
         if element is None:
