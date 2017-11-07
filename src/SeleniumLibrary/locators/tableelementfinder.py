@@ -25,8 +25,7 @@ class TableElementFinder(ContextAware):
         'row': ['//tr[{row}]//*'],
         'last-row': ['//tbody/tr[position()=last()-({row}-1)]'],
         'col': ['//tr//*[self::td or self::th][{col}]'],
-        'last-col': ['//tbody/tr/td[position()=last()-({col}-1)]',
-                     '//tbody/tr/td[position()=last()-({col}-1)]']
+        'last-col': ['//tr//*[self::td or self::th][position()=last()-({col}-1)]'],
     }
 
     def find_by_content(self, table_locator, content):

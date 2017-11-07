@@ -20,6 +20,23 @@ Should Retrieve Text From Cell
     formattedTable           2    3    formattedTable_ÄÖÜäöüß
     formattedTable           2    4    äöü€&äöü€&
 
+Mixed th and td
+    [Template]    Table Cell Should Be Equal With CSS And XPath Locators
+    mixed-th-td              1    1    1.1 (th)
+    mixed-th-td              1    2    1.2 (td)
+    mixed-th-td              1    3    1.3 (td)
+    mixed-th-td              2    2    2.2 (th)
+    mixed-th-td              3    2    3.2 (td)
+    mixed-th-td              4    2    4.2 (th)
+    mixed-th-td              5    2    5.2 (td)
+    mixed-th-td              6    2    6.2 (th)
+    mixed-th-td             -1   -1    6.3 (th)
+    mixed-th-td             -1   -2    6.2 (th)
+    mixed-th-td             -1   -3    6.1 (td)
+    mixed-th-td             -6   -3    1.1 (th)
+    mixed-th-td             -6   -2    1.2 (td)
+    mixed-th-td             -6   -1    1.3 (td)
+
 Should Give Error Message When Content Not Found In Table Cell
     Run Keyword And Expect Error
     ...    Table 'simpleTable' cell on row 1 and column 2 should have contained text 'simpleTable_B3' but it had 'simpleTable_B1'.

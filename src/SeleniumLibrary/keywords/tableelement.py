@@ -50,8 +50,7 @@ class TableElementKeywords(LibraryComponent):
                                  "rows but had only %d."
                                  % (locator, abs(row), len(rows)))
         index = row - 1 if row > 0 else row
-        cells = rows[index].find_elements_by_xpath('./th')
-        cells += rows[index].find_elements_by_xpath('./td')
+        cells = rows[index].find_elements_by_xpath('./th|./td')
         if len(cells) < abs(column):
             raise AssertionError("Table '%s' row %d should have had at "
                                  "least %d columns but had only %d."
