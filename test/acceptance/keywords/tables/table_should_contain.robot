@@ -1,5 +1,4 @@
 *** Settings ***
-Documentation     Tests table contents
 Resource          table_resource.robot
 
 *** Test Cases ***
@@ -30,22 +29,12 @@ Should Find Text In Table Content with CSS Specific Mechanics
     Table Should Contain    formattedTable    formattedTable_D1
 
 Should Give Error Message When Content Not Found In Table
-    [Template]    Table Should Contain Fails With CSS And XPath Locators
-    simpleTable    Not here
+    Run Keyword And Expect Error
+    ...    Table 'simpleTable' did not contain text 'Not here'.
+    ...    Table Should Contain    simpleTable    Not here
 
 *** Keywords ***
 Verify Table Contains With CSS And XPath Locators
     [Arguments]    ${table id}    ${expected}
-    Run Table Keyword With CSS And XPath Locators    Table Should Contain
-    ...    ${table id}    ${expected}
-
-Table Should Contain Fails With CSS And XPath Locators
-    [Arguments]    ${table id}    ${expected}
-    Run Table Keyword With CSS And XPath Locators    Table Should Contain Fails
-    ...    ${table id}    ${expected}
-
-Table Should Contain Fails
-    [Arguments]    ${locator}    ${expected}
-    ${err}=    Set Variable
-    ...    Table identified by '${locator}' should have contained text '${expected}'.
-    Run Keyword And Expect Error    ${err}    Table Should Contain    ${locator}    ${expected}
+    Run Table Keyword With CSS And XPath Locators
+    ...    Table Should Contain    ${table id}    ${expected}

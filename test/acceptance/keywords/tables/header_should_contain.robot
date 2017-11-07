@@ -15,7 +15,7 @@ Should Find Text In Header
 
 Should Give Error Message When Content Not Found In Table Header
     Run Keyword And Expect Error
-    ...    Header in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
+    ...    Table 'withHeadAndFoot' header did not contain text 'withHeadAndFoot_B2'.
     ...    Table Header Should Contain    withHeadAndFoot    withHeadAndFoot_B2
 
 *** Keywords ***

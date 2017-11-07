@@ -1,5 +1,4 @@
 *** Settings ***
-Documentation     Tests table rows content
 Resource          table_resource.robot
 
 *** Test Cases ***
@@ -29,12 +28,12 @@ Should Find Text In Specific Row with CSS Specific Mechanics
 
 Should Give Error Message When Content Not Found In Table Row
     Run Keyword And Expect Error
-    ...    Row #2 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+    ...    Table 'simpleTable' row 2 did not contain text 'simpleTable_B3'.
     ...    Table Row Should Contain    simpleTable    2    simpleTable_B3
 
 Should Give Error Message When Row Number Out Of Bounds
     Run Keyword And Expect Error
-    ...    Row #20 in table identified by 'simpleTable' should have contained text 'simpleTable_B3'.
+    ...    Table 'simpleTable' row 20 did not contain text 'simpleTable_B3'.
     ...    Table Row Should Contain    simpleTable    20    simpleTable_B3
 
 *** Keywords ***

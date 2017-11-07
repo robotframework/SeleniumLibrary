@@ -20,7 +20,7 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 class TableElementKeywords(LibraryComponent):
 
     @keyword
-    def get_table_cell(self, table_locator, row, column, loglevel='INFO'):
+    def get_table_cell(self, locator, row, column, loglevel='INFO'):
         """Returns the content from a table cell.
 
         Row and column number start from 1. Header and footer rows are
@@ -32,33 +32,45 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain` for explanation about `loglevel` argument.
         """
         row = int(row)
-        row_index = row
-        if row > 0:
-            row_index = row - 1
         column = int(column)
-        column_index = column
-        if column > 0:
-            column_index = column - 1
-        table = self.element_finder.find(table_locator)
-        if table:
-            rows = table.find_elements_by_xpath("./thead/tr")
-            if row_index >= len(rows) or row_index < 0:
-                rows.extend(table.find_elements_by_xpath("./tbody/tr"))
-            if row_index >= len(rows) or row_index < 0:
-                rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
-            if row_index < len(rows):
-                columns = rows[row_index].find_elements_by_tag_name('th')
-                if column_index >= len(columns) or column_index < 0:
-                    columns.extend(rows[row_index].find_elements_by_tag_name('td'))
-                if column_index < len(columns):
-                    return columns[column_index].text
-        self.ctx.log_source(loglevel)
-        raise AssertionError("Cell in table %s in row #%s and column #%s "
-                             "could not be found."
-                             % (table_locator, str(row), str(column)))
+        if row == 0 or column == 0:
+            raise ValueError('Both row and column must be non-zero, '
+                             'got row %d and column %d.' % (row, column))
+        try:
+            cell = self._get_cell(locator, row, column)
+        except AssertionError:
+            self.log_source(loglevel)
+            raise
+        return cell.text
+
+    def _get_cell(self, locator, row, column):
+        rows = self._get_rows(locator, row)
+        if len(rows) < abs(row):
+            raise AssertionError("Table '%s' should have had at least %d "
+                                 "rows but had only %d."
+                                 % (locator, abs(row), len(rows)))
+        index = row - 1 if row > 0 else row
+        cells = rows[index].find_elements_by_xpath('./th')
+        cells += rows[index].find_elements_by_xpath('./td')
+        if len(cells) < abs(column):
+            raise AssertionError("Table '%s' row %d should have had at "
+                                 "least %d columns but had only %d."
+                                 % (locator, row, abs(column), len(cells)))
+        index = column - 1 if column > 0 else column
+        return cells[index]
+
+    def _get_rows(self, locator, count):
+        # Get rows in same order as browsers render them.
+        table = self.find_element(locator, tag='table')
+        rows = table.find_elements_by_xpath("./thead/tr")
+        if count < 0 or len(rows) < count:
+            rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+        if count < 0 or len(rows) < count:
+            rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+        return rows
 
     @keyword
-    def table_cell_should_contain(self, table_locator, row, column, expected, loglevel='INFO'):
+    def table_cell_should_contain(self, locator, row, column, expected, loglevel='INFO'):
         """Verifies that a certain cell in a table contains `expected`.
 
         Row and column number start from 1. This keyword passes if the
@@ -73,22 +85,17 @@ class TableElementKeywords(LibraryComponent):
 
         See `Page Should Contain` for explanation about `loglevel` argument.
         """
-        message = ("Cell in table '%s' in row #%s and column #%s "
-                   "should have contained text '%s'."
-                   % (table_locator, row, column, expected))
-        try:
-            content = self.get_table_cell(table_locator, row, column, loglevel='NONE')
-        except AssertionError as err:
-            self.info(err)
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
-        self.info("Cell contains %s." % (content))
+        content = self.get_table_cell(locator, row, column, loglevel)
         if expected not in content:
             self.ctx.log_source(loglevel)
-            raise AssertionError(message)
+            raise AssertionError("Table '%s' cell on row %s and column %s "
+                                 "should have contained text '%s' but it had "
+                                 "'%s'."
+                                 % (locator, row, column, expected, content))
+        self.info("Table cell contains '%s'." % content)
 
     @keyword
-    def table_column_should_contain(self, table_locator, col, expected, loglevel='INFO'):
+    def table_column_should_contain(self, locator, column, expected, loglevel='INFO'):
         """Verifies that a specific column contains `expected`.
 
         The first leftmost column is column number 1. A negative column
@@ -108,16 +115,14 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self.table_element_finder.find_by_col(table_locator, col,
-                                                        expected)
+        element = self.table_element_finder.find_by_col(locator, column, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Column #%s in table identified by '%s' "
-                                 "should have contained text '%s'."
-                                 % (col, table_locator, expected))
+            raise AssertionError("Table '%s' column %s did not contain text "
+                                 "'%s'." % (locator, column, expected))
 
     @keyword
-    def table_footer_should_contain(self, table_locator, expected, loglevel='INFO'):
+    def table_footer_should_contain(self, locator, expected, loglevel='INFO'):
         """Verifies that the table footer contains `expected`.
 
         With table footer can be described as any <td>-element that is
@@ -127,16 +132,14 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self.table_element_finder.find_by_footer(table_locator,
-                                                           expected)
+        element = self.table_element_finder.find_by_footer(locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Footer in table identified by '%s' "
-                                 "should have contained "
-                                 "text '%s'." % (table_locator, expected))
+            raise AssertionError("Table '%s' footer did not contain text "
+                                 "'%s'." % (locator, expected))
 
     @keyword
-    def table_header_should_contain(self, table_locator, expected, loglevel='INFO'):
+    def table_header_should_contain(self, locator, expected, loglevel='INFO'):
         """Verifies that the table header, i.e. any <th>...</th> element, contains `expected`.
 
         To understand how tables are identified, please take a look at
@@ -145,16 +148,14 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self.table_element_finder.find_by_header(table_locator,
-                                                           expected)
+        element = self.table_element_finder.find_by_header(locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Header in table identified by '%s' should "
-                                 "have contained "
-                                 "text '%s'." % (table_locator, expected))
+            raise AssertionError("Table '%s' header did not contain text "
+                                 "'%s'." % (locator, expected))
 
     @keyword
-    def table_row_should_contain(self, table_locator, row, expected, loglevel='INFO'):
+    def table_row_should_contain(self, locator, row, expected, loglevel='INFO'):
         """Verifies that a specific table row contains `expected`.
 
         The uppermost row is row number 1. A negative column
@@ -171,16 +172,14 @@ class TableElementKeywords(LibraryComponent):
 
         See `Page Should Contain Element` for explanation about `loglevel` argument.
         """
-        element = self.table_element_finder.find_by_row(table_locator,
-                                                        row, expected)
+        element = self.table_element_finder.find_by_row(locator, row, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Row #%s in table identified by '%s' "
-                                 "should have contained "
-                                 "text '%s'." % (row, table_locator, expected))
+            raise AssertionError("Table '%s' row %s did not contain text "
+                                 "'%s'." % (locator, row, expected))
 
     @keyword
-    def table_should_contain(self, table_locator, expected, loglevel='INFO'):
+    def table_should_contain(self, locator, expected, loglevel='INFO'):
         """Verifies that `expected` can be found somewhere in the table.
 
         To understand how tables are identified, please take a look at
@@ -189,10 +188,8 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self.table_element_finder.find_by_content(table_locator,
-                                                            expected)
+        element = self.table_element_finder.find_by_content(locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table identified by '%s' should have "
-                                 "contained text '%s'."
-                                 % (table_locator, expected))
+            raise AssertionError("Table '%s' did not contain text '%s'."
+                                 % (locator, expected))

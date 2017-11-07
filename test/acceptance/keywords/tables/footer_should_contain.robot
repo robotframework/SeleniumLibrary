@@ -1,5 +1,4 @@
 *** Settings ***
-Documentation     Tests for table footer
 Resource          table_resource.robot
 
 *** Test Cases ***
@@ -12,7 +11,7 @@ Should Find Text In Footer
 
 Should Give Error Message When Content Not Found In Table Footer
     Run Keyword And Expect Error
-    ...    Footer in table identified by 'withHeadAndFoot' should have contained text 'withHeadAndFoot_B2'.
+    ...    Table 'withHeadAndFoot' footer did not contain text 'withHeadAndFoot_B2'.
     ...    Table Footer Should Contain    withHeadAndFoot    withHeadAndFoot_B2
 
 *** Keywords ***
