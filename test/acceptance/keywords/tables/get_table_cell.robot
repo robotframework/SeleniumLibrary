@@ -3,12 +3,12 @@ Resource          table_resource.robot
 
 *** Test Cases ***
 Should Retrieve Text From Cell
-    [Template]    Table Cell Should Be Equal With CSS And XPath Locators
+    [Template]    Table Cell Should Be Equal
     simpleTable              1    1    simpleTable_A1
-    simpleTable             -1   -1    simpleTable_C3
+    id:simpleTable          -1   -1    simpleTable_C3
     tableWithSingleHeader    1    1    tableWithSingleHeader_A1
     tableWithSingleHeader    3    3    tableWithSingleHeader_C3
-    withHeadAndFoot          1    2    withHeadAndFoot_BH1
+    css:#withHeadAndFoot     1    2    withHeadAndFoot_BH1
     withHeadAndFoot          4    3    withHeadAndFoot_C2
     withHeadAndFoot          6    1    withHeadAndFoot_AF1
     withHeadAndFoot         -2   -3    withHeadAndFoot_AF1
@@ -21,11 +21,11 @@ Should Retrieve Text From Cell
     formattedTable           2    4    äöü€&äöü€&
 
 Mixed th and td
-    [Template]    Table Cell Should Be Equal With CSS And XPath Locators
+    [Template]    Table Cell Should Be Equal
     mixed-th-td              1    1    1.1 (th)
-    mixed-th-td              1    2    1.2 (td)
-    mixed-th-td              1    3    1.3 (td)
-    mixed-th-td              2    2    2.2 (th)
+    id:mixed-th-td           1    2    1.2 (td)
+    css:#mixed-th-td         1    3    1.3 (td)
+    //*[@id="mixed-th-td"]   2    2    2.2 (th)
     mixed-th-td              3    2    3.2 (td)
     mixed-th-td              4    2    4.2 (th)
     mixed-th-td              5    2    5.2 (td)
@@ -59,11 +59,6 @@ Zero is invalid row and column index
     ...    Table Cell Should Contain    simpleTable    -1    0    xxx
 
 *** Keywords ***
-Table Cell Should Be Equal With CSS And XPath Locators
-    [Arguments]    ${tableId}    ${row}    ${col}    ${content}
-    Run Table Keyword With CSS And XPath Locators
-    ...    Table Cell Should Be Equal    ${table id}    ${row}    ${col}    ${content}
-
 Table Cell Should Be Equal
     [Arguments]    ${tableId}    ${row}    ${col}    ${content}
     ${cell}=    Get Table Cell    ${tableId}    ${row}    ${col}
