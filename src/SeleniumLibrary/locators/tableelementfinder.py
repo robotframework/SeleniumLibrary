@@ -18,56 +18,42 @@ from SeleniumLibrary.base import ContextAware
 
 
 class TableElementFinder(ContextAware):
-    locators = {
-        'content': ['//*'],
-        'header': ['//th'],
-        'footer': ['//tfoot//td'],
-        'row': ['//tr[{row}]//*'],
-        'last-row': ['//tbody/tr[position()=last()-({row}-1)]'],
-        'col': ['//tr//*[self::td or self::th][{col}]'],
-        'last-col': ['//tr//*[self::td or self::th][position()=last()-({col}-1)]'],
-    }
 
     def find_by_content(self, table_locator, content):
-        locators = self.locators['content']
-        return self._search_in_locators(table_locator, locators, content)
+        return self._find(table_locator, '//*', content)
 
     def find_by_header(self, table_locator, content):
-        locators = self.locators['header']
-        return self._search_in_locators(table_locator, locators, content)
+        return self._find(table_locator, '//th', content)
 
     def find_by_footer(self, table_locator, content):
-        locators = self.locators['footer']
-        return self._search_in_locators(table_locator, locators, content)
+        return self._find(table_locator, '//tfoot//td', content)
 
     def find_by_row(self, table_locator, row, content):
-        location_method = "row"
-        row = str(row)
-        if row[0] == "-":
-            row = row[1:]
-            location_method = "last-row"
-        locators = [locator.format(row=row)
-                    for locator in self.locators[location_method]]
-        return self._search_in_locators(table_locator, locators, content)
+        position = self._index_to_position(row)
+        locator = '//tr[{}]'.format(position)
+        return self._find(table_locator, locator, content)
 
-    def find_by_col(self, table_locator, col, content):
-        location_method = "col"
-        col = str(col)
-        if col[0] == "-":
-            col = col[1:]
-            location_method = "last-col"
-        locators = [locator.format(col=col)
-                    for locator in self.locators[location_method]]
-        return self._search_in_locators(table_locator, locators, content)
+    def find_by_column(self, table_locator, col, content):
+        position = self._index_to_position(col)
+        locator = '//tr//*[self::td or self::th][{}]'.format(position)
+        return self._find(table_locator, locator, content)
 
-    def _search_in_locators(self, table_locator, locators, content):
+    def _index_to_position(self, index):
+        index = int(index)
+        if index == 0:
+            raise ValueError('Row and column indexes must be non-zero.')
+        if index > 0:
+            return str(index)
+        if index == -1:
+            return 'position()=last()'
+        return 'position()=last()-{}'.format(abs(index) - 1)
+
+    def _find(self, table_locator, locator, content):
         table = self.find_element(table_locator)
-        for locator in locators:
-            elements = self.find_elements(locator, parent=table)
-            for element in elements:
-                if content is None:
-                    return element
-                element_text = element.text
-                if element_text and content in element_text:
-                    return element
+        elements = self.find_elements(locator, parent=table)
+        for element in elements:
+            if content is None:
+                return element
+            if element.text and content in element.text:
+                return element
         return None

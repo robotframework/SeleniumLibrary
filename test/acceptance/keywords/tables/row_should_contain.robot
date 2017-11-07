@@ -36,6 +36,11 @@ Should Give Error Message When Row Number Out Of Bounds
     ...    Table 'simpleTable' row 20 did not contain text 'simpleTable_B3'.
     ...    Table Row Should Contain    simpleTable    20    simpleTable_B3
 
+Zero is invalid column index
+    Run Keyword And Expect Error
+    ...    ValueError: Row and column indexes must be non-zero.
+    ...    Table Row Should Contain    simpleTable    0    xxx
+
 *** Keywords ***
 Table Row Should Contain With CSS And XPath Locators
     [Arguments]    ${table id}    ${row}    ${expected}

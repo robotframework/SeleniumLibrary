@@ -114,7 +114,7 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain Element` for explanation about
         `loglevel` argument.
         """
-        element = self.table_element_finder.find_by_col(locator, column, expected)
+        element = self.table_element_finder.find_by_column(locator, column, expected)
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError("Table '%s' column %s did not contain text "

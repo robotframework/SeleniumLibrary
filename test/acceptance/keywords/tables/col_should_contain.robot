@@ -36,6 +36,11 @@ Should Give Error Message When Column Number Out Of Bounds
     ...    Table '//*[@id="simpleTable"]' column 20 did not contain text 'simpleTable_B3'.
     ...    Table Column Should Contain    //*[@id="simpleTable"]    20    simpleTable_B3
 
+Zero is invalid column index
+    Run Keyword And Expect Error
+    ...    ValueError: Row and column indexes must be non-zero.
+    ...    Table Column Should Contain    simpleTable    0    xxx
+
 *** Keywords ***
 Table Column Should Contain With CSS And XPath Locators
     [Documentation]    Table Column Should Contain With CSS And XPath Locators
