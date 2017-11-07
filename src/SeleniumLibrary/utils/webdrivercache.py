@@ -27,7 +27,8 @@ class WebDriverCache(ConnectionCache):
     def drivers(self):
         return self._connections
 
-    def get_open_drivers(self):
+    @property
+    def active_drivers(self):
         open_drivers = []
         for driver in self._connections:
             if driver not in self._closed:

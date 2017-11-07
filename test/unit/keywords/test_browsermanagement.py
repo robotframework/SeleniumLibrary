@@ -100,14 +100,12 @@ class BrowserManagementTests(unittest.TestCase):
         _drivers = mock()
         ctx._drivers = _drivers
         first_browser, second_browser = mock(), mock()
-        when(_drivers).get_open_drivers().thenReturn(
-            [first_browser, second_browser]
-        )
+        ctx._drivers.active_drivers = [first_browser, second_browser]
         bm = BrowserManagementKeywords(ctx)
         bm.set_selenium_timeout("10 seconds")
         verify(first_browser).set_script_timeout(10.0)
         verify(second_browser).set_script_timeout(10.0)
-        when(_drivers).get_open_drivers().thenReturn([])
+        ctx._drivers.active_drivers = []
         bm.set_selenium_timeout("20 seconds")
         verifyNoMoreInteractions(first_browser)
         verifyNoMoreInteractions(second_browser)

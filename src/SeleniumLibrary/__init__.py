@@ -20,6 +20,7 @@ from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 
 from SeleniumLibrary.base import DynamicCore
+from SeleniumLibrary.errors import NoOpenBrowser
 from SeleniumLibrary.keywords import (AlertKeywords,
                                       BrowserManagementKeywords,
                                       CookieKeywords,
@@ -385,13 +386,13 @@ class SeleniumLibrary(DynamicCore):
 
     @property
     def driver(self):
-        """Current active driver
+        """Current active driver.
 
         :rtype: selenium.webdriver.remote.webdriver.WebDriver
         :raises RuntimeError if driver is not created
         """
         if not self._drivers.current:
-            raise RuntimeError('No driver is open')
+            raise NoOpenBrowser('No browser is open')
         return self._drivers.current
 
     @property

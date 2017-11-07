@@ -367,7 +367,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_speed = self.get_selenium_speed()
         self.ctx.speed = timestr_to_secs(value)
-        for driver in self.drivers.get_open_drivers():
+        for driver in self.drivers.active_drivers:
             self._monkey_patch_speed(driver)
         return old_speed
 
@@ -389,7 +389,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_timeout = self.get_selenium_timeout()
         self.ctx.timeout = timestr_to_secs(value)
-        for driver in self.drivers.get_open_drivers():
+        for driver in self.drivers.active_drivers:
             driver.set_script_timeout(self.ctx.timeout)
         return old_timeout
 
@@ -415,7 +415,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         old_wait = self.get_selenium_implicit_wait()
         self.ctx.implicit_wait = timestr_to_secs(value)
-        for driver in self.drivers.get_open_drivers():
+        for driver in self.drivers.active_drivers:
             driver.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
 

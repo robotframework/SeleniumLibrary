@@ -44,14 +44,14 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(driver2)
         cache.register(driver3)
 
-        drivers = cache.get_open_drivers()
+        drivers = cache.active_drivers
         self.assertEqual(len(drivers), 3)
         self.assertEqual(drivers[0], driver1)
         self.assertEqual(drivers[1], driver2)
         self.assertEqual(drivers[2], driver3)
 
         cache.close()
-        drivers = cache.get_open_drivers()
+        drivers = cache.active_drivers
         self.assertEqual(len(drivers), 2)
         self.assertEqual(drivers[0], driver1)
         self.assertEqual(drivers[1], driver2)
