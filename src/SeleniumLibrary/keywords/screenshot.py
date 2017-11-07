@@ -55,11 +55,6 @@ class ScreenshotKeywords(LibraryComponent):
         self.ctx.screenshot_root_directory = path
         return previous
 
-    def _create_directory(self, path):
-        target_dir = os.path.dirname(path)
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
-
     @keyword
     def capture_page_screenshot(self,
                                 filename='selenium-screenshot-{index}.png'):
@@ -119,3 +114,8 @@ class ScreenshotKeywords(LibraryComponent):
             # filename didn't contain {index} or unique path was found
             if formatted == filename or not os.path.exists(path):
                 return path
+
+    def _create_directory(self, path):
+        target_dir = os.path.dirname(path)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
