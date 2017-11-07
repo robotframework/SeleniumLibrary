@@ -308,7 +308,6 @@ class SeleniumLibrary(DynamicCore):
     def __init__(self, timeout=5.0, implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
                  screenshot_root_directory=None):
-
         """SeleniumLibrary can be imported with several optional arguments.
 
         - ``timeout``:
