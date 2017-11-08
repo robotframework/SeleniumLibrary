@@ -33,7 +33,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       TableElementKeywords,
                                       WaitingKeywords,
                                       WindowKeywords)
-from SeleniumLibrary.locators import ElementFinder, TableElementFinder
+from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
                                    timestr_to_secs)
 
@@ -346,7 +346,6 @@ class SeleniumLibrary(DynamicCore):
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self._element_finder = ElementFinder(self)
-        self._table_element_finder = TableElementFinder(self)
 
     _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
     _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
