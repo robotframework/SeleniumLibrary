@@ -20,7 +20,7 @@ from robot.utils import ConnectionCache
 class WebDriverCache(ConnectionCache):
 
     def __init__(self):
-        ConnectionCache.__init__(self, no_current_msg='No current driver')
+        ConnectionCache.__init__(self, no_current_msg='No current browser')
         self._closed = set()
 
     @property

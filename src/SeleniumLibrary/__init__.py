@@ -389,10 +389,10 @@ class SeleniumLibrary(DynamicCore):
         """Current active driver.
 
         :rtype: selenium.webdriver.remote.webdriver.WebDriver
-        :raises RuntimeError if driver is not created
+        :raises NoOpenBrowser if driver is not created
         """
         if not self._drivers.current:
-            raise NoOpenBrowser('No browser is open')
+            raise NoOpenBrowser('No browser is open.')
         return self._drivers.current
 
     @property
