@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_falsy, is_string
+from SeleniumLibrary.utils import is_noney, is_string
 
 
 class RunOnFailureKeywords(LibraryComponent):
@@ -24,18 +24,18 @@ class RunOnFailureKeywords(LibraryComponent):
     def register_keyword_to_run_on_failure(self, keyword):
         """Sets the keyword to execute when a SeleniumLibrary keyword fails.
 
-        `keyword` is the name of a keyword that will be executed if a
+        ``keyword`` is the name of a keyword that will be executed if a
         SeleniumLibrary keyword fails. It is possible to use any available
         keyword, including user keywords or keywords from other libraries,
         but the keyword must not take any arguments.
 
-        The initial keyword to use is set in `importing`, and the
-        keyword that is used by default is `Capture Page Screenshot`.
+        The initial keyword to use is set when `importing` the library, and
+        the keyword that is used by default is `Capture Page Screenshot`.
         Taking a screenshot when something failed is a very useful
         feature, but notice that it can slow down the execution.
 
-        It is possible to use string "Nothing" or "None", case-insensitively,
-        as well as any value considered false in Python to disable this
+        It is possible to use string ``NOTHING`` or ``NONE``,
+        case-insensitively, as well as Python ``None`` to disable this
         feature altogether.
 
         This keyword returns the name of the previously registered
@@ -44,15 +44,15 @@ class RunOnFailureKeywords(LibraryComponent):
         restore the original value later.
 
         Example:
-        | Register Keyword To Run On Failure  | Log Source | # Run `Log Source` on failure. |
-        | ${previous kw}= | Register Keyword To Run On Failure  | Nothing    | # Disables run-on-failure functionality and stores the previous kw name in a variable. |
-        | Register Keyword To Run On Failure  | ${previous kw} | # Restore to the previous keyword. |
+        | `Register Keyword To Run On Failure`  | Log Source |
+        | ${previous kw}= | `Register Keyword To Run On Failure`  | NONE |
+        | `Register Keyword To Run On Failure`  | ${previous kw} |
 
-        Changes in version 3.0.0:
-        - Possible to use string "NONE" or any falsy value to disable the
-          feature.
+        Changes in SeleniumLibrary 3.0:
+        - Possible to use string ``NONE`` or Python ``None`` to disable the
+          functionality.
         - Return Python ``None`` when the functionality was disabled earlier.
-          In previous versions special value "No Keyword" was returned and
+          In previous versions special value ``No Keyword`` was returned and
           it could not be used to restore the original state.
         """
         old_keyword = self.ctx.run_on_failure_keyword
@@ -63,6 +63,6 @@ class RunOnFailureKeywords(LibraryComponent):
 
     @staticmethod
     def resolve_keyword(name):
-        if is_falsy(name) or is_string(name) and name.upper() == 'NOTHING':
+        if is_noney(name) or is_string(name) and name.upper() == 'NOTHING':
             return None
         return name

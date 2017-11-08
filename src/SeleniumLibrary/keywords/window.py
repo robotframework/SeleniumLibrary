@@ -97,7 +97,7 @@ class WindowKeywords(LibraryComponent):
           and URL was case-insensitive.
         """
         try:
-            return self.browser.current_window_handle
+            return self.driver.current_window_handle
         except NoSuchWindowException:
             pass
         finally:
@@ -106,7 +106,7 @@ class WindowKeywords(LibraryComponent):
     @keyword
     def close_window(self):
         """Closes currently opened pop-up window."""
-        self.browser.close()
+        self.driver.close()
 
     @keyword
     def get_window_handles(self):
@@ -116,7 +116,7 @@ class WindowKeywords(LibraryComponent):
 
         Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.
         """
-        return self.browser.window_handles
+        return self.driver.window_handles
 
     @keyword
     def list_windows(self):
@@ -150,7 +150,7 @@ class WindowKeywords(LibraryComponent):
     @keyword
     def maximize_browser_window(self):
         """Maximizes current browser window."""
-        self.browser.maximize_window()
+        self.driver.maximize_window()
 
     @keyword
     def get_window_size(self):
@@ -161,7 +161,7 @@ class WindowKeywords(LibraryComponent):
         Example:
         | ${width} | ${height}= | `Get Window Size` |
         """
-        size = self.browser.get_window_size()
+        size = self.driver.get_window_size()
         return size['width'], size['height']
 
     @keyword
@@ -178,7 +178,7 @@ class WindowKeywords(LibraryComponent):
         Example:
         | `Set Window Size` | 800 | 600 |
         """
-        return self.browser.set_window_size(int(width), int(height))
+        return self.driver.set_window_size(int(width), int(height))
 
     @keyword
     def get_window_position(self):
@@ -190,7 +190,7 @@ class WindowKeywords(LibraryComponent):
         Example:
         | ${x} | ${y}= | `Get Window Position` |
         """
-        position = self.browser.get_window_position()
+        position = self.driver.get_window_position()
         return position['x'], position['y']
 
     @keyword
@@ -208,7 +208,7 @@ class WindowKeywords(LibraryComponent):
         Example:
         | `Set Window Position` | 100 | 200 |
         """
-        self.browser.set_window_position(int(x), int(y))
+        self.driver.set_window_position(int(x), int(y))
 
     def _log_list(self, items, what='item'):
         msg = [

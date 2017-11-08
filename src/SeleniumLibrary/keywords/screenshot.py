@@ -89,12 +89,12 @@ class ScreenshotKeywords(LibraryComponent):
         | `Capture Page Screenshot` | formatted_index_{index:03}.png         |
         | `File Should Exist`       | ${OUTPUTDIR}/formatted_index_001.png   |
         """
-        if not self.browsers.current:
+        if not self.drivers.current:
             self.info('Cannot capture screenshot because no browser is open.')
             return
         path = self._get_screenshot_path(filename)
         self._create_directory(path)
-        if not self.browser.save_screenshot(path):
+        if not self.driver.save_screenshot(path):
             raise RuntimeError("Failed to save screenshot '{}'.".format(path))
         # Image is shown on its own row and thus previous row is closed on
         # purpose. Depending on Robot's log structure is a bit risky.

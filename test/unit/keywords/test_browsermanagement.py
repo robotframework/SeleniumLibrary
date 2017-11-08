@@ -97,19 +97,15 @@ class BrowserManagementTests(unittest.TestCase):
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         ctx = mock()
         ctx.timeout = 5.0
-        _browsers = mock()
-        ctx._browsers = _browsers
+        _drivers = mock()
+        ctx._drivers = _drivers
         first_browser, second_browser = mock(), mock()
-        when(_browsers).get_open_browsers().thenReturn(
-            [first_browser, second_browser]
-        )
+        ctx._drivers.active_drivers = [first_browser, second_browser]
         bm = BrowserManagementKeywords(ctx)
         bm.set_selenium_timeout("10 seconds")
         verify(first_browser).set_script_timeout(10.0)
         verify(second_browser).set_script_timeout(10.0)
-        when(_browsers).get_open_browsers().thenReturn(
-            []
-        )
+        ctx._drivers.active_drivers = []
         bm.set_selenium_timeout("20 seconds")
         verifyNoMoreInteractions(first_browser)
         verifyNoMoreInteractions(second_browser)
@@ -119,7 +115,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         bm = BrowserManagementKeywords(ctx)
         try:
-            bm._make_browser("fireox")
+            bm._make_driver("fireox")
             self.fail("Exception not raised")
         except ValueError as e:
             self.assertEquals(str(e), "fireox is not a supported browser.")
@@ -131,15 +127,15 @@ class BrowserManagementTests(unittest.TestCase):
         driver = mock()
         when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
         when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
-        when(ctx).register_browser(driver, 'fake1').thenReturn(0)
+        when(ctx).register_driver(driver, 'fake1').thenReturn(0)
         webdriver.FakeWebDriver = FakeWebDriver
         try:
             index = bm.create_webdriver('FakeWebDriver', 'fake1', some_arg=1)
-            verify(ctx).register_browser(driver, 'fake1')
+            verify(ctx).register_driver(driver, 'fake1')
             self.assertEqual(index, 0)
             my_kwargs = {'some_arg': 2}
             bm.create_webdriver('FakeWebDriver', 'fake2', kwargs=my_kwargs)
-            verify(ctx).register_browser(driver, 'fake2')
+            verify(ctx).register_driver(driver, 'fake2')
         finally:
             del webdriver.FakeWebDriver
         unstub()
@@ -173,7 +169,7 @@ class BrowserManagementTests(unittest.TestCase):
 
         try:
             self.was_called = False
-            bm._make_browser(browser_name, **kw)
+            bm._make_driver(browser_name, **kw)
         except AttributeError:
             pass  #kinda dangerous but I'm too lazy to mock out all the set_timeout calls
         finally:

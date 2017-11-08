@@ -62,7 +62,7 @@ class ElementFinderParentTests(unittest.TestCase):
 
     def setUp(self):
         self.ctx = mock()
-        self.ctx.browser = self.browser = mock()
+        self.ctx.driver = self.driver = mock()
         self.finder = ElementFinder(self.ctx)
 
     def tearDown(self):
@@ -193,7 +193,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def setUp(self):
         self.ctx = mock()
-        self.ctx.browser = self.browser = mock()
+        self.ctx.driver = self.driver = mock()
         self.finder = ElementFinder(self.ctx)
 
     def tearDown(self):
@@ -207,18 +207,18 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_no_tag(self):
         self.finder.find("test1", required=False)
-        verify(self.browser).find_elements_by_xpath("//*[(@id='test1' or "
+        verify(self.driver).find_elements_by_xpath("//*[(@id='test1' or "
                                                          "@name='test1')]")
 
     def test_find_with_explicit_default_strategy(self):
         self.finder.find("default=test1", required=False)
-        verify(self.browser).find_elements_by_xpath("//*[(@id='test1' or "
+        verify(self.driver).find_elements_by_xpath("//*[(@id='test1' or "
                                                          "@name='test1')]")
 
     def test_find_with_explicit_default_strategy_and_equals(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("default=page.do?foo=bar", tag='a', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//a[(@id='page.do?foo=bar' or @name='page.do?foo=bar' or "
             "@href='page.do?foo=bar' or "
             "normalize-space(descendant-or-self::text())='page.do?foo=bar' or "
@@ -226,90 +226,90 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_tag(self):
         self.finder.find("test1", tag='div', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//div[(@id='test1' or @name='test1')]")
 
     def test_find_with_locator_with_apos(self):
         self.finder.find("test '1'", required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//*[(@id=\"test '1'\" or @name=\"test '1'\")]")
 
     def test_find_with_locator_with_quote(self):
         self.finder.find("test \"1\"", required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//*[(@id='test \"1\"' or @name='test \"1\"')]")
 
     def test_find_with_locator_with_quote_and_apos(self):
         self.finder.find("test \"1\" and '2'", required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//*[(@id=concat('test \"1\" and ', \"'\", '2', \"'\", '') "
             "or @name=concat('test \"1\" and ', \"'\", '2', \"'\", ''))]")
 
     def test_find_with_a(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='a', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//a[(@id='test1' or @name='test1' or @href='test1' or "
             "normalize-space(descendant-or-self::text())='test1' or "
             "@href='http://localhost/test1')]")
 
     def test_find_with_link_synonym(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='link', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//a[(@id='test1' or @name='test1' or @href='test1' or "
             "normalize-space(descendant-or-self::text())='test1' or "
             "@href='http://localhost/test1')]")
 
     def test_find_with_img(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='img', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//img[(@id='test1' or @name='test1' or @src='test1' or "
             "@alt='test1' or @src='http://localhost/test1')]")
 
     def test_find_with_image_synonym(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='image', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//img[(@id='test1' or @name='test1' or @src='test1' or "
             "@alt='test1' or @src='http://localhost/test1')]")
 
     def test_find_with_input(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='input', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//input[(@id='test1' or @name='test1' or @value='test1' or "
             "@src='test1' or @src='http://localhost/test1')]")
 
     def test_find_with_radio_button_synonym(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='radio button', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//input[@type='radio' and (@id='test1' or @name='test1' or "
             "@value='test1' or @src='test1' or "
             "@src='http://localhost/test1')]")
 
     def test_find_with_checkbox_synonym(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='checkbox', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//input[@type='checkbox' and (@id='test1' or @name='test1' or "
             "@value='test1' or @src='test1' or "
             "@src='http://localhost/test1')]")
 
     def test_find_with_file_upload_synonym(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='file upload', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//input[@type='file' and (@id='test1' or @name='test1' or "
             "@value='test1' or @src='test1' or "
             "@src='http://localhost/test1')]")
 
     def test_find_with_text_field_synonym(self):
-        self.browser.current_url = "http://localhost/mypage.html"
+        self.driver.current_url = "http://localhost/mypage.html"
         self.finder.find("test1", tag='text field', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//input[@type[. = 'date' or . = 'datetime-local' or . = 'email' or "
             ". = 'month' or . = 'number' or . = 'password' or . = 'search' or "
             ". = 'tel' or . = 'text' or . = 'time' or . = 'url' or . = 'week' or . = 'file'] and "
@@ -318,23 +318,23 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_button(self):
         self.finder.find("test1", tag='button', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//button[(@id='test1' or @name='test1' or @value='test1' or "
             "normalize-space(descendant-or-self::text())='test1')]")
 
     def test_find_with_select(self):
         self.finder.find("test1", tag='select', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//select[(@id='test1' or @name='test1')]")
 
     def test_find_with_list_synonym(self):
         self.finder.find("test1", tag='list', required=False)
-        verify(self.browser).find_elements_by_xpath(
+        verify(self.driver).find_elements_by_xpath(
             "//select[(@id='test1' or @name='test1')]")
 
     def test_find_with_implicit_xpath(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_xpath(
+        when(self.driver).find_elements_by_xpath(
             "//*[(@test='1')]").thenReturn(elements)
         result = self.finder.find("//*[(@test='1')]", first_only=False)
         self.assertEqual(result, elements)
@@ -345,9 +345,9 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_by_identifier(self):
         id_elements = self._make_mock_elements('div', 'a')
         name_elements = self._make_mock_elements('span', 'a')
-        when(self.browser).find_elements_by_id("test1").thenReturn(
+        when(self.driver).find_elements_by_id("test1").thenReturn(
             list(id_elements)).thenReturn(list(id_elements))
-        when(self.browser).find_elements_by_name("test1").thenReturn(
+        when(self.driver).find_elements_by_name("test1").thenReturn(
             list(name_elements)).thenReturn(list(name_elements))
         all_elements = list(id_elements)
         all_elements.extend(name_elements)
@@ -359,7 +359,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_id(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_id("test1").thenReturn(
+        when(self.driver).find_elements_by_id("test1").thenReturn(
             elements)
         result = self.finder.find("id=test1", first_only=False)
         self.assertEqual(result, elements)
@@ -368,7 +368,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_name(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_name("test1").thenReturn(
+        when(self.driver).find_elements_by_name("test1").thenReturn(
             elements)
         result = self.finder.find("name=test1", first_only=False)
         self.assertEqual(result, elements)
@@ -377,7 +377,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_xpath(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_xpath(
+        when(self.driver).find_elements_by_xpath(
             "//*[(@test='1')]").thenReturn(elements)
         result = self.finder.find("xpath=//*[(@test='1')]", first_only=False)
         self.assertEqual(result, elements)
@@ -388,7 +388,7 @@ class ElementFinderTests(unittest.TestCase):
     def test_find_by_dom(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         elems = [elements[1], elements[3]]
-        when(self.browser).execute_script(
+        when(self.driver).execute_script(
             "return document.getElementsByTagName('a');").thenReturn(elems)
         result = self.finder.find("dom=document.getElementsByTagName('a')",
                                   first_only=False)
@@ -396,7 +396,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_link_text(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_link_text(
+        when(self.driver).find_elements_by_link_text(
             "my link").thenReturn(elements)
         result = self.finder.find("link=my link", first_only=False)
         self.assertEqual(result, elements)
@@ -405,7 +405,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_partial_link_text(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_partial_link_text(
+        when(self.driver).find_elements_by_partial_link_text(
             "my link").thenReturn(elements)
         result = self.finder.find("partial link=my link", first_only=False)
         self.assertEqual(result, elements)
@@ -415,7 +415,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_css_selector(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_css_selector(
+        when(self.driver).find_elements_by_css_selector(
             "#test1").thenReturn(elements)
         result = self.finder.find("css=#test1", first_only=False)
         self.assertEqual(result, elements)
@@ -424,7 +424,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_class_names(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_class_name(
+        when(self.driver).find_elements_by_class_name(
             "test1").thenReturn(elements)
         result = self.finder.find("class=test1", first_only=False)
         self.assertEqual(result, elements)
@@ -433,7 +433,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_by_tag_name(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_tag_name(
+        when(self.driver).find_elements_by_tag_name(
             "div").thenReturn(elements)
         result = self.finder.find("tag=div", first_only=False)
         self.assertEqual(result, elements)
@@ -442,9 +442,9 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_sloppy_prefix(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_id("test1").thenReturn(
+        when(self.driver).find_elements_by_id("test1").thenReturn(
             elements)
-        when(self.browser).find_elements_by_partial_link_text(
+        when(self.driver).find_elements_by_partial_link_text(
             "test1").thenReturn(elements)
         result = self.finder.find("ID=test1", first_only=False)
         self.assertEqual(result, elements)
@@ -461,7 +461,7 @@ class ElementFinderTests(unittest.TestCase):
 
     def test_find_with_sloppy_criteria(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
-        when(self.browser).find_elements_by_id("test1  ").thenReturn(
+        when(self.driver).find_elements_by_id("test1  ").thenReturn(
             elements)
         result = self.finder.find("id= test1  ", first_only=False)
         self.assertEqual(result, elements)
@@ -475,7 +475,7 @@ class ElementFinderTests(unittest.TestCase):
         elements[5].set_attribute('type', 'text')
         elements[7].set_attribute('type', 'file')
         elements[8].set_attribute('type', 'email')
-        when(self.browser).find_elements_by_id("test1").thenReturn(
+        when(self.driver).find_elements_by_id("test1").thenReturn(
             elements)
         result = self.finder.find("id=test1", first_only=False)
         self.assertEqual(result, elements)
@@ -504,7 +504,7 @@ class ElementFinderTests(unittest.TestCase):
                     'find_elements_by_tag_name')
         for bad_value in (None, {'': None}):
             for func_name in locators:
-                when_find_func = getattr(when(self.browser), func_name)
+                when_find_func = getattr(when(self.driver), func_name)
                 when_find_func(any()).thenReturn(bad_value)
             for locator in ("identifier=it", "id=it", "name=it", "xpath=//div",
                             "link=it", "css=div.it", "tag=div", "default"):

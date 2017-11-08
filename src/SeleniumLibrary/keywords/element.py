@@ -202,7 +202,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Assigning temporary id '%s' to element '%s'." % (id, locator))
         element = self.find_element(locator)
-        self.browser.execute_script("arguments[0].id = '%s';" % id, element)
+        self.driver.execute_script("arguments[0].id = '%s';" % id, element)
 
     @keyword
     def element_should_be_disabled(self, locator):
@@ -240,10 +240,10 @@ class ElementKeywords(LibraryComponent):
         New in SeleniumLibrary 3.0.
         """
         element = self.find_element(locator)
-        if self.browser.capabilities['browserName'] != "firefox":
-            focused = self.browser.switch_to.active_element
+        if self.driver.capabilities['browserName'] != "firefox":
+            focused = self.driver.switch_to.active_element
         else:
-            focused = self.browser.execute_script('return document.activeElement;')
+            focused = self.driver.execute_script('return document.activeElement;')
         if element != focused:
             raise AssertionError("Element '%s' does not have focus." % locator)
 
@@ -422,7 +422,7 @@ class ElementKeywords(LibraryComponent):
         self.info("Clicking element '%s' at coordinates x=%s, y=%s."
                   % (locator, xoffset, yoffset))
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
@@ -437,7 +437,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Double clicking element '%s'." % locator)
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.double_click(element).perform()
 
     @keyword
@@ -450,7 +450,7 @@ class ElementKeywords(LibraryComponent):
         Prior to SeleniumLibrary 3.0 this keyword was named `Focus`.
         """
         element = self.find_element(locator)
-        self.browser.execute_script("arguments[0].focus();", element)
+        self.driver.execute_script("arguments[0].focus();", element)
 
     @keyword
     def focus(self, locator):
@@ -470,7 +470,7 @@ class ElementKeywords(LibraryComponent):
         """
         element = self.find_element(locator)
         target = self.find_element(target)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.drag_and_drop(element, target).perform()
 
     @keyword
@@ -487,7 +487,7 @@ class ElementKeywords(LibraryComponent):
         | `Drag And Drop By Offset` | myElem | 50 | -35 | # Move myElem 50px right and 35px down |
         """
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.drag_and_drop_by_offset(element, int(xoffset), int(yoffset))
         action.perform()
 
@@ -505,7 +505,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Simulating Mouse Down on element '%s'." % locator)
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -520,7 +520,7 @@ class ElementKeywords(LibraryComponent):
         size = element.size
         offsetx = (size['width'] / 2) + 1
         offsety = (size['height'] / 2) + 1
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.move_to_element(element).move_by_offset(offsetx, offsety)
         action.perform()
 
@@ -533,7 +533,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Simulating Mouse Over on element '%s'." % locator)
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.move_to_element(element).perform()
 
     @keyword
@@ -545,13 +545,13 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Simulating Mouse Up on element '%s'." % locator)
         element = self.find_element(locator)
-        ActionChains(self.browser).release(element).perform()
+        ActionChains(self.driver).release(element).perform()
 
     @keyword
     def open_context_menu(self, locator):
         """Opens context menu on element identified by ``locator``."""
         element = self.find_element(locator)
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.context_click(element).perform()
 
     @keyword
@@ -577,7 +577,7 @@ var evt = document.createEvent("HTMLEvents");
 evt.initEvent(eventName, true, true);
 return !element.dispatchEvent(evt);
         """
-        self.browser.execute_script(script, element, event)
+        self.driver.execute_script(script, element, event)
 
     @keyword
     def simulate(self, locator, event):
@@ -609,8 +609,8 @@ return !element.dispatchEvent(evt);
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
         """
         self.info("Clicking link '%s'." % locator)
         self.find_element(locator, tag='link').click()
@@ -629,11 +629,11 @@ return !element.dispatchEvent(evt);
         """Simulates a mouse down event on a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
         """
         element = self.find_element(locator, tag='link')
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -641,8 +641,8 @@ return !element.dispatchEvent(evt);
         """Verifies link identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -654,8 +654,8 @@ return !element.dispatchEvent(evt);
         """Verifies link identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for links are ``id``, ``name``, ``href`` and
-        link text.
+        syntax. When using the default locator strategy, links are searched
+        using ``id``, ``name``, ``href`` and the link text.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -667,7 +667,8 @@ return !element.dispatchEvent(evt);
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
         """
         self.info("Clicking image '%s'." % locator)
         element = self.find_element(locator, tag='image', required=False)
@@ -681,10 +682,11 @@ return !element.dispatchEvent(evt);
         """Simulates a mouse down event on an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
         """
         element = self.find_element(locator, tag='image')
-        action = ActionChains(self.browser)
+        action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -692,7 +694,8 @@ return !element.dispatchEvent(evt);
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -704,7 +707,8 @@ return !element.dispatchEvent(evt);
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
-        syntax. Key attributes for images are ``id``, ``src`` and ``alt``.
+        syntax. When using the default locator strategy, images are searched
+        using ``id``, ``name``, ``src`` and ``alt``.
 
         See `Page Should Contain Element` for explanation about ``message``
         and ``loglevel`` arguments.
@@ -796,7 +800,7 @@ return !element.dispatchEvent(evt);
             raise ValueError(message)
 
     def _page_contains(self, text):
-        self.browser.switch_to.default_content()
+        self.driver.switch_to.default_content()
 
         if self.is_text_present(text):
             return True
@@ -804,9 +808,9 @@ return !element.dispatchEvent(evt);
         subframes = self.find_elements("xpath://frame|//iframe")
         self.debug('Current frame has %d subframes.' % len(subframes))
         for frame in subframes:
-            self.browser.switch_to.frame(frame)
+            self.driver.switch_to.frame(frame)
             found_text = self.is_text_present(text)
-            self.browser.switch_to.default_content()
+            self.driver.switch_to.default_content()
             if found_text:
                 return True
         return False
