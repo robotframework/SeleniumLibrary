@@ -28,7 +28,7 @@ class CookieKeywords(LibraryComponent):
     @keyword
     def delete_all_cookies(self):
         """Deletes all cookies."""
-        self.browser.delete_all_cookies()
+        self.driver.delete_all_cookies()
 
     @keyword
     def delete_cookie(self, name):
@@ -36,7 +36,7 @@ class CookieKeywords(LibraryComponent):
 
         If the cookie is not found, nothing happens.
         """
-        self.browser.delete_cookie(name)
+        self.driver.delete_cookie(name)
 
     @keyword
     def get_cookies(self):
@@ -48,14 +48,14 @@ class CookieKeywords(LibraryComponent):
         HTTP requests.
         """
         pairs = []
-        for cookie in self.browser.get_cookies():
+        for cookie in self.driver.get_cookies():
             pairs.append(cookie['name'] + "=" + cookie['value'])
         return '; '.join(pairs)
 
     @keyword
     def get_cookie_value(self, name):
         """Deprecated. Use `Get Cookie` instead."""
-        cookie = self.browser.get_cookie(name)
+        cookie = self.driver.get_cookie(name)
         if cookie is not None:
             return cookie['value']
         raise ValueError("Cookie with name %s not found." % name)
@@ -93,7 +93,7 @@ class CookieKeywords(LibraryComponent):
 
         New in SeleniumLibrary 3.0.
         """
-        cookie = self.browser.get_cookie(name)
+        cookie = self.driver.get_cookie(name)
         if not cookie:
             raise CookieNotFound("Cookie with name '%s' not found." % name)
         return CookieInformation(**cookie)
@@ -126,7 +126,7 @@ class CookieKeywords(LibraryComponent):
             new_cookie['secure'] = is_truthy(secure)
         if not is_noney(expiry):
             new_cookie['expiry'] = self._expiry(expiry)
-        self.browser.add_cookie(new_cookie)
+        self.driver.add_cookie(new_cookie)
 
     def _expiry(self, expiry):
         try:

@@ -20,6 +20,7 @@ from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
 
 from SeleniumLibrary.base import DynamicCore
+from SeleniumLibrary.errors import NoOpenBrowser
 from SeleniumLibrary.keywords import (AlertKeywords,
                                       BrowserManagementKeywords,
                                       CookieKeywords,
@@ -34,8 +35,8 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WaitingKeywords,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder, TableElementFinder
-from SeleniumLibrary.utils import (BrowserCache, Deprecated, LibraryListener,
-                                   timestr_to_secs)
+from SeleniumLibrary.utils import (Deprecated, LibraryListener, timestr_to_secs,
+                                   WebDriverCache)
 
 
 __version__ = '3.0.0b4.dev1'
@@ -342,7 +343,7 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
-        self._browsers = BrowserCache()
+        self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self._element_finder = ElementFinder(self)
@@ -362,8 +363,8 @@ class SeleniumLibrary(DynamicCore):
             self.failure_occurred()
             raise
 
-    def register_browser(self, browser, alias):
-        return self._browsers.register(browser, alias)
+    def register_driver(self, driver, alias):
+        return self._drivers.register(driver, alias)
 
     def failure_occurred(self):
         """Method that is executed when a SeleniumLibrary keyword fails.
@@ -384,11 +385,22 @@ class SeleniumLibrary(DynamicCore):
             self._running_on_failure_keyword = False
 
     @property
+    def driver(self):
+        """Current active driver.
+
+        :rtype: selenium.webdriver.remote.webdriver.WebDriver
+        :raises SeleniumLibrary.errors.NoOpenBrowser: If browser is not open.
+        """
+        if not self._drivers.current:
+            raise NoOpenBrowser('No browser is open.')
+        return self._drivers.current
+
+    @property
     def browser(self):
-        """Current active browser"""
-        if not self._browsers.current:
-            raise RuntimeError('No browser is open')
-        return self._browsers.current
+        # TODO: Remove after 3.0 RC1 release.
+        warnings.warn('"SeleniumLibrary.browser" is deprecated, '
+                      'use "SeleniumLibrary.driver".', DeprecationWarning)
+        return self.driver
 
     def find_element(self, locator, parent=None):
         """Find element matching ``locator``.
@@ -423,9 +435,9 @@ class SeleniumLibrary(DynamicCore):
 
     def _current_browser(self):
         warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '
-                      'use "SeleniumLibrary.browser" instead.',
+                      'use "SeleniumLibrary.driver" instead.',
                       DeprecationWarning)
-        return self.browser
+        return self.driver
 
     def _run_on_failure(self):
         warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '

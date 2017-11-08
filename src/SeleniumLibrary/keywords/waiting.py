@@ -44,7 +44,7 @@ class WaitingKeywords(LibraryComponent):
             raise ValueError("Condition '%s' did not have mandatory 'return'."
                              % condition)
         self._wait_until(
-            lambda: self.browser.execute_script(condition) is True,
+            lambda: self.driver.execute_script(condition) is True,
             "Condition '%s' did not become true in <TIMEOUT>." % condition,
             timeout, error
         )

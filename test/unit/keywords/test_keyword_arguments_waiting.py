@@ -9,7 +9,7 @@ class KeywordArgumentsWaitingKeywordsTest(unittest.TestCase):
 
     def setUp(self):
         self.ctx = mock()
-        self.ctx.browser = mock()
+        self.ctx.driver = mock()
         self.ctx.timeout = 0.01
         self.waiting = WaitingKeywords(self.ctx)
 

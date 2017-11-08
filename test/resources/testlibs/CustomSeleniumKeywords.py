@@ -12,7 +12,7 @@ class CustomSeleniumKeywords(SeleniumLibrary):
         `Run On Failure Keyword Only Called Once` test."""
         super(CustomSeleniumKeywords, self).__init__(*args, **kwargs)
         sl = BuiltIn().get_library_instance("SeleniumLibrary")
-        self._browsers = sl._browsers
+        self._drivers = sl._drivers
 
     @keyword
     def custom_selenium_keyword(self):

@@ -37,7 +37,7 @@ class FrameKeywords(LibraryComponent):
         """
         self.info("Selecting frame '%s'." % locator)
         element = self.find_element(locator)
-        self.browser.switch_to.frame(element)
+        self.driver.switch_to.frame(element)
 
     @keyword
     def unselect_frame(self):
@@ -45,7 +45,7 @@ class FrameKeywords(LibraryComponent):
 
         In practice cancels the previous `Select Frame` call.
         """
-        self.browser.switch_to.default_content()
+        self.driver.switch_to.default_content()
 
     @keyword
     def current_frame_should_contain(self, text, loglevel='INFO'):
@@ -99,9 +99,9 @@ class FrameKeywords(LibraryComponent):
 
     def _frame_contains(self, locator, text):
         element = self.find_element(locator)
-        self.browser.switch_to.frame(element)
+        self.driver.switch_to.frame(element)
         self.info("Searching for text from frame '%s'." % locator)
         found = self.is_text_present(text)
-        self.browser.switch_to.default_content()
+        self.driver.switch_to.default_content()
         return found
 

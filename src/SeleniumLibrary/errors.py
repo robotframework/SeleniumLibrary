@@ -29,3 +29,7 @@ class WindowNotFound(SeleniumLibraryException):
 
 class CookieNotFound(SeleniumLibraryException):
     pass
+
+
+class NoOpenBrowser(SeleniumLibraryException):
+    pass
