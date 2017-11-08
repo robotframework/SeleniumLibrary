@@ -19,25 +19,18 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def test_get_list_items_false(self):
         locator = '//select'
-        select = mock()
         element = mock()
         element.text = 'foo'
-        elements = [element]
-        when(self.element)._get_select_list_options(locator).thenReturn(
-            (select, elements))
+        when(self.element)._get_options(locator).thenReturn([element])
         self.element.get_list_items(locator)
         self.element.get_list_items(locator, 'None')
         self.element.get_list_items(locator, 'No')
 
     def test_get_list_items_true(self):
         locator = '//select'
-        select = mock()
         element = mock()
-        elements = [element]
         when(element).get_attribute('value').thenReturn('text')
-        # when(element).get_attribute('value').thenReturn('text')
-        when(self.element)._get_select_list_options(locator).thenReturn(
-            (select, elements))
+        when(self.element)._get_options(locator).thenReturn([element])
         self.element.get_list_items(locator, True)
         self.element.get_list_items(locator, 'True')
         self.element.get_list_items(locator, 'Yes')

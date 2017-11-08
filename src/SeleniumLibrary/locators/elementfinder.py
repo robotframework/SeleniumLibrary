@@ -63,7 +63,7 @@ class ElementFinder(ContextAware):
         element_type = 'Element' if not tag else tag.capitalize()
         if parent and not self._is_webelement(parent):
             raise ValueError('Parent must be Selenium WebElement but it '
-                             'was {}'.format(type(parent)))
+                             'was {}.'.format(type(parent)))
         if self._is_webelement(locator):
             return locator
         prefix, criteria = self._parse_locator(locator)
