@@ -12,7 +12,7 @@ class WebDriverCacheTests(unittest.TestCase):
         try:
             self.assertRaises(RuntimeError, cache.current.anyMember())
         except RuntimeError as e:
-            self.assertEqual(str(e), "No current driver")
+            self.assertEqual(str(e), "No current browser")
 
     def test_browsers_property(self):
         cache = WebDriverCache()

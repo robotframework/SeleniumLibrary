@@ -12,7 +12,7 @@ Browser Open With Implicit Wait Should Not Override Default
     Close Browser
 
 There Should Be A Good Error Message If Browser Is Not Opened
-    Run Keyword And Expect Error    No browser is open    Title Should Be    foo
+    Run Keyword And Expect Error    No browser is open.    Title Should Be    foo
 
 Close Browser Does Nothing When No Browser Is Opened
     Close Browser
