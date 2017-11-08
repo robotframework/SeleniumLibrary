@@ -389,7 +389,7 @@ class SeleniumLibrary(DynamicCore):
         """Current active driver.
 
         :rtype: selenium.webdriver.remote.webdriver.WebDriver
-        :raises SeleniumLibrary.errors.ElementNotFound: If element not found.
+        :raises SeleniumLibrary.errors.NoOpenBrowser: If browser is not open.
         """
         if not self._drivers.current:
             raise NoOpenBrowser('No browser is open.')
