@@ -34,7 +34,6 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       TableElementKeywords,
                                       WaitingKeywords,
                                       WindowKeywords)
-
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import (Deprecated, LibraryListener, timestr_to_secs,
                                    WebDriverCache)
