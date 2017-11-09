@@ -22,8 +22,8 @@ class ContextAware(object):
     def __init__(self, ctx):
         """Base class exposing attributes from the common context.
 
-        :param SeleniumLibrary.SeleniumLibrary ctx:
-            The library itself as a context object.
+        :param ctx: The library itself as a context object.
+        :type ctx: SeleniumLibrary.SeleniumLibrary
         """
         self.ctx = ctx
 
@@ -49,6 +49,7 @@ class ContextAware(object):
             true, return `None` otherwise.
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
+        :type parent: selenium.webdriver.remote.webelement.WebElement
         :return: Found `WebElement` or `None` if element not found and
             `required` is false.
         :rtype: selenium.webdriver.remote.webelement.WebElement
@@ -59,6 +60,15 @@ class ContextAware(object):
 
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.
+
+        :param locator: Locator to use when searching the element.
+            See library documentation for the supported locator syntax.
+        :param tag: Limit searching only to these elements.
+        :param parent: Optional parent `WebElememt` to search child elements
+            from. By default search starts from the root using `WebDriver`.
+        :type parent: selenium.webdriver.remote.webelement.WebElement
+        :return: list of found `WebElement` or `[]` if element not found.
+        :rtype: list[selenium.webdriver.remote.webelement.WebElement]
 
         Always returns a list of `WebElement` objects. If no matching element
         is found, the list is empty. Otherwise semantics are exactly same
