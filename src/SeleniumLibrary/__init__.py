@@ -185,7 +185,7 @@ class SeleniumLibrary(DynamicCore):
     Selenium's WebElement objects. This requires first getting a WebElement,
     for example, by using the `Get WebElement` keyword.
 
-    | ${elem} =       | `Get WebElement` | id=example |
+    | ${elem} =       | `Get WebElement` | id:example |
     | `Click Element` | ${elem}          |            |
 
     == Custom locators ==

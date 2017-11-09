@@ -24,7 +24,7 @@ from SeleniumLibrary.utils import (is_falsy, is_noney, is_truthy,
 
 class ElementKeywords(LibraryComponent):
 
-    @keyword
+    @keyword(name='Get WebElement')
     def get_webelement(self, locator):
         """Returns the first WebElement matching the given ``locator``.
 
@@ -33,7 +33,7 @@ class ElementKeywords(LibraryComponent):
         """
         return self.find_element(locator)
 
-    @keyword
+    @keyword(name='Get WebElements')
     def get_webelements(self, locator):
         """Returns list of WebElement objects matching the ``locator``.
 
