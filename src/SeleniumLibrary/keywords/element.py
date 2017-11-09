@@ -735,8 +735,8 @@ return !element.dispatchEvent(evt);
         always return an integer.
 
         Example:
-        | ${count} =      | Get Matching Locator Count | name:div_name  |
-        | Should Be True  | ${count} > 2               |                |
+        | ${count} =       | `Get Element Count` | name:div_name  |
+        | `Should Be True` | ${count} > 2        |                |
 
         New in SeleniumLibrary 3.0.
         """

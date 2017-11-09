@@ -85,11 +85,11 @@ class CookieKeywords(LibraryComponent):
         natively does.
 
         Example:
-        | `Add Cookie       | foo             | bar |
+        | `Add Cookie`      | foo             | bar |
         | ${cookie} =       | `Get Cookie`    | foo |
         | `Should Be Equal` | ${cookie.name}  | bar |
         | `Should Be Equal` | ${cookie.value} | foo |
-        | `Should Be True`  | ${cookie.expiry.year} > 2016 |
+        | `Should Be True`  | ${cookie.expiry.year} > 2017 |
 
         New in SeleniumLibrary 3.0.
         """
@@ -109,12 +109,12 @@ class CookieKeywords(LibraryComponent):
         library or an epoch time stamp.
 
         Example:
-        | Add Cookie | foo | bar |                            | # Adds cookie with name foo and value bar       |
-        | Add Cookie | foo | bar | domain=example.com         | # Adds cookie with example.com domain defined   |
-        | Add Cookie | foo | bar | expiry=2027-09-28 16:21:35 | # Adds cookie with expiry time defined          |
-        | Add Cookie | foo | bar | expiry=1822137695          | # Adds cookie with expiry time defined as epoch |
+        | `Add Cookie` | foo | bar |                            |
+        | `Add Cookie` | foo | bar | domain=example.com         |
+        | `Add Cookie` | foo | bar | expiry=2027-09-28 16:21:35 | # Expiry as timestamp.     |
+        | `Add Cookie` | foo | bar | expiry=1822137695          | # Expiry as epoch seconds. |
 
-        Prior to SeleniumLibrary 3.0 setting the expiry did not work.
+        Prior to SeleniumLibrary 3.0 setting expiry did not work.
         """
         new_cookie = {'name': name, 'value': value}
         if not is_noney(path):

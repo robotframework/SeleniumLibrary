@@ -35,8 +35,8 @@ class SelectElementKeywords(LibraryComponent):
         arguments`).
 
         Example:
-        | ${labels} = | Get List Items | mylist                |             |
-        | ${values} = | Get List Items | css:#container select | values=True |
+        | ${labels} = | `Get List Items` | mylist              |             |
+        | ${values} = | `Get List Items` | css:#example select | values=True |
 
         Support to return values is new in SeleniumLibrary 3.0.
         """
