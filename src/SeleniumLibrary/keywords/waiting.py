@@ -36,6 +36,11 @@ class WaitingKeywords(LibraryComponent):
         and their default value.
 
         ``error`` can be used to override the default error message.
+
+        Examples:
+        | `Wait For Condition` | return document.title == "New Title" |
+        | `Wait For Condition` | return jQuery.active == 0            |
+        | `Wait For Condition` | style = document.querySelector('h1').style; return style.background == "red" && style.color == "white" |
         """
         if 'return' not in condition:
             raise ValueError("Condition '%s' did not have mandatory 'return'."

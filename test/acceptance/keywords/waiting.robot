@@ -7,6 +7,7 @@ Force Tags        Known Issue Internet Explorer
 Wait For Condition
     Title Should Be    Original
     Wait For Condition    return window.document.title == "Changed"
+    Wait For Condition    style = document.querySelector('#content').style; return style.background == "red" && style.color == "white"
     Run Keyword And Expect Error
     ...    Condition 'return window.document.title == "Invalid"' did not become true in 100 milliseconds.
     ...    Wait For Condition    return window.document.title == "Invalid"    ${0.1}
