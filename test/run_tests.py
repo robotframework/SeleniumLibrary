@@ -76,8 +76,6 @@ ROBOT_OPTIONS = [
 ]
 REBOT_OPTIONS = [
     '--outputdir', RESULTS_DIR,
-    '--critical', 'regression',
-    '--noncritical', 'inprogress',
     '--noncritical', 'known issue {browser}',
 ]
 
