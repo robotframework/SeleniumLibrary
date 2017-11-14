@@ -363,6 +363,15 @@ class SeleniumLibrary(DynamicCore):
             raise
 
     def register_driver(self, driver, alias):
+        """Add's a `driver` to the library WebDriverCache.
+
+        :param driver: Instance of the Selenium `WebDriver`.
+        :type driver: selenium.webdriver.remote.webdriver.WebDriver
+        :param alias: Alias given for this `WebDriver` instance.
+        :type alias: str
+        :return: The index of the `WebDriver` instance.
+        :rtype: int
+        """
         return self._drivers.register(driver, alias)
 
     def failure_occurred(self):
@@ -402,26 +411,31 @@ class SeleniumLibrary(DynamicCore):
         return self.driver
 
     def find_element(self, locator, parent=None):
-        """Find element matching ``locator``.
-
-        This method and :meth:`find_elements` form the recommended
-        public API for external tools to get elements via SeleniumLibrary.
+        """Find element matching `locator`.
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
-        :param parent: Optional parent ``WebElememt`` to search child elements
-            from. By default search starts from the root using ``WebDriver``.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
+        :param parent: Optional parent `WebElememt` to search child elements
+            from. By default search starts from the root using `WebDriver`.
+        :type parent: selenium.webdriver.remote.webelement.WebElement
+        :return: Found `WebElement`.
         :rtype: selenium.webdriver.remote.webelement.WebElement
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found.
         """
         return self._element_finder.find(locator, parent=parent)
 
     def find_elements(self, locator, parent=None):
-        """Find all elements matching ``locator``.
+        """Find all elements matching `locator`.
 
-        Returns a list of ``WebElement`` objects. If no matching elements
-        are found, the list is empty. Otherwise semantics are exactly same
-        as with the :meth:`find_element` method.
+        :param locator: Locator to use when searching the element.
+            See library documentation for the supported locator syntax.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
+        :param parent: Optional parent `WebElememt` to search child elements
+            from. By default search starts from the root using `WebDriver`.
+        :type parent: selenium.webdriver.remote.webelement.WebElement
+        :return: list of found `WebElement` or e,mpty if elements are not found.
+        :rtype: list[selenium.webdriver.remote.webelement.WebElement]
         """
         return self._element_finder.find(locator, first_only=False,
                                          required=False, parent=parent)
@@ -430,7 +444,7 @@ class SeleniumLibrary(DynamicCore):
     def _cache(self):
         warnings.warn('"SeleniumLibrary._cache" is deprecated, '
                       'use public API instead.', DeprecationWarning)
-        return self._browsers
+        return self._drivers
 
     def _current_browser(self):
         warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '

@@ -22,8 +22,8 @@ class ContextAware(object):
     def __init__(self, ctx):
         """Base class exposing attributes from the common context.
 
-        :param SeleniumLibrary.SeleniumLibrary ctx:
-            The library itself as a context object.
+        :param ctx: The library itself as a context object.
+        :type ctx: SeleniumLibrary.SeleniumLibrary
         """
         self.ctx = ctx
 
@@ -44,11 +44,15 @@ class ContextAware(object):
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
         :param tag: Limit searching only to these elements.
+        :type tag: str
         :param required: Raise `ElementNotFound` if element not found when
             true, return `None` otherwise.
+        :type required: True or False
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
+        :type parent: selenium.webdriver.remote.webelement.WebElement
         :return: Found `WebElement` or `None` if element not found and
             `required` is false.
         :rtype: selenium.webdriver.remote.webelement.WebElement
@@ -60,9 +64,16 @@ class ContextAware(object):
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.
 
-        Always returns a list of `WebElement` objects. If no matching element
-        is found, the list is empty. Otherwise semantics are exactly same
-        as with :meth:`find_element`.
+        :param locator: Locator to use when searching the element.
+            See library documentation for the supported locator syntax.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
+        :param tag: Limit searching only to these elements.
+        :type tag: str
+        :param parent: Optional parent `WebElememt` to search child elements
+            from. By default search starts from the root using `WebDriver`.
+        :type parent: selenium.webdriver.remote.webelement.WebElement
+        :return: list of found `WebElement` or empty if elements are not found.
+        :rtype: list[selenium.webdriver.remote.webelement.WebElement]
         """
         return self.element_finder.find(locator, tag, False, False, parent)
 
