@@ -44,9 +44,12 @@ class ContextAware(object):
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
         :param tag: Limit searching only to these elements.
+        :type tag: str
         :param required: Raise `ElementNotFound` if element not found when
             true, return `None` otherwise.
+        :type required: True or False
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
@@ -63,16 +66,14 @@ class ContextAware(object):
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
         :param tag: Limit searching only to these elements.
+        :type tag: str
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
-        :return: list of found `WebElement` or `[]` if element not found.
+        :return: list of found `WebElement` or empty if elements are not found.
         :rtype: list[selenium.webdriver.remote.webelement.WebElement]
-
-        Always returns a list of `WebElement` objects. If no matching element
-        is found, the list is empty. Otherwise semantics are exactly same
-        as with :meth:`find_element`.
         """
         return self.element_finder.find(locator, tag, False, False, parent)
 

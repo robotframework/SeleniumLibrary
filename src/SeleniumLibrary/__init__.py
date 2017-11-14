@@ -366,9 +366,9 @@ class SeleniumLibrary(DynamicCore):
         """Add's a `driver` to the library WebDriverCache.
 
         :param driver: Instance of the Selenium `WebDriver`.
-        :param alias: Alias given for this `WebDriver` instance.
         :type driver: selenium.webdriver.remote.webdriver.WebDriver
-        :type alias: intger or string
+        :param alias: Alias given for this `WebDriver` instance.
+        :type alias: str
         :return: The index of the `WebDriver` instance.
         :rtype: int
         """
@@ -415,17 +415,13 @@ class SeleniumLibrary(DynamicCore):
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
-        :param tag: Limit searching only to these elements.
-        :param required: Raise `ElementNotFound` if element not found when
-            true, return `None` otherwise.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
-        :return: Found `WebElement` or `None` if element not found and
-            `required` is false.
+        :return: Found `WebElement`.
         :rtype: selenium.webdriver.remote.webelement.WebElement
-        :raises SeleniumLibrary.errors.ElementNotFound: If element not found
-            and `required` is true.
+        :raises SeleniumLibrary.errors.ElementNotFound: If element not found.
         """
         return self._element_finder.find(locator, parent=parent)
 
@@ -434,16 +430,12 @@ class SeleniumLibrary(DynamicCore):
 
         :param locator: Locator to use when searching the element.
             See library documentation for the supported locator syntax.
-        :param tag: Limit searching only to these elements.
+        :type locator: str or selenium.webdriver.remote.webelement.WebElement
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
-        :return: list of found `WebElement` or `[]` if element not found.
+        :return: list of found `WebElement` or e,mpty if elements are not found.
         :rtype: list[selenium.webdriver.remote.webelement.WebElement]
-
-        Always returns a list of `WebElement` objects. If no matching element
-        is found, the list is empty. Otherwise semantics are exactly same
-        as with :meth:`find_element`.
         """
         return self._element_finder.find(locator, first_only=False,
                                          required=False, parent=parent)
