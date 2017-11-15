@@ -47,7 +47,7 @@ matrix:
         - BROWSER=chrome
         - SELENIUM=3.7.0
         - ROBOTFRAMEWORK=2.8.7
-        - ROBOT_OPTIONS=
+        - ROBOT_OPTIONS="--exclude not_on_rf_2.8.7"
     - python: "3.3"
       env:
         - BROWSER=chrome
