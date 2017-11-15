@@ -24,7 +24,7 @@ Test Capabilities Browser Name, Platform and Version
     ${status}    ${version}=    Run Keyword And Ignore Error    Set Variable    ${capabilities['version']}
     Run Keyword If    "${status}" == "PASS"    Log    Browser Version = ${version}
     ...    ELSE    Log    Browser Version = ${capabilities['browserVersion']}
-    [Teardown]    Close Browser
+    # [Teardown]    Close Browser    # Leave browser opened because "Checkbox And Radio Buttons" expects it
 
 Get Browser Capabilities Using Attributes
     [Documentation]    Using Open Browser
@@ -49,7 +49,7 @@ Test Capabilities Browser Name, Platform and Version Using Attributes
     Run Keyword If    "${status}" == "PASS"    Log    Browser Version = ${version}
     ...    ELSE    Log    Browser Version = ${capabilities.browserVersion}
     Log    Wearable = ${capabilities.get('wearable', 'What were you expecting? To wear a browser?')}
-    # [Teardown]    Close Browser
+    # [Teardown]    Close Browser    # Leave browser opened because "Checkbox And Radio Buttons" expects it
 
 *** Keywords ***
 Set Driver Variables
