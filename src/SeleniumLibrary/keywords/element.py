@@ -240,10 +240,10 @@ class ElementKeywords(LibraryComponent):
         New in SeleniumLibrary 3.0.
         """
         element = self.find_element(locator)
-        if self.driver.capabilities['browserName'] != "firefox":
-            focused = self.driver.switch_to.active_element
-        else:
-            focused = self.driver.execute_script('return document.activeElement;')
+        focused = self.driver.switch_to.active_element
+        # Selenium 3.6.0 with Firefox return dict wich contains the selenium WebElement
+        if isinstance(focused, dict):
+            focused = focused['value']
         if element != focused:
             raise AssertionError("Element '%s' does not have focus." % locator)
 
