@@ -4,9 +4,6 @@ from SeleniumLibrary.base import keyword
 
 class ExtSL(SeleniumLibrary):
 
-    def add_keywords(self):
-        self.add_library_components([self])
-
     @keyword
     def ext_web_element(self, locator):
         return self.get_webelements(locator)
