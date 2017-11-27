@@ -37,13 +37,14 @@ except ImportError:  # Support RF < 2.9
 
 PY2 = sys.version_info < (3,)
 
-__version__ = '1.0rc2'
+__version__ = '1.0rc3'
 
 
 class HybridCore(object):
 
     def __init__(self, library_components):
         self.keywords = {}
+        self.attributes = {}
         self.add_library_components(library_components)
         self.add_library_components([self])
 
@@ -51,8 +52,12 @@ class HybridCore(object):
         for component in library_components:
             for name, func in self._get_members(component):
                 if callable(func) and hasattr(func, 'robot_name'):
+                    kw = getattr(component, name)
                     kw_name = func.robot_name or name
-                    self.keywords[kw_name] = getattr(component, name)
+                    self.keywords[kw_name] = kw
+                    # Expose keywords as attributes both using original
+                    # method names as well as possible custom names.
+                    self.attributes[name] = self.attributes[kw_name] = kw
 
     def _get_members(self, component):
         if inspect.ismodule(component):
@@ -64,9 +69,9 @@ class HybridCore(object):
             raise TypeError('Libraries must be modules or new-style class '
                             'instances, got old-style class {!r} instead.'
                             .format(component.__class__.__name__))
-        return self._get_members_from_instannce(component)
+        return self._get_members_from_instance(component)
 
-    def _get_members_from_instannce(self, instance):
+    def _get_members_from_instance(self, instance):
         # Avoid calling properties by getting members from class, not instance.
         cls = type(instance)
         for name in dir(instance):
@@ -74,8 +79,8 @@ class HybridCore(object):
             yield name, getattr(owner, name)
 
     def __getattr__(self, name):
-        if name in self.keywords:
-            return self.keywords[name]
+        if name in self.attributes:
+            return self.attributes[name]
         raise AttributeError('{!r} object has no attribute {!r}'
                              .format(type(self).__name__, name))
 
@@ -84,7 +89,7 @@ class HybridCore(object):
             my_attrs = dir(type(self)) + list(self.__dict__)
         else:
             my_attrs = super().__dir__()
-        return sorted(set(my_attrs + list(self.keywords)))
+        return sorted(set(my_attrs) | set(self.attributes))
 
     def get_keyword_names(self):
         return sorted(self.keywords)
