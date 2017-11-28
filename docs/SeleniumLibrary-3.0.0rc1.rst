@@ -577,3 +577,6 @@ Altogether 50 issues. View on the `issue tracker <https://github.com/robotframew
 .. _#949: https://github.com/robotframework/SeleniumLibrary/issues/949
 .. _#958: https://github.com/robotframework/SeleniumLibrary/issues/958
 .. _#961: https://github.com/robotframework/SeleniumLibrary/issues/961
+.. _Dynamic library API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api
+.. _PythonLibCore: https://github.com/robotframework/PythonLibCore
+.. _Boolean arguments: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html#Boolean%20arguments
