@@ -77,12 +77,12 @@ class CookieKeywords(LibraryComponent):
         | httpOnly      | When true, cookie is not accessible via JavaScript.        |
         | expiry        | Python datetime object indicating when the cookie expires. |
 
-        See the [https://w3c.github.io/webdriver/webdriver-spec.html#cookies
-        WebDriver specification] for details about the cookie information.
+        See the
+        [https://w3c.github.io/webdriver/webdriver-spec.html#cookies|WebDriver specification]
+        for details about the cookie information.
         Notice that ``expiry`` is specified as a
-        [https://docs.python.org/3/library/datetime.html#datetime.datetime
-        datetime object], not as seconds since Unix Epoch like WebDriver
-        natively does.
+        [https://docs.python.org/3/library/datetime.html#datetime.datetime|datetime object],
+        not as seconds since Unix Epoch like WebDriver natively does.
 
         Example:
         | `Add Cookie`      | foo             | bar |
