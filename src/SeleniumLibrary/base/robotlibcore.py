@@ -37,7 +37,7 @@ except ImportError:  # Support RF < 2.9
 
 PY2 = sys.version_info < (3,)
 
-__version__ = '1.0rc3'
+__version__ = '1.0'
 
 
 class HybridCore(object):
