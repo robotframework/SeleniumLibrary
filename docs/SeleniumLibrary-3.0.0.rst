@@ -7,12 +7,11 @@ SeleniumLibrary 3.0.0
 
 
 SeleniumLibrary_ is a web testing library for `Robot Framework`_ that utilizes
-the Selenium_ tool internally. SeleniumLibrary 3.0.0 is a new release with Python 3 and
-Python 2.7 support. This release contains new architecture and enhanced public API
-for the Seleniumlibrary. Also the library and the keyword documentation has been rewritten.
- Also there are numerous smaller and bigger changes and fixes to the library.
-
-All issues targeted for SeleniumLibrary v3.0.0 can be found from the `issue tracker`_.
+the Selenium_ tool internally. SeleniumLibrary 3.0.0 is a new release with
+Python 3 support and various other big enhancements such as better
+public API for extending the library and highly enhanced keyword
+documentation. The library architecture has also changed making it easier
+to maintain and develop further.
 
 If you have pip_ installed, just run
 
@@ -29,7 +28,7 @@ to install the latest available release or use
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
-SeleniumLibrary 3.0.0 was released on Thursday December 1, 2017.
+SeleniumLibrary 3.0.0 was released on Friday December 1, 2017.
 
 .. _Robot Framework: http://robotframework.org
 .. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary
@@ -46,57 +45,45 @@ SeleniumLibrary 3.0.0 was released on Thursday December 1, 2017.
 Most important enhancements
 ===========================
 
-Python 3 support (`#479`_, alpha 1)
------------------------------------
-The SeleniunLibrary was was enhanced to support Python 3.3 or newer.
-More precisely, the currently supported Python versions are 2.7, 3.3 and newer.
-Installation on Python 3 works exactly as it does for Python 2, and the
-recommended installation method is with pip.
+Python 3 support
+----------------
 
-To ease support for Python 3.3, the support for Python 2.6 was dropped (`#620`_, alpha 1).
+SeleniumLibrary was enhanced to support Python 3 (`#479`_) and at the same
+time Python 2.6 support was dropped (`#620`_). More precisely, the currently
+supported Python versions are 2.7, 3.3 and newer.
 
-Change library name from Selenium2Library to SeleniumLibrary (`#777`_, alpha 1)
--------------------------------------------------------------------------------
+Name changed from Selenium2Library to SeleniumLibrary
+-----------------------------------------------------
+
 Because Selenium moved from version 2 to version 3, we felt that the old name,
 Selenium2Library, did not anymore describe what the library supports and
-helps user to achieve. Therefore we renamed the original SeleniumLibrary to
-OldSeleniumLibrary. Then the Selenium2Libary was renamed to SeleniumLibrary
-and new Selenium2Library was created. The new Selenium2Library is just a wrapper
-for the SeleniumLibrary and is meant only to ease migration from
-Selenium2Library to SeleniumLibrary.
+helps user to achieve. At the same time the old SeleniumLibrary became totally
+unusable as Selenium 3 dropped support for the remote controller API it used.
 
-Can not call methods which uses @keyword decorated methods to change the keyword name from the library instance when extending library (`#1001`_, rc 2)
--------------------------------------------------------------------------------------------------------------------------------------------------------
-When doing this:
+In this situation we decided to rename Selenium2Library to SeleniumLibrary
+(`#777`_). We also created new Selenium2Library that is just a wrapper
+for SeleniumLibrary and is meant only to ease migration. For more information
+see the `project pages`__.
 
-::
+__ https://github.com/robotframework/SeleniumLibrary/blob/master/README.rst#versions
 
-   from SeleniumLibrary import SeleniumLibrary
+Better documentation
+--------------------
 
-   lib = SeleniumLibrary()
-   print lib.keywords.get('get_webelements')
+The general project documentation (`#873`_) as well as keyword documentation
+(`#924`_ and `#925`_) have been enhanced heavily and in practice rewritten.
 
-the print should not display False, instead it should display the library keyword method.
+Better architecture
+-------------------
 
-Element Should Be Focused keyword should use driver.switch_to.active_element also with Firefox (`#998`_, rc 2)
---------------------------------------------------------------------------------------------------------------
-With selenium 3.6.0 (or smaller) and when using Firefox (with geckodriver) the
-driver.switch_to.active_element returns a dictionary which contains the a WebElement. Starting from
-Selenium 3.7.0 this is fixed and driver.switch_to.active_element returns directly a WebElement.
-
-Make SeleniumLibrary to use driver.switch_to.active_element with Firefox and support Selenium
-3.6.0 and 3.7.0.
-
-Create better architecture for Selenium2Library (`#771`_, alpha 1)
-------------------------------------------------------------------
-The old architecture did contained many practices which are against good
-coding practices and made the development of the library slower or more
-difficult. The old architecture made also hard to define clear API interface
+The old architecture did not work too well anymore when the library had
+grown so large and it made the development of the library slower or more
+difficult. The old architecture also made it hard to define clear API
 for the user who are building their own libraries on top of the
 SeleniumLibrary.
 
-The new architecture relies on the Robot Framework `Dynamic library API`_,
-`PythonLibCore`_ and using context object to share common methods
+The new architecture (`#771`_) relies on the Robot Framework `Dynamic library API`__,
+PythonLibCore__ and using context object to share state and common methods
 between different classes and methods. Because of the new architecture, many
 private methods or classes have been changed or removed totally.
 
@@ -104,171 +91,160 @@ The new architecture should not change how the keywords are used in Robot
 Framework test data. But new architecture causes changes how the SeleniumLibrary can
 be used to build new libraries. We have deprecated many private methods and have
 created many new public methods or attributes which should make the extending
-more easier in the future.
+more easier in the future. The public API is also documented (`#882`_).
 
-Enhance project documentation in README (`#873`_, beta 1)
----------------------------------------------------------
-The project documentation, expect keyword documentation, has been rewritten to
-better serve user of the SeleniumLibrary. Also documentation was enhanced in:
-(`#924`_, beta 3)
+__ http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api
+__ https://github.com/robotframework/PythonLibCore
 
-Document that Jython and PyPy are supported but IronPython is not (`#879`_, beta 3)
------------------------------------------------------------------------------------
-The current release was automatically tested with Python 2.7, Python 3.3
-and Python 3.6. The Jython, PyPy and IronPython compatibility was tested
-manually. We found that SeleniumLibrary supports Jython and PyPy, but
-IronPython is not supported.
+New `strategy:value` syntax to specify locator strategy
+-------------------------------------------------------
 
-Next steps are add the Jython and PyPy testing in CI.
+Nowadays the recommended syntax to specify an explicit locator strategy
+is `strategy:value` like `id:example` or `css:h1` (`#908`_). The old (and
+still supported) `strategy=value` syntax is problematic because Robot
+Framework uses the same syntax with `named arguments`__.
 
-Externally useful attributes should be declared public and documented. (`#882`_, rc 1)
---------------------------------------------------------------------------------------
-The library public API was enhanced. The public API contains methods to find single element
-or find multiple element. The browser attribute was renamed to driver and BrowserCache
-was renamed to WebDriverCache. Also some of the internal methods where renamed from
-browser to driver. Also sphinx style definitions where added to most used methods
-to ease IDE support. The change is not visible in the keyword level.
+__ http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#named-argument-syntax
 
-New `strategy:value` syntax to specify locator strategy in addition to current `strategy=value` (`#908`_, beta 3)
------------------------------------------------------------------------------------------------------------------
-New `strategy:value` syntax to specify locator strategy in addition to
-current `strategy=value`. The current locator strategy causes problems with
-Robot Framework keyword argument syntax, because then the equal sing must
-be escaped, example `xpath\=//div | &{kw_args} |`. The locator syntax is
-aimed to ease the transition when the keyword arguments are in future taken
-in use.
+Tables located using same logic as other elements
+-------------------------------------------------
 
-Tables should be located using same logic as other elements (`#923`_, beta 3)
------------------------------------------------------------------------------
-In the previous releases, the table keywords locator strategy did differ greatly
-from the rest of keywords which did interact with elements in the browsers.
-This is now changed and tables can be located with same locator strategies
-which can be used for the rest of the library.
+In the previous releases, the table keywords locator strategy did differ
+greatly from the rest of keywords which did interact with elements in
+the browsers. This is now changed and tables can be located with same
+locator strategies which can be used for the rest of the library (`#923`_).
 
-Cleanup and enhance keyword documentation (`#925`_, rc 1)
----------------------------------------------------------
-Whole keyword documentation has been rewritten and formatted to use the Robot Framework
-library documentation format. The new documentation should describe better what the
-keywords are actually doing and make the keyword usage more easier.
+Clean-up to alert related keywords
+----------------------------------
 
-Clean up keywords related to alerts (`#933`_, rc 1)
----------------------------------------------------
-The logic of alert related keywords has been rewritten. The alert keywords logic, in previous
-releases was not clean and contained many obvious bugs. Because of this many of the
-alert keywords has been deprecated and new keywords have been created to provide better
-interface for handling alters. See the keyword documentation and the issue for details
-about the change.
+The logic of alert related keywords has been rewritten. The alert keywords
+logic in previous releases was not clear and contained many obvious bugs.
+Because of this many of the alert keywords has been deprecated and new
+keywords have been created to provide better interface for handling alters.
+See the keyword documentation and the issue `#933`_ for details about the
+change.
 
-Backwards incompatible changes
-==============================
+Jython and PyPy support
+-----------------------
 
-Return value of `Register keyword to run on failure` cannot always be used to restore original state (`#176`_, beta 3)
-----------------------------------------------------------------------------------------------------------------------
-In this release the keyword returned by the `Register keyword to run on
-failure` keyword can be always used to restore the original state. User
-do not anymore need to have special logic in Robot Framework test data
-to restore the `Run On Failure` keyword.
+In addition to the standard Python 2 and Python 3 interpreters, also `Jython
+<http://jython.org>`_ and `PyPy <http://pypy.org>`_ are now officially
+supported (`#879`_).
 
-Capture Page Screenshot should not overwrite if file already exist  (`#502`_, alpha 1)
---------------------------------------------------------------------------------------
-The `Capture Page Screenshot` keyword now verifies from the file system
-that screenshot file does not exist in the file system. If the file
-exist, it will create new index in the file name until it find a file
-name which does not exist.
+Backwards incompatible changes and deprecated features
+======================================================
 
-If the filename does not contain index, the filename is always
-overwritten.
+Robot Framework and Selenium minimum versions increased
+-------------------------------------------------------
 
-Update required Robot Framework version to 2.8 (`#703`_, alpha 1)
------------------------------------------------------------------
-The minimum requires Robot Framework version is now updated to
-2.8.7.
+Nowadays the minimum supported Robot Framework version is 2.8.7 (`#703`_).
+It is likely that SeleniumLibrary 3.1 raises this requirement to Robot
+Framework 2.9 or even 3.0.
 
-In next release, it is planned to drop the support for Robot Framework 2.8.7.
+The minimum required Selenium version is now 2.53.6.
 
-Increase the required selenium version to latest selenium 2 version (`#704`_, alpha 1)
---------------------------------------------------------------------------------------
-The minimum required Selenium version is now updated to 2.53.6,
-which is the latest Selenium 2 release. The resent versions of
-Selenium 3 are also supported.
+New architecture
+----------------
 
-Use booleans arguments like in Robot Framework (`#719`_, alpha 1)
------------------------------------------------------------------
-The boolean arguments are handled in similar way as in Robot
-Framework. More details in library `Boolean arguments`_ documentation.
+The `better architecture`_ discussed above changes library internals a lot.
+This should not affect tests using keywords provided by the library, but
+other libraries and tools interacting with SeleniumLibrary are likely to
+require an update.
 
-Modify Get WebElements not to raise exception when no elements are found (`#805`_, beta 3)
-------------------------------------------------------------------------------------------
-The Get WebElements keyword does not anymore fail if the keyword does not find any elements.
+How to interact with the library and how to safely extend
+it is `going to be documented`__. Until that, if you are a maintainer of
+a library that is broken due to these changes, please report your problems
+on `robotframework-users mailing list`__, or on #seleniumlibrary channel on
+the `Slack community`__.
 
-Remove SeleniumLibrary profile for Firefox (`#883`_, beta 3)
-------------------------------------------------------------
-The Firefox profile was removed from the SeleniumLibrary and
-Selenium default profile is used instead. Although this should
-not cause any problems, there is low risk for some backwards
-incompatible change.
+__ https://github.com/robotframework/SeleniumLibrary/issues/1007
+__ https://groups.google.com/group/robotframework-users
+__ https://robotframework-slack-invite.herokuapp.com/
 
-Cleaning up locating windows (`#966`_, rc 1)
---------------------------------------------
-Like alter in keywords, the logic of selecting windows did contains inconsistency. This logic has
-been now refactored to be consistent and some of the supported ways to selecting window has been
-dropped. But now the documentation how the window can be located is enhanced and it should be
-clear how locating windows works.
+Attributes in programmatic API renamed
+--------------------------------------
 
-`Get Selected List Values/Labels` keywords should not fail if list has no selections (`#977`_, rc 1)
-----------------------------------------------------------------------------------------------------
-The Get Selected List Values/Labels keywords do not anymore fail if the list has not no selections.
-This change was done to unify how the Get* type of keywords works.
+Various attributes in the programmatic API have been renamed and the
+old attribute names are deprecated (`#882`_).
 
-Remove unused expiry argument from `Add Cookie` keyword (`#847`_, alpha 1)
---------------------------------------------------------------------------
-The expiry argument was removed in alpha 1 because it was not used. But the
-expiry argument was added back in the (`#891`_, rc 1)
+Keywords returning lists don't fail if there are no matches
+-----------------------------------------------------------
 
-Some checkbox keywords work also with radio buttons (`#962`_, rc 1)
+Earlier `Get WebElememts` (`#805`_) and `Get Selected List Values/Labels`
+keywords (`#977`_) failed if where were no matches. Nowadays they return
+an empty list instead.
+
+`Set Screenshot Directory` does not automatically restore old value
 -------------------------------------------------------------------
-Some of the checkbox keywords did work also with radio buttons in previous released. This is
-changed in this release and checkbox keywords only work with radio buttons.
 
+Earlier `Set Screenshot Directory` keyword tried to automatically restore
+the previous value when the current scope end, but this functionality was
+not documented adequately and contained bugs. The functionality was removed
+and, instead, the keyword returns the previous value similarly as `Set
+Selenium Timeout` and other `Set ...` keywords.
 
-`Set Screenshot Directory` is inconsistent with other `Set ...` keywords (`#985`_, rc 1)
-----------------------------------------------------------------------------------------
-The other Set type of keywords replace the previous value but the `Set Screenshot Directory`
-keyword tries to restore the previous value when the scope end. Restoring the previous value
-is good idea, but it did have a bug and it was poorly documented. Automatically restoring the
-original value might be a good feature, but it should be used consistently, be documented better,
-and obviously also fixed. All that is way too much work in release 3.0.0 and instead we'll remove
-this functionality from
+Changes to locating windows
+---------------------------
 
+Locating windows has been cleaned up and documented thoroughly. As part of
+the cleanup, undocumented features not considered useful were deprecated or
+removed:
 
-`Wait Until Element Is Enabled` should also check `readonly` status (`#958`_, rc 1)
------------------------------------------------------------------------------------
-The `Wait Until Element Is Enabled` now also checks the element `readonly` status.
+- Using Python `None` or string `null` or empty string as a locator to
+  select the main window is deprecated. Use documented `main` (default)
+  instead.
+- Using `popup` to select the latest new window is deprecated. Use
+  documented `new` instead.
+- Using `self` to select the current window is deprecated. Use earlier
+  undocumented but much more explicit `current` instead.
+- Locating windows by name, title or URL is not case-insensitive anymore.
+- Specifying explicit locator strategy is not case-insensitive anymore.
 
-Make it an error to unregister a locator strategy that hasn't been registered (`#961`_, rc 1)
----------------------------------------------------------------------------------------------
-Now an exception is raised if `Unregister` keyword is used to unregister a locator strategy
-which was not registered.
+Such changes are obviously backwards incompatible, but because these are
+undocumented features, it's very unlikely that they are used widely.
 
-Deprecate `Select From List` and `Unselect From List` (`#988`_, rc 1)
----------------------------------------------------------------------
-`Select From List` and `Unselect From List` keywords try to select/unselect items both by values
-and labels. This makes their implementation complex and slow, and the code also seems to have
-some subtle bugs.
+Deprecated keywords
+-------------------
 
-In addition to these keywords, we have dedicated keywords `(Un)select From List By Label`,
-`(Un)select From List By Value` and `(Un)select From List By Index` which are much more simple.
-We've decided to deprecate Select From List and Unselect From List keywords in favor of these
-label/value/index specific keywords.
+Various hard-to-use or badly named keywords have been "silently" deprecated
+in favor of better keywords. This means that the old keywords can be still
+used without warnings, but they will emit a deprecation warning staring from
+SeleniumLibrary 3.1.
 
-Enhancements to getting and validating elements counts (`#949`_, rc 1)
-----------------------------------------------------------------------
-In the previous releases the where different ways to count or verify how many elements
-the page did contain: `Locator Should Match X Times`, `Xpath Should Match X Times` and
-`Get Matching Xpath Count`. Those keywords are now silently deprecated and user should now
-use `Page Should Contain Element` keyword with limit argument or the `Get Matching Locator Count`
-keyword.
+==================================  =================================================  =======
+        Deprecated keyword                             Use instead                      Issue
+==================================  =================================================  =======
+Select From List                    Select From List By Label/Value/Index              `#988`_
+Unselect From List                  Unselect From List By Label/Value/Index            `#988`_
+Current Frame Contains              Current Frame Should Contain                       `#920`_
+Get Cookie Value                    Get Cookie                                         `#932`_
+List Windows                        Get Window Handles                                 `#966`_
+Locator Should Match X Times        Page Should Contain Element (w/ `limit` argument)  `#949`_
+XPath Should Match X Times          Page Should Contain Element (w/ `limit` argument)  `#949`_
+Get Matching XPath Count            Get Element Count                                  `#949`_
+Focus                               Set Focus To Element                               `#920`_
+Simulate                            Simulate Event                                     `#920`_
+Input Text Into Prompt              Input Text Into Alert                              `#933`_
+Choose Ok On Next Confirmation      Handle Alert                                       `#933`_
+Choose Cancel On Next Confirmation  Handle Alert                                       `#933`_
+Confirm Action                      Handle Alert                                       `#933`_
+Get Alert Message                   Handle Alert                                       `#933`_
+Dismiss Alert                       Handle Alert                                       `#933`_
+==================================  =================================================  =======
 
+Other backwards incompatible changes
+------------------------------------
+
+- Bundled Firefox profile has been removed and Selenium default profile is
+  used instead (`#883`_).
+- `Register Keyword To Run On Failure` returns Python `None`, not
+  string `No keyword`, if no keywords was previously registered (`#176`_).
+- `Capture Page Screenshot` doesn't overwrite existing screenshots
+  by default (`#502`_).
+- Checkbox keywords don't anymore work with radio buttons (`#962`_)
+- `Wait Until Element Is Enabled` checks also `readonly` status (`#958`_)
+- It is an error to unregister a locator strategy that hasn't been registered
+  (`#961`_).
 
 Acknowledgements
 ================
@@ -291,269 +267,196 @@ Full list of fixes and enhancements
       - Type
       - Priority
       - Summary
-      - Added
     * - `#479`_
       - enhancement
       - critical
       - Python 3 support
-      - alpha 1
     * - `#777`_
       - enhancement
       - critical
       - Change library name from Selenium2Library to SeleniumLibrary
-      - alpha 1
-    * - `#1001`_
-      - bug
-      - high
-      - Can not call methods which uses @keyword decorated methods to change the keyword name from the library instance when extending library
-      - rc 2
-    * - `#998`_
-      - bug
-      - high
-      - Element Should Be Focused keyword should use driver.switch_to.active_element also with Firefox
-      - rc 2
     * - `#620`_
       - enhancement
       - high
       - Drop Python 2.6 support
-      - alpha 1
     * - `#771`_
       - enhancement
       - high
-      - Create better architecture for Selenium2Library
-      - alpha 1
+      - Create better architecture
     * - `#873`_
       - enhancement
       - high
       - Enhance project documentation in README
-      - beta 1
     * - `#879`_
       - enhancement
       - high
       - Document that Jython and PyPy are supported but IronPython is not
-      - beta 3
     * - `#882`_
       - enhancement
       - high
       - Externally useful attributes should be declared public and documented.
-      - rc 1
     * - `#908`_
       - enhancement
       - high
       - New `strategy:value` syntax to specify locator strategy in addition to current `strategy=value`
-      - beta 3
     * - `#923`_
       - enhancement
       - high
       - Tables should be located using same logic as other elements
-      - beta 3
     * - `#924`_
       - enhancement
       - high
       - Enhance general library documentation in keyword docs
-      - beta 3
     * - `#925`_
       - enhancement
       - high
       - Cleanup and enhance keyword documentation
-      - rc 1
     * - `#933`_
       - enhancement
       - high
       - Clean up keywords related to alerts
-      - rc 1
     * - `#176`_
       - bug
       - medium
       - Return value of `Register keyword to run on failure` cannot always be used to restore original state
-      - beta 3
     * - `#435`_
       - bug
       - medium
       - Note version added to recently added keywords.
-      - beta 2
     * - `#546`_
       - bug
       - medium
       - HTML5 specialized text fields not recognized as text fields
-      - alpha 1
     * - `#652`_
       - bug
       - medium
       - Handling alerts sometimes fails with Chrome
-      - alpha 1
     * - `#779`_
       - bug
       - medium
       - Acceptance test do not work in windows
-      - alpha 1
     * - `#790`_
       - bug
       - medium
       - Cannot switch windows on browsers which don't support javascript
-      - alpha 1
     * - `#816`_
       - bug
       - medium
       - Modify Capture Page Screenshot keyword not fail if browser is not open.
-      - beta 3
     * - `#891`_
       - bug
       - medium
       - Fix setting cookie expiry date
-      - rc 1
-    * - `#898`_
-      - bug
-      - medium
-      - "Set Selenium Speed" doesn't work when called before opening browser in release 3.0.0b1
-      - beta 3
-    * - `#934`_
-      - bug
-      - medium
-      - Regressions in `Dismiss Alert` and `Confirm Action` compared to 1.8
-      - rc 1
     * - `#990`_
       - bug
       - medium
       - Bugs finding table cells when row has both `td` and `th` elements
-      - rc 1
     * - `#502`_
       - enhancement
       - medium
       - Capture Page Screenshot should not overwrite if file already exist
-      - alpha 1
     * - `#673`_
       - enhancement
       - medium
       - Support locating elements using element class
-      - alpha 1
     * - `#703`_
       - enhancement
       - medium
       - Update required Robot Framework version to 2.8
-      - alpha 1
     * - `#704`_
       - enhancement
       - medium
       - Increase the required selenium version to latest selenium 2 version
-      - alpha 1
     * - `#719`_
       - enhancement
       - medium
       - Use booleans arguments like in Robot Framework
-      - alpha 1
     * - `#722`_
       - enhancement
       - medium
       - Enhance `Get List Items` to support returning values or labels
-      - alpha 1
     * - `#805`_
       - enhancement
       - medium
       - Modify Get Webelements not to raise exception when no elements are found
-      - beta 3
     * - `#851`_
       - enhancement
       - medium
       - Add keyword that checks focus
-      - alpha 1
     * - `#883`_
       - enhancement
       - medium
       - Remove SeleniumLibrary profile for Firefox
-      - beta 3
     * - `#932`_
       - enhancement
       - medium
       - Add keyword to get all cookie information
-      - rc 1
     * - `#942`_
       - enhancement
       - medium
       - Support configurable timeout with alert related keywords
-      - rc 1
     * - `#966`_
       - enhancement
       - medium
       - Cleaning up locating windows
-      - rc 1
     * - `#977`_
       - enhancement
       - medium
       - `Get Selected List Values/Labels` keywords should not fail if list has no selections
-      - rc 1
     * - `#987`_
       - enhancement
       - medium
       - New `Unselect All From List` keyword
-      - rc 1
     * - `#988`_
       - enhancement
       - medium
       - Deprecate `Select From List` and `Unselect From List`
-      - rc 1
     * - `#592`_
       - bug
       - low
       - Deprecation warning from Selenium when using `Select/Unselect Frame`
-      - alpha 1
     * - `#759`_
       - bug
       - low
       - Change link in help `Get Alert Message` to `Dismiss Alert`
-      - alpha 1
-    * - `#847`_
-      - bug
-      - low
-      - Remove unused expiry argument from `Add Cookie` keyword
-      - alpha 1
     * - `#962`_
       - bug
       - low
       - Some checkbox keywords work also with radio buttons
-      - rc 1
     * - `#985`_
       - bug
       - low
       - `Set Screenshot Directory` is inconsistent with other `Set ...` keywords
-      - rc 1
     * - `#715`_
       - enhancement
       - low
       - Support returning int from `Get Matching Xpath Count`
-      - alpha 1
     * - `#794`_
       - enhancement
       - low
       - Extend xpath detection to support xpath starting with (//
-      - alpha 1
     * - `#920`_
       - enhancement
       - low
       - Better names for `Current Frame Contains`, `Focus` and `Simulate`
-      - beta 3
     * - `#943`_
       - enhancement
       - low
       - `Wait For Condition` should validate that condition contains `return`
-      - rc 1
     * - `#949`_
       - enhancement
       - low
       - Enhancements to getting and validating element counts
-      - rc 1
     * - `#958`_
       - enhancement
       - low
       - `Wait Until Element Is Enabled` should also check `readonly` status
-      - rc 1
     * - `#961`_
       - enhancement
       - low
       - Make it an error to unregister a locator strategy that hasn't been registered
-      - rc 1
 
-Altogether 52 issues. View on the `issue tracker <https://github.com/robotframework/SeleniumLibrary/issues?q=milestone%3Av3.0.0>`__.
+Altogether 47 issues. View on the `issue tracker <https://github.com/robotframework/SeleniumLibrary/issues?q=milestone%3Av3.0.0>`__.
 
 .. _#479: https://github.com/robotframework/SeleniumLibrary/issues/479
 .. _#777: https://github.com/robotframework/SeleniumLibrary/issues/777
@@ -607,6 +510,3 @@ Altogether 52 issues. View on the `issue tracker <https://github.com/robotframew
 .. _#949: https://github.com/robotframework/SeleniumLibrary/issues/949
 .. _#958: https://github.com/robotframework/SeleniumLibrary/issues/958
 .. _#961: https://github.com/robotframework/SeleniumLibrary/issues/961
-.. _Dynamic library API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api
-.. _PythonLibCore: https://github.com/robotframework/PythonLibCore
-.. _Boolean arguments: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html#Boolean%20arguments
