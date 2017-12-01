@@ -39,7 +39,7 @@ from SeleniumLibrary.utils import (Deprecated, LibraryListener, timestr_to_secs,
                                    WebDriverCache)
 
 
-__version__ = '3.0.0'
+__version__ = '3.0.1.dev1'
 
 
 class SeleniumLibrary(DynamicCore):
