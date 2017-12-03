@@ -129,8 +129,8 @@ Release notes
 
 4. Add, commit and push::
 
-      git add doc/SeleniumLibrary-$VERSION.rst
-      git commit -m "Release notes for $VERSION" doc/SeleniumLibrary-$VERSION.rst
+      git add docs/SeleniumLibrary-$VERSION.rst
+      git commit -m "Release notes for $VERSION" docs/SeleniumLibrary-$VERSION.rst
       git push
 
 5. Update later if necessary. Writing release notes is typically the biggest
