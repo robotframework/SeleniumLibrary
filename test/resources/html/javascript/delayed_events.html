@@ -5,13 +5,14 @@
     function modifyAfterDelay() {
         setTimeout('addElement()', 1000)
         setTimeout('removeElement()', 1000)
+        setTimeout('hideElement()', 1000)
         setTimeout('changeContent()', 1000)
         setTimeout('changeTitle()', 1000)
         setTimeout('unhideContent()', 1000)
         setTimeout('enableContent()', 1000)
         setTimeout('readwriteContent()', 1000)
     }
-    
+
     function addElement() {
       var div = document.createElement('div')
       div.setAttribute('id', 'new div')
@@ -21,6 +22,10 @@
 
     function removeElement() {
       document.getElementById("not_present").remove()
+    }
+
+    function hideElement() {
+      document.getElementById("hide_delay").style.display = 'none';
     }
 
     function changeTitle() {
@@ -45,11 +50,12 @@
     }
     </script>
     </head>
-    
+
     <body onload="modifyAfterDelay()">
     <div id="content" style="color: white; background: red">This is content</div>
     <div id="container"></div>
     <div id="not_present">Element that should disappear</div>
+    <div id="hide_delay">Element that should set display:none</div>
     <div id="hidden" style="display:none;">Initially hidden content</div>
     <button id="disabled" disabled>Initially disabled content</button>
     <input id="readonly" value="Initially readonly" readonly>

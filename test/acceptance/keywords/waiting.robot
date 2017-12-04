@@ -46,24 +46,6 @@ Wait Until Page Does Not Contain Element
     ...    Element 'content' did not disappear in 100 milliseconds.
     ...    Wait Until Page Does Not Contain Element    content    0.1 seconds
 
-Wait Until Element Is Visible
-    Run Keyword And Expect Error
-    ...    Element 'hidden' not visible after 10 milliseconds.
-    ...    Wait Until Element Is Visible    hidden    0.01
-    Run Keyword And Expect Error
-    ...    User error message
-    ...    Wait Until Element Is Visible    hidden    0.01    User error message
-    Wait Until Element Is Visible    hidden    2 s
-    Run Keyword And Expect Error
-    ...    Element with locator 'invalid' not found.
-    ...    Wait Until Element Is Visible    invalid    0.1
-
-Wait Until Element Is Visible with locator and error arguments
-    Wait Until Element Is Visible    hidden    error=My error message
-
-Wait Until Element Is Visible with locator only
-    Wait Until Element Is Visible    hidden
-
 Wait Until Element Is Enabled
     Run Keyword And Expect Error
     ...    Element 'id=disabled' was not enabled in 2 milliseconds.
