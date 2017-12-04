@@ -21,9 +21,6 @@ Selenium2Library_ and then later renamed back to SeleniumLibrary.
 See the Versions_ and History_ sections below for more information about
 different versions and the overall project history.
 
-The new SeleniumLibrary is currently in pre-release phase. The final
-SeleniumLibrary 3.0 release is planned for October.
-
 .. image:: https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version
    :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 
@@ -43,19 +40,17 @@ Installation
 
 The recommended installation method is using pip_::
 
-    pip install --pre --upgrade robotframework-seleniumlibrary
+    pip install --upgrade robotframework-seleniumlibrary
 
 Running this command installs also the latest Selenium and Robot Framework
 versions, but you still need to install `browser drivers`_ separately.
-Notice that the ``--pre`` option is needed to get the current SeleniumLibrary,
-not the `old SeleniumLibrary`_, until the final SeleniumLibrary 3.0 is
-released. The ``--upgrade`` option can be omitted when installing the
-library for the first time.
+The ``--upgrade`` option can be omitted when installing the library for the
+first time.
 
 Those migrating from Selenium2Library_ can install SeleniumLibrary so that
 it is exposed also as Selenium2Library::
 
-    pip install --pre --upgrade robotframework-selenium2library
+    pip install --upgrade robotframework-selenium2library
 
 The above command installs the normal SeleniumLibrary as well as a new
 Selenium2Library version that is just a thin wrapper to SeleniumLibrary.
