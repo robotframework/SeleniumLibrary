@@ -13,7 +13,7 @@ Wait Until Element Is Visible
     ...    Wait Until Element Is Visible    hidden    0.01    User error message
     Wait Until Element Is Visible    hidden    2 s
     Run Keyword And Expect Error
-    ...    Element with locator 'invalid' not found.
+    ...    Element 'invalid' not visible after 100 milliseconds.
     ...    Wait Until Element Is Visible    invalid    0.1
 
 Wait Until Element Is Visible with locator and error arguments

@@ -129,7 +129,7 @@ class WaitingKeywords(LibraryComponent):
         ``error`` can be used to override the default error message.
         """
         self._wait_until(
-            lambda: self.find_element(locator).is_displayed(),
+            lambda: self.is_visible(locator),
             "Element '%s' not visible after <TIMEOUT>." % locator,
             timeout, error
         )
