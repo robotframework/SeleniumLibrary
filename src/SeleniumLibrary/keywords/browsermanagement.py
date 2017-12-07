@@ -93,6 +93,8 @@ class BrowserManagementKeywords(LibraryComponent):
         |    = Browser =    |        = Name(s) =       |
         | Firefox           | firefox, ff              |
         | Google Chrome     | googlechrome, chrome, gc |
+        | Headless Firefox  | headlessfirefox, headlessff |
+        | Headless Google Chrome | headlessgooglechrome, headlesschrome, headlessgc |
         | Internet Explorer | internetexplorer, ie     |
         | Edge              | edge                     |
         | Safari            | safari                   |
