@@ -33,7 +33,7 @@ matrix:
     - python: "3.6"
       env:
         - BROWSER=chrome
-        - SELENIUM=3.7.0
+        - SELENIUM=3.8.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
     - python: "2.7"
@@ -45,7 +45,7 @@ matrix:
     - python: "2.7"
       env:
         - BROWSER=chrome
-        - SELENIUM=3.7.0
+        - SELENIUM=3.8.0
         - ROBOTFRAMEWORK=2.8.7
         - ROBOT_OPTIONS=
     - python: "3.3"
@@ -57,7 +57,7 @@ matrix:
     - python: "3.3"
       env:
         - BROWSER=firefox
-        - SELENIUM=3.7.0
+        - SELENIUM=3.8.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS="--exclude Known_Issue_Firefox --dotted"
 before_script:
