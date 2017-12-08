@@ -108,7 +108,8 @@ class BrowserManagementKeywords(LibraryComponent):
         To be able to actually use one of these browsers, you need to have
         a matching Selenium browser driver available. See the
         [https://github.com/robotframework/SeleniumLibrary#browser-drivers|
-        project documentation] for more details.
+        project documentation] for more details. Headless Firefox and
+        Headless Google Chrome require Selenium 3.8.0 or newer.
 
         Optional ``alias`` is an alias given for this browser instance and
         it can be used for switching between browsers. An alternative
