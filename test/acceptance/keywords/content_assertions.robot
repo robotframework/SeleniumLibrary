@@ -145,20 +145,6 @@ Get Text
     ...    Element with locator 'missing_id' not found.
     ...    Get Text    missing_id
 
-Element Should Be Visible
-    [Setup]    Go To Page "visibility.html"
-    Element Should Be Visible    i_am_visible
-    Run Keyword And Expect Error
-    ...    The element 'i_am_hidden' should be visible, but it is not.
-    ...    Element Should Be Visible    i_am_hidden
-
-Element Should Not Be Visible
-    [Setup]    Go To Page "visibility.html"
-    Element Should Not Be Visible    i_am_hidden
-    Run Keyword And Expect Error
-    ...    The element 'i_am_visible' should not be visible, but it is.
-    ...    Element Should Not Be Visible    i_am_visible
-
 Page Should Contain Checkbox
     [Documentation]    LOG 2:5 Current page contains checkbox 'can_send_email'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"

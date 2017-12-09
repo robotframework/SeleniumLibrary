@@ -18,7 +18,7 @@ import time
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils import is_noney, secs_to_timestr
+from SeleniumLibrary.utils import is_noney, is_truthy, secs_to_timestr
 
 
 class WaitingKeywords(LibraryComponent):
@@ -129,7 +129,7 @@ class WaitingKeywords(LibraryComponent):
         ``error`` can be used to override the default error message.
         """
         self._wait_until(
-            lambda: self.find_element(locator).is_displayed(),
+            lambda: self.is_visible(locator),
             "Element '%s' not visible after <TIMEOUT>." % locator,
             timeout, error
         )
@@ -147,7 +147,7 @@ class WaitingKeywords(LibraryComponent):
         ``error`` can be used to override the default error message.
         """
         self._wait_until(
-            lambda: not self.find_element(locator).is_displayed(),
+            lambda: not self.is_visible(locator),
             "Element '%s' still visible after <TIMEOUT>." % locator,
             timeout, error
         )
