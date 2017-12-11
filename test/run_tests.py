@@ -38,6 +38,7 @@ import os
 import sys
 import argparse
 import textwrap
+import shutil
 import subprocess
 
 from robot import rebot_cli
@@ -90,8 +91,9 @@ def unit_tests():
 
 def acceptance_tests(interpreter, browser, rf_options=[],
                      sauce_username=None, sauce_key=None):
-    if not os.path.exists(RESULTS_DIR):
-        os.mkdir(RESULTS_DIR)
+    if os.path.exists(RESULTS_DIR):
+        shutil.rmtree(RESULTS_DIR)
+    os.mkdir(RESULTS_DIR)
     with http_server():
         execute_tests(interpreter, browser, rf_options,
                       sauce_username, sauce_key)
