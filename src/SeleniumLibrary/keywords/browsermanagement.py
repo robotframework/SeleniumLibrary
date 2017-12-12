@@ -93,8 +93,8 @@ class BrowserManagementKeywords(LibraryComponent):
         |    = Browser =    |        = Name(s) =       |
         | Firefox           | firefox, ff              |
         | Google Chrome     | googlechrome, chrome, gc |
-        | Headless Firefox  | headlessfirefox, headlessff |
-        | Headless Google Chrome | headlessgooglechrome, headlesschrome, headlessgc |
+        | Headless Firefox  | headlessfirefox          |
+        | Headless Chrome   | headlesschrome           |
         | Internet Explorer | internetexplorer, ie     |
         | Edge              | edge                     |
         | Safari            | safari                   |
@@ -109,7 +109,8 @@ class BrowserManagementKeywords(LibraryComponent):
         a matching Selenium browser driver available. See the
         [https://github.com/robotframework/SeleniumLibrary#browser-drivers|
         project documentation] for more details. Headless Firefox and
-        Headless Google Chrome require Selenium 3.8.0 or newer.
+        Headless Chrome are new additions in SeleniumLibrary 3.1.0
+        and require Selenium 3.8.0 or newer.
 
         Optional ``alias`` is an alias given for this browser instance and
         it can be used for switching between browsers. An alternative
@@ -478,17 +479,15 @@ class BrowserManagementKeywords(LibraryComponent):
             webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER,
             remote, desired_capabilities)
 
-    def _make_chrome(self, remote, desired_capabilities, profile_dir):
+    def _make_chrome(self, remote, desired_capabilities, profile_dir, options=None):
         return self._generic_make_driver(
             webdriver.Chrome, webdriver.DesiredCapabilities.CHROME, remote,
-            desired_capabilities)
+            desired_capabilities, options=options)
 
     def _make_headless_chrome(self, remote, desired_capabilities, profile_dir):
         options = webdriver.ChromeOptions()
         options.set_headless()
-        return self._generic_make_driver(
-            webdriver.Chrome, webdriver.DesiredCapabilities.CHROME, remote,
-            desired_capabilities, options=options)
+        return self._make_chrome(remote, desired_capabilities, profile_dir, options)
 
     def _make_opera(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_driver(
