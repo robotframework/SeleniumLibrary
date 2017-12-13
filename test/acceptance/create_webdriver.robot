@@ -37,13 +37,14 @@ Set Driver Variables
     ${drivers}=    Create Dictionary    ff=Firefox    firefox=Firefox    ie=Ie
     ...    internetexplorer=Ie    googlechrome=Chrome    gc=Chrome
     ...    chrome=Chrome    opera=Opera    phantomjs=PhantomJS    safari=Safari
+    ...    headlesschrome=Chrome    headlessfirefox=Firefox
     ${name}=    Evaluate    "Remote" if "${REMOTE_URL}"!="None" else ${drivers}["${BROWSER.lower().replace(' ', '')}"]
     Set Test Variable    ${DRIVER_NAME}    ${name}
     ${dc names}=    Create Dictionary    ff=FIREFOX    firefox=FIREFOX    ie=INTERNETEXPLORER
     ...    internetexplorer=INTERNETEXPLORER    googlechrome=CHROME    gc=CHROME
     ...    chrome=CHROME    opera=OPERA    phantomjs=PHANTOMJS    htmlunit=HTMLUNIT
     ...    htmlunitwithjs=HTMLUNITWITHJS    android=ANDROID    iphone=IPHONE
-    ...    safari=SAFARI
+    ...    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
     ${dc name}=    Get From Dictionary    ${dc names}    ${BROWSER.lower().replace(' ', '')}
     ${caps}=    Evaluate    sys.modules['selenium.webdriver'].DesiredCapabilities.${dc name}
     ...    selenium.webdriver,sys

@@ -44,7 +44,9 @@ BROWSER_NAMES = NormalizedDict({
     'android': "_make_android",
     'iphone': "_make_iphone",
     'safari': "_make_safari",
-    'edge': "_make_edge"
+    'edge': "_make_edge",
+    'headlessfirefox': '_make_headless_ff',
+    'headlesschrome': '_make_headless_chrome'
 })
 
 
@@ -88,6 +90,8 @@ class BrowserManagementKeywords(LibraryComponent):
         |    = Browser =    |        = Name(s) =       |
         | Firefox           | firefox, ff              |
         | Google Chrome     | googlechrome, chrome, gc |
+        | Headless Firefox  | headlessfirefox          |
+        | Headless Chrome   | headlesschrome           |
         | Internet Explorer | internetexplorer, ie     |
         | Edge              | edge                     |
         | Safari            | safari                   |
@@ -101,7 +105,9 @@ class BrowserManagementKeywords(LibraryComponent):
         To be able to actually use one of these browsers, you need to have
         a matching Selenium browser driver available. See the
         [https://github.com/robotframework/SeleniumLibrary#browser-drivers|
-        project documentation] for more details.
+        project documentation] for more details. Headless Firefox and
+        Headless Chrome are new additions in SeleniumLibrary 3.1.0
+        and require Selenium 3.8.0 or newer.
 
         Optional ``alias`` is an alias given for this browser instance and
         it can be used for switching between browsers. An alternative
@@ -445,7 +451,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self._monkey_patch_speed(driver)
         return driver
 
-    def _make_ff(self, remote, desired_capabilities, profile_dir):
+    def _make_ff(self, remote, desired_capabilities, profile_dir, options=None):
         if is_falsy(profile_dir):
             profile = webdriver.FirefoxProfile()
         else:
@@ -453,21 +459,32 @@ class BrowserManagementKeywords(LibraryComponent):
         if is_truthy(remote):
             driver = self._create_remote_web_driver(
                 webdriver.DesiredCapabilities.FIREFOX, remote,
-                desired_capabilities, profile)
+                desired_capabilities, profile, options=options)
         else:
             driver = webdriver.Firefox(firefox_profile=profile,
+                                       options=options,
                                        **self._geckodriver_log_config)
         return driver
+
+    def _make_headless_ff(self, remote, desired_capabilities, profile_dir):
+        options = webdriver.FirefoxOptions()
+        options.set_headless()
+        return self._make_ff(remote, desired_capabilities, profile_dir, options=options)
 
     def _make_ie(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_driver(
             webdriver.Ie, webdriver.DesiredCapabilities.INTERNETEXPLORER,
             remote, desired_capabilities)
 
-    def _make_chrome(self, remote, desired_capabilities, profile_dir):
+    def _make_chrome(self, remote, desired_capabilities, profile_dir, options=None):
         return self._generic_make_driver(
             webdriver.Chrome, webdriver.DesiredCapabilities.CHROME, remote,
-            desired_capabilities)
+            desired_capabilities, options=options)
+
+    def _make_headless_chrome(self, remote, desired_capabilities, profile_dir):
+        options = webdriver.ChromeOptions()
+        options.set_headless()
+        return self._make_chrome(remote, desired_capabilities, profile_dir, options)
 
     def _make_opera(self, remote, desired_capabilities, profile_dir):
         return self._generic_make_driver(
@@ -510,21 +527,26 @@ class BrowserManagementKeywords(LibraryComponent):
             desired_capabilities)
 
     def _generic_make_driver(self, webdriver_type, desired_cap_type,
-                             remote_url, desired_caps):
+                             remote_url, desired_caps, options=None):
         """Generic driver creation
 
         Most of the make driver functions just call this function which
         creates the appropriate driver
         """
         if is_falsy(remote_url):
-            driver = webdriver_type()
+            if options is None:
+                driver = webdriver_type()
+            else:
+                driver = webdriver_type(options=options)
         else:
             driver = self._create_remote_web_driver(desired_cap_type,
-                                                    remote_url, desired_caps)
+                                                    remote_url, desired_caps,
+                                                    options=options)
         return driver
 
     def _create_remote_web_driver(self, capabilities_type, remote_url,
-                                  desired_capabilities=None, profile=None):
+                                  desired_capabilities=None, profile=None,
+                                  options=None):
         '''parses the string based desired_capabilities if neccessary and
         creates the associated remote web driver'''
 
@@ -533,7 +555,8 @@ class BrowserManagementKeywords(LibraryComponent):
             desired_capabilities = self._parse_capabilities_string(desired_capabilities)
         desired_capabilities_object.update(desired_capabilities or {})
         return webdriver.Remote(desired_capabilities=desired_capabilities_object,
-                command_executor=str(remote_url), browser_profile=profile)
+                command_executor=str(remote_url), browser_profile=profile,
+                options=options)
 
     def _parse_capabilities_string(self, capabilities_string):
         '''parses the string based desired_capabilities which should be in the form
