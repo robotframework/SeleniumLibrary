@@ -1,9 +1,9 @@
 language: python
 sudo: required
 dist: trusty
+group: deprecated-2017Q4
 addons:
   firefox: latest
-  # firefox: latest-esr
   apt:
     sources:
       - google-chrome
@@ -18,8 +18,6 @@ before_install:
   # Firefox latest
   - FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
   - VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
-  # Firefox latest-esr
-  # - VFILE=https://github.com//mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
   - wget --no-verbose $VFILE
   - tar xzf geckodriver*-linux64.tar.gz
   - sudo chmod u+x geckodriver
