@@ -46,9 +46,6 @@ BROWSER_NAMES = NormalizedDict({
     'safari': "_make_safari",
     'edge': "_make_edge",
     'headlessfirefox': '_make_headless_ff',
-    'headlessff': '_make_headless_ff',
-    'headlessgooglechrome': '_make_headless_chrome',
-    'headlessgc': '_make_headless_chrome',
     'headlesschrome': '_make_headless_chrome'
 })
 
