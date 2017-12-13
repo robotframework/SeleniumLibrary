@@ -59,11 +59,12 @@ matrix:
         - BROWSER=firefox
         - SELENIUM=3.8.0
         - ROBOTFRAMEWORK=3.0.2
-        - ROBOT_OPTIONS="--exclude Known_Issue_Firefox --dotted"
+        - ROBOT_OPTIONS="--exclude Known_Issue_Firefox"
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - pip install selenium==$SELENIUM
   - pip install robotframework==$ROBOTFRAMEWORK
+  - pip freeze
 script:
   - python test/run_tests.py $BROWSER $ROBOT_OPTIONS
