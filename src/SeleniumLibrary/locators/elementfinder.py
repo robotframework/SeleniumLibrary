@@ -89,9 +89,9 @@ class ElementFinder(ContextAware):
         found = False
         for a_locator in locators:
             try:
-                element = self.element_finder.find(a_locator, tag, True, required, parent)
+                element = self.find(a_locator)
                 found = True
-                break                
+                break
             except:
                 continue
 

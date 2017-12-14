@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from SeleniumLibrary.utils import escape_xpath_value
-from SeleniumLibrary.errors import ElementNotFound
 
 class ContextAware(object):
 
