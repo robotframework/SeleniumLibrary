@@ -63,33 +63,23 @@ class ContextAware(object):
             return self.element_finder.find(locator, tag, True, required, parent)
         else:
             """
-            Editing code starting here
-            """
-            # 2. check for element locators
-            element = None
-            locators = locator.get('locators', '')
-            if(len(locators)==0):
-                raise AttributeError('List of locators is empty or you forgot to pass locators attribute.')
-            # 3. go & find the exsting locator
-            found = False
-            for a_locator in locators:
-                try:
-                    element = self.element_finder.find(a_locator, tag, True, required, parent)
-                    found = True
-                    break                
-                except:
-                    continue
-
-            element_name = locator.get('name', '')
-            if(element_name is ''):
-                element_name = ''
-            else:
-                element_name = "'" + element_name + "' "
+            Add a new strategy to find element.
+            locator format showing below:
+            {
+                'name':'locator_name',
+                'locators':['xpath=//locator_xpath','id', 'css'...]
+            }
             
-            if (found==False):
-                raise ElementNotFound("Element {}with locators '{}' not found."
-                                      .format(element_name, locators))
-            return element
+            name: optional field, you can provide a name to find an element. 
+                If element couldnot found, name will be taken to be displayed 
+                on the error message 
+            locators: list of element's locators that you want to find.
+                If the first locator is failed to find, keep searching
+                element by using the second then third...
+            
+            """
+            return self.element_finder.find_dict_element(locator)
+            
 
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.

@@ -80,6 +80,33 @@ class ElementFinder(ContextAware):
             return elements[0]
         return elements
 
+    def find_dict_element(self, locator):
+        element = None
+        locators = locator.get('locators', '')
+        if(len(locators)==0):
+            raise AttributeError('List of locators is empty or you forgot to pass locators attribute.')
+        # 3. go & find the exsting locator
+        found = False
+        for a_locator in locators:
+            try:
+                element = self.element_finder.find(a_locator, tag, True, required, parent)
+                found = True
+                break                
+            except:
+                continue
+
+        element_name = locator.get('name', '')
+        if(element_name is ''):
+            element_name = ''
+        else:
+            element_name = "'" + element_name + "' "
+        
+        if (found==False):
+            raise ElementNotFound("Element {}with locators '{}' not found."
+                                  .format(element_name, locators))
+        return element
+
+
     def register(self, strategy_name, strategy_keyword, persist=False):
         strategy = CustomLocator(self.ctx, strategy_name, strategy_keyword)
         if strategy.name in self._strategies:
