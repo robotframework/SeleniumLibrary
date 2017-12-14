@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from SeleniumLibrary.utils import escape_xpath_value
-
+from SeleniumLibrary.errors import ElementNotFound
 
 class ContextAware(object):
 
@@ -59,7 +59,37 @@ class ContextAware(object):
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found
             and `required` is true.
         """
-        return self.element_finder.find(locator, tag, True, required, parent)
+        if(type(locator)==str or type(locator)==unicode):
+            return self.element_finder.find(locator, tag, True, required, parent)
+        else:
+            """
+            Editing code starting here
+            """
+            # 2. check for element locators
+            element = None
+            locators = locator.get('locators', '')
+            if(len(locators)==0):
+                raise AttributeError('List of locators is empty or you forgot to pass locators attribute.')
+            # 3. go & find the exsting locator
+            found = False
+            for a_locator in locators:
+                try:
+                    element = self.element_finder.find(a_locator, tag, True, required, parent)
+                    found = True
+                    break                
+                except:
+                    continue
+
+            element_name = locator.get('name', '')
+            if(element_name is ''):
+                element_name = ''
+            else:
+                element_name = "'" + element_name + "' "
+            
+            if (found==False):
+                raise ElementNotFound("Element {}with locators '{}' not found."
+                                      .format(element_name, locators))
+            return element
 
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.
