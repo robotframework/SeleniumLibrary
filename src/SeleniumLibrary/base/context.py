@@ -58,7 +58,7 @@ class ContextAware(object):
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found
             and `required` is true.
         """
-        if(type(locator)==str or type(locator)==unicode):
+        if(type(locator)==type('') or type(locator)==type(u'')):
             return self.element_finder.find(locator, tag, True, required, parent)
         else:
             """
