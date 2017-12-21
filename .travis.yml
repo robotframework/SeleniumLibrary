@@ -52,7 +52,7 @@ matrix:
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
-    - python: "3.3"
+    - python: "3.6"
       env:
         - BROWSER=firefox
         - SELENIUM=3.8.0
