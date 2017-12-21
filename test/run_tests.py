@@ -216,7 +216,9 @@ if __name__ == '__main__':
     )
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
-    if TRAVIS and browser not in ['chrome', 'firefox'] and TRAVIS_EVENT_TYPE != 'cron':
+    if (TRAVIS and browser not in ['chrome', 'firefox', 'headlesschrome'] and
+        TRAVIS_EVENT_TYPE != 'cron'):
+        # When running in only Chrome and Firefox are available.
         print(
             'Can not run test with browser "{}" from SauceLabs with PR.\n'
             'SauceLabs can be used only when running with cron and from '
