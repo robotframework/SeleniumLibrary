@@ -30,7 +30,7 @@ matrix:
   include:
     - python: "3.6"
       env:
-        - BROWSER=chrome
+        - BROWSER=headlesschrome
         - SELENIUM=3.8.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
