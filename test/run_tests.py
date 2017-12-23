@@ -26,6 +26,7 @@ execution when developing new functionality for the library. Example like
 Examples:
 
     run_tests.py chrome
+    run_tests.py headlesschrome
     run_tests.py --interpreter jython firefox --suite javascript
     run_tests.py chrome --sauceusername your_username --saucekey account_key --suite javascript
 
@@ -64,6 +65,7 @@ TRAVIS_EVENT_TYPE = os.environ.get("TRAVIS_EVENT_TYPE", None)
 TRAVIS_JOB_NUMBER = os.environ.get("TRAVIS_JOB_NUMBER", "localtunnel")
 SAUCE_USERNAME = os.environ.get("SAUCE_USERNAME", None)
 SAUCE_ACCESS_KEY = os.environ.get("SAUCE_ACCESS_KEY", None)
+TRAVIS_BROWSERS = ['chrome', 'firefox', 'headlesschrome']
 
 ROBOT_OPTIONS = [
     '--doc', 'SeleniumLibrary acceptance tests with {browser}',
@@ -146,7 +148,7 @@ def log_start(command_list, *hiddens):
 
 
 def get_sauce_conf(browser, sauce_username, sauce_key):
-    if browser in ['chrome', 'firefox'] and TRAVIS:
+    if browser in TRAVIS_BROWSERS and TRAVIS:
         return []
     return [
         '--variable', 'SAUCE_USERNAME:{}'.format(sauce_username),
@@ -216,8 +218,7 @@ if __name__ == '__main__':
     )
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
-    if (TRAVIS and browser not in ['chrome', 'firefox', 'headlesschrome'] and
-        TRAVIS_EVENT_TYPE != 'cron'):
+    if TRAVIS and browser not in TRAVIS_BROWSERS and TRAVIS_EVENT_TYPE != 'cron':
         # When running in only Chrome and Firefox are available.
         print(
             'Can not run test with browser "{}" from SauceLabs with PR.\n'
