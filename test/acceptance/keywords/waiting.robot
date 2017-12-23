@@ -22,6 +22,7 @@ Wait For Condition requires `return`
 
 Wait Until Page Contains
     Wait Until Page Contains    New Content    2 s
+    Wait Until Page Contains    ${123}    2 s
     Run Keyword And Expect Error
     ...    Text 'invalid' did not appear in 100 milliseconds.
     ...    Wait Until Page Contains    invalid    0.1
