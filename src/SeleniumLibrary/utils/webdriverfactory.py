@@ -23,7 +23,7 @@ import copy
 
 from selenium import webdriver
 
-from types import is_noney
+from .types import is_noney
 
 
 class WebDriverFactory(object):
