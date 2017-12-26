@@ -111,12 +111,16 @@ class WebDriverFactoryTest(unittest.TestCase):
 
 class WebDriverFactoryChromeTest(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.CHROME
+
     def tearDown(self):
         unstub()
 
     def test_create_with_default(self):
         mock_driver = mock()
-        when(webdriver).Chrome(desired_capabilities={},
+        when(webdriver).Chrome(desired_capabilities=self.default_caps,
                                options=None).thenReturn(mock_driver)
         driver = WebDriverFactory('chrome').create(remote_url=None,
                                                    desired_capabilities=None,
@@ -132,7 +136,7 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
         mock_driver = mock()
         caps = 'browserName:chrome'
         when(webdriver).Chrome(
-            desired_capabilities={'browserName': 'chrome'},
+            desired_capabilities=self.default_caps,
             options=None).thenReturn(mock_driver)
         driver = WebDriverFactory('chrome').create(remote_url=None,
                                                    desired_capabilities=caps,
@@ -143,7 +147,7 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
         options = mock()
         when(webdriver).ChromeOptions().thenReturn(options)
         mock_driver = mock()
-        when(webdriver).Chrome(desired_capabilities={},
+        when(webdriver).Chrome(desired_capabilities=self.default_caps,
                                options=options).thenReturn(mock_driver)
         driver = WebDriverFactory('headlesschrome').create(remote_url=None,
                                                            desired_capabilities=None,
@@ -154,9 +158,8 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
     def test_create_with_remote_url(self):
         mock_driver = mock()
         url = 'http://127.0.0.1:4444/wd/hub'
-        caps = {'platform': 'ANY', 'browserName': 'chrome', 'version': ''}
         when(webdriver).Remote(command_executor=url,
-                               desired_capabilities=caps,
+                               desired_capabilities=self.default_caps,
                                browser_profile=None).thenReturn(mock_driver)
         driver = WebDriverFactory('chrome').create(remote_url=url,
                                                    desired_capabilities=None,
@@ -166,12 +169,16 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
 
 class WebDriverFactoryFirefoxTest(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.FIREFOX
+
     def tearDown(self):
         unstub()
 
     def test_create_with_default(self):
         mock_driver = mock()
-        when(webdriver).Firefox(firefox_profile=None, capabilities={},
+        when(webdriver).Firefox(firefox_profile=None, capabilities=self.default_caps,
                                 options=None).thenReturn(mock_driver)
         driver = WebDriverFactory('Firefox').create(remote_url=None,
                                                     desired_capabilities=None,
@@ -181,25 +188,42 @@ class WebDriverFactoryFirefoxTest(unittest.TestCase):
     def test_create_with_caps(self):
         mock_driver = mock()
         caps = 'browserName:firefox'
-        when(webdriver).Firefox(firefox_profile=None,
-                                capabilities={'browserName': 'firefox'},
+        when(webdriver).Firefox(firefox_profile=None, capabilities=self.default_caps,
                                 options=None).thenReturn(mock_driver)
         driver = WebDriverFactory('Firefox').create(remote_url=None,
                                                     desired_capabilities=caps,
                                                     ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
 
-    def not_test_create_with_headless(self):
+    def test_create_with_headless(self):
         options = mock()
-        when(webdriver).ChromeOptions().thenReturn(options)
+        when(webdriver).FirefoxOptions().thenReturn(options)
         mock_driver = mock()
-        when(webdriver).Chrome(desired_capabilities={},
-                               options=options).thenReturn(mock_driver)
-        driver = WebDriverFactory('headlesschrome').create(remote_url=None,
-                                                           desired_capabilities=None,
-                                                           ff_profile_dir=None)
+        when(webdriver).Firefox(firefox_profile=None, capabilities=self.default_caps,
+                                options=options).thenReturn(mock_driver)
+        driver = WebDriverFactory('headlessfirefox').create(remote_url=None,
+                                                            desired_capabilities=None,
+                                                            ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
         verify(options).set_headless()
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=self.default_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('firefox').create(
+            remote_url=url, desired_capabilities=self.default_caps, ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=self.default_caps,
+                               browser_profile='/path/to/profile').thenReturn(mock_driver)
+        driver = WebDriverFactory('firefox').create(
+            remote_url=url, desired_capabilities=self.default_caps,
+            ff_profile_dir='/path/to/profile')
+        self.assertEqual(driver, mock_driver)
 
 
 class CreateBaseTest(unittest.TestCase):

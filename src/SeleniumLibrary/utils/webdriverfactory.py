@@ -97,13 +97,13 @@ class CreateChrome(CreateBase):
     @classmethod
     def create(self, headless, remote_url, desired_capabilities):
         desired_capabilities = self.parse_desired_capabilities(desired_capabilities)
+        desired_capabilities.update(webdriver.DesiredCapabilities.CHROME)
         if headless:
             options = webdriver.ChromeOptions()
             options.set_headless()
         else:
             options = None
         if not is_noney(remote_url):
-            desired_capabilities.update(webdriver.DesiredCapabilities.CHROME)
             return self.create_remote(command_executor=remote_url,
                                       desired_capabilities=desired_capabilities)
         return webdriver.Chrome(desired_capabilities=desired_capabilities,
@@ -115,11 +115,16 @@ class CreateFirefox(CreateBase):
     @classmethod
     def create(self, headless, remote_url, desired_capabilities, ff_profile_dir):
         desired_capabilities = self.parse_desired_capabilities(desired_capabilities)
+        desired_capabilities.update(webdriver.DesiredCapabilities.FIREFOX)
         if headless:
             options = webdriver.FirefoxOptions()
             options.set_headless()
         else:
             options = None
+        if not is_noney(remote_url):
+            return self.create_remote(command_executor=remote_url,
+                                      desired_capabilities=desired_capabilities,
+                                      browser_profile=ff_profile_dir)
         return webdriver.Firefox(firefox_profile=ff_profile_dir,
                                  capabilities=desired_capabilities,
                                  options=options)
