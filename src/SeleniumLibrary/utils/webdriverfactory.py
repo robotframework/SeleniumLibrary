@@ -19,6 +19,7 @@ try:
 except NameError:
     basestring = str
 
+import copy
 
 from selenium import webdriver
 
@@ -64,6 +65,8 @@ class WebDriverFactory(object):
 
     def create(self, remote_url, desired_capabilities, ff_profile_dir):
         headless, driver_creator = self.parse_browser()
+        desired_capabilities = driver_creator.parse_desired_capabilities(
+            desired_capabilities)
         if driver_creator is CreateFirefox:
             return driver_creator.create(headless, remote_url, desired_capabilities,
                                          ff_profile_dir)
@@ -96,45 +99,50 @@ class CreateChrome(CreateBase):
 
     @classmethod
     def create(self, headless, remote_url, desired_capabilities):
-        desired_capabilities = self.parse_desired_capabilities(desired_capabilities)
-        desired_capabilities.update(webdriver.DesiredCapabilities.CHROME)
+        capabilities = copy.deepcopy(webdriver.DesiredCapabilities.CHROME)
+        capabilities.update(desired_capabilities)
         if headless:
             options = webdriver.ChromeOptions()
             options.set_headless()
         else:
             options = None
-        if not is_noney(remote_url):
-            return self.create_remote(command_executor=remote_url,
-                                      desired_capabilities=desired_capabilities)
-        return webdriver.Chrome(desired_capabilities=desired_capabilities,
-                                options=options)
+        if is_noney(remote_url):
+            return webdriver.Chrome(desired_capabilities=capabilities,
+                                    options=options)
+        return self.create_remote(command_executor=remote_url,
+                                  desired_capabilities=capabilities)
 
 
 class CreateFirefox(CreateBase):
 
     @classmethod
     def create(self, headless, remote_url, desired_capabilities, ff_profile_dir):
-        desired_capabilities = self.parse_desired_capabilities(desired_capabilities)
-        desired_capabilities.update(webdriver.DesiredCapabilities.FIREFOX)
+        capabilities = copy.deepcopy(webdriver.DesiredCapabilities.FIREFOX)
+        capabilities.update(desired_capabilities)
         if headless:
             options = webdriver.FirefoxOptions()
             options.set_headless()
         else:
             options = None
-        if not is_noney(remote_url):
-            return self.create_remote(command_executor=remote_url,
-                                      desired_capabilities=desired_capabilities,
-                                      browser_profile=ff_profile_dir)
-        return webdriver.Firefox(firefox_profile=ff_profile_dir,
-                                 capabilities=desired_capabilities,
-                                 options=options)
+        if is_noney(remote_url):
+            return webdriver.Firefox(firefox_profile=ff_profile_dir,
+                                     capabilities=capabilities,
+                                     options=options)
+        return self.create_remote(command_executor=remote_url,
+                                  desired_capabilities=capabilities,
+                                  browser_profile=ff_profile_dir)
 
 
 class CreateIe(CreateBase):
 
     @classmethod
-    def create(self, headless):
-        return 'Foobar'
+    def create(self, headless, remote_url, desired_capabilities):
+        capabilities = copy.deepcopy(webdriver.DesiredCapabilities.INTERNETEXPLORER)
+        capabilities.update(desired_capabilities)
+        if is_noney(remote_url):
+            return webdriver.Ie(capabilities=capabilities)
+        return self.create_remote(command_executor=remote_url,
+                                  desired_capabilities=capabilities)
 
 
 class CreateEdge(CreateBase):

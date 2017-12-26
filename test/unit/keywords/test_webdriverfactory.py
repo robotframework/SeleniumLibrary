@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 from selenium import webdriver
@@ -223,6 +224,49 @@ class WebDriverFactoryFirefoxTest(unittest.TestCase):
         driver = WebDriverFactory('firefox').create(
             remote_url=url, desired_capabilities=self.default_caps,
             ff_profile_dir='/path/to/profile')
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactoryIeTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_caps(self):
+        mock_driver = mock()
+        when(webdriver).Ie(capabilities=self.default_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('ie').create(remote_url=None,
+                                               desired_capabilities=None,
+                                               ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Ie(capabilities=all_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('ie').create(remote_url=None,
+                                               desired_capabilities=caps,
+                                               ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('ie').create(remote_url=url,
+                                               desired_capabilities=caps,
+                                               ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
 
 
