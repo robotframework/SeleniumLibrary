@@ -24,6 +24,7 @@ import copy
 from selenium import webdriver
 
 from .types import is_noney
+from .seleniumversion import SELENIUM_VERSION
 
 
 class WebDriverFactory(object):
@@ -101,16 +102,19 @@ class CreateChrome(CreateBase):
     def create(self, headless, remote_url, desired_capabilities):
         capabilities = copy.deepcopy(webdriver.DesiredCapabilities.CHROME)
         capabilities.update(desired_capabilities)
-        if headless:
-            options = webdriver.ChromeOptions()
-            options.set_headless()
-        else:
-            options = None
+        options = self._get_options() if headless else {}
         if is_noney(remote_url):
-            return webdriver.Chrome(desired_capabilities=capabilities,
-                                    options=options)
+            return webdriver.Chrome(desired_capabilities=capabilities, **options)
         return self.create_remote(command_executor=remote_url,
                                   desired_capabilities=capabilities)
+
+    @classmethod
+    def _get_options(self):
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            options = webdriver.ChromeOptions()
+            options.set_headless()
+            return {'options': options}
+        return {}
 
 
 class CreateFirefox(CreateBase):
@@ -119,18 +123,21 @@ class CreateFirefox(CreateBase):
     def create(self, headless, remote_url, desired_capabilities, ff_profile_dir):
         capabilities = copy.deepcopy(webdriver.DesiredCapabilities.FIREFOX)
         capabilities.update(desired_capabilities)
-        if headless:
-            options = webdriver.FirefoxOptions()
-            options.set_headless()
-        else:
-            options = None
+        options = self._get_options() if headless else {}
         if is_noney(remote_url):
             return webdriver.Firefox(firefox_profile=ff_profile_dir,
-                                     capabilities=capabilities,
-                                     options=options)
+                                     capabilities=capabilities, **options)
         return self.create_remote(command_executor=remote_url,
                                   desired_capabilities=capabilities,
                                   browser_profile=ff_profile_dir)
+
+    @classmethod
+    def _get_options(self):
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            options = webdriver.FirefoxOptions()
+            options.set_headless()
+            return {'options': options}
+        return {}
 
 
 class CreateIe(CreateBase):

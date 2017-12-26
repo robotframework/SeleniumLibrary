@@ -4,13 +4,14 @@ import unittest
 from selenium import webdriver
 from mockito import mock, unstub, when, verify
 
+from SeleniumLibrary.utils import SELENIUM_VERSION
 from SeleniumLibrary.utils import WebDriverFactory
 from SeleniumLibrary.utils.webdriverfactory import (CreateAndroid, CreateBase,
                                                     CreateChrome, CreateEdge,
                                                     CreateFirefox, CreateIe, CreateiPhone,
                                                     CreateOpera, CreateSafari,
                                                     CreateHtmlUnit, CreateHtmlUnitWithJS,
-                                                    CreatePhantomJS,)
+                                                    CreatePhantomJS)
 
 
 class WebDriverFactoryTest(unittest.TestCase):
@@ -121,8 +122,12 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
 
     def test_create_with_default(self):
         mock_driver = mock()
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            options = {'options': None}
+        else:
+            options = {}
         when(webdriver).Chrome(desired_capabilities=self.default_caps,
-                               options=None).thenReturn(mock_driver)
+                               **options).thenReturn(mock_driver)
         driver = WebDriverFactory('chrome').create(remote_url=None,
                                                    desired_capabilities=None,
                                                    ff_profile_dir=None)
@@ -136,25 +141,35 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
     def test_create_with_caps(self):
         mock_driver = mock()
         caps = 'browserName:chrome'
-        when(webdriver).Chrome(
-            desired_capabilities=self.default_caps,
-            options=None).thenReturn(mock_driver)
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            options = {'options': None}
+        else:
+            options = {}
+        when(webdriver).Chrome(desired_capabilities=self.default_caps,
+                               **options).thenReturn(mock_driver)
         driver = WebDriverFactory('chrome').create(remote_url=None,
                                                    desired_capabilities=caps,
                                                    ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
 
     def test_create_with_headless(self):
-        options = mock()
-        when(webdriver).ChromeOptions().thenReturn(options)
+        chrome_options = mock()
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            when(webdriver).ChromeOptions().thenReturn(chrome_options)
+            options = {'options': chrome_options}
+        else:
+            options = {}
         mock_driver = mock()
         when(webdriver).Chrome(desired_capabilities=self.default_caps,
-                               options=options).thenReturn(mock_driver)
+                               **options).thenReturn(mock_driver)
         driver = WebDriverFactory('headlesschrome').create(remote_url=None,
                                                            desired_capabilities=None,
                                                            ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
-        verify(options).set_headless()
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            verify(chrome_options).set_headless()
+        else:
+            verify(chrome_options, times=0).set_headless()
 
     def test_create_with_remote_url(self):
         mock_driver = mock()
@@ -179,8 +194,12 @@ class WebDriverFactoryFirefoxTest(unittest.TestCase):
 
     def test_create_with_default(self):
         mock_driver = mock()
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            options = {'options': None}
+        else:
+            options = {}
         when(webdriver).Firefox(firefox_profile=None, capabilities=self.default_caps,
-                                options=None).thenReturn(mock_driver)
+                                **options).thenReturn(mock_driver)
         driver = WebDriverFactory('Firefox').create(remote_url=None,
                                                     desired_capabilities=None,
                                                     ff_profile_dir=None)
@@ -189,24 +208,35 @@ class WebDriverFactoryFirefoxTest(unittest.TestCase):
     def test_create_with_caps(self):
         mock_driver = mock()
         caps = 'browserName:firefox'
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            options = {'options': None}
+        else:
+            options = {}
         when(webdriver).Firefox(firefox_profile=None, capabilities=self.default_caps,
-                                options=None).thenReturn(mock_driver)
+                                **options).thenReturn(mock_driver)
         driver = WebDriverFactory('Firefox').create(remote_url=None,
                                                     desired_capabilities=caps,
                                                     ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
 
     def test_create_with_headless(self):
-        options = mock()
-        when(webdriver).FirefoxOptions().thenReturn(options)
+        ff_options = mock()
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            when(webdriver).FirefoxOptions().thenReturn(ff_options)
+            options = {'options': ff_options}
+        else:
+            options = {}
         mock_driver = mock()
         when(webdriver).Firefox(firefox_profile=None, capabilities=self.default_caps,
-                                options=options).thenReturn(mock_driver)
+                                **options).thenReturn(mock_driver)
         driver = WebDriverFactory('headlessfirefox').create(remote_url=None,
                                                             desired_capabilities=None,
                                                             ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
-        verify(options).set_headless()
+        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+            verify(ff_options).set_headless()
+        else:
+            verify(ff_options, times=0).set_headless()
 
     def test_create_with_remote_url(self):
         mock_driver = mock()
