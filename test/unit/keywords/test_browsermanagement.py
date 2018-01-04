@@ -98,7 +98,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         ctx.speed = 5.0
         browser = mock()
-        caps = {'platform': 'ANY', 'browserName': 'chrome', 'version': ''}
+        caps = webdriver.DesiredCapabilities.CHROME
         when(webdriver).Chrome(desired_capabilities=caps).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
@@ -109,7 +109,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         ctx.speed = 0.0
         browser = mock()
-        caps = {'platform': 'ANY', 'browserName': 'chrome', 'version': ''}
+        caps = webdriver.DesiredCapabilities.CHROME
         when(webdriver).Chrome(desired_capabilities=caps).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
