@@ -154,7 +154,7 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
 
     def test_create_with_headless(self):
         chrome_options = mock()
-        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+        if SELENIUM_VERSION.major == '3' and SELENIUM_VERSION.minor == '8':
             when(webdriver).ChromeOptions().thenReturn(chrome_options)
             options = {'options': chrome_options}
         else:
@@ -166,7 +166,7 @@ class WebDriverFactoryChromeTest(unittest.TestCase):
                                                            desired_capabilities=None,
                                                            ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
-        if SELENIUM_VERSION.major == 3 and SELENIUM_VERSION.minor == 8:
+        if SELENIUM_VERSION.major == '3' and SELENIUM_VERSION.minor == '8':
             verify(chrome_options).set_headless()
         else:
             verify(chrome_options, times=0).set_headless()
@@ -297,6 +297,237 @@ class WebDriverFactoryIeTest(unittest.TestCase):
         driver = WebDriverFactory('ie').create(remote_url=url,
                                                desired_capabilities=caps,
                                                ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactoryEdgeTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.EDGE
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_caps(self):
+        mock_driver = mock()
+        when(webdriver).Edge(capabilities=self.default_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('edge').create(remote_url=None,
+                                                 desired_capabilities=None,
+                                                 ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Edge(capabilities=all_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('edge').create(remote_url=None,
+                                                 desired_capabilities=caps,
+                                                 ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('edge').create(remote_url=url,
+                                                 desired_capabilities=caps,
+                                                 ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactoryOperaTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.OPERA
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_caps(self):
+        mock_driver = mock()
+        when(webdriver).Opera(
+            desired_capabilities=self.default_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('Opera').create(remote_url=None,
+                                                  desired_capabilities=None,
+                                                  ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Opera(desired_capabilities=all_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('Opera').create(remote_url=None,
+                                                  desired_capabilities=caps,
+                                                  ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('Opera').create(remote_url=url,
+                                                  desired_capabilities=caps,
+                                                  ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactoryPhantomJSTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.PHANTOMJS
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).PhantomJS(desired_capabilities=all_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('PhantomJS').create(remote_url=None,
+                                                      desired_capabilities=caps,
+                                                      ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('PhantomJS').create(remote_url=url,
+                                                      desired_capabilities=caps,
+                                                      ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactorySafariTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.SAFARI
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Safari(desired_capabilities=all_caps).thenReturn(mock_driver)
+        driver = WebDriverFactory('Safari').create(remote_url=None,
+                                                   desired_capabilities=caps,
+                                                   ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('Safari').create(remote_url=url,
+                                                   desired_capabilities=caps,
+                                                   ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactoryHtmlUnitTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.HTMLUNIT
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=None,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('htmlunit').create(remote_url=None,
+                                                     desired_capabilities=caps,
+                                                     ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('htmlunit').create(remote_url=url,
+                                                     desired_capabilities=caps,
+                                                     ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+
+class WebDriverFactoryHtmlWithJSUnitTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.default_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_with_default(self):
+        mock_driver = mock()
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=None,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('htmlunitwithjs').create(remote_url=None,
+                                                           desired_capabilities=caps,
+                                                           ff_profile_dir=None)
+        self.assertEqual(driver, mock_driver)
+
+    def test_create_with_remote_url(self):
+        mock_driver = mock()
+        url = 'http://127.0.0.1:4444/wd/hub'
+        caps = 'version:11'
+        all_caps = copy.deepcopy(self.default_caps)
+        all_caps['version'] = '11'
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=all_caps,
+                               browser_profile=None).thenReturn(mock_driver)
+        driver = WebDriverFactory('htmlunitwithjs').create(remote_url=url,
+                                                           desired_capabilities=caps,
+                                                           ff_profile_dir=None)
         self.assertEqual(driver, mock_driver)
 
 
