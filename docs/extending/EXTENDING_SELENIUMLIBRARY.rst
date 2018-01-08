@@ -59,22 +59,52 @@ enhancement requests can be read from the `CONTRIBUTING.rst Enhancement requests
 General prinsibles for extending SeleniumLibrary
 ------------------------------------------------
 The prinsibles described in the Robot Framework User Guide, `Extending existing test libraries`_
-chapter also apply when extending the SeleniumLibrary. But because the SeleniumLibrary uses the
-`PythonLibCore`_ and the `dynamic library API`_, there are some extra steps which needs to be taken
-in account when SeleniumLibrary is extended by using with `inheritace`_ or `dynamically`_.
+chapter also apply when extending the SeleniumLibrary. There are two different ways to
+extend the SeleniumLibrary.
+1) Create a library which also the existing SeleniumLibrary keywords, example by using `inheritace`_.
+2) Create library which contains only new keywords.
 
-All methods which should be published as keywords must be decorated with ``@keyword`` decorator.
-The ``@keyword`` decorator can be imported in following ways::
+When creating a library, which also includes the existing SeleniumLibrary keywords, there are
+extra steps which needs to be taken account because SeleniunLibrary uses `PythonLibCore`_
+and the `dynamic library API`_. All methods which should be published as keywords must be
+decorated with ``@keyword`` decorator. The ``@keyword`` decorator can be imported in following way::
 
     from from SeleniumLibrary.base import keyword
+
+Keywords should be inside of a ``class`` and the ``add_library_components`` method
+must be called to add keywords. The ``add_library_components`` method is inherited from the
+`PythonLibCore`_ project and the project provides easy way to write libraries with
+dynamic or hybrid library API.
 
 Creating a new library by using inheritance
 -------------------------------------------
 Perhaps the easiest way to extend the SeleniumLibrary is to inherit the SeleniumLibrary and add
-new keywords methods to a new library. The `inheritance example`_ shows how to declare new keyword
-`Get Browser Desired Capabilities` and how to overwrite existing `Open Browser` keyword.
+new or replace existing keywords methods to a new library. The `inheritance example`_ shows how
+to declare new keyword ``Get Browser Desired Capabilities`` and how to overwrite existing
+``Open Browser`` keyword.
 
-The
+Because the ``InheritSeleniumLibrary`` class foes not overwrite the SeleniumLibrary init method, the
+``add_library_components`` is called automatically. Then the ``InheritSeleniumLibrary`` class methods
+which are  decorated with ``@keyword`` decorator are added to the ``InheritSeleniumLibrary``
+library keywords. Also existing keywords from SeleniumLibrary are added as library keywords.
+
+Creating a new library from multiple classes
+--------------------------------------------
+Decomposition is a good way to split library to smaller name spaces and it usually eases the
+library testing. The `decomposition example`_ shows how the ``Get Browser Desired Capabilities``
+and ``Open Browser`` keywords can divided to own classes.
+
+The example also shows the usage of the ``context`` object and the `LibraryComponent`_ class.
+The ``context`` object is a instance of the SeleniunLibrary which provides access the the
+SeleniumLibrary methods, example to the Selenium WebDriver instance. Without the ``context`` object,
+the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes would not have access to the
+SeleniunLibrary methods and objects.
+
+The ``LibraryComponent`` wrapper class, which provides easier shortcuts the ``context`` object methods
+and example provides general logging methods. Example the Selenium WebDriver instance in the context in:
+``self.ctx.driver``, but the ``LibraryComponent`` provides a shortcut and it can be accessed with
+``self.driver``
+
 
 Creating a new library by getting active library instance
 ---------------------------------------------------------
@@ -94,3 +124,5 @@ TO BE DEIFNED
 .. _inheritace: https://github.com/robotframework/SeleniumLibrary#TO_BE_DEDFINE
 .. _dynamically: https://github.com/robotframework/SeleniumLibrary#TO_BE_DEDFINE_2
 .. _inheritance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
+.. _decomposition example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/decomposition/Decomposition.py
+.. _LibraryComponent: https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py

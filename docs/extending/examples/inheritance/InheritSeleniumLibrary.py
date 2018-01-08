@@ -16,3 +16,11 @@ class InheritSeleniumLibrary(SeleniumLibrary):
     def get_browser_desired_capabilities(self):
         logger.info('Getting currently open browser desired capabilities')
         return self.driver.desired_capabilities
+
+    def not_keywords_but_public_methods(self):
+        logger.info('Python public method not a keyword, because it is not '
+                    'decorated with @keyword decorator')
+
+    def _private_method_are_not_keywords(self):
+        logger.info('Python private method is not a keyword, because it is not '
+                    'decorated with @keyword decorator')
