@@ -15,9 +15,9 @@ Public API methods
 ------------------
 All the methods, which are exposed as keywords, are available in the library public API. Generally
 keywords are converted to lover case and spaces are converted to underscores. Example `Open Browser`_
-is available as ``open_browser``. Please note that method name can be overwritten with the ``@keyword``
-decorator, but in the SeleniumLibrary 3.0.0 release does not contain keywords where the keyword
-name would differ from the method name (other than the keywords name case).
+keyword is available as ``open_browser`` method. Please note that method name can be overwritten
+with the ``@keyword`` decorator, but in the SeleniumLibrary 3.0.0 release does not contain keywords
+where the keyword name would differ from the method name (other than the keywords name case).
 
 Methods or attributes which are not keywords but are available in the public API
 --------------------------------------------------------------------------------
@@ -53,15 +53,16 @@ Extending SeleniumLibrary by pull requests
 ------------------------------------------
 Before making your own extension, private or public, please consider would the extension be
 generally useful in the SeleniumLibrary. If the extension would be useful for others, then please
-create an issue and a pull request. For more details how SeleniumLibrary project handles the
-enhancement requests can be read from the `CONTRIBUTING.rst Enhancement requests`_ chapter.
+create an issue and a pull request. More details how SeleniumLibrary project handles the
+enhancement requests can be read from the CONTRIBUTING.rst `Enhancement requests`_ chapter.
 
 General prinsibles for extending SeleniumLibrary
 ------------------------------------------------
 The prinsibles described in the Robot Framework User Guide, `Extending existing test libraries`_
 chapter also apply when extending the SeleniumLibrary. There are two different ways to
 extend the SeleniumLibrary.
-1) Create a library which also the existing SeleniumLibrary keywords, example by using `inheritace`_.
+
+1) Create a library which also the contains existing SeleniumLibrary keywords, example by using `inheritace`_.
 2) Create library which contains only new keywords.
 
 When creating a library, which also includes the existing SeleniumLibrary keywords, there are
@@ -93,7 +94,7 @@ anymore possible to call the original method like this::
     super(ClassName, self).open_browser(url, browser, alias, remote_url,
                                         desired_capabilities, ff_profile_dir)
 
-Instead user must call the method from the class which implements the keyword, example::
+Instead user must call the method from the class instance which implements the keyword, example::
 
     browser_management = BrowserManagementKeywords(self)
     browser_management.open_browser(url, 'chrome')
@@ -106,19 +107,24 @@ and ``Open Browser`` keywords can divided to own classes.
 
 The example also shows the usage of the ``context`` object and the `LibraryComponent`_ class.
 The ``context`` object is a instance of the SeleniunLibrary which provides access the the
-SeleniumLibrary methods, example to the Selenium WebDriver instance. Without the ``context`` object,
-the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes would not have access to the
-SeleniunLibrary common methods and objects.
+SeleniumLibrary methods from the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes.
+Example ``context`` object provides access to the Selenium WebDriver instance.
 
-The ``LibraryComponent`` wrapper class, which provides easier shortcuts the ``context`` object methods
-and example provides general logging methods. Example the Selenium WebDriver instance in the context in:
-``self.ctx.driver``, but the ``LibraryComponent`` provides a shortcut and it can be accessed with
-``self.driver``
+The ``LibraryComponent`` is a wrapper class, which provides easier shortcuts the ``context`` object
+methods and example provides general logging methods. Example the Selenium WebDriver instance in
+the context: ``self.ctx.driver``, but the ``LibraryComponent`` provides a shortcut and it can be
+accessed with: ``self.driver``
 
 
 Creating a new library by getting active library instance
 ---------------------------------------------------------
-* Creating a new library by getting active library instance from Robot Framework.
+Getting the active library instance provides way to create a new library that it does not
+automatically contain keywords from the SeleniumLibrary. This eases the name space
+handling and if only new keywords are created, user does not have to prefix the keywords with the
+library name. This way also allows user to freely choose the Robot Framework `library API`_.
+The `instance example`_ shows a way how the active SeleniumLibrary is get from the Robot Framework.
+The example shows how to declare ``Get Browser Desired Capabilities`` and ``Open Browser`` keywords
+to the new library and the example uses the `static keyword API`_.
 
 Extending the SeleniumLibrary dynamically
 -----------------------------------------
@@ -129,10 +135,13 @@ TO BE DEIFNED
 .. _PythonLibCore: https://github.com/robotframework/PythonLibCore
 .. _Open Browser: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html#Open%20Browser
 .. _keyword documentation: https://github.com/robotframework/SeleniumLibrary#keyword-documentation
-.. _CONTRIBUTING.rst Enhancement requests: https://github.com/robotframework/SeleniumLibrary/blob/master/CONTRIBUTING.rst#enhancement-requests
+.. _Enhancement requests: https://github.com/robotframework/SeleniumLibrary/blob/master/CONTRIBUTING.rst#enhancement-requests
 .. _Extending existing test libraries: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#extending-existing-test-libraries
 .. _inheritace: https://github.com/robotframework/SeleniumLibrary#TO_BE_DEDFINE
 .. _dynamically: https://github.com/robotframework/SeleniumLibrary#TO_BE_DEDFINE_2
 .. _inheritance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
 .. _decomposition example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/decomposition/Decomposition.py
+.. _instance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/get_instance/GetSeleniumLibraryInstance.py
 .. _LibraryComponent: https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py
+.. _library API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#different-test-library-apis
+.. _static keyword API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#creating-static-keywords
