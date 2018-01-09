@@ -19,8 +19,8 @@ is available as ``open_browser``. Please note that method name can be overwritte
 decorator, but in the SeleniumLibrary 3.0.0 release does not contain keywords where the keyword
 name would differ from the method name (other than the keywords name case).
 
-Methods and attributes which are not keywords in the public API methods
------------------------------------------------------------------------
+Methods or attributes which are not keywords but are available in the public API
+--------------------------------------------------------------------------------
 The SeleniumLibrary instance also contains methods and attributes which are not keywords but are
 useful when extending the SeleniumLibrary. The available methods are:
 
@@ -65,11 +65,11 @@ extend the SeleniumLibrary.
 2) Create library which contains only new keywords.
 
 When creating a library, which also includes the existing SeleniumLibrary keywords, there are
-extra steps which needs to be taken account because SeleniunLibrary uses `PythonLibCore`_
+extra steps which needs to be taken account, because SeleniunLibrary uses `PythonLibCore`_
 and the `dynamic library API`_. All methods which should be published as keywords must be
 decorated with ``@keyword`` decorator. The ``@keyword`` decorator can be imported in following way::
 
-    from from SeleniumLibrary.base import keyword
+    from SeleniumLibrary.base import keyword
 
 Keywords should be inside of a ``class`` and the ``add_library_components`` method
 must be called to add keywords. The ``add_library_components`` method is inherited from the
@@ -79,14 +79,24 @@ dynamic or hybrid library API.
 Creating a new library by using inheritance
 -------------------------------------------
 Perhaps the easiest way to extend the SeleniumLibrary is to inherit the SeleniumLibrary and add
-new or replace existing keywords methods to a new library. The `inheritance example`_ shows how
-to declare new keyword ``Get Browser Desired Capabilities`` and how to overwrite existing
-``Open Browser`` keyword.
+new keywords methods to a new library. The `inheritance example`_ shows how to declare new
+keyword ``Get Browser Desired Capabilities`` and how to overwrite existing ``Open Browser`` keyword.
 
 Because the ``InheritSeleniumLibrary`` class foes not overwrite the SeleniumLibrary init method, the
 ``add_library_components`` is called automatically. Then the ``InheritSeleniumLibrary`` class methods
 which are  decorated with ``@keyword`` decorator are added to the ``InheritSeleniumLibrary``
 library keywords. Also existing keywords from SeleniumLibrary are added as library keywords.
+
+Because the methods are not anymore directly available in the SeleniumLibrary class, it not
+anymore possible to call the original method like this::
+
+    super(ClassName, self).open_browser(url, browser, alias, remote_url,
+                                        desired_capabilities, ff_profile_dir)
+
+Instead user must call the method from the class which implements the keyword, example::
+
+    browser_management = BrowserManagementKeywords(self)
+    browser_management.open_browser(url, 'chrome')
 
 Creating a new library from multiple classes
 --------------------------------------------
@@ -98,7 +108,7 @@ The example also shows the usage of the ``context`` object and the `LibraryCompo
 The ``context`` object is a instance of the SeleniunLibrary which provides access the the
 SeleniumLibrary methods, example to the Selenium WebDriver instance. Without the ``context`` object,
 the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes would not have access to the
-SeleniunLibrary methods and objects.
+SeleniunLibrary common methods and objects.
 
 The ``LibraryComponent`` wrapper class, which provides easier shortcuts the ``context`` object methods
 and example provides general logging methods. Example the Selenium WebDriver instance in the context in:
