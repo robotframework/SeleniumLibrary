@@ -74,8 +74,8 @@ decorated with ``@keyword`` decorator. The ``@keyword`` decorator can be importe
 
 Keywords should be inside of a ``class`` and the ``add_library_components`` method
 must be called to add keywords. The ``add_library_components`` method is inherited from the
-`PythonLibCore`_ project and the project provides easy way to write libraries with
-dynamic or hybrid library API.
+`PythonLibCore`_ project and the method must contains list of classes which contains the
+new keywords.
 
 Creating a new library by using inheritance
 -------------------------------------------
@@ -83,13 +83,13 @@ Perhaps the easiest way to extend the SeleniumLibrary is to inherit the Selenium
 new keywords methods to a new library. The `inheritance example`_ shows how to declare new
 keyword ``Get Browser Desired Capabilities`` and how to overwrite existing ``Open Browser`` keyword.
 
-Because the ``InheritSeleniumLibrary`` class foes not overwrite the SeleniumLibrary init method, the
-``add_library_components`` is called automatically. Then the ``InheritSeleniumLibrary`` class methods
+Because the ``InheritSeleniumLibrary`` class foes not overwrite the SeleniumLibrary ``init`` method,
+the ``add_library_components`` is called automatically. Then the ``InheritSeleniumLibrary`` class methods
 which are  decorated with ``@keyword`` decorator are added to the ``InheritSeleniumLibrary``
 library keywords. Also existing keywords from SeleniumLibrary are added as library keywords.
 
 Because the methods are not anymore directly available in the SeleniumLibrary class, it not
-anymore possible to call the original method like this::
+anymore possible to call the original method example like this::
 
     super(ClassName, self).open_browser(url, browser, alias, remote_url,
                                         desired_capabilities, ff_profile_dir)
@@ -124,24 +124,34 @@ handling and if only new keywords are created, user does not have to prefix the 
 library name. This way also allows user to freely choose the Robot Framework `library API`_.
 The `instance example`_ shows a way how the active SeleniumLibrary is get from the Robot Framework.
 The example shows how to declare ``Get Browser Desired Capabilities`` and ``Open Browser`` keywords
-to the new library and the example uses the `static keyword API`_.
+to the new library and the `instance example`_ uses the `static keyword API`_ to declare new
+keywords.
 
 Extending the SeleniumLibrary dynamically
 -----------------------------------------
-TO BE DEIFNED
+It is possible to modify keywords directly in the SeleniumLibrary. This can be done calling
+``add_library_components`` method from the SeleniumLibrary instance and then using the
+``BuiltIn().reload_library()`` method to reload the SeleniumLibrary.
 
+The `modify SeleniumLibrary`_ example uses the Robot Framework `Listener API`_ to extend the
+SeleniumLibrary with a keywords in the ``KeywordClass``. The ``NewKeywords``class is library
+which is also a listener and it uses the ``start_suite`` method to trigger the modifications
+to the SeleniumLibrary. The example gets the active library instance from the Robot Framework
+and uses the ``add_library_components`` method to add the ``KeywordClass`` keywords in to
+the SeleniumLibrary directly.
 
 .. _dynamic library API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api
 .. _PythonLibCore: https://github.com/robotframework/PythonLibCore
 .. _Open Browser: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html#Open%20Browser
-.. _keyword documentation: https://github.com/robotframework/SeleniumLibrary#keyword-documentation
+.. _keyword documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
 .. _Enhancement requests: https://github.com/robotframework/SeleniumLibrary/blob/master/CONTRIBUTING.rst#enhancement-requests
 .. _Extending existing test libraries: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#extending-existing-test-libraries
-.. _inheritace: https://github.com/robotframework/SeleniumLibrary#TO_BE_DEDFINE
-.. _dynamically: https://github.com/robotframework/SeleniumLibrary#TO_BE_DEDFINE_2
+.. _inheritace: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
 .. _inheritance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
 .. _decomposition example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/decomposition/Decomposition.py
 .. _instance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/get_instance/GetSeleniumLibraryInstance.py
 .. _LibraryComponent: https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py
 .. _library API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#different-test-library-apis
 .. _static keyword API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#creating-static-keywords
+.. _modify SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/modify_seleniumlibrary/NewKeywords.py
+.. _Listener API: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#listener-interface
