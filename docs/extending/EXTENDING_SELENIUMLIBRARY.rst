@@ -62,7 +62,7 @@ The prinsibles described in the Robot Framework User Guide, `Extending existing 
 chapter also apply when extending the SeleniumLibrary. There are two different ways to
 extend the SeleniumLibrary.
 
-1) Create a library which also the contains existing SeleniumLibrary keywords, example by using `inheritace`_.
+1) Create a library which also the contains existing SeleniumLibrary keywords, example by using `inheritance`_.
 2) Create library which contains only new keywords.
 
 When creating a library, which also includes the existing SeleniumLibrary keywords, there are
@@ -106,8 +106,8 @@ library testing. The `decomposition example`_ shows how the ``Get Browser Desire
 and ``Open Browser`` keywords can divided to own classes.
 
 The example also shows the usage of the ``context`` object and the `LibraryComponent`_ class.
-The ``context`` object is a instance of the SeleniunLibrary which provides access the the
-SeleniumLibrary methods from the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes.
+The ``context`` object is a instance of the SeleniunLibrary which provides access to the
+SeleniumLibrary methods for the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes.
 Example ``context`` object provides access to the Selenium WebDriver instance.
 
 The ``LibraryComponent`` is a wrapper class, which provides easier shortcuts the ``context`` object
@@ -146,7 +146,7 @@ the SeleniumLibrary directly.
 .. _keyword documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
 .. _Enhancement requests: https://github.com/robotframework/SeleniumLibrary/blob/master/CONTRIBUTING.rst#enhancement-requests
 .. _Extending existing test libraries: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#extending-existing-test-libraries
-.. _inheritace: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
+.. _inheritance: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
 .. _inheritance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/inheritance/InheritSeleniumLibrary.py
 .. _decomposition example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/decomposition/Decomposition.py
 .. _instance example: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/examples/get_instance/GetSeleniumLibraryInstance.py
