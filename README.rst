@@ -156,6 +156,19 @@ See the demo for more examples that you can also execute on your own
 machine. For more information about Robot Framework test data syntax in
 general see the `Robot Framework User Guide`_.
 
+Extending SeleniumLibrary
+-------------------------
+Before creating your own library which extends the ``SeleniumLibrary``, please consider would
+the extension be also useful also for general usage. If it could be useful also for general
+usage, please create a new issue describing the enhancement request and even better if the
+issue is backed up the a pull request.
+
+If the enhancement is not generally useful, example solution is domain specific, then the
+SeleniumLibrary offers a public API which can be used to build own libraries. All keyword
+methods are available in the public API. There are also generally useful methods and attributes
+available, which are useful for creating new libraries. Please see `extending documentation`_
+for more details about the available methods and for examples how the library can be extended.
+
 Support
 -------
 
@@ -243,6 +256,7 @@ project.
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
 .. _robotframework-users: http://groups.google.com/group/robotframework-users
+.. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/EXTENDING_SELENIUMLIBRARY.rst
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
 .. _Other support forums: http://robotframework.org/#support
