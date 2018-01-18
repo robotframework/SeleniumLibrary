@@ -114,13 +114,17 @@ Page Should Not Contain Element With Disabling Source Logging
     [Teardown]    Set Log Level    DEBUG
 
 Element Should Contain
+    [Tags]  focusnola
     Element Should Contain    some_id    This text is inside an identified element
-    Run Keyword And Expect Error
-    ...    Element 'some_id' should have contained text 'non existing text' but its text was 'This text is inside an identified element'.
-    ...    Element Should Contain    some_id    non existing text
-    Run Keyword And Expect Error
-    ...    Element with locator 'missing_id' not found.
-    ...    Element Should Contain    missing_id    This should report missing element.
+    Element Should Contain    some_id    THIS TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
+    Element Should Contain    some_id    This text is inside an identified elemenT  ignore_case=False   message=This Passed blah blah
+
+    # Run Keyword And Expect Error
+    # ...    Element 'some_id' should have contained text 'non existing text' but its text was 'This text is inside an identified element'.
+    # ...    Element Should Contain    some_id    non existing text
+    # Run Keyword And Expect Error
+    # ...    Element with locator 'missing_id' not found.
+    # ...    Element Should Contain    missing_id    This should report missing element.
 
 Element Should Not Contain
     Element Should Not Contain    some_id    This text is not inside an identified element
