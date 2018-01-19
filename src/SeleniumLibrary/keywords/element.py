@@ -53,7 +53,7 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
 
-        The ``ignore_case`` argumentcan be set to True to compare case
+        The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
 
         The ``message`` argument can be used to override the default error
@@ -64,7 +64,7 @@ class ElementKeywords(LibraryComponent):
         """
         actual = self.find_element(locator).text
 
-        if ignore_case:
+        if is_truthy(ignore_case):
             actual = actual.lower()
             expected = expected.lower()
 
@@ -77,16 +77,24 @@ class ElementKeywords(LibraryComponent):
         self.info("Element '%s' contains text '%s'." % (locator, expected))
 
     @keyword
-    def element_should_not_contain(self, locator, expected, message=None):
+    def element_should_not_contain(self, locator, expected, ignore_case=False, message=None):
         """Verifies that element ``locator`` does not contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
+
         The ``message`` argument can be used to override the default error
         message.
         """
         actual = self.find_element(locator).text
+
+        if is_truthy(ignore_case):
+            actual = actual.lower()
+            expected = expected.lower()
+
         if expected in actual:
             if is_noney(message):
                 message = "Element '%s' should not contain text '%s' but " \
@@ -297,7 +305,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def element_text_should_be(self, locator, expected, message=None):
+    def element_text_should_be(self, locator, expected, ignore_case=False, message=None):
         """Verifies that element ``locator`` contains exact text ``expected``.
 
         See the `Locating elements` section for details about the locator
@@ -311,6 +319,11 @@ class ElementKeywords(LibraryComponent):
         self.info("Verifying element '%s' contains exact text '%s'."
                   % (locator, expected))
         text = self.find_element(locator).text
+
+        if is_truthy(ignore_case):
+            text = text.lower()
+            expected = expected.lower()
+
         if text != expected:
             if is_noney(message):
                 message = ("The text of element '%s' should have been '%s' "
