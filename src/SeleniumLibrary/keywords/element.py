@@ -61,8 +61,8 @@ class ElementKeywords(LibraryComponent):
         """
         actual = self.find_element(locator).text        
         if is_truthy(ignore_case):
-            actual = actual.lower
-            expected = expected.lower
+            actual = actual.lower()
+            expected = expected.lower()
         if expected not in actual:
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
