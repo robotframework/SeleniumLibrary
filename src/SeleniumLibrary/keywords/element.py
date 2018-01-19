@@ -53,6 +53,9 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
 
+        The ``ignore_case`` argumentcan be set to True to compare case
+        insensitive, default is False.
+
         The ``message`` argument can be used to override the default error
         message.
 
@@ -69,7 +72,7 @@ class ElementKeywords(LibraryComponent):
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
                           "its text was '%s'." % (locator, expected, actual)
-                          
+
             raise AssertionError(message)
         self.info("Element '%s' contains text '%s'." % (locator, expected))
 

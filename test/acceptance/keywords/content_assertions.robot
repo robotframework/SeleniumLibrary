@@ -117,7 +117,7 @@ Element Should Contain
     [Tags]  focusnola
     Element Should Contain    some_id    This text is inside an identified element
     Element Should Contain    some_id    THIS TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
-    Element Should Contain    some_id    This text is inside an identified elemenT  ignore_case=False   message=This Passed blah blah
+    Element Should Contain    some_id    This text is inside an identified elemenT  ignore_case=False
 
     # Run Keyword And Expect Error
     # ...    Element 'some_id' should have contained text 'non existing text' but its text was 'This text is inside an identified element'.
