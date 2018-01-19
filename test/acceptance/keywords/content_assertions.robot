@@ -114,7 +114,6 @@ Page Should Not Contain Element With Disabling Source Logging
     [Teardown]    Set Log Level    DEBUG
 
 Element Should Contain
-    [Tags]  focusnola
     Element Should Contain    some_id    This text is inside an identified element
     Element Should Contain    some_id    THIS TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
     Element Should Contain    some_id    This text is inside an identified elemenT  ignore_case=False
