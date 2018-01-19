@@ -47,7 +47,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_elements(locator)
 
     @keyword
-    def element_should_contain(self, locator, expected, message=None):
+    def element_should_contain(self, locator, expected, message=None, ignore_case=False):
         """Verifies that element ``locator`` contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
@@ -59,7 +59,10 @@ class ElementKeywords(LibraryComponent):
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
         """
-        actual = self.find_element(locator).text
+        actual = self.find_element(locator).text        
+        if is_truthy(ignore_case):
+            actual = actual.lower
+            expected = expected.lower
         if expected not in actual:
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
