@@ -126,7 +126,7 @@ Element Should Contain
 
 Element Should Not Contain
     Element Should Not Contain    some_id    This text is not inside an identified element
-    Element Should Not Contain    some_id    text   ignore_case=True
+    Element Should Not Contain    some_id    THIS TEXT is not inside an identified element   ignore_case=True
     Element Should Not Contain    some_id    elementypo
     Run Keyword And Expect Error
     ...    Element 'some_id' should not contain text 'This text is inside an identified element' but it did.
@@ -136,7 +136,6 @@ Element Should Not Contain
     ...    Element Should Not Contain    missing_id    This should report missing element.
 
 Element Text Should Be
-    [Tags]  focus
     Element Text Should Be    some_id    This text is inside an identified element
     Element Text Should Be    some_id    This TEST IS INSIDE                         ignore_case=True
     Run Keyword And Expect Error

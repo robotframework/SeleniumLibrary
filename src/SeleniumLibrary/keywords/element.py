@@ -311,6 +311,9 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
 
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
+
         The ``message`` argument can be used to override the default error
         message.
 
