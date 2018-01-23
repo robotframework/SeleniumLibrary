@@ -47,17 +47,17 @@ class ElementKeywords(LibraryComponent):
         return self.find_elements(locator)
 
     @keyword
-    def element_should_contain(self, locator, expected, ignore_case=False, message=None):
+    def element_should_contain(self, locator, expected, message=None, ignore_case=False):
         """Verifies that element ``locator`` contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
-        The ``ignore_case`` argument can be set to True to compare case
-        insensitive, default is False.
-
         The ``message`` argument can be used to override the default error
         message.
+
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
 
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
@@ -77,17 +77,17 @@ class ElementKeywords(LibraryComponent):
         self.info("Element '%s' contains text '%s'." % (locator, expected))
 
     @keyword
-    def element_should_not_contain(self, locator, expected, ignore_case=False, message=None):
+    def element_should_not_contain(self, locator, expected, message=None, ignore_case=False ):
         """Verifies that element ``locator`` does not contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
-        The ``ignore_case`` argument can be set to True to compare case
-        insensitive, default is False.
-
         The ``message`` argument can be used to override the default error
         message.
+
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
         """
         actual = self.find_element(locator).text
 
@@ -305,17 +305,17 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def element_text_should_be(self, locator, expected, ignore_case=False, message=None):
+    def element_text_should_be(self, locator, expected, message=None, ignore_case=False):
         """Verifies that element ``locator`` contains exact text ``expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
-        The ``ignore_case`` argument can be set to True to compare case
-        insensitive, default is False.
-
         The ``message`` argument can be used to override the default error
         message.
+
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
 
         Use `Element Should Contain` if a substring match is desired.
         """
