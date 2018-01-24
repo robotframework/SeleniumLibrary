@@ -22,7 +22,7 @@ Browser Open With Not Well-Formed URL Should Close
     ...    LOG 1.1:10 DEBUG STARTS: Opened browser with session id
     ...    LOG 1.1:10 DEBUG REGEXP: .*but failed to open url.*
     ...    LOG 2:2 DEBUG STARTS: DELETE
-    ...    LOG 2:3 DEBUG Finished Request
+    ...    LOG 2:3 DEBUG STARTS: Finished Request
     Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}
     Close All Browsers
 
