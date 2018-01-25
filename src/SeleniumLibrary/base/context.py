@@ -16,7 +16,6 @@
 
 from SeleniumLibrary.utils import escape_xpath_value
 
-
 class ContextAware(object):
 
     def __init__(self, ctx):
@@ -59,7 +58,27 @@ class ContextAware(object):
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found
             and `required` is true.
         """
-        return self.element_finder.find(locator, tag, True, required, parent)
+        if(type(locator)==type('') or type(locator)==type(u'')):
+            return self.element_finder.find(locator, tag, True, required, parent)
+        else:
+            """
+            Add a new strategy to find element.
+            locator format showing below:
+            {
+                'name':'locator_name',
+                'locators':['xpath=//locator_xpath','id', 'css'...]
+            }
+            
+            name: optional field, you can provide a name to find an element. 
+                If element couldnot found, name will be taken to be displayed 
+                on the error message 
+            locators: list of element's locators that you want to find.
+                If the first locator is failed to find, keep searching
+                element by using the second then third...
+            
+            """
+            return self.element_finder.find_dict_element(locator)
+            
 
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.
