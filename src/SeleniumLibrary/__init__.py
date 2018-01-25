@@ -403,13 +403,6 @@ class SeleniumLibrary(DynamicCore):
             raise NoOpenBrowser('No browser is open.')
         return self._drivers.current
 
-    @property
-    def browser(self):
-        # TODO: Remove after 3.0 RC1 release.
-        warnings.warn('"SeleniumLibrary.browser" is deprecated, '
-                      'use "SeleniumLibrary.driver".', DeprecationWarning)
-        return self.driver
-
     def find_element(self, locator, parent=None):
         """Find element matching `locator`.
 
