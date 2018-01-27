@@ -18,7 +18,7 @@ import time
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils import is_noney, is_truthy, secs_to_timestr
+from SeleniumLibrary.utils import is_noney, secs_to_timestr
 
 
 class WaitingKeywords(LibraryComponent):
