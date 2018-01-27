@@ -42,57 +42,11 @@ class BrowserManagementTests(unittest.TestCase):
     def test_create_phantomjs_browser(self):
         self.verify_browser(webdriver.PhantomJS, "PHANTOMJS")
 
-    def test_create_remote_browser(self):
-        self.verify_browser(
-            webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub"
-        )
-
     def test_create_htmlunit_browser(self):
         self.verify_browser(webdriver.Remote, "htmlunit")
 
     def test_create_htmlunitwihtjs_browser(self):
         self.verify_browser(webdriver.Remote, "htmlunitwithjs")
-
-    def test_parse_capabilities_string(self):
-        ctx = mock()
-        bm = BrowserManagementKeywords(ctx)
-        expected_caps = "key1:val1,key2:val2"
-        capabilities = bm._parse_capabilities_string(expected_caps)
-        self.assertTrue("val1", capabilities["key1"])
-        self.assertTrue("val2", capabilities["key2"])
-        self.assertTrue(2, len(capabilities))
-        unstub()
-
-    def test_parse_complex_capabilities_string(self):
-        ctx = mock()
-        bm = BrowserManagementKeywords(ctx)
-        expected_caps = "proxyType:manual,httpProxy:IP:port"
-        capabilities = bm._parse_capabilities_string(expected_caps)
-        self.assertTrue("manual", capabilities["proxyType"])
-        self.assertTrue("IP:port", capabilities["httpProxy"])
-        self.assertTrue(2, len(capabilities))
-        unstub()
-
-    def test_create_remote_browser_with_desired_prefs(self):
-        expected_caps = {"key1": "val1", "key2": "val2"}
-        self.verify_browser(
-            webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps
-        )
-
-    def test_create_remote_browser_with_string_desired_prefs(self):
-        expected_caps = "key1:val1,key2:val2"
-        self.verify_browser(
-            webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps)
-
-    def test_capabilities_attribute_not_modified(self):
-        expected_caps = {"some_cap": "42"}
-        self.verify_browser(
-            webdriver.Remote, "chrome", remote="http://127.0.0.1/wd/hub",
-            desired_capabilities=expected_caps
-        )
-        self.assertFalse("some_cap" in webdriver.DesiredCapabilities.CHROME)
 
     def test_set_selenium_timeout_only_affects_open_browsers(self):
         ctx = mock()
@@ -144,7 +98,8 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         ctx.speed = 5.0
         browser = mock()
-        when(webdriver).Chrome().thenReturn(browser)
+        caps = webdriver.DesiredCapabilities.CHROME
+        when(webdriver).Chrome(desired_capabilities=caps).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
         self.assertEqual(browser._speed, 5.0)
@@ -154,7 +109,8 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         ctx.speed = 0.0
         browser = mock()
-        when(webdriver).Chrome().thenReturn(browser)
+        caps = webdriver.DesiredCapabilities.CHROME
+        when(webdriver).Chrome(desired_capabilities=caps).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
         verify(browser, times=0).__call__('_speed')

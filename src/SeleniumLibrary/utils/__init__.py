@@ -21,6 +21,7 @@ from .librarylistener import LibraryListener
 from .seleniumversion import SELENIUM_VERSION
 from .types import is_falsy, is_noney, is_string, is_truthy
 from .webdrivercache import WebDriverCache
+from .webdriverfactory import WebDriverFactory
 
 
 def escape_xpath_value(value):
