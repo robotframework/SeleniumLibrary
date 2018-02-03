@@ -23,7 +23,7 @@ from selenium import webdriver
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import (is_falsy, is_truthy, secs_to_timestr,
+from SeleniumLibrary.utils import (is_falsy, is_truthy, is_noney, secs_to_timestr,
                                    timestr_to_secs, SELENIUM_VERSION)
 
 
@@ -303,12 +303,17 @@ class BrowserManagementKeywords(LibraryComponent):
         return title
 
     @keyword
-    def title_should_be(self, title):
-        """Verifies that current page title equals ``title``."""
+    def title_should_be(self, title, message=None):
+        """Verifies that current page title equals ``title``.
+
+        The ``message`` argument can be used to override the default error
+        message.
+        """
         actual = self.get_title()
         if actual != title:
-            raise AssertionError("Title should have been '%s' but was '%s'."
-                                 % (title, actual))
+            if is_noney(message):
+                message = "Title should have been '%s' but was '%s'." % (title, actual)
+            raise AssertionError(message)
         self.info("Page title is '%s'." % title)
 
     @keyword
