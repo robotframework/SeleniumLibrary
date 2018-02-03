@@ -307,7 +307,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """Verifies that current page title equals ``title``.
 
         The ``message`` argument can be used to override the default error
-        message.
+        message. Added in 3.1
         """
         actual = self.get_title()
         if actual != title:
