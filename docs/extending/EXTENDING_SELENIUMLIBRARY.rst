@@ -56,9 +56,9 @@ generally useful in the SeleniumLibrary. If the extension would be useful for ot
 create an issue and a pull request. More details how SeleniumLibrary project handles the
 enhancement requests can be read from the CONTRIBUTING.rst `Enhancement requests`_ chapter.
 
-General prinsibles for extending SeleniumLibrary
+General principles for extending SeleniumLibrary
 ------------------------------------------------
-The prinsibles described in the Robot Framework User Guide, `Extending existing test libraries`_
+The principles described in the Robot Framework User Guide, `Extending existing test libraries`_
 chapter also apply when extending the SeleniumLibrary. There are two different ways to
 extend the SeleniumLibrary.
 
