@@ -25,6 +25,10 @@ Title Should Be
     Run Keyword And Expect Error
     ...    Title should have been 'not a title' but was '(root)/index.html'.
     ...    Title Should Be    not a title
+    Run Keyword And Expect Error
+    ...    Page title was not expected
+    ...    Title Should Be    not a title   message=Page title was not expected
+
 
 Page Should Contain
     [Documentation]    LOG 2:5 Current page contains text 'needle'.

@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+3.1.0
+-----
+- Added a message param to `Title Should Be` to display custom error message [rubygeek]
+
 3.0.0
 -----
 - Added 'Get Locations' keyword [thaffenden]
