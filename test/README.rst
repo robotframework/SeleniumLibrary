@@ -72,7 +72,7 @@ use the following command::
     bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel
 
 More details and to download Sauce Connect visit:
-https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
+https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Proxy+Setup
 
 
 Examples
