@@ -24,7 +24,7 @@ from SeleniumLibrary.locators import WindowManager
 from SeleniumLibrary.utils import (is_truthy, is_noney, secs_to_timestr,
                                    timestr_to_secs)
 
-from .webdrivercreator import WebDriverCreator
+from .webdrivertools import WebDriverCreator
 
 
 class BrowserManagementKeywords(LibraryComponent):
@@ -93,12 +93,13 @@ class BrowserManagementKeywords(LibraryComponent):
         opened, and reset back to 1 when `Close All Browsers` is called.
         See `Switch Browser` for more information and examples.
 
-        Optional ``remote_url`` is the URL for a remote Selenium server. If
-        you specify a value for a remote, you can also specify
-        ``desired_capabilities`` to configure, for example, a proxy server
-        for Internet Explorer or a browser and operating system when using
-        [http://saucelabs.com|Sauce Labs]. Desired capabilities can be given
-        either as a Python dictionary or as a string in format
+        Optional ``remote_url`` is the URL for a
+        [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid].
+
+        Optional ``desired_capabilities`` can be used to configure, for example,
+        logging preferences for a browser or a browser and operating system
+        when using [http://saucelabs.com|Sauce Labs]. Desired capabilities can
+        be given either as a Python dictionary or as a string in format
         ``key1:value1,key2:value2``.
         [https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities|
         Selenium documentation] lists possible capabilities that can be
@@ -117,6 +118,9 @@ class BrowserManagementKeywords(LibraryComponent):
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
         more.
+
+        Applying ``desired_capabilities`` argument also for local browser is
+        new in SeleniumLibrary 3.1.
         """
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
