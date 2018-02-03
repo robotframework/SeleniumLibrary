@@ -33,10 +33,10 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       SelectElementKeywords,
                                       TableElementKeywords,
                                       WaitingKeywords,
+                                      WebDriverCache,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import (Deprecated, LibraryListener, timestr_to_secs,
-                                   WebDriverCache)
+from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs
 
 
 __version__ = '3.0.2.dev1'

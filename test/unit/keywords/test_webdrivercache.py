@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock, verify
 
-from SeleniumLibrary.utils import WebDriverCache
+from SeleniumLibrary.keywords import WebDriverCache
 
 
 class WebDriverCacheTests(unittest.TestCase):

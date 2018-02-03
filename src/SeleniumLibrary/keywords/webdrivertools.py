@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import copy
 import os
 
+from robot.utils import ConnectionCache
 from selenium import webdriver
 
 from SeleniumLibrary.utils import is_falsy, is_truthy, SELENIUM_VERSION
@@ -80,7 +80,8 @@ class WebDriverCreator(object):
             return self._remote(default, desired_capabilities, remote_url)
         capabilities = self._combine_capabilites(default, desired_capabilities)
         if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
-            return webdriver.Chrome(desired_capabilities=capabilities, options=options)
+            return webdriver.Chrome(desired_capabilities=capabilities,
+                                    options=options)
         return webdriver.Chrome(desired_capabilities=capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url):
@@ -88,7 +89,7 @@ class WebDriverCreator(object):
             options = webdriver.ChromeOptions()
             options.set_headless()
         else:
-            options=None
+            options = None
         return self.create_chrome(desired_capabilities, remote_url, options)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir,
@@ -191,3 +192,36 @@ class WebDriverCreator(object):
         default = default.copy()
         default.update(user)
         return default
+
+
+class WebDriverCache(ConnectionCache):
+
+    def __init__(self):
+        ConnectionCache.__init__(self, no_current_msg='No current browser')
+        self._closed = set()
+
+    @property
+    def drivers(self):
+        return self._connections
+
+    @property
+    def active_drivers(self):
+        open_drivers = []
+        for driver in self._connections:
+            if driver not in self._closed:
+                open_drivers.append(driver)
+        return open_drivers
+
+    def close(self):
+        if self.current:
+            driver = self.current
+            driver.quit()
+            self.current = self._no_current
+            self._closed.add(driver)
+
+    def close_all(self):
+        for driver in self._connections:
+            if driver not in self._closed:
+                driver.quit()
+        self.empty_cache()
+        return self.current
