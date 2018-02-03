@@ -307,7 +307,9 @@ class BrowserManagementKeywords(LibraryComponent):
         """Verifies that current page title equals ``title``.
 
         The ``message`` argument can be used to override the default error
-        message. Added in 3.1
+        message. 
+        
+        ``message`` argument is new in SeleniumLibrary 3.1.
         """
         actual = self.get_title()
         if actual != title:
