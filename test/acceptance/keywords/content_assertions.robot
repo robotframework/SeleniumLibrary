@@ -116,17 +116,19 @@ Page Should Not Contain Element With Disabling Source Logging
 Element Should Contain
     Element Should Contain    some_id    This text is inside an identified element
     Element Should Contain    some_id    THIS TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
-
     Run Keyword And Expect Error
     ...    Element 'some_id' should have contained text 'non existing text' but its text was 'This text is inside an identified element'.
     ...    Element Should Contain    some_id    non existing text
     Run Keyword And Expect Error
     ...    Element with locator 'missing_id' not found.
     ...    Element Should Contain    missing_id    This should report missing element.
+    Run Keyword And Expect Error
+    ...    Element 'some_id' should have contained text 'foobar' but its text was 'This text is inside an identified element'.
+    ...    Element Should Contain    some_id    foobar    ignore_case=True
 
 Element Should Not Contain
     Element Should Not Contain    some_id    This text is not inside an identified element
-    Element Should Not Contain    some_id    THIS TEXT is not inside an identified element   ignore_case=True
+    Element Should Not Contain    some_id    THIS TEXT is not inside an identified element   ignore_case=False
     Element Should Not Contain    some_id    elementypo
     Run Keyword And Expect Error
     ...    Element 'some_id' should not contain text 'This text is inside an identified element' but it did.
@@ -137,7 +139,7 @@ Element Should Not Contain
 
 Element Text Should Be
     Element Text Should Be    some_id    This text is inside an identified element
-    Element Text Should Be    some_id    This TEST IS INSIDE                         ignore_case=True
+    Element Text Should Be    some_id    This TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
     Run Keyword And Expect Error
     ...    The text of element 'some_id' should have been 'inside' but it was 'This text is inside an identified element'.
     ...    Element Text Should Be    some_id    inside

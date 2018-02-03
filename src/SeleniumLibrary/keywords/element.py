@@ -62,7 +62,8 @@ class ElementKeywords(LibraryComponent):
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
         """
-        actual = self.find_element(locator).text
+        actual = actual_before = self.find_element(locator).text
+        expected_before = expected
 
         if is_truthy(ignore_case):
             actual = actual.lower()
@@ -71,10 +72,10 @@ class ElementKeywords(LibraryComponent):
         if expected not in actual:
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
-                          "its text was '%s'." % (locator, expected, actual)
+                          "its text was '%s'." % (locator, expected_before, actual_before)
 
             raise AssertionError(message)
-        self.info("Element '%s' contains text '%s'." % (locator, expected))
+        self.info("Element '%s' contains text '%s'." % (locator, expected_before))
 
     @keyword
     def element_should_not_contain(self, locator, expected, message=None, ignore_case=False ):
@@ -90,6 +91,7 @@ class ElementKeywords(LibraryComponent):
         insensitive, default is False.
         """
         actual = self.find_element(locator).text
+        expected_before = expected
 
         if is_truthy(ignore_case):
             actual = actual.lower()
@@ -98,10 +100,10 @@ class ElementKeywords(LibraryComponent):
         if expected in actual:
             if is_noney(message):
                 message = "Element '%s' should not contain text '%s' but " \
-                          "it did." % (locator, expected)
+                          "it did." % (locator, expected_before)
             raise AssertionError(message)
         self.info("Element '%s' does not contain text '%s'."
-                  % (locator, expected))
+                  % (locator, expected_before))
 
     @keyword
     def page_should_contain(self, text, loglevel='INFO'):
@@ -321,7 +323,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info("Verifying element '%s' contains exact text '%s'."
                   % (locator, expected))
-        text = self.find_element(locator).text
+        text = before_text = self.find_element(locator).text
 
         if is_truthy(ignore_case):
             text = text.lower()
@@ -331,7 +333,7 @@ class ElementKeywords(LibraryComponent):
             if is_noney(message):
                 message = ("The text of element '%s' should have been '%s' "
                            "but it was '%s'."
-                           % (locator, expected, text))
+                           % (locator, expected, before_text))
             raise AssertionError(message)
 
     @keyword
