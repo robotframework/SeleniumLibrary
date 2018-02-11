@@ -57,7 +57,9 @@ class ElementKeywords(LibraryComponent):
         message.
 
         The ``ignore_case`` argument can be set to True to compare case
-        insensitive, default is False.
+        insensitive, default is False. New in SeleniumLibrary 3.1.
+
+        ``ignore_case`` argument new in SeleniumLibrary 3.1.
 
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
@@ -68,12 +70,10 @@ class ElementKeywords(LibraryComponent):
         if is_truthy(ignore_case):
             actual = actual.lower()
             expected = expected.lower()
-
         if expected not in actual:
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
                           "its text was '%s'." % (locator, expected_before, actual_before)
-
             raise AssertionError(message)
         self.info("Element '%s' contains text '%s'." % (locator, expected_before))
 
@@ -89,14 +89,14 @@ class ElementKeywords(LibraryComponent):
 
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
+
+        ``ignore_case`` argument new in SeleniumLibrary 3.1.
         """
         actual = self.find_element(locator).text
         expected_before = expected
-
         if is_truthy(ignore_case):
             actual = actual.lower()
-            expected = expected.lower()
-
+            expected = expected.lower() 
         if expected in actual:
             if is_noney(message):
                 message = "Element '%s' should not contain text '%s' but " \
@@ -318,6 +318,8 @@ class ElementKeywords(LibraryComponent):
 
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
+
+        ``ignore_case`` argument new in SeleniumLibrary 3.1.
 
         Use `Element Should Contain` if a substring match is desired.
         """
