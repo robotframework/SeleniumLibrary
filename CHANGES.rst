@@ -4,6 +4,7 @@ Release Notes
 3.1.0
 -----
 - Added a message param to `Title Should Be` to display custom error message [rubygeek]
+- Compare text regardless of case in: `Element Should Contain`, `Element Should Not Contain` and `Element Text Should Be` by passing `ignore_case=True`. The default is `False` 
 
 3.0.1
 -----

@@ -47,7 +47,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_elements(locator)
 
     @keyword
-    def element_should_contain(self, locator, expected, message=None):
+    def element_should_contain(self, locator, expected, message=None, ignore_case=False):
         """Verifies that element ``locator`` contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
@@ -56,19 +56,28 @@ class ElementKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False. New in SeleniumLibrary 3.1.
+
+        ``ignore_case`` argument new in SeleniumLibrary 3.1.
+
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
         """
-        actual = self.find_element(locator).text
+        actual = actual_before = self.find_element(locator).text
+        expected_before = expected
+        if is_truthy(ignore_case):
+            actual = actual.lower()
+            expected = expected.lower()
         if expected not in actual:
             if is_noney(message):
                 message = "Element '%s' should have contained text '%s' but "\
-                          "its text was '%s'." % (locator, expected, actual)
+                          "its text was '%s'." % (locator, expected_before, actual_before)
             raise AssertionError(message)
-        self.info("Element '%s' contains text '%s'." % (locator, expected))
+        self.info("Element '%s' contains text '%s'." % (locator, expected_before))
 
     @keyword
-    def element_should_not_contain(self, locator, expected, message=None):
+    def element_should_not_contain(self, locator, expected, message=None, ignore_case=False ):
         """Verifies that element ``locator`` does not contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
@@ -76,15 +85,24 @@ class ElementKeywords(LibraryComponent):
 
         The ``message`` argument can be used to override the default error
         message.
+
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
+
+        ``ignore_case`` argument new in SeleniumLibrary 3.1.
         """
         actual = self.find_element(locator).text
+        expected_before = expected
+        if is_truthy(ignore_case):
+            actual = actual.lower()
+            expected = expected.lower()
         if expected in actual:
             if is_noney(message):
                 message = "Element '%s' should not contain text '%s' but " \
-                          "it did." % (locator, expected)
+                          "it did." % (locator, expected_before)
             raise AssertionError(message)
         self.info("Element '%s' does not contain text '%s'."
-                  % (locator, expected))
+                  % (locator, expected_before))
 
     @keyword
     def page_should_contain(self, text, loglevel='INFO'):
@@ -288,7 +306,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def element_text_should_be(self, locator, expected, message=None):
+    def element_text_should_be(self, locator, expected, message=None, ignore_case=False):
         """Verifies that element ``locator`` contains exact text ``expected``.
 
         See the `Locating elements` section for details about the locator
@@ -297,16 +315,24 @@ class ElementKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
+
+        ``ignore_case`` argument new in SeleniumLibrary 3.1.
+
         Use `Element Should Contain` if a substring match is desired.
         """
         self.info("Verifying element '%s' contains exact text '%s'."
                   % (locator, expected))
-        text = self.find_element(locator).text
+        text = before_text = self.find_element(locator).text
+        if is_truthy(ignore_case):
+            text = text.lower()
+            expected = expected.lower()
         if text != expected:
             if is_noney(message):
                 message = ("The text of element '%s' should have been '%s' "
                            "but it was '%s'."
-                           % (locator, expected, text))
+                           % (locator, expected, before_text))
             raise AssertionError(message)
 
     @keyword
