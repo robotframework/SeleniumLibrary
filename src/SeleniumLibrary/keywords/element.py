@@ -66,7 +66,6 @@ class ElementKeywords(LibraryComponent):
         """
         actual = actual_before = self.find_element(locator).text
         expected_before = expected
-
         if is_truthy(ignore_case):
             actual = actual.lower()
             expected = expected.lower()
@@ -96,7 +95,7 @@ class ElementKeywords(LibraryComponent):
         expected_before = expected
         if is_truthy(ignore_case):
             actual = actual.lower()
-            expected = expected.lower() 
+            expected = expected.lower()
         if expected in actual:
             if is_noney(message):
                 message = "Element '%s' should not contain text '%s' but " \
@@ -326,11 +325,9 @@ class ElementKeywords(LibraryComponent):
         self.info("Verifying element '%s' contains exact text '%s'."
                   % (locator, expected))
         text = before_text = self.find_element(locator).text
-
         if is_truthy(ignore_case):
             text = text.lower()
             expected = expected.lower()
-
         if text != expected:
             if is_noney(message):
                 message = ("The text of element '%s' should have been '%s' "
