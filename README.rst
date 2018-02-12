@@ -68,7 +68,7 @@ this command::
     pip install git+https://github.com/robotframework/SeleniumLibrary.git
 
 Please note that installation will take some time, because ``pip`` will
-clone the SeleniumLibrary_ project to a temporary directly and then
+clone the SeleniumLibrary_ project to a temporary directory and then
 perform the installation.
 
 See `Robot Framework installation instructions`_ for detailed information
