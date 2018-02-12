@@ -61,11 +61,15 @@ To install the last legacy Selenium2Library_ version, use this command instead::
 
     pip install robotframework-selenium2library==1.8.0
 
-An alternative to using ``pip`` is getting the project source code either
-from a source distribution at PyPI_ or by cloning the GitHub_ repository,
-and installing the code using ``python setup.py install``. This approach
-does not install Selenium or other dependencies, so they need to be installed
-separately.
+With resent versions of ``pip`` it is possible to install directly from the
+GitHub_ repository. To install latest source from the master branch, use
+this command::
+
+    pip install git+https://github.com/robotframework/SeleniumLibrary.git
+
+Please note that installation will take some time, because ``pip`` will
+clone the SeleniumLibrary_ project to a temporary directly and then
+perform the installation.
 
 See `Robot Framework installation instructions`_ for detailed information
 about installing Python and Robot Framework itself. For more details about
