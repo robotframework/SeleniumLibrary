@@ -65,11 +65,13 @@ That allows importing Selenium2Library in tests while migrating to
 SeleniumLibrary.</p>
 <p>To install the last legacy <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> version, use this command instead:</p>
 <pre class="literal-block">pip install robotframework-selenium2library==1.8.0</pre>
-<p>An alternative to using <span class="docutils literal">pip</span> is getting the project source code either
-from a source distribution at <a class="reference external" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">PyPI</a> or by cloning the <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a> repository,
-and installing the code using <span class="docutils literal">python setup.py install</span>. This approach
-does not install Selenium or other dependencies, so they need to be installed
-separately.</p>
+<p>With resent versions of <span class="docutils literal">pip</span> it is possible to install directly from the
+<a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a> repository. To install latest source from the master branch, use
+this command:</p>
+<pre class="literal-block">pip install git+https://github.com/robotframework/SeleniumLibrary.git</pre>
+<p>Please note that installation will take some time, because <span class="docutils literal">pip</span> will
+clone the <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> project to a temporary directory and then
+perform the installation.</p>
 <p>See <a class="reference external" href="https://github.com/robotframework/robotframework/blob/master/INSTALL.rst">Robot Framework installation instructions</a> for detailed information
 about installing Python and Robot Framework itself. For more details about
 using <span class="docutils literal">pip</span> see <a class="reference external" href="http://pip-installer.org">its own documentation</a>.</p>
