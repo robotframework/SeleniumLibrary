@@ -39,7 +39,7 @@ from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs
 
 
-__version__ = '3.1.0a3.dev1'
+__version__ = '3.1.0'
 
 
 class SeleniumLibrary(DynamicCore):
