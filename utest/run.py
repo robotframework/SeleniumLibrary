@@ -11,7 +11,7 @@ CURDIR = dirname(abspath(__file__))
 def run_unit_tests():
     sys.path.insert(0, join(CURDIR, '..', 'src'))
     try:
-        suite = defaultTestLoader.discover(join(CURDIR, 'unit'), 'test_*.py')
+        suite = defaultTestLoader.discover(join(CURDIR, 'test'), 'test_*.py')
         result = TextTestRunner().run(suite)
     finally:
         sys.path.pop(0)
