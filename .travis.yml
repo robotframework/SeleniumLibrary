@@ -34,40 +34,46 @@ matrix:
         - SELENIUM=3.9.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python3
     - python: "pypy3.5"
       env:
         - BROWSER=chrome
         - SELENIUM=3.9.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=pypy3
     - python: "2.7"
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=2.9.2
         - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python2
     - python: "2.7"
       env:
         - BROWSER=chrome
         - SELENIUM=3.9.0
         - ROBOTFRAMEWORK=2.8.7
         - ROBOT_OPTIONS=
+        - INTERPRETER=python2
     - python: "3.3"
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python3
     - python: "3.6"
       env:
         - BROWSER=firefox
         - SELENIUM=3.9.0
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS="--exclude Known_Issue_Firefox --dotted"
+        - INTERPRETER=python3
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - pip install selenium==$SELENIUM
   - pip install robotframework==$ROBOTFRAMEWORK
 script:
-  - python test/run_tests.py $BROWSER $ROBOT_OPTIONS
+  - python atest/run.py $BROWSER --interpreter $INTERPRETER $ROBOT_OPTIONS

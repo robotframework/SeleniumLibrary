@@ -49,11 +49,11 @@ except ImportError:
     sys.exit('Required `robotstatuschecker` not installed.\n'
              'Install it with `pip install robotstatuschecker`.')
 
-from run_unit_tests import run_unit_tests
 
 # Folder settings
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 ACCEPTANCE_TEST_DIR = os.path.join(ROOT_DIR, "acceptance")
+UNIT_TEST_RUNNER = os.path.join(ROOT_DIR, '..', 'utest', 'run.py')
 RESOURCES_DIR = os.path.join(ROOT_DIR, "resources")
 RESULTS_DIR = os.path.join(ROOT_DIR, "results")
 SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, "..", "src"))
@@ -192,34 +192,25 @@ if __name__ == '__main__':
         formatter_class=argparse.RawTextHelpFormatter,
         epilog='\n'.join(__doc__.splitlines()[2:])
     )
-    parser.add_argument(
-        '--interpreter',
-        '-I',
-        default='python',
-        help=textwrap.dedent("""\
-            Any Python interpreter supported by the library.
-            E.g. `python`, `jython` or `c:\\Python27\\python.exe`.
-            By default set to `python`.
-        """)
-    )
-    parser.add_argument(
-        'browser',
-        help='Any browser supported by the library (e.g. `chrome`or `firefox`)'
-    )
-    parser.add_argument(
-        '--sauceusername',
-        '-U',
-        help='Username to order browser from SauceLabs'
-    )
-    parser.add_argument(
-        '--saucekey',
-        '-K',
-        help='Access key to order browser from SauceLabs'
-    )
+    parser.add_argument('--interpreter', '-I',
+                        default='python',
+                        help=textwrap.dedent("""\
+                            Any Python interpreter supported by the library.
+                            E.g. `python`, `jython` or `c:\\Python27\\python.exe`.
+                            By default set to `python`."""))
+    parser.add_argument('browser',
+                        help=('Any browser supported by the library '
+                              '(e.g. `chrome`or `firefox`).'))
+    parser.add_argument('--sauceusername', '-U',
+                        help='Username to order browser from SauceLabs.')
+    parser.add_argument('--saucekey', '-K',
+                        help='Access key to order browser from SauceLabs.')
+    parser.add_argument('--nounit', help='Does not run unit test when set.',
+                        default=False, action='store_true')
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
     if TRAVIS and browser not in TRAVIS_BROWSERS and TRAVIS_EVENT_TYPE != 'cron':
-        # When running in only Chrome and Firefox are available.
+        # When running in Travis only Chrome and Firefox are available for PR.
         print(
             'Can not run test with browser "{}" from SauceLabs with PR.\n'
             'SauceLabs can be used only when running with cron and from '
@@ -230,6 +221,10 @@ if __name__ == '__main__':
         sys.exit(0)
     sauce_username, sauce_key = sauce_credentials(
         args.sauceusername, args.saucekey)
-    unit_tests()
-    acceptance_tests(args.interpreter, browser, rf_options,
+    interpreter = args.interpreter
+    if args.nounit:
+        print('Not running unit tests.')
+    else:
+        subprocess.call([interpreter, UNIT_TEST_RUNNER])
+    acceptance_tests(interpreter, browser, rf_options,
                      sauce_username, sauce_key)
