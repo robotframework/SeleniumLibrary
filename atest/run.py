@@ -129,12 +129,12 @@ def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
     if sauce_username and sauce_key:
         options.extend(get_sauce_conf(browser, sauce_username, sauce_key))
     command = runner
+    command += ['--listener', 'atest/resources/testlibs/SLListener.py']
     command += options + [ACCEPTANCE_TEST_DIR]
     log_start(command, sauce_username, sauce_key)
     syslog = os.path.join(RESULTS_DIR, 'syslog.txt')
-    subprocess.call(
-        command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog)
-    )
+    subprocess.call(command,
+                    env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 
 def log_start(command_list, *hiddens):
