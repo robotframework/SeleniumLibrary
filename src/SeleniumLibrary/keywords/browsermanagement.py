@@ -423,6 +423,8 @@ class BrowserManagementKeywords(LibraryComponent):
 
     def _make_driver(self, browser, desired_capabilities=None,
                      profile_dir=None, remote=None):
+        import time
+        time.sleep(1)
         driver = WebDriverCreator(self.log_dir).create_driver(
             browser=browser, desired_capabilities=desired_capabilities,
             remote_url=remote, profile_dir=profile_dir)

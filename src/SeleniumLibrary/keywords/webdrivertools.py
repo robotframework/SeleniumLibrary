@@ -80,6 +80,10 @@ class WebDriverCreator(object):
             return self._remote(default, desired_capabilities, remote_url)
         capabilities = self._combine_capabilites(default, desired_capabilities)
         if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+            if not options:
+                options = webdriver.ChromeOptions()
+            options.add_argument('--no-sandbox')
+            options.add_argument('window-size=1024,768')
             return webdriver.Chrome(desired_capabilities=capabilities,
                                     options=options)
         return webdriver.Chrome(desired_capabilities=capabilities)
