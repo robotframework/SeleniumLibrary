@@ -423,9 +423,13 @@ class BrowserManagementKeywords(LibraryComponent):
 
     def _make_driver(self, browser, desired_capabilities=None,
                      profile_dir=None, remote=None):
+        self.info('Message before driver.')
+        import time
+        time.sleep(1)
         driver = WebDriverCreator(self.log_dir).create_driver(
             browser=browser, desired_capabilities=desired_capabilities,
             remote_url=remote, profile_dir=profile_dir)
+        self.info('Message after driver.')
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:
