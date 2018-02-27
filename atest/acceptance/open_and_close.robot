@@ -4,6 +4,7 @@ Resource          resource.robot
 
 *** Test Cases ***
 Browser Should Open And Close
+    Log chromedriver
     Open Browser To Start Page Without Testing Default Options
     Close Browser
     Log chromedriver
