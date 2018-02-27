@@ -3,7 +3,7 @@ Documentation     These tests must open own browser because windows opened by
 ...               earlier tests would otherwise be visible to Get Window XXX keywords
 ...               even if those windows were closed.
 Suite Setup       Open Browser To Start Page Without Testing Default Options
-Suite Teardown    Close All Browsers
+Suite Teardown    Run Keywords    Close All Browsers    Log chromedriver
 Test Setup        Go To Page "javascript/popupwindow.html"
 Resource          resource.robot
 
