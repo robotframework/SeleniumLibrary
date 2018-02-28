@@ -3,6 +3,7 @@ Library           SeleniumLibrary    run_on_failure=Nothing    implicit_wait=0.2
 Library           Collections
 Library           OperatingSystem
 Library           DateTime
+Library           Process
 
 *** Variable ***
 ${SERVER}=         localhost:7000
@@ -22,6 +23,7 @@ Open Browser To Start Page
     # FIXME: The second test below verifies a hard coded return value!!?!
     Should Be Equal    ${default speed}    0 seconds
     Should Be Equal    ${default timeout}    5 seconds
+    Log chromedriver
 
 Open Browser To Start Page Without Testing Default Options
     [Documentation]    Open Browser To Start Page Without Testing Default Options
@@ -29,6 +31,7 @@ Open Browser To Start Page Without Testing Default Options
     ...    desired_capabilities=${DESIRED_CAPABILITIES}
     ${orig speed} =    Set Selenium Speed    ${SPEED}
     ${orig timeout} =    Set Selenium Timeout    10 seconds
+    Log chromedriver
     [Return]    ${orig speed}    5 seconds
 
 Open Browser To Start Page And Test Implicit Wait
@@ -44,6 +47,7 @@ Open Browser To Start Page And Test Implicit Wait
     Should Be Equal    ${implicit_wait} seconds    ${default_implicit_wait}
     #be sure to revert the implicit wait to whatever it was before so as to not effect other tests
     Set Selenium Implicit Wait    ${old_wait}
+    Log chromedriver
 
 Cannot Be Executed In IE
     [Documentation]    Cannot Be Executed In IE
@@ -81,3 +85,9 @@ Set Global Timeout
 
 Restore Global Timeout
     Set Selenium timeout    ${PREVIOUS TIMEOUT}
+
+Log chromedriver
+    ${result} =    Process.Run Process    ps    aux    |    grep    -i     chromedriver    stderr=STDOUT    shell=True
+    # ${result} =    Process.Run Process    pgrep    chromedriver    stderr=STDOUT
+    Log    ${result.stdout}
+    Log To Console    ${result.stdout}

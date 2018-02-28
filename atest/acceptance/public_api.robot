@@ -4,7 +4,7 @@ Library           CustomSeleniumKeywords
 Suite Setup       Run Keywords
 ...               Set Library Search Order    CustomSeleniumKeywords    AND
 ...               Open Browser To Start Page
-Suite Teardown    Close Browser
+Suite Teardown    Run Keywords    Close Browser    Log chromedriver
 
 *** Test Cases ***
 Find Element
