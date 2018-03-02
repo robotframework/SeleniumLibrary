@@ -10,6 +10,8 @@ addons:
       - google-chrome-stable
 before_install:
   - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+  # For ChromeDriver problems in Travis, hard code the version to 2.33
+  - CDVERSION=2.33
   - wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
