@@ -159,6 +159,20 @@ Element Text Should Be
     ...    The text of element 'some_id' should have been 'inside' but it was 'This text is inside an identified element'.
     ...    Element Text Should Be    some_id    inside
 
+Element Text Should Not Be
+    Element Text Should Not Be    some_id    Foo This text is inside an identified element
+    Element Text Should Not Be    some_id    This TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=False
+    Element Text Should Not Be    some_id    FOO This text is inside an identified element  ignore_case=True
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' was not supposed to be 'This text is inside an identified element'.
+    ...    Element Text Should Not Be    some_id    This text is inside an identified element
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' was not supposed to be 'This text is inside an identified element'.
+    ...    Element Text Should Not Be    some_id    This text is inside an identified element  ignore_case=False
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' was not supposed to be 'THIS TEXT is inside an identified element'.
+    ...    Element Text Should Not Be    some_id    THIS TEXT is inside an identified element  ignore_case=True
+
 Get Text
     ${str} =    Get Text    some_id
     Should Match    ${str}    This text is inside an identified element

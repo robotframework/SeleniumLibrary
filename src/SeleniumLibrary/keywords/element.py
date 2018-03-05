@@ -336,6 +336,34 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
+    def element_text_should_not_be(self, locator, not_expected, message=None, ignore_case=False):
+        """Verifies that element ``locator`` does not contain exact text ``not_expected``.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        The ``ignore_case`` argument can be set to True to compare case
+        insensitive, default is False.
+
+        New in SeleniumLibrary 3.2.
+        """
+        self.info("Verifying element '%s' does not contains exact text '%s'."
+                  % (locator, not_expected))
+        text = self.find_element(locator).text
+        before_not_expected = not_expected
+        if is_truthy(ignore_case):
+            text = text.lower()
+            not_expected = not_expected.lower()
+        if text == not_expected:
+            if is_noney(message):
+                message = ("The text of element '%s' was not supposed to be '%s'."
+                           % (locator, before_not_expected))
+            raise AssertionError(message)
+
+    @keyword
     def get_element_attribute(self, locator, attribute=None):
         """Returns value of ``attribute`` from element ``locator``.
 
