@@ -337,7 +337,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_not_be(self, locator, not_expected, message=None, ignore_case=False):
-        """Verifies that element ``locator`` contains exact text ``expected``.
+        """Verifies that element ``locator`` contains does not contain exact text ``not_expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -349,8 +349,6 @@ class ElementKeywords(LibraryComponent):
         insensitive, default is False.
 
         ``ignore_case`` argument new in SeleniumLibrary 3.1.
-
-        Use `Element Should Contain` if a substring match is desired.
         """
         self.info("Verifying element '%s' does not contains exact text '%s'."
                   % (locator, not_expected))
