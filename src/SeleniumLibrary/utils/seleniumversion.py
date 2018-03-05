@@ -20,4 +20,5 @@ import selenium
 
 SeleniumVersion = namedtuple('SeleniumVersion', 'major minor micro')
 major, minor, micro = (selenium.__version__.split('.') + ['0', '0'])[:3]
+major, minor, micro = int(major), int(minor), int(micro)
 SELENIUM_VERSION = SeleniumVersion(major=major, minor=minor, micro=micro)

@@ -79,13 +79,13 @@ class WebDriverCreator(object):
         if is_truthy(remote_url):
             return self._remote(default, desired_capabilities, remote_url)
         capabilities = self._combine_capabilites(default, desired_capabilities)
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Chrome(desired_capabilities=capabilities,
                                     options=options)
         return webdriver.Chrome(desired_capabilities=capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url):
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             options = webdriver.ChromeOptions()
             options.set_headless()
         else:
@@ -99,7 +99,7 @@ class WebDriverCreator(object):
         if is_truthy(remote_url):
             return self._remote(default, desired_capabilities, remote_url, profile)
         capabilities = self._combine_capabilites(default, desired_capabilities)
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Firefox(capabilities=capabilities, options=options,
                                      firefox_profile=profile,
                                      **self._geckodriver_log)
@@ -114,13 +114,13 @@ class WebDriverCreator(object):
 
     @property
     def _geckodriver_log(self):
-        if SELENIUM_VERSION.major >= '3':
+        if SELENIUM_VERSION.major >= 3:
             return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
         return {}
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
                                 ff_profile_dir):
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             options = webdriver.FirefoxOptions()
             options.set_headless()
         else:
