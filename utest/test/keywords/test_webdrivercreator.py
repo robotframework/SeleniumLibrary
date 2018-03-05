@@ -53,7 +53,7 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_chrome(self):
         expected_webdriver = mock()
         caps = webdriver.DesiredCapabilities.CHROME
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Chrome(desired_capabilities=caps,
                                    options=None).thenReturn(expected_webdriver)
         else:
@@ -76,13 +76,13 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         options = mock()
         when(webdriver).ChromeOptions().thenReturn(options)
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Chrome(desired_capabilities=caps,
                                    options=options).thenReturn(expected_webdriver)
         else:
             when(webdriver).Chrome(desired_capabilities=caps).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_chrome({}, None)
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             verify(options).set_headless()
         else:
             verify(options, times=0).set_headless()
@@ -93,7 +93,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
         caps = webdriver.DesiredCapabilities.FIREFOX
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Firefox(capabilities=caps,
                                     options=None,
                                     firefox_profile=profile,
@@ -122,7 +122,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile = mock()
         when(webdriver).FirefoxProfile('/profile/dir').thenReturn(profile)
         caps = webdriver.DesiredCapabilities.FIREFOX
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Firefox(capabilities=caps,
                                     options=None,
                                     log_path='/log/dir/geckodriver.log',
@@ -138,7 +138,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.FIREFOX
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             options = mock()
             when(webdriver).FirefoxOptions().thenReturn(options)
             when(webdriver).Firefox(capabilities=caps,
@@ -275,7 +275,7 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_create_driver_chrome(self):
         expected_webdriver = mock()
         caps = webdriver.DesiredCapabilities.CHROME
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Chrome(desired_capabilities=caps,
                                    options=None).thenReturn(expected_webdriver)
         else:
@@ -289,7 +289,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
         caps = webdriver.DesiredCapabilities.FIREFOX
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Firefox(capabilities=caps,
                                     options=None,
                                     log_path='/log/dir/geckodriver.log',

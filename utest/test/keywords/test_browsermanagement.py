@@ -60,7 +60,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx.speed = 5.0
         browser = mock()
         caps = webdriver.DesiredCapabilities.CHROME
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Chrome(desired_capabilities=caps,
                                    options=None).thenReturn(browser)
         else:
@@ -75,7 +75,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx.speed = 0.0
         browser = mock()
         caps = webdriver.DesiredCapabilities.CHROME
-        if SELENIUM_VERSION.major >= '3' and SELENIUM_VERSION.minor >= '8':
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             when(webdriver).Chrome(desired_capabilities=caps,
                                    options=None).thenReturn(browser)
         else:
