@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-3.1.1
+3.2.0
 -----
 - Added `Element Text Should Not Be` to check a element text is not the argument, you can ignore case with `ignore_case=True` [rubygeek]
 
