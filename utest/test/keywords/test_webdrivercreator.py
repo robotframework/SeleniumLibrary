@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from mockito import mock, verify, when, unstub
@@ -11,7 +12,8 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.creator = WebDriverCreator('/log/dir')
+        cls.log_dir = '/log/dir'
+        cls.creator = WebDriverCreator(cls.log_dir)
 
     def tearDown(self):
         unstub()
@@ -94,10 +96,11 @@ class WebDriverCreatorTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         caps = webdriver.DesiredCapabilities.FIREFOX
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
+            log_file = self.get_geckodriver_log()
             when(webdriver).Firefox(capabilities=caps,
                                     options=None,
                                     firefox_profile=profile,
-                                    log_path='/log/dir/geckodriver.log').thenReturn(expected_webdriver)
+                                    log_path=log_file).thenReturn(expected_webdriver)
         else:
             when(webdriver).Firefox(capabilities=caps,
                                     firefox_profile=profile).thenReturn(expected_webdriver)
@@ -120,17 +123,19 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_firefox_profile(self):
         expected_webdriver = mock()
         profile = mock()
-        when(webdriver).FirefoxProfile('/profile/dir').thenReturn(profile)
+        profile_dir = '/profile/dir'
+        when(webdriver).FirefoxProfile(profile_dir).thenReturn(profile)
         caps = webdriver.DesiredCapabilities.FIREFOX
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
+            log_file = self.get_geckodriver_log()
             when(webdriver).Firefox(capabilities=caps,
                                     options=None,
-                                    log_path='/log/dir/geckodriver.log',
+                                    log_path=log_file,
                                     firefox_profile=profile).thenReturn(expected_webdriver)
         else:
             when(webdriver).Firefox(capabilities=caps,
                                     firefox_profile=profile).thenReturn(expected_webdriver)
-        driver = self.creator.create_firefox({}, None, '/profile/dir')
+        driver = self.creator.create_firefox({}, None, profile_dir)
         self.assertEqual(driver, expected_webdriver)
 
     def test_firefox_headless(self):
@@ -141,9 +146,10 @@ class WebDriverCreatorTests(unittest.TestCase):
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             options = mock()
             when(webdriver).FirefoxOptions().thenReturn(options)
+            log_file = self.get_geckodriver_log()
             when(webdriver).Firefox(capabilities=caps,
                                     options=options,
-                                    log_path='/log/dir/geckodriver.log',
+                                    log_path=log_file,
                                     firefox_profile=profile).thenReturn(expected_webdriver)
         else:
             when(webdriver).Firefox(capabilities=caps,
@@ -290,9 +296,10 @@ class WebDriverCreatorTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         caps = webdriver.DesiredCapabilities.FIREFOX
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
+            log_file = self.get_geckodriver_log()
             when(webdriver).Firefox(capabilities=caps,
                                     options=None,
-                                    log_path='/log/dir/geckodriver.log',
+                                    log_path=log_file,
                                     firefox_profile=profile).thenReturn(expected_webdriver)
         else:
             when(webdriver).Firefox(capabilities=caps,
@@ -328,3 +335,6 @@ class WebDriverCreatorTests(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.creator._combine_capabilites({}, 'bar')
+
+    def get_geckodriver_log(self):
+        return os.path.join(self.log_dir, 'geckodriver.log')
