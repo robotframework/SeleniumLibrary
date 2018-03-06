@@ -348,7 +348,7 @@ class ElementKeywords(LibraryComponent):
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
 
-        New in SeleniumLibrary 3.2.
+        New in SeleniumLibrary 3.1.1
         """
         self.info("Verifying element '%s' does not contains exact text '%s'."
                   % (locator, not_expected))
