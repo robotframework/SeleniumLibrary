@@ -15,12 +15,12 @@ before_install:
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
   # Firefox latest
-  - FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
-  - VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
-  - wget --no-verbose $VFILE
-  - tar xzf geckodriver*-linux64.tar.gz
-  - sudo chmod u+x geckodriver
-  - sudo mv geckodriver /usr/bin/
+  # - FDVERSION=`curl -s -L https://github.com/mozilla/geckodriver/releases/latest | grep -E href=\"\(.*\)geckodriver-v\(.*\)-linux64.tar.gz\"`
+  # - VFILE=`echo $FDVERSION | sed -E "s/^.*<a href=\"/https:\/\/github.com/" -- | sed -E "s/\" rel=\"nofollow\">//" --`
+  # - wget --no-verbose $VFILE
+  # - tar xzf geckodriver*-linux64.tar.gz
+  # - sudo chmod u+x geckodriver
+  # - sudo mv geckodriver /usr/bin/
 install:
   - pip install .
   - pip install -r requirements.txt
@@ -61,13 +61,6 @@ matrix:
         - SELENIUM=2.53.6
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
-        - INTERPRETER=python3
-    - python: "3.6"
-      env:
-        - BROWSER=firefox
-        - SELENIUM=3.10.0
-        - ROBOTFRAMEWORK=3.0.2
-        - ROBOT_OPTIONS="--exclude Known_Issue_Firefox --dotted"
         - INTERPRETER=python3
 before_script:
   - "export DISPLAY=:99.0"
