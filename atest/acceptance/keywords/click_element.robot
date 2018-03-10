@@ -16,6 +16,16 @@ Double Click Element
     Double Click Element    doubleClickButton
     Element Text Should Be    output    double clicked
 
+Click Element Error
+    [Documentation]    FAIL Element with locator 'id:äääääää' not found.
+    [Setup]    Go To Page "javascript/click.html"
+    Click Element    id:äääääää
+
+Double Click Element Error
+    [Documentation]    FAIL Element with locator 'id:öööö' not found.
+    [Setup]    Go To Page "javascript/click.html"
+    Double Click Element    id:öööö
+
 *** Keywords ***
 Initialize Page
     [Documentation]    Initialize Page

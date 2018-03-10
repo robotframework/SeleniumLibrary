@@ -43,8 +43,8 @@ Locator Should Match X Times Error
     ...    Locator 'name: div_name' should have matched 3 times but matched 2 times.
     ...    Locator Should Match X Times    name: div_name    3
     Run Keyword And Expect Error
-    ...    Custom error
-    ...    Locator Should Match X Times    name:div_name    3    Custom error
+    ...    Custom error ÄÄÄ
+    ...    Locator Should Match X Times    name:div_name    3    Custom error ÄÄÄ
 
 Get Element Count With Xpath Locator
     [Setup]    Go To Page "links.html"
