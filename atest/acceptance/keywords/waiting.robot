@@ -38,6 +38,9 @@ Wait Until Page Contains Element
     Run Keyword And Expect Error
     ...    Element '%cnon-existent' did not appear in 100 milliseconds.
     ...    Wait Until Page Contains Element    %cnon-existent    0.1 seconds
+    Run Keyword And Expect Error
+    ...    Element 'id:ääööåå' did not appear in 100 milliseconds.
+    ...    Wait Until Page Contains Element    id:ääööåå    0.1 seconds
 
 Wait Until Page Does Not Contain Element
     [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
@@ -45,6 +48,9 @@ Wait Until Page Does Not Contain Element
     Run Keyword And Expect Error
     ...    Element 'content' did not disappear in 100 milliseconds.
     ...    Wait Until Page Does Not Contain Element    content    0.1 seconds
+    Run Keyword And Expect Error
+    ...    Custom Error ää ÖÖ
+    ...    Wait Until Page Does Not Contain Element    content    0.1 seconds    Custom Error ää ÖÖ
 
 Wait Until Element Is Enabled
     Run Keyword And Expect Error
