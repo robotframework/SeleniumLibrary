@@ -384,6 +384,25 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).get_attribute(attribute)
 
     @keyword
+    def element_attribute_value_should_be(self, locator, attribute, expected, message=None):
+        """Compares returned value from ``attribute`` identified by ``locator``
+        to expected ``value``.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        Example:
+        `Element Attribute Value Should Be` | css:img | href | value
+        """
+        current_expected = self.find_element(locator).get_attribute(attribute)
+        if current_expected != expected:
+            if is_noney(message):
+                message = "Element '%s' attribute should have value '%s' but "\
+                          "its value was '%s'." % (locator, expected, current_expected)
+            raise AssertionError(message)
+        self.info("Element '%s' attribute '%s' contains value '%s'." % (locator, attribute, expected))
+
+    @keyword
     def get_horizontal_position(self, locator):
         """Returns horizontal position of element identified by ``locator``.
 

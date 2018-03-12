@@ -1,5 +1,8 @@
 Release Notes
 =============
+3.2.1
+-----
+- Added `Element Attribute Value Should Be` to capture element attribute and compare expected value. [brian-mathews]
 
 3.2.0
 -----

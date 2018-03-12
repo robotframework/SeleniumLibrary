@@ -55,6 +55,16 @@ Get Element Attribute
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
+Get Element Attribute Value Should Be
+    [Tags]  focus
+    Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
+    Element Attribute Value Should Be  link=Relative to sub-directory  href  http://localhost:7000/html/sub/index.html
+    Element Attribute Value Should Be  id=image_id  src  http://localhost:7000/html/image.jpg
+    Element Attribute Value Should Be  css=#second_div  class  Second Class
+    ${attribute_value}=  Get Element Attribute  css=#second_div  class
+    Element Attribute Value Should Be  Second Class
+    Should Not Match  ${attribute_value}  second class
+
 Get Horizontal Position
     ${pos}=    Get Horizontal Position    link=Link
     Should Be True    ${pos} > 0
