@@ -1,12 +1,9 @@
 Release Notes
 =============
-3.2.1
------
-- Added `Element Attribute Value Should Be` to capture element attribute and compare expected value. [brian-mathews]
 
 3.2.0
 -----
-To be defined.
+- Added `Element Attribute Value Should Be` verifies element identified by locator contains expected attribute value.. [brian-mathews]
 
 3.1.1
 -----

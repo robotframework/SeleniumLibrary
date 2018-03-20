@@ -385,20 +385,21 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_attribute_value_should_be(self, locator, attribute, expected, message=None):
-        """Compares returned value from ``attribute`` identified by ``locator``
-        to expected ``value``.
+        """Verifies element identified by ``locator`` contains expected attribute value.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
         Example:
         `Element Attribute Value Should Be` | css:img | href | value
+
+        New in SeleniumLibrary 3.2.
         """
         current_expected = self.find_element(locator).get_attribute(attribute)
         if current_expected != expected:
             if is_noney(message):
-                message = "Element '%s' attribute should have value '%s' but "\
-                          "its value was '%s'." % (locator, expected, current_expected)
+                message = ("Element '%s' attribute should have value '%s' but "
+                          "its value was '%s'." % (locator, expected, current_expected))
             raise AssertionError(message)
         self.info("Element '%s' attribute '%s' contains value '%s'." % (locator, attribute, expected))
 
