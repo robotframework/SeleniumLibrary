@@ -87,7 +87,7 @@ def set_version(ctx, version):
     - Final version like 3.0 or 3.1.2.
     - Alpha, beta or release candidate with ``a``, ``b`` or ``rc`` postfix,
       respectively, and an incremented number like 3.0a1 or 3.0.1rc1.
-    - Development version with ``.dev`` postix and an incremented number like
+    - Development version with ``.dev`` postfix and an incremented number like
       3.0.dev1 or 3.1a1.dev2.
 
     When the given version is ``dev``, the existing version number is updated
