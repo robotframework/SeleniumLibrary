@@ -55,6 +55,30 @@ Get Element Attribute
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
+Get Element Attribute Value Should Be Should Be Succesfull 
+    Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
+
+Get Element Attribute And Element Attribute Value Should Be Should have same results
+    ${attribute_value}=  Get Element Attribute  css=#second_div  class
+    Element Attribute Value Should Be  css=#second_div  class  ${attribute_value}
+
+Get Element Attribute Value Should Be Should Be Succesfull with non-ascii characters
+    Element Attribute Value Should Be  link=Link with Unicode äöüÄÖÜß  href  http://localhost:7000/html/index.html
+
+Get Element Attribute Value Should Be Should Be Succesfull error and errors messages
+    Run Keyword And Expect Error
+    ...    Test Fail Custom Message
+    ...    Element Attribute Value Should Be  id=image_id  href  http://non_existing.com  message=Test Fail Custom Message
+    Run Keyword And Expect Error
+    ...    Element 'id=image_id' attribute should have value 'http://non_existing.com' but its value was 'None'.
+    ...    Element Attribute Value Should Be  id=image_id  href  http://non_existing.com
+    Run Keyword And Expect Error
+    ...    Element with locator 'id=non_existing' not found.
+    ...    Element Attribute Value Should Be  id=non_existing  href  http://non_existing.com
+    Run Keyword And Expect Error
+    ...    Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html' but its value was 'http://localhost:7000/html/index.html'.
+    ...    Element Attribute Value Should Be  link=Target opens in new window  href  http://localhost:7000/html/indéx.html
+
 Get Horizontal Position
     ${pos}=    Get Horizontal Position    link=Link
     Should Be True    ${pos} > 0

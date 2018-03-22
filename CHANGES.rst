@@ -3,7 +3,7 @@ Release Notes
 
 3.2.0
 -----
-To be defined.
+- Added `Element Attribute Value Should Be` verifies element identified by locator contains expected attribute value.. [brian-mathews]
 
 3.1.1
 -----
