@@ -8,9 +8,18 @@ Resource          ../resource.robot
 Location Should Be
     [Documentation]    LOG 2:3 Current location is '${FRONT PAGE}'.
     Location Should Be    ${FRONT PAGE}
+    Location Should Be    ${FRONT PAGE}  message=taco
+    Location Should Be    ${FRONT PAGE}  message=None
     Run Keyword And Expect Error
     ...    Location should have been 'non existing' but was '${FRONT PAGE}'.
     ...    Location Should Be    non existing
+    Run Keyword And Expect Error
+    ...    not a url
+    ...    Location Should Be    non existing  message=not a url
+    Run Keyword And Expect Error
+    ...    Location should have been 'non existing' but was 'http://localhost:7000/html/'.
+    ...    Location Should Be    non existing  message=None
+
 
 Location Should Contain
     [Documentation]    LOG 2:3 Current location contains 'html'.
