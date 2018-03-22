@@ -3,7 +3,7 @@ Release Notes
 
 3.2.0
 -----
-To be defined.
+- Added message param to keywords `Location Should Be` and `Location Should Contain` to display custom error message [taniabhullar]
 
 3.1.1
 -----
