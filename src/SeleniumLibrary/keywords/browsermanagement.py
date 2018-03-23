@@ -252,8 +252,8 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if actual != url:
             if is_noney(message):
-                message = "Location should have been '%s' but "\
-                          "was '%s'." % (url, actual)
+                message = ("Location should have been '%s' but "
+                           "was '%s'." % (url, actual))
             raise AssertionError(message)
         self.info("Current location is '%s'." % url)
 
@@ -271,8 +271,8 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if expected not in actual:
             if is_noney(message):
-                message = "Location should have contained '%s' but "\
-                          "it was '%s'." % (expected, actual)
+                message = ("Location should have contained '%s' but "
+                           "it was '%s'." % (expected, actual))
             raise AssertionError(message)
         self.info("Current location contains '%s'." % expected)
 
