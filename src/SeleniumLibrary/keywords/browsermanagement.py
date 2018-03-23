@@ -239,21 +239,41 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.driver.current_url
 
     @keyword
-    def location_should_be(self, url):
-        """Verifies that current URL is exactly ``url``."""
+    def location_should_be(self, url, message=None):
+        """Verifies that current URL is exactly ``url`.
+
+        The ``url`` argument contains the exact url that should exist in browser.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument new in SeleniumLibrary 3.2.0.
+        """
         actual = self.get_location()
         if actual != url:
-            raise AssertionError("Location should have been '%s' but was "
-                                 "'%s'." % (url, actual))
+            if is_noney(message):
+                message = ("Location should have been '%s' but "
+                           "was '%s'." % (url, actual))
+            raise AssertionError(message)
         self.info("Current location is '%s'." % url)
 
     @keyword
-    def location_should_contain(self, expected):
-        """Verifies that current URL contains ``expected``."""
+    def location_should_contain(self, expected, message=None):
+        """Verifies that current URL contains ``expected``.
+
+        The ``url`` argument contains the expected value in url.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument new in SeleniumLibrary 3.2.0.
+        """
         actual = self.get_location()
         if expected not in actual:
-            raise AssertionError("Location should have contained '%s' "
-                                 "but it was '%s'." % (expected, actual))
+            if is_noney(message):
+                message = ("Location should have contained '%s' but "
+                           "it was '%s'." % (expected, actual))
+            raise AssertionError(message)
         self.info("Current location contains '%s'." % expected)
 
     @keyword

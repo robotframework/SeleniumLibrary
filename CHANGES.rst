@@ -3,6 +3,7 @@ Release Notes
 
 3.2.0
 -----
+- Added message param to keywords `Location Should Be` and `Location Should Contain` to display custom error message [taniabhullar]
 - Added `Element Attribute Value Should Be` verifies element identified by locator contains expected attribute value.. [brian-mathews]
 
 3.1.1
