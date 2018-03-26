@@ -83,7 +83,7 @@ before_script:
       export PATH="$(pwd)/jython/dist/bin:$PATH";
       wget --no-verbose https://bootstrap.pypa.io/3.2/get-pip.py;
       $INTERPRETER get-pip.py;
-      pip install robotstatuschecker;
+      python pip install robotstatuschecker;
     fi
   - echo $INTERPRETER
   - $INTERPRETER --version
