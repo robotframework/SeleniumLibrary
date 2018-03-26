@@ -86,9 +86,9 @@ before_script:
     fi
   - echo $INTERPRETER
   - $INTERPRETER --version
-  - $INTERPRETER pip install .
-  - $INTERPRETER pip install -r requirements-dev.txt
-  - $INTERPRETER pip install selenium==$SELENIUM
-  - $INTERPRETER pip install robotframework==$ROBOTFRAMEWORK
+  - $INTERPRETER -m pip install .
+  - $INTERPRETER -m pip install -r requirements-dev.txt
+  - $INTERPRETER -m pip install selenium==$SELENIUM
+  - $INTERPRETER -m pip install robotframework==$ROBOTFRAMEWORK
 script:
   - python atest/run.py $BROWSER --interpreter $INTERPRETER $ROBOT_OPTIONS
