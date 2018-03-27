@@ -1,6 +1,9 @@
 language: python
 sudo: required
 dist: trusty
+env:
+  global:
+    - JYTHON=false
 addons:
   firefox: latest
   apt:
@@ -21,10 +24,6 @@ before_install:
   # - tar xzf geckodriver*-linux64.tar.gz
   # - sudo chmod u+x geckodriver
   # - sudo mv geckodriver /usr/bin/
-install:
-  - pip install .
-  - pip install -r requirements.txt
-  - pip install -r requirements-dev.txt
 matrix:
   include:
     - python: "3.6"
@@ -62,10 +61,35 @@ matrix:
         - ROBOTFRAMEWORK=3.0.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
+    - python: "3.6"
+      env:
+        - BROWSER=headlesschrome
+        - SELENIUM=3.11.0
+        - ROBOTFRAMEWORK=3.0.2
+        - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python3
+        - JYTHON=true
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - pip install selenium==$SELENIUM
-  - pip install robotframework==$ROBOTFRAMEWORK
+  - if [ "$JYTHON" == "true" ]; then
+      hg clone http://hg.python.org/jython;
+      cd jython;
+      ant;
+      cd ..;
+      chmod +x "$(pwd)/jython/dist/bin/jython";
+      export INTERPRETER="$(pwd)/jython/dist/bin/jython";
+      alias jython="$(pwd)/jython/dist/bin/jython";
+      export PATH="$(pwd)/jython/dist/bin:$PATH";
+      wget --no-verbose https://bootstrap.pypa.io/3.2/get-pip.py;
+      $INTERPRETER get-pip.py;
+    fi
+  - python -m pip install robotstatuschecker
+  - echo $INTERPRETER
+  - $INTERPRETER --version
+  - $INTERPRETER -m pip install .
+  - $INTERPRETER -m pip install -r requirements-dev.txt
+  - $INTERPRETER -m pip install selenium==$SELENIUM
+  - $INTERPRETER -m pip install robotframework==$ROBOTFRAMEWORK
 script:
   - python atest/run.py $BROWSER --interpreter $INTERPRETER $ROBOT_OPTIONS

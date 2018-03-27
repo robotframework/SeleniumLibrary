@@ -4,6 +4,7 @@
 atest/results
 *.pyc
 *.orig
+*py.class
 MANIFEST
 *.egg-info
 *.egg
