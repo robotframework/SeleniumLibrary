@@ -149,6 +149,5 @@ class CookieInformation(object):
 
     def __str__(self):
         items = 'name value path domain secure httpOnly expiry'.split()
-        # str() is needed for Jython only.
-        return '\n'.join('{}={}'.format(item, str(getattr(self, item)))
+        return '\n'.join('%s=%s' % (item, getattr(self, item))
                          for item in items)
