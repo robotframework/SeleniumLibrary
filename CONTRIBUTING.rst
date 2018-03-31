@@ -55,6 +55,14 @@ contribute your changes via GitHub's pull requests. This is not
 restricted to code, on the contrary, fixes and enhancements to
 documentation\_ and tests\_ alone are also very valuable.
 
+Code style
+----------
+
+You may find a mix of param names for the same thing, for example \`\`error\`\` and
+message to indicate a custom error message. Moving forward we are going to
+prefer \`\`message\`\` over \`\`error\`\`. We *may* deprecate \`\`error\`\` in the future but for
+going forward, please use \`\`message\`\` with your keywords.
+
 Choosing something to work on
 -----------------------------
 
