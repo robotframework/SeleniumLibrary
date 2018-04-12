@@ -71,6 +71,10 @@ class ElementFinder(ContextAware):
         tag, constraints = self._get_tag_and_constraints(tag)
         elements = strategy(criteria, tag, constraints,
                             parent=parent or self.driver)
+        element_count = len(elements)
+        if (element_count > 1) and not first_only and not self._is_webelement(locator):
+            logger.warn("Found %d items identified by same locator: '%s'"
+                       %  (element_count, locator))
         if required and not elements:
             raise ElementNotFound("%s with locator '%s' not found."
                                   % (element_type, locator))
