@@ -30,16 +30,24 @@ matrix:
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.11.0
-        - ROBOTFRAMEWORK=3.0.3
+        - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
     - python: "pypy3.5"
       env:
         - BROWSER=chrome
         - SELENIUM=3.11.0
-        - ROBOTFRAMEWORK=3.0.3
+        - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
+    - python: "3.6"
+      env:
+        - BROWSER=headlesschrome
+        - SELENIUM=3.11.0
+        - ROBOTFRAMEWORK=3.0.4
+        - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python3
+        - JYTHON=true
     - python: "2.7"
       env:
         - BROWSER=chrome
@@ -58,17 +66,9 @@ matrix:
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
-        - ROBOTFRAMEWORK=3.0.3
+        - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
-    - python: "3.6"
-      env:
-        - BROWSER=headlesschrome
-        - SELENIUM=3.11.0
-        - ROBOTFRAMEWORK=3.0.3
-        - ROBOT_OPTIONS=--dotted
-        - INTERPRETER=python3
-        - JYTHON=true
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
