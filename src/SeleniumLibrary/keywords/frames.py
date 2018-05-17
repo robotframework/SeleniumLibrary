@@ -65,7 +65,7 @@ class FrameKeywords(LibraryComponent):
 
     @keyword
     def current_frame_contains(self, text, loglevel='INFO'):
-        """Deprecated. Use `Current Frame Should Contain` instead."""
+        """*DEPRECATED!!* Use `Current Frame Should Contain` instead."""
         self.current_frame_should_contain(text, loglevel)
 
     @keyword
@@ -104,4 +104,3 @@ class FrameKeywords(LibraryComponent):
         found = self.is_text_present(text)
         self.driver.switch_to.default_content()
         return found
-
