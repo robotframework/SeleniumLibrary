@@ -225,9 +225,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_browser_session_id(self):
-        """Returns the browser session id useful for download file using selenoid.
-        See [https://github.com/aerokube/selenoid/blob/master/docs/file-download.adoc]
-        """
+        """Returns the currently active browser session id. """
         return self.driver.session_id
         
     @keyword
