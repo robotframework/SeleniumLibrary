@@ -58,3 +58,21 @@ Closing all browsers clears cache
     Run Keyword And Expect Error
     ...    No browser with index or alias 'Browser 2' found.
     ...    Switch Browser    Browser 2
+    
+Get Session Id
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 1
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 2
+    ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+    Switch Browser    Browser 1
+    ${browser 1}    Get Session Id
+    Switch Browser    Browser 2
+    ${browser 2}    Get Session Id
+    Should Not Be Equal    ${browser 1}    ${browser 2}    Session id should be diffrent
+    Close All Browsers
+    Run Keyword And Expect Error
+    ...    No browser with index or alias 'Browser 1' found.
+    ...    Switch Browser    Browser 1
+    Run Keyword And Expect Error
+    ...    No browser with index or alias 'Browser 2' found.
+    ...    Switch Browser    Browser 2
