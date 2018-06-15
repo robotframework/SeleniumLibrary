@@ -900,3 +900,14 @@ return !element.dispatchEvent(evt);
             if found_text:
                 return True
         return False
+
+    def parse_modifier(self, modifier):
+        modifier = modifier.upper()
+        modifiers = modifier.split('+')
+        keys = []
+        for item in modifiers:
+            if item == 'CTRL':
+                item = 'CONTROL'
+            if hasattr(Keys, item):
+                keys.append(getattr(Keys, item))
+        return keys
