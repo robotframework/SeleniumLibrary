@@ -910,4 +910,7 @@ return !element.dispatchEvent(evt);
                 item = 'CONTROL'
             if hasattr(Keys, item):
                 keys.append(getattr(Keys, item))
+            else:
+                raise ValueError("'%s' modifier does not match to Selenium Keys"
+                                 % item)
         return keys

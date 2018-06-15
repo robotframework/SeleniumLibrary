@@ -33,3 +33,17 @@ class ParsingModifierKeys(unittest.TestCase):
 
         parsed = self.element.parse_modifier('ctrl+alt+shift')
         self.assertEqual(parsed, [Keys.CONTROL, Keys.ALT, Keys.SHIFT])
+
+    def test_invalid_modifier(self):
+        with self.assertRaisesRegexp(ValueError, "'FOO' modifier "):
+            self.element.parse_modifier('FOO')
+        with self.assertRaisesRegexp(ValueError, "'FOO' modifier "):
+            self.element.parse_modifier('FOO+CTRL')
+        with self.assertRaisesRegexp(ValueError, "'FOO' modifier "):
+            self.element.parse_modifier('CTRL+FOO')
+        with self.assertRaisesRegexp(ValueError, "'CTRLFOO' modifier "):
+            self.element.parse_modifier('CTRLFOO')
+
+    def test_invalid_key_separator(self):
+        with self.assertRaisesRegexp(ValueError, "'CTRL-CTRL' modifier "):
+            self.element.parse_modifier('CTRL-CTRL')
