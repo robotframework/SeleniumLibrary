@@ -224,6 +224,14 @@ class BrowserManagementKeywords(LibraryComponent):
                    % self.driver.session_id)
 
     @keyword
+    def get_session_id(self):
+        """Returns the currently active browser session id.
+
+        New in SeleniumLibrary 3.2
+        """
+        return self.driver.session_id
+        
+    @keyword
     def get_source(self):
         """Returns the entire HTML source of the current page or frame."""
         return self.driver.page_source
