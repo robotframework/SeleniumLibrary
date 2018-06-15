@@ -917,6 +917,7 @@ return !element.dispatchEvent(evt);
         modifiers = modifier.split('+')
         keys = []
         for item in modifiers:
+            item = item.strip()
             if item == 'CTRL':
                 item = 'CONTROL'
             if hasattr(Keys, item):

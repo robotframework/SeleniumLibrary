@@ -30,8 +30,9 @@ class ParsingModifierKeys(unittest.TestCase):
     def test_parsing_multiple_modifiers(self):
         parsed = self.element.parse_modifier('ctrl+shift')
         self.assertEqual(parsed, [Keys.CONTROL, Keys.SHIFT])
-
         parsed = self.element.parse_modifier('ctrl+alt+shift')
+        self.assertEqual(parsed, [Keys.CONTROL, Keys.ALT, Keys.SHIFT])
+        parsed = self.element.parse_modifier(' ctrl + alt +shift ')
         self.assertEqual(parsed, [Keys.CONTROL, Keys.ALT, Keys.SHIFT])
 
     def test_invalid_modifier(self):
