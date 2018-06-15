@@ -497,16 +497,15 @@ class ElementKeywords(LibraryComponent):
 
         The ``modifier`` is new in SeleniumLibrary 3.2
         """
-        element = self.find_element(locator)
         if is_falsy(modifier):
             self.info("Clicking element '%s'." % locator)
-            element.click()
+            self.find_element(locator).click()
         else:
             modifier = self.parse_modifier(modifier)
             action = ActionChains(self.driver)
             for item in modifier:
                 action.key_down(item)
-            action.click(element)
+            action.click(self.find_element(locator))
             for item in modifier:
                 action.key_up(item)
             action.perform()
