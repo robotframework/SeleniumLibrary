@@ -21,6 +21,16 @@ Click Element Error
     [Setup]    Go To Page "javascript/click.html"
     Click Element    id:äääääää
 
+Click Element Error 2
+    [Documentation]    FAIL Element with locator 'id:鱼鱼鱼鱼' not found.
+    [Setup]    Go To Page "javascript/click.html"
+    Click Element    id:鱼鱼鱼鱼
+
+Click Element Error 3
+    [Documentation]    FAIL Element with locator '鱼在天空中飞翔' not found.
+    [Setup]    Go To Page "javascript/click.html"
+    Click Element    鱼在天空中飞翔
+
 Double Click Element Error
     [Documentation]    FAIL Element with locator 'id:öööö' not found.
     [Setup]    Go To Page "javascript/click.html"
