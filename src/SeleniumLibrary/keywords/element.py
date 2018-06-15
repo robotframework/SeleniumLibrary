@@ -474,14 +474,25 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).location['y']
 
     @keyword
-    def click_element(self, locator):
+    def click_element(self, locator, modifier=False):
         """Click element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Clicking element '%s'." % locator)
-        self.find_element(locator).click()
+        element = self.find_element(locator)
+        if is_falsy(modifier):
+            self.info("Clicking element '%s'." % locator)
+            element.click()
+        else:
+            modifier = self.parse_modifier(modifier)
+            action = ActionChains(self.driver)
+            for item in modifier:
+                action.key_down(item)
+            action.click(element)
+            for item in modifier:
+                action.key_up(item)
+            action.perform()
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
