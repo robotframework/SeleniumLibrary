@@ -225,7 +225,10 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_session_id(self):
-        """Returns the currently active browser session id. """
+        """Returns the currently active browser session id.
+
+        New in SeleniumLibrary 3.2
+        """
         return self.driver.session_id
         
     @keyword
