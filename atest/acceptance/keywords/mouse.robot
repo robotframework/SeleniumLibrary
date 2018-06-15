@@ -13,6 +13,14 @@ Mouse Over
     ...    Element with locator 'not_there' not found.
     ...    Mouse Over    not_there
 
+Mouse Over Error
+    [Tags]    Known Issue Safari
+    Mouse Over    el_for_mouseover
+    Textfield Value Should Be    el_for_mouseover    mouseover el_for_mouseover
+    Run Keyword And Expect Error
+    ...    Element with locator '鱼在天空中飞翔' not found.
+    ...    Mouse Over    鱼在天空中飞翔
+
 Mouse Out
     [Tags]    Known Issue Safari
     Mouse Out    el_for_mouseout
