@@ -479,6 +479,23 @@ class ElementKeywords(LibraryComponent):
 
         See the `Locating elements` section for details about the locator
         syntax.
+
+        The ``modifier`` argument can be used to pass
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys|Selenium Keys]
+        when clicking the element. The `+` can be used as a separator
+        for different keys. The `CTRL` is internally translated to `CONTROL`
+        key. The ``modifier`` is space and case insensitive, example "alt"
+        and " aLt " are supported formats to
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
+        . If ``modifier`` does not match to Selenium Keys an exception is raised.
+
+        Example:
+        | Click Element | id:button | | # Would click element without any modifiers. |
+        | Click Element | id:button | CTRL | # Would click element without with CTLR key pressed down. |
+        | Click Element | id:button | CTRL+ALT | # Would click element without with CTLR and ALT key pressed down. |
+        | Click Element | id:button | FOOBAR | # Raises an exception. |
+
+        The ``modifier`` is new in SeleniumLibrary 3.2
         """
         element = self.find_element(locator)
         if is_falsy(modifier):
