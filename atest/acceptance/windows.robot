@@ -132,6 +132,11 @@ Select Window By Special Locator
     Select Window    main
     Title Should Be    Click link to show a popup window
 
+Select Window With Delay
+    ${win}=    List Windows
+    Click Button     id:MyButton
+    Select Window    Original    timeout=5
+
 *** Keywords ***
 Open Popup Window, Select It And Verify
     [Arguments]    ${window_id}
