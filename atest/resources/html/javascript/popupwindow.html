@@ -1,9 +1,8 @@
 <!-- Example adapted from http://www.htmlcodetutorial.com/linking/linking_famsupp_72.html -->
 <html>
-	<head>
-		<title>Click link to show a popup window</title>
-		<SCRIPT TYPE="text/javascript">
-            <!--
+    <head>
+        <title>Click link to show a popup window</title>
+        <SCRIPT TYPE="text/javascript">
             function popup(mylink, windowname)
             {
                 if (! window.focus)return true;
@@ -15,10 +14,9 @@
                 window.open(href, windowname, 'width=400,height=200,scrollbars=yes');
                 return false;
             }
-            //-->
         </SCRIPT>
-	</head>
-	<body>
+    </head>
+    <body>
         <A HREF="dynamic_content.html" onClick="return popup(this, 'myName')">my popup</A>
-	</body>
+    </body>
 </html>
