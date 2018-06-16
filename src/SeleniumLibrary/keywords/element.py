@@ -474,14 +474,40 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).location['y']
 
     @keyword
-    def click_element(self, locator):
+    def click_element(self, locator, modifier=False):
         """Click element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
+
+        The ``modifier`` argument can be used to pass
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys|Selenium Keys]
+        when clicking the element. The `+` can be used as a separator
+        for different Selenium Keys. The `CTRL` is internally translated to
+        `CONTROL` key. The ``modifier`` is space and case insensitive, example
+        "alt" and " aLt " are supported formats to
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
+        . If ``modifier`` does not match to Selenium Keys, keyword fails.
+
+        Example:
+        | Click Element | id:button | | # Would click element without any modifiers. |
+        | Click Element | id:button | CTRL | # Would click element with CTLR key pressed down. |
+        | Click Element | id:button | CTRL+ALT | # Would click element with CTLR and ALT keys pressed down. |
+
+        The ``modifier`` argument is new in SeleniumLibrary 3.2
         """
-        self.info("Clicking element '%s'." % locator)
-        self.find_element(locator).click()
+        if is_falsy(modifier):
+            self.info("Clicking element '%s'." % locator)
+            self.find_element(locator).click()
+        else:
+            modifier = self.parse_modifier(modifier)
+            action = ActionChains(self.driver)
+            for item in modifier:
+                action.key_down(item)
+            action.click(self.find_element(locator))
+            for item in modifier:
+                action.key_up(item)
+            action.perform()
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
@@ -900,3 +926,18 @@ return !element.dispatchEvent(evt);
             if found_text:
                 return True
         return False
+
+    def parse_modifier(self, modifier):
+        modifier = modifier.upper()
+        modifiers = modifier.split('+')
+        keys = []
+        for item in modifiers:
+            item = item.strip()
+            if item == 'CTRL':
+                item = 'CONTROL'
+            if hasattr(Keys, item):
+                keys.append(getattr(Keys, item))
+            else:
+                raise ValueError("'%s' modifier does not match to Selenium Keys"
+                                 % item)
+        return keys

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clicking with modifier</title>
+    <script>
+        function isKeyPressed(event) {
+            if (event.ctrlKey && event.shiftKey) {
+                document.getElementById("output").innerHTML="CTRL and Shift click";
+            } else if (event.altKey) {
+                document.getElementById("output").innerHTML="ALT click";
+            } else if (event.shiftKey) {
+                document.getElementById("output").innerHTML="Shift click";
+            } else if (event.ctrlKey) {
+                document.getElementById("output").innerHTML="CTRL click";
+            } else {
+                document.getElementById("output").innerHTML="Normal click";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Clicking with modifier</h1>
+    <p id="info">Watch the output below</p>
+    <p id="output">initial output</p>
+    <button type="button" id="Button" onmousedown="isKeyPressed(event)">Click me!</button>
+</body>
+</html>
+<!DOCTYPE html>
