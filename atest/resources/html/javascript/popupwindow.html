@@ -3,6 +3,9 @@
     <head>
         <title>Click link to show a popup window</title>
         <SCRIPT TYPE="text/javascript">
+            function openAfterDelay(mylink, windowname) {
+                setTimeout('window.open("dynamic_content.html");', 2000)
+            }
             function popup(mylink, windowname)
             {
                 if (! window.focus)return true;
@@ -17,6 +20,7 @@
         </SCRIPT>
     </head>
     <body>
-        <A HREF="dynamic_content.html" onClick="return popup(this, 'myName')">my popup</A>
+        <A HREF="dynamic_content.html" onClick="return popup(this, 'myName')">my popup</A><br><br>
+        <button onclick="openAfterDelay()" id="MyButton">Click</button>
     </body>
 </html>
