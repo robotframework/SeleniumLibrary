@@ -127,6 +127,16 @@ Select Popup Window By Excluded List
     Select Window    ${parent}
     Title Should Be    Click link to show a popup window
 
+Select Popup Window With Delay By Excluded List
+    [Tags]    Known Issue Internet Explorer
+    @{excluded_handle_list}=    List Windows
+    Click Button     id:MyButton
+    Select Window    ${excluded_handle_list}    timeout=5
+    Title Should Be    Original
+    Close Window
+    Select Window    main
+    Title Should Be    Click link to show a popup window
+
 Select Window By Special Locator
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
@@ -135,6 +145,15 @@ Select Window By Special Locator
     ${parent}=    Select Window    new    timeout=5
     Title Should Be    Original
     Should Be True    '${start}' == '${parent}'
+    Close Window
+    Select Window    main
+    Title Should Be    Click link to show a popup window
+
+Select Window With Delay By Special Locator
+    [Tags]    Known Issue Internet Explorer
+    Click Button     id:MyButton
+    Select Window    new    timeout=5
+    Title Should Be    Original
     Close Window
     Select Window    main
     Title Should Be    Click link to show a popup window
