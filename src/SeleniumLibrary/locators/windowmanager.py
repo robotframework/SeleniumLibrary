@@ -70,6 +70,7 @@ class WindowManager(ContextAware):
             except WindowNotFound:
                 if time.time() > timeout:
                     raise
+                time.sleep(0.1)
 
     def _select(self, locator):
         if not is_string(locator):
