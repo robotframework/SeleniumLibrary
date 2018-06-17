@@ -116,6 +116,14 @@ Select Window With Delay By Title
     Select Window    main
     Title Should Be    Click link to show a popup window
 
+Select Window With Delay By Title And Window Not Found
+    [Tags]    Known Issue Internet Explorer
+    Click Button     id:MyButton
+    Run Keyword And Expect Error
+    ...    No window matching handle, name, title or URL 'Original' found.
+    ...    Select Window    Original    timeout=0.2
+    [Teardown]    Select Window    main
+
 Select Popup Window By Excluded List
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
