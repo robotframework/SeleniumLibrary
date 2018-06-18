@@ -107,16 +107,42 @@ Select Window By Handle
     Title Should Be    Click link to show a popup window
     Should Be True    ${FromWindow} == None
 
+Select Window With Delay By Title
+    [Tags]    Known Issue Internet Explorer
+    Click Button     id:MyButton
+    Select Window    Original    timeout=5
+    Title Should Be    Original
+    Close Window
+    Select Window    main
+    Title Should Be    Click link to show a popup window
+
+Select Window With Delay By Title And Window Not Found
+    [Tags]    Known Issue Internet Explorer
+    Click Button     id:MyButton
+    Run Keyword And Expect Error
+    ...    No window matching handle, name, title or URL 'Original' found.
+    ...    Select Window    Original    timeout=0.2
+    [Teardown]    Select Window    main
+
 Select Popup Window By Excluded List
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
     @{excluded_handle_list}=    List Windows
     Click Link    my popup
-    Wait Until New Window Is Open
-    ${parent}=    Select Window    ${excluded_handle_list}
+    ${parent}=    Select Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original
     Close Window
     Select Window    ${parent}
+    Title Should Be    Click link to show a popup window
+
+Select Popup Window With Delay By Excluded List
+    [Tags]    Known Issue Internet Explorer
+    @{excluded_handle_list}=    List Windows
+    Click Button     id:MyButton
+    Select Window    ${excluded_handle_list}    timeout=5
+    Title Should Be    Original
+    Close Window
+    Select Window    main
     Title Should Be    Click link to show a popup window
 
 Select Window By Special Locator
@@ -124,10 +150,18 @@ Select Window By Special Locator
     Cannot Be Executed in IE
     ${start}=    Select Window    current
     Click Link    my popup
-    Wait Until New Window Is Open
-    ${parent}=    Select Window    new
+    ${parent}=    Select Window    new    timeout=5
     Title Should Be    Original
     Should Be True    '${start}' == '${parent}'
+    Close Window
+    Select Window    main
+    Title Should Be    Click link to show a popup window
+
+Select Window With Delay By Special Locator
+    [Tags]    Known Issue Internet Explorer
+    Click Button     id:MyButton
+    Select Window    new    timeout=5
+    Title Should Be    Original
     Close Window
     Select Window    main
     Title Should Be    Click link to show a popup window
@@ -136,13 +170,12 @@ Select Window By Special Locator
 Open Popup Window, Select It And Verify
     [Arguments]    ${window_id}
     Click Link    my popup
-    Wait Until New Window Is Open
-    Select Window    ${window_id}
+    Select Window    ${window_id}    timeout=5
     Title should Be    Original
 
 Select Main Window And Verify
     Close Window
-    Select Window    main
+    Select Window    main    timeout=5
     Title Should Be    Click link to show a popup window
 
 Do Action In Popup Window And Verify

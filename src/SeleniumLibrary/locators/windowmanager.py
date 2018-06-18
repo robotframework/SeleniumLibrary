@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import time
 from collections import namedtuple
 
 from robot.api import logger
@@ -61,8 +62,17 @@ class WindowManager(ContextAware):
                 self.driver.switch_to.window(starting_handle)
         return infos
 
-    def select(self, locator):
+    def select(self, locator, timeout=0):
         locator = self._handle_deprecated_locators(locator)
+        while True:
+            try:
+                return self._select(locator)
+            except WindowNotFound:
+                if time.time() > timeout:
+                    raise
+                time.sleep(0.1)
+
+    def _select(self, locator):
         if not is_string(locator):
             self._select_by_excludes(locator)
         elif locator.upper() == 'CURRENT':

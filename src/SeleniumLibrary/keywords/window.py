@@ -13,7 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import time
 
+from SeleniumLibrary.utils import is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
@@ -27,7 +29,7 @@ class WindowKeywords(LibraryComponent):
         self._window_manager = WindowManager(ctx)
 
     @keyword
-    def select_window(self, locator='MAIN'):
+    def select_window(self, locator='MAIN', timeout=None):
         """Selects browser window matching ``locator``.
 
         If the window is found, all subsequent commands use the selected
@@ -69,6 +71,9 @@ class WindowKeywords(LibraryComponent):
           can be get from `Get Window Handles` prior to doing an action that
           opens a new window.
 
+        The ``timeout`` is used to specify how long keyword will poll to select
+        the new window. The ``timeout`` is new in SeleniumLibrary 3.2.
+
         Example:
         | `Click Link`      | popup1      |      | # Open new window |
         | `Select Window`   | example     |      | # Select window using default strategy |
@@ -96,12 +101,14 @@ class WindowKeywords(LibraryComponent):
         - Prior to SeleniumLibrary 3.0 matching windows by name, title
           and URL was case-insensitive.
         """
+        epoch = time.time()
+        timeout = epoch if is_falsy(timeout) else timestr_to_secs(timeout) + epoch
         try:
             return self.driver.current_window_handle
         except NoSuchWindowException:
             pass
         finally:
-            self._window_manager.select(locator)
+            self._window_manager.select(locator, timeout)
 
     @keyword
     def close_window(self):
