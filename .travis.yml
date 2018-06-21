@@ -62,7 +62,7 @@ matrix:
         - ROBOTFRAMEWORK=2.8.7
         - ROBOT_OPTIONS=
         - INTERPRETER=python2
-    - python: "3.3"
+    - python: "3.4"
       env:
         - BROWSER=chrome
         - SELENIUM=2.53.6
