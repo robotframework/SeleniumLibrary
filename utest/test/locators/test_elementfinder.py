@@ -199,7 +199,7 @@ class ElementFinderTests(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_non_exisisting_prefix(self):
+    def test_non_existing_prefix(self):
         with self.assertRaises(ElementNotFound):
             self.finder.find("something=test1")
         with self.assertRaises(ElementNotFound):
