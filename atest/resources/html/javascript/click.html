@@ -7,6 +7,12 @@
       function doubleClick() {
         document.getElementById("output").innerHTML="double clicked";
       }
+      function twoButtons1() {
+        document.getElementById("output").innerHTML="Two Buttons 1";
+      }
+      function twoButtons2() {
+        document.getElementById("output").innerHTML="Two Buttons 2";
+      }
     </script>
   </head>
 
@@ -16,6 +22,8 @@
     <p id="output">initial output</p>
     <button type="button" id="singleClickButton" onclick="singleClick()">Click me!</button>
     <button type="button" id="doubleClickButton" ondblclick="doubleClick()">Double click me!</button>
+    <button type="button" class="twoButtons" onclick="twoButtons1()">Button 1</button>
+    <button type="button" class="twoButtons" onclick="twoButtons2()">Button 2</button>
   </body>
 </html>
 
