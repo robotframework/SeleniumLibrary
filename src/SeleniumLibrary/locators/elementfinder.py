@@ -77,6 +77,9 @@ class ElementFinder(ContextAware):
         if first_only:
             if not elements:
                 return None
+            if len(elements) > 1:
+                logger.warn("Multiple elements by found using '%s' locator, "
+                            "but only one should have been found." % locator)
             return elements[0]
         return elements
 
