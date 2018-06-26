@@ -76,7 +76,7 @@ before_script:
       wget -O jython.jar http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.1/jython-installer-2.7.1.jar;
       java -jar jython.jar -s -d ~/jython;
       export PATH="~/jython/bin:$PATH";
-      export INTERPRETER=jython;
+      export INTERPRETER=~/jython/bin/jython;
     fi
   - python -m pip install robotstatuschecker
   - echo $INTERPRETER
