@@ -73,16 +73,10 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - if [ "$JYTHON" == "true" ]; then
-      hg clone http://hg.python.org/jython;
-      cd jython;
-      ant;
-      cd ..;
-      chmod +x "$(pwd)/jython/dist/bin/jython";
-      export INTERPRETER="$(pwd)/jython/dist/bin/jython";
-      alias jython="$(pwd)/jython/dist/bin/jython";
-      export PATH="$(pwd)/jython/dist/bin:$PATH";
-      wget --no-verbose https://bootstrap.pypa.io/3.2/get-pip.py;
-      $INTERPRETER get-pip.py;
+      wget -O jython.jar http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.1/jython-installer-2.7.1.jar;
+      java -jar jython.jar -s -d ~/jython;
+      export PATH="~/jython/bin:$PATH";
+      export INTERPRETER=~/jython/bin/jython;
     fi
   - python -m pip install robotstatuschecker
   - echo $INTERPRETER
