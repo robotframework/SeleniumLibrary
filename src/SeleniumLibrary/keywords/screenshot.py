@@ -109,7 +109,7 @@ class ScreenshotKeywords(LibraryComponent):
                   .format(src=get_link_path(path, self.log_dir)), html=True)
         return path
     
-    @keyword
+    @keyword(name='Take Screenshot On Element')
     def take_screenshot_on_element(self, locator, filename):
         """
         param locator: element locator
@@ -121,7 +121,6 @@ class ScreenshotKeywords(LibraryComponent):
             self.info('Cannot capture screenshot because no browser is open.')
             return
         path = self._get_screenshot_path(filename)
-        print path
         self._create_directory(path)
         if not self.driver.save_screenshot(path):
             raise RuntimeError("Failed to save screenshot '{}'.".format(path))
