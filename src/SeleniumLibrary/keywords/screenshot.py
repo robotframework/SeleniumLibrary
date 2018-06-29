@@ -26,7 +26,6 @@ def scop_to(filename, left, top, right, bottom):
     im = Image.open(filename) # uses PIL library to open image in memory
     im = im.crop((left, top, right, bottom)) # defines crop points
     im.save(filename) # saves new cropped image
-    print 'crop', filename
 
 class ScreenshotKeywords(LibraryComponent):
 
