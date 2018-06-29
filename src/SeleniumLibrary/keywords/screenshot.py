@@ -21,6 +21,12 @@ from robot.utils import get_link_path
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_noney
 
+def scop_to(filename, left, top, right, bottom):
+    from PIL import Image
+    im = Image.open(filename) # uses PIL library to open image in memory
+    im = im.crop((left, top, right, bottom)) # defines crop points
+    im.save(filename) # saves new cropped image
+    print 'crop', filename
 
 class ScreenshotKeywords(LibraryComponent):
 
@@ -98,6 +104,33 @@ class ScreenshotKeywords(LibraryComponent):
             raise RuntimeError("Failed to save screenshot '{}'.".format(path))
         # Image is shown on its own row and thus previous row is closed on
         # purpose. Depending on Robot's log structure is a bit risky.
+        self.info('</td></tr><tr><td colspan="3">'
+                  '<a href="{src}"><img src="{src}" width="800px"></a>'
+                  .format(src=get_link_path(path, self.log_dir)), html=True)
+        return path
+    
+    @keyword
+    def take_screenshot_on_element(self, locator, filename):
+        """
+        param locator: element locator
+        param filename: argument specifies the name of the file to write the
+        screenshot into.
+        return: screenshot path
+        """
+        if not self.drivers.current:
+            self.info('Cannot capture screenshot because no browser is open.')
+            return
+        path = self._get_screenshot_path(filename)
+        print path
+        self._create_directory(path)
+        if not self.driver.save_screenshot(path):
+            raise RuntimeError("Failed to save screenshot '{}'.".format(path))
+        item = self.find_element(locator)
+        left = item.location['x']
+        right = left + item.size['width']
+        top = item.location['y']
+        bottom = top + item.size['height']
+        scop_to(path, left, top, right, bottom)
         self.info('</td></tr><tr><td colspan="3">'
                   '<a href="{src}"><img src="{src}" width="800px"></a>'
                   .format(src=get_link_path(path, self.log_dir)), html=True)
