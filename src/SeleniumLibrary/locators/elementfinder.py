@@ -60,12 +60,13 @@ class ElementFinder(ContextAware):
 
     def find(self, locator, tag=None, first_only=True, required=True,
              parent=None):
+        ""
         element_type = 'Element' if not tag else tag.capitalize()
         if parent and not self._is_webelement(parent):
             raise ValueError('Parent must be Selenium WebElement but it '
                              'was {}.'.format(type(parent)))
         if self._is_webelement(locator):
-            return locator
+            return locator, None
         prefix, criteria = self._parse_locator(locator)
         strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
@@ -76,9 +77,9 @@ class ElementFinder(ContextAware):
                                   % (element_type, locator))
         if first_only:
             if not elements:
-                return None
-            return elements[0]
-        return elements
+                return None, False
+            return elements[0], True if len(elements) > 1 else False
+        return elements, None
 
     def register(self, strategy_name, strategy_keyword, persist=False):
         strategy = CustomLocator(self.ctx, strategy_name, strategy_keyword)

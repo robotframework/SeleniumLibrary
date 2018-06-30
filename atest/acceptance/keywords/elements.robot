@@ -19,6 +19,19 @@ Get Web Element
     ...    Element with locator 'id=non_existing_elem' not found.
     ...    Get WebElement    id=non_existing_elem
 
+Get WebElement Logs Warning If Multiple Elements Are Found
+    [Documentation]    LOG 2:1 DEBUG STARTS: POST
+    ...                LOG 2:2 DEBUG STARTS: Finished
+    ...                LOG 2:3 INFO STARTS: ${link} = <selenium.webdriver.remote.webelement.WebElement
+    ...                LOG 2:4 NONE
+    ...                LOG 3:1 DEBUG STARTS: POST
+    ...                LOG 3:2 DEBUG STARTS: Finished
+    ...                LOG 3:3 WARN Multiple elements by found using '//div[@id="div_id"]/a' locator, but only one should have been found.
+    ...                LOG 3:4 INFO STARTS: ${link} = <selenium.webdriver.remote.webelement.WebElement
+    ...                LOG 3:5 NONE
+    ${link}=    Get WebElement    //div[@id="div_id"]
+    ${link}=    Get WebElement    //div[@id="div_id"]/a
+
 More Get Elements
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     @{checkboxes}=    Get WebElements    //input[@type="checkbox"]
@@ -55,7 +68,7 @@ Get Element Attribute
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
-Get Element Attribute Value Should Be Should Be Succesfull 
+Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
 
 Get Element Attribute And Element Attribute Value Should Be Should have same results

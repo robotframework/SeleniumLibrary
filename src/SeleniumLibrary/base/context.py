@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from robot.api import logger
+
 from SeleniumLibrary.utils import escape_xpath_value
 
 
@@ -39,7 +41,7 @@ class ContextAware(object):
     def element_finder(self):
         return self.ctx._element_finder
 
-    def find_element(self, locator, tag=None, required=True, parent=None):
+    def find_element(self, locator, tag=None, required=True, parent=None, warn=True):
         """Find element matching `locator`.
 
         :param locator: Locator to use when searching the element.
@@ -53,13 +55,22 @@ class ContextAware(object):
         :param parent: Optional parent `WebElememt` to search child elements
             from. By default search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
+        :param warn: If true, will log at warn level if locator did match to
+            multiple WebElement's. Used to give information to users if locator
+            did match to multiple elements.
+        :type warn: True or False
         :return: Found `WebElement` or `None` if element not found and
             `required` is false.
         :rtype: selenium.webdriver.remote.webelement.WebElement
         :raises SeleniumLibrary.errors.ElementNotFound: If element not found
             and `required` is true.
         """
-        return self.element_finder.find(locator, tag, True, required, parent)
+        element, multiple = self.element_finder.find(locator, tag, True,
+                                                     required, parent)
+        if multiple and warn:
+            logger.warn("Multiple elements by found using '%s' locator, "
+                        "but only one should have been found." % locator)
+        return element
 
     def find_elements(self, locator, tag=None, parent=None):
         """Find all elements matching `locator`.
@@ -75,7 +86,8 @@ class ContextAware(object):
         :return: list of found `WebElement` or empty if elements are not found.
         :rtype: list[selenium.webdriver.remote.webelement.WebElement]
         """
-        return self.element_finder.find(locator, tag, False, False, parent)
+        elements, multiple = self.element_finder.find(locator, tag, False, False, parent)
+        return elements
 
     def is_text_present(self, text):
         locator = "xpath://*[contains(., %s)]" % escape_xpath_value(text)

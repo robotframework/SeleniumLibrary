@@ -336,11 +336,13 @@ class ElementFinderTests(unittest.TestCase):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_xpath(
             "//*[(@test='1')]").thenReturn(elements)
-        result = self.finder.find("//*[(@test='1')]", first_only=False)
+        result, multiple = self.finder.find("//*[(@test='1')]", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("//*[(@test='1')]", tag='a',
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("//*[(@test='1')]", tag='a',
                                   first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_identifier(self):
         id_elements = self._make_mock_elements('div', 'a')
@@ -351,94 +353,130 @@ class ElementFinderTests(unittest.TestCase):
             list(name_elements)).thenReturn(list(name_elements))
         all_elements = list(id_elements)
         all_elements.extend(name_elements)
-        result = self.finder.find("identifier=test1", first_only=False)
+        result, multiple = self.finder.find("identifier=test1", first_only=False)
         self.assertEqual(result, all_elements)
-        result = self.finder.find("identifier=test1", tag='a',
-                                  first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("identifier=test1", tag='a',
+                                            first_only=False)
         self.assertEqual(result, [id_elements[1], name_elements[1]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_id(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_id("test1").thenReturn(
             elements)
-        result = self.finder.find("id=test1", first_only=False)
+        result, multiple = self.finder.find("id=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("id=test1", tag='a', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("id=test1", tag='a', first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_name(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_name("test1").thenReturn(
             elements)
-        result = self.finder.find("name=test1", first_only=False)
+        result, multiple = self.finder.find("name=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("name=test1", tag='a', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("name=test1", tag='a',
+                                            first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_xpath(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_xpath(
             "//*[(@test='1')]").thenReturn(elements)
-        result = self.finder.find("xpath=//*[(@test='1')]", first_only=False)
+        result, multiple = self.finder.find("xpath=//*[(@test='1')]",
+                                            first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("xpath=//*[(@test='1')]", tag='a',
-                                  first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("xpath=//*[(@test='1')]", tag='a',
+                                            first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
+
+    def test_find_by_xpath_multiple(self):
+        elements = self._make_mock_elements('div', 'a', 'span', 'a')
+        when(self.driver).find_elements_by_xpath(
+            "//*[(@test='1')]").thenReturn(elements)
+        result, multiple = self.finder.find("xpath=//*[(@test='1')]",
+                                            first_only=True)
+        self.assertEqual(result, elements[0])
+        self.assertEqual(multiple, True)
+        result, multiple = self.finder.find("xpath=//*[(@test='1')]", tag='span',
+                                            first_only=True)
+        self.assertEqual(result, elements[2])
+        self.assertEqual(multiple, False)
 
     def test_find_by_dom(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         elems = [elements[1], elements[3]]
         when(self.driver).execute_script(
             "return document.getElementsByTagName('a');").thenReturn(elems)
-        result = self.finder.find("dom=document.getElementsByTagName('a')",
-                                  first_only=False)
+        result, multiple = self.finder.find("dom=document.getElementsByTagName('a')",
+                                            first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_link_text(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_link_text(
             "my link").thenReturn(elements)
-        result = self.finder.find("link=my link", first_only=False)
+        result, multiple = self.finder.find("link=my link", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("link=my link", tag='a', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("link=my link", tag='a', first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_partial_link_text(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_partial_link_text(
             "my link").thenReturn(elements)
-        result = self.finder.find("partial link=my link", first_only=False)
+        result, multiple = self.finder.find("partial link=my link",
+                                            first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("partial link=my link", tag='a',
-                                  first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("partial link=my link", tag='a',
+                                            first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_css_selector(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_css_selector(
             "#test1").thenReturn(elements)
-        result = self.finder.find("css=#test1", first_only=False)
+        result, multiple = self.finder.find("css=#test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("css=#test1", tag='a', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("css=#test1", tag='a', first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_class_names(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_class_name(
             "test1").thenReturn(elements)
-        result = self.finder.find("class=test1", first_only=False)
+        result, multiple = self.finder.find("class=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("class=test1", tag='a', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("class=test1", tag='a',
+                                            first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_by_tag_name(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_tag_name(
             "div").thenReturn(elements)
-        result = self.finder.find("tag=div", first_only=False)
+        result, multiple = self.finder.find("tag=div", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("tag=div", tag='a', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("tag=div", tag='a', first_only=False)
         self.assertEqual(result, [elements[1], elements[3]])
+        self.assertEqual(multiple, None)
 
     def test_find_with_sloppy_prefix(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
@@ -446,25 +484,32 @@ class ElementFinderTests(unittest.TestCase):
             elements)
         when(self.driver).find_elements_by_partial_link_text(
             "test1").thenReturn(elements)
-        result = self.finder.find("ID=test1", first_only=False)
+        result, multiple = self.finder.find("ID=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("iD=test1", first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("iD=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("id=test1", first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("id=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("  id =test1", first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("  id =test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("  partiallink =test1", first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("  partiallink =test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("  p art iallin k =test1", first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("  p art iallin k =test1", first_only=False)
         self.assertEqual(result, elements)
+        self.assertEqual(multiple, None)
 
     def test_find_with_sloppy_criteria(self):
         elements = self._make_mock_elements('div', 'a', 'span', 'a')
         when(self.driver).find_elements_by_id("test1  ").thenReturn(
             elements)
-        result = self.finder.find("id= test1  ", first_only=False)
+        result, multiple = self.finder.find("id= test1  ", first_only=False)
         self.assertEqual(result, elements)
+        self.assertEqual(multiple, None)
 
     def test_find_by_id_with_synonym_and_constraints(self):
         elements = self._make_mock_elements('div', 'input', 'span', 'input',
@@ -477,22 +522,30 @@ class ElementFinderTests(unittest.TestCase):
         elements[8].set_attribute('type', 'email')
         when(self.driver).find_elements_by_id("test1").thenReturn(
             elements)
-        result = self.finder.find("id=test1", first_only=False)
+        result, multiple = self.finder.find("id=test1", first_only=False)
         self.assertEqual(result, elements)
-        result = self.finder.find("id=test1", tag='input', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("id=test1", tag='input',
+                                            first_only=False)
+        self.assertEqual(multiple, None)
         self.assertEqual(result, [elements[1], elements[3], elements[5],
                                   elements[7], elements[8]])
-        result = self.finder.find("id=test1", tag='radio button',
-                                  first_only=False)
+        result, multiple = self.finder.find("id=test1", tag='radio button',
+                                            first_only=False)
         self.assertEqual(result, [elements[1]])
-        result = self.finder.find("id=test1", tag='checkbox', first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("id=test1", tag='checkbox',
+                                            first_only=False)
         self.assertEqual(result, [elements[3]])
-        result = self.finder.find("id=test1", tag='text field',
-                                  first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("id=test1", tag='text field',
+                                            first_only=False)
         self.assertEqual(result, [elements[5], elements[7], elements[8]])
-        result = self.finder.find("id=test1", tag='file upload',
-                                  first_only=False)
+        self.assertEqual(multiple, None)
+        result, multiple = self.finder.find("id=test1", tag='file upload',
+                                            first_only=False)
         self.assertEqual(result, [elements[7]])
+        self.assertEqual(multiple, None)
 
     def test_find_returns_bad_values(self):
         # selenium.webdriver.ie.webdriver.WebDriver sometimes returns these
@@ -508,12 +561,14 @@ class ElementFinderTests(unittest.TestCase):
                 when_find_func(any()).thenReturn(bad_value)
             for locator in ("identifier=it", "id=it", "name=it", "xpath=//div",
                             "link=it", "css=div.it", "tag=div", "default"):
-                result = self.finder.find(locator, required=False,
-                                          first_only=False)
+                result, multiple = self.finder.find(locator, required=False,
+                                                    first_only=False)
                 self.assertEqual(result, [])
-                result = self.finder.find(locator, tag='div', required=False,
-                                          first_only=False)
+                self.assertEqual(multiple, None)
+                result, multiple = self.finder.find(locator, tag='div', required=False,
+                                                    first_only=False)
                 self.assertEqual(result, [])
+                self.assertEqual(multiple, None)
 
     def _make_mock_elements(self, *tags):
         elements = []
