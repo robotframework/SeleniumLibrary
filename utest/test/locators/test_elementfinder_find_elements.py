@@ -16,17 +16,18 @@ class FindElementAndElementsTests(unittest.TestCase):
 
     def test_find_element_single(self):
         element1 = mock()
-        when(self.find).find(locator='xpath://div', tag=None, required=True,
-                             parent=None).thenReturn([element1])
+        when(self.find).find(locator='xpath://div', tag=None, first_only=False,
+                             parent=None, required=True).thenReturn([element1])
         element = self.find.find_element('xpath://div')
         verify(self.find, times=1).find(locator='xpath://div', tag=None,
-                                        required=True, parent=None)
+                                        first_only=False, parent=None, required=True)
         self.assertEqual(element, element1)
 
     def test_find_element_multiple(self):
         element1, element2 = mock(), mock()
-        when(self.find).find(locator='xpath://td', tag=None, required=True,
-                             parent=None).thenReturn([element1, element2])
+        elements = [element1, element2]
+        when(self.find).find(locator='xpath://td', tag=None, first_only=False,
+                             parent=None, required=True).thenReturn(elements)
         message = ('Multiple elements found with locator "xpath://td", '
                    'but only one should have been found.')
         when(self.find)._warn(message).thenReturn(None)

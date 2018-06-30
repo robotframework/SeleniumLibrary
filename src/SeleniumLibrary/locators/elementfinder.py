@@ -59,8 +59,8 @@ class ElementFinder(ContextAware):
         }
 
     def find_element(self, locator, tag=None, required=True, parent=None):
-        elements = self.find(locator=locator, tag=tag, required=required,
-                             parent=parent)
+        elements = self.find(locator=locator, tag=tag, first_only=False,
+                             required=required, parent=parent)
         if len(elements) > 1:
             message = ('Multiple elements found with locator "%s", but only '
                        'one should have been found.' % locator)
