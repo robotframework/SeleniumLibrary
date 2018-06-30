@@ -26,7 +26,7 @@ Get WebElement Logs Warning If Multiple Elements Are Found
     ...                LOG 2:4 NONE
     ...                LOG 3:1 DEBUG STARTS: POST
     ...                LOG 3:2 DEBUG STARTS: Finished
-    ...                LOG 3:3 WARN Multiple elements by found using '//div[@id="div_id"]/a' locator, but only one should have been found.
+    ...                LOG 3:3 WARN 11 elements found with locator '//div[@id="div_id"]/a', but only one should have been found.
     ...                LOG 3:4 INFO STARTS: ${link} = <selenium.webdriver.remote.webelement.WebElement
     ...                LOG 3:5 NONE
     ${link}=    Get WebElement    //div[@id="div_id"]

@@ -80,7 +80,7 @@ class ElementFinder(ContextAware):
             raise ValueError('Parent must be Selenium WebElement but it '
                              'was {}.'.format(type(parent)))
         if self._is_webelement(locator):
-            return locator
+            return locator if first_only else [locator]
         prefix, criteria = self._parse_locator(locator)
         strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
