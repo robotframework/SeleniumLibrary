@@ -28,7 +28,7 @@ class FindElementAndElementsTests(unittest.TestCase):
         elements = [element1, element2]
         when(self.find).find(locator='xpath://td', tag=None, first_only=False,
                              parent=None, required=True).thenReturn(elements)
-        message = ('2 elements found with locator "xpath://td", '
+        message = ("2 elements found with locator 'xpath://td', "
                    'but only one should have been found.')
         when(self.find)._warn(message).thenReturn(None)
         element = self.find.find_element('xpath://td')
@@ -50,7 +50,7 @@ class FindElementAndElementsTests(unittest.TestCase):
         when(self.find).find(locator='xpath://div', tag=None, first_only=False,
                              parent=None, required=False).thenReturn([element1,
                                                                       element2])
-        message = ('Multiple elements found with locator "xpath://div", '
+        message = ("2 elements found with locator 'xpath://div', "
                    'but only one should have been found.')
         when(self.find)._warn(message).thenReturn(None)
         element = self.find.find_elements('xpath://div')

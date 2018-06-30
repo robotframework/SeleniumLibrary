@@ -62,8 +62,8 @@ class ElementFinder(ContextAware):
         elements = self.find(locator=locator, tag=tag, first_only=False,
                              required=required, parent=parent)
         if len(elements) > 1:
-            message = ('%s elements found with locator "%s", but only '
-                       'one should have been found.' % (len(elements), locator))
+            message = ("%s elements found with locator '%s', but only "
+                       "one should have been found." % (len(elements), locator))
             self._warn(message)
         if not elements:
             return None
