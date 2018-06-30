@@ -38,7 +38,7 @@ Double Click Element Error
 
 Click Element Logs Warning When Two Elements Have Found
     [Documentation]    LOG 2:1 INFO Clicking element 'class:twoButtons'.
-    ...                LOG 2:4 WARN Multiple elements by found using 'class:twoButtons' locator, but only one should have been found.
+    ...                LOG 2:4 WARN 2 elements found with locator 'class:twoButtons', but only one should have been found.
     Click Element    class:twoButtons
     Element Text Should Be    output    Two Buttons 1
 
