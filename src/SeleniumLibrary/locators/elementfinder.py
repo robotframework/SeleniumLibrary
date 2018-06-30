@@ -58,6 +58,21 @@ class ElementFinder(ContextAware):
                        'normalize-space(descendant-or-self::text())']
         }
 
+    def find_element(self, locator, tag=None, required=True, parent=None):
+        elements = self.find(locator=locator, tag=tag, required=required,
+                             parent=parent)
+        if len(elements) > 1:
+            message = ('Multiple elements found with locator "%s", but only '
+                       'one should have been found.' % locator)
+            self._warn(message)
+        if not elements:
+            return None
+        return elements[0]
+
+    def find_elements(self, locator, tag=None, required=False, parent=None):
+        return self.find(locator=locator, tag=tag, first_only=False,
+                         required=required, parent=parent)
+
     def find(self, locator, tag=None, first_only=True, required=True,
              parent=None):
         element_type = 'Element' if not tag else tag.capitalize()
@@ -103,6 +118,10 @@ class ElementFinder(ContextAware):
     def _is_webelement(self, element):
         # Hook for unit tests
         return isinstance(element, WebElement)
+
+    def _warn(self, message):
+        # Hook for unit tests
+        logger.warn(message)
 
     def _disallow_webelement_parent(self, element):
         if self._is_webelement(element):
