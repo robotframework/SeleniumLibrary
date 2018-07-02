@@ -2,6 +2,9 @@
 Test Setup        Go To Page "javascript/dynamic_content.html"
 Resource          ../resource.robot
 
+*** Variables ***
+${TEXT}=   You scrolled in div.
+
 *** Test Cases ***
 Clicking Elements Should Activate Javascript
     Title Should Be    Original
@@ -52,3 +55,17 @@ Drag and Drop by Offset
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${100}    ${20}
     Element Text Should Be    id=droppable    Dropped!
+
+Scroll to Element via Javascript
+    [Documentation]    Scroll to element by executing javascript with target web
+    ...    element as argument
+    [Tags]    javascript_with_args
+    Go To Page "scroll/index.html"
+    ${initial_position}=    Get Vertical Position    css:#target
+    ${element}=    Get WebElement    css:#target
+    set test variable    ${script}    return arguments[0].scrollIntoView();
+    Execute Javascript with arguments    ${script}    ${element}
+    ${position}=    Get Vertical Position    css:#target
+    Should Be True    ${initial_position} > ${position}
+    Element Should Contain    css:#result    ${TEXT}
+

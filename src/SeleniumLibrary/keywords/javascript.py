@@ -79,8 +79,8 @@ class JavaScriptKeywords(LibraryComponent):
 
     @keyword
     def execute_javascript_with_arguments(self, code, *arguments):
-        """ Executes the JavaScript code with the given arguments
-
+        """ Executes the given JavaScript code with the given arguments
+        #TODO: Add docstring
         """
         js = self._get_javascript_to_execute(code)
         self.info("Executing JavaScript \n%s with arguments \n%s" % (
@@ -88,12 +88,10 @@ class JavaScriptKeywords(LibraryComponent):
         return self.driver.execute_script(js, *arguments)
 
     @keyword
-    def execute_javascript_with_arguments(self, code, *arguments):
+    def execute_async_javascript_with_arguments(self, code, *arguments):
         """ Executes asynchronous JavaScript code with the given arguments
-
-
+        #TODO: Add docstring
         """
-
         js = self._get_javascript_to_execute(code)
         self.info("Executing Asynchronous JavaScript \n%s with arguments \n%s"
                   % (js, str(*arguments)))
