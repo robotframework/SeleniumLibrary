@@ -77,26 +77,6 @@ class JavaScriptKeywords(LibraryComponent):
         self.info("Executing Asynchronous JavaScript:\n%s" % js)
         return self.driver.execute_async_script(js)
 
-    @keyword
-    def execute_javascript_with_arguments(self, code, *arguments):
-        """ Executes the given JavaScript code with the given arguments
-        #TODO: Add docstring
-        """
-        js = self._get_javascript_to_execute(code)
-        self.info("Executing JavaScript \n%s with arguments \n%s" % (
-            js, str(*arguments)))
-        return self.driver.execute_script(js, *arguments)
-
-    @keyword
-    def execute_async_javascript_with_arguments(self, code, *arguments):
-        """ Executes asynchronous JavaScript code with the given arguments
-        #TODO: Add docstring
-        """
-        js = self._get_javascript_to_execute(code)
-        self.info("Executing Asynchronous JavaScript \n%s with arguments \n%s"
-                  % (js, str(*arguments)))
-        return self.driver.execute_async_script(js, *arguments)
-
     def _get_javascript_to_execute(self, lines):
         code = ''.join(lines)
         path = code.replace('/', os.sep)
