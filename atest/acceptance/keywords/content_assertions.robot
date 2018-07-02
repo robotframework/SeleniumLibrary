@@ -57,6 +57,16 @@ Page Should Contain
     ...    Page should have contained text 'non existing text' but did not.
     ...    Page Should Contain    non existing text
 
+Page Should Contain With Same Text In Multiple Elements
+    [Documentation]
+    ...    LOG 2:1 DEBUG STARTS: POST
+    ...    LOG 2:2 DEBUG Finished Request
+    ...    LOG 2:3 DEBUG STARTS: POST
+    ...    LOG 2:4 DEBUG Finished Request
+    ...    LOG 2:5 INFO Current page contains text 'Same text and class'.
+    ...    LOG 2:6 NONE
+    Page Should Contain    Same text and class
+
 Page Should Contain with text having internal elements
     Page Should Contain    This is the haystack and somewhere on this page is a needle.
     Go to page "links.html"
