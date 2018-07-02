@@ -57,7 +57,7 @@ Page Should Contain
     ...    Page should have contained text 'non existing text' but did not.
     ...    Page Should Contain    non existing text
 
-Page Should Contain With Same Text In Multiple Elements
+Page Should Contain With Same Text In Multiple Elements And Does Not Log Warn Message
     [Documentation]
     ...    LOG 2:1 DEBUG STARTS: POST
     ...    LOG 2:2 DEBUG Finished Request
@@ -97,6 +97,21 @@ Page Should Not Contain
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
     ...    Page Should Not Contain    needle
+
+Page Should Not Contain With Same Text In Multiple Elements And Does Not Log Warn Message
+    [Documentation]
+    ...    FAIL Page should not have contained text 'Same text and class'.
+    ...    LOG 2:1 DEBUG STARTS: POST
+    ...    LOG 2:2 DEBUG Finished Request
+    ...    LOG 2:3 DEBUG STARTS: POST
+    ...    LOG 2:4 DEBUG Finished Request
+    ...    LOG 2:5 DEBUG STARTS: GET
+    ...    LOG 2:6 DEBUG Finished Request
+    ...    LOG 2:7 INFO REGEXP: (?i)<html.*</html>
+    ...    LOG 2:8 FAIL STARTS: Page should not have
+    ...    LOG 2:9 DEBUG STARTS: Traceback
+    ...    LOG 2:10 NONE
+    Page Should Not Contain    Same text and class
 
 Page Should Not Contain With Custom Log Level
     [Documentation]    LOG 2.1:7 DEBUG REGEXP: (?i)<html.*</html>
