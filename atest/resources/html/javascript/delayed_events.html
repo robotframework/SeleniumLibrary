@@ -35,6 +35,7 @@
 
     function changeContent() {
         document.getElementById("content").firstChild.nodeValue = "New Content"
+        document.getElementById("content2").firstChild.nodeValue = "Other Content"
     }
 
     function unhideContent() {
@@ -53,6 +54,7 @@
 
     <body onload="modifyAfterDelay()">
     <div id="content" style="color: white; background: red">This is content</div>
+    <div id="content2" style="color: white; background: red">This is content</div>
     <div id="container"></div>
     <div id="not_present">Element that should disappear</div>
     <div id="hide_delay">Element that should set display:none</div>
