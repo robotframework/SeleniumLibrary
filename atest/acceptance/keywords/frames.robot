@@ -6,7 +6,16 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Frame Should Contain
-    Frame Should contain    right    You're looking at right.
+    [Documentation]    LOG 2:1 DEBUG STARTS: POST
+    ...                LOG 2:2 DEBUG STARTS: Finished
+    ...                LOG 2:3 DEBUG STARTS: POST
+    ...                LOG 2:4 DEBUG STARTS: Finished
+    ...                LOG 2:5 INFO STARTS: Searching for text from frame
+    ...                LOG 2:6 DEBUG STARTS: POST
+    ...                LOG 2:7 DEBUG STARTS: Finished
+    ...                LOG 2:8 DEBUG STARTS: POST
+    ...                LOG 2:9 DEBUG STARTS: Finished
+    Frame Should Contain    right    You're looking at right.
     Frame Should Contain    left    Links
 
 Frame Should Contain should also work with iframes
