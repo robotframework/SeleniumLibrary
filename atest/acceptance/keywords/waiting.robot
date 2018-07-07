@@ -38,6 +38,13 @@ Wait Until Page Does Not Contain
     ...    Text 'Initially hidden' did not disappear in 100 milliseconds.
     ...    Wait Until Page Does Not Contain    Initially hidden    0.1
 
+Wait Until Page Does Not Contain Does Not Log Warning
+    [Documentation]    LOG 2:1 DEBUG STARTS: POST
+    ...                LOG 2:2 DEBUG STARTS: Finished
+    ...                LOG 2:3 DEBUG STARTS: POST
+    ...                LOG 2:4 DEBUG STARTS: Finished
+    Wait Until Page Does Not Contain    This is content    2 s
+
 Wait Until Page Contains Element
     [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
     Wait Until Page Contains Element    new div    2 seconds
