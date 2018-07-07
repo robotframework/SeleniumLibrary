@@ -26,6 +26,12 @@ Wait Until Page Contains
     ...    Text 'invalid' did not appear in 100 milliseconds.
     ...    Wait Until Page Contains    invalid    0.1
 
+Wait Until Page Contains Does Not Log Warning
+    [Documentation]    LOG 2:1 DEBUG STARTS: POST
+    ...                LOG 2:2 DEBUG STARTS: Finished
+    ...                LOG 2:3 NONE
+    Wait Until Page Contains    Same text    2 s
+
 Wait Until Page Does Not Contain
     Wait Until Page Does Not Contain    This is content    2 s
     Run Keyword And Expect Error
