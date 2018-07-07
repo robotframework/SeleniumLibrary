@@ -6,6 +6,10 @@ Library           String
 
 *** Test Cases ***
 Get Elements
+    [Documentation]    LOG 2:1 DEBUG STARTS: POST
+    ...                LOG 2:2 DEBUG STARTS: Finished
+    ...                LOG 2:3 INFO STARTS: @{links} = [ <selenium.
+    ...                LOG 2:4 NONE
     @{links}=    Get WebElements    //div[@id="div_id"]/a
     Length Should Be    ${links}    11
     ${no_elements} =     Get WebElements    id:non_existing_elem
