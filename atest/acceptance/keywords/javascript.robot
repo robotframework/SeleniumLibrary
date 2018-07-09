@@ -69,3 +69,47 @@ Scroll to Element via Javascript
     Should Be True    ${initial_position} > ${position}
     Element Should Contain    css:#result    ${TEXT}
 
+# test multiline
+Execute JavaScript test
+#    [Tags]  test_only
+    Go To Page "scroll/index.html"
+    ${useless_variable}=  Set Variable  123
+    Execute Javascript with arguments
+    ...  ARGUMENTS
+    ...  ${useless_variable}
+    ...  JAVASCRIPT
+    ...  alert('Hello, world!');
+    ...  alert('This is me!');
+    ...  alert(arguments[0]);
+
+# python atest/run.py firefox --suite javascript --include test_only
+Show WebElement type
+    [Tags]  test_only
+    Go To Page "tables/tables.html"
+    ${element}=  get WebElement  xpath://*[@id="mergedRows"]
+    ${useless_variable}=  Set Variable  123
+    Execute Javascript with arguments
+    ...  ARGUMENTS
+    ...  ${element}
+    ...  ${useless_variable}
+    ...  JAVASCRIPT
+#    ...  alert(typeof arguments[0]);
+#    ...  element = document.evaluate("//*[@id='mergedRows']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+#    ...  alert(typeof element);
+    ...  return arguments[0].scrollIntoView();
+#    ...  element = arguments[0]
+#    ...  element.scrollIntoView();
+
+Highlight background
+#    [Tags]  test_only
+    Go to Page "tables/tables.html"
+    ${element}=  get WebElement  xpath://*[@id="mixed-th-td"]
+    Execute Javascript with arguments
+    ...  ARGUMENTS
+    ...  ${element}
+    ...  JAVASCRIPT
+    ...  element_outside = arguments[0];
+    ...  element_inside = document.getElementById('mergedCols');
+    ...  console.log(typeof element_outside);
+    ...  console.log(typeof element_inside);
+    ...  return element_outside.scrollIntoView(behavior="auto");

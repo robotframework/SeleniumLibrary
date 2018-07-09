@@ -78,14 +78,22 @@ class JavaScriptKeywords(LibraryComponent):
         return self.driver.execute_async_script(js)
 
     @keyword
-    def execute_javascript_with_arguments(self, code, *arguments):
+    def execute_javascript_with_arguments(self, *code):
         """ Executes the given JavaScript code with the given arguments
         #TODO: Add docstring
         """
+
+        code, args = self._parse_javascript_and_arguments(code)
         js = self._get_javascript_to_execute(code)
-        self.info("Executing JavaScript \n%s with arguments \n%s" % (
-            js, str(*arguments)))
-        return self.driver.execute_script(js, *arguments)
+
+        if len(args) == 0:
+            self.info("Executing JavaScript \n%s" % (
+                js))
+            return self.driver.execute_script(js)
+        else:
+            self.info("Executing JavaScript \n%s\nwith arguments \n%s" % (
+                code, args))
+            return self.driver.execute_script(code, args)
 
     @keyword
     def execute_async_javascript_with_arguments(self, code, *arguments):
@@ -104,8 +112,29 @@ class JavaScriptKeywords(LibraryComponent):
             code = self._read_javascript_from_file(path)
         return code
 
+    def _parse_javascript_and_arguments(self, code):
+        is_arg = False
+        is_code = True
+        self.codelines = ''
+        self.args = []
+
+        for exp in code:
+            if str(exp).strip() == "JAVASCRIPT":
+                is_code = True
+                is_arg = False
+            elif str(exp).strip() == "ARGUMENTS":
+                is_arg = True
+                is_code = False
+            elif is_code:
+                self.codelines = self.codelines.__add__(exp + '\n')
+            elif is_arg:
+                self.args.append(exp)
+
+        return self.codelines, self.args
+
     def _read_javascript_from_file(self, path):
         self.info('Reading JavaScript from file <a href="file://%s">%s</a>.'
                   .format(path.replace(os.sep, '/'), path), html=True)
         with open(path) as file:
             return file.read().strip()
+
