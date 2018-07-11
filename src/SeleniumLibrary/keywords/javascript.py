@@ -83,27 +83,52 @@ class JavaScriptKeywords(LibraryComponent):
         #TODO: Add docstring
         """
 
-        code, args = self._parse_javascript_and_arguments(code)
-        js = self._get_javascript_to_execute(code)
-
-        if len(args) == 0:
-            self.info("Executing JavaScript \n%s" % (
-                js))
+        if len(code) == 1:
+            js = self._get_javascript_to_execute(code)
+            self.info("Executing JavaScript:\n%s" % js)
             return self.driver.execute_script(js)
-        else:
-            self.info("Executing JavaScript \n%s\nwith arguments \n%s" % (
-                code, args))
-            return self.driver.execute_script(code, args)
+
+        elif len(code) > 1:
+            code, args = self._parse_javascript_and_arguments(code)
+
+            if len(args) == 0:
+                self.info("Executing JavaScript: \n%s" % code)
+                return self.driver.execute_script(code)
+            else:
+                args_list = []
+                for idx, item in enumerate(args):
+                    args_list.append("arguments[" + str(idx) + "]: " +
+                                     str(item))
+                self.info("Executing JavaScript: \n%s\nwith arguments \n%s"
+                          % (code, "\n".join(args_list)))
+                return self.driver.execute_script(code, *args)
 
     @keyword
-    def execute_async_javascript_with_arguments(self, code, *arguments):
-        """ Executes asynchronous JavaScript code with the given arguments
+    def execute_async_javascript_with_arguments(self, *code):
+        """ Executes the given asynchronous JavaScript code with the given
+        arguments
         #TODO: Add docstring
         """
-        js = self._get_javascript_to_execute(code)
-        self.info("Executing Asynchronous JavaScript \n%s with arguments \n%s"
-                  % (js, str(*arguments)))
-        return self.driver.execute_async_script(js, *arguments)
+
+        if len(code) == 1:
+            js = self._get_javascript_to_execute(code)
+            self.info("Executing Asynchronous JavaScript:\n%s" % js)
+            return self.driver.execute_async_script(js)
+
+        elif len(code) > 1:
+            code, args = self._parse_javascript_and_arguments(code)
+
+            if len(args) == 0:
+                self.info("Executing Asynchronous JavaScript: \n%s" % code)
+                return self.driver.execute_async_script(code)
+            else:
+                args_list = []
+                for idx, item in enumerate(args):
+                    args_list.append("arguments[" + str(idx) + "]: " +
+                                     str(item))
+                self.info("Executing Asynchronous JavaScript: ""\n%s\n"
+                          "with arguments \n%s" % (code, "\n".join(args_list)))
+                return self.driver.execute_async_script(code, *args)
 
     def _get_javascript_to_execute(self, lines):
         code = ''.join(lines)
@@ -113,6 +138,7 @@ class JavaScriptKeywords(LibraryComponent):
         return code
 
     def _parse_javascript_and_arguments(self, code):
+
         is_arg = False
         is_code = True
         self.codelines = ''
