@@ -123,3 +123,23 @@ Execute multiline JavaScript with marker
     ...    console.log('Hello, world!');
     ...    console.log('Here I am.');
     ...    console.log('Who else is here?');
+
+
+Execute multiline Javascript without marker with multiple arguments
+    [Setup]    Go To Page "tables/tables.html"
+    [Tags]    test_only
+    ${number_variable}=    Set Variable    123
+    ${string_variable}=    Set Variable    string
+    ${boolean_variable}=    Set Variable    True
+    ${null_variable}=    Set Variable    Null
+    ${webelement_variable}=    Get WebElement    xpath://*[@id="mergedRows"]
+    Execute Javascript with arguments
+    ...    console.log('Hello, world!');
+    ...    console.log('Here I am.');
+    ...    console.log('Who else is here?');
+    ...    ARGUMENTS
+    ...    ${number_variable}
+    ...    ${string_variable}
+    ...    ${boolean_variable}
+    ...    ${null_variable}
+    ...    ${webelement_variable}
