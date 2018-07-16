@@ -127,7 +127,6 @@ Execute multiline JavaScript with marker
 
 Execute multiline Javascript without marker with multiple arguments
     [Setup]    Go To Page "tables/tables.html"
-    [Tags]    test_only
     ${number_variable}=    Set Variable    123
     ${string_variable}=    Set Variable    string
     ${boolean_variable}=    Set Variable    True
