@@ -19,10 +19,10 @@ Close Browser Does Nothing When No Browser Is Opened
 
 Browser Open With Not Well-Formed URL Should Close
     [Documentation]    Verify after incomplete 'Open Browser' browser closes
-    ...    LOG 1.1:10 DEBUG STARTS: Opened browser with session id
-    ...    LOG 1.1:10 DEBUG REGEXP: .*but failed to open url.*
+    ...    LOG 1.1:15 DEBUG STARTS: Opened browser with session id
+    ...    LOG 1.1:15 DEBUG REGEXP: .*but failed to open url.*
     ...    LOG 2:2 DEBUG STARTS: DELETE
-    ...    LOG 2:3 DEBUG STARTS: Finished Request
+    ...    LOG 2:4 DEBUG STARTS: Finished Request
     Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}
     Close All Browsers
 
@@ -58,7 +58,7 @@ Closing all browsers clears cache
     Run Keyword And Expect Error
     ...    No browser with index or alias 'Browser 2' found.
     ...    Switch Browser    Browser 2
-    
+
 Get Session Id
     Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 1
     ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
