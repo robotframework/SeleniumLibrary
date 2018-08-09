@@ -6,7 +6,7 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Location Should Be
-    [Documentation]    LOG 2:3 Current location is '${FRONT PAGE}'.
+    [Documentation]    LOG 2:4 Current location is '${FRONT PAGE}'.
     Location Should Be    ${FRONT PAGE}
     Location Should Be    ${FRONT PAGE}  message=taco
     Location Should Be    ${FRONT PAGE}  message=None
@@ -22,7 +22,7 @@ Location Should Be
 
 
 Location Should Contain
-    [Documentation]    LOG 2:3 Current location contains 'html'.
+    [Documentation]    LOG 2:4 Current location contains 'html'.
     Location Should Contain    html
     Location Should Contain    html  message=foobar
     Location Should Contain    html  message=None
@@ -38,7 +38,7 @@ Location Should Contain
 
 
 Title Should Be
-    [Documentation]    LOG 2:3 Page title is '(root)/index.html'.
+    [Documentation]    LOG 2:4 Page title is '(root)/index.html'.
     Title Should Be    (root)/index.html
     Run Keyword And Expect Error
     ...    Title should have been 'not a title' but was '(root)/index.html'.
@@ -49,8 +49,8 @@ Title Should Be
 
 
 Page Should Contain
-    [Documentation]    LOG 2:5 Current page contains text 'needle'.
-    ...    LOG 4.1:10 REGEXP: (?i)<html.*</html>
+    [Documentation]    LOG 2:7 Current page contains text 'needle'.
+    ...    LOG 4.1:14 REGEXP: (?i)<html.*</html>
     Page Should Contain    needle
     Page Should Contain    This is the haystack
     Run Keyword And Expect Error
@@ -63,7 +63,7 @@ Page Should Contain with text having internal elements
     Page Should Contain    Relative with text after
 
 Page Should Contain With Custom Log Level
-    [Documentation]    LOG 2.1:10 DEBUG REGEXP: (?i)<html.*</html>
+    [Documentation]    LOG 2.1:14 DEBUG REGEXP: (?i)<html.*</html>
     Run Keyword And Expect Error
     ...    Page should have contained text 'non existing text' but did not.
     ...    Page Should Contain    non existing text    DEBUG
@@ -81,15 +81,15 @@ Page Should Contain With Frames
     Page Should Contain    You're looking at right.
 
 Page Should Not Contain
-    [Documentation]    LOG 2:8 Current page does not contain text 'non existing text'.
-    ...    LOG 3.1:7 REGEXP: (?i)<html.*</html>
+    [Documentation]    LOG 2:11 Current page does not contain text 'non existing text'.
+    ...    LOG 3.1:10 REGEXP: (?i)<html.*</html>
     Page Should Not Contain    non existing text
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
     ...    Page Should Not Contain    needle
 
 Page Should Not Contain With Custom Log Level
-    [Documentation]    LOG 2.1:7 DEBUG REGEXP: (?i)<html.*</html>
+    [Documentation]    LOG 2.1:10 DEBUG REGEXP: (?i)<html.*</html>
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
     ...    Page Should Not Contain    needle    DEBUG
@@ -199,7 +199,7 @@ Get Text
     ...    Get Text    missing_id
 
 Page Should Contain Checkbox
-    [Documentation]    LOG 2:5 Current page contains checkbox 'can_send_email'.
+    [Documentation]    LOG 2:7 Current page contains checkbox 'can_send_email'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Contain Checkbox    can_send_email
     Page Should Contain Checkbox    xpath=//input[@type='checkbox' and @name='can_send_sms']
@@ -208,7 +208,7 @@ Page Should Contain Checkbox
     ...    Page Should Contain Checkbox    non-existing
 
 Page Should Not Contain Checkbox
-    [Documentation]    LOG 2:5 Current page does not contain checkbox 'non-existing'.
+    [Documentation]    LOG 2:7 Current page does not contain checkbox 'non-existing'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Not Contain Checkbox    non-existing
     Run Keyword And Expect Error
@@ -298,7 +298,7 @@ Page Should Not Contain Text Field
     ...    Page Should Not Contain Text Field    website
 
 TextField Should Contain
-    [Documentation]    LOG 2:7 Text field 'name' contains text ''.
+    [Documentation]    LOG 2:10 Text field 'name' contains text ''.
     [Setup]    Go To Page "forms/email_form.html"
     TextField Should contain    name    ${EMPTY}
     TextField Should contain    website    ${EMPTY}
@@ -314,7 +314,7 @@ TextField Should Contain
     ...    TextField Should contain    website    https://w3.org
 
 TextField Value Should Be
-    [Documentation]    LOG 2:7 Content of text field 'name' is ''.
+    [Documentation]    LOG 2:10 Content of text field 'name' is ''.
     [Setup]    Go To Page "forms/email_form.html"
     textfield Value Should Be    name    ${EMPTY}
     Input Text    name    my name
