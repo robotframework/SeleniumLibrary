@@ -103,7 +103,7 @@ Test Get Cookie Object Value
 
 Test Get Cookie Keyword Logging
     [Documentation]
-    ...    LOG 2:3 ${cookie} = name=another
+    ...    LOG 2:4 ${cookie} = name=another
     ...    value=value
     ...    path=/
     ...    domain=localhost
