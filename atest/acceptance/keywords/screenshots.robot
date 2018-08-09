@@ -7,8 +7,8 @@ Force Tags        Known Issue Internet Explorer
 *** Test Cases ***
 Capture page screenshot to default location
     [Documentation]
-    ...    LOG 2:3 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
-    ...    LOG 8:3 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-2.png"><img src="selenium-screenshot-2.png" width="800px"></a>
+    ...    LOG 2:4 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
+    ...    LOG 8:4 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-2.png"><img src="selenium-screenshot-2.png" width="800px"></a>
     [Setup]    Remove Files    ${OUTPUTDIR}/selenium-screenshot-*.png
     ${file} =    Capture Page Screenshot
     ${count} =    Count Files In Directory    ${OUTPUTDIR}    selenium-screenshot-*.png
