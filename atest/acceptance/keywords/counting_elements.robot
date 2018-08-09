@@ -75,12 +75,12 @@ Page Should Contain Element When Limit Is None
     Page Should Contain Element    name: div_name    limit=${None}
 
 Page Should Contain Element When Limit Is Number
-    [Documentation]    LOG 2:3    INFO Current page contains 2 element(s).
+    [Documentation]    LOG 2:4    INFO Current page contains 2 element(s).
     [Setup]    Go To Page "links.html"
     Page Should Contain Element    name: div_name    limit=2
 
 Page Should Contain Element Log Level Does Not Affect When Keyword Passes
-    [Documentation]    LOG 2:3    INFO Current page contains 2 element(s).
+    [Documentation]    LOG 2:4    INFO Current page contains 2 element(s).
     [Setup]    Go To Page "links.html"
     Page Should Contain Element    name: div_name    loglevel=debug    limit=2
 
@@ -101,8 +101,8 @@ Page Should Contain Element When Limit Is Not Number
 
 Page Should Contain Element When Error With Limit And Different Loglevels
     [Documentation]
-    ...    LOG 2.1:5    INFO REGEXP: .*links\\.html.*
-    ...    LOG 3.1:5    DEBUG REGEXP: .*links\\.html.*
+    ...    LOG 2.1:7    INFO REGEXP: .*links\\.html.*
+    ...    LOG 3.1:7    DEBUG REGEXP: .*links\\.html.*
     [Setup]    Go To Page "links.html"
     Run Keyword And Ignore Error
     ...    Page Should Contain Element    name: div_name    limit=99
