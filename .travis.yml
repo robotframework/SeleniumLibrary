@@ -74,7 +74,13 @@ before_script:
   - echo $INTERPRETER
   - $INTERPRETER --version
   - $INTERPRETER -m pip install .
-  - $INTERPRETER -m pip install -r requirements-dev.txt
+  - if [ "$JYTHON" == "true" ]; then
+      $INTERPRETER -m pip install mockito;
+      $INTERPRETER -m pip install robotstatuschecker;
+      $INTERPRETER -m pip install -r requirements.txt;
+    else
+      $INTERPRETER -m pip install -r requirements-dev.txt;
+    fi
   - $INTERPRETER -m pip install selenium==$SELENIUM
   - $INTERPRETER -m pip install robotframework==$ROBOTFRAMEWORK
 script:
