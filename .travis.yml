@@ -40,7 +40,7 @@ matrix:
         - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
-    - python: "3.4"
+    - python: "3.6"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.14.0
@@ -48,6 +48,13 @@ matrix:
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
         - JYTHON=true
+    - python: "3.4"
+        env:
+        - BROWSER=headlesschrome
+        - SELENIUM=3.14.0
+        - ROBOTFRAMEWORK=3.0.4
+        - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python3
     - python: "2.7"
       env:
         - BROWSER=chrome
