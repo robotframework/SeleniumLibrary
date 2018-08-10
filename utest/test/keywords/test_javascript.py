@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from robot.utils import JYTHON
+from SeleniumLibrary.utils.platform import JYTHON
 try:
     from approvaltests.approvals import verify
     from approvaltests.reporters.generic_diff_reporter_factory import GenericDiffReporterFactory
