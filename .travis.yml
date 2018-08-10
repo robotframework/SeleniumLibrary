@@ -5,7 +5,6 @@ env:
   global:
     - JYTHON=false
 addons:
-  firefox: latest
   apt:
     sources:
       - google-chrome
