@@ -1,0 +1,8 @@
+code and args
+
+0) (['code1'], [])
+1) (['code1', 'code2'], [])
+2) (['code1', 'code2'], [])
+3) (['code1', 'code2'], [])
+4) (['code1', 'code2'], ['arg1', 'arg2'])
+5) (['code1', 'code2'], ['arg1', 'arg2'])
