@@ -195,8 +195,8 @@ class SeleniumLibrary(DynamicCore):
     locators is a two part process. First, create a keyword that returns
     a WebElement that should be acted on:
 
-    | Custom Locator Strategy | [Arguments] | ${browser} | ${criteria} | ${tag} | ${constraints} |
-    |   | ${element}= | Execute Javascript | return window.document.getElementById('${criteria}'); |
+    | Custom Locator Strategy | [Arguments] | ${browser} | ${locator} | ${tag} | ${constraints} |
+    |   | ${element}= | Execute Javascript | return window.document.getElementById('${locator}'); |
     |   | [Return] | ${element} |
 
     This keyword is a reimplementation of the basic functionality of the
