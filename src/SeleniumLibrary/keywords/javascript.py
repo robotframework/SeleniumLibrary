@@ -158,3 +158,4 @@ class JavaScriptKeywords(LibraryComponent):
                   .format(path.replace(os.sep, '/'), path), html=True)
         with open(path) as file:
             return file.read().strip()
+
