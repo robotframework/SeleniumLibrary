@@ -1,0 +1,7 @@
+INPUT
+
+16) my.first.line.of.JS.code;
+17) my.second.line.of.JS.code
+18) 
+19) argument1
+20) argument2

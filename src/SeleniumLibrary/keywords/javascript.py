@@ -77,15 +77,85 @@ class JavaScriptKeywords(LibraryComponent):
         self.info("Executing Asynchronous JavaScript:\n%s" % js)
         return self.driver.execute_async_script(js)
 
+    @keyword
+    def execute_javascript_with_arguments(self, *code):
+        """ Executes the given JavaScript code with the given arguments
+        #TODO: Add docstring
+        """
+        code, args = self._get_javascript_to_execute(code)
+        self._execute_javascript_code(code, *args)
+
+    @keyword
+    def execute_async_javascript_with_arguments(self, *code):
+        """ Executes the given asynchronous JavaScript code with the given
+        arguments
+        #TODO: Add docstring
+        """
+        code, args = self._get_javascript_to_execute(code)
+        self._execute_async_javascript_code(code, args)
+
+    def _prepare_argument_list(self, args):
+        self.args_list = []
+        for idx, item in enumerate(args):
+            self.args_list.append("arguments[" + str(idx) + "]: " +
+                                  str(item))
+
+    def _execute_javascript_code(self, code, *args):
+        if len(args) > 0:
+            self._prepare_argument_list(args)
+            self.info("Executing JavaScript: ""\n%s\n"
+                      "with arguments \n%s" % (
+                          code, "\n".join(self.args_list)))
+        else:
+            self.info("Executing JavaScript:\n%s" % code)
+        self.driver.execute_script(code, *args)
+
+    def _execute_async_javascript_code(self, code, *args):
+        if len(args) > 0:
+            self._prepare_argument_list(*args)
+            self.info("Executing Async JavaScript: ""\n%s\n"
+                      "with arguments \n%s" % (
+                          code, "\n".join(self.args_list)))
+            return self.driver.execute_script(code, *args)
+
+        else:
+            self.info("Executing Async JavaScript: \n%s" % code)
+            return self.driver.execute_script(code)
+
     def _get_javascript_to_execute(self, lines):
-        code = ''.join(lines)
-        path = code.replace('/', os.sep)
-        if os.path.isabs(path) and os.path.isfile(path):
-            code = self._read_javascript_from_file(path)
-        return code
+        if all(isinstance(n, str) for n in lines):
+            code = ''.join(lines)
+            path = code.replace('/', os.sep)
+            if os.path.isabs(path) and os.path.isfile(path):
+                code = self._read_javascript_from_file(path)
+                return code, []
+
+        code, args = self._parse_javascript_and_arguments(lines)
+        return code, args
+
+    def _parse_javascript_and_arguments(self, code):
+        is_arg = False
+        is_code = True
+        self.codelines = ''
+        self.args = []
+
+        for exp in code:
+            if str(exp).strip() == "JAVASCRIPT":
+                is_code = True
+                is_arg = False
+            elif str(exp).strip() == "ARGUMENTS":
+                is_arg = True
+                is_code = False
+            elif is_code:
+                self.codelines = self.codelines.__add__(exp + '\n')
+            elif is_arg:
+                self.args.append(exp)
+
+        return self.codelines, self.args
 
     def _read_javascript_from_file(self, path):
         self.info('Reading JavaScript from file <a href="file://%s">%s</a>.'
                   .format(path.replace(os.sep, '/'), path), html=True)
         with open(path) as file:
             return file.read().strip()
+

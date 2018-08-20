@@ -1,0 +1,6 @@
+INPUT
+
+7) my.first.line.of.JS.code;
+8) my.second.line.of.JS.code;
+9) my.third.line.of.JS.code;
+10) 
