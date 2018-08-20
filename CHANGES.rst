@@ -6,6 +6,7 @@ Release Notes
 - Added message param to keywords `Location Should Be` and `Location Should Contain` to display custom error message [taniabhullar]
 - Added `Element Attribute Value Should Be` verifies element identified by locator contains expected attribute value.. [brian-mathews]
 - Added `Get Session Id` keyword to get remote webdriver session id [ilfirinpl]
+- Fixed example documentation for custom locator [DanielPBak]
 
 3.1.1
 -----
