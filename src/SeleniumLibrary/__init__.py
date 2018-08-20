@@ -201,7 +201,7 @@ class SeleniumLibrary(DynamicCore):
 
     This keyword is a reimplementation of the basic functionality of the
     ``id`` locator where ``${browser}`` is a reference to a WebDriver
-    instance and ``${strategy}`` is name of the locator strategy. To use
+    instance and ``${locator}`` is name of the locator strategy. To use
     this locator it must first be registered by using the
     `Add Location Strategy` keyword:
 
