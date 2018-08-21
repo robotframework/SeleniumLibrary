@@ -49,8 +49,8 @@ class JavaScriptKeywords(LibraryComponent):
         | `Should Be Equal`    | ${sum}               | ${2}          |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self.info("Executing JavaScript:\n%s\nBy using arguments %s"
-                  % (js_code, js_args))
+        self.info('Executing JavaScript:\n%s\nBy using argument(s):\n"%s"'
+                  % (js_code, ', '.join(js_args)))
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
@@ -75,8 +75,8 @@ class JavaScriptKeywords(LibraryComponent):
         | `Should Be Equal` | ${result} | text |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self.info("Executing Asynchronous JavaScript:\n%s\nBy using arguments %s"
-                  % (js_code, js_args))
+        self.info('Executing Asynchronous JavaScript:\n%s\nBy using argument(s):\n"%s"'
+                  % (js_code, ', '.join(js_args)))
         return self.driver.execute_async_script(js_code, *js_args)
 
     def _get_javascript_to_execute(self, code):
@@ -116,6 +116,6 @@ class JavaScriptKeywords(LibraryComponent):
 
     def _read_javascript_from_file(self, path):
         self.info('Reading JavaScript from file <a href="file://%s">%s</a>.'
-                  .format(path.replace(os.sep, '/'), path), html=True)
+                  % (path.replace(os.sep, '/'), path), html=True)
         with open(path) as file:
             return file.read().strip()
