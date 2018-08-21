@@ -22,6 +22,7 @@ Mouse Down On Link
 Execute Javascript
     [Documentation]    LOG 2 Executing JavaScript:
     ...    window.add_content('button_target', 'Inserted directly')
+    ...    By using arguments []
     Execute Javascript    window.add_content('button_target', 'Inserted directly')
     Page Should Contain    Inserted directly
 
@@ -29,6 +30,7 @@ Execute Javascript from File
     [Documentation]    LOG 2:1 REGEXP: Reading JavaScript from file .*
     ...    LOG 2:2 Executing JavaScript:
     ...    window.add_content('button_target', 'Inserted via file')
+    ...    By using arguments []
     Execute Javascript    ${CURDIR}/executed_by_execute_javascript.js
     Page Should Contain    Inserted via file
 
