@@ -103,6 +103,8 @@ class JavaScriptKeywords(LibraryComponent):
                 get_code = False
                 get_args, found_args = True, True
                 continue
+            if not get_code and not get_args:
+                get_code, found_code = True, True
             if get_code:
                 js_code.append(item)
             if get_args:

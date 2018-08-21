@@ -1,7 +1,8 @@
 error
 
 6) There must be at least one JavaScript line defined.
-7) ARGUMENTS found two times in code.
-8) JAVASCRIPT found two times in code.
-9) ARGUMENTS found two times in code.
-10) ARGUMENTS found two times in code.
+7) ARGUMENTS marker was found two times in code.
+8) JAVASCRIPT marker was found two times in code.
+9) ARGUMENTS marker was found two times in code.
+10) JAVASCRIPT marker was found two times in code.
+11) ARGUMENTS marker was found two times in code.
