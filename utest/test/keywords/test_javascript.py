@@ -30,8 +30,9 @@ class JavaScriptKeywordsTest(unittest.TestCase):
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_get_javascript(self):
-        code = self.js._get_javascript_to_execute('code here')
-        verify(code, self.reporter)
+        code, args = self.js._get_javascript_to_execute(('code', 'here'))
+        result = '%s + %s' % (code, args)
+        verify(result, self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_separate_code_and_args(self):

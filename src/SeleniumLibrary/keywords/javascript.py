@@ -48,9 +48,10 @@ class JavaScriptKeywords(LibraryComponent):
         | ${sum} =             | `Execute JavaScript` | return 1 + 1; |
         | `Should Be Equal`    | ${sum}               | ${2}          |
         """
-        js = self._get_javascript_to_execute(code)
-        self.info("Executing JavaScript:\n%s" % js)
-        return self.driver.execute_script(js)
+        js_code, js_args = self._get_javascript_to_execute(code)
+        self.info("Executing JavaScript:\n%s\nBy using arguments %s"
+                  % (js_code, js_args))
+        return self.driver.execute_script(js_code, *js_args)
 
     @keyword
     def execute_async_javascript(self, *code):
@@ -73,16 +74,18 @@ class JavaScriptKeywords(LibraryComponent):
         | ...         | window.setTimeout(answer, 2000);                |
         | `Should Be Equal` | ${result} | text |
         """
-        js = self._get_javascript_to_execute(code)
-        self.info("Executing Asynchronous JavaScript:\n%s" % js)
-        return self.driver.execute_async_script(js)
+        js_code, js_args = self._get_javascript_to_execute(code)
+        self.info("Executing Asynchronous JavaScript:\n%s\nBy using arguments %s"
+                  % (js_code, js_args))
+        return self.driver.execute_async_script(js_code, *js_args)
 
     def _get_javascript_to_execute(self, code):
-        code = ''.join(code)
-        path = code.replace('/', os.sep)
-        if os.path.isabs(path) and os.path.isfile(path):
-            code = self._read_javascript_from_file(path)
-        return code
+        js_code, js_args = self._separate_code_and_args(code)
+        js_code = ''.join(js_code)
+        path = js_code.replace('/', os.sep)
+        if os.path.isfile(path):
+            js_code = self._read_javascript_from_file(path)
+        return js_code, js_args
 
     def _separate_code_and_args(self, code):
         if not code:
@@ -90,14 +93,14 @@ class JavaScriptKeywords(LibraryComponent):
         js_code, js_args = [], []
         get_code, get_args = False, False
         found_code, found_args = False, False
-        for item in code:
-            if item == 'JAVASCRIPT':
+        for line in code:
+            if line == 'JAVASCRIPT':
                 if found_code:
                     raise ValueError('JAVASCRIPT marker was found two times in code.')
                 get_code, found_code = True, True
                 get_args = False
                 continue
-            if item == 'ARGUMENTS':
+            if line == 'ARGUMENTS':
                 if found_args:
                     raise ValueError('ARGUMENTS marker was found two times in code.')
                 get_code = False
@@ -106,9 +109,9 @@ class JavaScriptKeywords(LibraryComponent):
             if not get_code and not get_args:
                 get_code, found_code = True, True
             if get_code:
-                js_code.append(item)
+                js_code.append(line)
             if get_args:
-                js_args.append(item)
+                js_args.append(line)
         return js_code, js_args
 
     def _read_javascript_from_file(self, path):
