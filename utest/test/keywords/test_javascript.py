@@ -44,8 +44,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS', 'arg1', 'arg2'),
             ('ARGUMENTS', 'arg1', 'arg2', 'JAVASCRIPT', 'code1', 'code2')]
         for code in code_examples:
-            code_and_args = self.js._separate_code_and_args(code)
-            all_results.append(code_and_args)
+            all_results.append(self.js_reporter(code))
         verify_all('code and args', all_results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -61,9 +60,11 @@ class JavaScriptKeywordsTest(unittest.TestCase):
         ]
         all_results = []
         for code in code_examples:
-            try:
-                self.js._separate_code_and_args(code)
-                raise AssertionError('Method should fail, but it did not')
-            except Exception as error:
-                all_results.append(error)
+            all_results.append(self.js_reporter(code))
         verify_all('error', all_results, reporter=self.reporter)
+
+    def js_reporter(self, code):
+        try:
+            return self.js._separate_code_and_args(code)
+        except Exception as error:
+            return error
