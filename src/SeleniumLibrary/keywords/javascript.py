@@ -87,21 +87,19 @@ class JavaScriptKeywords(LibraryComponent):
     def _separate_code_and_args(self, code):
         if not code:
             raise ValueError('There must be at least one JavaScript line defined.')
-        js_code = []
-        js_args = []
-        get_code = True
-        get_args = False
+        js_code, js_args = [], []
+        get_code, get_args = False, False
         found_code, found_args = False, False
         for item in code:
             if item == 'JAVASCRIPT':
                 if found_code:
-                    raise ValueError('JAVASCRIPT found two times in code.')
+                    raise ValueError('JAVASCRIPT marker was found two times in code.')
                 get_code, found_code = True, True
                 get_args = False
                 continue
             if item == 'ARGUMENTS':
                 if found_args:
-                    raise ValueError('ARGUMENTS found two times in code.')
+                    raise ValueError('ARGUMENTS marker was found two times in code.')
                 get_code = False
                 get_args, found_args = True, True
                 continue
