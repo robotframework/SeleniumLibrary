@@ -23,7 +23,7 @@ class JavaScriptKeywords(LibraryComponent):
 
     @keyword
     def execute_javascript(self, *code):
-        """Executes the given JavaScript code.
+        """Executes the given JavaScript code with possible arguments.
 
         ``code`` may contain multiple lines of code and may be divided into
         multiple cells in the test data. In that case, the parts are
@@ -42,11 +42,22 @@ class JavaScriptKeywords(LibraryComponent):
         This keyword returns whatever the executed JavaScript code returns.
         Return values are converted to the appropriate Python types.
 
+        Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
+        arguments] as part of ``code`` argument. The JavaScript code and
+        arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` statements
+        and must used exactly with this format. If the Javascript code is
+        first, then the `JAVASCRIPT` statement is optional. The order of
+        `JAVASCRIPT` and `ARGUMENTS` statements can swapped, but if `ARGUMENTS`
+        is first statement, then `JAVASCRIPT` statement is mandatory. It is only
+        allowed to use `JAVASCRIPT` and `ARGUMENTS` statements one time in the
+        ``code`` argument.
+
         Examples:
         | `Execute JavaScript` | window.myFunc('arg1', 'arg2') |
         | `Execute JavaScript` | ${CURDIR}/js_to_execute.js    |
-        | ${sum} =             | `Execute JavaScript` | return 1 + 1; |
-        | `Should Be Equal`    | ${sum}               | ${2}          |
+        | `Execute JavaScript` | alert(arguments[0]); | ARGUMENTS | 123 |
+        | `Execute JavaScript` | ARGUMENTS | 123 | JAVASCRIPT | alert(arguments[0]); |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
         self.info('Executing JavaScript:\n%s\nBy using argument(s):\n"%s"'
@@ -55,7 +66,7 @@ class JavaScriptKeywords(LibraryComponent):
 
     @keyword
     def execute_async_javascript(self, *code):
-        """Executes asynchronous JavaScript code.
+        """Executes asynchronous JavaScript code with possible arguments.
 
         Similar to `Execute Javascript` except that scripts executed with
         this keyword must explicitly signal they are finished by invoking the
@@ -64,6 +75,17 @@ class JavaScriptKeywords(LibraryComponent):
 
         Scripts must complete within the script timeout or this keyword will
         fail. See the `Timeouts` section for more information.
+
+        Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_async_script|
+        arguments] as part of ``code`` argument. The JavaScript code and
+        and must used exactly with this format. If the Javascript code is
+        and must use exactly the previous format. If the Javascript code is
+        first, then the `JAVASCRIPT` statement is optional. The order of
+        `JAVASCRIPT` and `ARGUMENTS` statements can swapped, but if `ARGUMENTS`
+        is first statement, then `JAVASCRIPT` statement is mandatory. It is only
+        allowed to use `JAVASCRIPT` and `ARGUMENTS` statements one time in the
+        ``code`` argument.
 
         Examples:
         | `Execute Async JavaScript` | var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 2000); |
