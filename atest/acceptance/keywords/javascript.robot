@@ -46,10 +46,16 @@ Execute Javascript With JAVASCRIPT and ARGUMENTS Marker
     Alert Should Be Present    123    timeout=10 s
 
 Execute Javascript With ARGUMENTS Marker Only
+    [Documentation]
+    ...    LOG 2 Executing JavaScript:
+    ...    alert(arguments[0]);
+    ...    By using argument(s):
+    ...    "123, 0987"
     Execute Javascript
     ...  alert(arguments[0]);
     ...  ARGUMENTS
     ...  123
+    ...  0987
     Alert Should Be Present    123    timeout=10 s
 
 Execute Javascript from File
