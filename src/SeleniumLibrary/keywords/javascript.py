@@ -103,6 +103,8 @@ class JavaScriptKeywords(LibraryComponent):
 
     def _get_javascript_to_execute(self, code):
         js_code, js_args = self._separate_code_and_args(code)
+        if not js_code:
+            raise ValueError('JavaScript code was found not found in `code` argument.')
         js_code = ''.join(js_code)
         path = js_code.replace('/', os.sep)
         if os.path.isfile(path):

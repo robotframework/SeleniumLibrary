@@ -6,3 +6,4 @@ error
 3) ARGUMENTS marker was found two times in code.
 4) JAVASCRIPT marker was found two times in code.
 5) ARGUMENTS marker was found two times in code.
+6) JAVASCRIPT marker was found two times in code.
