@@ -29,7 +29,6 @@ Execute Javascript
     Page Should Contain    Inserted directly
 
 Execute Javascript With ARGUMENTS and JAVASCRIPT Marker
-    [Documentation]
     Execute Javascript
     ...  ARGUMENTS
     ...  123

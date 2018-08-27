@@ -6,8 +6,18 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Should Not Timeout If Callback Invoked Immediately
-    ${result} =    Execute Async Javascript    arguments[arguments.length - 1](123);
+    ${result} =    Execute Async Javascript
+    ...    JAVASCRIPT
+    ...    arguments[arguments.length - 1](123);
     Should Be Equal    ${result}    ${123}
+
+Execute Async Javascript With ARGUMENTS and JAVASCRIPT Marker
+    Execute Async Javascript
+    ...  ARGUMENTS
+    ...  123
+    ...  JAVASCRIPT
+    ...  alert(arguments[0]);
+    Alert Should Be Present    123    timeout=10 s
 
 Should Be Able To Return Javascript Primitives From Async Scripts Neither None Nor Undefined
     ${result} =    Execute Async Javascript    arguments[arguments.length - 1](123);
