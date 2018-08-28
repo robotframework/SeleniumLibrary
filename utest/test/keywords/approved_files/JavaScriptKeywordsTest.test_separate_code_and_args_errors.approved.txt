@@ -1,6 +1,6 @@
 error
 
-0) There must be at least one JavaScript line defined.
+0) There must be at least one argument defined.
 1) ARGUMENTS marker was found two times in code.
 2) JAVASCRIPT marker was found two times in code.
 3) ARGUMENTS marker was found two times in code.
