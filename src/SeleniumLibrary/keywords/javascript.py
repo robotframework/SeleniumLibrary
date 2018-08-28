@@ -25,11 +25,12 @@ class JavaScriptKeywords(LibraryComponent):
     def execute_javascript(self, *code):
         """Executes the given JavaScript code with possible arguments.
 
-        ``code`` may contain multiple lines of code and may be divided into
-        multiple cells in the test data. In that case, the parts are
-        concatenated together without adding spaces.
+        ``code`` may be divided into multiple cells in the test data and
+        ``code`` may contain multiple lines of code and arguments. In that case,
+        the JavaScript code parts are concatenated together without adding
+        spaces and optional arguments are separated from ``code``.
 
-        If ``code`` is an absolute path to an existing file, the JavaScript
+        If ``code`` is a path to an existing file, the JavaScript
         to execute will be read from that file. Forward slashes work as
         a path separator on all operating systems.
 
@@ -45,12 +46,12 @@ class JavaScriptKeywords(LibraryComponent):
         Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
         arguments] as part of ``code`` argument. The JavaScript code and
-        arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` statements
+        arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` markers
         and must used exactly with this format. If the Javascript code is
-        first, then the `JAVASCRIPT` statement is optional. The order of
-        `JAVASCRIPT` and `ARGUMENTS` statements can swapped, but if `ARGUMENTS`
-        is first statement, then `JAVASCRIPT` statement is mandatory. It is only
-        allowed to use `JAVASCRIPT` and `ARGUMENTS` statements one time in the
+        first, then the `JAVASCRIPT` marker is optional. The order of
+        `JAVASCRIPT` and `ARGUMENTS` markers can swapped, but if `ARGUMENTS`
+        is first marker, then `JAVASCRIPT` marker is mandatory. It is only
+        allowed to use `JAVASCRIPT` and `ARGUMENTS` markers only one time in the
         ``code`` argument.
 
         Examples:
@@ -78,16 +79,9 @@ class JavaScriptKeywords(LibraryComponent):
 
         Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_async_script|
-        arguments] as part of ``code`` argument. The JavaScript code and
-        and must used exactly with this format. If the Javascript code is
-        and must use exactly the previous format. If the Javascript code is
-        first, then the `JAVASCRIPT` statement is optional. The order of
-        `JAVASCRIPT` and `ARGUMENTS` statements can swapped, but if `ARGUMENTS`
-        is first statement, then `JAVASCRIPT` statement is mandatory. It is only
-        allowed to use `JAVASCRIPT` and `ARGUMENTS` statements one time in the
-        ``code`` argument.
+        arguments] as part of ``code`` argument. See `Execute Javascript` for
+        more details.
 
-        Examples:
         | `Execute Async JavaScript` | var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 2000); |
         | `Execute Async JavaScript` | ${CURDIR}/async_js_to_execute.js |
         | ${result} = | `Execute Async JavaScript`                      |
@@ -104,7 +98,7 @@ class JavaScriptKeywords(LibraryComponent):
     def _get_javascript_to_execute(self, code):
         js_code, js_args = self._separate_code_and_args(code)
         if not js_code:
-            raise ValueError('JavaScript code was found not found in `code` argument.')
+            raise ValueError('JavaScript code was not found from code argument.')
         js_code = ''.join(js_code)
         path = js_code.replace('/', os.sep)
         if os.path.isfile(path):
@@ -113,14 +107,15 @@ class JavaScriptKeywords(LibraryComponent):
 
     def _separate_code_and_args(self, code):
         if not code:
-            raise ValueError('There must be at least one JavaScript line defined.')
+            raise ValueError('There must be at least one argument defined.')
         js_code, js_args = [], []
         get_code, get_args = False, False
         found_code, found_args = False, False
         for line in code:
             if line == 'JAVASCRIPT':
                 if found_code:
-                    raise ValueError('JAVASCRIPT marker was found two times in code.')
+                    message = 'JAVASCRIPT marker was found two times in code.'
+                    raise ValueError(message)
                 get_code, found_code = True, True
                 get_args = False
                 continue
