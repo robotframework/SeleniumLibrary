@@ -40,7 +40,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             self.js._get_javascript_to_execute(code)
         except Exception as error:
             result = str(error)
-        verify(str(result), self.reporter)
+        verify(result, self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_separate_code_and_args(self):
