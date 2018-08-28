@@ -112,16 +112,17 @@ class JavaScriptKeywords(LibraryComponent):
         get_code, get_args = False, False
         found_code, found_args = False, False
         for line in code:
-            if line == 'JAVASCRIPT':
-                if found_code:
-                    message = 'JAVASCRIPT marker was found two times in code.'
-                    raise ValueError(message)
+            if line == 'JAVASCRIPT' and found_code:
+                message = 'JAVASCRIPT marker was found two times in the code.'
+                raise ValueError(message)
+            if line == 'JAVASCRIPT' and not found_code:
                 get_code, found_code = True, True
                 get_args = False
                 continue
-            if line == 'ARGUMENTS':
-                if found_args:
-                    raise ValueError('ARGUMENTS marker was found two times in code.')
+            if line == 'ARGUMENTS' and found_args:
+                message = 'ARGUMENTS marker was found two times in the code.'
+                raise ValueError(message)
+            if line == 'ARGUMENTS' and not found_args:
                 get_code = False
                 get_args, found_args = True, True
                 continue
