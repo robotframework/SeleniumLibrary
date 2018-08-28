@@ -82,6 +82,7 @@ class JavaScriptKeywords(LibraryComponent):
         arguments] as part of ``code`` argument. See `Execute Javascript` for
         more details.
 
+        Examples:
         | `Execute Async JavaScript` | var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 2000); |
         | `Execute Async JavaScript` | ${CURDIR}/async_js_to_execute.js |
         | ${result} = | `Execute Async JavaScript`                      |
