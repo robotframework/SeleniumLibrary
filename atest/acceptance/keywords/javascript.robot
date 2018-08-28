@@ -67,6 +67,13 @@ Execute Javascript from File
     Execute Javascript    ${CURDIR}/executed_by_execute_javascript.js
     Page Should Contain    Inserted via file
 
+Execute Javascript from File With ARGUMENTS Marker
+    Execute Javascript
+    ...    ${CURDIR}/javascript_alert.js
+    ...    ARGUMENTS
+    ...    123
+    Alert Should Be Present    123    timeout=10 s
+
 Open Context Menu
     [Tags]    Known Issue Safari
     Go To Page "javascript/context_menu.html"
