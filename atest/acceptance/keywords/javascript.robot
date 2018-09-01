@@ -23,8 +23,7 @@ Execute Javascript
     [Documentation]
     ...    LOG 2 Executing JavaScript:
     ...    window.add_content('button_target', 'Inserted directly')
-    ...    By using argument(s):
-    ...    ""
+    ...    Without any arguments.
     Execute Javascript    window.add_content('button_target', 'Inserted directly')
     Page Should Contain    Inserted directly
 
@@ -37,6 +36,11 @@ Execute Javascript With ARGUMENTS and JAVASCRIPT Marker
     Alert Should Be Present    123    timeout=10 s
 
 Execute Javascript With JAVASCRIPT and ARGUMENTS Marker
+    [Documentation]
+    ...    LOG 2 Executing JavaScript:
+    ...    alert(arguments[0]);
+    ...    By using argument:
+    ...    '123'
     Execute Javascript
     ...  JAVASCRIPT
     ...  alert(arguments[0]);
@@ -48,8 +52,8 @@ Execute Javascript With ARGUMENTS Marker Only
     [Documentation]
     ...    LOG 2 Executing JavaScript:
     ...    alert(arguments[0]);
-    ...    By using argument(s):
-    ...    "123, 0987"
+    ...    By using arguments:
+    ...    '123' and '0987'
     Execute Javascript
     ...  alert(arguments[0]);
     ...  ARGUMENTS
@@ -62,8 +66,7 @@ Execute Javascript from File
     ...    LOG 2:1 REGEXP: Reading JavaScript from file .*executed_by_execute_javascript.*
     ...    LOG 2:2 Executing JavaScript:
     ...    window.add_content('button_target', 'Inserted via file')
-    ...    By using argument(s):
-    ...    ""
+    ...    Without any arguments.
     Execute Javascript    ${CURDIR}/executed_by_execute_javascript.js
     Page Should Contain    Inserted via file
 

@@ -17,6 +17,8 @@
 import os
 from collections import namedtuple
 
+from robot.utils import plural_or_not, seq2str
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
@@ -65,8 +67,7 @@ class JavaScriptKeywords(LibraryComponent):
         | `Execute JavaScript` | ARGUMENTS | 123 | JAVASCRIPT | alert(arguments[0]); |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self.info('Executing JavaScript:\n%s\nBy using argument(s):\n"%s"'
-                  % (js_code, ', '.join(js_args)))
+        self._js_logger('JavaScript', js_code, js_args)
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
@@ -96,9 +97,17 @@ class JavaScriptKeywords(LibraryComponent):
         | `Should Be Equal` | ${result} | text |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self.info('Executing Asynchronous JavaScript:\n%s\nBy using argument(s):\n"%s"'
-                  % (js_code, ', '.join(js_args)))
+        self._js_logger('Execute Async JavaScript', js_code, js_args)
         return self.driver.execute_async_script(js_code, *js_args)
+
+    def _js_logger(self, kw, code, args):
+        message = 'Executing %s:\n%s\n' % (kw, code)
+        if args:
+            message = ('%sBy using argument%s:\n%s'
+                       % (message, plural_or_not(args), seq2str(args)))
+        else:
+            message = '%sWithout any arguments.' % message
+        self.info(message)
 
     def _get_javascript_to_execute(self, code):
         js_code, js_args = self._separate_code_and_args(code)
