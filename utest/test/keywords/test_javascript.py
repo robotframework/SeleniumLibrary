@@ -20,6 +20,18 @@ class JavaScriptKeywordsTest(unittest.TestCase):
     @classmethod
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def setUpClass(cls):
+        cls.code_examples = [(),
+            ('code1',), ('code1', 'code2'),
+            ('JAVASCRIPT', 'code1', 'code2'),
+            ('code1', 'code2', 'ARGUMENTS', 'arg1', 'arg2'),
+            ('code1', 'code2', 'arguments', 'arg1', 'arg2'),
+            ('javascript', 'code1', 'code2'),
+            ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS'),
+            ('JAVASCRIPT', 'code1', 'code2', 'argUMENTs'),
+            ('ARGUMENTS', 'JAVASCRIPT', 'code1', 'code2'),
+            ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS', 'arg1', 'arg2'),
+            ('ARGUMENTS', 'arg1', 'arg2', 'JAVASCRIPT', 'code1', 'code2'),
+            ('aRGUMENTS', 'arg1', 'arg2', 'jAVASCRIPT', 'code1', 'code2')]
         cls.js = JavaScriptKeywords(None)
         path = os.path.dirname(__file__)
         reporter_json = os.path.abspath(os.path.join(path, '..', 'approvals_reporters.json'))
@@ -45,23 +57,20 @@ class JavaScriptKeywordsTest(unittest.TestCase):
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_separate_code_and_args(self):
         all_results = []
-        code_examples = [
-            ('code1',), ('code1', 'code2'),
-            ('JAVASCRIPT', 'code1', 'code2'),
-            ('javascript', 'code1', 'code2'),
-            ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS'),
-            ('JAVASCRIPT', 'code1', 'code2', 'argUMENTs'),
-            ('ARGUMENTS', 'JAVASCRIPT', 'code1', 'code2'),
-            ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS', 'arg1', 'arg2'),
-            ('ARGUMENTS', 'arg1', 'arg2', 'JAVASCRIPT', 'code1', 'code2'),
-            ('aRGUMENTS', 'arg1', 'arg2', 'jAVASCRIPT', 'code1', 'code2'),]
-        for code in code_examples:
+        for code in self.code_examples:
             all_results.append(self.js_reporter(code))
         verify_all('code and args', all_results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
-    def test_separate_code_and_args_errors(self):
-        code_examples = [
+    def test_indexing(self):
+        all_results = []
+        for code in self.code_examples:
+            all_results.append(self.js._get_marker_index(code))
+        verify_all('index', all_results, reporter=self.reporter)
+
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    def test_check_marker_error(self):
+        examples = [
             (),
             ('ARGUMENTS', 'arg1', 'ARGUMENTS', 'arg1', 'JAVASCRIPT',
              'code1', 'JAVASCRIPT', 'code2'),
@@ -71,10 +80,17 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             ('ARGUMENTS', 'arg1', 'ARGUMENTS', 'arg1', 'JAVASCRIPT', 'code1'),
             ('aRGUMENtS', 'arg1', 'arg2', 'JAVASCRIPT', 'code1', 'code2'),
         ]
+        examples = examples + self.code_examples
         all_results = []
-        for code in code_examples:
-            all_results.append(self.js_reporter(code))
+        for code in examples:
+            all_results.append(self.js_marker_error(code))
         verify_all('error', all_results, reporter=self.reporter)
+
+    def js_marker_error(self, code):
+        try:
+            return self.js._check_marker_error(code)
+        except Exception as error:
+            return error
 
     def js_reporter(self, code):
         try:

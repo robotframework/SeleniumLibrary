@@ -15,11 +15,15 @@
 # limitations under the License.
 
 import os
+from collections import namedtuple
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class JavaScriptKeywords(LibraryComponent):
+
+    js_marker = 'JAVASCRIPT'
+    arg_marker = 'ARGUMENTS'
 
     @keyword
     def execute_javascript(self, *code):
@@ -107,33 +111,45 @@ class JavaScriptKeywords(LibraryComponent):
         return js_code, js_args
 
     def _separate_code_and_args(self, code):
+        code = list(code)
+        self._check_marker_error(code)
+        index = self._get_marker_index(code)
+        if self.arg_marker not in code:
+            return code[index.js + 1:], []
+        if self.js_marker not in code:
+            return code[0:index.arg], code[index.arg + 1:]
+        else:
+            if index.js == 0:
+                return code[index.js + 1:index.arg], code[index.arg + 1:]
+            else:
+                return code[index.js + 1:], code[index.arg + 1:index.js]
+
+    def _check_marker_error(self, code):
         if not code:
             raise ValueError('There must be at least one argument defined.')
-        js_code, js_args = [], []
-        get_code, get_args = False, False
-        found_code, found_args = False, False
-        for line in code:
-            if line == 'JAVASCRIPT' and found_code:
-                message = 'JAVASCRIPT marker was found two times in the code.'
-                raise ValueError(message)
-            if line == 'JAVASCRIPT' and not found_code:
-                get_code, found_code = True, True
-                get_args = False
-                continue
-            if line == 'ARGUMENTS' and found_args:
-                message = 'ARGUMENTS marker was found two times in the code.'
-                raise ValueError(message)
-            if line == 'ARGUMENTS' and not found_args:
-                get_code = False
-                get_args, found_args = True, True
-                continue
-            if not get_code and not get_args:
-                get_code, found_code = True, True
-            if get_code:
-                js_code.append(line)
-            if get_args:
-                js_args.append(line)
-        return js_code, js_args
+        message = None
+        template = '%s marker was found two times in the code.'
+        if code.count(self.js_marker) > 1:
+            message = template % self.js_marker
+        if code.count(self.arg_marker) > 1:
+            message = template % self.arg_marker
+        index = self._get_marker_index(code)
+        if index.js > 0 and index.arg != 0:
+            message = template % self.js_marker
+        if message:
+            raise ValueError(message)
+
+    def _get_marker_index(self, code):
+        Index = namedtuple('Index', 'js arg')
+        if self.js_marker in code:
+            js = code.index(self.js_marker)
+        else:
+            js = -1
+        if self.arg_marker in code:
+            arg = code.index(self.arg_marker)
+        else:
+            arg = -1
+        return Index(js=js, arg=arg)
 
     def _read_javascript_from_file(self, path):
         self.info('Reading JavaScript from file <a href="file://%s">%s</a>.'

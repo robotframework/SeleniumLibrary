@@ -7,3 +7,16 @@ error
 4) JAVASCRIPT marker was found two times in the code.
 5) ARGUMENTS marker was found two times in the code.
 6) JAVASCRIPT marker was found two times in the code.
+7) There must be at least one argument defined.
+8) None
+9) None
+10) None
+11) None
+12) None
+13) None
+14) None
+15) None
+16) None
+17) None
+18) None
+19) None
