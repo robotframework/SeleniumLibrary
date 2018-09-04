@@ -46,7 +46,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
         when(logger).warn("Using 'Get Element Attribute' without explicit "
                           "attribute is deprecated.", False).thenReturn(None)
-        value = self.element.get_element_attribute('//div@id', 'None')
+        value = self.element.get_element_attribute('//div', 'id')
         self.assertEqual(value, 'value')
 
     def test_get_matching_xpath_count(self):

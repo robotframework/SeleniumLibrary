@@ -364,7 +364,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def get_element_attribute(self, locator, attribute=None):
+    def get_element_attribute(self, locator, attribute):
         """Returns value of ``attribute`` from element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -373,14 +373,10 @@ class ElementKeywords(LibraryComponent):
         Example:
         | ${id}= | `Get Element Attribute` | css:h1 | id |
 
-        Passing attribute name as part of the ``locator`` is deprecated
-        since SeleniumLibrary 3.0. The explicit ``attribute`` argument
+        Passing attribute name as part of the ``locator`` was removed
+        in SeleniumLibrary 3.2. The explicit ``attribute`` argument
         should be used instead.
         """
-        if is_noney(attribute):
-            self.warn("Using 'Get Element Attribute' without explicit "
-                      "attribute is deprecated.")
-            locator, attribute = locator.rsplit('@', 1)
         return self.find_element(locator).get_attribute(attribute)
 
     @keyword

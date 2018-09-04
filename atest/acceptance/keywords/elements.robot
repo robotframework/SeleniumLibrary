@@ -40,22 +40,19 @@ Assign Id To Element
     Page Should Not Contain Element    my id
 
 Get Element Attribute
-    ${id}=    Get Element Attribute    link=Link with id@id
+    ${id}=    Get Element Attribute    link:Link with id    id
     Should Be Equal    ${id}    some_id
-    ${id}=    Get Element Attribute    dom=document.getElementsByTagName('a')[3]@id
+    ${id}=    Get Element Attribute    dom:document.getElementsByTagName('a')[3]    id
     Should Be Equal    ${id}    some_id
-    ${class}=    Get Element Attribute    second_div@class
+    ${class}=    Get Element Attribute    second_div    class
     Should Be Equal    ${class}    Second Class
     ${id}=    Get Element Attribute    link=Link with id    id
-    Should Be Equal    ${id}    some_id
-    ${element_by_dom}=    Get Webelement    dom=document.getElementsByTagName('a')[3]
-    ${id}=    Get Element Attribute    ${element_by_dom}    id
     Should Be Equal    ${id}    some_id
     ${second_div}=    Get Webelement    second_div
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
-Get Element Attribute Value Should Be Should Be Succesfull 
+Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
 
 Get Element Attribute And Element Attribute Value Should Be Should have same results
