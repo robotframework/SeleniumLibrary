@@ -191,7 +191,7 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def select_from_list(self, locator, *options):
-        """Deprecated. Use `Select From List By Label/Value/Index` instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Select From List By Label/Value/Index` instead.
 
         This keyword selects options based on labels or values, which makes
         it very complicated and slow. It has been deprecated in
@@ -307,7 +307,7 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list(self, locator, *items):
-        """Deprecated. Use `Unselect From List By Label/Value/Index` instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Unselect From List By Label/Value/Index` instead.
 
         This keyword unselects options based on labels or values, which makes
         it very complicated and slow. It has been deprecated in
