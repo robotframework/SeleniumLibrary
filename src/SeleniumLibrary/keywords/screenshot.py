@@ -41,6 +41,7 @@ class ScreenshotKeywords(LibraryComponent):
         the original value later if needed.
 
         Returning the previous value is new in SeleniumLibrary 3.0.
+        The persist argument was removed in SeleniumLibrary 3.2.
         """
         if is_noney(path):
             path = None
