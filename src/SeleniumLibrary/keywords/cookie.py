@@ -54,7 +54,7 @@ class CookieKeywords(LibraryComponent):
 
     @keyword
     def get_cookie_value(self, name):
-        """Deprecated. Use `Get Cookie` instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Cookie` instead."""
         cookie = self.driver.get_cookie(name)
         if cookie is not None:
             return cookie['value']
