@@ -127,7 +127,7 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def list_windows(self):
-        """Deprecated. Use `Get Window Handles` instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Window Handles` instead."""
         return self.get_window_handles()
 
     @keyword
