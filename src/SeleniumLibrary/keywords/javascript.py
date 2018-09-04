@@ -67,7 +67,7 @@ class JavaScriptKeywords(LibraryComponent):
         | `Execute JavaScript` | ARGUMENTS | 123 | JAVASCRIPT | alert(arguments[0]); |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self._js_logger('JavaScript', js_code, js_args)
+        self._js_logger('Executing JavaScript', js_code, js_args)
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
@@ -97,11 +97,11 @@ class JavaScriptKeywords(LibraryComponent):
         | `Should Be Equal` | ${result} | text |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self._js_logger('Execute Async JavaScript', js_code, js_args)
+        self._js_logger('Executing Asynchronous JavaScript', js_code, js_args)
         return self.driver.execute_async_script(js_code, *js_args)
 
-    def _js_logger(self, kw, code, args):
-        message = 'Executing %s:\n%s\n' % (kw, code)
+    def _js_logger(self, base, code, args):
+        message = '%s:\n%s\n' % (base, code)
         if args:
             message = ('%sBy using argument%s:\n%s'
                        % (message, plural_or_not(args), seq2str(args)))
