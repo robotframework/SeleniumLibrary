@@ -550,7 +550,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def focus(self, locator):
-        """Deprecated. Use `Set Focus To Element` instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Set Focus To Element` instead."""
         self.set_focus_to_element(locator)
 
     @keyword
@@ -689,7 +689,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def simulate(self, locator, event):
-        """Deprecated. Use `Simulate Event` instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Simulate Event` instead."""
         self.simulate_event(locator, event)
 
     @keyword
@@ -825,13 +825,13 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def get_matching_xpath_count(self, xpath, return_str=True):
-        """Deprecated. Use `Get Element Count` instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Element Count` instead."""
         count = self.get_element_count('xpath:' + xpath)
         return str(count) if is_truthy(return_str) else count
 
     @keyword
     def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='INFO'):
-        """Deprecated, use `Page Should Contain Element` with ``limit`` argument instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Page Should Contain Element` with ``limit`` argument instead."""
         self.locator_should_match_x_times('xpath:'+xpath, x, message, loglevel)
 
     @keyword

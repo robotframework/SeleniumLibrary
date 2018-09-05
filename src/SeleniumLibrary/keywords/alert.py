@@ -30,11 +30,12 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def input_text_into_prompt(self, text):
-        """Deprecated. Use `Input Text Into Alert` instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Input Text Into Alert` instead.
 
         Types the given ``text`` into an input field in an alert.
         Leaves the alert open.
         """
+
         self.input_text_into_alert(text, self.LEAVE)
 
     @keyword
@@ -99,7 +100,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def choose_cancel_on_next_confirmation(self):
-        """Deprecated. Use `Handle Alert` directly instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` directly instead.
 
         In versions prior to SeleniumLibrary 3.0, the alert handling
         approach needed to be set separately before using the `Confirm
@@ -110,7 +111,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def choose_ok_on_next_confirmation(self):
-        """Deprecated. Use `Handle Alert` directly instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` directly instead.
 
         In versions prior to SeleniumLibrary 3.0, the alert handling
         approach needed to be set separately before using the `Confirm
@@ -121,7 +122,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def confirm_action(self):
-        """Deprecated. Use `Handle Alert` instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` instead.
 
         By default accepts an alert, but this behavior can be altered
         with `Choose Cancel On Next Confirmation` and `Choose Ok On Next
@@ -135,7 +136,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def get_alert_message(self, dismiss=True):
-        """Deprecated. Use `Handle Alert` instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` instead.
 
         Returns the message the alert has. Dismisses the alert by default
         (i.e. presses ``Cancel``) and setting ``dismiss`` to false leaves
@@ -150,7 +151,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def dismiss_alert(self, accept=True):
-        """Deprecated. Use `Handle Alert` instead.
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` instead.
 
         Contrary to its name, this keyword accepts the alert by default
         (i.e. presses ``Ok``). ``accept`` can be set to a false value

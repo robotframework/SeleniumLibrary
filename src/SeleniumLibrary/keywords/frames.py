@@ -65,7 +65,7 @@ class FrameKeywords(LibraryComponent):
 
     @keyword
     def current_frame_contains(self, text, loglevel='INFO'):
-        """Deprecated. Use `Current Frame Should Contain` instead."""
+        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Current Frame Should Contain` instead."""
         self.current_frame_should_contain(text, loglevel)
 
     @keyword
