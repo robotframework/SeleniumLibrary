@@ -35,20 +35,6 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         with self.assertRaisesRegexp(AssertionError, 'foobar'):
             self.element.element_text_should_be(locator, 'not text', 'foobar')
 
-    def test_get_element_attribute(self):
-        locator = '//div'
-        attrib = 'id'
-        element = mock()
-        when(self.element).find_element(locator).thenReturn(element)
-        when(element).get_attribute(attrib).thenReturn('value')
-        value = self.element.get_element_attribute(locator, attrib)
-        self.assertEqual(value, 'value')
-
-        when(logger).warn("Using 'Get Element Attribute' without explicit "
-                          "attribute is deprecated.", False).thenReturn(None)
-        value = self.element.get_element_attribute('//div@id', 'None')
-        self.assertEqual(value, 'value')
-
     def test_get_matching_xpath_count(self):
         locator = '//div'
         when(self.element).find_elements('xpath:' + locator).thenReturn([])
