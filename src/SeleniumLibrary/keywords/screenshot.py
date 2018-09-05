@@ -25,7 +25,7 @@ from SeleniumLibrary.utils import is_noney
 class ScreenshotKeywords(LibraryComponent):
 
     @keyword
-    def set_screenshot_directory(self, path, persist='DEPRECATED'):
+    def set_screenshot_directory(self, path):
         """Sets the directory for captured screenshots.
 
         ``path`` argument specifies the absolute path to a directory where
@@ -40,17 +40,14 @@ class ScreenshotKeywords(LibraryComponent):
         The previous value is returned and can be used to restore
         the original value later if needed.
 
-        Deprecating ``persist`` and returning the previous value are new
-        in SeleniumLibrary 3.0.
+        Returning the previous value is new in SeleniumLibrary 3.0.
+        The persist argument was removed in SeleniumLibrary 3.2.
         """
         if is_noney(path):
             path = None
         else:
             path = os.path.abspath(path)
             self._create_directory(path)
-        if persist != 'DEPRECATED':
-            self.warn("'persist' argument to 'Set Screenshot Directory' "
-                      "keyword is deprecated and has no effect.")
         previous = self.ctx.screenshot_root_directory
         self.ctx.screenshot_root_directory = path
         return previous
