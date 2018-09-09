@@ -31,7 +31,9 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             ('ARGUMENTS', 'JAVASCRIPT', 'code1', 'code2'),
             ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS', 'arg1', 'arg2'),
             ('ARGUMENTS', 'arg1', 'arg2', 'JAVASCRIPT', 'code1', 'code2'),
-            ('aRGUMENTS', 'arg1', 'arg2', 'jAVASCRIPT', 'code1', 'code2')]
+            ('aRGUMENTS', 'arg1', 'arg2', 'jAVASCRIPT', 'code1', 'code2'),
+            ('JAVASCRIPTCODE', 'code1', 'code2'),
+            ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS ARG2', 'arg3')]
         cls.js = JavaScriptKeywords(None)
         path = os.path.dirname(__file__)
         reporter_json = os.path.abspath(os.path.join(path, '..', 'approvals_reporters.json'))

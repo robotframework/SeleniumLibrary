@@ -13,3 +13,5 @@ index
 10) Index(js=0, arg=3)
 11) Index(js=3, arg=0)
 12) Index(js=-1, arg=-1)
+13) Index(js=-1, arg=-1)
+14) Index(js=0, arg=-1)
