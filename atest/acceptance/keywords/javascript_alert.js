@@ -1,0 +1,1 @@
+alert(arguments[0]);

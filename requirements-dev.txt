@@ -3,7 +3,7 @@
 
 mockito >= 1.0.0
 robotstatuschecker
-approvaltests >= 0.2.3
+approvaltests >= 0.2.4
 
 # Include normal dependencies from requirements.txt. Makes it possible to use
 # requirements-dev.txt as a single requirement file in PyCharm and other IDEs.
