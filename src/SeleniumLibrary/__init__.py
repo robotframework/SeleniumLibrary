@@ -60,6 +60,7 @@ class SeleniumLibrary(DynamicCore):
     - `Timeouts, waits and delays`
     - `Run-on-failure functionality`
     - `Boolean arguments`
+    - `Thread support`
     - `Importing`
     - `Shortcuts`
     - `Keywords`
@@ -302,6 +303,14 @@ class SeleniumLibrary(DynamicCore):
 
     Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
     ``false``, ``no`` and ``none``, were considered true.
+
+    = Thread support =
+
+    SeleniumLibrary is not thread safe. This is mainly due because the underlying
+    [https://github.com/SeleniumHQ/selenium/wiki/Frequently-Asked-Questions#q-is-webdriver-thread-safe|
+    Selenium tool is not thread safe] within one browser/driver instance.
+    Because of the limitation in the Selenium side, the keywords or the
+    API provided the SeleniumLibrary is not thread safe.
     """
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
