@@ -1,5 +1,4 @@
 *** Setting ***
-# Test Setup        Go To Page "javascript/click.html"
 Resource          resource.robot
 Library           BigListOfNaughtyStrings.BigListOfNaughtyStrings    WITH NAME    blns
 
@@ -17,5 +16,5 @@ Big List Of Naughty Strings
 Check Blns Error Check
     [Arguments]    ${string}
     Run Keyword And Expect Error
-    ...    Page should have contained element '${string}' but did not.
+    ...    Page should have contained element*
     ...    Page Should Contain Element    ${string}
