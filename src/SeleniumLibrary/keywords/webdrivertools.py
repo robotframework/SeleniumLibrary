@@ -77,7 +77,8 @@ class WebDriverCreator(object):
     def create_chrome(self, desired_capabilities, remote_url, options=None):
         default = webdriver.DesiredCapabilities.CHROME
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url)
+            return self._remote(default, desired_capabilities, remote_url,
+                                options=options)
         capabilities = self._combine_capabilites(default, desired_capabilities)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Chrome(desired_capabilities=capabilities,
@@ -97,7 +98,8 @@ class WebDriverCreator(object):
         default = webdriver.DesiredCapabilities.FIREFOX
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url, profile)
+            return self._remote(default, desired_capabilities, remote_url,
+                                profile, options)
         capabilities = self._combine_capabilites(default, desired_capabilities)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Firefox(capabilities=capabilities, options=options,
@@ -180,10 +182,14 @@ class WebDriverCreator(object):
         return self._remote(default, desired_capabilities, remote_url)
 
     def _remote(self, default_capabilities, user_capabilities, remote_url,
-                profile_dir=None):
+                profile_dir=None, options=None):
         remote_url = str(remote_url)
         capabilities = self._combine_capabilites(default_capabilities,
                                                  user_capabilities)
+        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
+            return webdriver.Remote(command_executor=remote_url,
+                                    desired_capabilities=capabilities,
+                                    browser_profile=profile_dir, options=options)
         return webdriver.Remote(command_executor=remote_url,
                                 desired_capabilities=capabilities,
                                 browser_profile=profile_dir)
