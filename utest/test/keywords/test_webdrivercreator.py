@@ -69,7 +69,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.CHROME
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({}, url)
         self.assertEqual(driver, expected_webdriver)
 
@@ -88,6 +89,19 @@ class WebDriverCreatorTests(unittest.TestCase):
             verify(options).set_headless()
         else:
             verify(options, times=0).set_headless()
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_chrome_healdless_with_grid(self):
+        caps = webdriver.DesiredCapabilities.CHROME
+        expected_webdriver = mock()
+        options = mock()
+        when(webdriver).ChromeOptions().thenReturn(options)
+        remote_url = 'localhost:4444'
+        when(webdriver).Remote(command_executor=remote_url,
+                               desired_capabilities=caps, options=options,
+                               browser_profile=None,).thenReturn(expected_webdriver)
+        driver = self.creator.create_headless_chrome({}, remote_url)
+        verify(options).set_headless()
         self.assertEqual(driver, expected_webdriver)
 
     def test_firefox(self):
@@ -116,7 +130,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.FIREFOX
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=profile).thenReturn(expected_webdriver)
+                               browser_profile=profile,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, url, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -157,6 +172,21 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_headless_firefox({}, None, None)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_firefox_healdless_with_grid(self):
+        caps = webdriver.DesiredCapabilities.FIREFOX
+        expected_webdriver = mock()
+        options = mock()
+        when(webdriver).FirefoxOptions().thenReturn(options)
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        remote_url = 'localhost:4444'
+        when(webdriver).Remote(command_executor=remote_url,
+                               desired_capabilities=caps, options=options,
+                               browser_profile=profile,).thenReturn(expected_webdriver)
+        driver = self.creator.create_headless_firefox({}, remote_url, None)
+        verify(options).set_headless()
+        self.assertEqual(driver, expected_webdriver)
+
     def test_ie(self):
         expected_webdriver = mock()
         caps = webdriver.DesiredCapabilities.INTERNETEXPLORER
@@ -170,7 +200,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.INTERNETEXPLORER
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, url)
         self.assertEqual(driver, expected_webdriver)
 
@@ -187,7 +218,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.EDGE
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_edge({}, url)
         self.assertEqual(driver, expected_webdriver)
 
@@ -204,7 +236,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.OPERA
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, url)
         self.assertEqual(driver, expected_webdriver)
 
@@ -221,7 +254,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.SAFARI
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_safari({}, url)
         self.assertEqual(driver, expected_webdriver)
 
@@ -238,7 +272,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.PHANTOMJS
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_phantomjs({}, url)
         self.assertEqual(driver, expected_webdriver)
 
@@ -247,7 +282,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.HTMLUNIT
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -256,7 +292,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit_with_js({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -265,7 +302,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.ANDROID
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_android({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -274,7 +312,8 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.IPHONE
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None).thenReturn(expected_webdriver)
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_iphone({}, None)
         self.assertEqual(driver, expected_webdriver)
 
