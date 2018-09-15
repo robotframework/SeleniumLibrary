@@ -94,12 +94,12 @@ class WindowKeywords(LibraryComponent):
 
         - The ``strategy:value`` syntax is only supported by SeleniumLibrary
           3.0 and newer.
-        - Earlier versions supported aliases ``None``, ``null`` and the
-          empty string for selecting the main window, and alias ``self``
-          for selecting the current window. These aliases were deprecated
-          in SeleniumLibrary 3.0.
         - Prior to SeleniumLibrary 3.0 matching windows by name, title
           and URL was case-insensitive.
+        - Earlier versions supported aliases ``None``, ``null`` and the
+          empty string for selecting the main window, and alias ``self``
+          for selecting the current window. Support for these aliases were
+          removed in SeleniumLibrary 3.2.
         """
         epoch = time.time()
         timeout = epoch if is_falsy(timeout) else timestr_to_secs(timeout) + epoch

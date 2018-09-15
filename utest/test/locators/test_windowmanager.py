@@ -99,19 +99,6 @@ class WindowManagerTests(unittest.TestCase):
             "Unable to locate window with URL 'http://localhost/page-1.html'."
         )
 
-    def test_select_with_deprecated_locators_to_select_main_window(self):
-        manager = WindowManagerWithMockBrowser(
-            {'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html'},
-            {'name': 'win2', 'title': "Title 2", 'url': 'http://localhost/page2.html'},
-            {'name': 'win3', 'title': "Title 3", 'url': 'http://localhost/page3.html'}
-        )
-        for deprecated in [None, 'null', 'NULL', '']:
-            manager.select("name=win2")
-            msg = "Using '%s' as window locator is deprecated. Use 'main' instead." % deprecated
-            with when(logger).warn(msg).thenReturn(None):
-                manager.select(deprecated)
-            self.assertEqual(manager.driver.current_window.name, 'win1')
-
     def test_select_main_window(self):
         manager = WindowManagerWithMockBrowser(
             {'name': 'win1', 'title': "Title 1", 'url': 'http://localhost/page1.html'},
