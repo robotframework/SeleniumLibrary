@@ -30,11 +30,11 @@
 <p><a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> is a web testing library for <a class="reference external" href="http://robotframework.org">Robot Framework</a> that
 utilizes the <a class="reference external" href="http://seleniumhq.org">Selenium</a> tool internally. The project is hosted on <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a>
 and downloads can be found from <a class="reference external" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">PyPI</a>.</p>
-<p>SeleniumLibrary works with Selenium 2.53.6 or newer, including Selenium 3.
-It supports Python 2.7 as well as Python 3.3 or newer. In addition to the
-normal <a class="reference external" href="http://python.org">Python</a> interpreter, it works also with <a class="reference external" href="http://pypy.org">PyPy</a> and <a class="reference external" href="http://jython.org">Jython</a>. Unfortunately
-<a class="reference external" href="http://seleniumhq.org">Selenium</a> is not currently supported by <a class="reference external" href="http://ironpython.net">IronPython</a> and thus this library
-does not work with IronPython either.</p>
+<p>SeleniumLibrary works with Selenium 3. It supports Python 2.7 as well as
+Python 3.4 or newer. In addition to the normal <a class="reference external" href="http://python.org">Python</a> interpreter, it
+works also with <a class="reference external" href="http://pypy.org">PyPy</a> and <a class="reference external" href="http://jython.org">Jython</a>. Unfortunately <a class="reference external" href="http://seleniumhq.org">Selenium</a> is not
+currently supported by <a class="reference external" href="http://ironpython.net">IronPython</a> and thus this library does not work with
+IronPython either.</p>
 <p>SeleniumLibrary is based on the <a class="reference external" href="https://github.com/robotframework/OldSeleniumLibrary">old SeleniumLibrary</a> that was forked to
 <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> and then later renamed back to SeleniumLibrary.
 See the <a class="reference internal" href="#versions">Versions</a> and <a class="reference internal" href="#history">History</a> sections below for more information about
@@ -183,10 +183,10 @@ below and the <a class="reference internal" href="#history">History</a> section 
 a bit more.</p>
 <table>
 <colgroup>
-<col style="width: 24%" />
-<col style="width: 11%" />
-<col style="width: 13%" />
-<col style="width: 51%" />
+<col style="width: 22%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 46%" />
 </colgroup>
 <thead>
 <tr><th class="head"><p>Project</p></th>
@@ -206,14 +206,19 @@ a bit more.</p>
 <td><p>Python 2.6-2.7</p></td>
 <td><p>Fork of SeleniumLibrary using Selenium WebDriver API.</p></td>
 </tr>
-<tr><td><p>SeleniumLibrary 3.0 and newer</p></td>
+<tr><td><p>SeleniumLibrary 3.0 and 3.1</p></td>
 <td><p>Selenium 2 and 3</p></td>
 <td><p>Python 2.7 and 3.3+</p></td>
 <td><p>Selenium2Library renamed and with Python 3 support and new architecture.</p></td>
 </tr>
-<tr><td><p>Selenium2Library 3.0 and newer</p></td>
-<td><p>Selenium 2 and 3</p></td>
-<td><p>Python 2.7 and 3.3+</p></td>
+<tr><td><p>SeleniumLibrary 3.2 and newer</p></td>
+<td><p>Selenium 3</p></td>
+<td><p>Python 2.7 and 3.4+</p></td>
+<td><p>Drops Selenium 2 support.</p></td>
+</tr>
+<tr><td><p>Selenium2Library 3.0</p></td>
+<td><p>Depends on SeleniumLibrary</p></td>
+<td><p>Depends on SeleniumLibrary</p></td>
 <td><p>Thin wrapper for SeleniumLibrary 3.0 to ease transition.</p></td>
 </tr>
 </tbody>
