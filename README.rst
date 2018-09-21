@@ -165,7 +165,7 @@ Extending SeleniumLibrary
 Before creating your own library which extends the ``SeleniumLibrary``, please consider would
 the extension be also useful also for general usage. If it could be useful also for general
 usage, please create a new issue describing the enhancement request and even better if the
-issue is backed up the a pull request.
+issue is backed up by a pull request.
 
 If the enhancement is not generally useful, example solution is domain specific, then the
 SeleniumLibrary offers a public API which can be used to build own libraries. All keyword
