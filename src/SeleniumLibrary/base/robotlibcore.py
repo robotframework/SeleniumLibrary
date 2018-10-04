@@ -112,13 +112,18 @@ class DynamicCore(HybridCore):
         return args
 
     def _get_arg_spec(self, kw):
-        spec = inspect.getargspec(kw)
+        if PY2:
+            spec = inspect.getargspec(kw)
+            keywords = spec.keywords
+        else:
+            spec = inspect.getfullargspec(kw)
+            keywords = spec.varkw
         args = spec.args[1:] if inspect.ismethod(kw) else spec.args  # drop self
         defaults = spec.defaults or ()
         nargs = len(args) - len(defaults)
         mandatory = args[:nargs]
         defaults = zip(args[nargs:], defaults)
-        return mandatory, defaults, spec.varargs, spec.keywords
+        return mandatory, defaults, spec.varargs, keywords
 
     def get_keyword_tags(self, name):
         self._get_keyword_tags_supported = True
