@@ -248,7 +248,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def location_should_be(self, url, message=None):
-        """Verifies that current URL is exactly ``url`.
+        """Verifies that current URL is exactly ``url``.
 
         The ``url`` argument contains the exact url that should exist in browser.
 
