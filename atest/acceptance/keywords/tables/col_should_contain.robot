@@ -33,7 +33,7 @@ Should Give Error Message When Content Not Found In Table Column
 
 Should Give Error Message When Column Number Out Of Bounds
     Run Keyword And Expect Error
-    ...    Table '//*[@id="simpleTable"]' column 20 did not contain text 'simpleTable_B3'.
+    ...    Table '//*?@id="simpleTable"?' column 20 did not contain text 'simpleTable_B3'.
     ...    Table Column Should Contain    //*[@id="simpleTable"]    20    simpleTable_B3
 
 Zero is invalid column index
