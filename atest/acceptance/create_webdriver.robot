@@ -38,7 +38,7 @@ Set Driver Variables
     ...    internetexplorer=Ie    googlechrome=Chrome    gc=Chrome
     ...    chrome=Chrome    opera=Opera    phantomjs=PhantomJS    safari=Safari
     ...    headlesschrome=Chrome    headlessfirefox=Firefox
-    ${name}=    Evaluate    "Remote" if "${REMOTE_URL}"!="None" else ${drivers}["${BROWSER.lower().replace(' ', '')}"]
+    ${name}=    Evaluate    "Remote" if "${REMOTE_URL}"!="None" else $drivers["${BROWSER}"]
     Set Test Variable    ${DRIVER_NAME}    ${name}
     ${dc names}=    Create Dictionary    ff=FIREFOX    firefox=FIREFOX    ie=INTERNETEXPLORER
     ...    internetexplorer=INTERNETEXPLORER    googlechrome=CHROME    gc=CHROME
