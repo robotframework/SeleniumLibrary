@@ -17,7 +17,6 @@
 import time
 from collections import namedtuple
 
-from robot.api import logger
 from selenium.common.exceptions import (NoSuchWindowException,
                                         WebDriverException)
 
