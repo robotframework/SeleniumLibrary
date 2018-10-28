@@ -60,12 +60,12 @@ List Selection Should Be
     List Selection Should Be    possible_channels    Telephone    Email
     List Selection Should Be    possible_channels    phone    email
     Run Keyword And Expect Error
-    ...    List 'possible_channels' should have had selection [ Email | Telephone | Direct mail ] but selection was [ Email (email) | Telephone (phone) ].
+    ...    List 'possible_channels' should have had selection ? Email | Telephone | Direct mail ? but selection was ? Email (email) | Telephone (phone) ?.
     ...    List Selection Should Be    possible_channels    Email    Telephone    Direct mail
 
 List Selection Should Be When Extraneous Options Are Selected
     Run Keyword And Expect Error
-    ...    List 'possible_channels' should have had selection [ email ] but selection was [ Email (email) | Telephone (phone) ].
+    ...    List 'possible_channels' should have had selection ? email ? but selection was ? Email (email) | Telephone (phone) ?.
     ...    List Selection Should Be    possible_channels    email
 
 List Selection Should Be When List Does Not Exist
@@ -156,7 +156,7 @@ List Should Have No Selections
     List Should Have No Selections    interests
     Select All From List    interests
     Run Keyword And Expect Error
-    ...    List 'interests' should have had no selection but selection was [ Males (males) | Females (females) | Others (others) ].
+    ...    List 'interests' should have had no selection but selection was ? Males (males) | Females (females) | Others (others) ?.
     ...    List Should Have No Selections    interests
 
 *** Keywords ***

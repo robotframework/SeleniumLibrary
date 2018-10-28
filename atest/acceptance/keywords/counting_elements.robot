@@ -25,7 +25,7 @@ Xpath Should Match X Times
     Xpath Should Match X Times      //input[@type="text"]    1
     Xpath Should Match X Times      //input[@type="text"]    ${1}
     Run Keyword And Expect Error
-    ...    Locator 'xpath://input[@type="text"]' should have matched 2 times but matched 1 time.
+    ...    Locator 'xpath://input?@type="text"?' should have matched 2 times but matched 1 time.
     ...    Xpath Should Match X Times    //input[@type="text"]    2
 
 Locator Should Match X Times

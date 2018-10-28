@@ -45,7 +45,7 @@ Radio Button Should Be Focused
     Click Element    xpath=//input[@name='sex' and @value='male']
     Element Should Be Focused    xpath=//input[@name='sex' and @value='male']
     Run Keyword And Expect Error
-    ...    Element 'xpath=//input[@name=\'sex\' and @value=\'female\']' does not have focus.
+    ...    Element 'xpath=//input?@name=\'sex\' and @value=\'female\'?' does not have focus.
     ...    Element Should Be Focused    xpath=//input[@name='sex' and @value='female']
 
 Checkbox Should Be Focused
@@ -53,7 +53,7 @@ Checkbox Should Be Focused
     Click Element    xpath=//input[@name='can_send_sms']
     Element Should Be Focused    xpath=//input[@name='can_send_sms']
     Run Keyword And Expect Error
-    ...    Element 'xpath=//input[@name=\'can_send_email\']' does not have focus.
+    ...    Element 'xpath=//input?@name=\'can_send_email\'?' does not have focus.
     ...    Element Should Be Focused    xpath=//input[@name='can_send_email']
 
 Select Button Should Be Focused
@@ -61,11 +61,11 @@ Select Button Should Be Focused
     Mouse Down    xpath=//select[@name='preferred_channel']
     Element Should Be Focused    xpath=//select[@name='preferred_channel']
     Run Keyword And Expect Error
-    ...    Element 'xpath=//select[@name=\'preferred_channel\']/option[@value=\'phone\']' does not have focus.
+    ...    Element 'xpath=//select?@name=\'preferred_channel\'?/option?@value=\'phone\'?' does not have focus.
     ...    Element Should Be Focused    xpath=//select[@name='preferred_channel']/option[@value='phone']
     Click Element    xpath=//option[@value='email']
     Run Keyword And Expect Error
-    ...    Element 'xpath=//option[@value=\'email\']' does not have focus.
+    ...    Element 'xpath=//option?@value=\'email\'?' does not have focus.
     ...    Element Should Be Focused    xpath=//option[@value='email']
 
 Submit Button Should Be Focused
