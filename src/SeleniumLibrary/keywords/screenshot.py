@@ -105,6 +105,12 @@ class ScreenshotKeywords(LibraryComponent):
 
         An absolute path to the created element screenshot is returned.
 
+        Support for capturing the screenshot from a element has limited support
+        among browser vendors. Please check the browser vendor driver documentation
+        does the browser support capturing a screenshot from a element.
+
+        New in SeleniumLibrary 3.3
+
         Examples:
         | `Capture Element Screenshot` | id:image_id |                                |
         | `Capture Element Screenshot` | id:image_id | ${OUTPUTDIR}/id_image_id-1.png |
