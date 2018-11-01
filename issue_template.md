@@ -42,8 +42,8 @@ Libraries
 
 # Feature requests
 Describe the need or the feature you are missing from the SeleniumLibrary. Also it
-is useful to understand why you need such feature. many times useful to provide few examples
-for acceptance tests. Try to avoid technical or implementation details,
+is useful to understand why you need such feature. Many times, it is useful to provide
+few examples for acceptance tests. Try to avoid technical or implementation details,
 those will handled later.
 
 This project is not funded by any organisation or company, I do this because I
