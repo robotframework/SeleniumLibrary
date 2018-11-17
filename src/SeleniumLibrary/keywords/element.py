@@ -77,7 +77,7 @@ class ElementKeywords(LibraryComponent):
         self.info("Element '%s' contains text '%s'." % (locator, expected_before))
 
     @keyword
-    def element_should_not_contain(self, locator, expected, message=None, ignore_case=False ):
+    def element_should_not_contain(self, locator, expected, message=None, ignore_case=False):
         """Verifies that element ``locator`` does not contains text ``expected``.
 
         See the `Locating elements` section for details about the locator
@@ -395,7 +395,7 @@ class ElementKeywords(LibraryComponent):
         if current_expected != expected:
             if is_noney(message):
                 message = ("Element '%s' attribute should have value '%s' but "
-                          "its value was '%s'." % (locator, expected, current_expected))
+                           "its value was '%s'." % (locator, expected, current_expected))
             raise AssertionError(message)
         self.info("Element '%s' attribute '%s' contains value '%s'." % (locator, attribute, expected))
 

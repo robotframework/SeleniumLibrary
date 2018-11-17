@@ -230,7 +230,7 @@ class BrowserManagementKeywords(LibraryComponent):
         New in SeleniumLibrary 3.2
         """
         return self.driver.session_id
-        
+
     @keyword
     def get_source(self):
         """Returns the entire HTML source of the current page or frame."""
