@@ -966,3 +966,41 @@ return !element.dispatchEvent(evt);
                 raise ValueError("'%s' modifier does not match to Selenium Keys"
                                  % item)
         return keys
+
+    def _parse_keys(self, *keys):
+        list_keys = []
+        for key in keys:
+            separate_keys = self._separate_key(key)
+            separate_keys = self._convert_special_keys(separate_keys)
+            list_keys.append(separate_keys)
+        return list_keys
+
+    def _parse_aliases(self, key):
+        if key == 'CTRL':
+            return 'CONTROL'
+        if key == 'ESC':
+            return 'ESCAPE'
+        return key
+
+    def _separate_key(self, key):
+        one_key = ''
+        list_keys = []
+        for char in key:
+            if char == '+' and one_key != '':
+                list_keys.append(one_key)
+                one_key = ''
+            else:
+                one_key += char
+        if one_key:
+            list_keys.append(one_key)
+        return list_keys
+
+    def _convert_special_keys(self, keys):
+        converted_keys = []
+        for key in keys:
+            key = self._parse_aliases(key)
+            if hasattr(Keys, key):
+                converted_keys.append(getattr(Keys, key))
+            else:
+                converted_keys.append(key)
+        return converted_keys

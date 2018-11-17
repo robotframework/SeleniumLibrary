@@ -1,0 +1,6 @@
+To Selenium Special Keys
+
+0) ['B']
+1) ['AA', 'CCC']
+2) ['\ue00a', 'B']
+3) ['\ue00a', '\ue009']
