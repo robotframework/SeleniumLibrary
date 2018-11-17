@@ -104,4 +104,3 @@ class FrameKeywords(LibraryComponent):
         found = self.is_text_present(text)
         self.driver.switch_to.default_content()
         return found
-

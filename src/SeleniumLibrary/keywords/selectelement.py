@@ -210,17 +210,17 @@ class SelectElementKeywords(LibraryComponent):
         for item in options:
             try:
                 select.select_by_value(item)
-            except:
+            except Exception:
                 try:
                     select.select_by_visible_text(item)
-                except:
+                except Exception:
                     non_existing_items = non_existing_items + [item]
                     continue
         if any(non_existing_items):
             if select.is_multiple:
                 raise ValueError("Options '%s' not in list '%s'." % (", ".join(non_existing_items), locator))
             else:
-                if any (non_existing_items[:-1]):
+                if any(non_existing_items[:-1]):
                     items_str = non_existing_items[:-1] and "Option(s) '%s'" % ", ".join(non_existing_items[:-1])
                     self.warn("%s not found within list '%s'." % (items_str, locator))
                 if options and options[-1] in non_existing_items:
