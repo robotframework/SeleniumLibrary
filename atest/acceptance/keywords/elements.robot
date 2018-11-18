@@ -102,3 +102,7 @@ Get Empty Element Size
     [Tags]  Known Issue Internet Explorer
     ${width}  ${height}=  Get Element Size  id=emptyDiv
     Should be Equal    ${height}    ${0}
+
+Cover Element
+    Cover Element  //img[@src="image.jpg"]
+    Element Should Not be Visible  //img[@src="image.jpg"]

@@ -429,6 +429,27 @@ class ElementKeywords(LibraryComponent):
         return element.size['width'], element.size['height']
 
     @keyword
+    def cover_element(self, locator):
+        """Will cover element with a blue div without breaking page layout
+        Example:
+        |`Cover Element` | css:div#container |
+        """
+        element = self.find_element(locator)
+        script = """
+old_element = arguments[0];
+let newDiv = document.createElement('div');
+newDiv.style.backgroundColor = 'blue';
+newDiv.style.zIndex = '999';
+newDiv.style.top = old_element.offsetTop + 'px';
+newDiv.style.left = old_element.offsetLeft + 'px';
+newDiv.style.height = old_element.offsetHeight + 'px';
+newDiv.style.width = old_element.offsetWidth + 'px';
+old_element.parentNode.insertBefore(newDiv, old_element);
+old_element.remove();
+        """
+        self.driver.execute_script(script, element)
+
+    @keyword
     def get_value(self, locator):
         """Returns the value attribute of element identified by ``locator``.
 
