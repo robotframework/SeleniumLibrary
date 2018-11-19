@@ -447,6 +447,7 @@ newDiv.style.height = old_element.offsetHeight + 'px';
 newDiv.style.width = old_element.offsetWidth + 'px';
 old_element.parentNode.insertBefore(newDiv, old_element);
 old_element.remove();
+newDiv.parentNode.style.overflow = 'hidden';
         """
         self.driver.execute_script(script, element)
 
