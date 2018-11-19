@@ -7,6 +7,7 @@ Release Notes
 - Added `Element Attribute Value Should Be` verifies element identified by locator contains expected attribute value.. [brian-mathews]
 - Added `Get Session Id` keyword to get remote webdriver session id [ilfirinpl]
 - Fixed example documentation for custom locator [DanielPBak]
+- Added Cover Element keyword to hide elements without breaking page layout [SergiuTudos]
 
 3.1.1
 -----

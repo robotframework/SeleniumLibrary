@@ -106,3 +106,4 @@ Get Empty Element Size
 Cover Element
     Cover Element  //img[@src="image.jpg"]
     Element Should Not be Visible  //img[@src="image.jpg"]
+    Element Should be Visible  //div[@name="covered"]

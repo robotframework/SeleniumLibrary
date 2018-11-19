@@ -438,6 +438,7 @@ class ElementKeywords(LibraryComponent):
         script = """
 old_element = arguments[0];
 let newDiv = document.createElement('div');
+newDiv.setAttribute("name", "covered");
 newDiv.style.backgroundColor = 'blue';
 newDiv.style.zIndex = '999';
 newDiv.style.top = old_element.offsetTop + 'px';
