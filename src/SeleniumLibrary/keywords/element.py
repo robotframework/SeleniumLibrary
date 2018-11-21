@@ -105,7 +105,7 @@ class ElementKeywords(LibraryComponent):
                   % (locator, expected_before))
 
     @keyword
-    def page_should_contain(self, text, loglevel='INFO'):
+    def page_should_contain(self, text, loglevel='TRACE'):
         """Verifies that current page contains ``text``.
 
         If this keyword fails, it automatically logs the page source
@@ -122,7 +122,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_element(self, locator, message=None,
-                                    loglevel='INFO', limit=None):
+                                    loglevel='TRACE', limit=None):
         """Verifies that element ``locator`` is found on the current page.
 
         See the `Locating elements` section for details about the locator
@@ -163,7 +163,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def locator_should_match_x_times(self, locator, x, message=None, loglevel='INFO'):
+    def locator_should_match_x_times(self, locator, x, message=None, loglevel='TRACE'):
         """Deprecated, use `Page Should Contain Element` with ``limit`` argument instead."""
         count = len(self.find_elements(locator))
         x = int(x)
@@ -178,7 +178,7 @@ class ElementKeywords(LibraryComponent):
                   % (count, locator))
 
     @keyword
-    def page_should_not_contain(self, text, loglevel='INFO'):
+    def page_should_not_contain(self, text, loglevel='TRACE'):
         """Verifies the current page does not contain ``text``.
 
         See `Page Should Contain` for explanation about the ``loglevel``
@@ -191,7 +191,7 @@ class ElementKeywords(LibraryComponent):
         self.info("Current page does not contain text '%s'." % text)
 
     @keyword
-    def page_should_not_contain_element(self, locator, message=None, loglevel='INFO'):
+    def page_should_not_contain_element(self, locator, message=None, loglevel='TRACE'):
         """Verifies that element ``locator`` is found on the current page.
 
         See the `Locating elements` section for details about the locator
@@ -745,7 +745,7 @@ return !element.dispatchEvent(evt);
         action.click_and_hold(element).perform()
 
     @keyword
-    def page_should_contain_link(self, locator, message=None, loglevel='INFO'):
+    def page_should_contain_link(self, locator, message=None, loglevel='TRACE'):
         """Verifies link identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -758,7 +758,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_contains(locator, 'link', message, loglevel)
 
     @keyword
-    def page_should_not_contain_link(self, locator, message=None, loglevel='INFO'):
+    def page_should_not_contain_link(self, locator, message=None, loglevel='TRACE'):
         """Verifies link identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -798,7 +798,7 @@ return !element.dispatchEvent(evt);
         action.click_and_hold(element).perform()
 
     @keyword
-    def page_should_contain_image(self, locator, message=None, loglevel='INFO'):
+    def page_should_contain_image(self, locator, message=None, loglevel='TRACE'):
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -811,7 +811,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_contains(locator, 'image', message, loglevel)
 
     @keyword
-    def page_should_not_contain_image(self, locator, message=None, loglevel='INFO'):
+    def page_should_not_contain_image(self, locator, message=None, loglevel='TRACE'):
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -830,7 +830,7 @@ return !element.dispatchEvent(evt);
         return str(count) if is_truthy(return_str) else count
 
     @keyword
-    def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='INFO'):
+    def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='TRACE'):
         """*DEPRECATED in SeleniumLibrary 3.2.* Use `Page Should Contain Element` with ``limit`` argument instead."""
         self.locator_should_match_x_times('xpath:'+xpath, x, message, loglevel)
 

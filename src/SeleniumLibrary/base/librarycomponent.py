@@ -40,11 +40,11 @@ class LibraryComponent(ContextAware):
     def warn(self, msg, html=False):
         logger.warn(msg, html)
 
-    def log_source(self, loglevel='INFO'):
+    def log_source(self, loglevel='TRACE'):
         self.ctx.log_source(loglevel)
 
     def assert_page_contains(self, locator, tag=None, message=None,
-                             loglevel='INFO'):
+                             loglevel='TRACE'):
         if not self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
@@ -55,7 +55,7 @@ class LibraryComponent(ContextAware):
                     % (tag or 'element', locator))
 
     def assert_page_not_contains(self, locator, tag=None, message=None,
-                                 loglevel='INFO'):
+                                 loglevel='TRACE'):
         if self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
