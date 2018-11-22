@@ -107,3 +107,10 @@ Cover Element
     Cover Element  //img[@src="image.jpg"]
     Element Should Not be Visible  //img[@src="image.jpg"]
     Element Should be Visible  //div[@name="covered"]
+
+
+Cover Element should cover all matching elements
+    Cover Element  //img[@src="image.jpg"]
+    Element Should Not be Visible  //img[@src="image.jpg"]
+    ${count}  Get Element Count  //div[@name="covered"]
+    Should Be equal As Integers  ${count}  2
