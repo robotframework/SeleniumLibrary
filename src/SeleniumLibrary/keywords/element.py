@@ -429,6 +429,35 @@ class ElementKeywords(LibraryComponent):
         return element.size['width'], element.size['height']
 
     @keyword
+    def cover_element(self, locator):
+        """Will cover element identified by ``locator`` with a blue div without breaking page layout.
+        
+        See the `Locating elements` section for details about the locator
+        syntax.
+        
+        New in SeleniumLibrary 3.3.0
+        
+        Example:
+        |`Cover Element` | css:div#container |
+        """
+        element = self.find_element(locator)
+        script = """
+old_element = arguments[0];
+let newDiv = document.createElement('div');
+newDiv.setAttribute("name", "covered");
+newDiv.style.backgroundColor = 'blue';
+newDiv.style.zIndex = '999';
+newDiv.style.top = old_element.offsetTop + 'px';
+newDiv.style.left = old_element.offsetLeft + 'px';
+newDiv.style.height = old_element.offsetHeight + 'px';
+newDiv.style.width = old_element.offsetWidth + 'px';
+old_element.parentNode.insertBefore(newDiv, old_element);
+old_element.remove();
+newDiv.parentNode.style.overflow = 'hidden';
+        """
+        self.driver.execute_script(script, element)
+
+    @keyword
     def get_value(self, locator):
         """Returns the value attribute of element identified by ``locator``.
 
