@@ -430,7 +430,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def cover_element(self, locator):
-        """Will cover element identified by ``locator`` with a blue div without breaking page layout.
+        """Will cover elements identified by ``locator`` with a blue div without breaking page layout.
         
         See the `Locating elements` section for details about the locator
         syntax.
@@ -440,8 +440,9 @@ class ElementKeywords(LibraryComponent):
         Example:
         |`Cover Element` | css:div#container |
         """
-        element = self.find_element(locator)
-        script = """
+        elements = self.find_elements(locator)
+        for element in elements:
+            script = """
 old_element = arguments[0];
 let newDiv = document.createElement('div');
 newDiv.setAttribute("name", "covered");
@@ -455,7 +456,7 @@ old_element.parentNode.insertBefore(newDiv, old_element);
 old_element.remove();
 newDiv.parentNode.style.overflow = 'hidden';
         """
-        self.driver.execute_script(script, element)
+            self.driver.execute_script(script, element)
 
     @keyword
     def get_value(self, locator):
