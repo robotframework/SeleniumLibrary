@@ -7,7 +7,7 @@ Library           String
 *** Test Cases ***
 Get Elements
     @{links}=    Get WebElements    //div[@id="div_id"]/a
-    Length Should Be    ${links}    11
+    Length Should Be    ${links}    12
     ${no_elements} =     Get WebElements    id:non_existing_elem
     Should Be Empty    ${no_elements}
 

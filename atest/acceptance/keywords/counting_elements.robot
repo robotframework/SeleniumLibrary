@@ -9,12 +9,12 @@ Get Matching XPath Count
     [Documentation]    Deprecated
     [Setup]    Go To Page "links.html"
     ${count}=    Get Matching XPath Count    //a
-    Should Be Equal    ${count}    19
+    Should Be Equal    ${count}    20
     ${count}=    Get Matching XPath Count    //a    ${True}
-    Should Be Equal    ${count}    19
+    Should Be Equal    ${count}    20
     Should Be String    ${count}
     ${count}=    Get Matching XPath Count    //a    ${False}
-    Should Be Equal    ${count}    ${19}
+    Should Be Equal    ${count}    ${20}
     Should Not Be String    ${count}
     ${count}=    Get Matching XPath Count    //div[@id="first_div"]/a
     Should Be Equal    ${count}    2
