@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
@@ -740,6 +739,24 @@ return !element.dispatchEvent(evt);
             key = self._map_ascii_key_code_to_key(int(key[1:]))
         element = self.find_element(locator)
         element.send_keys(key)
+
+    @keyword
+    def press_keys(self, locator=None, *keys):
+        """Write doc"""
+        if is_truthy(locator):
+            element = self.find_element(locator, required=False)
+        for parsed_keys in self._parse_keys(*keys):
+            special_keys = []
+            actions = ActionChains(self.driver)
+            for key in parsed_keys:
+                if key in Keys.__dict__.values():
+                    actions.key_down(key)
+                    special_keys.append(key)
+                else:
+                    actions.send_keys_to_element(element, key)
+            for special_key in special_keys:
+                actions.key_up(special_key)
+            actions.perform()
 
     @keyword
     def click_link(self, locator):
