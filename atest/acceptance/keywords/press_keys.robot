@@ -6,7 +6,6 @@ Force Tags       tidii
 
 *** Test Cases ***
 Press Keys Normal Keys
-
     Press Keys    text_field    AAAAA
     Click Button    OK
     Wait Until Page Contains    AAAAA
@@ -21,6 +20,11 @@ Press Keys Normal Keys Many Arguments
     Click Button    OK
     Wait Until Page Contains    cccDDDD
 
+Press Keys Normal Keys Many Times With Many Args
+    Press Keys    text_field    a+b    C+D
+    Click Button    OK
+    Wait Until Page Contains    abCD
+
 Press Keys Special Keys SHIFT
     Press Keys    text_field    SHIFT+cc
     Click Button    OK
@@ -31,6 +35,10 @@ Press Keys Special Keys SHIFT Many Times
     Click Button    OK
     Wait Until Page Contains    CCDD     timeout=3
 
+Press Keys Special Keys SHIFT Many Times
+    Press Keys    None    SHIFT+cc    SHIFT+dd
+    Click Button    OK
+    Wait Until Page Contains    CCDD     timeout=3
 
 *** Keywords ***
 Test CleanUp
