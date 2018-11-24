@@ -35,17 +35,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
     def tearDown(self):
         unstub()
 
-    def test_press_keys_with_locator(self):
-        element = mock()
-        when(self.element_keywords).find_element('id:tidii', required=False).thenReturn(element)
-        self.element_keywords.press_keys('id:tidii', 'A', 'B', 'C')
-        verifyStubbedInvocationsAreUsed()
-
-    def test_press_keys_no_locator(self):
-        when(self.element_keywords).find_element('id:tidii', required=False).thenReturn(None)
-        self.element_keywords.press_keys('None', 'A', 'B', 'C')
-        verify(self.element_keywords, times=0).find_element('None', required=False)
-
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_parse_keys(self):
         results = []
