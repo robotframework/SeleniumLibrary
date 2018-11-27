@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+3.3.0
+-----
+- Added Cover Element keyword to hide elements without breaking page layout [SergiuTudos]
+
 3.2.0
 -----
 - Added message param to keywords `Location Should Be` and `Location Should Contain` to display custom error message [taniabhullar]
