@@ -44,13 +44,22 @@ class WebDriverCreator(object):
         'iphone': 'iphone'
     }
 
+    browser_alias = {
+        'googlechrome': "chrome",
+        'gc': "chrome",
+        'headlesschrome': 'chrome',
+        'ff': 'firefox',
+        'headlessfirefox': 'firefox',
+        'internetexplorer': 'ie',
+    }
+
     def __init__(self, log_dir):
         self.log_dir = log_dir
 
     def create_driver(self, browser, desired_capabilities, remote_url,
                       profile_dir=None):
         creation_method = self._get_creator_method(browser)
-        desired_capabilities = self._parse_capabilities(desired_capabilities)
+        desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
         if (creation_method == self.create_firefox
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url,
@@ -63,7 +72,7 @@ class WebDriverCreator(object):
             return getattr(self, 'create_{}'.format(self.browser_names[browser]))
         raise ValueError('{} is not a supported browser.'.format(browser))
 
-    def _parse_capabilities(self, capabilities):
+    def _parse_capabilities(self, capabilities, browser=None):
         if isinstance(capabilities, dict):
             return capabilities
         desired_capabilities = {}
@@ -72,18 +81,17 @@ class WebDriverCreator(object):
         for part in capabilities.split(','):
             key, value = part.split(':')
             desired_capabilities[key.strip()] = value.strip()
-        return desired_capabilities
+        browser = self.browser_alias.get(browser, browser)
+        if browser in ['ie', 'firefox', 'edge']:
+            return {'capabilities': desired_capabilities}
+        return {'desired_capabilities': desired_capabilities}
 
     def create_chrome(self, desired_capabilities, remote_url, options=None):
-        default = webdriver.DesiredCapabilities.CHROME
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url,
-                                options=options)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
+            return self._remote(desired_capabilities, remote_url, options=options)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Chrome(desired_capabilities=capabilities,
-                                    options=options)
-        return webdriver.Chrome(desired_capabilities=capabilities)
+            return webdriver.Chrome(options=options, **desired_capabilities)
+        return webdriver.Chrome(**desired_capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url):
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
@@ -95,18 +103,16 @@ class WebDriverCreator(object):
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir,
                        options=None):
-        default = webdriver.DesiredCapabilities.FIREFOX
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url,
+            return self._remote(desired_capabilities, remote_url,
                                 profile, options)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Firefox(capabilities=capabilities, options=options,
-                                     firefox_profile=profile,
+            return webdriver.Firefox(options=options, firefox_profile=profile,
+                                     **desired_capabilities,
                                      **self._geckodriver_log)
-        return webdriver.Firefox(capabilities=capabilities,
-                                 firefox_profile=profile,
+        return webdriver.Firefox(firefox_profile=profile,
+                                 **desired_capabilities,
                                  **self._geckodriver_log)
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -131,73 +137,54 @@ class WebDriverCreator(object):
                                    ff_profile_dir, options)
 
     def create_ie(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.INTERNETEXPLORER
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
-        return webdriver.Ie(capabilities=capabilities)
+            return self._remote(desired_capabilities, remote_url)
+        return webdriver.Ie(**desired_capabilities)
 
     def create_edge(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.EDGE
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
-        return webdriver.Edge(capabilities=capabilities)
+            return self._remote(desired_capabilities, remote_url)
+        return webdriver.Edge(**desired_capabilities)
 
     def create_opera(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.OPERA
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
-        return webdriver.Opera(desired_capabilities=capabilities)
+            return self._remote(desired_capabilities, remote_url)
+        return webdriver.Opera(**desired_capabilities)
 
     def create_safari(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.SAFARI
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
-        return webdriver.Safari(desired_capabilities=capabilities)
+            return self._remote(desired_capabilities, remote_url)
+        return webdriver.Safari(**desired_capabilities)
 
     def create_phantomjs(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.PHANTOMJS
         if is_truthy(remote_url):
-            return self._remote(default, desired_capabilities, remote_url)
-        capabilities = self._combine_capabilites(default, desired_capabilities)
-        return webdriver.PhantomJS(desired_capabilities=capabilities)
+            return self._remote(desired_capabilities, remote_url)
+        return webdriver.PhantomJS(**desired_capabilities)
 
     def create_htmlunit(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.HTMLUNIT
-        return self._remote(default, desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url)
 
     def create_htmlunit_with_js(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.HTMLUNITWITHJS
-        return self._remote(default, desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url)
 
     def create_android(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.ANDROID
-        return self._remote(default, desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url)
 
     def create_iphone(self, desired_capabilities, remote_url):
-        default = webdriver.DesiredCapabilities.IPHONE
-        return self._remote(default, desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url)
 
-    def _remote(self, default_capabilities, user_capabilities, remote_url,
+    def _remote(self, desired_capabilities, remote_url,
                 profile_dir=None, options=None):
         remote_url = str(remote_url)
-        capabilities = self._combine_capabilites(default_capabilities,
-                                                 user_capabilities)
+        if 'capabilities' in desired_capabilities:
+            desired_capabilities['desired_capabilities'] = desired_capabilities.pop('capabilities')
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Remote(command_executor=remote_url,
-                                    desired_capabilities=capabilities,
-                                    browser_profile=profile_dir, options=options)
+                                    browser_profile=profile_dir, options=options,
+                                    **desired_capabilities)
         return webdriver.Remote(command_executor=remote_url,
-                                desired_capabilities=capabilities,
-                                browser_profile=profile_dir)
-
-    def _combine_capabilites(self, default, user):
-        default = default.copy()
-        default.update(user)
-        return default
+                                browser_profile=profile_dir,
+                                **desired_capabilities)
 
 
 class WebDriverCache(ConnectionCache):
