@@ -88,6 +88,12 @@ We do, however, recommend to create dedicated branches for pull requests
 instead of creating them based on the master branch. This is especially
 important if you plan to work on multiple pull requests at the same time.
 
+This project requires that pull request contains linear history of commits and
+we do not allow that pull request contains merge commits or other noise. This helps
+the review process and makes the maintenance easier for the project administrators.
+Generally it is recommended to do `git pull --rebase`  instead of the `git pull --merge`
+when there is need pull changes from upstream.
+
 Coding conventions
 ------------------
 
