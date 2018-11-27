@@ -22,7 +22,7 @@ acceptance tests with Robot Framework. This includes:
 
 To run unit and acceptance tests, run::
 
-    python test/run.py <browser>
+    python atest/run.py <browser>
 
 Acceptance tests are executed using Robot Framework and results verified
 automatically afterwards using `robotstatuschecker`_ tool. Please visit
@@ -69,16 +69,20 @@ Examples::
 To run just the unit tests, run::
 
     python utest/run.py
+    
+To full list of options run::
+
+    python atest/run.py --help
 
 Travis CI integration
 ---------------------
 `Travis CI`_ is used to automatically test all new pull request to the
 repository. The detailed information about execution matrix can be found
 from the `.travis.yam`_. Generally speaking the test are automatically run
-by using Chrome and Firefox browsers. The project uses Python 2.7, Python 3.3,
-Python 3.6 and PyPy 3.5 for test execution. The project uses Selenium 2.53.6
-and latest available Selenium 3 version for test execution. Test uses
-Robot Framework versions 2.8.7, 2.9.2 and 3.0.2 for acceptance test execution.
+by using Chrome and Firefox browsers. The project uses Python 2.7, Python 3.4,
+Python 3.6 and PyPy 3.5 for test execution. The project uses and latest available 
+Selenium 3 version for test execution. Test uses Robot Framework versions 
+2.9.2 and 3.0.2 for acceptance test execution.
 
 .. _browser driver: https://github.com/robotframework/SeleniumLibrary#browser-drivers
 .. _PATH: https://en.wikipedia.org/wiki/PATH_(variable)
