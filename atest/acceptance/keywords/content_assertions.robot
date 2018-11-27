@@ -20,7 +20,6 @@ Location Should Be
     ...    Location should have been 'non existing' but was 'http://localhost:7000/html/'.
     ...    Location Should Be    non existing  message=None
 
-
 Location Should Contain
     [Documentation]    LOG 2:4 Current location contains 'html'.
     Location Should Contain    html
@@ -36,7 +35,6 @@ Location Should Contain
     ...    Location should have contained 'not a location' but it was 'http://localhost:7000/html/'.
     ...    Location Should Contain    not a location  message=None
 
-
 Title Should Be
     [Documentation]    LOG 2:4 Page title is '(root)/index.html'.
     Title Should Be    (root)/index.html
@@ -46,7 +44,6 @@ Title Should Be
     Run Keyword And Expect Error
     ...    Page title was not expected
     ...    Title Should Be    not a title   message=Page title was not expected
-
 
 Page Should Contain
     [Documentation]    LOG 2:7 Current page contains text 'needle'.
