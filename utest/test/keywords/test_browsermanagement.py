@@ -59,12 +59,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         ctx.speed = 5.0
         browser = mock()
-        caps = webdriver.DesiredCapabilities.CHROME
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            when(webdriver).Chrome(desired_capabilities=caps,
-                                   options=None).thenReturn(browser)
-        else:
-            when(webdriver).Chrome(desired_capabilities=caps).thenReturn(browser)
+        when(webdriver).Chrome(options=None).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
         self.assertEqual(browser._speed, 5.0)
@@ -74,12 +69,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx = mock()
         ctx.speed = 0.0
         browser = mock()
-        caps = webdriver.DesiredCapabilities.CHROME
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            when(webdriver).Chrome(desired_capabilities=caps,
-                                   options=None).thenReturn(browser)
-        else:
-            when(webdriver).Chrome(desired_capabilities=caps).thenReturn(browser)
+        when(webdriver).Chrome(options=None).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
         verify(browser, times=0).__call__('_speed')
