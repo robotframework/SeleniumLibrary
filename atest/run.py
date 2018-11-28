@@ -158,7 +158,7 @@ def get_sauce_conf(browser, sauce_username, sauce_key):
             sauce_username, sauce_key
         ),
         '--variable',
-        'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0}'.format(
+        'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0},browserName:{1}'.format(
             TRAVIS_JOB_NUMBER, browser
         )
     ]
