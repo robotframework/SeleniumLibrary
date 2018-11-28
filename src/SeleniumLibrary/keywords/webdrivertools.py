@@ -44,15 +44,6 @@ class WebDriverCreator(object):
         'iphone': 'iphone'
     }
 
-    browser_alias = {
-        'googlechrome': "chrome",
-        'gc': "chrome",
-        'headlesschrome': 'chrome',
-        'ff': 'firefox',
-        'headlessfirefox': 'firefox',
-        'internetexplorer': 'ie',
-    }
-
     def __init__(self, log_dir):
         self.log_dir = log_dir
 
@@ -81,7 +72,11 @@ class WebDriverCreator(object):
         for part in capabilities.split(','):
             key, value = part.split(':')
             desired_capabilities[key.strip()] = value.strip()
-        browser = self.browser_alias.get(browser, browser)
+        browser_alias = {'googlechrome': "chrome", 'gc': "chrome",
+                         'headlesschrome': 'chrome', 'ff': 'firefox',
+                         'headlessfirefox': 'firefox',
+                         'internetexplorer': 'ie'}
+        browser = browser_alias.get(browser, browser)
         if browser in ['ie', 'firefox', 'edge']:
             return {'capabilities': desired_capabilities}
         return {'desired_capabilities': desired_capabilities}
