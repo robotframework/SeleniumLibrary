@@ -71,6 +71,12 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_chrome({}, None)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_chrome_with_desired_capabilities(self):
+        expected_webdriver = mock()
+        when(webdriver).Chrome(desired_capabilities={'key': 'value'}, options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({'desired_capabilities': {'key': 'value'}}, None)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_chrome_remote(self):
         url = 'http://localhost:4444/wd/hub'
         expected_webdriver = mock()
