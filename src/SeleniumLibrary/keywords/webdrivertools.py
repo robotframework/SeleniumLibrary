@@ -107,13 +107,12 @@ class WebDriverCreator(object):
         if is_truthy(remote_url):
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
+        desired_capabilities.update(self._geckodriver_log)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Firefox(options=options, firefox_profile=profile,
-                                     **desired_capabilities,
-                                     **self._geckodriver_log)
+                                     **desired_capabilities)
         return webdriver.Firefox(firefox_profile=profile,
-                                 **desired_capabilities,
-                                 **self._geckodriver_log)
+                                 **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
         if is_falsy(ff_profile_dir):
