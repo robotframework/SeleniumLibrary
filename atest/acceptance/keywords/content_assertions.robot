@@ -70,9 +70,11 @@ Page Should Contain With Custom Log Level DEBUG
 Page Should Contain With Custom Log Level TRACE
     [Documentation]    Html content is shown at DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 2:14 TRACE REGEXP: (?i)<html.*</html>
-    ...    LOG 2:15 FAIL Page should have contained text 'non existing text' but did not.
+    ...    LOG 3:15 TRACE REGEXP: (?i)<html.*</html>
+    ...    LOG 3:16 FAIL Page should have contained text 'non existing text' but did not.
+    Set Log Level    TRACE
     Page Should Contain    non existing text    TRACE
+    [Teardown]    Set Log Level    DEBUG
 
 Page Should Contain With Disabling Source Logging
     [Documentation]    LOG 3:2 NONE
