@@ -296,8 +296,8 @@ class BrowserManagementKeywords(LibraryComponent):
         """Logs and returns the HTML source of the current page or frame.
 
         The ``loglevel`` argument defines the used log level. Valid log
-        levels are ``WARN``, ``INFO`` (default), ``DEBUG``, and ``NONE``
-        (no logging).
+        levels are ``WARN``, ``INFO`` (default), ``DEBUG``, ``TRACE``
+        and ``NONE`` (no logging).
         """
         source = self.get_source()
         self.log(source, loglevel)
