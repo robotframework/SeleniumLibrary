@@ -50,7 +50,6 @@ Press Keys No keys Argument
     ...    "keys" argument can not be empty.
     ...    Press Keys    text_field
 
-
 Press Keys Without Element
     Click Element    text_field
     Press Keys       None    tidii
