@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from collections import namedtuple
+
+from robot.utils import plural_or_not
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
@@ -756,16 +759,16 @@ return !element.dispatchEvent(evt);
             actions = ActionChains(self.driver)
             special_keys = []
             for key in parsed_key:
-                if key in Keys.__dict__.values():
-                    self.info('Pressing special key %s down.' % key)
-                    actions.key_down(key)
+                if hasattr(Keys, key.original):
+                    self.info('Pressing special key %s down.' % key.original)
+                    actions.key_down(key.converted)
                     special_keys.append(key)
                 else:
-                    self.info('Sending key %s' % key)
-                    actions.send_keys(key)
+                    self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
+                    actions.send_keys(key.converted)
             for special_key in special_keys:
-                self.info('Releasing special key %s.' % special_key)
-                actions.key_up(special_key)
+                self.info('Releasing special key %s.' % special_key.original)
+                actions.key_up(special_key.converted)
             actions.perform()
 
     def _press_keys_with_element(self, locator, parsed_keys):
@@ -774,16 +777,16 @@ return !element.dispatchEvent(evt);
             actions = ActionChains(self.driver)
             special_keys = []
             for key in parsed_key:
-                if key in Keys.__dict__.values():
-                    self.info('Pressing special key %s down.' % key)
-                    actions.key_down(key)
+                if hasattr(Keys, key.original):
+                    self.info('Pressing special key %s down.' % key.original)
+                    actions.key_down(key.converted)
                     special_keys.append(key)
                 else:
-                    self.info('Sending key %s' % key)
-                    actions.send_keys_to_element(element, key)
+                    self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
+                    actions.send_keys_to_element(element, key.converted)
             for special_key in special_keys:
-                self.info('Releasing special key %s.' % special_key)
-                actions.key_up(special_key)
+                self.info('Releasing special key %s.' % special_key.original)
+                actions.key_up(special_key.converted)
             actions.perform()
 
     @keyword
@@ -1041,11 +1044,12 @@ return !element.dispatchEvent(evt);
         return list_keys
 
     def _convert_special_keys(self, keys):
+        KeysRecord = namedtuple('KeysRecord', 'converted, original')
         converted_keys = []
         for key in keys:
             key = self._parse_aliases(key)
             if hasattr(Keys, key):
-                converted_keys.append(getattr(Keys, key))
+                converted_keys.append(KeysRecord(getattr(Keys, key), key))
             else:
-                converted_keys.append(key)
+                converted_keys.append(KeysRecord(key, key))
         return converted_keys

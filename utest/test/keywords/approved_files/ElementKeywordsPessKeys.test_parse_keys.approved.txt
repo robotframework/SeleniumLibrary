@@ -1,7 +1,7 @@
 index
 
-0) [['A'], ['B'], ['C']]
-1) [['AAA'], ['\ue009'], ['C']]
-2) [['AAA'], ['\ue009', 'B'], ['C']]
-3) [['\ue009', 'A'], ['\ue00a', 'B']]
-4) [['\ue009', '\ue00a', 'b']]
+0) [[KeysRecord(converted='A', original='A')], [KeysRecord(converted='B', original='B')], [KeysRecord(converted='C', original='C')]]
+1) [[KeysRecord(converted='AAA', original='AAA')], [KeysRecord(converted='\ue009', original='CONTROL')], [KeysRecord(converted='C', original='C')]]
+2) [[KeysRecord(converted='AAA', original='AAA')], [KeysRecord(converted='\ue009', original='CONTROL'), KeysRecord(converted='B', original='B')], [KeysRecord(converted='C', original='C')]]
+3) [[KeysRecord(converted='\ue009', original='CONTROL'), KeysRecord(converted='A', original='A')], [KeysRecord(converted='\ue00a', original='ALT'), KeysRecord(converted='B', original='B')]]
+4) [[KeysRecord(converted='\ue009', original='CONTROL'), KeysRecord(converted='\ue00a', original='ALT'), KeysRecord(converted='b', original='b')]]
