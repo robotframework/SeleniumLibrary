@@ -17,9 +17,11 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import (is_falsy, is_noney, is_truthy,
                                    plural_or_not as s)
+from SeleniumLibrary.errors import ElementNotFound
 
 
 class ElementKeywords(LibraryComponent):
@@ -441,6 +443,9 @@ class ElementKeywords(LibraryComponent):
         |`Cover Element` | css:div#container |
         """
         elements = self.find_elements(locator)
+        if not elements:
+            raise ElementNotFound("No element with locator '%s' found."
+                                  % locator)
         for element in elements:
             script = """
 old_element = arguments[0];

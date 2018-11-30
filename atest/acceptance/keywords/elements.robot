@@ -119,3 +119,7 @@ Cover Element can cover just one element
     Element Should be Visible  //img[@src="image.jpg"]
     ${count}  Get Element Count  //div[@name="covered"]
     Should Be equal As Integers  ${count}  1
+
+Cover Elements should throw exception when locator is invalid
+    Run Keyword And Expect Error  No element with locator '//img[@src="inexistent"]' found.
+    ...  Cover Element  //img[@src="inexistent"]
