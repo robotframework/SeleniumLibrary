@@ -35,10 +35,10 @@ Press Keys Special Keys SHIFT Many Times
     Click Button    OK
     Wait Until Page Contains    CCDD     timeout=3
 
-Press Keys Special Keys SHIFT Many Times
-    Press Keys    None    SHIFT+cc    SHIFT+dd
-    Click Button    OK
-    Wait Until Page Contains    CCDD     timeout=3
+Press Keys Element Not Found
+    run keyword and expect error
+    ...    Element with locator 'not_here' not found.
+    ...    Press Keys    not_here    YYYY
 
 *** Keywords ***
 Test CleanUp
