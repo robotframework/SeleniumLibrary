@@ -1,10 +1,8 @@
 import unittest
 import os
-from collections import namedtuple
 
-from mockito import mock, verifyStubbedInvocationsAreUsed, when, unstub, verify
-from robot.utils import JYTHON
-from selenium.webdriver.common.keys import Keys
+from robot.utils import JYTHON, PY3
+
 try:
     from approvaltests.approvals import verify_all
     from approvaltests.reporters.generic_diff_reporter_factory import GenericDiffReporterFactory
@@ -22,8 +20,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        ctx = mock()
-        cls.element_keywords = ElementKeywords(ctx)
+        cls.element_keywords = ElementKeywords(None)
 
     def setUp(self):
         path = os.path.dirname(__file__)
@@ -31,9 +28,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         factory = GenericDiffReporterFactory()
         factory.load(reporter_json)
         self.reporter = factory.get_first_working()
-
-    def tearDown(self):
-        unstub()
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_parse_keys(self):
@@ -43,6 +37,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_keys('AAA', 'CONTROL+B', 'C'))
         results.append(self.element_keywords._parse_keys('CONTROL+A', 'ALT+B'))
         results.append(self.element_keywords._parse_keys('CONTROL+ALT+b'))
+        results = self.result_formatter(results)
         verify_all('index', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -52,6 +47,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_aliases('ESC'))
         results.append(self.element_keywords._parse_aliases('CONTROL'))
         results.append(self.element_keywords._parse_aliases('BB'))
+        results = self.result_formatter(results)
         verify_all('Alias testing', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -63,6 +59,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._separate_key('A++'))
         results.append(self.element_keywords._separate_key('A+++'))
         results.append(self.element_keywords._separate_key('A+++C'))
+        results = self.result_formatter(results)
         verify_all('Separate key', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -72,4 +69,13 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._convert_special_keys(['AA', 'CCC']))
         results.append(self.element_keywords._convert_special_keys(['ALT', 'B']))
         results.append(self.element_keywords._convert_special_keys(['ALT', 'CTRL']))
+        results = self.result_formatter(results)
         verify_all('To Selenium Special Keys', results, reporter=self.reporter)
+
+    def result_formatter(self, results):
+        if PY3:
+            return results
+        for index, result in enumerate(results):
+            result = str(result)
+            results[index] = result.replace("=u'", "='")
+        return results
