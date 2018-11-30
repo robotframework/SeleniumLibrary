@@ -744,38 +744,45 @@ return !element.dispatchEvent(evt);
     def press_keys(self, locator=None, *keys):
         """Write doc"""
         parsed_keys = self._parse_keys(*keys)
-        actions = ActionChains(self.driver)
         if is_truthy(locator):
             self.info('Sending key(s) %s to %s element.' % (keys, locator))
-            self._press_keys_with_element(locator, parsed_keys, actions)
+            self._press_keys_with_element(locator, parsed_keys)
         else:
             self.info('Sending key(s) %s to page.' % str(keys))
-            self._press_keys_without_element(parsed_keys, actions)
+            self._press_keys_without_element(parsed_keys)
 
-    def _press_keys_without_element(self, parsed_keys, actions):
+    def _press_keys_without_element(self, parsed_keys):
         for parsed_key in parsed_keys:
+            actions = ActionChains(self.driver)
             special_keys = []
             for key in parsed_key:
                 if key in Keys.__dict__.values():
+                    self.info('Pressing special key %s down.' % key)
                     actions.key_down(key)
                     special_keys.append(key)
                 else:
+                    self.info('Sending key %s' % key)
                     actions.send_keys(key)
             for special_key in special_keys:
+                self.info('Releasing special key %s.' % special_key)
                 actions.key_up(special_key)
             actions.perform()
 
-    def _press_keys_with_element(self, locator, parsed_keys, actions):
+    def _press_keys_with_element(self, locator, parsed_keys):
         element = self.find_element(locator)
         for parsed_key in parsed_keys:
+            actions = ActionChains(self.driver)
             special_keys = []
             for key in parsed_key:
                 if key in Keys.__dict__.values():
+                    self.info('Pressing special key %s down.' % key)
                     actions.key_down(key)
                     special_keys.append(key)
                 else:
+                    self.info('Sending key %s' % key)
                     actions.send_keys_to_element(element, key)
             for special_key in special_keys:
+                self.info('Releasing special key %s.' % special_key)
                 actions.key_up(special_key)
             actions.perform()
 
