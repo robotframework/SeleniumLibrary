@@ -749,12 +749,15 @@ return !element.dispatchEvent(evt);
         parsed_keys = self._parse_keys(*keys)
         if is_truthy(locator):
             self.info('Sending key(s) %s to %s element.' % (keys, locator))
-            self._press_keys_with_element(locator, parsed_keys)
         else:
             self.info('Sending key(s) %s to page.' % str(keys))
-            self._press_keys_without_element(parsed_keys)
+        self._press_keys(locator, parsed_keys)
 
-    def _press_keys_without_element(self, parsed_keys):
+    def _press_keys(self, locator, parsed_keys):
+        if is_truthy(locator):
+            element = self.find_element(locator)
+        else:
+            element = None
         for parsed_key in parsed_keys:
             actions = ActionChains(self.driver)
             special_keys = []
@@ -764,30 +767,18 @@ return !element.dispatchEvent(evt);
                     actions.key_down(key.converted)
                     special_keys.append(key)
                 else:
-                    self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
-                    actions.send_keys(key.converted)
+                    self._press_keys_normal_keys(actions, element, key)
             for special_key in special_keys:
                 self.info('Releasing special key %s.' % special_key.original)
                 actions.key_up(special_key.converted)
             actions.perform()
 
-    def _press_keys_with_element(self, locator, parsed_keys):
-        element = self.find_element(locator)
-        for parsed_key in parsed_keys:
-            actions = ActionChains(self.driver)
-            special_keys = []
-            for key in parsed_key:
-                if hasattr(Keys, key.original):
-                    self.info('Pressing special key %s down.' % key.original)
-                    actions.key_down(key.converted)
-                    special_keys.append(key)
-                else:
-                    self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
-                    actions.send_keys_to_element(element, key.converted)
-            for special_key in special_keys:
-                self.info('Releasing special key %s.' % special_key.original)
-                actions.key_up(special_key.converted)
-            actions.perform()
+    def _press_keys_normal_keys(self, actions, element, key):
+        self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
+        if element:
+            actions.send_keys_to_element(element, key.converted)
+        else:
+            actions.send_keys(key.converted)
 
     @keyword
     def click_link(self, locator):
