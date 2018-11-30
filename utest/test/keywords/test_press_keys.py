@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from robot.utils import JYTHON, PY3
+from robot.utils import JYTHON
 
 try:
     from approvaltests.approvals import verify_all
@@ -14,6 +14,7 @@ except ImportError:
         raise
 
 from SeleniumLibrary.keywords import ElementKeywords
+from SeleniumLibrary.utils import PY3
 
 
 class ElementKeywordsPessKeys(unittest.TestCase):
