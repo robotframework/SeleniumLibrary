@@ -725,7 +725,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def press_key(self, locator, key):
-        r"""Simulates user pressing key on element identified by ``locator``.
+        """Simulates user pressing key on element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -1007,6 +1007,8 @@ return !element.dispatchEvent(evt);
         return keys
 
     def _parse_keys(self, *keys):
+        if not keys:
+            raise AssertionError('"keys" argument can not be empty.')
         list_keys = []
         for key in keys:
             separate_keys = self._separate_key(key)

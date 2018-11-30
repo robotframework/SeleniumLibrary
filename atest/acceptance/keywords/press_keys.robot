@@ -34,9 +34,15 @@ Press Keys Special Keys SHIFT Many Times
     Wait Until Page Contains    CCDD     timeout=3
 
 Press Keys Element Not Found
-    run keyword and expect error
+    Run Keyword And Expect Error
     ...    Element with locator 'not_here' not found.
     ...    Press Keys    not_here    YYYY
+
+Press Keys No keys Argument
+    Run Keyword And Expect Error
+    ...    "keys" argument can not be empty.
+    ...    Press Keys    text_field
+
 
 Press Keys Without Element
     Click Element    text_field
