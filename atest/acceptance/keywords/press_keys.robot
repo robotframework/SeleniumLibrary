@@ -1,8 +1,6 @@
 *** Settings ***
 Test Setup        Go To Page "forms/input_special_keys.html"
-# Test Teardown     Test CleanUp
 Resource          ../resource.robot
-Force Tags       tidii
 
 *** Test Cases ***
 Press Keys Normal Keys
@@ -40,6 +38,20 @@ Press Keys Element Not Found
     ...    Element with locator 'not_here' not found.
     ...    Press Keys    not_here    YYYY
 
-*** Keywords ***
-Test CleanUp
-    Input Text    text_field    ${EMPTY}
+Press Keys Without Element
+    Click Element    text_field
+    Press Keys       None    tidii
+    Click Button     OK
+    Wait Until Page Contains    tidii     timeout=3
+
+Press Keys Multiple Times Without Element
+    Click Element    text_field
+    Press Keys       None    foo+bar    e+n+d
+    Click Button     OK
+    Wait Until Page Contains    foobarend     timeout=3
+
+Press Keys Without Element Special Keys
+    Click Element    text_field
+    Press Keys       None    CTRL+A    CTRL+v
+    Click Button     OK
+    Wait Until Page Contains    Please input text and click the button. Text will appear in the page.     timeout=3

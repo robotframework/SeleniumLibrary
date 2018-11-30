@@ -743,12 +743,33 @@ return !element.dispatchEvent(evt);
     @keyword
     def press_keys(self, locator=None, *keys):
         """Write doc"""
+        parsed_keys = self._parse_keys(*keys)
+        actions = ActionChains(self.driver)
         if is_truthy(locator):
-            element = self.find_element(locator, required=False)
-        for parsed_keys in self._parse_keys(*keys):
+            self.info('Sending key(s) %s to %s element.' % (keys, locator))
+            self._press_keys_with_element(locator, parsed_keys, actions)
+        else:
+            self.info('Sending key(s) %s to page.' % str(keys))
+            self._press_keys_without_element(parsed_keys, actions)
+
+    def _press_keys_without_element(self, parsed_keys, actions):
+        for parsed_key in parsed_keys:
             special_keys = []
-            actions = ActionChains(self.driver)
-            for key in parsed_keys:
+            for key in parsed_key:
+                if key in Keys.__dict__.values():
+                    actions.key_down(key)
+                    special_keys.append(key)
+                else:
+                    actions.send_keys(key)
+            for special_key in special_keys:
+                actions.key_up(special_key)
+            actions.perform()
+
+    def _press_keys_with_element(self, locator, parsed_keys, actions):
+        element = self.find_element(locator)
+        for parsed_key in parsed_keys:
+            special_keys = []
+            for key in parsed_key:
                 if key in Keys.__dict__.values():
                     actions.key_down(key)
                     special_keys.append(key)
