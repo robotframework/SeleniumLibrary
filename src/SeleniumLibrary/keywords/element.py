@@ -725,19 +725,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def press_key(self, locator, key):
-        """Simulates user pressing key on element identified by ``locator``.
-
-        See the `Locating elements` section for details about the locator
-        syntax.
-
-        ``key`` is either a single character, a string, or a numerical ASCII
-        code of the key lead by '\\'.
-
-        Examples:
-        | `Press Key` | text_field   | q     |
-        | `Press Key` | text_field   | abcde |
-        | `Press Key` | login_button | \\13  | # ASCII code for enter key |
-        """
+        """Deprecated use `Press Keys` instead."""
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
         element = self.find_element(locator)
@@ -745,7 +733,37 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def press_keys(self, locator=None, *keys):
-        """Write doc"""
+        """Simulates user pressing key(s) to an element or on the active browser.
+
+
+        If ``locator`` is is false, then the ``keys`` are send to the currently
+        active browser. If  ``locator`` is true, then keys are send the
+        element identified by ``locator``. If element is not found, keywords
+        fails. See the `Locating elements` section for details about the locator
+        syntax and `Boolean arguments` for boolean handling in the library.
+
+        ``keys`` arguments can contain one or many strings.
+        ``keys`` can also be combination of
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]
+        and strings, separated by `+` charater, like `CONTROL+c`. If
+        Selenium Keys is detected in the ``keys``, keyword will press the
+        Selenium Key down, send the strings (if defined) and then
+        release the Selenium Key. If keyword needs to send a Selenium
+        Key as a string, then each character must be separated with
+        `+` character. `CTRL` is alias for
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]
+        and ESC is alias for
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]
+
+        New in SeleniumLibrary 3.3
+        Examples:
+        | `Press Keys` | text_field | AAAAA  |    | # Sends string "AAAAA" to element identified by text_field            |
+        | `Press Keys` | None       | BBBBB  |    | # Sends string "BBBBB" to currently active browser                    |
+        | `Press Keys` | text_field | CTRL+c |    | # Pressing CTRL key down, sends string "c" and then releases CTRL key |
+        | `Press Keys` | text_field | E+N+D  |    | # Sends string "END" to element identified by text_field              |
+        | `Press Keys` | text_field | XXX    | YY | # Sends strings "XXX" and "YY" to element identified by text_field    |
+        | `Press Keys` | button     | RETURN |    | # Press enter key to element identified by button                     |
+        """
         parsed_keys = self._parse_keys(*keys)
         if is_truthy(locator):
             self.info('Sending key(s) %s to %s element.' % (keys, locator))
