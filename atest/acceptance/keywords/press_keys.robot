@@ -33,6 +33,13 @@ Press Keys Special Keys SHIFT Many Times
     Click Button    OK
     Wait Until Page Contains    CCDD     timeout=3
 
+Press Keys To Multiple Elements
+    Press Keys      text_field    tidii
+    Press Keys      OK            ENTER
+    Press Keys      None          ENTER    ENTER
+    Wait Until Page Contains    tidii     timeout=3
+    Page Should Contain Element     //p[text()="tidii"]    limit=4
+
 Press Keys Element Not Found
     Run Keyword And Expect Error
     ...    Element with locator 'not_here' not found.

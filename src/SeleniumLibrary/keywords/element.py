@@ -763,9 +763,8 @@ return !element.dispatchEvent(evt);
             special_keys = []
             for key in parsed_key:
                 if hasattr(Keys, key.original):
-                    self.info('Pressing special key %s down.' % key.original)
-                    actions.key_down(key.converted)
-                    special_keys.append(key)
+                    special_keys = self._press_keys_special_keys(actions, element, parsed_key,
+                                                                 key, special_keys)
                 else:
                     self._press_keys_normal_keys(actions, element, key)
             for special_key in special_keys:
@@ -779,6 +778,19 @@ return !element.dispatchEvent(evt);
             actions.send_keys_to_element(element, key.converted)
         else:
             actions.send_keys(key.converted)
+
+    def _press_keys_special_keys(self, actions, element, parsed_key, key, special_keys):
+        if len(parsed_key) == 1 and element:
+            self.info('Pressing special key %s to element.' % key.original)
+            actions.send_keys_to_element(element, key.converted)
+        elif len(parsed_key) == 1 and not element:
+            self.info('Pressing special key %s to browser.' % key.original)
+            actions.send_keys(key.converted)
+        else:
+            self.info('Pressing special key %s down.' % key.original)
+            actions.key_down(key.converted)
+            special_keys.append(key)
+        return special_keys
 
     @keyword
     def click_link(self, locator):
