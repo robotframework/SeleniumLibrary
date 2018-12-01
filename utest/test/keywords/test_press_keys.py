@@ -38,6 +38,13 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_keys('AAA', 'CONTROL+B', 'C'))
         results.append(self.element_keywords._parse_keys('CONTROL+A', 'ALT+B'))
         results.append(self.element_keywords._parse_keys('CONTROL+ALT+b'))
+        results.append(self.element_keywords._parse_keys('Press CTRL+C to'))
+        results.append(self.element_keywords._parse_keys('Press CTRL++C to'))
+        results.append(self.element_keywords._parse_keys('END+E+N+D'))
+        results.append(self.element_keywords._parse_keys('AALTO'))
+        results.append(self.element_keywords._parse_keys('alt'))
+        results.append(self.element_keywords._parse_keys('IS ALT HERE'))
+        results.append(self.element_keywords._parse_keys('IS', 'ALT', 'HERE'))
         results = self.result_formatter(results)
         verify_all('index', results, reporter=self.reporter)
 
@@ -48,6 +55,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_aliases('ESC'))
         results.append(self.element_keywords._parse_aliases('CONTROL'))
         results.append(self.element_keywords._parse_aliases('BB'))
+        results.append(self.element_keywords._parse_aliases('END'))
         results = self.result_formatter(results)
         verify_all('Alias testing', results, reporter=self.reporter)
 
