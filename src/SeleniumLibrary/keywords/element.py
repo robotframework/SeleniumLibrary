@@ -736,17 +736,17 @@ return !element.dispatchEvent(evt);
         """Simulates user pressing key(s) to an element or on the active browser.
 
 
-        If ``locator`` is is false, then the ``keys`` are send to the currently
-        active browser. If  ``locator`` is true, then keys are send the
-        element identified by ``locator``. If element is not found, keywords
+        If ``locator`` is None or false, then the ``keys`` are sent to the currently
+        active browser. Otherwise, if ``locator`` is valid, then the keys are sent to the
+        element identified by ``locator``. If element is not found, the keyword
         fails. See the `Locating elements` section for details about the locator
         syntax and `Boolean arguments` for boolean handling in the library.
 
         ``keys`` arguments can contain one or many strings.
-        ``keys`` can also be combination of
+        ``keys`` can also be a combination of
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]
-        and strings, separated by `+` charater, like `CONTROL+c`. If
-        Selenium Keys is detected in the ``keys``, keyword will press the
+        and strings, separated by the `+` character, like in `CONTROL+c`. If
+        Selenium Keys are detected in the ``keys``, keyword will press the
         Selenium Key down, send the strings (if defined) and then
         release the Selenium Key. If keyword needs to send a Selenium
         Key as a string, then each character must be separated with
