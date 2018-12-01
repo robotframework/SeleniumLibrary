@@ -34,11 +34,28 @@ Press Keys Special Keys SHIFT Many Times
     Wait Until Page Contains    CCDD     timeout=3
 
 Press Keys To Multiple Elements
+    [DOCUMENTATION]    The | Press Keys | OK | ENTER | presses OK button two times, because
+    ...    Selenium sets the focus to element by clicking the element.
     Press Keys      text_field    tidii
     Press Keys      OK            ENTER
     Press Keys      None          ENTER    ENTER
     Wait Until Page Contains    tidii     timeout=3
     Page Should Contain Element     //p[text()="tidii"]    limit=4
+
+Press Keys ASCII Code Send As Is
+    Press Keys    text_field    \\108    \\13
+    Click Button    OK
+    Wait Until Page Contains    \\108\\13     timeout=3
+
+Press Keys With Scandic Letters
+    Press Keys    text_field    ÖÄÖÄÖ    ÅÖÄP
+    Click Button    OK
+    Wait Until Page Contains    ÖÄÖÄÖÅÖÄP     timeout=3
+
+Press Keys With Asian Text
+    Press Keys    text_field    田中さんにあげ+て下    さい
+    Click Button    OK
+    Wait Until Page Contains    田中さんにあげて下さい     timeout=3
 
 Press Keys Element Not Found
     Run Keyword And Expect Error
