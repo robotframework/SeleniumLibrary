@@ -736,32 +736,46 @@ return !element.dispatchEvent(evt);
         """Simulates user pressing key(s) to an element or on the active browser.
 
 
-        If ``locator`` is None or false, then the ``keys`` are sent to the currently
-        active browser. Otherwise, if ``locator`` is valid, then the keys are sent to the
-        element identified by ``locator``. If element is not found, the keyword
-        fails. See the `Locating elements` section for details about the locator
-        syntax and `Boolean arguments` for boolean handling in the library.
+        If ``locator`` evaluates as false, see `Boolean arguments` for more
+        details, then the ``keys`` are sent to the currently active browser.
+        Otherwise element is searched and ``keys`` are send to the element
+        identified by the ``locator``. In later case, keyword fails if element
+        is not found. See the `Locating elements` section for details about
+        the locator syntax.
 
-        ``keys`` arguments can contain one or many strings.
-        ``keys`` can also be a combination of
+        ``keys`` arguments can contain one or many strings, but it can not
+        be empty. ``keys`` can also be a combination of
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]
-        and strings, separated by the `+` character, like in `CONTROL+c`. If
-        Selenium Keys are detected in the ``keys``, keyword will press the
-        Selenium Key down, send the strings (if defined) and then
-        release the Selenium Key. If keyword needs to send a Selenium
+        and strings or a single Selenium Key. If Selenium Key is combined
+        with strings, Selenium key and strings must be separated by the
+        `+` character, like in `CONTROL+c` or `CONTROL+v`. Selenium Keys
+        are space and case sensitive and Selenium Keys are not parsed
+        inside of the string. Example AALTO, would send string `AALTO`
+        and `ALT` not parsed inside of the string. But `A+ALT+O` would
+        found Selenium ALT key from the ``keys`` argument. It also possible
+        to press many Selenium Keys down at the same time, example
+        'ALT+ARROW_DOWN`.
+
+        If Selenium Keys are detected in the ``keys`` argument, keyword
+        will press the Selenium Key down, send the strings and
+         then release the Selenium Key. If keyword needs to send a Selenium
         Key as a string, then each character must be separated with
-        `+` character. `CTRL` is alias for
+        `+` character, example `E+N+D`.
+
+        `CTRL` is alias for
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]
         and ESC is alias for
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]
 
         New in SeleniumLibrary 3.3
+
         Examples:
         | `Press Keys` | text_field | AAAAA  |    | # Sends string "AAAAA" to element identified by text_field            |
         | `Press Keys` | None       | BBBBB  |    | # Sends string "BBBBB" to currently active browser                    |
         | `Press Keys` | text_field | CTRL+c |    | # Pressing CTRL key down, sends string "c" and then releases CTRL key |
         | `Press Keys` | text_field | E+N+D  |    | # Sends string "END" to element identified by text_field              |
         | `Press Keys` | text_field | XXX    | YY | # Sends strings "XXX" and "YY" to element identified by text_field    |
+        | `Press Keys` | text_field | XXX+YY |    | # Sends strings "XXX" and "YY" to element identified by text_field    |
         | `Press Keys` | button     | RETURN |    | # Press enter key to element identified by button                     |
         """
         parsed_keys = self._parse_keys(*keys)
