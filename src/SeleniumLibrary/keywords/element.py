@@ -794,7 +794,7 @@ return !element.dispatchEvent(evt);
             actions = ActionChains(self.driver)
             special_keys = []
             for key in parsed_key:
-                if hasattr(Keys, key.original):
+                if self._selenium_keys_has_attr(key.original):
                     special_keys = self._press_keys_special_keys(actions, element, parsed_key,
                                                                  key, special_keys)
                 else:
@@ -1085,8 +1085,14 @@ return !element.dispatchEvent(evt);
         converted_keys = []
         for key in keys:
             key = self._parse_aliases(key)
-            if hasattr(Keys, key):
+            if self._selenium_keys_has_attr(key):
                 converted_keys.append(KeysRecord(getattr(Keys, key), key))
             else:
                 converted_keys.append(KeysRecord(key, key))
         return converted_keys
+
+    def _selenium_keys_has_attr(self, key):
+        try:
+            return hasattr(Keys, key)
+        except UnicodeError:  # To support Python 2 and non ascii characters.
+            return False
