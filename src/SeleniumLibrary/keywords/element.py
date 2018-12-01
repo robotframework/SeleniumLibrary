@@ -748,7 +748,7 @@ return !element.dispatchEvent(evt);
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]
         and strings or a single Selenium Key. If Selenium Key is combined
         with strings, Selenium key and strings must be separated by the
-        `+` character, like in `CONTROL+c` or `CONTROL+v`. Selenium Keys
+        `+` character, like in `CONTROL+c`. Selenium Keys
         are space and case sensitive and Selenium Keys are not parsed
         inside of the string. Example AALTO, would send string `AALTO`
         and `ALT` not parsed inside of the string. But `A+ALT+O` would
@@ -770,13 +770,15 @@ return !element.dispatchEvent(evt);
         New in SeleniumLibrary 3.3
 
         Examples:
-        | `Press Keys` | text_field | AAAAA  |    | # Sends string "AAAAA" to element identified by text_field            |
-        | `Press Keys` | None       | BBBBB  |    | # Sends string "BBBBB" to currently active browser                    |
-        | `Press Keys` | text_field | CTRL+c |    | # Pressing CTRL key down, sends string "c" and then releases CTRL key |
-        | `Press Keys` | text_field | E+N+D  |    | # Sends string "END" to element identified by text_field              |
-        | `Press Keys` | text_field | XXX    | YY | # Sends strings "XXX" and "YY" to element identified by text_field    |
-        | `Press Keys` | text_field | XXX+YY |    | # Sends strings "XXX" and "YY" to element identified by text_field    |
-        | `Press Keys` | button     | RETURN |    | # Press enter key to element identified by button                     |
+        | `Press Keys` | text_field | AAAAA          |            | # Sends string "AAAAA" to element.                                                |
+        | `Press Keys` | None       | BBBBB          |            | # Sends string "BBBBB" to currently active browser.                               |
+        | `Press Keys` | text_field | E+N+D          |            | # Sends string "END" to element.                                                  |
+        | `Press Keys` | text_field | XXX            | YY         | # Sends strings "XXX" and "YY" to element.                                        |
+        | `Press Keys` | text_field | XXX+YY         |            | # Same as above.                                                                  |
+        | `Press Keys` | text_field | ALT+ARROW_DOWN |            | # Pressing "ALT" key down, then pressing ARROW_DOWN and then releasing both keys. |
+        | `Press Keys` | text_field | ALT            | ARROW_DOWN | # Pressing "ALT" key and then pressing ARROW_DOWN.                                |
+        | `Press Keys` | text_field | CTRL+c         |            | # Pressing CTRL key down, sends string "c" and then releases CTRL key.            |
+        | `Press Keys` | button     | RETURN         |            | # Pressing "ENTER" key to element.                                                |
         """
         parsed_keys = self._parse_keys(*keys)
         if is_truthy(locator):
