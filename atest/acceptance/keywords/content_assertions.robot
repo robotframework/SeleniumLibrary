@@ -374,5 +374,5 @@ Page Should Not Contain Button In Input Tag
 Get All Links
     [Setup]    Go To Page "links.html"
     ${links}=    Get All Links
-    Length Should Be    ${links}    19
+    Length Should Be    ${links}    20
     List Should Contain Value    ${links}    bold_id

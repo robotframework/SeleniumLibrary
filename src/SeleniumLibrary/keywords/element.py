@@ -17,9 +17,11 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import (is_falsy, is_noney, is_truthy,
                                    plural_or_not as s)
+from SeleniumLibrary.errors import ElementNotFound
 
 
 class ElementKeywords(LibraryComponent):
@@ -430,7 +432,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def cover_element(self, locator):
-        """Will cover element identified by ``locator`` with a blue div without breaking page layout.
+        """Will cover elements identified by ``locator`` with a blue div without breaking page layout.
         
         See the `Locating elements` section for details about the locator
         syntax.
@@ -440,8 +442,12 @@ class ElementKeywords(LibraryComponent):
         Example:
         |`Cover Element` | css:div#container |
         """
-        element = self.find_element(locator)
-        script = """
+        elements = self.find_elements(locator)
+        if not elements:
+            raise ElementNotFound("No element with locator '%s' found."
+                                  % locator)
+        for element in elements:
+            script = """
 old_element = arguments[0];
 let newDiv = document.createElement('div');
 newDiv.setAttribute("name", "covered");
@@ -455,7 +461,7 @@ old_element.parentNode.insertBefore(newDiv, old_element);
 old_element.remove();
 newDiv.parentNode.style.overflow = 'hidden';
         """
-        self.driver.execute_script(script, element)
+            self.driver.execute_script(script, element)
 
     @keyword
     def get_value(self, locator):
