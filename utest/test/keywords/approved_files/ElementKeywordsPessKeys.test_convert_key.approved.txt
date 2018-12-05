@@ -1,0 +1,6 @@
+To Selenium Special Keys
+
+0) [KeysRecord(converted='B', original='B')]
+1) [KeysRecord(converted='AA', original='AA'), KeysRecord(converted='CCC', original='CCC')]
+2) [KeysRecord(converted='\ue00a', original='ALT'), KeysRecord(converted='B', original='B')]
+3) [KeysRecord(converted='\ue00a', original='ALT'), KeysRecord(converted='\ue009', original='CONTROL')]

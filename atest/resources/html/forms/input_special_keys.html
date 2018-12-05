@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <p>Please input text and click the button. Text will appear in the page.</p><br>
+    <input id="text_field" size="30" type="text" /><br><br>
+    <button id="OK" onclick="getText();">OK</button><br>
+    <div id="div1"></div>
+</body>
+ <script>
+function getText() {
+    var input = document.getElementById("text_field").value;
+    var para = document.createElement("p");
+    var node = document.createTextNode(input);
+    para.appendChild(node);
+    var element = document.getElementById("div1");
+    element.appendChild(para);
+}
+</script>
+</html>
