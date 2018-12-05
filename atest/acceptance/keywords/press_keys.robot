@@ -13,6 +13,11 @@ Press Keys Normal Keys Many Times
     Click Button    OK
     Wait Until Page Contains    AAAAABBB
 
+Press Keys Sends c++
+    Press Keys    text_field    c++
+    Click Button    OK
+    Wait Until Page Contains    c+
+
 Press Keys Normal Keys Many Arguments
     Press Keys    text_field    ccc    DDDD
     Click Button    OK

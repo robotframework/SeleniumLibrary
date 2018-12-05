@@ -68,6 +68,9 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._separate_key('A++'))
         results.append(self.element_keywords._separate_key('A+++'))
         results.append(self.element_keywords._separate_key('A+++C'))
+        results.append(self.element_keywords._separate_key('+'))
+        results.append(self.element_keywords._separate_key('++'))
+        results.append(self.element_keywords._separate_key('+++'))
         results = self.result_formatter(results)
         verify_all('Separate key', results, reporter=self.reporter)
 
