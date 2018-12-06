@@ -1,8 +1,7 @@
 import unittest
 import uuid
 
-from mockito import mock, when
-from robot.api import logger
+from mockito import mock
 
 from SeleniumLibrary.errors import WindowNotFound
 from SeleniumLibrary.locators import WindowManager
