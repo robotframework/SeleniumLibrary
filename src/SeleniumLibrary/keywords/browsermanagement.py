@@ -292,7 +292,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return url
 
     @keyword
-    def log_source(self, loglevel='TRACE'):
+    def log_source(self, loglevel='INFO'):
         """Logs and returns the HTML source of the current page or frame.
 
         The ``loglevel`` argument defines the used log level. Valid log

@@ -40,7 +40,7 @@ class LibraryComponent(ContextAware):
     def warn(self, msg, html=False):
         logger.warn(msg, html)
 
-    def log_source(self, loglevel='TRACE'):
+    def log_source(self, loglevel='INFO'):
         self.ctx.log_source(loglevel)
 
     def assert_page_contains(self, locator, tag=None, message=None,
