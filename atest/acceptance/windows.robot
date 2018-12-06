@@ -22,6 +22,16 @@ Get Window Titles
     ${titles}=    Get Window Titles
     Should Be Equal    ${titles}    ${exp_titles}
 
+Get Window Titles With Non ASCII Title
+    ${exp_titles}=    Create List    Click link to show a popup window    äää
+    Click Link    my popup
+    Wait Until New Window Is Open
+    ${parent} =    Select Window    Original
+    Click Element    unicode
+    ${titles} =    Get Window Titles
+    Should Be Equal    ${titles}    ${exp_titles}
+    [Teardown]  Select Window    ${parent}
+
 Get Title
     ${title} =    Get Title
     Should Be Equal As Strings    ${title}    Click link to show a popup window
