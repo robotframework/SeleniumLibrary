@@ -20,6 +20,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
+from SeleniumLibrary.utils import plural_or_not
 
 
 class WindowKeywords(LibraryComponent):
@@ -219,10 +220,10 @@ class WindowKeywords(LibraryComponent):
 
     def _log_list(self, items, what='item'):
         msg = [
-            'Altogether {} {}.'.format(
-                len(items), what if len(items) == 1 else '{}s'.format(what))
+            'Altogether %s %s%s.'
+            % (len(items), what, plural_or_not(items))
         ]
         for index, item in enumerate(items):
-            msg.append('{}: {}'.format(index + 1, item))
+            msg.append('%s: %s' % (index + 1, item))
         self.info('\n'.join(msg))
         return items
