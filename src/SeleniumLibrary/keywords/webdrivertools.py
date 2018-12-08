@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import os
+import warnings
 
 from robot.utils import ConnectionCache
 from selenium import webdriver
@@ -151,6 +152,8 @@ class WebDriverCreator(object):
         return webdriver.Safari(**desired_capabilities)
 
     def create_phantomjs(self, desired_capabilities, remote_url):
+        warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
+                      'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
             return self._remote(desired_capabilities, remote_url)
         return webdriver.PhantomJS(**desired_capabilities)
