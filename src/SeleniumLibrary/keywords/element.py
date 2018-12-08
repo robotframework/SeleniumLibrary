@@ -1049,8 +1049,7 @@ return !element.dispatchEvent(evt);
         keys = []
         for item in modifiers:
             item = item.strip()
-            if item == 'CTRL':
-                item = 'CONTROL'
+            item = self._parse_aliases(item)
             if hasattr(Keys, item):
                 keys.append(getattr(Keys, item))
             else:
