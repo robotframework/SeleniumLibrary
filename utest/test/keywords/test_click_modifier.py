@@ -20,6 +20,10 @@ class ParsingModifierKeys(unittest.TestCase):
     def test_parsing_one_mofier(self):
         parsed = self.element.parse_modifier('CTRL')
         self.assertEqual(parsed, [Keys.CONTROL])
+        parsed = self.element.parse_modifier('esc')
+        self.assertEqual(parsed, [Keys.ESCAPE])
+        parsed = self.element.parse_modifier('ESCAPE')
+        self.assertEqual(parsed, [Keys.ESCAPE])
         parsed = self.element.parse_modifier('control')
         self.assertEqual(parsed, [Keys.CONTROL])
         parsed = self.element.parse_modifier('alt')
