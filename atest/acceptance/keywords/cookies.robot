@@ -5,7 +5,6 @@ Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
 Resource          ../resource.robot
 
-
 *** Test Cases ***
 Get Cookies
     ${cookies}=    Get Cookies

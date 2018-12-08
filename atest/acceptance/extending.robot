@@ -4,7 +4,6 @@ Suite Teardown    ExtSeLib.Close All Browsers
 Resource          resource.robot
 Library           ExtSL.ExtSL    WITH NAME    ExtSeLib
 
-
 *** Test Cases ***
 When Extending SeleniumLibrary Keywords With Decorated Name Can Be Used For Extending
     ${elements} =    ExtSeLib.Ext Web Element    //tr

@@ -11,7 +11,6 @@ Big List Of Naughty Strings
     :FOR    ${string}    IN    @{blns}
     \    Check Blns Error Check    ${string}
 
-
 *** Keywords ***
 Check Blns Error Check
     [Arguments]    ${string}

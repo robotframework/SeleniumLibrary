@@ -3,7 +3,6 @@ Documentation    Suite description
 Suite Setup       Go To Page "links.html"
 Resource          ../resource.robot
 
-
 *** Test Cases ***
 Capture Element Screenshot
     [Setup]    Remove Files    ${OUTPUTDIR}/selenium-element-screenshot-1.png

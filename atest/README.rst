@@ -82,7 +82,7 @@ from the `.travis.yam`_. Generally speaking the test are automatically run
 by using Chrome and Firefox browsers. The project uses Python 2.7, Python 3.4,
 Python 3.6 and PyPy 3.5 for test execution. The project uses and latest available 
 Selenium 3 version for test execution. Test uses Robot Framework versions 
-2.9.2 and 3.0.2 for acceptance test execution.
+2.9.2 and 3.0.4 for acceptance test execution.
 
 .. _browser driver: https://github.com/robotframework/SeleniumLibrary#browser-drivers
 .. _PATH: https://en.wikipedia.org/wiki/PATH_(variable)

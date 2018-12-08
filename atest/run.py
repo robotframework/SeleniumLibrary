@@ -52,19 +52,19 @@ except ImportError:
 
 # Folder settings
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-ACCEPTANCE_TEST_DIR = os.path.join(ROOT_DIR, "acceptance")
-UNIT_TEST_RUNNER = os.path.join(ROOT_DIR, '..', 'utest', 'run.py')
-RESOURCES_DIR = os.path.join(ROOT_DIR, "resources")
-RESULTS_DIR = os.path.join(ROOT_DIR, "results")
-SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, "..", "src"))
-TEST_LIBS_DIR = os.path.join(RESOURCES_DIR, "testlibs")
-HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, "testserver", "testserver.py")
+ACCEPTANCE_TEST_DIR = os.path.join(ROOT_DIR, 'acceptance')
+UNIT_TEST_RUNNER = os.path.join(ROOT_DIR, os.pardir, 'utest', 'run.py')
+RESOURCES_DIR = os.path.join(ROOT_DIR, 'resources')
+RESULTS_DIR = os.path.join(ROOT_DIR, 'results')
+SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, os.pardir, 'src'))
+TEST_LIBS_DIR = os.path.join(RESOURCES_DIR, 'testlibs')
+HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, 'testserver', 'testserver.py')
 # Travis settings for pull request
-TRAVIS = os.environ.get("TRAVIS", False)
-TRAVIS_EVENT_TYPE = os.environ.get("TRAVIS_EVENT_TYPE", None)
-TRAVIS_JOB_NUMBER = os.environ.get("TRAVIS_JOB_NUMBER", "localtunnel")
-SAUCE_USERNAME = os.environ.get("SAUCE_USERNAME", None)
-SAUCE_ACCESS_KEY = os.environ.get("SAUCE_ACCESS_KEY", None)
+TRAVIS = os.environ.get('TRAVIS', False)
+TRAVIS_EVENT_TYPE = os.environ.get('TRAVIS_EVENT_TYPE', None)
+TRAVIS_JOB_NUMBER = os.environ.get('TRAVIS_JOB_NUMBER', 'localtunnel')
+SAUCE_USERNAME = os.environ.get('SAUCE_USERNAME', None)
+SAUCE_ACCESS_KEY = os.environ.get('SAUCE_ACCESS_KEY', None)
 TRAVIS_BROWSERS = ['chrome', 'firefox', 'headlesschrome']
 
 ROBOT_OPTIONS = [
@@ -91,7 +91,7 @@ def unit_tests():
         sys.exit(failures)
 
 
-def acceptance_tests(interpreter, browser, rf_options=[],
+def acceptance_tests(interpreter, browser, rf_options=None,
                      sauce_username=None, sauce_key=None):
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
@@ -125,7 +125,8 @@ def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
     options = []
     runner = interpreter.split() + ['-m', 'robot.run']
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
-    options += rf_options
+    if rf_options:
+        options += rf_options
     if sauce_username and sauce_key:
         options.extend(get_sauce_conf(browser, sauce_username, sauce_key))
     command = runner

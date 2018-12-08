@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import sys
 from os.path import abspath, dirname, join
 from unittest import defaultTestLoader, TextTestRunner
@@ -9,7 +10,7 @@ CURDIR = dirname(abspath(__file__))
 
 
 def run_unit_tests():
-    sys.path.insert(0, join(CURDIR, '..', 'src'))
+    sys.path.insert(0, join(CURDIR, os.pardir, 'src'))
     try:
         suite = defaultTestLoader.discover(join(CURDIR, 'test'), 'test_*.py')
         result = TextTestRunner().run(suite)

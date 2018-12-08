@@ -20,7 +20,7 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 class TableElementKeywords(LibraryComponent):
 
     @keyword
-    def get_table_cell(self, locator, row, column, loglevel='INFO'):
+    def get_table_cell(self, locator, row, column, loglevel='TRACE'):
         """Returns contents of table cell.
 
         The table is located using the ``locator`` argument and its cell
@@ -76,7 +76,7 @@ class TableElementKeywords(LibraryComponent):
         return rows
 
     @keyword
-    def table_cell_should_contain(self, locator, row, column, expected, loglevel='INFO'):
+    def table_cell_should_contain(self, locator, row, column, expected, loglevel='TRACE'):
         """Verifies table cell contains text ``expected``.
 
         See `Get Table Cell` that this keyword uses internally for
@@ -92,7 +92,7 @@ class TableElementKeywords(LibraryComponent):
         self.info("Table cell contains '%s'." % content)
 
     @keyword
-    def table_column_should_contain(self, locator, column, expected, loglevel='INFO'):
+    def table_column_should_contain(self, locator, column, expected, loglevel='TRACE'):
         """Verifies table column contains text ``expected``.
 
         The table is located using the ``locator`` argument and its column
@@ -116,7 +116,7 @@ class TableElementKeywords(LibraryComponent):
                                  "'%s'." % (locator, column, expected))
 
     @keyword
-    def table_footer_should_contain(self, locator, expected, loglevel='INFO'):
+    def table_footer_should_contain(self, locator, expected, loglevel='TRACE'):
         """Verifies table footer contains text ``expected``.
 
         Any ``<td>`` element inside ``<tfoot>`` element is considered to
@@ -135,7 +135,7 @@ class TableElementKeywords(LibraryComponent):
                                  "'%s'." % (locator, expected))
 
     @keyword
-    def table_header_should_contain(self, locator, expected, loglevel='INFO'):
+    def table_header_should_contain(self, locator, expected, loglevel='TRACE'):
         """Verifies table header contains text ``expected``.
 
         Any ``<th>`` element anywhere in the table is considered to be
@@ -154,7 +154,7 @@ class TableElementKeywords(LibraryComponent):
                                  "'%s'." % (locator, expected))
 
     @keyword
-    def table_row_should_contain(self, locator, row, expected, loglevel='INFO'):
+    def table_row_should_contain(self, locator, row, expected, loglevel='TRACE'):
         """Verifies that table row contains text ``expected``.
 
         The table is located using the ``locator`` argument and its column
@@ -178,7 +178,7 @@ class TableElementKeywords(LibraryComponent):
                                  "'%s'." % (locator, row, expected))
 
     @keyword
-    def table_should_contain(self, locator, expected, loglevel='INFO'):
+    def table_should_contain(self, locator, expected, loglevel='TRACE'):
         """Verifies table contains text ``expected``.
 
         The table is located using the ``locator`` argument. See the

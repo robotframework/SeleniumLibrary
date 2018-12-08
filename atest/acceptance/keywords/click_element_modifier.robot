@@ -3,7 +3,6 @@ Suite Setup       Go To Page "javascript/click_modifier.html"
 Test Setup        Initialize Page
 Resource          ../resource.robot
 
-
 *** Test Cases ***
 Click Element Modifier CTRL
     Click Element    Button    modifier=CTRL

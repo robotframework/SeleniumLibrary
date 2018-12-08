@@ -37,7 +37,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             ('JAVASCRIPT', 'code1', 'code2', 'ARGUMENTS ARG2', 'arg3')]
         cls.js = JavaScriptKeywords(None)
         path = os.path.dirname(__file__)
-        reporter_json = os.path.abspath(os.path.join(path, '..', 'approvals_reporters.json'))
+        reporter_json = os.path.abspath(os.path.join(path, os.pardir, 'approvals_reporters.json'))
         factory = GenericDiffReporterFactory()
         factory.load(reporter_json)
         cls.reporter = factory.get_first_working()
