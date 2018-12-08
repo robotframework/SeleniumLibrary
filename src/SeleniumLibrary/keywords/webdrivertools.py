@@ -156,15 +156,23 @@ class WebDriverCreator(object):
         return webdriver.PhantomJS(**desired_capabilities)
 
     def create_htmlunit(self, desired_capabilities, remote_url):
+        if not desired_capabilities:
+            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.HTMLUNIT
         return self._remote(desired_capabilities, remote_url)
 
     def create_htmlunit_with_js(self, desired_capabilities, remote_url):
+        if not desired_capabilities:
+            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.HTMLUNITWITHJS
         return self._remote(desired_capabilities, remote_url)
 
     def create_android(self, desired_capabilities, remote_url):
+        if not desired_capabilities:
+            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.ANDROID
         return self._remote(desired_capabilities, remote_url)
 
     def create_iphone(self, desired_capabilities, remote_url):
+        if not desired_capabilities:
+            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.IPHONE
         return self._remote(desired_capabilities, remote_url)
 
     def _remote(self, desired_capabilities, remote_url,
