@@ -252,32 +252,40 @@ class WebDriverCreatorTests(unittest.TestCase):
         self.assertEqual(driver, expected_webdriver)
 
     def test_htmlunit(self):
+        caps = webdriver.DesiredCapabilities.HTMLUNIT
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
                                browser_profile=None,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit({}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_htmlunit_with_js(self):
+        caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
                                browser_profile=None,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit_with_js({}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_android(self):
+        caps = webdriver.DesiredCapabilities.ANDROID
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
                                browser_profile=None,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_android({}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_iphone(self):
+        caps = webdriver.DesiredCapabilities.IPHONE
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
                                browser_profile=None,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_iphone({}, None)
