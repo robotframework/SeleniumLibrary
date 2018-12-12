@@ -11,6 +11,11 @@ Get Cookies
     Should Match Regexp    ${cookies}
     ...    ^(test=seleniumlibrary; another=value)|(another=value; test=seleniumlibrary)$
 
+Get Cookies As Dict
+    ${cookies}=    Get Cookies        as_dict=True
+    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value
+    Dictionaries Should Be Equal  ${expected_cookies}   ${cookies}
+
 Get Cookie Value Set By Selenium
     ${value} =    Get Cookie Value    another
     Should Be Equal    ${value}       value
@@ -65,6 +70,13 @@ Get Cookies When There Are None
     Delete All Cookies
     ${cookies} =    Get Cookies
     Should Be Equal    ${cookies}    ${EMPTY}
+
+Get Cookies As Dict When There Are None
+    [Tags]    Known Issue Safari
+    Delete All Cookies
+    ${cookies} =    Get Cookies   as_dict=True
+    ${expected_cookies}=    Create Dictionary
+    Dictionaries Should Be Equal  ${expected_cookies}   ${cookies}
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie      another

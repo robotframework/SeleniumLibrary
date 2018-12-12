@@ -17,10 +17,11 @@
 from datetime import datetime
 
 from robot.libraries.DateTime import convert_date
+from robot.utils import DotDict
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import CookieNotFound
-from SeleniumLibrary.utils import is_truthy, is_noney
+from SeleniumLibrary.utils import is_truthy, is_noney, is_falsy
 
 
 class CookieKeywords(LibraryComponent):
@@ -39,18 +40,29 @@ class CookieKeywords(LibraryComponent):
         self.driver.delete_cookie(name)
 
     @keyword
-    def get_cookies(self):
+    def get_cookies(self, as_dict=False):
         """Returns all cookies of the current page.
 
         The cookie information is returned as a single string in format
-        ``name1=value1; name2=value2; name3=value3``. It can be used,
-        for example, for logging purposes or in headers when sending
-        HTTP requests.
+        ``name1=value1; name2=value2; name3=value3`` if optional
+        ``as_dict`` is not provided or not explictly set to True.
+        Keyword can be used, for example, for logging purposes or in
+        headers when sending HTTP requests. In later case, setting
+        ``as_dict`` to True is helpful as then the result can be passed
+        to requests library's Create Session keyword's optional cookies
+        parameter.
+
         """
-        pairs = []
-        for cookie in self.driver.get_cookies():
-            pairs.append(cookie['name'] + "=" + cookie['value'])
-        return '; '.join(pairs)
+        if is_falsy(as_dict):
+            pairs = []
+            for cookie in self.driver.get_cookies():
+                pairs.append(cookie['name'] + "=" + cookie['value'])
+            return '; '.join(pairs)
+        else:
+            pairs = DotDict()
+            for cookie in self.driver.get_cookies():
+                pairs[cookie['name']] = cookie['value']
+            return pairs
 
     @keyword
     def get_cookie_value(self, name):
