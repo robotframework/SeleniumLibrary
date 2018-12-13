@@ -43,15 +43,17 @@ class CookieKeywords(LibraryComponent):
     def get_cookies(self, as_dict=False):
         """Returns all cookies of the current page.
 
-        The cookie information is returned as a single string in format
-        ``name1=value1; name2=value2; name3=value3`` if optional
-        ``as_dict`` is not provided or not explictly set to True.
-        Keyword can be used, for example, for logging purposes or in
-        headers when sending HTTP requests. In later case, setting
-        ``as_dict`` to True is helpful as then the result can be passed
-        to requests library's Create Session keyword's optional cookies
-        parameter.
-
+        If ``as_dict`` argument evaluates as false, see `Boolean arguments` 
+        for more details, then cookie information is returned as 
+        a single string in format ``name1=value1; name2=value2; name3=value3``.
+        When ``as_dict`` argument evaluates as true, cookie information
+        is returned as Robot Framework dictionary format. The string format 
+        can be used, for example, for logging purposes or in headers when
+        sending HTTP requests. The dictionary format is helpful when
+        the result can be passed to requests library's Create Session
+        keyword's optional cookies parameter.
+        
+        The `` as_dict`` argument is new in SeleniumLibrary 3.3
         """
         if is_falsy(as_dict):
             pairs = []
