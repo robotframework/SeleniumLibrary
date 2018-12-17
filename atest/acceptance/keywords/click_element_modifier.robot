@@ -13,6 +13,10 @@ Click Link Modifier CTRL
     Element Text Should Be    output    CTRL click
     [Teardown]    Close Popup Window
 
+Click Button Modifier CTRL
+    Click Button    Click me!    modifier=CTRL
+    Element Text Should Be    output    CTRL click
+
 Click Element Modifier ALT
     Click Element    Button    alt
     Element Text Should Be    output    ALT click
