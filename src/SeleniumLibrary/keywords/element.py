@@ -507,18 +507,26 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).location['y']
 
     @keyword
-    def click_button(self, locator):
+    def click_button(self, locator, modifier=False):
         """Clicks button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, buttons are
         searched using ``id``, ``name`` and ``value``.
+
+        See the `Click Element` keyword for details about the
+        ``modifier`` argument.
+
+        The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
-        self.info("Clicking button '%s'." % locator)
-        element = self.find_element(locator, tag='input', required=False)
-        if not element:
-            element = self.find_element(locator, tag='button')
-        element.click()
+        if is_falsy(modifier):
+            self.info("Clicking button '%s'." % locator)
+            element = self.find_element(locator, tag='input', required=False)
+            if not element:
+                element = self.find_element(locator, tag='button')
+            element.click()
+        else:
+            self._click_with_modifier(locator, 'button', modifier)
 
     @keyword
     def click_image(self, locator):
@@ -584,7 +592,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, None, modifier)
 
     def _click_with_modifier(self, locator, tag, modifier):
-        self.info("Clicking element '%s' with %s." % (locator, modifier))
+        self.info("Clicking %s '%s' with %s." % (tag if tag else 'element', locator, modifier))
         modifier = self.parse_modifier(modifier)
         action = ActionChains(self.driver)
         for item in modifier:
