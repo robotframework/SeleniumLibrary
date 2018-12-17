@@ -17,6 +17,16 @@
                 document.getElementById("output").innerHTML="Normal click";
             }
         }
+        function popup(mylink, windowname) {
+            if (! window.focus)return true;
+                var href;
+            if (typeof(mylink) == 'string')
+                href=mylink;
+            else
+                href=mylink.href;
+            window.open(href, windowname, 'width=400,height=200,scrollbars=yes');
+            return false;
+         }
     </script>
 </head>
 <body>
@@ -24,6 +34,7 @@
     <p id="info">Watch the output below</p>
     <p id="output">initial output</p>
     <button type="button" id="Button" onmousedown="isKeyPressed(event)">Click me!</button>
+    <a href="popupwindow.html" onmousedown="isKeyPressed(event)" onClick="return popup(this, 'myName')">link text</a>
 </body>
 </html>
 <!DOCTYPE html>
