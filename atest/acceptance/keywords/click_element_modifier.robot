@@ -8,6 +8,11 @@ Click Element Modifier CTRL
     Click Element    Button    modifier=CTRL
     Element Text Should Be    output    CTRL click
 
+Click Link Modifier CTRL
+    Click Link    link text    modifier=CTRL
+    Element Text Should Be    output    CTRL click
+    [Teardown]    Close Popup Window
+
 Click Element Modifier ALT
     Click Element    Button    alt
     Element Text Should Be    output    ALT click
@@ -33,3 +38,8 @@ Click Element Wrong Modifier
 Initialize Page
     Reload Page
     Element Text Should Be    output    initial output
+
+Close Popup Window
+    Select Window    myName    timeout=5s
+    Close Window
+    Select Window    MAIN      timeout=5s

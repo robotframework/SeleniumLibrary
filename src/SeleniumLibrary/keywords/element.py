@@ -536,15 +536,23 @@ newDiv.parentNode.style.overflow = 'hidden';
         element.click()
 
     @keyword
-    def click_link(self, locator):
+    def click_link(self, locator, modifier=False):
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, links are searched
         using ``id``, ``name``, ``href`` and the link text.
+
+        See the `Click Element` keyword for details about the
+        ``modifier`` argument.
+
+        The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
-        self.info("Clicking link '%s'." % locator)
-        self.find_element(locator, tag='link').click()
+        if is_falsy(modifier):
+            self.info("Clicking link '%s'." % locator)
+            self.find_element(locator, tag='link').click()
+        else:
+            self._click_with_modifier(locator, 'link', modifier)
 
     @keyword
     def click_element(self, locator, modifier=False):
@@ -573,14 +581,15 @@ newDiv.parentNode.style.overflow = 'hidden';
             self.info("Clicking element '%s'." % locator)
             self.find_element(locator).click()
         else:
-            self._click_with_modifier(locator, modifier)
+            self._click_with_modifier(locator, None, modifier)
 
-    def _click_with_modifier(self, locator, modifier):
+    def _click_with_modifier(self, locator, tag, modifier):
+        self.info("Clicking element '%s' with %s." % (locator, modifier))
         modifier = self.parse_modifier(modifier)
         action = ActionChains(self.driver)
         for item in modifier:
             action.key_down(item)
-        action.click(self.find_element(locator))
+        action.click(self.find_element(locator, tag=tag))
         for item in modifier:
             action.key_up(item)
         action.perform()
