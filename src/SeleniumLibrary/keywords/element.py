@@ -526,22 +526,30 @@ newDiv.parentNode.style.overflow = 'hidden';
                 element = self.find_element(locator, tag='button')
             element.click()
         else:
-            self._click_with_modifier(locator, 'button', modifier)
+            self._click_with_modifier(locator, ['button', 'input'], modifier)
 
     @keyword
-    def click_image(self, locator):
+    def click_image(self, locator, modifier=False):
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, images are searched
         using ``id``, ``name``, ``src`` and ``alt``.
+
+        See the `Click Element` keyword for details about the
+        ``modifier`` argument.
+
+        The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
-        self.info("Clicking image '%s'." % locator)
-        element = self.find_element(locator, tag='image', required=False)
-        if not element:
-            # A form may have an image as it's submit trigger.
-            element = self.find_element(locator, tag='input')
-        element.click()
+        if is_falsy(modifier):
+            self.info("Clicking image '%s'." % locator)
+            element = self.find_element(locator, tag='image', required=False)
+            if not element:
+                # A form may have an image as it's submit trigger.
+                element = self.find_element(locator, tag='input')
+            element.click()
+        else:
+            self._click_with_modifier(locator, ['image', 'input'], modifier)
 
     @keyword
     def click_link(self, locator, modifier=False):
@@ -560,7 +568,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self.info("Clicking link '%s'." % locator)
             self.find_element(locator, tag='link').click()
         else:
-            self._click_with_modifier(locator, 'link', modifier)
+            self._click_with_modifier(locator, ['link', 'link'], modifier)
 
     @keyword
     def click_element(self, locator, modifier=False):
@@ -589,15 +597,18 @@ newDiv.parentNode.style.overflow = 'hidden';
             self.info("Clicking element '%s'." % locator)
             self.find_element(locator).click()
         else:
-            self._click_with_modifier(locator, None, modifier)
+            self._click_with_modifier(locator, [None, None], modifier)
 
     def _click_with_modifier(self, locator, tag, modifier):
-        self.info("Clicking %s '%s' with %s." % (tag if tag else 'element', locator, modifier))
+        self.info("Clicking %s '%s' with %s." % (tag if tag[0] else 'element', locator, modifier))
         modifier = self.parse_modifier(modifier)
         action = ActionChains(self.driver)
         for item in modifier:
             action.key_down(item)
-        action.click(self.find_element(locator, tag=tag))
+        element = self.find_element(locator, tag=tag[0], required=False)
+        if not element:
+            element = self.find_element(locator, tag=tag[1])
+        action.click(element)
         for item in modifier:
             action.key_up(item)
         action.perform()
