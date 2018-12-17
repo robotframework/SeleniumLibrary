@@ -340,20 +340,6 @@ class FormElementKeywords(LibraryComponent):
         self.info("Content of text area '%s' is '%s'." % (locator, expected))
 
     @keyword
-    def click_button(self, locator):
-        """Clicks button identified by ``locator``.
-
-        See the `Locating elements` section for details about the locator
-        syntax. When using the default locator strategy, buttons are
-        searched using ``id``, ``name`` and ``value``.
-        """
-        self.info("Clicking button '%s'." % locator)
-        element = self.find_element(locator, tag='input', required=False)
-        if not element:
-            element = self.find_element(locator, tag='button')
-        element.click()
-
-    @keyword
     def page_should_contain_button(self, locator, message=None, loglevel='TRACE'):
         """Verifies button ``locator`` is found from current page.
 
