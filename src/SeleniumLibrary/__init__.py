@@ -228,7 +228,10 @@ class SeleniumLibrary(DynamicCore):
     SeleniumLibrary contains various keywords that have an optional
     ``timeout`` argument that specifies how long these keywords should
     wait for certain events or actions. These keywords include, for example,
-    ``Wait ...`` keywords and keywords related to alerts.
+    ``Wait ...`` keywords and keywords related to alerts. Additionally
+    `Execute Async Javascript`. although it does not have ``timeout``,
+    argument, uses timeout to define how long asynchronous JavaScript
+    can run.
 
     The default timeout these keywords use can be set globally either by
     using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
