@@ -80,7 +80,7 @@ class JavaScriptKeywords(LibraryComponent):
         function as the last argument.
 
         Scripts must complete within the script timeout or this keyword will
-        fail. See the `Timeouts` section for more information.
+        fail. See the `Timeout` section for more information.
 
         Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_async_script|
