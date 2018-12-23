@@ -231,6 +231,7 @@ class WaitingKeywords(LibraryComponent):
             except ElementNotFound as err:
                 not_found = str(err)
             except StaleElementReferenceException as err:
+                self.info('Suppressing StaleElementReferenceException from Selenium.')
                 not_found = err
             else:
                 not_found = None
