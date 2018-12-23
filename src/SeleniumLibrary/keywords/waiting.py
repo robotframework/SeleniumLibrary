@@ -16,6 +16,8 @@
 
 import time
 
+from selenium.common.exceptions import StaleElementReferenceException
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.utils import is_noney, secs_to_timestr
@@ -228,6 +230,8 @@ class WaitingKeywords(LibraryComponent):
                     return
             except ElementNotFound as err:
                 not_found = str(err)
+            except StaleElementReferenceException as err:
+                not_found = err
             else:
                 not_found = None
             time.sleep(0.2)
