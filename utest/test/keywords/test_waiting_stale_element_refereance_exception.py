@@ -1,9 +1,13 @@
 import unittest
 
 from selenium.common.exceptions import StaleElementReferenceException
-from mockito import mock, when, unstub, when2, patch
+from mockito import mock, when, unstub
 
 from SeleniumLibrary.keywords import WaitingKeywords
+
+
+def _raise(*a):
+    raise StaleElementReferenceException('Darn')
 
 
 class TableKeywordsTest(unittest.TestCase):
@@ -62,3 +66,21 @@ class TableKeywordsTest(unittest.TestCase):
         when(element).is_enabled().thenRaise(StaleElementReferenceException('foo'))
         with self.assertRaisesRegexp(AssertionError, 'Message: foo'):
             self.waiting.wait_until_element_is_enabled(locator, self.timeout)
+
+    def test_wait_until_element_contains(self):
+        locator = '//div'
+        text = 'foo'
+        element1, element2 = mock(), mock()
+        element1.__class__.text = property(_raise)
+        element2.text = 'foobar'
+        when(self.waiting).find_element(locator).thenReturn(element1).thenReturn(element2)
+        self.waiting.wait_until_element_contains(locator, text, self.timeout)
+
+    def test_wait_until_element_does_not_contain(self):
+        locator = '//div'
+        text = 'foo'
+        element1, element2 = mock(), mock()
+        element1.__class__.text = property(_raise)
+        element2.text = 'tidii'
+        when(self.waiting).find_element(locator).thenReturn(element1).thenReturn(element2)
+        self.waiting.wait_until_element_does_not_contain(locator, text, self.timeout)
