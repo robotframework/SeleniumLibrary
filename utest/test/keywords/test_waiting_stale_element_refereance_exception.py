@@ -70,17 +70,15 @@ class TableKeywordsTest(unittest.TestCase):
     def test_wait_until_element_contains(self):
         locator = '//div'
         text = 'foo'
-        element1, element2 = mock(), mock()
+        element1, element2 = mock(), mock({'text': 'foobar'})
         element1.__class__.text = property(_raise)
-        element2.text = 'foobar'
         when(self.waiting).find_element(locator).thenReturn(element1).thenReturn(element2)
         self.waiting.wait_until_element_contains(locator, text, self.timeout)
 
     def test_wait_until_element_does_not_contain(self):
         locator = '//div'
         text = 'foo'
-        element1, element2 = mock(), mock()
+        element1, element2 = mock(), mock({'text': 'tidii'})
         element1.__class__.text = property(_raise)
-        element2.text = 'tidii'
         when(self.waiting).find_element(locator).thenReturn(element1).thenReturn(element2)
         self.waiting.wait_until_element_does_not_contain(locator, text, self.timeout)
