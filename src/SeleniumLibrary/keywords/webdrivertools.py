@@ -65,22 +65,25 @@ class WebDriverCreator(object):
         raise ValueError('{} is not a supported browser.'.format(browser))
 
     def _parse_capabilities(self, capabilities, browser=None):
-        if isinstance(capabilities, dict):
-            return capabilities
-        desired_capabilities = {}
         if is_falsy(capabilities):
-            return desired_capabilities
-        for part in capabilities.split(','):
-            key, value = part.split(':')
-            desired_capabilities[key.strip()] = value.strip()
+            return {}
+        if not isinstance(capabilities, dict):
+            capabilities = self._string_to_dict(capabilities)
         browser_alias = {'googlechrome': "chrome", 'gc': "chrome",
                          'headlesschrome': 'chrome', 'ff': 'firefox',
                          'headlessfirefox': 'firefox',
                          'internetexplorer': 'ie'}
         browser = browser_alias.get(browser, browser)
         if browser in ['ie', 'firefox', 'edge']:
-            return {'capabilities': desired_capabilities}
-        return {'desired_capabilities': desired_capabilities}
+            return {'capabilities': capabilities}
+        return {'desired_capabilities': capabilities}
+
+    def _string_to_dict(self, capabilities):
+        desired_capabilities = {}
+        for part in capabilities.split(','):
+            key, value = part.split(':')
+            desired_capabilities[key.strip()] = value.strip()
+        return desired_capabilities
 
     def create_chrome(self, desired_capabilities, remote_url, options=None):
         if is_truthy(remote_url):

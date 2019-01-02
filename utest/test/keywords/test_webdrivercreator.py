@@ -48,8 +48,9 @@ class WebDriverCreatorTests(unittest.TestCase):
         caps = self.creator._parse_capabilities('key1:value1,key2:value2', 'edge')
         self.assertDictEqual(caps, expected)
 
-        caps = self.creator._parse_capabilities(expected)
-        self.assertDictEqual(caps, expected)
+        parsing_caps = expected.copy()
+        caps = self.creator._parse_capabilities(parsing_caps)
+        self.assertDictEqual(caps, {'desired_capabilities': expected})
 
         caps = self.creator._parse_capabilities('key1 : value1 , key2: value2')
         expected = {'desired_capabilities': {'key1': 'value1', 'key2': 'value2'}}
@@ -64,6 +65,19 @@ class WebDriverCreatorTests(unittest.TestCase):
 
         caps = self.creator._parse_capabilities({})
         self.assertDictEqual(caps, {})
+
+        caps = self.creator._parse_capabilities(None)
+        self.assertDictEqual(caps, {})
+
+        for browser in [None, 'safari', 'headlesschrome', 'foobar']:
+            caps = self.creator._parse_capabilities({'key1': 'value1', 'key2': 'value2'}, browser)
+            expected = {'desired_capabilities': {'key1': 'value1', 'key2': 'value2'}}
+            self.assertDictEqual(caps, expected)
+
+        for browser in ['ie', 'firefox', 'edge']:
+            caps = self.creator._parse_capabilities({'key1': 'value1', 'key2': 'value2'}, browser)
+            expected = {'capabilities': {'key1': 'value1', 'key2': 'value2'}}
+            self.assertDictEqual(caps, expected)
 
     def test_chrome(self):
         expected_webdriver = mock()
