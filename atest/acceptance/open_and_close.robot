@@ -76,3 +76,8 @@ Get Session Id
     Run Keyword And Expect Error
     ...    No browser with index or alias 'Browser 2' found.
     ...    Switch Browser    Browser 2
+
+Open Browser desired_capabilities As Dictionary
+    ${caps}    Create Dictionary    foo=${True}
+    Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}
+     ...    remote_url=${REMOTE_URL}    desired_capabilities=${caps}
