@@ -91,13 +91,26 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_chrome({'desired_capabilities': {'key': 'value'}}, None)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_chrome_remote(self):
+    def test_chrome_remote_no_caps(self):
         url = 'http://localhost:4444/wd/hub'
         expected_webdriver = mock()
+        capabilities = webdriver.DesiredCapabilities.CHROME.copy()
         when(webdriver).Remote(command_executor=url,
                                browser_profile=None,
+                               desired_capabilities=capabilities,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({}, url)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_chrome_remote_caps(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {"browserName": "chrome"}
+        when(webdriver).Remote(command_executor=url,
+                               browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({'desired_capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
     def test_chrome_healdless(self):
@@ -114,8 +127,10 @@ class WebDriverCreatorTests(unittest.TestCase):
         options = mock()
         when(webdriver).ChromeOptions().thenReturn(options)
         remote_url = 'localhost:4444'
+        capabilities = webdriver.DesiredCapabilities.CHROME.copy()
         when(webdriver).Remote(command_executor=remote_url,
-                               options=options, browser_profile=None).thenReturn(expected_webdriver)
+                               options=options, browser_profile=None,
+                               desired_capabilities=capabilities).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_chrome({}, remote_url)
         verify(options).set_headless()
         self.assertEqual(driver, expected_webdriver)

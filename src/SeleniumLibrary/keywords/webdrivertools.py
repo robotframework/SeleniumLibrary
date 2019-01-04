@@ -87,6 +87,8 @@ class WebDriverCreator(object):
 
     def create_chrome(self, desired_capabilities, remote_url, options=None):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.CHROME.copy()}
             return self._remote(desired_capabilities, remote_url, options=options)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Chrome(options=options, **desired_capabilities)
