@@ -156,6 +156,9 @@ class WebDriverCreator(object):
 
     def create_opera(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                opera = webdriver.DesiredCapabilities.OPERA.copy()
+                desired_capabilities = {'desired_capabilities': opera}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Opera(**desired_capabilities)
 

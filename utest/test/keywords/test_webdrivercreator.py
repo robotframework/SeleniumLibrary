@@ -287,13 +287,24 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_opera({}, None)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_opera_remote(self):
+    def test_opera_remote_no_caps(self):
         url = 'http://localhost:4444/wd/hub'
         expected_webdriver = mock()
-        when(webdriver).Remote(command_executor=url,
-                               browser_profile=None,
+        capabilities = webdriver.DesiredCapabilities.OPERA.copy()
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, url)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_opera_remote_caps(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {"browserName": "opera"}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_opera({'desired_capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
     def test_safari(self):
