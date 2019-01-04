@@ -234,13 +234,24 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_ie({'capabilities': {'key': 'value'}}, None)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_ie_remote(self):
+    def test_ie_remote_no_caps(self):
         url = 'http://localhost:4444/wd/hub'
         expected_webdriver = mock()
-        when(webdriver).Remote(command_executor=url,
-                               browser_profile=None,
+        capabilities = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, url)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_ie_remote_caps(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {"browserName": "internet explorer"}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({'capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
     def test_edge(self):

@@ -140,6 +140,9 @@ class WebDriverCreator(object):
 
     def create_ie(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                ie = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+                desired_capabilities = {'desired_capabilities': ie}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Ie(**desired_capabilities)
 
