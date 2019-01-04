@@ -164,6 +164,9 @@ class WebDriverCreator(object):
 
     def create_safari(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                caps = webdriver.DesiredCapabilities.SAFARI.copy()
+                desired_capabilities = {'desired_capabilities': caps}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Safari(**desired_capabilities)
 

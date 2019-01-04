@@ -313,13 +313,24 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_safari({}, None)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_safari_remote(self):
+    def test_safari_remote_no_caps(self):
         url = 'http://localhost:4444/wd/hub'
         expected_webdriver = mock()
-        when(webdriver).Remote(command_executor=url,
-                               browser_profile=None,
+        capabilities = webdriver.DesiredCapabilities.SAFARI.copy()
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_safari({}, url)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_safari_remote_caps(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {"browserName": "safari"}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_safari({'desired_capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
     def test_phantomjs(self):
