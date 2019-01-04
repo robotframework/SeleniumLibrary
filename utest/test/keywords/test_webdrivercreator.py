@@ -147,15 +147,28 @@ class WebDriverCreatorTests(unittest.TestCase):
         self.assertEqual(driver, expected_webdriver)
         verify(webdriver).FirefoxProfile()
 
-    def test_firefox_remote(self):
+    def test_firefox_remote_no_caps(self):
         url = 'http://localhost:4444/wd/hub'
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
         expected_webdriver = mock()
+        capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
         when(webdriver).Remote(command_executor=url,
-                               browser_profile=profile,
-                               options=None).thenReturn(expected_webdriver)
+                               browser_profile=profile, options=None,
+                               desired_capabilities=capabilities).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, url, None)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_firefox_remote_caps(self):
+        url = 'http://localhost:4444/wd/hub'
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        expected_webdriver = mock()
+        capabilities = {"browserName": "firefox"}
+        when(webdriver).Remote(command_executor=url,
+                               browser_profile=profile, options=None,
+                               desired_capabilities=capabilities).thenReturn(expected_webdriver)
+        driver = self.creator.create_firefox({'desired_capabilities': capabilities}, url, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_firefox_profile(self):
@@ -181,7 +194,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_headless_firefox({}, None, None)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_firefox_healdless_with_grid(self):
+    def test_firefox_healdless_with_grid_caps(self):
         expected_webdriver = mock()
         options = mock()
         when(webdriver).FirefoxOptions().thenReturn(options)
@@ -194,12 +207,22 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_headless_firefox({'capabilities': {'key': 'value'}}, remote_url, None)
         verify(options).set_headless()
         self.assertEqual(driver, expected_webdriver)
+        verify(options).set_headless()
 
+    def test_firefox_healdless_with_grid_no_caps(self):
+        expected_webdriver = mock()
+        options = mock()
+        when(webdriver).FirefoxOptions().thenReturn(options)
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        remote_url = 'localhost:4444'
+        capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
         when(webdriver).Remote(command_executor=remote_url, options=options,
+                               desired_capabilities=capabilities,
                                browser_profile=profile, ).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_firefox({}, remote_url, None)
         self.assertEqual(driver, expected_webdriver)
-        verify(options, times=2).set_headless()
+        verify(options).set_headless()
 
     def test_ie(self):
         expected_webdriver = mock()

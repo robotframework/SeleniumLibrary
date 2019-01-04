@@ -106,6 +106,8 @@ class WebDriverCreator(object):
                        options=None):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.FIREFOX.copy()}
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         desired_capabilities.update(self._geckodriver_log)
