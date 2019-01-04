@@ -257,7 +257,7 @@ project.
 .. _PyPy: http://pypy.org
 .. _Jython: http://jython.org
 .. _IronPython: http://ironpython.net
-.. _demo project: https://bitbucket.org/robotframework/webdemo
+.. _demo project: https://github.com/robotframework/WebDemo
 .. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
 .. _robotframework-users: http://groups.google.com/group/robotframework-users
