@@ -148,6 +148,9 @@ class WebDriverCreator(object):
 
     def create_edge(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                edge = webdriver.DesiredCapabilities.EDGE.copy()
+                desired_capabilities = {'desired_capabilities': edge}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Edge(**desired_capabilities)
 
