@@ -87,6 +87,8 @@ class WebDriverCreator(object):
 
     def create_chrome(self, desired_capabilities, remote_url, options=None):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.CHROME.copy()}
             return self._remote(desired_capabilities, remote_url, options=options)
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             return webdriver.Chrome(options=options, **desired_capabilities)
@@ -104,6 +106,8 @@ class WebDriverCreator(object):
                        options=None):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.FIREFOX.copy()}
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         desired_capabilities.update(self._geckodriver_log)
@@ -136,21 +140,33 @@ class WebDriverCreator(object):
 
     def create_ie(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                ie = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+                desired_capabilities = {'desired_capabilities': ie}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Ie(**desired_capabilities)
 
     def create_edge(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                edge = webdriver.DesiredCapabilities.EDGE.copy()
+                desired_capabilities = {'desired_capabilities': edge}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Edge(**desired_capabilities)
 
     def create_opera(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                opera = webdriver.DesiredCapabilities.OPERA.copy()
+                desired_capabilities = {'desired_capabilities': opera}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Opera(**desired_capabilities)
 
     def create_safari(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                caps = webdriver.DesiredCapabilities.SAFARI.copy()
+                desired_capabilities = {'desired_capabilities': caps}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Safari(**desired_capabilities)
 
@@ -158,6 +174,9 @@ class WebDriverCreator(object):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
                       'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
+                desired_capabilities = {'desired_capabilities': caps}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.PhantomJS(**desired_capabilities)
 
