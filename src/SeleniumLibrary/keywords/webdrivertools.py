@@ -174,6 +174,9 @@ class WebDriverCreator(object):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
                       'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
+            if not desired_capabilities:
+                caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
+                desired_capabilities = {'desired_capabilities': caps}
             return self._remote(desired_capabilities, remote_url)
         return webdriver.PhantomJS(**desired_capabilities)
 
