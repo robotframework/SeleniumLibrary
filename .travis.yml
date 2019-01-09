@@ -22,21 +22,21 @@ matrix:
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=3.1.0
+        - ROBOTFRAMEWORK=3.1.1
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
     - python: "pypy3.5"
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=3.1.0
+        - ROBOTFRAMEWORK=3.1.1
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
     - python: "3.6"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=3.1.0
+        - ROBOTFRAMEWORK=3.1.1
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
         - JYTHON=true
@@ -44,7 +44,7 @@ matrix:
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=3.1.0
+        - ROBOTFRAMEWORK=3.1.1
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
     - python: "2.7"
