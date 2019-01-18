@@ -54,6 +54,27 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
+    def wait_until_location_contains(self, expected, timeout=None, message=None):
+        """Wait until that current URL contains ``expected``.
+
+        The ``expected`` argument contains the expected value in url.
+
+        Fails if ``timeout`` expires before the location contains. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        New in SeleniumLibrary 3.4.0
+        """
+        expected = str(expected)
+        self._wait_until(lambda: expected in self.driver.current_url,
+                         "Location did not contain '%s' in <TIMEOUT>." % expected,
+                         timeout, message)
+
+
+    @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
         """Waits until ``text`` appears on current page.
 

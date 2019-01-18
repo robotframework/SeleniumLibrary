@@ -269,7 +269,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def location_should_contain(self, expected, message=None):
         """Verifies that current URL contains ``expected``.
 
-        The ``url`` argument contains the expected value in url.
+        The ``expected`` argument contains the expected value in url.
 
         The ``message`` argument can be used to override the default error
         message.
