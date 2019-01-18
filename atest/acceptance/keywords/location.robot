@@ -33,3 +33,34 @@ Location Should Contain
     Run Keyword And Expect Error
     ...    Location should have contained 'not a location' but it was 'http://localhost:7000/html/'.
     ...    Location Should Contain    not a location  message=None
+
+Wait Until Location Contains At The End
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Wait Until Location Contains     html
+
+Wait Until Location Contains In The Middle
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Wait Until Location Contains     7000
+
+Wait Until Location Contains As Number
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Wait Until Location Contains     ${7000}
+
+Wait Until Location Contains Fails
+    [Setup]    Go To Page "javascript/wait_location.html"
+    ${orig_timeout}=    Set Selenium Timeout    2 s
+    Click Element   button
+    Run Keyword And Expect Error
+    ...     Location did not contain 'not_here' in 2 seconds.
+    ...     Wait Until Location Contains     not_here
+    Set Selenium Timeout    ${orig_timeout}
+
+Wait Until Location Contains Fails With Timeout
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Run Keyword And Expect Error
+    ...     my_message
+    ...     Wait Until Location Contains     not_here   timeout=0.1     message=my_message
