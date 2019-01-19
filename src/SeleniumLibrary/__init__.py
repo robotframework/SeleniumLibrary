@@ -18,6 +18,7 @@ import warnings
 
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn
+from robot.utils.importer import Importer
 
 from SeleniumLibrary.base import DynamicCore
 from SeleniumLibrary.errors import NoOpenBrowser
@@ -36,8 +37,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WebDriverCache,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs
-
+from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_falsy
 
 __version__ = '3.3.2.dev1'
 
@@ -321,7 +321,7 @@ class SeleniumLibrary(DynamicCore):
 
     def __init__(self, timeout=5.0, implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None):
+                 screenshot_root_directory=None, external_modules=None):
         """SeleniumLibrary can be imported with several optional arguments.
 
         - ``timeout``:
@@ -356,6 +356,9 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
+        parsed_libraries = self._string_to_modules(external_modules)
+        for lib in self._import_modules(parsed_libraries):
+            libraries.append(lib(self))
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
@@ -463,3 +466,13 @@ class SeleniumLibrary(DynamicCore):
                       'use "SeleniumLibrary.failure_occurred" instead.',
                       DeprecationWarning)
         self.failure_occurred()
+
+    def _string_to_modules(self, libraries):
+        if is_falsy(libraries):
+            return []
+        return libraries.split(',')
+
+    def _import_modules(self, libraries):
+        importer = Importer('test library')
+        return [importer.import_class_or_module(library) for library in libraries]
+
