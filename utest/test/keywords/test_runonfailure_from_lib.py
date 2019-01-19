@@ -3,7 +3,6 @@ import unittest
 from mockito import when, unstub, verify
 
 from SeleniumLibrary import SeleniumLibrary
-from SeleniumLibrary.keywords import RunOnFailureKeywords
 
 
 class SeleniumLibraryRunOnFailureTest(unittest.TestCase):
