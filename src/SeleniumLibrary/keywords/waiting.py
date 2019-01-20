@@ -73,6 +73,7 @@ class WaitingKeywords(LibraryComponent):
         self._wait_until(lambda: expected == self.driver.current_url,
                          "Location did not is '%s' in <TIMEOUT>." % expected,
                          timeout, message)
+
     @keyword
     def wait_until_location_contains(self, expected, timeout=None, message=None):
         """Wait until that current URL contains ``expected``.
@@ -92,7 +93,6 @@ class WaitingKeywords(LibraryComponent):
         self._wait_until(lambda: expected in self.driver.current_url,
                          "Location did not contain '%s' in <TIMEOUT>." % expected,
                          timeout, message)
-
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
