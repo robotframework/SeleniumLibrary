@@ -54,6 +54,27 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
+    def wait_until_location_is(self, expected, timeout=None, message=None):
+        """Wait until that current URL is ``expected``.
+
+        The ``expected`` argument is the expected value in url.
+
+        Fails if ``timeout`` expires before the location is. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        """
+
+        expected = str(expected)
+        self._wait_until(lambda: expected == self.driver.current_url,
+                         "Location did not is '%s' in <TIMEOUT>." % expected,
+                         timeout, message)
+
+
+    @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
         """Waits until ``text`` appears on current page.
 
