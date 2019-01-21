@@ -64,3 +64,24 @@ Wait Until Location Contains Fails With Timeout
     Run Keyword And Expect Error
     ...     my_message
     ...     Wait Until Location Contains     not_here   timeout=0.1     message=my_message
+
+Wait Until Location Is
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Wait Until Location Is     http://localhost:7000/html/
+
+Wait Until Location Is Fails
+    [Setup]    Go To Page "javascript/wait_location.html"
+    ${orig_timeout}=    Set Selenium Timeout    2 s
+    Click Element   button
+    Run Keyword And Expect Error
+    ...     Location did not is 'not_me' in 2 seconds.
+    ...     Wait Until Location Is     not_me
+    Set Selenium Timeout    ${orig_timeout}
+
+Wait Until Location Is Fails With Timeout
+    [Setup]    Go To Page "javascript/wait_location.html"
+    Click Element   button
+    Run Keyword And Expect Error
+    ...     my_message
+    ...     Wait Until Location Is     not_here   timeout=0.1     message=my_message
