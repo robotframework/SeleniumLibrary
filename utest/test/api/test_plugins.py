@@ -2,6 +2,8 @@ from collections import namedtuple
 import os
 import unittest
 
+from robot.errors import DataError
+
 from SeleniumLibrary import SeleniumLibrary
 
 
@@ -10,9 +12,9 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.sl = SeleniumLibrary()
-        root_dir = os.path.dirname(os.path.abspath(__file__))
+        cls.root_dir = os.path.dirname(os.path.abspath(__file__))
         Lib = namedtuple('Lib', 'lib, args')
-        lib = Lib(lib=os.path.join(root_dir, 'my_lib.py'), args=[])
+        lib = Lib(lib=os.path.join(cls.root_dir, 'my_lib.py'), args=[])
         cls.my_lib = lib
 
     def test_no_libraries(self):
@@ -50,3 +52,11 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         self.assertEqual(len(library), 2)
         self.assertEqual('%s.%s' % (library[0].__module__, library[0].__name__),
                          'my_lib.my_lib')
+
+    def test_plugin_does_not_exist(self):
+        not_here = os.path.join(self.root_dir, 'not_here.py')
+        with self.assertRaises(DataError):
+            SeleniumLibrary(plugins=not_here)
+
+        with self.assertRaises(DataError):
+            SeleniumLibrary(plugins='SeleniumLibrary.NotHere')
