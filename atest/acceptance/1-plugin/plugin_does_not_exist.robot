@@ -9,16 +9,14 @@ ${FRONT_PAGE}=     ${ROOT}/
 Importing SeleniumLibrary Should Fail If Plugin Is Not Found
     [Documentation]    When finding plugin fails, the SeleniumLibrary import fails and
     ...    therefore Open Browser keyword is not found.
-    Run Keyword And Expect Error
-    ...    Initializing test library 'SeleniumLibrary' with arguments *
-    ...    Import Library
+    ...    FAIL STARTS: Initializing test library 'SeleniumLibrary' with arguments
+    Import Library
     ...    SeleniumLibrary
     ...    plugins=${CURDIR}/NotHere.py
 
 SeleniumLibrary Open Browser Keyword Should Not Be Found
-    Run Keyword And Expect Error
-    ...    No keyword with name 'Open Browser' found.
-    ...    Open Browser
+    [Documentation]    FAIL No keyword with name 'Open Browser' found.
+    Open Browser
     ...    ${FRONT PAGE}
     ...    ${BROWSER}
     ...    remote_url=${REMOTE_URL}
