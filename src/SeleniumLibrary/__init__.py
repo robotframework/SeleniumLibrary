@@ -362,10 +362,10 @@ class SeleniumLibrary(DynamicCore):
             WindowKeywords(self)
         ]
         if is_truthy(plugins):
-            parsed_libraries = self._string_to_modules(plugins)
-            for index, lib in enumerate(self._import_modules(parsed_libraries)):
-                libraries.append(lib(self, *parsed_libraries[index].args,
-                                     **parsed_libraries[index].kw_args))
+            parsed_plugins = self._string_to_modules(plugins)
+            for index, lib in enumerate(self._import_modules(parsed_plugins)):
+                libraries.append(lib(self, *parsed_plugins[index].args,
+                                     **parsed_plugins[index].kw_args))
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
@@ -474,27 +474,25 @@ class SeleniumLibrary(DynamicCore):
                       DeprecationWarning)
         self.failure_occurred()
 
-    def _string_to_modules(self, libraries):
-        Lib = namedtuple('Lib', 'lib, args, kw_args')
-        if is_falsy(libraries):
-            return []
-        parsed_libs = []
-        for library in libraries.split(','):
-            library_and_args = library.split(';')
-            lib_name = library_and_args.pop(0)
+    def _string_to_modules(self, plugins):
+        Plugin = namedtuple('Plugin', 'plugin, args, kw_args')
+        parsed_plugins = []
+        for plugin in plugins.split(','):
+            plugin_and_args = plugin.split(';')
+            plugin_name = plugin_and_args.pop(0)
             kw_args = {}
             args = []
-            for argument in library_and_args:
+            for argument in plugin_and_args:
                 if '=' in argument:
                     key, value = argument.split('=')
                     kw_args[key] = value
                 else:
                     args.append(argument)
-            lib = Lib(lib=lib_name, args=args, kw_args=kw_args)
-            parsed_libs.append(lib)
-        return parsed_libs
+            plugin = Plugin(plugin=plugin_name, args=args, kw_args=kw_args)
+            parsed_plugins.append(plugin)
+        return parsed_plugins
 
-    def _import_modules(self, libraries):
+    def _import_modules(self, plugins):
         importer = Importer('test library')
-        return [importer.import_class_or_module(library.lib) for library in libraries]
+        return [importer.import_class_or_module(plugin.plugin) for plugin in plugins]
 

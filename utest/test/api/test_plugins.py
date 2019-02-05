@@ -13,54 +13,57 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def setUpClass(cls):
         cls.sl = SeleniumLibrary()
         cls.root_dir = os.path.dirname(os.path.abspath(__file__))
-        Lib = namedtuple('Lib', 'lib, args')
-        lib = Lib(lib=os.path.join(cls.root_dir, 'my_lib.py'), args=[])
-        cls.my_lib = lib
+        Plugin = namedtuple('Plugin', 'plugin, args, kw_args')
+        lib = Plugin(plugin=os.path.join(cls.root_dir, 'my_lib.py'), args=[],
+                     kw_args={})
+        cls.plugin = lib
 
     def test_no_libraries(self):
         for item in [None, 'None', '']:
-            libraries = self.sl._string_to_modules(item)
-            self.assertEqual(libraries, [])
+            sl = SeleniumLibrary(plugins=item)
+            self.assertEqual(len(sl.get_keyword_names()), 185)
 
     def test_parse_library(self):
-        lib = 'path.to.MyLibrary'
-        libraries = self.sl._string_to_modules(lib)
-        self.assertEqual(len(libraries), 1)
-        self.assertEqual(libraries[0].lib, lib)
-        self.assertEqual(libraries[0].args, [])
+        plugin = 'path.to.MyLibrary'
+        plugins = self.sl._string_to_modules(plugin)
+        self.assertEqual(len(plugins), 1)
+        self.assertEqual(plugins[0].plugin, plugin)
+        self.assertEqual(plugins[0].args, [])
+        self.assertEqual(plugins[0].kw_args, {})
 
     def test_parse_libraries(self):
-        lib = 'path.to.MyLibrary,path.to.OtherLibrary'
-        libraries = self.sl._string_to_modules(lib)
-        self.assertEqual(len(libraries), 2)
-        self.assertEqual(libraries[0].lib, lib.split(',')[0])
-        self.assertEqual(libraries[0].args, [])
-        self.assertEqual(libraries[1].lib, lib.split(',')[1])
-        self.assertEqual(libraries[1].args, [])
+        plugin = 'path.to.MyLibrary,path.to.OtherLibrary'
+        plugins = self.sl._string_to_modules(plugin)
+        self.assertEqual(len(plugins), 2)
+        self.assertEqual(plugins[0].plugin, plugin.split(',')[0])
+        self.assertEqual(plugins[0].args, [])
+        self.assertEqual(plugins[1].plugin, plugin.split(',')[1])
+        self.assertEqual(plugins[1].args, [])
 
     def test_parse_library_with_args(self):
-        lib = 'path.to.MyLibrary'
-        lib_args = 'arg1;arg2'
-        libraries = self.sl._string_to_modules('%s;%s' % (lib, lib_args))
-        library = libraries[0]
-        self.assertEqual(len(libraries), 1)
-        self.assertEqual(library.lib, lib)
-        self.assertEqual(library.args, [arg for arg in lib_args.split(';')])
+        plugin = 'path.to.MyLibrary'
+        plugin_args = 'arg1;arg2'
+        parsed_plugins = self.sl._string_to_modules('%s;%s' % (plugin, plugin_args))
+        parsed_plugin = parsed_plugins[0]
+        self.assertEqual(len(parsed_plugins), 1)
+        self.assertEqual(parsed_plugin.plugin, plugin)
+        self.assertEqual(parsed_plugin.args, [arg for arg in plugin_args.split(';')])
+        self.assertEqual(parsed_plugin.kw_args, {})
 
     def test_parse_plugin_with_kw_args(self):
-        lib = 'PluginWithKwArgs.py'
-        lib_args = 'kw1=Text1;kw2=Text2'
-        libraries = self.sl._string_to_modules('%s;%s' % (lib, lib_args))
-        library = libraries[0]
-        self.assertEqual(len(libraries), 1)
-        self.assertEqual(library.lib, lib)
-        self.assertEqual(library.args, [])
-        self.assertEqual(library.kw_args, {'kw1': 'Text1', 'kw2': 'Text2'})
+        plugin = 'PluginWithKwArgs.py'
+        plugin_args = 'kw1=Text1;kw2=Text2'
+        parsed_plugins = self.sl._string_to_modules('%s;%s' % (plugin, plugin_args))
+        parsed_plugin = parsed_plugins[0]
+        self.assertEqual(len(parsed_plugins), 1)
+        self.assertEqual(parsed_plugin.plugin, plugin)
+        self.assertEqual(parsed_plugin.args, [])
+        self.assertEqual(parsed_plugin.kw_args, {'kw1': 'Text1', 'kw2': 'Text2'})
 
     def test_import_library(self):
-        library = self.sl._import_modules([self.my_lib, self.my_lib])
-        self.assertEqual(len(library), 2)
-        self.assertEqual('%s.%s' % (library[0].__module__, library[0].__name__),
+        plugins = self.sl._import_modules([self.plugin, self.plugin])
+        self.assertEqual(len(plugins), 2)
+        self.assertEqual('%s.%s' % (plugins[0].__module__, plugins[0].__name__),
                          'my_lib.my_lib')
 
     def test_plugin_does_not_exist(self):
@@ -71,8 +74,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         with self.assertRaises(DataError):
             SeleniumLibrary(plugins='SeleniumLibrary.NotHere')
 
-    def test_parse_plugin_with_kw_args(self):
-
+    def test_sl_with_kw_args_plugin(self):
         kw_args_lib = os.path.join(self.root_dir, '..', '..', '..',
                                    'atest', 'acceptance', '1-plugin',
                                    'PluginWithKwArgs.py;kw1=Text1;kw2=Text2')
