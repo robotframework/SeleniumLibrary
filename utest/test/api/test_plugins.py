@@ -47,6 +47,16 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         self.assertEqual(library.lib, lib)
         self.assertEqual(library.args, [arg for arg in lib_args.split(';')])
 
+    def test_parse_plugin_with_kw_args(self):
+        lib = 'PluginWithKwArgs.py'
+        lib_args = 'kw1=Text1;kw2=Text2'
+        libraries = self.sl._string_to_modules('%s;%s' % (lib, lib_args))
+        library = libraries[0]
+        self.assertEqual(len(libraries), 1)
+        self.assertEqual(library.lib, lib)
+        self.assertEqual(library.args, [])
+        self.assertEqual(library.kw_args, {'kw1': 'Text1', 'kw2': 'Text2'})
+
     def test_import_library(self):
         library = self.sl._import_modules([self.my_lib, self.my_lib])
         self.assertEqual(len(library), 2)
@@ -60,3 +70,10 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
 
         with self.assertRaises(DataError):
             SeleniumLibrary(plugins='SeleniumLibrary.NotHere')
+
+    def test_parse_plugin_with_kw_args(self):
+
+        kw_args_lib = os.path.join(self.root_dir, '..', '..', '..',
+                                   'atest', 'acceptance', '1-plugin',
+                                   'PluginWithKwArgs.py;kw1=Text1;kw2=Text2')
+        SeleniumLibrary(plugins=kw_args_lib)

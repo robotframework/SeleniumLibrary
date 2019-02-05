@@ -309,6 +309,10 @@ class SeleniumLibrary(DynamicCore):
     ``false``, ``no`` and ``none``, were considered true. Starting from
     SeleniumLibrary 4.0, strings ``0`` and ``off`` are considered as false.
 
+    = Plugins =
+
+    SeleniumLibrary offers way to modify library keywords and some internal functionality
+
     = Thread support =
 
     SeleniumLibrary is not thread safe. This is mainly due because the underlying
@@ -360,7 +364,8 @@ class SeleniumLibrary(DynamicCore):
         if is_truthy(plugins):
             parsed_libraries = self._string_to_modules(plugins)
             for index, lib in enumerate(self._import_modules(parsed_libraries)):
-                libraries.append(lib(self, *parsed_libraries[index].args))
+                libraries.append(lib(self, *parsed_libraries[index].args,
+                                     **parsed_libraries[index].kw_args))
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
@@ -470,13 +475,22 @@ class SeleniumLibrary(DynamicCore):
         self.failure_occurred()
 
     def _string_to_modules(self, libraries):
-        Lib = namedtuple('Lib', 'lib, args')
+        Lib = namedtuple('Lib', 'lib, args, kw_args')
         if is_falsy(libraries):
             return []
         parsed_libs = []
         for library in libraries.split(','):
             library_and_args = library.split(';')
-            lib = Lib(lib=library_and_args.pop(0), args=library_and_args)
+            lib_name = library_and_args.pop(0)
+            kw_args = {}
+            args = []
+            for argument in library_and_args:
+                if '=' in argument:
+                    key, value = argument.split('=')
+                    kw_args[key] = value
+                else:
+                    args.append(argument)
+            lib = Lib(lib=lib_name, args=args, kw_args=kw_args)
             parsed_libs.append(lib)
         return parsed_libs
 
