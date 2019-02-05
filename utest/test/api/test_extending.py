@@ -1,4 +1,4 @@
-import importlib
+from collections import namedtuple
 import os
 import unittest
 
@@ -11,7 +11,9 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def setUpClass(cls):
         cls.sl = SeleniumLibrary()
         root_dir = os.path.dirname(os.path.abspath(__file__))
-        cls.my_lib = os.path.join(root_dir, 'my_lib.py')
+        Lib = namedtuple('Lib', 'lib, args')
+        lib = Lib(lib=os.path.join(root_dir, 'my_lib.py'), args=[])
+        cls.my_lib = lib
 
     def test_no_libraries(self):
         for item in [None, 'None', '']:
@@ -21,12 +23,27 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def test_parse_library(self):
         lib = 'path.to.MyLibrary'
         libraries = self.sl._string_to_modules(lib)
-        self.assertEqual(libraries, [lib])
+        self.assertEqual(len(libraries), 1)
+        self.assertEqual(libraries[0].lib, lib)
+        self.assertEqual(libraries[0].args, [])
 
     def test_parse_libraries(self):
         lib = 'path.to.MyLibrary,path.to.OtherLibrary'
         libraries = self.sl._string_to_modules(lib)
-        self.assertEqual(libraries, lib.split(','))
+        self.assertEqual(len(libraries), 2)
+        self.assertEqual(libraries[0].lib, lib.split(',')[0])
+        self.assertEqual(libraries[0].args, [])
+        self.assertEqual(libraries[1].lib, lib.split(',')[1])
+        self.assertEqual(libraries[1].args, [])
+
+    def test_parse_library_with_args(self):
+        lib = 'path.to.MyLibrary'
+        lib_args = 'arg1;arg2'
+        libraries = self.sl._string_to_modules('%s;%s' % (lib, lib_args))
+        library = libraries[0]
+        self.assertEqual(len(libraries), 1)
+        self.assertEqual(library.lib, lib)
+        self.assertEqual(library.args, [arg for arg in lib_args.split(';')])
 
     def test_import_library(self):
         library = self.sl._import_modules([self.my_lib, self.my_lib])

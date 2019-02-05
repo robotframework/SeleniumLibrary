@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from collections import namedtuple
 import warnings
 
 from robot.api import logger
@@ -358,8 +359,8 @@ class SeleniumLibrary(DynamicCore):
         ]
         if is_truthy(plugins):
             parsed_libraries = self._string_to_modules(plugins)
-            for lib in self._import_modules(parsed_libraries):
-                libraries.append(lib(self))
+            for index, lib in enumerate(self._import_modules(parsed_libraries)):
+                libraries.append(lib(self, *parsed_libraries[index].args))
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
@@ -469,11 +470,17 @@ class SeleniumLibrary(DynamicCore):
         self.failure_occurred()
 
     def _string_to_modules(self, libraries):
+        Lib = namedtuple('Lib', 'lib, args')
         if is_falsy(libraries):
             return []
-        return libraries.split(',')
+        parsed_libs = []
+        for library in libraries.split(','):
+            library_and_args = library.split(';')
+            lib = Lib(lib=library_and_args.pop(0), args=library_and_args)
+            parsed_libs.append(lib)
+        return parsed_libs
 
     def _import_modules(self, libraries):
         importer = Importer('test library')
-        return [importer.import_class_or_module(library) for library in libraries]
+        return [importer.import_class_or_module(library.lib) for library in libraries]
 
