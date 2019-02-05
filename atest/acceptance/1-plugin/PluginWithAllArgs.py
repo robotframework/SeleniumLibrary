@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
@@ -14,6 +16,7 @@ class PluginWithAllArgs(LibraryComponent):
             joined_str = 'start: arg=%s,' % self.arg
             for arg in self.varargs:
                 joined_str = '%s %s,' % (joined_str, arg)
+            kwargs = OrderedDict(sorted(self.kwargs.items()))
             for key in self.kwargs:
-                joined_str = '%s %s=%s,' % (joined_str, key, self.kwargs[key])
+                joined_str = '%s %s=%s,' % (joined_str, key, kwargs[key])
             return joined_str[:-1]
