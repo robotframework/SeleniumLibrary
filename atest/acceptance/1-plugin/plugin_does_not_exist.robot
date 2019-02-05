@@ -6,7 +6,7 @@ ${ROOT}=           http://${SERVER}/html
 ${FRONT_PAGE}=     ${ROOT}/
 
 *** Test Cases ***
-Testing Plugin With Arguments
+Importing SeleniumLibrary Should Fail If Plugin Is Not Found
     [Documentation]    When finding plugin fails, the SeleniumLibrary import fails and
     ...    therefore Open Browser keyword is not found.
     Run Keyword And Expect Error
@@ -14,6 +14,8 @@ Testing Plugin With Arguments
     ...    Import Library
     ...    SeleniumLibrary
     ...    plugins=${CURDIR}/NotHere.py
+
+Importing SeleniumLibrary Keywords Should Not Be Found
     Run Keyword And Expect Error
     ...    No keyword with name 'Open Browser' found.
     ...    Open Browser
