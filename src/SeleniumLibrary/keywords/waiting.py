@@ -66,7 +66,7 @@ class WaitingKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
-        New in SeleniumLibrary 3.4.0
+        New in SeleniumLibrary 4.0
         """
 
         expected = str(expected)
@@ -87,7 +87,7 @@ class WaitingKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
-        New in SeleniumLibrary 3.4.0
+        New in SeleniumLibrary 4.0
         """
         expected = str(expected)
         self._wait_until(lambda: expected in self.driver.current_url,
