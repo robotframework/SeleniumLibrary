@@ -37,7 +37,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WebDriverCache,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_falsy
+from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_falsy, is_truthy
 
 __version__ = '3.3.2.dev1'
 
@@ -321,7 +321,7 @@ class SeleniumLibrary(DynamicCore):
 
     def __init__(self, timeout=5.0, implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None, external_modules=None):
+                 screenshot_root_directory=None, plugins=None):
         """SeleniumLibrary can be imported with several optional arguments.
 
         - ``timeout``:
@@ -356,9 +356,10 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
-        parsed_libraries = self._string_to_modules(external_modules)
-        for lib in self._import_modules(parsed_libraries):
-            libraries.append(lib(self))
+        if is_truthy(plugins):
+            parsed_libraries = self._string_to_modules(plugins)
+            for lib in self._import_modules(parsed_libraries):
+                libraries.append(lib(self))
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()

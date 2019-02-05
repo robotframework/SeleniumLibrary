@@ -1,7 +1,7 @@
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
-class MyLib(LibraryComponent):
+class MyPlugin(LibraryComponent):
 
     @keyword
     def new_keyword(self):

@@ -1,5 +1,5 @@
 *** Settings ***
-Library    SeleniumLibrary    external_modules=${CURDIR}/MyLib.py
+Library    SeleniumLibrary    plugins=${CURDIR}/MyPlugin.py
 
 *** Test Cases ***
 Adding New Keyword From Class
