@@ -38,7 +38,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WebDriverCache,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_falsy, is_truthy
+from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_truthy
 
 __version__ = '3.3.2.dev1'
 
@@ -61,6 +61,7 @@ class SeleniumLibrary(DynamicCore):
     - `Timeouts, waits and delays`
     - `Run-on-failure functionality`
     - `Boolean arguments`
+    - `Plugins`
     - `Thread support`
     - `Importing`
     - `Shortcuts`
@@ -311,7 +312,35 @@ class SeleniumLibrary(DynamicCore):
 
     = Plugins =
 
-    SeleniumLibrary offers way to modify library keywords and some internal functionality
+    SeleniumLibrary offers plugins as a way to modify and/or add library keywords and/or modify some of the internal
+    functionality without creating new library or hacking the source code. Plugins can be only loaded in the
+    library import, with the `plugins` argument and SeleniumLibrary does not offer way to unload the
+    plugins from the SeleniumLibrary.
+
+    Plugins is new SeleniumLibrary 4.0
+
+    == Importing plugins ==
+
+    Importing plugins is similar when importing Robot Framework
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#importing-libraries|libraries]. It
+    is possible import plugin with using
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-physical-path-to-library|physical path]
+    or with
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-library-name|plugin name],
+    exactly in same way as importing libraries in Robot Framework. SeleniumLibrary plugins are searched from the
+    same
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|module search path]
+    as Robot Framework searches libraries. It is only possible to import plugins written in Python, other programming
+    languages or Robot Framework test data is not supported.
+
+    | Library | SeleniumLibrary | plugins=${CURDIR}/MyPlugin.py   | # Imports plugin with physical path |
+    | Library | SeleniumLibrary | plugins=sellib_plugins.MyPlugin | # Import plugin with name           |
+
+    == Plugin API ==
+
+    Plugins must be implemented as Python classes and plugins must intherit the SeleniumLibrary
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
+    class.
 
     = Thread support =
 
@@ -338,6 +367,8 @@ class SeleniumLibrary(DynamicCore):
         - ``screenshot_root_directory``:
           Location where possible screenshots are created. If not given,
           the directory where the log file is written is used.
+        - ``plugins``:
+          Allows extending the SeleniumLibrary with external Python classes.
         """
         self.timeout = timestr_to_secs(timeout)
         self.implicit_wait = timestr_to_secs(implicit_wait)
