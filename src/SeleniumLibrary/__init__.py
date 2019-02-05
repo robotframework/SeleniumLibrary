@@ -338,7 +338,7 @@ class SeleniumLibrary(DynamicCore):
 
     == Plugin API ==
 
-    Plugins must be implemented as Python classes and plugins must intherit the SeleniumLibrary
+    Plugins must be implemented as Python classes and plugins must inherit the SeleniumLibrary
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
     class.
 
