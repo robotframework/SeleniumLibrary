@@ -15,7 +15,7 @@ Importing SeleniumLibrary Should Fail If Plugin Is Not Found
     ...    SeleniumLibrary
     ...    plugins=${CURDIR}/NotHere.py
 
-Importing SeleniumLibrary Keywords Should Not Be Found
+SeleniumLibrary Open Browser Keyword Should Not Be Found
     Run Keyword And Expect Error
     ...    No keyword with name 'Open Browser' found.
     ...    Open Browser
