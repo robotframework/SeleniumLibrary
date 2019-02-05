@@ -17,6 +17,6 @@ class PluginWithAllArgs(LibraryComponent):
             for arg in self.varargs:
                 joined_str = '%s %s,' % (joined_str, arg)
             kwargs = OrderedDict(sorted(self.kwargs.items()))
-            for key in self.kwargs:
+            for key in kwargs:
                 joined_str = '%s %s=%s,' % (joined_str, key, kwargs[key])
             return joined_str[:-1]
