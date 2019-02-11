@@ -377,6 +377,7 @@ class SeleniumLibrary(DynamicCore):
             = RunOnFailureKeywords.resolve_keyword(run_on_failure)
         self._running_on_failure_keyword = False
         self.screenshot_root_directory = screenshot_root_directory
+        self._element_finder = ElementFinder(self)
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -400,7 +401,6 @@ class SeleniumLibrary(DynamicCore):
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
-        self._element_finder = ElementFinder(self)
 
     _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
     _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')

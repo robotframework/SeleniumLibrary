@@ -9,3 +9,7 @@ Adding New Keyword From Class
 Overwriting Exsisting Keyword
     ${text} =    Open Browser     text is returned
     Should Be Equal    ${text}    text is returned
+
+Oerwriting ElementFinder
+    ${element} =    Get WebElement    //div
+    Should Be Equal    ${element}    Dummy find
