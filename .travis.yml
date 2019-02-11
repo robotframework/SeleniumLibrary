@@ -51,7 +51,7 @@ matrix:
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=2.9.2
+        - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python2
 before_script:
