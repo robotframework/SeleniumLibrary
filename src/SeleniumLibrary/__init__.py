@@ -40,6 +40,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_truthy
 
+
 __version__ = '4.0.0.dev1'
 
 
@@ -331,16 +332,30 @@ class SeleniumLibrary(DynamicCore):
     same
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|module search path]
     as Robot Framework searches libraries. It is only possible to import plugins written in Python, other programming
-    languages or Robot Framework test data is not supported.
+    languages or Robot Framework test data is not supported. Like with Robot Framework library imports, plugin
+    names are case sensitive and spaces are not supported in the plugin name. It is possible to import multiple plugins
+    at the same time by plugins must be separated with comma. It is possible to have space before and after the comma.
 
-    | Library | SeleniumLibrary | plugins=${CURDIR}/MyPlugin.py   | # Imports plugin with physical path |
-    | Library | SeleniumLibrary | plugins=sellib_plugins.MyPlugin | # Import plugin with name           |
+    | Library | SeleniumLibrary | plugins=${CURDIR}/MyPlugin.py                  | # Imports plugin with physical path |
+    | Library | SeleniumLibrary | plugins=plugins.MyPlugin,plugins.MyOtherPlugin | # Import two plugins with name      |
+
+
+    == Plugin arguments ==
+    When SeleniumLibrary creates instances from the plugin classes, it will by default initiate the class implementing
+    the plugin with a single argument.
+    It is also possible to provide arguments to the plugins. Arguments must be separated with a semicolon
+    from the plugin.
 
     == Plugin API ==
 
     Plugins must be implemented as Python classes and plugins must inherit the SeleniumLibrary
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
     class.
+
+    == Handling failures ==
+    SeleniumLibrary does not suppress exception raised during plugin import or during keywords discovery from the
+    plugins. In this case the whole SeleniumLibrary import will fail and SeleniumLibrary keywords can not be used
+    from that import.
 
     = Thread support =
 
