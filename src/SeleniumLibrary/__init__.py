@@ -509,6 +509,7 @@ class SeleniumLibrary(DynamicCore):
         Plugin = namedtuple('Plugin', 'plugin, args, kw_args')
         parsed_plugins = []
         for plugin in plugins.split(','):
+            plugin = plugin.strip()
             plugin_and_args = plugin.split(';')
             plugin_name = plugin_and_args.pop(0)
             kw_args = {}

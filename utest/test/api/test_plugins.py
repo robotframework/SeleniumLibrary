@@ -40,6 +40,24 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         self.assertEqual(plugins[1].plugin, plugin.split(',')[1])
         self.assertEqual(plugins[1].args, [])
 
+    def test_comma_and_space(self):
+        plugin = 'path.to.MyLibrary , path.to.OtherLibrary'
+        plugins = self.sl._string_to_modules(plugin)
+        self.assertEqual(len(plugins), 2)
+        self.assertEqual(plugins[0].plugin, 'path.to.MyLibrary')
+        self.assertEqual(plugins[0].args, [])
+        self.assertEqual(plugins[1].plugin, 'path.to.OtherLibrary')
+        self.assertEqual(plugins[1].args, [])
+
+    def test_comma_and_space_with_arg(self):
+        plugin = 'path.to.MyLibrary;foo;bar , path.to.OtherLibrary'
+        plugins = self.sl._string_to_modules(plugin)
+        self.assertEqual(len(plugins), 2)
+        self.assertEqual(plugins[0].plugin, 'path.to.MyLibrary')
+        self.assertEqual(plugins[0].args, ['foo', 'bar'])
+        self.assertEqual(plugins[1].plugin, 'path.to.OtherLibrary')
+        self.assertEqual(plugins[1].args, [])
+
     def test_parse_library_with_args(self):
         plugin = 'path.to.MyLibrary'
         plugin_args = 'arg1;arg2'
