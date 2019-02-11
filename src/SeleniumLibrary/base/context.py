@@ -39,6 +39,10 @@ class ContextAware(object):
     def element_finder(self):
         return self.ctx._element_finder
 
+    @element_finder.setter
+    def element_finder(self, value):
+        self.ctx._element_finder = value
+
     def find_element(self, locator, tag=None, required=True, parent=None):
         """Find element matching `locator`.
 
