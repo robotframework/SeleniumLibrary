@@ -1,19 +1,6 @@
 import unittest
 
-from SeleniumLibrary.utils import is_string, is_truthy, is_falsy, is_noney
-
-
-class IsstringTests(unittest.TestCase):
-
-    def test_is_string(self):
-        strings = ['1', 'foo', ' ', u'', '']
-        for item in strings:
-            self.assertTrue(is_string(item))
-
-    def test_is_not_string(self):
-        strings = [1, 2.345, None, False]
-        for item in strings:
-            self.assertFalse(is_string(item))
+from SeleniumLibrary.utils import is_truthy, is_falsy, is_noney
 
 
 class IsTruthyFalsyNoneyTests(unittest.TestCase):
