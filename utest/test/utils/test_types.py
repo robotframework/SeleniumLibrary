@@ -4,8 +4,8 @@ from SeleniumLibrary.utils import is_truthy, is_falsy, is_noney
 
 
 class IsTruthyFalsyNoneyTests(unittest.TestCase):
-    truthy = ['0', 'foo', ' ', 1, 2.3, True, [1], 'True', {'k': 'v'}]
-    falsy = [0, False, None, [], {}, (), u'', '', 'False', 'None']
+    truthy = ['foo', ' ', 1, 2.3, True, [1], 'True', {'k': 'v'}]
+    falsy = [0, False, None, [], {}, (), u'', '', 'False', 'None', '0', 'off']
 
     def test_is_truthy(self):
         for item in self.truthy:

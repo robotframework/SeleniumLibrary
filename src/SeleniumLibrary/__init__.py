@@ -283,8 +283,8 @@ class SeleniumLibrary(DynamicCore):
 
     Some keywords accept arguments that are handled as Boolean values true or
     false. If such an argument is given as a string, it is considered false if
-    it is either empty or case-insensitively equal to ``false``, ``no`` or
-    ``none``. Other strings are considered true regardless their value, and
+    it is either empty or case-insensitively equal to ``false``, ``no``, ``off``,
+     ``0`` or ``none``. Other strings are considered true regardless their value, and
     other argument types are tested using same
     [https://docs.python.org/2/library/stdtypes.html#truth-value-testing|rules as in Python].
 
@@ -305,7 +305,8 @@ class SeleniumLibrary(DynamicCore):
     | `Set Screenshot Directory` | ${RESULTS} | persist=${NONE}  | # Python None is false.         |
 
     Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
-    ``false``, ``no`` and ``none``, were considered true.
+    ``false``, ``no`` and ``none``, were considered true. Starting from
+    SeleniumLibrary 4.0, strings ``0`` and ``off`` are considered as false.
 
     = Thread support =
 
