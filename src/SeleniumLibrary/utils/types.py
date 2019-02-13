@@ -25,7 +25,7 @@ from robot.utils import PY3
 
 def is_truthy(item):
     if is_string(item):
-        return item.upper() not in ('FALSE', 'NO', '', 'NONE', '0')
+        return item.upper() not in ('FALSE', 'NO', '', 'NONE', '0', 'OFF')
     return bool(item)
 
 
