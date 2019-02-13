@@ -33,7 +33,7 @@ class KeywordArgumentsCookieTest(unittest.TestCase):
                                secure=True)
         verify(self.driver, times=3).add_cookie(cookie)
         self.cookie.add_cookie('name', 'value', path='None', domain='None',
-                               secure='0')
+                               secure='1')
         verify(self.driver, times=4).add_cookie(cookie)
 
     def test_add_cookie_secure_false(self):
