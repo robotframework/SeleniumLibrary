@@ -152,7 +152,7 @@ class CookieKeywords(LibraryComponent):
 class CookieInformation(object):
 
     def __init__(self, name, value, path=None, domain=None, secure=False,
-                 httpOnly=False, expiry=None):
+                 httpOnly=False, expiry=None, **extra):
         self.name = name
         self.value = value
         self.path = path
@@ -160,8 +160,8 @@ class CookieInformation(object):
         self.secure = secure
         self.httpOnly = httpOnly
         self.expiry = datetime.fromtimestamp(expiry) if expiry else None
+        for key in extra:
+            setattr(self, key, extra[key])
 
     def __str__(self):
-        items = 'name value path domain secure httpOnly expiry'.split()
-        return '\n'.join('%s=%s' % (item, getattr(self, item))
-                         for item in items)
+        return '\n'.join('%s=%s' % (key, value) for key, value in self.__dict__.items())
