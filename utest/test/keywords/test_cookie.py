@@ -95,8 +95,7 @@ class CookieObjecttest(unittest.TestCase):
         self.assertEqual(cookie.secure, True)
         self.assertEqual(cookie.httpOnly, True)
         self.assertEqual(cookie.expiry, datetime.fromtimestamp(123))
-        with self.assertRaises(AttributeError):
-            cookie.extra
+        self.assertEqual(cookie.extra, {})
 
     def test_extra_args(self):
         cookie_dict = self.all_args.copy()

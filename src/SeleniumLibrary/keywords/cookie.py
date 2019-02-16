@@ -104,8 +104,7 @@ class CookieKeywords(LibraryComponent):
         [https://w3c.github.io/webdriver/#cookies|WebDriver specification].
         These other attributes are available in a ``extra`` attribute in the cookie
         object and it contains a dictionary of the other attributes. The ``extra``
-        attribute is only available if cookie contains attributes outside the
-        WebDriver specification. The ``extra`` attribute is new in SeleniumLibrary 4.0.
+        attribute is new in SeleniumLibrary 4.0.
 
         Example:
         | `Add Cookie`      | foo             | bar |
@@ -169,13 +168,12 @@ class CookieInformation(object):
         self.secure = secure
         self.httpOnly = httpOnly
         self.expiry = datetime.fromtimestamp(expiry) if expiry else None
-        if extra:
-            self.extra = extra
+        self.extra = extra
 
     def __str__(self):
         items = 'name value path domain secure httpOnly expiry'.split()
         string = '\n'.join('%s=%s' % (item, getattr(self, item))
                            for item in items)
-        if hasattr(self, 'extra'):
+        if self.extra:
             string = '%s%s=%s\n' % (string, 'extra', self.extra)
         return string
