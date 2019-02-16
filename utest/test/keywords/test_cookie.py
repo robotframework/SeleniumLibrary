@@ -1,8 +1,10 @@
+from datetime import datetime
 import unittest
 
 from mockito import mock, unstub, verify
 
 from SeleniumLibrary.keywords import CookieKeywords
+from SeleniumLibrary.keywords.cookie import CookieInformation
 
 
 class KeywordArgumentsCookieTest(unittest.TestCase):
@@ -72,3 +74,41 @@ class KeywordArgumentsCookieTest(unittest.TestCase):
         self.cookie.add_cookie('name', 'value', path='None', domain=None,
                                secure=None)
         verify(self.driver).add_cookie(self.default_cookie)
+
+
+class CookieObjecttest(unittest.TestCase):
+
+    all_args = {'name': 'foo', 'value': '123', 'path': '/', 'domain': 'not.Here',
+                'secure': True, 'httpOnly': True, 'expiry': 123}
+
+    def test_name_value_only(self):
+        cookie = CookieInformation(name='foo', value='bar')
+        self.assertEqual(cookie.name, 'foo')
+        self.assertEqual(cookie.value, 'bar')
+
+    def test_all_args(self):
+        cookie = CookieInformation(**self.all_args)
+        self.assertEqual(cookie.name, 'foo')
+        self.assertEqual(cookie.value, '123')
+        self.assertEqual(cookie.path, '/')
+        self.assertEqual(cookie.domain, 'not.Here')
+        self.assertEqual(cookie.secure, True)
+        self.assertEqual(cookie.httpOnly, True)
+        self.assertEqual(cookie.expiry, datetime.fromtimestamp(123))
+        self.assertEqual(cookie.extra, {})
+
+    def test_extra_args(self):
+        cookie_dict = self.all_args.copy()
+        cookie_dict['class_name'] = 'seleniumLibary'
+        cookie = CookieInformation(**cookie_dict)
+        self.assertEqual(cookie.name, 'foo')
+        self.assertEqual(cookie.value, '123')
+        self.assertEqual(cookie.extra, {'class_name': 'seleniumLibary'})
+        string = str(cookie)
+        self.assertIn("extra={'class_name': 'seleniumLibary'}", string)
+
+    def test_no_mandatory_args(self):
+        cookie_dict = self.all_args.copy()
+        del cookie_dict['name']
+        with self.assertRaises(TypeError):
+            CookieInformation(**cookie_dict)

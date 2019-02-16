@@ -90,13 +90,21 @@ class CookieKeywords(LibraryComponent):
         | secure        | When true, cookie is only used with HTTPS connections.     |
         | httpOnly      | When true, cookie is not accessible via JavaScript.        |
         | expiry        | Python datetime object indicating when the cookie expires. |
+        | extra         | Possible attributes outside of the WebDriver specification |
 
         See the
-        [https://w3c.github.io/webdriver/webdriver-spec.html#cookies|WebDriver specification]
+        [https://w3c.github.io/webdriver/#cookies|WebDriver specification]
         for details about the cookie information.
         Notice that ``expiry`` is specified as a
         [https://docs.python.org/3/library/datetime.html#datetime.datetime|datetime object],
         not as seconds since Unix Epoch like WebDriver natively does.
+
+        In some cases, example when running browser in the cloud, it is possible that
+        cookie contains other attributes than is defined in the
+        [https://w3c.github.io/webdriver/#cookies|WebDriver specification].
+        These other attributes are available in a ``extra`` attribute in the cookie
+        object and it contains a dictionary of the other attributes. The ``extra``
+        attribute is new in SeleniumLibrary 4.0.
 
         Example:
         | `Add Cookie`      | foo             | bar |
@@ -152,7 +160,7 @@ class CookieKeywords(LibraryComponent):
 class CookieInformation(object):
 
     def __init__(self, name, value, path=None, domain=None, secure=False,
-                 httpOnly=False, expiry=None):
+                 httpOnly=False, expiry=None, **extra):
         self.name = name
         self.value = value
         self.path = path
@@ -160,8 +168,12 @@ class CookieInformation(object):
         self.secure = secure
         self.httpOnly = httpOnly
         self.expiry = datetime.fromtimestamp(expiry) if expiry else None
+        self.extra = extra
 
     def __str__(self):
         items = 'name value path domain secure httpOnly expiry'.split()
-        return '\n'.join('%s=%s' % (item, getattr(self, item))
-                         for item in items)
+        string = '\n'.join('%s=%s' % (item, getattr(self, item))
+                           for item in items)
+        if self.extra:
+            string = '%s%s=%s\n' % (string, 'extra', self.extra)
+        return string
