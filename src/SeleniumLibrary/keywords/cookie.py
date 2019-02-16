@@ -164,4 +164,11 @@ class CookieInformation(object):
             setattr(self, key, extra[key])
 
     def __str__(self):
-        return '\n'.join('%s=%s' % (key, value) for key, value in self.__dict__.items())
+        mandatory_params = ['name', 'value', 'path', 'domain', 'secure', 'httpOnly', 'expiry']
+        string = ''
+        for param in mandatory_params:
+            string = '%s%s=%s\n' % (string, param, getattr(self, param))
+        for key, value in self.__dict__.items():
+            if key not in mandatory_params:
+                string = '%s%s=%s\n' % (string, key, value)
+        return string

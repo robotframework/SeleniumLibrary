@@ -96,7 +96,6 @@ class CookieObjecttest(unittest.TestCase):
         self.assertEqual(cookie.httpOnly, True)
         self.assertEqual(cookie.expiry, datetime.fromtimestamp(123))
 
-
     def test_extra_args(self):
         cookie_dict = self.all_args.copy()
         cookie_dict['class_name'] = 'seleniumLibary'
@@ -106,3 +105,9 @@ class CookieObjecttest(unittest.TestCase):
         self.assertEqual(cookie.class_name, 'seleniumLibary')
         string = str(cookie)
         self.assertIn('class_name=seleniumLibary', string)
+
+    def test_no_mandatory_args(self):
+        cookie_dict = self.all_args.copy()
+        del cookie_dict['name']
+        with self.assertRaises(TypeError):
+            CookieInformation(**cookie_dict)
