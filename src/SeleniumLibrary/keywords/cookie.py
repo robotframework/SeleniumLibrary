@@ -102,10 +102,10 @@ class CookieKeywords(LibraryComponent):
         In some cases, example when running browser in the cloud, it is possible that
         cookie contains other attributes than is defined in the
         [https://w3c.github.io/webdriver/#cookies|WebDriver specification].
-        These other attributes are available ``extra`` attribute in the cookie object
-        and it contains a dictionary of the other attributes. The ``extra`` attribute
-        is only available if cookie contains attributes outside the WebDriver
-        specification. The ``extra`` attribute is new in SeleniumLibrary 4.0.
+        These other attributes are available in a ``extra`` attribute in the cookie
+        object and it contains a dictionary of the other attributes. The ``extra``
+        attribute is only available if cookie contains attributes outside the
+        WebDriver specification. The ``extra`` attribute is new in SeleniumLibrary 4.0.
 
         Example:
         | `Add Cookie`      | foo             | bar |
