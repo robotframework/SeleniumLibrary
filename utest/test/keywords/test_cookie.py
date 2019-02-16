@@ -95,6 +95,8 @@ class CookieObjecttest(unittest.TestCase):
         self.assertEqual(cookie.secure, True)
         self.assertEqual(cookie.httpOnly, True)
         self.assertEqual(cookie.expiry, datetime.fromtimestamp(123))
+        with self.assertRaises(AttributeError):
+            cookie.extra
 
     def test_extra_args(self):
         cookie_dict = self.all_args.copy()
@@ -102,9 +104,9 @@ class CookieObjecttest(unittest.TestCase):
         cookie = CookieInformation(**cookie_dict)
         self.assertEqual(cookie.name, 'foo')
         self.assertEqual(cookie.value, '123')
-        self.assertEqual(cookie.class_name, 'seleniumLibary')
+        self.assertEqual(cookie.extra, {'class_name': 'seleniumLibary'})
         string = str(cookie)
-        self.assertIn('class_name=seleniumLibary', string)
+        self.assertIn("extra={'class_name': 'seleniumLibary'}", string)
 
     def test_no_mandatory_args(self):
         cookie_dict = self.all_args.copy()
