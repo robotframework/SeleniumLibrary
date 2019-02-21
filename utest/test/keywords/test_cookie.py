@@ -105,7 +105,7 @@ class CookieObjecttest(unittest.TestCase):
         self.assertEqual(cookie.value, '123')
         self.assertEqual(cookie.extra, {'class_name': 'seleniumLibary'})
         string = str(cookie)
-        self.assertIn("extra={'class_name': 'seleniumLibary'}", string)
+        self.assertIn("\nextra={'class_name': 'seleniumLibary'}", string)
 
     def test_no_mandatory_args(self):
         cookie_dict = self.all_args.copy()
