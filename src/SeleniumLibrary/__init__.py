@@ -334,28 +334,86 @@ class SeleniumLibrary(DynamicCore):
     as Robot Framework searches libraries. It is only possible to import plugins written in Python, other programming
     languages or Robot Framework test data is not supported. Like with Robot Framework library imports, plugin
     names are case sensitive and spaces are not supported in the plugin name. It is possible to import multiple plugins
-    at the same time by plugins must be separated with comma. It is possible to have space before and after the comma.
+    at the same time by separating plugins with comma. It is possible to have space before and after the comma. Plugins
+    are imported in the order they defined in the `plugins` argument. If two or more plugins declare the same keyword
+    or modify the same method/attribute in the SeleniumLibrary, the last plugin to perform the changes will overwrite
+    the changes made by other plugins.
 
-    | Library | SeleniumLibrary | plugins=${CURDIR}/MyPlugin.py                  | # Imports plugin with physical path |
-    | Library | SeleniumLibrary | plugins=plugins.MyPlugin,plugins.MyOtherPlugin | # Import two plugins with name      |
+    | Library | SeleniumLibrary | plugins=${CURDIR}/MyPlugin.py                   | # Imports plugin with physical path |
+    | Library | SeleniumLibrary | plugins=plugins.MyPlugin, plugins.MyOtherPlugin | # Import two plugins with name      |
 
+    Generally speaking, plugin are not any different from the classes that are used to implement keyword in the
+    SeleniumLibrary. Example like with
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/keywords/browsermanagement.py|BrowserManagementKeywords]
+    class. BrowserManagementKeywords class inherits the
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
+    and uses ``@keyword`` decorator to mark which methods implements keywords.
 
     == Plugin arguments ==
-    When SeleniumLibrary creates instances from the plugin classes, it will by default initiate the class implementing
-    the plugin with a single argument.
-    It is also possible to provide arguments to the plugins. Arguments must be separated with a semicolon
-    from the plugin.
+    When SeleniumLibrary creates instances from the plugin classes, it will by default initiate the class with a single
+    argument, called ``ctx`` (context). ``ctx`` is the instance of the SeleniummLibrary and it provides access to the
+    common methods and attributes used across in the SeleniumLibrary classes. See the
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/__init__.py|SeleniumLibrary init]
+    which methods and attributes are publicly available in the SeleniumLibrary.
+
+    It is also possible to provide optional arguments to the plugins. Arguments must be separated with a semicolon
+    from the plugin. SeleniumLibrary will not convert arguments and plugin is responsible for converting the argument
+    to proper types.
+
+    | Library | SeleniumLibrary | plugins=plugins.Plugin;ArgOne;ArgTwo | # Import two plugins with two arguments: ArgOne and ArgTwo |
+
+    It is possible to provide variable number of arguments and keywords arguments. Named arguments must be defined
+    first, variable number of arguments as second and keywords arguments as last. All arguments must be separated
+    with semicolon. Example if plugin init is defined like this:
+    | class Plugin(LibraryComponent):
+    |
+    |     def __init__(self, ctx, arg, *varargs, **kwargs):
+    When the plugin is, example, imported with these arguments.
+    | Library | SeleniumLibrary | plugins=plugins.Plugin;argument1;varg1;varg2;kw1=kwarg1;kw2=kwarg2 |
+    Then the ``argument1`` is given the ``arg`` in the ``__init__``. The ``varg1`` and ``varg2`` variable number
+    arguments are given to the ``*varargs`` argument in the  ``__init__``. Finally, the ``kw1=kwarg1`` and
+    ``kw2=kwarg2`` keyword arguments are given to the ``**kwargs`` in the  ``__init__``. As in Python, there can be
+    zero or more variable number and keyword arguments.
 
     == Plugin API ==
 
     Plugins must be implemented as Python classes and plugins must inherit the SeleniumLibrary
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    class.
+    class. Plugin __init__ must support at least one argument: ``ctx``. Also optional arguments are supported, see
+    `Plugin arguments` for more details how to provide optional arguments to plugins.
+
+    SeleniumLibrary uses Robot Framework
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api|dynamic library API].
+    For plugins this means that methods that implements keywords, must be decorated with ``@keyword`` decorator.
+    The ``@keyword`` decorator can be imported from Robot Framework and used in the following way.
+    | from robot.api.deco import keyword
+    |
+    | class Plugin(LibraryComponent):
+    |
+    |     @keyword
+    |     def keyword(self):
+    |         # Code here to implement a keyword.
+
+
+
 
     == Handling failures ==
     SeleniumLibrary does not suppress exception raised during plugin import or during keywords discovery from the
     plugins. In this case the whole SeleniumLibrary import will fail and SeleniumLibrary keywords can not be used
     from that import.
+
+    ==  LibraryComponent ==
+    Although `ctx` provides access to the common methods and attributes, the
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
+    provides an easier access to the common methods and attributes, Example currently active browser can be found
+    from `self.ctx.driver`, the `LibraryComponent` exposes the browser as: `self.driver`. Plugin classes must
+    inherit the `LibraryComponent`.
+
+    See the
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
+    and the
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/context.py|ContextAware]
+    implementation what methods are available.
 
     = Thread support =
 
