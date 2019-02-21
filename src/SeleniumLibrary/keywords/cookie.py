@@ -175,5 +175,5 @@ class CookieInformation(object):
         string = '\n'.join('%s=%s' % (item, getattr(self, item))
                            for item in items)
         if self.extra:
-            string = '%s%s=%s\n' % (string, 'extra', self.extra)
+            string = '%s\n%s=%s\n' % (string, 'extra', self.extra)
         return string
