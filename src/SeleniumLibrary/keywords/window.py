@@ -189,16 +189,16 @@ class WindowKeywords(LibraryComponent):
         return self.driver.set_window_size(int(width), int(height))
 
     @keyword
-    def get_page_size(self):
-        """Returns current page width and height as integers.
+    def get_inner_window_size(self):
+        """Returns current inner window width and height as integers.
 
-        See also `Set Page Size`.
+        See also `Set Inner Window Size`.
 
         Example:
-        | ${width} | ${height}= | `Get Page Size` |
+        | ${width} | ${height}= | `Get Inner Window Size` |
 
         The main difference with `Get Window Size` is that you receive
-        the page size, excluding the browser bars, borders and so on.
+        the inner size, excluding the browser bars, borders and so on.
         """
         inner_width = int(self.driver.execute_script("window.innerWidth"))
         inner_height = int(self.driver.execute_script("window.innerHeight"))
@@ -206,12 +206,12 @@ class WindowKeywords(LibraryComponent):
         return inner_width, inner_height
 
     @keyword
-    def set_page_size(self, width, height):
+    def set_inner_window_size(self, width, height):
         """Sets current windows size adapted to contain page
         with given ``width`` and ``height``.
 
         The main difference with `Set Window Size` is that you can give
-        the page size required, excluding the browser bars, borders and so on.
+        the inner size required, excluding the browser bars, borders and so on.
         The window size is adapted to provide the correct page size for each browser.
 
         Values can be given using strings containing numbers or by using
@@ -222,7 +222,7 @@ class WindowKeywords(LibraryComponent):
         size.
 
         Example:
-        | `Set Page Size` | 800 | 600 |
+        | `Set Inner Window Size` | 800 | 600 |
         """
         self.driver.set_window_size(int(width), int(height))
         inner_width = int(self.driver.execute_script("window.innerWidth"))
