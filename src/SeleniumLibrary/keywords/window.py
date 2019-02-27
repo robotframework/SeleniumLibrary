@@ -189,6 +189,51 @@ class WindowKeywords(LibraryComponent):
         return self.driver.set_window_size(int(width), int(height))
 
     @keyword
+    def get_page_size(self):
+        """Returns current page width and height as integers.
+
+        See also `Set Page Size`.
+
+        Example:
+        | ${width} | ${height}= | `Get Page Size` |
+
+        The main difference with `Get Window Size` is that you receive
+        the page size, excluding the browser bars, borders and so on.
+        """
+        inner_width = int(self.driver.execute_script("window.innerWidth"))
+        inner_height = int(self.driver.execute_script("window.innerHeight"))
+
+        return inner_width, inner_height
+
+    @keyword
+    def set_page_size(self, width, height):
+        """Sets current windows size adapted to contain page
+        with given ``width`` and ``height``.
+
+        The main difference with `Set Window Size` is that you can give
+        the page size required, excluding the browser bars, borders and so on.
+        The window size is adapted to provide the correct page size for each browser.
+
+        Values can be given using strings containing numbers or by using
+        actual numbers. See also `Get Window Size` and `Set Window Size` .
+
+        Browsers have a limit how small they can be set. Trying to set them
+        smaller will cause the actual size to be bigger than the requested
+        size.
+
+        Example:
+        | `Set Page Size` | 800 | 600 |
+        """
+        self.driver.set_window_size(int(width), int(height))
+        inner_width = int(self.driver.execute_script("window.innerWidth"))
+        inner_height = int(self.driver.execute_script("window.innerHeight"))
+        width_offset = width - inner_width
+        height_offset = height - inner_height
+        window_width = width + width_offset
+        window_height = height + height_offset
+        return self.driver.set_window_size(int(window_width), int(window_height))
+
+    @keyword
     def get_window_position(self):
         """Returns current window position.
 
