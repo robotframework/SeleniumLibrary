@@ -313,7 +313,7 @@ class SeleniumLibrary(DynamicCore):
 
     = Plugins =
 
-    SeleniumLibrary offers plugins as a way to modify and/or add library keywords and/or modify some of the internal
+    SeleniumLibrary offers plugins as a way to modify, add library keywords and modify some of the internal
     functionality without creating new library or hacking the source code. Plugins can be only loaded in the
     library import, with the `plugins` argument and SeleniumLibrary does not offer way to unload the
     plugins from the SeleniumLibrary.
@@ -345,16 +345,15 @@ class SeleniumLibrary(DynamicCore):
     Generally speaking, plugin are not any different from the classes that are used to implement keyword in the
     SeleniumLibrary. Example like with
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/keywords/browsermanagement.py|BrowserManagementKeywords]
-    class. BrowserManagementKeywords class inherits the
+    class inherits the
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    and uses ``@keyword`` decorator to mark which methods implements keywords.
+    and uses ``@keyword`` decorator to mark which methods are exposed as keywords.
 
     == Plugin arguments ==
     When SeleniumLibrary creates instances from the plugin classes, it will by default initiate the class with a single
     argument, called ``ctx`` (context). ``ctx`` is the instance of the SeleniummLibrary and it provides access to the
-    common methods and attributes used across in the SeleniumLibrary classes. See the
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/__init__.py|SeleniumLibrary init]
-    which methods and attributes are publicly available in the SeleniumLibrary.
+    common methods and attributes used across in the SeleniumLibrary classes. But is recommended to use
+    wrappers provided by the `LibraryComponent`.
 
     It is also possible to provide optional arguments to the plugins. Arguments must be separated with a semicolon
     from the plugin. SeleniumLibrary will not convert arguments and plugin is responsible for converting the argument
@@ -364,11 +363,11 @@ class SeleniumLibrary(DynamicCore):
 
     It is possible to provide variable number of arguments and keywords arguments. Named arguments must be defined
     first, variable number of arguments as second and keywords arguments as last. All arguments must be separated
-    with semicolon. Example if plugin init is defined like this:
+    with semicolon. Example if plugin __init__ is defined like this:
     | class Plugin(LibraryComponent):
     |
     |     def __init__(self, ctx, arg, *varargs, **kwargs):
-    When the plugin is, example, imported with these arguments.
+    Then, for example, it is possible to plugin with these arguments:
     | Library | SeleniumLibrary | plugins=plugins.Plugin;argument1;varg1;varg2;kw1=kwarg1;kw2=kwarg2 |
     Then the ``argument1`` is given the ``arg`` in the ``__init__``. The ``varg1`` and ``varg2`` variable number
     arguments are given to the ``*varargs`` argument in the  ``__init__``. Finally, the ``kw1=kwarg1`` and
@@ -384,6 +383,8 @@ class SeleniumLibrary(DynamicCore):
 
     SeleniumLibrary uses Robot Framework
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api|dynamic library API].
+    The main difference, when compared to libraries using dynamic library API, is that plugins are not responsible
+    for implementing the dynamic library API. SeleniumLibrary is handling the dynamic library API requirements.
     For plugins this means that methods that implements keywords, must be decorated with ``@keyword`` decorator.
     The ``@keyword`` decorator can be imported from Robot Framework and used in the following way.
     | from robot.api.deco import keyword
@@ -394,26 +395,51 @@ class SeleniumLibrary(DynamicCore):
     |     def keyword(self):
     |         # Code here to implement a keyword.
 
-
-
-
     == Handling failures ==
     SeleniumLibrary does not suppress exception raised during plugin import or during keywords discovery from the
     plugins. In this case the whole SeleniumLibrary import will fail and SeleniumLibrary keywords can not be used
     from that import.
 
     ==  LibraryComponent ==
-    Although `ctx` provides access to the common methods and attributes, the
+    Although ``ctx`` provides access to the common methods and attributes used in the SeleniumLibrary, the
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    provides an easier access to the common methods and attributes, Example currently active browser can be found
-    from `self.ctx.driver`, the `LibraryComponent` exposes the browser as: `self.driver`. Plugin classes must
-    inherit the `LibraryComponent`.
+    provides more, an easier and IDE friendly access to the common methods and attributes, Example currently
+    active browser can be found from ``self.ctx.driver``, the ``LibraryComponent`` exposes the browser as:
+    ``self.driver``. Plugin classes must inherit the ``LibraryComponent``.
+
+    The following methods are available from the ``LibraryComponent`` class:
+
+    |        = Method =        |                                                                  = Description =                                                                  |
+    | find_element             | Finds first element matching ``locator``.                                                                                                         |
+    | find_elements            | Find all elements matching ``locator``.                                                                                                           |
+    | is_text_present          | Returns True if text is present in the page.                                                                                                      |
+    | is_element_enabled       | Returns True if element is enabled.                                                                                                               |
+    | is_visible               | Returns True if element is visible.                                                                                                               |
+    | log_source               | Calls method defining the `Log Source` keyword.                                                                                                   |
+    | assert_page_contains     | Raises AssertionError if element is not found from the page.                                                                                      |
+    | assert_page_not_contains | Raises AssertionError if element is found from the page.                                                                                          |
+    | get_timeout              | By default returns SeleniumLibrary ``timeout`` argument value. With argument converts string with Robot Framework ``timestr_to_secs`` to seconds. |
+    | info                     | Wrapper to ``robot.api.logger.info`` method.                                                                                                      |
+    | debug                    | Wrapper to ``robot.api.logger.debug`` method.                                                                                                     |
+    | warn                     | Wrapper to ``robot.api.logger.warn`` method.                                                                                                      |
+    | log                      | Wrapper to ``robot.api.logger.write`` method.                                                                                                     |
+
+    The following attributes are available from the ``LibraryComponent`` class:
+
+    | = Attribute =  |                                                                          = Description =                                                                           |
+    | driver         | Currently active browser/WebDriver instance in the SeleniumLibrary.                                                                                                |
+    | drivers        | [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/keywords/webdrivertools.py|Cache] for the opened browsers/WebDriver instances.  |
+    | element_finder | Read/write attribute for the [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/locators/elementfinder.py|ElementFinder] instance. |
+    | ctx            | Instance of the SeleniumLibrary.                                                                                                                                   |
+    | log_dir        | Folder where output files are written.                                                                                                                             |
 
     See the
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/__init__.py|SeleniumLibrary init],
+    the
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
     and the
     [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/context.py|ContextAware]
-    implementation what methods are available.
+    classes for further implementation details.
 
     = Thread support =
 
