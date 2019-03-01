@@ -384,9 +384,10 @@ class SeleniumLibrary(DynamicCore):
     SeleniumLibrary uses Robot Framework
     [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api|dynamic library API].
     The main difference, when compared to libraries using dynamic library API, is that plugins are not responsible
-    for implementing the dynamic library API. SeleniumLibrary is handling the dynamic library API requirements.
-    For plugins this means that methods that implements keywords, must be decorated with ``@keyword`` decorator.
-    The ``@keyword`` decorator can be imported from Robot Framework and used in the following way.
+    for implementing the dynamic library API. SeleniumLibrary is handling the dynamic library API requirements
+    towards Robot Framework. For plugins this means that methods that implements keywords, must be decorated
+    with ``@keyword`` decorator. The ``@keyword`` decorator can be imported from Robot Framework and used in the
+    following way:
     | from robot.api.deco import keyword
     |
     | class Plugin(LibraryComponent):
