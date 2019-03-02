@@ -17,3 +17,8 @@ class my_lib_args(LibraryComponent):
     @keyword
     def bar_2(self, arg):
         self.info(arg)
+
+    @keyword
+    def add_cookie(self, foo, bar):
+        self.info(foo)
+        self.info(bar)

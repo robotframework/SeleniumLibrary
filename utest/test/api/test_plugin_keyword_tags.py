@@ -27,7 +27,7 @@ class PluginKeywordTags(unittest.TestCase):
     def test_store_plugin_keywords_with_args(self):
         sl = SeleniumLibrary()
         sl._store_plugin_keywords(my_lib_args, '111', '222')
-        self.assertEqual(sl._plugin_keywords, ['bar_2', 'foo_1'])
+        self.assertEqual(sl._plugin_keywords, ['add_cookie', 'bar_2', 'foo_1'])
 
     def test_tags_in_plugin(self):
         sl = SeleniumLibrary(plugins=self.plugin)
@@ -44,3 +44,6 @@ class PluginKeywordTags(unittest.TestCase):
 
         tags = sl.get_keyword_tags('open_browser')
         self.assertFalse(tags)
+
+        tags = sl.get_keyword_tags('add_cookie')
+        self.assertEqual(tags, ['plugin'])
