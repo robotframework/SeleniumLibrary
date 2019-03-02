@@ -478,6 +478,7 @@ class SeleniumLibrary(DynamicCore):
         self._running_on_failure_keyword = False
         self.screenshot_root_directory = screenshot_root_directory
         self._element_finder = ElementFinder(self)
+        self._plugin_keywords = []
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -496,6 +497,8 @@ class SeleniumLibrary(DynamicCore):
         if is_truthy(plugins):
             parsed_plugins = self._string_to_modules(plugins)
             for index, lib in enumerate(self._import_modules(parsed_plugins)):
+                self._store_plugin_keywords(lib, *parsed_plugins[index].args,
+                                            **parsed_plugins[index].kw_args)
                 libraries.append(lib(self, *parsed_plugins[index].args,
                                      **parsed_plugins[index].kw_args))
         self._drivers = WebDriverCache()
@@ -515,6 +518,12 @@ class SeleniumLibrary(DynamicCore):
         except Exception:
             self.failure_occurred()
             raise
+
+    def get_keyword_tags(self, name):
+        tags = list(DynamicCore.get_keyword_tags(self, name))
+        if name in self._plugin_keywords:
+            tags.append('plugin')
+        return tags
 
     def register_driver(self, driver, alias):
         """Add's a `driver` to the library WebDriverCache.
@@ -628,3 +637,7 @@ class SeleniumLibrary(DynamicCore):
         importer = Importer('test library')
         return [importer.import_class_or_module(plugin.plugin) for plugin in plugins]
 
+    def _store_plugin_keywords(self, plugin, *args, **kwargs):
+        plugin_list = [plugin(self, *args, **kwargs)]
+        dynamic_core = DynamicCore(plugin_list)
+        self._plugin_keywords.extend(dynamic_core.get_keyword_names())
