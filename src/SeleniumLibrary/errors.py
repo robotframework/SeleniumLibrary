@@ -33,3 +33,7 @@ class CookieNotFound(SeleniumLibraryException):
 
 class NoOpenBrowser(SeleniumLibraryException):
     pass
+
+
+class PluginError(SeleniumLibraryException):
+    pass
