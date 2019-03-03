@@ -15,9 +15,11 @@
 # limitations under the License.
 
 from collections import namedtuple
+from inspect import isclass
 import warnings
 
 from robot.api import logger
+from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
 from robot.utils.importer import Importer
 
@@ -508,6 +510,9 @@ class SeleniumLibrary(DynamicCore):
         if is_truthy(plugins):
             parsed_plugins = self._string_to_modules(plugins)
             for index, lib in enumerate(self._import_modules(parsed_plugins)):
+                if not isclass(lib):
+                    message = "Importing test library: '%s' failed." % parsed_plugins[index].plugin
+                    raise DataError(message)
                 self._store_plugin_keywords(lib, *parsed_plugins[index].args,
                                             **parsed_plugins[index].kw_args)
                 libraries.append(lib(self, *parsed_plugins[index].args,

@@ -92,6 +92,12 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         with self.assertRaises(DataError):
             SeleniumLibrary(plugins='SeleniumLibrary.NotHere')
 
+    def test_plugin_wrong_import_with_path(self):
+        my_lib = os.path.join(self.root_dir, 'my_lib.py')
+        wrong_name = os.path.join(self.root_dir, 'my_lib_wrong_name.py')
+        with self.assertRaises(DataError):
+            SeleniumLibrary(plugins='%s, %s' % (my_lib, wrong_name))
+
     def test_sl_with_kw_args_plugin(self):
         kw_args_lib = os.path.join(self.root_dir, '..', '..', '..',
                                    'atest', 'acceptance', '1-plugin',
