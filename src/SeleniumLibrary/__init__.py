@@ -23,8 +23,8 @@ from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
 from robot.utils.importer import Importer
 
-from SeleniumLibrary.base import DynamicCore
-from SeleniumLibrary.errors import NoOpenBrowser
+from SeleniumLibrary.base import DynamicCore, LibraryComponent
+from SeleniumLibrary.errors import NoOpenBrowser, PluginError
 from SeleniumLibrary.keywords import (AlertKeywords,
                                       BrowserManagementKeywords,
                                       CookieKeywords,
@@ -509,14 +509,17 @@ class SeleniumLibrary(DynamicCore):
         ]
         if is_truthy(plugins):
             parsed_plugins = self._string_to_modules(plugins)
-            for index, lib in enumerate(self._import_modules(parsed_plugins)):
-                if not isclass(lib):
+            for index, plugin in enumerate(self._import_modules(parsed_plugins)):
+                if not isclass(plugin):
                     message = "Importing test library: '%s' failed." % parsed_plugins[index].plugin
                     raise DataError(message)
-                self._store_plugin_keywords(lib, *parsed_plugins[index].args,
-                                            **parsed_plugins[index].kw_args)
-                libraries.append(lib(self, *parsed_plugins[index].args,
-                                     **parsed_plugins[index].kw_args))
+                plugin = plugin(self, *parsed_plugins[index].args,
+                                **parsed_plugins[index].kw_args)
+                if not isinstance(plugin, LibraryComponent):
+                    message = 'Plugin does not inherit SeleniumLibrary.base.LibraryComponent'
+                    raise PluginError(message)
+                self._store_plugin_keywords(plugin)
+                libraries.append(plugin)
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
@@ -653,7 +656,6 @@ class SeleniumLibrary(DynamicCore):
         importer = Importer('test library')
         return [importer.import_class_or_module(plugin.plugin) for plugin in plugins]
 
-    def _store_plugin_keywords(self, plugin, *args, **kwargs):
-        plugin_list = [plugin(self, *args, **kwargs)]
-        dynamic_core = DynamicCore(plugin_list)
+    def _store_plugin_keywords(self, plugin):
+        dynamic_core = DynamicCore([plugin])
         self._plugin_keywords.extend(dynamic_core.get_keyword_names())

@@ -5,6 +5,7 @@ import unittest
 from robot.errors import DataError
 
 from SeleniumLibrary import SeleniumLibrary
+from SeleniumLibrary.errors import PluginError
 
 
 class ExtendingSeleniumLibrary(unittest.TestCase):
@@ -103,3 +104,8 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
                                    'atest', 'acceptance', '1-plugin',
                                    'PluginWithKwArgs.py;kw1=Text1;kw2=Text2')
         SeleniumLibrary(plugins=kw_args_lib)
+
+    def test_no_library_component_inherit(self):
+        no_inherit = os.path.join(self.root_dir, 'my_lib_not_inherit.py')
+        with self.assertRaises(PluginError):
+            SeleniumLibrary(plugins=no_inherit)

@@ -21,12 +21,12 @@ class PluginKeywordTags(unittest.TestCase):
 
     def test_store_plugin_keywords(self):
         sl = SeleniumLibrary()
-        sl._store_plugin_keywords(my_lib)
+        sl._store_plugin_keywords(my_lib('0'))
         self.assertEqual(sl._plugin_keywords, ['bar', 'foo'])
 
     def test_store_plugin_keywords_with_args(self):
         sl = SeleniumLibrary()
-        sl._store_plugin_keywords(my_lib_args, '111', '222')
+        sl._store_plugin_keywords(my_lib_args('000', '111', '222'))
         self.assertEqual(sl._plugin_keywords, ['add_cookie', 'bar_2', 'foo_1'])
 
     def test_tags_in_plugin(self):
