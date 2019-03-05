@@ -197,7 +197,10 @@ class FormElementKeywords(LibraryComponent):
 
         This keyword is most often used to input files into upload forms.
         The file specified with ``file_path`` must be available on machine
-        where tests are executed.
+        where tests are executed. When using Selenium Grid, Selenium
+        will, magically, transfer the file from the local file system
+        to the node file system. Then Selenium will send the file path,
+        from to node file system, to the browser.
 
         Example:
         | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |
