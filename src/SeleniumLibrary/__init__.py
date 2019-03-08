@@ -508,18 +508,8 @@ class SeleniumLibrary(DynamicCore):
             WindowKeywords(self)
         ]
         if is_truthy(plugins):
-            parsed_plugins = self._string_to_modules(plugins)
-            for index, plugin in enumerate(self._import_modules(parsed_plugins)):
-                if not isclass(plugin):
-                    message = "Importing test library: '%s' failed." % parsed_plugins[index].plugin
-                    raise DataError(message)
-                plugin = plugin(self, *parsed_plugins[index].args,
-                                **parsed_plugins[index].kw_args)
-                if not isinstance(plugin, LibraryComponent):
-                    message = 'Plugin does not inherit SeleniumLibrary.base.LibraryComponent'
-                    raise PluginError(message)
-                self._store_plugin_keywords(plugin)
-                libraries.append(plugin)
+            plugin_libs = self._parse_plugins(plugins)
+            libraries = libraries + plugin_libs
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
@@ -633,28 +623,41 @@ class SeleniumLibrary(DynamicCore):
                       DeprecationWarning)
         self.failure_occurred()
 
-    def _string_to_modules(self, plugins):
-        Plugin = namedtuple('Plugin', 'plugin, args, kw_args')
-        parsed_plugins = []
-        for plugin in plugins.split(','):
-            plugin = plugin.strip()
-            plugin_and_args = plugin.split(';')
-            plugin_name = plugin_and_args.pop(0)
+    def _parse_plugins(self, plugins):
+        libraries = []
+        importer = Importer('test library')
+        for parsed_plugin in self._string_to_modules(plugins):
+            plugin = importer.import_class_or_module(parsed_plugin.module)
+            if not isclass(plugin):
+                message = "Importing test library: '%s' failed." % parsed_plugin.module
+                raise DataError(message)
+            plugin = plugin(self, *parsed_plugin.args,
+                            **parsed_plugin.kw_args)
+            if not isinstance(plugin, LibraryComponent):
+                message = 'Plugin does not inherit SeleniumLibrary.base.LibraryComponent'
+                raise PluginError(message)
+            self._store_plugin_keywords(plugin)
+            libraries.append(plugin)
+        return libraries
+
+    def _string_to_modules(self, modules):
+        Module = namedtuple('Module', 'module, args, kw_args')
+        parsed_modules = []
+        for module in modules.split(','):
+            module = module.strip()
+            module_and_args = module.split(';')
+            module_name = module_and_args.pop(0)
             kw_args = {}
             args = []
-            for argument in plugin_and_args:
+            for argument in module_and_args:
                 if '=' in argument:
                     key, value = argument.split('=')
                     kw_args[key] = value
                 else:
                     args.append(argument)
-            plugin = Plugin(plugin=plugin_name, args=args, kw_args=kw_args)
-            parsed_plugins.append(plugin)
-        return parsed_plugins
-
-    def _import_modules(self, plugins):
-        importer = Importer('test library')
-        return [importer.import_class_or_module(plugin.plugin) for plugin in plugins]
+            module = Module(module=module_name, args=args, kw_args=kw_args)
+            parsed_modules.append(module)
+        return parsed_modules
 
     def _store_plugin_keywords(self, plugin):
         dynamic_core = DynamicCore([plugin])
