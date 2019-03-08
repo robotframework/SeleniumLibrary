@@ -18,7 +18,7 @@ before_install:
   - sudo mv chromedriver /usr/bin/
 matrix:
   include:
-    - python: "3.6"
+    - python: "3.7-dev"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
