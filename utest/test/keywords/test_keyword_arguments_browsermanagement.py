@@ -9,6 +9,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
 
     def setUp(self):
         ctx = mock()
+        ctx.event_firing_webdriver = None
         ctx._browser = mock()
         self.brorser = BrowserManagementKeywords(ctx)
 
