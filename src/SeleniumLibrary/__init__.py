@@ -65,6 +65,7 @@ class SeleniumLibrary(DynamicCore):
     - `Run-on-failure functionality`
     - `Boolean arguments`
     - `Plugins`
+    - `EventFiringWebDriver`
     - `Thread support`
     - `Importing`
     - `Shortcuts`
@@ -455,6 +456,35 @@ class SeleniumLibrary(DynamicCore):
 
     | python -m robot.libdoc SeleniumLibrary::plugins=/path/to/Plugin.py ./SeleniumLibraryWithPlugin.html
 
+    = EventFiringWebDriver =
+
+    The Selenium
+    [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
+    offers listener API for firing events before and after certain Selenium API calls.
+    SeleniumLibrary offers support for Selenium ``EventFiringWebDriver`` listener class, by providing possibility
+    to import the listener class with ``event_firing_webdriver`` argument. Refer to the Selenium
+    ``EventFiringWebDriver`` documentation which Selenium API methods which can fire events and how the Selenium
+    listener class should be implemented.
+
+    == Importing listener class ==
+
+    Importing Selenium listener class is similar when importing Robot Framework
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#importing-libraries|libraries]. It
+    is possible import Selenium listener class with using
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-physical-path-to-library|physical path]
+    or with
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-library-name|listener name],
+    exactly in same way as importing libraries in Robot Framework. Selenium listener class is searched from the same
+    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|module search path]
+    as Robot Framework searches libraries. It is only possible to import listener class written in Python, other
+    programming languages or Robot Framework test data is not supported. Like with Robot Framework library imports,
+    Selenium listener class name is case sensitive and spaces are not supported in the class name. It is only
+    possible to import one Selenium listener class and it is not possible to provide arguments for the Selenium
+    listener class.
+
+    | Library | SeleniumLibrary | event_firing_webdriver=listner.SeleniumListener | # Improts listener with name.         |
+    | Library | SeleniumLibrary | event_firing_webdriver=${CURDIR}/MyListener.py  | # Imports listner with physical path. |
+
     = Thread support =
 
     SeleniumLibrary is not thread safe. This is mainly due because the underlying
@@ -468,7 +498,8 @@ class SeleniumLibrary(DynamicCore):
 
     def __init__(self, timeout=5.0, implicit_wait=0.0,
                  run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None, plugins=None):
+                 screenshot_root_directory=None, plugins=None,
+                 event_firing_webdriver=None):
         """SeleniumLibrary can be imported with several optional arguments.
 
         - ``timeout``:
@@ -482,6 +513,9 @@ class SeleniumLibrary(DynamicCore):
           the directory where the log file is written is used.
         - ``plugins``:
           Allows extending the SeleniumLibrary with external Python classes.
+        - ``event_firing_webdriver``:
+          Class for wrapping Selenium with
+          [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
         """
         self.timeout = timestr_to_secs(timeout)
         self.implicit_wait = timestr_to_secs(implicit_wait)
@@ -492,6 +526,7 @@ class SeleniumLibrary(DynamicCore):
         self.screenshot_root_directory = screenshot_root_directory
         self._element_finder = ElementFinder(self)
         self._plugin_keywords = []
+        self._event_firing_webdriver = event_firing_webdriver
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
