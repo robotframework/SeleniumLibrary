@@ -69,11 +69,7 @@ class WebDriverCreator(object):
             return {}
         if not isinstance(capabilities, dict):
             capabilities = self._string_to_dict(capabilities)
-        browser_alias = {'googlechrome': "chrome", 'gc': "chrome",
-                         'headlesschrome': 'chrome', 'ff': 'firefox',
-                         'headlessfirefox': 'firefox',
-                         'internetexplorer': 'ie'}
-        browser = browser_alias.get(browser, browser)
+        browser = self.browser_names.get(browser, browser)
         if browser in ['ie', 'firefox', 'edge']:
             return {'capabilities': capabilities}
         return {'desired_capabilities': capabilities}
