@@ -24,7 +24,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.utils.importer import Importer
 
 from SeleniumLibrary.base import DynamicCore, LibraryComponent
-from SeleniumLibrary.errors import NoOpenBrowser, PluginError
+from SeleniumLibrary.errors import NoOpenBrowser, PluginError, EventFiringWebDriverError
 from SeleniumLibrary.keywords import (AlertKeywords,
                                       BrowserManagementKeywords,
                                       CookieKeywords,
@@ -526,7 +526,6 @@ class SeleniumLibrary(DynamicCore):
         self.screenshot_root_directory = screenshot_root_directory
         self._element_finder = ElementFinder(self)
         self._plugin_keywords = []
-        self._event_firing_webdriver = event_firing_webdriver
         libraries = [
             AlertKeywords(self),
             BrowserManagementKeywords(self),
@@ -548,6 +547,10 @@ class SeleniumLibrary(DynamicCore):
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
+        if is_truthy(event_firing_webdriver):
+            self.event_firing_webdriver = self._parse_listener(event_firing_webdriver)
+        else:
+            self.event_firing_webdriver = None
 
     _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
     _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
@@ -674,6 +677,20 @@ class SeleniumLibrary(DynamicCore):
             self._store_plugin_keywords(plugin)
             libraries.append(plugin)
         return libraries
+
+    def _parse_listener(self, event_firing_webdriver):
+        listener_module = self._string_to_modules(event_firing_webdriver)
+        listener_count = len(listener_module )
+        if listener_count > 1:
+            message = 'Is is possible import one listener but there was %s listeners.' % listener_count
+            raise EventFiringWebDriverError(message)
+        listener_module = listener_module[0]
+        importer = Importer('test library')
+        listener = importer.import_class_or_module(listener_module.module)
+        if not isclass(listener):
+            message = "Importing test Selenium lister class '%s' failed." % listener_module.module
+            raise DataError(message)
+        return listener
 
     def _string_to_modules(self, modules):
         Module = namedtuple('Module', 'module, args, kw_args')
