@@ -26,3 +26,7 @@ class EventFiringWebDriverSeleniumLibrary(unittest.TestCase):
         listener = os.path.join(self.root_dir, 'MyListenerWrongName.py')
         with self.assertRaises(DataError):
             SeleniumLibrary(event_firing_webdriver=listener)
+
+    def test_too_many_event_firing_webdriver(self):
+        with self.assertRaises(ValueError):
+            SeleniumLibrary(event_firing_webdriver='%s,%s' % (self.listener, self.listener))

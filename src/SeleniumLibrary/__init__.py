@@ -24,7 +24,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.utils.importer import Importer
 
 from SeleniumLibrary.base import DynamicCore, LibraryComponent
-from SeleniumLibrary.errors import NoOpenBrowser, PluginError, EventFiringWebDriverError
+from SeleniumLibrary.errors import NoOpenBrowser, PluginError
 from SeleniumLibrary.keywords import (AlertKeywords,
                                       BrowserManagementKeywords,
                                       CookieKeywords,
@@ -682,8 +682,8 @@ class SeleniumLibrary(DynamicCore):
         listener_module = self._string_to_modules(event_firing_webdriver)
         listener_count = len(listener_module )
         if listener_count > 1:
-            message = 'Is is possible import one listener but there was %s listeners.' % listener_count
-            raise EventFiringWebDriverError(message)
+            message = 'Is is possible import only one listener but there was %s listeners.' % listener_count
+            raise ValueError(message)
         listener_module = listener_module[0]
         importer = Importer('test library')
         listener = importer.import_class_or_module(listener_module.module)
