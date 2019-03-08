@@ -194,7 +194,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def _wrap_event_firing_webdriver(self, driver):
         if not self.ctx.event_firing_webdriver:
             return driver
-        # self.debug('Wrapping driver to event_firing_webdriver.')
+        self.debug('Wrapping driver to event_firing_webdriver.')
         return EventFiringWebDriver(driver, self.ctx.event_firing_webdriver())
 
     @keyword

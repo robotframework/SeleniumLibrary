@@ -17,7 +17,7 @@ class MyListener(AbstractEventListener):
         logger.info("After click")
 
     def before_change_value_of(self, element, driver):
-        logger.info("Before send_keys")
+        logger.info("Before clear and send_keys")
 
     def after_change_value_of(self, element, driver):
-        logger.info("After send_keys")
+        logger.info("After clear and send_keys")

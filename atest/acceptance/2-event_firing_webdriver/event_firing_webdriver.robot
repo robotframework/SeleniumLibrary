@@ -13,7 +13,7 @@ ${FRONT_PAGE}=              ${ROOT}/
 *** Test Cases ***
 Open Browser To Start Page
     [Documentation]
-    ...    REGEXP:  .*Wrapping driver to event_firing_webdriver\..*
+    ...    LOG 1:12 DEBUG  Wrapping driver to event_firing_webdriver.
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}
 
@@ -25,12 +25,14 @@ Event Firing Webdriver Go To (WebDriver)
 
 Event Firing Webdriver Input Text (WebElement)
     [Documentation]
-    ...    REGEXP:  .*Before send_keys.*
-    ...    REGEXP:  .*After send_keys.*
+    ...    LOG 1:5 INFO  Before clear and send_keys
+    ...    LOG 1:9 INFO  After clear and send_keys
+    ...    LOG 1:10 INFO  Before clear and send_keys
+    ...    LOG 1:14 INFO  After clear and send_keys
     Input Text    //input[@name="textfield"]    FooBar
 
 Event Firing Webdriver Click Element (WebElement)
     [Documentation]
-    ...    REGEXP:  .*Before click.*
-    ...    REGEXP:  .*After click.*
+    ...    LOG 1:5 INFO  Before click
+    ...    LOG 1:9 INFO  After click
     Click Element    //input[@name="ok_button"]
