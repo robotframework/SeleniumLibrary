@@ -466,6 +466,8 @@ class SeleniumLibrary(DynamicCore):
     ``EventFiringWebDriver`` documentation which Selenium API methods which can fire events and how the Selenium
     listener class should be implemented.
 
+    EventFiringWebDriver is new in SeleniumLibrary 4.0
+
     == Importing listener class ==
 
     Importing Selenium listener class is similar when importing Robot Framework
