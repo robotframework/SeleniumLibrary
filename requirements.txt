@@ -1,2 +1,2 @@
-selenium >= 3.4.0
-robotframework >= 2.8.7
+selenium >= 3.8.1
+robotframework >= 3.0.4

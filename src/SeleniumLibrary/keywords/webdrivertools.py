@@ -20,7 +20,7 @@ import warnings
 from robot.utils import ConnectionCache
 from selenium import webdriver
 
-from SeleniumLibrary.utils import is_falsy, is_truthy, SELENIUM_VERSION
+from SeleniumLibrary.utils import is_falsy, is_truthy
 
 
 class WebDriverCreator(object):
@@ -86,16 +86,12 @@ class WebDriverCreator(object):
             if not desired_capabilities:
                 desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.CHROME.copy()}
             return self._remote(desired_capabilities, remote_url, options=options)
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Chrome(options=options, **desired_capabilities)
-        return webdriver.Chrome(**desired_capabilities)
+        return webdriver.Chrome(options=options, **desired_capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url):
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            options = webdriver.ChromeOptions()
-            options.set_headless()
-        else:
-            options = None
+        options = webdriver.ChromeOptions()
+        # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
+        options.set_headless()
         return self.create_chrome(desired_capabilities, remote_url, options)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir,
@@ -107,10 +103,7 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         desired_capabilities.update(self._geckodriver_log)
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Firefox(options=options, firefox_profile=profile,
-                                     **desired_capabilities)
-        return webdriver.Firefox(firefox_profile=profile,
+        return webdriver.Firefox(options=options, firefox_profile=profile,
                                  **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -120,17 +113,13 @@ class WebDriverCreator(object):
 
     @property
     def _geckodriver_log(self):
-        if SELENIUM_VERSION.major >= 3:
-            return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
-        return {}
+        return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
                                 ff_profile_dir):
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            options = webdriver.FirefoxOptions()
-            options.set_headless()
-        else:
-            options = None
+        options = webdriver.FirefoxOptions()
+        # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
+        options.set_headless()
         return self.create_firefox(desired_capabilities, remote_url,
                                    ff_profile_dir, options)
 
@@ -201,12 +190,9 @@ class WebDriverCreator(object):
         remote_url = str(remote_url)
         if 'capabilities' in desired_capabilities:
             desired_capabilities['desired_capabilities'] = desired_capabilities.pop('capabilities')
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Remote(command_executor=remote_url,
-                                    browser_profile=profile_dir, options=options,
-                                    **desired_capabilities)
+
         return webdriver.Remote(command_executor=remote_url,
-                                browser_profile=profile_dir,
+                                browser_profile=profile_dir, options=options,
                                 **desired_capabilities)
 
 
