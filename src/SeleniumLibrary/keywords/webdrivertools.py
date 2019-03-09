@@ -86,13 +86,12 @@ class WebDriverCreator(object):
             if not desired_capabilities:
                 desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.CHROME.copy()}
             return self._remote(desired_capabilities, remote_url, options=options)
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Chrome(options=options, **desired_capabilities)
-        return webdriver.Chrome(**desired_capabilities)
+        return webdriver.Chrome(options=options, **desired_capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url):
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             options = webdriver.ChromeOptions()
+            # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
             options.set_headless()
         else:
             options = None
@@ -107,11 +106,8 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         desired_capabilities.update(self._geckodriver_log)
-        if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
-            return webdriver.Firefox(options=options, firefox_profile=profile,
+        return webdriver.Firefox(options=options, firefox_profile=profile,
                                      **desired_capabilities)
-        return webdriver.Firefox(firefox_profile=profile,
-                                 **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
         if is_falsy(ff_profile_dir):
@@ -128,6 +124,7 @@ class WebDriverCreator(object):
                                 ff_profile_dir):
         if SELENIUM_VERSION.major >= 3 and SELENIUM_VERSION.minor >= 8:
             options = webdriver.FirefoxOptions()
+            # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
             options.set_headless()
         else:
             options = None
