@@ -37,6 +37,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_create_webdriver(self):
         ctx = mock()
+        ctx.event_firing_webdriver = None
         bm = BrowserManagementKeywords(ctx)
         FakeWebDriver = mock()
         driver = mock()
@@ -57,6 +58,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_open_browser_speed(self):
         ctx = mock()
+        ctx.event_firing_webdriver = None
         ctx.speed = 5.0
         browser = mock()
         when(webdriver).Chrome(options=None).thenReturn(browser)
@@ -67,6 +69,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_create_webdriver_speed(self):
         ctx = mock()
+        ctx.event_firing_webdriver = None
         ctx.speed = 0.0
         browser = mock()
         when(webdriver).Chrome(options=None).thenReturn(browser)

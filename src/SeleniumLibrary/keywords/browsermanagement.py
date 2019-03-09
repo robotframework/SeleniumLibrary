@@ -18,6 +18,7 @@ import time
 import types
 
 from selenium import webdriver
+from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
@@ -129,6 +130,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         driver = self._make_driver(browser, desired_capabilities,
                                    ff_profile_dir, remote_url)
+        driver = self._wrap_event_firing_webdriver(driver)
         try:
             driver.get(url)
         except Exception:
@@ -186,7 +188,14 @@ class BrowserManagementKeywords(LibraryComponent):
         driver = creation_func(**init_kwargs)
         self.debug("Created %s WebDriver instance with session id %s."
                    % (driver_name, driver.session_id))
+        driver = self._wrap_event_firing_webdriver(driver)
         return self.ctx.register_driver(driver, alias)
+
+    def _wrap_event_firing_webdriver(self, driver):
+        if not self.ctx.event_firing_webdriver:
+            return driver
+        self.debug('Wrapping driver to event_firing_webdriver.')
+        return EventFiringWebDriver(driver, self.ctx.event_firing_webdriver())
 
     @keyword
     def switch_browser(self, index_or_alias):
