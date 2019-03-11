@@ -174,8 +174,8 @@ class WindowKeywords(LibraryComponent):
         | ${width} | ${height}= | `Get Window Size` | True |
         """
         if inner == True:
-            inner_width = int(self.driver.execute_script("window.innerWidth"))
-            inner_height = int(self.driver.execute_script("window.innerHeight"))
+            inner_width = int(self.driver.execute_script("return window.innerWidth;"))
+            inner_height = int(self.driver.execute_script("return window.innerHeight;"))
 
             return inner_width, inner_height
         else:
@@ -204,11 +204,13 @@ class WindowKeywords(LibraryComponent):
         """
         if inner == True:
             self.driver.set_window_size(int(width), int(height))
-            inner_width = int(self.driver.execute_script("window.innerWidth"))
-            inner_height = int(self.driver.execute_script("window.innerHeight"))
-            width_offset = width - inner_width
-            height_offset = height - inner_height
-            return self.driver.set_window_size(int(width + width_offset), int(height + height_offset))
+            inner_width = self.driver.execute_script("return window.innerWidth;")
+            inner_height = self.driver.execute_script("return window.innerHeight;")
+            width_offset = int(width) - int(inner_width)
+            height_offset = int(height) - int(inner_height)
+            window_width = int(width) + int(width_offset)
+            window_height = int(height) + int(height_offset)
+            return self.driver.set_window_size(int(window_width), int(window_height))
         else:
             return self.driver.set_window_size(int(width), int(height))
 
