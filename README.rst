@@ -93,8 +93,24 @@ New browser driver versions are released to support features in
 new browsers, fix bug, or otherwise, and you need to keep an eye on them
 to know when to update drivers you use.
 
+Alternatively, you can use a tool called WebdriverManager__ which can
+find the latest version or when required, any version of appropriate
+webdrivers for you and then download and link/copy it into right
+location. Tool can run on all major operating systems and supports
+downloading of Chrome, Firefox, Opera & Edge webdrivers.
+
+Here's an example:
+
+.. code:: bash
+
+      pip install webdrivermanager
+      webdrivermanager firefox chrome --linkpath /usr/local/bin
+
+
+
 __ https://seleniumhq.github.io/selenium/docs/api/py/index.html#drivers
 __ https://en.wikipedia.org/wiki/PATH_(variable)
+__ https://github.com/omenia/webdrivermanager
 
 Usage
 -----
