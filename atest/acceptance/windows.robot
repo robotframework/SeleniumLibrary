@@ -76,14 +76,14 @@ Set Window Size using strings
     Should Be Equal    ${height}    ${800}
 
 Get and Set Inner Window Size
-    Set Inner Window Size    ${800}    ${600}
-    ${width}    ${height}=    Get Inner Window Size
+    Set Window Size    ${800}    ${600}    ${True}
+    ${width}    ${height}=    Get Window Size    ${True}
     Should Be Equal    ${width}    ${800}
     Should Be Equal    ${height}    ${600}
 
 Set Inner Window Size using strings
-    Set Inner Window Size    800    600
-    ${width}    ${height}=    Get Inner Window Size
+    Set Window Size    800    600    ${True}
+    ${width}    ${height}=    Get Window Size    ${True}
     Should Be Equal    ${width}    ${800}
     Should Be Equal    ${height}    ${600}
 
