@@ -1,5 +1,4 @@
 *** Setting ***
-Documentation     Test textfields
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
