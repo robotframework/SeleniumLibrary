@@ -92,6 +92,8 @@ class BrowserManagementKeywords(LibraryComponent):
         approach for switching is using an index returned by this keyword.
         These indices start from 1, are incremented when new browsers are
         opened, and reset back to 1 when `Close All Browsers` is called.
+        If you use same ``alias`` with multiple instances of a same browser,
+        new instance won't be generated but existing one will be re-used.
         See `Switch Browser` for more information and examples.
 
         Optional ``remote_url`` is the URL for a
@@ -123,23 +125,37 @@ class BrowserManagementKeywords(LibraryComponent):
         Applying ``desired_capabilities`` argument also for local browser is
         new in SeleniumLibrary 3.1.
         """
+        def _resolve_browser_alias_to_browser_name(name):
+            return WebDriverCreator.browser_names.get(name.lower(), name)
+
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
         else:
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
-        driver = self._make_driver(browser, desired_capabilities,
-                                   ff_profile_dir, remote_url)
-        driver = self._wrap_event_firing_webdriver(driver)
+
+        try:
+            driver, driver_index = self.ctx._get_driver(alias)
+            browser_name = _resolve_browser_alias_to_browser_name(browser)
+            if driver.name not in browser_name:
+                self.warn("Multiple browsers with alias %s being used." %
+                          alias)
+                raise RuntimeError
+
+        except (RuntimeError, ValueError, TypeError):
+            driver = self._make_driver(browser, desired_capabilities,
+                                       ff_profile_dir, remote_url)
+            driver = self._wrap_event_firing_webdriver(driver)
+            driver_index = self.ctx.register_driver(driver, alias)
+
         try:
             driver.get(url)
         except Exception:
-            self.ctx.register_driver(driver, alias)
             self.debug("Opened browser with session id %s but failed "
                        "to open url '%s'." % (driver.session_id, url))
             raise
         self.debug('Opened browser with session id %s.' % driver.session_id)
-        return self.ctx.register_driver(driver, alias)
+        return driver_index
 
     @keyword
     def create_webdriver(self, driver_name, alias=None, kwargs={},

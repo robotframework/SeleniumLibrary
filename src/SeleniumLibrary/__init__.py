@@ -692,3 +692,9 @@ class SeleniumLibrary(DynamicCore):
     def _store_plugin_keywords(self, plugin):
         dynamic_core = DynamicCore([plugin])
         self._plugin_keywords.extend(dynamic_core.get_keyword_names())
+
+    def _get_driver(self, index_or_alias):
+        driver = self._drivers.get_connection(index_or_alias)
+        index = self._drivers._resolve_alias_or_index(index_or_alias)
+        return (driver, index)
+
