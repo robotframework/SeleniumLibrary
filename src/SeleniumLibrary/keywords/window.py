@@ -15,7 +15,7 @@
 # limitations under the License.
 import time
 
-from SeleniumLibrary.utils import is_falsy, timestr_to_secs
+from SeleniumLibrary.utils import is_truthy, is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
@@ -166,21 +166,21 @@ class WindowKeywords(LibraryComponent):
 
         See also `Set Window Size`.
 
-        With optional `inner` parameter you receive
-        the inner size, excluding the browser bars, borders and so on.
+        If ``inner`` parameter is set to True, keyword returns
+        HTML DOM window.innerWidth and window.innerHeight properties.
+        See `Boolean arguments` for more details how to set boolean
+        arguments.
 
         Example:
         | ${width} | ${height}= | `Get Window Size` |
         | ${width} | ${height}= | `Get Window Size` | True |
         """
-        if inner == True:
+        if is_truthy(inner):
             inner_width = int(self.driver.execute_script("return window.innerWidth;"))
             inner_height = int(self.driver.execute_script("return window.innerHeight;"))
-
             return inner_width, inner_height
-        else:
-            size = self.driver.get_window_size()
-            return size['width'], size['height']
+        size = self.driver.get_window_size()
+        return size['width'], size['height']
 
     @keyword
     def set_window_size(self, width, height, inner=False):
@@ -193,26 +193,27 @@ class WindowKeywords(LibraryComponent):
         smaller will cause the actual size to be bigger than the requested
         size.
 
-        With optional `inner` parameter you can give
-        the inner size required, excluding the browser bars, borders and so on.
-        The window size is adapted to provide the correct page size for each browser.
-
+        If ``inner`` parameter is set to True, keyword sets the necessary
+        window width and height to have the desired HTML DOM window.innerWidth
+        and window.innerHeight
+        See `Boolean arguments` for more details how to set boolean
+        arguments.
 
         Example:
         | `Set Window Size` | 800 | 600 |
         | `Set Window Size` | 800 | 600 | True |
         """
-        if inner == True:
-            self.driver.set_window_size(int(width), int(height))
-            inner_width = self.driver.execute_script("return window.innerWidth;")
-            inner_height = self.driver.execute_script("return window.innerHeight;")
-            width_offset = int(width) - int(inner_width)
-            height_offset = int(height) - int(inner_height)
-            window_width = int(width) + int(width_offset)
-            window_height = int(height) + int(height_offset)
-            return self.driver.set_window_size(int(window_width), int(window_height))
-        else:
-            return self.driver.set_window_size(int(width), int(height))
+        width, height = int(width), int(height)
+        if is_truthy(inner):
+            self.driver.set_window_size(width, height)
+            inner_width = int(self.driver.execute_script("return window.innerWidth;"))
+            inner_height = int(self.driver.execute_script("return window.innerHeight;"))
+            width_offset = width - inner_width
+            height_offset = height - inner_height
+            window_width = width + width_offset
+            window_height = height + height_offset
+            return self.driver.set_window_size(window_width, window_height)
+        return self.driver.set_window_size(width, height)
 
     @keyword
     def get_window_position(self):
