@@ -138,8 +138,8 @@ class SeleniumLibrary(DynamicCore):
     | dom          | DOM expression.                     | ``dom:document.images[5]``     |
     | link         | Exact text a link has.              | ``link:The example``           |
     | partial link | Partial link text.                  | ``partial link:he ex``         |
-    | sizzle       | Sizzle selector provided by jQuery. | ``sizzle:div.example``         |
-    | jquery       | Same as the above.                  | ``jquery:div.example``         |
+    | sizzle       | Sizzle selector deprecated.         | ``sizzle:div.example``         |
+    | jquery       | jQuery expression.                  | ``jquery:div.example``         |
     | default      | Keyword specific default behavior.  | ``default:example``            |
 
     See the `Default locator strategy` section below for more information
