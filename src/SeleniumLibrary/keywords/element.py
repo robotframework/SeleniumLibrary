@@ -168,7 +168,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def locator_should_match_x_times(self, locator, x, message=None, loglevel='TRACE'):
-        """Deprecated, use `Page Should Contain Element` with ``limit`` argument instead."""
+        """*DEPRECATED in SeleniumLibrary 4.0.*, use `Page Should Contain Element` with ``limit`` argument instead."""
         count = len(self.find_elements(locator))
         x = int(x)
         if count != x:
@@ -802,7 +802,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def press_key(self, locator, key):
-        """Deprecated use `Press Keys` instead."""
+        """*DEPRECATED in SeleniumLibrary 4.0.* use `Press Keys` instead."""
         if key.startswith('\\') and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
         element = self.find_element(locator)
