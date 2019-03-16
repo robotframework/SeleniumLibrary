@@ -67,14 +67,6 @@ class CookieKeywords(LibraryComponent):
             return pairs
 
     @keyword
-    def get_cookie_value(self, name):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Cookie` instead."""
-        cookie = self.driver.get_cookie(name)
-        if cookie is not None:
-            return cookie['value']
-        raise ValueError("Cookie with name %s not found." % name)
-
-    @keyword
     def get_cookie(self, name):
         """Returns information of cookie with ``name`` as an object.
 

@@ -64,11 +64,6 @@ class FrameKeywords(LibraryComponent):
         self.info("Current frame contains text '%s'." % text)
 
     @keyword
-    def current_frame_contains(self, text, loglevel='TRACE'):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Current Frame Should Contain` instead."""
-        self.current_frame_should_contain(text, loglevel)
-
-    @keyword
     def current_frame_should_not_contain(self, text, loglevel='TRACE'):
         """Verifies that current frame does not contains ``text``.
 

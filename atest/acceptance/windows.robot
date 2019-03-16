@@ -137,7 +137,7 @@ Select Window With Delay By Title And Window Not Found
 Select Popup Window By Excluded List
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
-    @{excluded_handle_list}=    List Windows
+    @{excluded_handle_list}=    Get Window Handles
     Click Link    my popup
     ${parent}=    Select Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original
@@ -147,7 +147,7 @@ Select Popup Window By Excluded List
 
 Select Popup Window With Delay By Excluded List
     [Tags]    Known Issue Internet Explorer
-    @{excluded_handle_list}=    List Windows
+    @{excluded_handle_list}=    Get Window Handles
     Click Button     id:MyButton
     Select Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original

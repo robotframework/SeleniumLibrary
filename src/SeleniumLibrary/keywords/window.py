@@ -127,11 +127,6 @@ class WindowKeywords(LibraryComponent):
         return self.driver.window_handles
 
     @keyword
-    def list_windows(self):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Window Handles` instead."""
-        return self.get_window_handles()
-
-    @keyword
     def get_window_identifiers(self):
         """Returns and logs id attributes of all known browser windows."""
         ids = [info.id for info in self._window_manager.get_window_infos()]

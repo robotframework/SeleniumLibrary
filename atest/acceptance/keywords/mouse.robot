@@ -48,8 +48,3 @@ Mouse Up
 Simulate Event
     Simulate event    el_for_blur    blur
     Textfield Value Should Be    el_for_blur    blur el_for_blur
-
-Simulate is deprecated
-    [Documentation]    "Simulate" is deprecated in favor of "Simulate Event"
-    Simulate    el_for_blur    blur
-    Textfield Value Should Be    el_for_blur    blur el_for_blur
