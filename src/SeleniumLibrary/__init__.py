@@ -57,8 +57,8 @@ class SeleniumLibrary(DynamicCore):
     SeleniumLibrary uses the Selenium WebDriver modules internally to
     control a web browser. See http://seleniumhq.org for more information
     about Selenium in general and SeleniumLibrary README.rst
-    https://github.com/robotframework/SeleniumLibrary#browser-drivers
-    for more details about webdriver binary instalation.
+    [https://github.com/robotframework/SeleniumLibrary#browser-drivers|Browser drivers chapter]
+    for more details about WebDriver binary installation.
 
     == Table of contents ==
 
