@@ -190,43 +190,6 @@ class SelectElementKeywords(LibraryComponent):
             select.select_by_index(i)
 
     @keyword
-    def select_from_list(self, locator, *options):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Select From List By Label/Value/Index` instead.
-
-        This keyword selects options based on labels or values, which makes
-        it very complicated and slow. It has been deprecated in
-        SeleniumLibrary 3.0, and dedicated keywords `Select From List By
-        Label`, `Select From List By Value` and `Select From List By Index`
-        should be used instead.
-        """
-        non_existing_items = []
-        items_str = options and "option(s) '%s'" % ", ".join(options) or "all options"
-        self.info("Selecting %s from list '%s'." % (items_str, locator))
-        select = self._get_select_list(locator)
-        if not options:
-            for i in range(len(select.options)):
-                select.select_by_index(i)
-            return
-        for item in options:
-            try:
-                select.select_by_value(item)
-            except Exception:
-                try:
-                    select.select_by_visible_text(item)
-                except Exception:
-                    non_existing_items = non_existing_items + [item]
-                    continue
-        if any(non_existing_items):
-            if select.is_multiple:
-                raise ValueError("Options '%s' not in list '%s'." % (", ".join(non_existing_items), locator))
-            else:
-                if any(non_existing_items[:-1]):
-                    items_str = non_existing_items[:-1] and "Option(s) '%s'" % ", ".join(non_existing_items[:-1])
-                    self.warn("%s not found within list '%s'." % (items_str, locator))
-                if options and options[-1] in non_existing_items:
-                    raise ValueError("Option '%s' not in list '%s'." % (options[-1], locator))
-
-    @keyword
     def select_from_list_by_index(self, locator, *indexes):
         """Selects options from selection list ``locator`` by ``indexes``.
 
@@ -304,36 +267,6 @@ class SelectElementKeywords(LibraryComponent):
             raise RuntimeError("Un-selecting options works only with "
                                "multi-selection lists.")
         select.deselect_all()
-
-    @keyword
-    def unselect_from_list(self, locator, *items):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Unselect From List By Label/Value/Index` instead.
-
-        This keyword unselects options based on labels or values, which makes
-        it very complicated and slow. It has been deprecated in
-        SeleniumLibrary 3.0, and dedicated keywords `Unselect From List By
-        Label`, `Unselect From List By Value` and `Unselect From List By
-        Index` should be used instead.
-        """
-        items_str = items and "option(s) '%s'" % ", ".join(items) or "all options"
-        self.info("Unselecting %s from list '%s'." % (items_str, locator))
-        select = self._get_select_list(locator)
-        if not select.is_multiple:
-            raise RuntimeError("Keyword 'Unselect from list' works only for multiselect lists.")
-        if not items:
-            select.deselect_all()
-            return
-        for item in items:
-            # Only Selenium 2.52 and newer raise exceptions when there is no match.
-            # For backwards compatibility reasons we want to ignore them.
-            try:
-                select.deselect_by_value(item)
-            except NoSuchElementException:
-                pass
-            try:
-                select.deselect_by_visible_text(item)
-            except NoSuchElementException:
-                pass
 
     @keyword
     def unselect_from_list_by_index(self, locator, *indexes):

@@ -29,16 +29,6 @@ class AlertKeywords(LibraryComponent):
     _next_alert_action = ACCEPT
 
     @keyword
-    def input_text_into_prompt(self, text):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Input Text Into Alert` instead.
-
-        Types the given ``text`` into an input field in an alert.
-        Leaves the alert open.
-        """
-
-        self.input_text_into_alert(text, self.LEAVE)
-
-    @keyword
     def input_text_into_alert(self, text, action=ACCEPT, timeout=None):
         """Types the given ``text`` into an input field in an alert.
 
@@ -97,74 +87,6 @@ class AlertKeywords(LibraryComponent):
             return
         text = self._handle_alert(alert, action)
         raise AssertionError("Alert with message '%s' present." % text)
-
-    @keyword
-    def choose_cancel_on_next_confirmation(self):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` directly instead.
-
-        In versions prior to SeleniumLibrary 3.0, the alert handling
-        approach needed to be set separately before using the `Confirm
-        Action` keyword. New `Handle Alert` keyword accepts the action how
-        to handle the alert as a normal argument and should be used instead.
-        """
-        self._next_alert_action = self.DISMISS
-
-    @keyword
-    def choose_ok_on_next_confirmation(self):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` directly instead.
-
-        In versions prior to SeleniumLibrary 3.0, the alert handling
-        approach needed to be set separately before using the `Confirm
-        Action` keyword. New `Handle Alert` keyword accepts the action how
-        to handle the alert as a normal argument and should be used instead.
-        """
-        self._next_alert_action = self.ACCEPT
-
-    @keyword
-    def confirm_action(self):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` instead.
-
-        By default accepts an alert, but this behavior can be altered
-        with `Choose Cancel On Next Confirmation` and `Choose Ok On Next
-        Confirmation` keywords. New `Handle Alert` keyword accepts the action
-        how to handle the alert as a normal argument and should be used
-        instead.
-        """
-        text = self.handle_alert(self._next_alert_action)
-        self._next_alert_action = self.ACCEPT
-        return text
-
-    @keyword
-    def get_alert_message(self, dismiss=True):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` instead.
-
-        Returns the message the alert has. Dismisses the alert by default
-        (i.e. presses ``Cancel``) and setting ``dismiss`` to false leaves
-        the alert open. There is no support to accept the alert (i.e. to
-        press ``Ok``).
-
-        `Handle Alert` has better support for controlling should the alert
-        be accepted, dismissed, or left open.
-        """
-        action = self.DISMISS if is_truthy(dismiss) else self.LEAVE
-        return self.handle_alert(action)
-
-    @keyword
-    def dismiss_alert(self, accept=True):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Handle Alert` instead.
-
-        Contrary to its name, this keyword accepts the alert by default
-        (i.e. presses ``Ok``). ``accept`` can be set to a false value
-        to dismiss the alert (i.e. to press ``Cancel``).
-
-        `Handle Alert` has better support for controlling should the alert
-        be accepted, dismissed, or left open.
-        """
-        if is_truthy(accept):
-            self.handle_alert(self.ACCEPT)
-            return True
-        self.handle_alert(self.DISMISS)
-        return False
 
     @keyword
     def handle_alert(self, action=ACCEPT, timeout=None):

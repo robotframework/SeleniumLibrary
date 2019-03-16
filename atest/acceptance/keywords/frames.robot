@@ -23,11 +23,6 @@ Current Frame Should (Not) Contain
     Current Frame Should Contain    This is RIGHT side.
     Current Frame Should Not Contain   LEFT
 
-Current Frame Contains is deprecated
-    [Documentation]    "Current Frame Contains" is deprecated in favor of "Current Frame Should Contain"
-    Select Frame    left
-    Current Frame Contains    This is LEFT side.
-
 Page Should Contain Text Within Frames
     Page Should contain    You're looking at right.
     Page Should Contain    Links

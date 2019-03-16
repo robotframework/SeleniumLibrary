@@ -657,11 +657,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.driver.execute_script("arguments[0].focus();", element)
 
     @keyword
-    def focus(self, locator):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Set Focus To Element` instead."""
-        self.set_focus_to_element(locator)
-
-    @keyword
     def scroll_element_into_view(self, locator):
         """Scrolls an element identified by ``locator`` into view.
 
@@ -794,19 +789,6 @@ evt.initEvent(eventName, true, true);
 return !element.dispatchEvent(evt);
         """
         self.driver.execute_script(script, element, event)
-
-    @keyword
-    def simulate(self, locator, event):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Simulate Event` instead."""
-        self.simulate_event(locator, event)
-
-    @keyword
-    def press_key(self, locator, key):
-        """Deprecated use `Press Keys` instead."""
-        if key.startswith('\\') and len(key) > 1:
-            key = self._map_ascii_key_code_to_key(int(key[1:]))
-        element = self.find_element(locator)
-        element.send_keys(key)
 
     @keyword
     def press_keys(self, locator=None, *keys):
@@ -987,17 +969,6 @@ return !element.dispatchEvent(evt);
         and ``loglevel`` arguments.
         """
         self.assert_page_not_contains(locator, 'image', message, loglevel)
-
-    @keyword
-    def get_matching_xpath_count(self, xpath, return_str=True):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Get Element Count` instead."""
-        count = self.get_element_count('xpath:' + xpath)
-        return str(count) if is_truthy(return_str) else count
-
-    @keyword
-    def xpath_should_match_x_times(self, xpath, x, message=None, loglevel='TRACE'):
-        """*DEPRECATED in SeleniumLibrary 3.2.* Use `Page Should Contain Element` with ``limit`` argument instead."""
-        self.locator_should_match_x_times('xpath:'+xpath, x, message, loglevel)
 
     @keyword
     def get_element_count(self, locator):

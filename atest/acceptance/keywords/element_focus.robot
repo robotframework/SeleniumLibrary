@@ -81,10 +81,3 @@ Set Focus To Element
     Set Focus To Element    el_for_focus
     Textfield Value Should Be    el_for_focus    focus el_for_focus
     Element Should Be Focused    el_for_focus
-
-Focus is deprecated
-    [Documentation]    "Focus" is deprecated in favor of "Set Focus To Element"
-    [Setup]    Go To Page "mouse/index.html"
-    Focus    el_for_focus
-    Textfield Value Should Be    el_for_focus    focus el_for_focus
-    Element Should Be Focused    el_for_focus
