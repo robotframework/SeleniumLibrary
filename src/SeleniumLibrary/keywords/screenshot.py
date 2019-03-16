@@ -35,8 +35,6 @@ class ScreenshotKeywords(LibraryComponent):
         screenshots are saved to the same directory where Robot Framework's
         log file is written.
 
-        ``persist`` argument is deprecated and has no effect.
-
         The previous value is returned and can be used to restore
         the original value later if needed.
 
