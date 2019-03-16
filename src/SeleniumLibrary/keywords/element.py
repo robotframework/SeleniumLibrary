@@ -791,6 +791,14 @@ return !element.dispatchEvent(evt);
         self.driver.execute_script(script, element, event)
 
     @keyword
+    def press_key(self, locator, key):
+        """Deprecated use `Press Keys` instead."""
+        if key.startswith('\\') and len(key) > 1:
+            key = self._map_ascii_key_code_to_key(int(key[1:]))
+        element = self.find_element(locator)
+        element.send_keys(key)
+
+    @keyword
     def press_keys(self, locator=None, *keys):
         """Simulates user pressing key(s) to an element or on the active browser.
 
