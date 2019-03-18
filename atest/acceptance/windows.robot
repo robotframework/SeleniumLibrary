@@ -89,6 +89,7 @@ Set Inner Window Size using strings
 
 Get and Set Inner Window Size with Frames
     Go To Page "frames/frameset.html"
+    Set Window Size         ${800}    ${600}    ${True}
     ${page_width}           ${page_height}=     Get Window Size    ${True}
     Select Frame            left
     Set Window Size         ${800}    ${600}    ${True}
