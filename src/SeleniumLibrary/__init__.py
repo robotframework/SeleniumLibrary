@@ -495,7 +495,7 @@ class SeleniumLibrary(DynamicCore):
     [https://github.com/SeleniumHQ/selenium/wiki/Frequently-Asked-Questions#q-is-webdriver-thread-safe|
     Selenium tool is not thread safe] within one browser/driver instance.
     Because of the limitation in the Selenium side, the keywords or the
-    API provided the SeleniumLibrary is not thread safe.
+    API provided by the SeleniumLibrary is not thread safe.
     """
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
