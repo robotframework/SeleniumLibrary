@@ -92,11 +92,10 @@ Get and Set Inner Window Size with Frames
     Set Window Size         ${800}    ${600}    ${True}
     ${page_width}           ${page_height}=     Get Window Size    ${True}
     Select Frame            left
-    Set Window Size         ${800}    ${600}    ${True}
+    Set Window Size         ${400}    ${300}    ${True}
     ${frame_width}          ${frame_height}=    Get Window Size    ${True}
-    Should Be Equal         ${frame_width}      ${800}
-    Should Be Equal         ${frame_height}     ${600}
-    Should Not Be Equal     ${frame_width}      ${page_width}
+    Should Be Equal         ${frame_width}      ${400}
+    Should Be Equal         ${frame_height}     ${300}
 
 Get and Set Window Position
     [Tags]  Known Issue Chrome    Known Issue Safari
