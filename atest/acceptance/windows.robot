@@ -87,6 +87,16 @@ Set Inner Window Size using strings
     Should Be Equal    ${width}    ${800}
     Should Be Equal    ${height}    ${600}
 
+Get and Set Inner Window Size with Frames
+    Go To Page "frames/frameset.html"
+    ${page_width}           ${page_height}=     Get Window Size    ${True}
+    Select Frame            left
+    Set Window Size         ${800}    ${600}    ${True}
+    ${frame_width}          ${frame_height}=    Get Window Size    ${True}
+    Should Be Equal         ${frame_width}      ${800}
+    Should Be Equal         ${frame_height}     ${600}
+    Should Not Be Equal     ${frame_width}      ${page_width}
+
 Get and Set Window Position
     [Tags]  Known Issue Chrome    Known Issue Safari
     Set Window Position    ${300}    ${200}
