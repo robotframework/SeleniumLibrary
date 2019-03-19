@@ -1,22 +1,27 @@
 *** Setting ***
 Test Setup        Go To Page "forms/html5_input_types.html"
 Resource          ../resource.robot
+Library           ../../resources/testlibs/date_parser.py
 
 *** Test Cases ***
 Input field type color
-    Input Text    id:color    \#72da19
+    Input Text    id:color     \#72da19
     ${value} =    Get Value    id:color
     Log    ${value}    # Get value does not return the changed value
 
 Input field type date
-    Input Text    id:date    03/01/2019
-    ${value} =    Get Value    id:date
-    Should Be Equal As Strings    ${value}    2019-03-01
+    ${date} =     Set Variable    11/22/2019
+    Input Text    id:date         ${date}
+    ${value} =    Get Value       id:date
+    ${date}    ${value} =    Parse Two Dates    ${date}    ${value}
+    Should Be Equal    ${value}    ${date}
 
 Input field type datetime-local
-    Input Text    id:datetime-local    12/24/201909:34AM
-    ${value} =    Get Value    id:datetime-local
-    Log    ${value}    # Get value does not return the value
+    ${date} =     Set Variable         04-03-002019 01:45PM
+    Input Text    id:datetime-local    ${date}
+    ${value} =    Get Value            id:datetime-local
+    ${date}    ${value} =    Parse Two Dates    ${date}    ${value}
+    Should Be Equal    ${value}    ${date}
 
 Input field type email
     Input Text    id:email    foo@bar.com
@@ -49,9 +54,11 @@ Input field type tel
     Should Be Equal As Strings    ${value}    123 456 567
 
 Input field type time
-    Input Text    id:time    02:34AM
+    ${time} =     Set Variable    02:34PM
+    Input Text    id:time         ${time}
     ${value} =    Get Value    id:time
-    Should Be Equal As Strings    ${value}    02:34
+    ${time}    ${value} =    Parse Two Dates    ${time}    ${value}
+    Should Be Equal    ${value}    ${time}
 
 Input field type url
     Input Text    id:url    https://github.com/robotframework/SeleniumLibrary
@@ -59,6 +66,6 @@ Input field type url
     Should Be Equal As Strings    ${value}    https://github.com/robotframework/SeleniumLibrary
 
 Input field type week
-    Input Text    id:week    012019
+    Input Text    id:week    452019
     ${value} =    Get Value    id:week
-    Should Be Equal As Strings    ${value}    2019-W01
+    Should Be Equal As Strings    ${value}    2019-W45
