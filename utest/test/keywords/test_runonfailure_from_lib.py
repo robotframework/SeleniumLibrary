@@ -15,9 +15,3 @@ class SeleniumLibraryRunOnFailureTest(unittest.TestCase):
         sl = SeleniumLibrary()
         sl.failure_occurred()
         verify(SeleniumLibrary, times=1).failure_occurred()
-
-    def test_deprecated_run_on_failure(self):
-        when(SeleniumLibrary).failure_occurred().thenReturn(True)
-        sl = SeleniumLibrary()
-        sl._run_on_failure()
-        verify(SeleniumLibrary, times=1).failure_occurred()

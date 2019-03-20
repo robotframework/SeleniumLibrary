@@ -16,7 +16,6 @@
 
 from collections import namedtuple
 from inspect import isclass
-import warnings
 
 from robot.api import logger
 from robot.errors import DataError
@@ -40,7 +39,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WebDriverCache,
                                       WindowKeywords)
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import Deprecated, LibraryListener, timestr_to_secs, is_truthy
+from SeleniumLibrary.utils import LibraryListener, timestr_to_secs, is_truthy
 
 
 __version__ = '4.0.0.dev1'
@@ -639,24 +638,6 @@ class SeleniumLibrary(DynamicCore):
         """
         return self._element_finder.find(locator, first_only=False,
                                          required=False, parent=parent)
-
-    @property
-    def _cache(self):
-        warnings.warn('"SeleniumLibrary._cache" is deprecated, '
-                      'use public API instead.', DeprecationWarning)
-        return self._drivers
-
-    def _current_browser(self):
-        warnings.warn('"SeleniumLibrary._current_browser" is deprecated, '
-                      'use "SeleniumLibrary.driver" instead.',
-                      DeprecationWarning)
-        return self.driver
-
-    def _run_on_failure(self):
-        warnings.warn('"SeleniumLibrary._run_on_failure" is deprecated, '
-                      'use "SeleniumLibrary.failure_occurred" instead.',
-                      DeprecationWarning)
-        self.failure_occurred()
 
     def _parse_plugins(self, plugins):
         libraries = []
