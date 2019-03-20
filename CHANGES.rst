@@ -1,5 +1,6 @@
 Release Notes
 =============
+This is not anymore updated, release notes is generated in here: https://github.com/robotframework/SeleniumLibrary/tree/master/docs
 
 3.3.0
 -----
