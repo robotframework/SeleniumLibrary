@@ -556,13 +556,6 @@ class SeleniumLibrary(DynamicCore):
         else:
             self.event_firing_webdriver = None
 
-    _speed_in_secs = Deprecated('_speed_in_secs', 'speed')
-    _timeout_in_secs = Deprecated('_timeout_in_secs', 'timeout')
-    _implicit_wait_in_secs = Deprecated('_implicit_wait_in_secs',
-                                        'implicit_wait')
-    _run_on_failure_keyword = Deprecated('_run_on_failure_keyword',
-                                         'run_on_failure_keyword')
-
     def run_keyword(self, name, args, kwargs):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
