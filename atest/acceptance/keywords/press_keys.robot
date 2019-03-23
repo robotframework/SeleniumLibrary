@@ -1,6 +1,10 @@
 *** Settings ***
 Test Setup        Go To Page "forms/input_special_keys.html"
 Resource          ../resource.robot
+Library           ../../resources/testlibs/ctrl_or_command.py
+
+*** Variables ***
+${CTRL_OR_COMMAND}    ${EMPTY}
 
 *** Test Cases ***
 Press Keys Normal Keys
@@ -86,6 +90,11 @@ Press Keys Multiple Times Without Element
 
 Press Keys Without Element Special Keys
     Click Element    text_field
-    Press Keys       None    CTRL+A    CTRL+v
+    Press Keys       None    ${CTRL_OR_COMMAND}+A    ${CTRL_OR_COMMAND}+v
     Click Button     OK
     Wait Until Page Contains    Please input text and click the button. Text will appear in the page.     timeout=3
+
+*** Keywords ***
+CTRL Or Command Key
+    ${CTRL_OR_COMMAND} =    Ctrl Or Command Key
+    Set Suite Variable      ${CTRL_OR_COMMAND}
