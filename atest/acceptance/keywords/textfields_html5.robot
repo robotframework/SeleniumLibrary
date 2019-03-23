@@ -1,7 +1,6 @@
 *** Setting ***
 Test Setup        Go To Page "forms/html5_input_types.html"
 Resource          ../resource.robot
-Library           ../../resources/testlibs/date_parser.py
 
 *** Test Cases ***
 Input field type color
