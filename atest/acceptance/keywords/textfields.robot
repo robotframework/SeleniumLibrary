@@ -16,10 +16,25 @@ Input Text and Input Password
     ...    LOG 2 Typing text 'username' into text field 'username_field'.
     ...    LOG 3 Typing password into text field 'password_field'.
     [Setup]    Go To Page "forms/login.html"
-    Input Text    username_field    username
+    Input Text        username_field    username
     Input Password    password_field    password
+    ${username} =    Get Value          username_field
+    ${password} =    Get Value          password_field
+    Should Be Equal    ${username}      username
+    Should Be Equal    ${password}      password
     Submit Form
     Verify Location Is "forms/submit.html"
+
+Input Text and Input Password No Clear
+    [Setup]    Go To Page "forms/login.html"
+    Input Text        username_field    user    clear=False
+    Input Password    password_field    pass    False
+    Input Text        username_field    name    clear=False
+    Input Password    password_field    word    False
+    ${username} =    Get Value          username_field
+    ${password} =    Get Value          password_field
+    Should Be Equal    ${username}      username
+    Should Be Equal    ${password}      password
 
 Input Non-ASCII Text
     [Documentation]

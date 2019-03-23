@@ -18,7 +18,7 @@ import os
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils import is_noney
+from SeleniumLibrary.utils import is_noney, is_truthy
 
 
 class FormElementKeywords(LibraryComponent):
@@ -213,11 +213,11 @@ class FormElementKeywords(LibraryComponent):
         self.find_element(locator).send_keys(file_path)
 
     @keyword
-    def input_password(self, locator, password):
+    def input_password(self, locator, password, clear=True):
         """Types the given password into text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
-        syntax.
+        syntax. See `Input Text` for ``clear`` argument details.
 
         Difference compared to `Input Text` is that this keyword does not
         log the given password on the INFO level. Notice that if you use
@@ -235,22 +235,29 @@ class FormElementKeywords(LibraryComponent):
         be seen there. Additionally Robot Framework logs all arguments using
         the TRACE level. Tests must thus not be executed using level below
         INFO if password should not be logged in any format.
+
+        The `clear` argument is new in SeleniumLibrary 4.0
         """
         self.info("Typing password into text field '%s'." % locator)
-        self._input_text_into_text_field(locator, password)
+        self._input_text_into_text_field(locator, password, clear)
 
     @keyword
-    def input_text(self, locator, text):
+    def input_text(self, locator, text, clear=True):
         """Types the given ``text`` into text field identified by ``locator``.
 
-        Use `Input Password` if you do not want the given ``text`` to be
-        logged.
+        When ``clear`` is true, the input element is cleared before
+        text is typed to the element. When false, the previous text
+        is not cleared from the element. Use `Input Password` if you
+        do not want the given ``text`` to be logged.
 
         See the `Locating elements` section for details about the locator
-        syntax.
+        syntax. See the `Boolean arguments` section how Boolean values are
+        handled.
+
+        The `clear` argument is new in SeleniumLibrary 4.0
         """
         self.info("Typing text '%s' into text field '%s'." % (text, locator))
-        self._input_text_into_text_field(locator, text)
+        self._input_text_into_text_field(locator, text, clear)
 
     @keyword
     def page_should_contain_textfield(self, locator, message=None, loglevel='TRACE'):
@@ -405,7 +412,8 @@ class FormElementKeywords(LibraryComponent):
                 return element.get_attribute('value')
         return None
 
-    def _input_text_into_text_field(self, locator, text):
+    def _input_text_into_text_field(self, locator, text, clear):
         element = self.find_element(locator)
-        element.clear()
+        if is_truthy(clear):
+            element.clear()
         element.send_keys(text)
