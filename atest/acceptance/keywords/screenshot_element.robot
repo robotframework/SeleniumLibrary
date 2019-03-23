@@ -8,7 +8,7 @@ Capture Element Screenshot
     [Setup]    Remove Files    ${OUTPUTDIR}/selenium-element-screenshot-1.png
     ${path} =    Capture Element Screenshot    id:nothing
     File Should Exist    ${OUTPUTDIR}/selenium-element-screenshot-1.png
-    Should Be Equal    ${path}    ${OUTPUTDIR}/selenium-element-screenshot-1.png
+    Should Be Equal    ${path}    ${OUTPUTDIR}${/}selenium-element-screenshot-1.png
 
 Capture Element Screenshot When Element Does Not Exist
     Run Keyword And Expect Error
@@ -17,9 +17,9 @@ Capture Element Screenshot When Element Does Not Exist
 
 Capture Element Screenshot When Path Does Not Exist
     [Setup]    Remove Directory    ${OUTPUTDIR}/elements_pictures
-    ${path} =    Capture Element Screenshot    id:nothing    ${OUTPUTDIR}/elements_pictures/selenium-element-screenshot-1.png
-    File Should Exist    ${OUTPUTDIR}/elements_pictures/selenium-element-screenshot-1.png
-    Should Be Equal    ${path}    ${OUTPUTDIR}/elements_pictures/selenium-element-screenshot-1.png
+    ${path} =    Capture Element Screenshot    id:nothing    ${OUTPUTDIR}${/}elements_pictures${/}selenium-element-screenshot-1.png
+    File Should Exist    ${OUTPUTDIR}${/}elements_pictures${/}selenium-element-screenshot-1.png
+    Should Be Equal    ${path}    ${OUTPUTDIR}${/}elements_pictures${/}selenium-element-screenshot-1.png
 
 Capture Element Screenshot When No Browser Is Open
     [Setup]    Close All Browsers
