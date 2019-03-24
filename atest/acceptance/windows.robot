@@ -90,10 +90,9 @@ Set Inner Window Size using strings
 Get and Set Inner Window Size with Frames
     Go To Page "frames/frameset.html"
     Select Frame            left
-    Set Window Size         ${400}    ${300}    ${True}
-    ${frame_width}          ${frame_height}=    Get Window Size    ${True}
-    ${check}=               Run Keyword And Return Status       Check Frame Size    ${frame_width}      ${frame_height}     ${400}    ${300}
-    Should Be Equal         ${check}    ${False}
+    Run Keyword And Expect Error
+    ...    Keyword failed setting correct window size.
+    ...    Set Window Size         ${400}    ${300}    ${True}
 
 Get and Set Window Position
     [Tags]  Known Issue Chrome    Known Issue Safari
@@ -222,8 +221,3 @@ Wait Until New Window Is Open
 New Windows Should Be Open
     ${titles} =    Get Window Titles
     Should Be True    len(${titles}) > 1
-
-Check Frame Size
-    [Arguments]     ${frame_width}      ${frame_height}     ${width}    ${height}
-    Should Be Equal         ${frame_width}      ${width}
-    Should Be Equal         ${frame_height}     ${height}
