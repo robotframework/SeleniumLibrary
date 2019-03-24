@@ -199,6 +199,9 @@ class WindowKeywords(LibraryComponent):
         See `Boolean arguments` for more details how to set boolean
         arguments.
 
+        This keyword does NOT support Frames. If a frame is selected,
+        switch to default before running this.
+
         Example:
         | `Set Window Size` | 800 | 600 |
         | `Set Window Size` | 800 | 600 | True |
@@ -212,7 +215,12 @@ class WindowKeywords(LibraryComponent):
             height_offset = height - inner_height
             window_width = width + width_offset
             window_height = height + height_offset
-            return self.driver.set_window_size(window_width, window_height)
+            res = self.driver.set_window_size(window_width, window_height)
+            result_width = int(self.driver.execute_script("return window.innerWidth;"))
+            result_height = int(self.driver.execute_script("return window.innerHeight;"))
+            if result_width != width or result_height != height:
+                raise AssertionError("Keyword failed setting correct window size.")
+            return res
         return self.driver.set_window_size(width, height)
 
     @keyword
