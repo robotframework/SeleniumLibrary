@@ -1,6 +1,4 @@
 *** Settings ***
-Documentation    Suite description
-Suite Teardown    Close All Browsers
 Resource          ../resource.robot
 
 *** Test Cases ***
@@ -9,7 +7,7 @@ Browser Open With Implicit Wait Should Not Override Default
     [Teardown]    Close Browser
 
 Browser Open With Implicit Wait And Test Wating
-    Open Browser To Start Page
+    [Setup]    Open Browser To Start Page
     ${old_value} =     Set Selenium Implicit Wait    3
     ${start_time} =    Get Current Date    result_format=epoch    exclude_millis=yes
     Run Keyword And Ignore Error  Wait Until Page Contains Element       //not_here    1
