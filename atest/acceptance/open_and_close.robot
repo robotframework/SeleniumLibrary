@@ -7,10 +7,6 @@ Browser Should Open And Close
     Open Browser To Start Page Without Testing Default Options
     Close Browser
 
-Browser Open With Implicit Wait Should Not Override Default
-    Open Browser To Start Page And Test Implicit Wait    10
-    Close Browser
-
 There Should Be A Good Error Message If Browser Is Not Opened
     Run Keyword And Expect Error    No browser is open.    Title Should Be    foo
 
