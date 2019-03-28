@@ -31,20 +31,6 @@ Open Browser To Start Page Without Testing Default Options
     ${orig timeout} =    Set Selenium Timeout    10 seconds
     [Return]    ${orig speed}    5 seconds
 
-Open Browser To Start Page And Test Implicit Wait
-    [Arguments]    ${implicit_wait}
-    [Documentation]    This keyword tests that 'Set Selenium Implicit Wait' and
-    ...    'Get Selenium Implicit Wait' work as expected
-    Should Not Be Equal    0    ${implicit_wait}
-    ...    Please do not pass in a value of 0 for the implicit wait argument for this function
-    ${old_wait}=    Set Selenium Implicit Wait    ${implicit_wait}
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}
-    ${default_implicit_wait} =    Get Selenium Implicit Wait
-    Should Be Equal    ${implicit_wait} seconds    ${default_implicit_wait}
-    #be sure to revert the implicit wait to whatever it was before so as to not effect other tests
-    Set Selenium Implicit Wait    ${old_wait}
-
 Cannot Be Executed In IE
     [Documentation]    Cannot Be Executed In IE
     ${runsInIE}=    Set Variable If    "${BROWSER}".replace(' ', '').lower() in ['ie', '*iexplore', 'internetexplorer']    ${TRUE}

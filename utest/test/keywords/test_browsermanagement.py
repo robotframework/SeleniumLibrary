@@ -38,6 +38,21 @@ class BrowserManagementTests(unittest.TestCase):
         sl.set_selenium_implicit_wait('1 min')
         self.assertEqual(sl.implicit_wait, 60.0)
 
+    def test_selenium_implicit_wait_error(self):
+        with self.assertRaises(ValueError):
+            SeleniumLibrary(implicit_wait='False')
+        sl = SeleniumLibrary(implicit_wait='3')
+        with self.assertRaises(ValueError):
+            sl.set_selenium_implicit_wait('1 vuosi')
+
+    def test_selenium_implicit_wait_get(self):
+        sl = SeleniumLibrary(implicit_wait='3')
+        self.assertEqual(sl.get_selenium_implicit_wait(), '3 seconds')
+
+        org_value = sl.set_selenium_implicit_wait('1 min')
+        self.assertEqual(sl.get_selenium_implicit_wait(), '1 minute')
+        self.assertEqual(org_value, '3 seconds')
+
     def test_bad_browser_name(self):
         ctx = mock()
         bm = BrowserManagementKeywords(ctx)

@@ -2,10 +2,6 @@
 Resource          ../resource.robot
 
 *** Test Cases ***
-Browser Open With Implicit Wait Should Not Override Default
-    Open Browser To Start Page And Test Implicit Wait    10
-    [Teardown]    Close Browser
-
 Browser Open With Implicit Wait And Test Wating
     [Setup]    Open Browser To Start Page
     ${old_value} =     Set Selenium Implicit Wait    3
