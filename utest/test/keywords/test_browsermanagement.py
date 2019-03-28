@@ -4,7 +4,7 @@ from mockito import when, mock, verify, verifyNoMoreInteractions, unstub
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import BrowserManagementKeywords
-from SeleniumLibrary.utils import SELENIUM_VERSION
+from SeleniumLibrary import SeleniumLibrary
 
 
 class BrowserManagementTests(unittest.TestCase):
@@ -25,6 +25,33 @@ class BrowserManagementTests(unittest.TestCase):
         verifyNoMoreInteractions(first_browser)
         verifyNoMoreInteractions(second_browser)
         unstub()
+
+    def test_selenium_implicit_wait_default(self):
+        sl = SeleniumLibrary()
+        self.assertEqual(sl.implicit_wait, 0.0)
+
+    def test_set_selenium_implicit_wait(self):
+        sl = SeleniumLibrary()
+        sl.set_selenium_implicit_wait('5.0')
+        self.assertEqual(sl.implicit_wait, 5.0)
+
+        sl.set_selenium_implicit_wait('1 min')
+        self.assertEqual(sl.implicit_wait, 60.0)
+
+    def test_selenium_implicit_wait_error(self):
+        with self.assertRaises(ValueError):
+            SeleniumLibrary(implicit_wait='False')
+        sl = SeleniumLibrary(implicit_wait='3')
+        with self.assertRaises(ValueError):
+            sl.set_selenium_implicit_wait('1 vuosi')
+
+    def test_selenium_implicit_wait_get(self):
+        sl = SeleniumLibrary(implicit_wait='3')
+        self.assertEqual(sl.get_selenium_implicit_wait(), '3 seconds')
+
+        org_value = sl.set_selenium_implicit_wait('1 min')
+        self.assertEqual(sl.get_selenium_implicit_wait(), '1 minute')
+        self.assertEqual(org_value, '3 seconds')
 
     def test_bad_browser_name(self):
         ctx = mock()
