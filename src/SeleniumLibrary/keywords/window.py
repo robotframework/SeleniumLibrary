@@ -169,10 +169,10 @@ class WindowKeywords(LibraryComponent):
         If ``inner`` parameter is set to True, keyword returns
         HTML DOM window.innerWidth and window.innerHeight properties.
         See `Boolean arguments` for more details how to set boolean
-        arguments.
+        arguments. The ``inner`` is new in SeleniumLibrary 4.0.
 
         Example:
-        | ${width} | ${height}= | `Get Window Size` |
+        | ${width} | ${height}= | `Get Window Size` |      |
         | ${width} | ${height}= | `Get Window Size` | True |
         """
         if is_truthy(inner):
@@ -195,15 +195,15 @@ class WindowKeywords(LibraryComponent):
 
         If ``inner`` parameter is set to True, keyword sets the necessary
         window width and height to have the desired HTML DOM window.innerWidth
-        and window.innerHeight
+        and window.innerHeight The ``inner`` is new in SeleniumLibrary 4.0.
         See `Boolean arguments` for more details how to set boolean
         arguments.
 
-        This keyword does NOT support Frames. If a frame is selected,
+        This ``inner`` argument does not support Frames. If a frame is selected,
         switch to default before running this.
 
         Example:
-        | `Set Window Size` | 800 | 600 |
+        | `Set Window Size` | 800 | 600 |      |
         | `Set Window Size` | 800 | 600 | True |
         """
         width, height = int(width), int(height)
@@ -215,12 +215,12 @@ class WindowKeywords(LibraryComponent):
             height_offset = height - inner_height
             window_width = width + width_offset
             window_height = height + height_offset
-            res = self.driver.set_window_size(window_width, window_height)
+            size = self.driver.set_window_size(window_width, window_height)
             result_width = int(self.driver.execute_script("return window.innerWidth;"))
             result_height = int(self.driver.execute_script("return window.innerHeight;"))
             if result_width != width or result_height != height:
                 raise AssertionError("Keyword failed setting correct window size.")
-            return res
+            return size['width'], size['height']
         return self.driver.set_window_size(width, height)
 
     @keyword
