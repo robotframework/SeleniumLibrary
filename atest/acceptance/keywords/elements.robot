@@ -5,9 +5,11 @@ Resource          ../resource.robot
 Library           String
 
 *** Test Cases ***
-Get Elements
+Get Many Elements
     @{links}=    Get WebElements    //div[@id="div_id"]/a
     Length Should Be    ${links}    12
+
+Get Zero Elements
     ${no_elements} =     Get WebElements    id:non_existing_elem
     Should Be Empty    ${no_elements}
 
@@ -15,6 +17,8 @@ Get Web Element
     @{links}=    Get WebElements    //div[@id="div_id"]/a
     ${link}=    Get WebElement    //div[@id="div_id"]/a
     Should Be Equal    @{links}[0]    ${link}
+
+Get Web Element Should Fail If Element Is Not Found
     Run Keyword and Expect Error
     ...    Element with locator 'id=non_existing_elem' not found.
     ...    Get WebElement    id=non_existing_elem
