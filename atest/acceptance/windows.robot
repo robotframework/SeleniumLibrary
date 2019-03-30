@@ -75,6 +75,25 @@ Set Window Size using strings
     Should Be Equal    ${width}    ${600}
     Should Be Equal    ${height}    ${800}
 
+Get and Set Inner Window Size
+    Set Window Size    ${800}    ${600}    ${True}
+    ${width}    ${height}=    Get Window Size    ${True}
+    Should Be Equal    ${width}    ${800}
+    Should Be Equal    ${height}    ${600}
+
+Set Inner Window Size using strings
+    Set Window Size    800    600    ${True}
+    ${width}    ${height}=    Get Window Size    ${True}
+    Should Be Equal    ${width}    ${800}
+    Should Be Equal    ${height}    ${600}
+
+Get and Set Inner Window Size with Frames
+    Go To Page "frames/frameset.html"
+    Select Frame            left
+    Run Keyword And Expect Error
+    ...    Keyword failed setting correct window size.
+    ...    Set Window Size         ${400}    ${300}    ${True}
+
 Get and Set Window Position
     [Tags]  Known Issue Chrome    Known Issue Safari
     Set Window Position    ${300}    ${200}

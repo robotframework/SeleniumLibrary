@@ -15,7 +15,7 @@
 # limitations under the License.
 import time
 
-from SeleniumLibrary.utils import is_falsy, timestr_to_secs
+from SeleniumLibrary.utils import is_truthy, is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
@@ -156,19 +156,29 @@ class WindowKeywords(LibraryComponent):
         self.driver.maximize_window()
 
     @keyword
-    def get_window_size(self):
+    def get_window_size(self, inner=False):
         """Returns current window width and height as integers.
 
         See also `Set Window Size`.
 
+        If ``inner`` parameter is set to True, keyword returns
+        HTML DOM window.innerWidth and window.innerHeight properties.
+        See `Boolean arguments` for more details how to set boolean
+        arguments. The ``inner`` is new in SeleniumLibrary 4.0.
+
         Example:
-        | ${width} | ${height}= | `Get Window Size` |
+        | ${width} | ${height}= | `Get Window Size` |      |
+        | ${width} | ${height}= | `Get Window Size` | True |
         """
+        if is_truthy(inner):
+            inner_width = int(self.driver.execute_script("return window.innerWidth;"))
+            inner_height = int(self.driver.execute_script("return window.innerHeight;"))
+            return inner_width, inner_height
         size = self.driver.get_window_size()
         return size['width'], size['height']
 
     @keyword
-    def set_window_size(self, width, height):
+    def set_window_size(self, width, height, inner=False):
         """Sets current windows size to given ``width`` and ``height``.
 
         Values can be given using strings containing numbers or by using
@@ -178,10 +188,36 @@ class WindowKeywords(LibraryComponent):
         smaller will cause the actual size to be bigger than the requested
         size.
 
+        If ``inner`` parameter is set to True, keyword sets the necessary
+        window width and height to have the desired HTML DOM window.innerWidth
+        and window.innerHeight The ``inner`` is new in SeleniumLibrary 4.0.
+        See `Boolean arguments` for more details how to set boolean
+        arguments.
+
+        This ``inner`` argument does not support Frames. If a frame is selected,
+        switch to default before running this.
+
         Example:
-        | `Set Window Size` | 800 | 600 |
+        | `Set Window Size` | 800 | 600 |      |
+        | `Set Window Size` | 800 | 600 | True |
         """
-        return self.driver.set_window_size(int(width), int(height))
+        width, height = int(width), int(height)
+        if is_falsy(inner):
+            return self.driver.set_window_size(width, height)
+        self.driver.set_window_size(width, height)
+        inner_width = int(self.driver.execute_script("return window.innerWidth;"))
+        inner_height = int(self.driver.execute_script("return window.innerHeight;"))
+        self.info('window.innerWidth is %s and window.innerHeight is %s' % (inner_width, inner_height))
+        width_offset = width - inner_width
+        height_offset = height - inner_height
+        window_width = width + width_offset
+        window_height = height + height_offset
+        self.info('Setting window size to %s %s' % (window_width, window_height))
+        self.driver.set_window_size(window_width, window_height)
+        result_width = int(self.driver.execute_script("return window.innerWidth;"))
+        result_height = int(self.driver.execute_script("return window.innerHeight;"))
+        if result_width != width or result_height != height:
+            raise AssertionError("Keyword failed setting correct window size.")
 
     @keyword
     def get_window_position(self):
