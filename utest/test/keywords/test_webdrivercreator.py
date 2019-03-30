@@ -79,6 +79,33 @@ class WebDriverCreatorTests(unittest.TestCase):
             expected = {'capabilities': {'key1': 'value1', 'key2': 'value2'}}
             self.assertDictEqual(caps, expected)
 
+    def test_capabilities_resolver_firefox(self):
+        default_capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
+        expected_caps = {'desired_capabilities': {'version': '66.02', 'browserName': 'firefox'}}
+        caps_in = {'capabilities': {'version': '66.02'}}
+        resolved_caps = self.creator._remote_capabilities_resolver(caps_in, default_capabilities)
+        self.assertEqual(resolved_caps, expected_caps)
+
+        caps_in = {'capabilities': {'version': '66.02', 'browserName': 'firefox'}}
+        resolved_caps = self.creator._remote_capabilities_resolver(caps_in, default_capabilities)
+        self.assertEqual(resolved_caps, expected_caps)
+
+    def test_capabilities_resolver_no_set_caps(self):
+        default_capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
+        resolved_caps = self.creator._remote_capabilities_resolver({}, default_capabilities)
+        self.assertEqual(resolved_caps, {'desired_capabilities': default_capabilities})
+
+    def test_capabilities_resolver_chrome(self):
+        default_capabilities = webdriver.DesiredCapabilities.CHROME.copy()
+        expected_caps = {'desired_capabilities': {'version': '73.0.3683.86', 'browserName': 'chrome'}}
+        resolved_caps = self.creator._remote_capabilities_resolver({'capabilities': {'version': '73.0.3683.86'}},
+                                                                   default_capabilities)
+        self.assertEqual(resolved_caps, expected_caps)
+
+        caps_in = {'desired_capabilities': {'version': '73.0.3683.86', 'browserName': 'chrome'}}
+        resolved_caps = self.creator._remote_capabilities_resolver(caps_in, default_capabilities)
+        self.assertEqual(resolved_caps, expected_caps)
+
     def test_chrome(self):
         expected_webdriver = mock()
         when(webdriver).Chrome(options=None).thenReturn(expected_webdriver)
@@ -111,6 +138,17 @@ class WebDriverCreatorTests(unittest.TestCase):
                                desired_capabilities=capabilities,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({'desired_capabilities': capabilities}, url)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_chrome_remote_caps_no_browser_name(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'chrome', 'key': 'value'}
+        when(webdriver).Remote(command_executor=url,
+                               browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({'desired_capabilities': {'key': 'value'}}, url)
         self.assertEqual(driver, expected_webdriver)
 
     def test_chrome_healdless(self):
@@ -171,6 +209,18 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_firefox({'desired_capabilities': capabilities}, url, None)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_firefox_remote_caps_no_browsername(self):
+        url = 'http://localhost:4444/wd/hub'
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'firefox', 'version': '66.02'}
+        when(webdriver).Remote(command_executor=url,
+                               browser_profile=profile, options=None,
+                               desired_capabilities=capabilities).thenReturn(expected_webdriver)
+        driver = self.creator.create_firefox({'capabilities': {"version": "66.02"}}, url, None)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_firefox_profile(self):
         expected_webdriver = mock()
         profile = mock()
@@ -201,8 +251,9 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
         remote_url = 'localhost:4444'
+        capabilities = {'browserName': 'firefox', 'key': 'value'}
         when(webdriver).Remote(command_executor=remote_url, options=options,
-                               desired_capabilities={'key': 'value'},
+                               desired_capabilities=capabilities,
                                browser_profile=profile,).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_firefox({'capabilities': {'key': 'value'}}, remote_url, None)
         verify(options).set_headless()
@@ -254,6 +305,16 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_ie({'capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_ie_no_browser_name(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'internet explorer', 'key': 'value'}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({'capabilities': {'key': 'value'}}, url)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_edge(self):
         expected_webdriver = mock()
         when(webdriver).Edge().thenReturn(expected_webdriver)
@@ -280,6 +341,15 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_edge({'capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_edge_no_browser_name(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'MicrosoftEdge', 'key': 'value'}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_edge({'capabilities': {'key': 'value'}}, url)
+        self.assertEqual(driver, expected_webdriver)
 
     def test_opera(self):
         expected_webdriver = mock()
@@ -305,6 +375,16 @@ class WebDriverCreatorTests(unittest.TestCase):
                                desired_capabilities=capabilities,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({'desired_capabilities': capabilities}, url)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_opera_no_browser_name(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'opera', 'key': 'value'}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_opera({'desired_capabilities': {'key': 'value'}}, url)
         self.assertEqual(driver, expected_webdriver)
 
     def test_safari(self):
@@ -333,6 +413,16 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_safari({'desired_capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_safari_no_broser_name(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'safari', 'key': 'value'}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_safari({'desired_capabilities': {'key': 'value'}}, url)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_phantomjs(self):
         expected_webdriver = mock()
         when(webdriver).PhantomJS().thenReturn(expected_webdriver)
@@ -359,6 +449,16 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_phantomjs({'desired_capabilities': capabilities}, url)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_phantomjs_no_browser_name(self):
+        url = 'http://localhost:4444/wd/hub'
+        expected_webdriver = mock()
+        capabilities = {'browserName': 'phantomjs', 'key': 'value'}
+        when(webdriver).Remote(command_executor=url, browser_profile=None,
+                               desired_capabilities=capabilities,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_phantomjs({'desired_capabilities': {'key': 'value'}}, url)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_htmlunit_no_caps(self):
         caps = webdriver.DesiredCapabilities.HTMLUNIT
         expected_webdriver = mock()
@@ -369,7 +469,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_htmlunit({}, None)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_htmlunit_no_caps(self):
+    def test_htmlunit_remote_caps(self):
         caps = {"browserName": "htmlunit"}
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
@@ -379,14 +479,34 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_htmlunit({'desired_capabilities': caps}, None)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_htmlunit_no_browser_name(self):
+        capabilities = {'browserName': 'htmlunit', 'key': 'value'}
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=capabilities,
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_htmlunit({'desired_capabilities': {'key': 'value'}}, None)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_htmlunit_with_js(self):
-        caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS
+        caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
                                browser_profile=None,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit_with_js({}, None)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_htmlunit_with_js_no_browser_name(self):
+        capabilities = {'browserName': 'htmlunit', 'key': 'value'}
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=capabilities,
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_htmlunit_with_js({'desired_capabilities': {'key': 'value'}}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_android(self):
@@ -399,6 +519,16 @@ class WebDriverCreatorTests(unittest.TestCase):
         driver = self.creator.create_android({}, None)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_android_no_browser_name(self):
+        capabilities = {'browserName': 'android', 'key': 'value'}
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=capabilities,
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_android({'desired_capabilities': {'key': 'value'}}, None)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_iphone(self):
         caps = webdriver.DesiredCapabilities.IPHONE
         expected_webdriver = mock()
@@ -407,6 +537,16 @@ class WebDriverCreatorTests(unittest.TestCase):
                                browser_profile=None,
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_iphone({}, None)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_iphone_no_browser_name(self):
+        capabilities = {'browserName': 'iPhone', 'key': 'value'}
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=capabilities,
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_iphone({'desired_capabilities': {'key': 'value'}}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_create_driver_chrome(self):
