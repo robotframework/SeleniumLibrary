@@ -207,21 +207,22 @@ class WindowKeywords(LibraryComponent):
         | `Set Window Size` | 800 | 600 | True |
         """
         width, height = int(width), int(height)
-        if is_truthy(inner):
-            self.driver.set_window_size(width, height)
-            inner_width = int(self.driver.execute_script("return window.innerWidth;"))
-            inner_height = int(self.driver.execute_script("return window.innerHeight;"))
-            width_offset = width - inner_width
-            height_offset = height - inner_height
-            window_width = width + width_offset
-            window_height = height + height_offset
-            size = self.driver.set_window_size(window_width, window_height)
-            result_width = int(self.driver.execute_script("return window.innerWidth;"))
-            result_height = int(self.driver.execute_script("return window.innerHeight;"))
-            if result_width != width or result_height != height:
-                raise AssertionError("Keyword failed setting correct window size.")
-            return size['width'], size['height']
-        return self.driver.set_window_size(width, height)
+        if is_falsy(inner):
+            return self.driver.set_window_size(width, height)
+        self.driver.set_window_size(width, height)
+        inner_width = int(self.driver.execute_script("return window.innerWidth;"))
+        inner_height = int(self.driver.execute_script("return window.innerHeight;"))
+        self.info('window.innerWidth is %s and window.innerHeight is %s' % (inner_width, inner_height))
+        width_offset = width - inner_width
+        height_offset = height - inner_height
+        window_width = width + width_offset
+        window_height = height + height_offset
+        self.info('Setting window size to %s %s' % (window_width, window_height))
+        self.driver.set_window_size(window_width, window_height)
+        result_width = int(self.driver.execute_script("return window.innerWidth;"))
+        result_height = int(self.driver.execute_script("return window.innerHeight;"))
+        if result_width != width or result_height != height:
+            raise AssertionError("Keyword failed setting correct window size.")
 
     @keyword
     def get_window_position(self):
