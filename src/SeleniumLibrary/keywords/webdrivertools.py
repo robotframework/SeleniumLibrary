@@ -194,9 +194,6 @@ class WebDriverCreator(object):
     def _remote(self, desired_capabilities, remote_url,
                 profile_dir=None, options=None):
         remote_url = str(remote_url)
-        if 'capabilities' in desired_capabilities:
-            desired_capabilities['desired_capabilities'] = desired_capabilities.pop('capabilities')
-
         return webdriver.Remote(command_executor=remote_url,
                                 browser_profile=profile_dir, options=options,
                                 **desired_capabilities)
