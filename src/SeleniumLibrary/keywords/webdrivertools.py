@@ -81,10 +81,21 @@ class WebDriverCreator(object):
             desired_capabilities[key.strip()] = value.strip()
         return desired_capabilities
 
+    def _remote_capabilities_resolver(self, set_capabilities, default_capabilities):
+        if not set_capabilities:
+            return {'desired_capabilities': default_capabilities}
+        if 'capabilities' in set_capabilities:
+            caps = set_capabilities['capabilities']
+        else:
+            caps = set_capabilities['desired_capabilities']
+        if 'browserName' not in caps:
+            caps['browserName'] = default_capabilities['browserName']
+        return {'desired_capabilities': caps}
+
     def create_chrome(self, desired_capabilities, remote_url, options=None):
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.CHROME.copy()}
+            defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url, options=options)
         return webdriver.Chrome(options=options, **desired_capabilities)
 
@@ -98,8 +109,8 @@ class WebDriverCreator(object):
                        options=None):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                desired_capabilities = {'desired_capabilities': webdriver.DesiredCapabilities.FIREFOX.copy()}
+            defaul_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         desired_capabilities.update(self._geckodriver_log)
@@ -125,33 +136,29 @@ class WebDriverCreator(object):
 
     def create_ie(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                ie = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
-                desired_capabilities = {'desired_capabilities': ie}
+            defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Ie(**desired_capabilities)
 
     def create_edge(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                edge = webdriver.DesiredCapabilities.EDGE.copy()
-                desired_capabilities = {'desired_capabilities': edge}
+            defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Edge(**desired_capabilities)
 
     def create_opera(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                opera = webdriver.DesiredCapabilities.OPERA.copy()
-                desired_capabilities = {'desired_capabilities': opera}
+            defaul_caps = webdriver.DesiredCapabilities.OPERA.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Opera(**desired_capabilities)
 
     def create_safari(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                caps = webdriver.DesiredCapabilities.SAFARI.copy()
-                desired_capabilities = {'desired_capabilities': caps}
+            defaul_caps = webdriver.DesiredCapabilities.SAFARI.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Safari(**desired_capabilities)
 
@@ -159,38 +166,34 @@ class WebDriverCreator(object):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
                       'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
-            if not desired_capabilities:
-                caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
-                desired_capabilities = {'desired_capabilities': caps}
+            defaul_caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         return webdriver.PhantomJS(**desired_capabilities)
 
     def create_htmlunit(self, desired_capabilities, remote_url):
-        if not desired_capabilities:
-            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.HTMLUNIT
+        defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
+        desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
     def create_htmlunit_with_js(self, desired_capabilities, remote_url):
-        if not desired_capabilities:
-            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.HTMLUNITWITHJS
+        defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
+        desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
     def create_android(self, desired_capabilities, remote_url):
-        if not desired_capabilities:
-            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.ANDROID
+        defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
+        desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
     def create_iphone(self, desired_capabilities, remote_url):
-        if not desired_capabilities:
-            desired_capabilities['desired_capabilities'] = webdriver.DesiredCapabilities.IPHONE
+        defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
+        desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
     def _remote(self, desired_capabilities, remote_url,
                 profile_dir=None, options=None):
         remote_url = str(remote_url)
-        if 'capabilities' in desired_capabilities:
-            desired_capabilities['desired_capabilities'] = desired_capabilities.pop('capabilities')
-
         return webdriver.Remote(command_executor=remote_url,
                                 browser_profile=profile_dir, options=options,
                                 **desired_capabilities)
