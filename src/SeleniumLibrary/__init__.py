@@ -317,176 +317,22 @@ class SeleniumLibrary(DynamicCore):
 
     = Plugins =
 
-    SeleniumLibrary offers plugins as a way to modify, add library keywords and modify some of the internal
-    functionality without creating new library or hacking the source code. Plugins can be only loaded in the
-    library import, with the `plugins` argument and SeleniumLibrary does not offer way to unload the
-    plugins from the SeleniumLibrary.
+    SeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal
+    functionality without creating new library or hacking the source code. See
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending_seleniumlibrary.rst#Plugins|plugin API]
+    documentation for further details.
 
-    Plugins is new SeleniumLibrary 4.0
-
-    == Importing plugins ==
-
-    Importing plugins is similar when importing Robot Framework
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#importing-libraries|libraries]. It
-    is possible import plugin with using
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-physical-path-to-library|physical path]
-    or with
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-library-name|plugin name],
-    exactly in same way as importing libraries in Robot Framework. SeleniumLibrary plugins are searched from the
-    same
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|module search path]
-    as Robot Framework searches libraries. It is only possible to import plugins written in Python, other programming
-    languages or Robot Framework test data is not supported. Like with Robot Framework library imports, plugin
-    names are case sensitive and spaces are not supported in the plugin name. It is possible to import multiple plugins
-    at the same time by separating plugins with comma. It is possible to have space before and after the comma. Plugins
-    are imported in the order they defined in the `plugins` argument. If two or more plugins declare the same keyword
-    or modify the same method/attribute in the SeleniumLibrary, the last plugin to perform the changes will overwrite
-    the changes made by other plugins.
-
-    | Library | SeleniumLibrary | plugins=${CURDIR}/MyPlugin.py                   | # Imports plugin with physical path |
-    | Library | SeleniumLibrary | plugins=plugins.MyPlugin, plugins.MyOtherPlugin | # Import two plugins with name      |
-
-    Generally speaking, plugin are not any different from the classes that are used to implement keyword in the
-    SeleniumLibrary. Example like with
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/keywords/browsermanagement.py|BrowserManagementKeywords]
-    class inherits the
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    and uses ``@keyword`` decorator to mark which methods are exposed as keywords.
-
-    == Plugin arguments ==
-    When SeleniumLibrary creates instances from the plugin classes, it will by default initiate the class with a single
-    argument, called ``ctx`` (context). ``ctx`` is the instance of the SeleniummLibrary and it provides access to the
-    common methods and attributes used across in the SeleniumLibrary classes. But is recommended to use
-    wrappers provided by the `LibraryComponent`.
-
-    It is also possible to provide optional arguments to the plugins. Arguments must be separated with a semicolon
-    from the plugin. SeleniumLibrary will not convert arguments and plugin is responsible for converting the argument
-    to proper types.
-
-    | Library | SeleniumLibrary | plugins=plugins.Plugin;ArgOne;ArgTwo | # Import two plugins with two arguments: ArgOne and ArgTwo |
-
-    It is possible to provide variable number of arguments and keywords arguments. Named arguments must be defined
-    first, variable number of arguments as second and keywords arguments as last. All arguments must be separated
-    with semicolon. Example if plugin __init__ is defined like this:
-    | class Plugin(LibraryComponent):
-    |
-    |     def __init__(self, ctx, arg, *varargs, **kwargs):
-    Then, for example, it is possible to plugin with these arguments:
-    | Library | SeleniumLibrary | plugins=plugins.Plugin;argument1;varg1;varg2;kw1=kwarg1;kw2=kwarg2 |
-    Then the ``argument1`` is given the ``arg`` in the ``__init__``. The ``varg1`` and ``varg2`` variable number
-    arguments are given to the ``*varargs`` argument in the  ``__init__``. Finally, the ``kw1=kwarg1`` and
-    ``kw2=kwarg2`` keyword arguments are given to the ``**kwargs`` in the  ``__init__``. As in Python, there can be
-    zero or more variable number and keyword arguments.
-
-    == Plugin API ==
-
-    Plugins must be implemented as Python classes and plugins must inherit the SeleniumLibrary
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    class. Plugin __init__ must support at least one argument: ``ctx``. Also optional arguments are supported, see
-    `Plugin arguments` for more details how to provide optional arguments to plugins.
-
-    SeleniumLibrary uses Robot Framework
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#dynamic-library-api|dynamic library API].
-    The main difference, when compared to libraries using dynamic library API, is that plugins are not responsible
-    for implementing the dynamic library API. SeleniumLibrary is handling the dynamic library API requirements
-    towards Robot Framework. For plugins this means that methods that implements keywords, must be decorated
-    with ``@keyword`` decorator. The ``@keyword`` decorator can be imported from Robot Framework and used in the
-    following way:
-    | from robot.api.deco import keyword
-    |
-    | class Plugin(LibraryComponent):
-    |
-    |     @keyword
-    |     def keyword(self):
-    |         # Code here to implement a keyword.
-
-    == Handling failures ==
-    SeleniumLibrary does not suppress exception raised during plugin import or during keywords discovery from the
-    plugins. In this case the whole SeleniumLibrary import will fail and SeleniumLibrary keywords can not be used
-    from that import.
-
-    ==  LibraryComponent ==
-    Although ``ctx`` provides access to the common methods and attributes used in the SeleniumLibrary, the
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    provides more, an easier and IDE friendly access to the common methods and attributes, Example currently
-    active browser can be found from ``self.ctx.driver``, the ``LibraryComponent`` exposes the browser as:
-    ``self.driver``. Plugin classes must inherit the ``LibraryComponent``.
-
-    The following methods are available from the ``LibraryComponent`` class:
-
-    |        = Method =        |                                                                  = Description =                                                                  |
-    | find_element             | Finds first element matching ``locator``.                                                                                                         |
-    | find_elements            | Find all elements matching ``locator``.                                                                                                           |
-    | is_text_present          | Returns True if text is present in the page.                                                                                                      |
-    | is_element_enabled       | Returns True if element is enabled.                                                                                                               |
-    | is_visible               | Returns True if element is visible.                                                                                                               |
-    | log_source               | Calls method defining the `Log Source` keyword.                                                                                                   |
-    | assert_page_contains     | Raises AssertionError if element is not found from the page.                                                                                      |
-    | assert_page_not_contains | Raises AssertionError if element is found from the page.                                                                                          |
-    | get_timeout              | By default returns SeleniumLibrary ``timeout`` argument value. With argument converts string with Robot Framework ``timestr_to_secs`` to seconds. |
-    | info                     | Wrapper to ``robot.api.logger.info`` method.                                                                                                      |
-    | debug                    | Wrapper to ``robot.api.logger.debug`` method.                                                                                                     |
-    | warn                     | Wrapper to ``robot.api.logger.warn`` method.                                                                                                      |
-    | log                      | Wrapper to ``robot.api.logger.write`` method.                                                                                                     |
-
-    The following attributes are available from the ``LibraryComponent`` class:
-
-    | = Attribute =  |                                                                          = Description =                                                                           |
-    | driver         | Currently active browser/WebDriver instance in the SeleniumLibrary.                                                                                                |
-    | drivers        | [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/keywords/webdrivertools.py|Cache] for the opened browsers/WebDriver instances.  |
-    | element_finder | Read/write attribute for the [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/locators/elementfinder.py|ElementFinder] instance. |
-    | ctx            | Instance of the SeleniumLibrary.                                                                                                                                   |
-    | log_dir        | Folder where output files are written.                                                                                                                             |
-
-    See the
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/__init__.py|SeleniumLibrary init],
-    the
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/librarycomponent.py|LibraryComponent]
-    and the
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/src/SeleniumLibrary/base/context.py|ContextAware]
-    classes for further implementation details.
-
-    == Generating keyword documentation ==
-    To separate keywords which are added or modified by plugins, SeleniumLibrary will add ``plugin``
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#keyword-tags|keyword tag]
-    to all keywords added or modified from plugins. When SeleniumLibrary keyword documentation, with plugins,
-    is generated by
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#library-documentation-tool-libdoc|libdoc]
-    it is easy to separate keywords which are added or modified by plugins. Keyword documentation can be example
-    generated by following command:
-
-    | python -m robot.libdoc SeleniumLibrary::plugins=/path/to/Plugin.py ./SeleniumLibraryWithPlugin.html
+    Plugin API is new SeleniumLibrary 4.0
 
     = EventFiringWebDriver =
 
-    The Selenium
-    [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
-    offers listener API for firing events before and after certain Selenium API calls.
-    SeleniumLibrary offers support for Selenium ``EventFiringWebDriver`` listener class, by providing possibility
-    to import the listener class with ``event_firing_webdriver`` argument. Refer to the Selenium
-    ``EventFiringWebDriver`` documentation which Selenium API methods which can fire events and how the Selenium
-    listener class should be implemented.
+    The SeleniumLibrary offers support for
+    [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
+    See the Selenium and SeleniumLibrary
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending_seleniumlibrary.rst#EventFiringWebDriver|EventFiringWebDriver support]
+    documentation for futher details.
 
     EventFiringWebDriver is new in SeleniumLibrary 4.0
-
-    == Importing listener class ==
-
-    Importing Selenium listener class is similar when importing Robot Framework
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#importing-libraries|libraries]. It
-    is possible import Selenium listener class with using
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-physical-path-to-library|physical path]
-    or with
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#using-library-name|listener name],
-    exactly in same way as importing libraries in Robot Framework. Selenium listener class is searched from the same
-    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path|module search path]
-    as Robot Framework searches libraries. It is only possible to import listener class written in Python, other
-    programming languages or Robot Framework test data is not supported. Like with Robot Framework library imports,
-    Selenium listener class name is case sensitive and spaces are not supported in the class name. It is only
-    possible to import one Selenium listener class and it is not possible to provide arguments for the Selenium
-    listener class.
-
-    | Library | SeleniumLibrary | event_firing_webdriver=listner.SeleniumListener | # Improts listener with name.         |
-    | Library | SeleniumLibrary | event_firing_webdriver=${CURDIR}/MyListener.py  | # Imports listner with physical path. |
 
     = Thread support =
 
