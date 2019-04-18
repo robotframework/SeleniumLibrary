@@ -14,19 +14,19 @@
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#introduction" id="id5">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#keyword-documentation" id="id6">Keyword documentation</a></p></li>
-<li><p><a class="reference internal" href="#installation" id="id7">Installation</a></p></li>
-<li><p><a class="reference internal" href="#browser-drivers" id="id8">Browser drivers</a></p></li>
-<li><p><a class="reference internal" href="#usage" id="id9">Usage</a></p></li>
-<li><p><a class="reference internal" href="#extending-seleniumlibrary" id="id10">Extending SeleniumLibrary</a></p></li>
-<li><p><a class="reference internal" href="#support" id="id11">Support</a></p></li>
-<li><p><a class="reference internal" href="#versions" id="id12">Versions</a></p></li>
-<li><p><a class="reference internal" href="#history" id="id13">History</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="id6">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#keyword-documentation" id="id7">Keyword documentation</a></p></li>
+<li><p><a class="reference internal" href="#installation" id="id8">Installation</a></p></li>
+<li><p><a class="reference internal" href="#browser-drivers" id="id9">Browser drivers</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id10">Usage</a></p></li>
+<li><p><a class="reference internal" href="#extending-seleniumlibrary" id="id11">Extending SeleniumLibrary</a></p></li>
+<li><p><a class="reference internal" href="#support" id="id12">Support</a></p></li>
+<li><p><a class="reference internal" href="#versions" id="id13">Versions</a></p></li>
+<li><p><a class="reference internal" href="#history" id="id14">History</a></p></li>
 </ul>
 </div>
 <div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id5">Introduction</a></h1>
+<h1><a class="toc-backref" href="#id6">Introduction</a></h1>
 <p><a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> is a web testing library for <a class="reference external" href="http://robotframework.org">Robot Framework</a> that
 utilizes the <a class="reference external" href="http://seleniumhq.org">Selenium</a> tool internally. The project is hosted on <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a>
 and downloads can be found from <a class="reference external" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">PyPI</a>.</p>
@@ -44,12 +44,12 @@ different versions and the overall project history.</p>
 <a class="reference external image-reference" href="http://travis-ci.org/robotframework/SeleniumLibrary"><img alt="https://api.travis-ci.org/robotframework/SeleniumLibrary.png" src="https://api.travis-ci.org/robotframework/SeleniumLibrary.png" /></a>
 </div>
 <div class="section" id="keyword-documentation">
-<h1><a class="toc-backref" href="#id6">Keyword documentation</a></h1>
+<h1><a class="toc-backref" href="#id7">Keyword documentation</a></h1>
 <p>See <a class="reference external" href="http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> for available keywords and more information
 about the library in general.</p>
 </div>
 <div class="section" id="installation">
-<h1><a class="toc-backref" href="#id7">Installation</a></h1>
+<h1><a class="toc-backref" href="#id8">Installation</a></h1>
 <p>The recommended installation method is using <a class="reference external" href="http://pip-installer.org">pip</a>:</p>
 <pre class="literal-block">pip install --upgrade robotframework-seleniumlibrary</pre>
 <p>Running this command installs also the latest Selenium and Robot Framework
@@ -77,7 +77,7 @@ about installing Python and Robot Framework itself. For more details about
 using <span class="docutils literal">pip</span> see <a class="reference external" href="http://pip-installer.org">its own documentation</a>.</p>
 </div>
 <div class="section" id="browser-drivers">
-<h1><a class="toc-backref" href="#id8">Browser drivers</a></h1>
+<h1><a class="toc-backref" href="#id9">Browser drivers</a></h1>
 <p>After installing the library, you still need to install browser and
 operating system specific browser drivers for all those browsers you
 want to use in tests. These are the exact same drivers you need to use with
@@ -91,9 +91,17 @@ search engine with a search term like <span class="docutils literal">selenium ch
 New browser driver versions are released to support features in
 new browsers, fix bug, or otherwise, and you need to keep an eye on them
 to know when to update drivers you use.</p>
+<p>Alternatively, you can use a tool called <a class="reference external" href="https://github.com/omenia/webdrivermanager">WebdriverManager</a> which can
+find the latest version or when required, any version of appropriate
+webdrivers for you and then download and link/copy it into right
+location. Tool can run on all major operating systems and supports
+downloading of Chrome, Firefox, Opera &amp; Edge webdrivers.</p>
+<p>Here's an example:</p>
+<pre class="code bash literal-block"><code>pip install webdrivermanager
+webdrivermanager firefox chrome --linkpath /usr/local/bin</code></pre>
 </div>
 <div class="section" id="usage">
-<h1><a class="toc-backref" href="#id9">Usage</a></h1>
+<h1><a class="toc-backref" href="#id10">Usage</a></h1>
 <p>To use SeleniumLibrary in Robot Framework tests, the library needs to
 first be imported using the <span class="docutils literal">Library</span> setting as any other library.
 The library accepts some import time arguments, which are documented
@@ -144,13 +152,13 @@ ${</span><span class="name variable">BROWSER</span><span class="punctuation">}  
 </span><span class="generic subheading">Welcome Page Should Be Open</span><span class="punctuation">
     </span><span class="name function">Title Should Be</span><span class="punctuation">    </span><span class="literal string">Welcome Page</span></code></pre>
 <p>The above example is a slightly modified version of an example in a
-<a class="reference external" href="https://bitbucket.org/robotframework/webdemo">demo project</a> that illustrates using Robot Framework and SeleniumLibrary.
+<a class="reference external" href="https://github.com/robotframework/WebDemo">demo project</a> that illustrates using Robot Framework and SeleniumLibrary.
 See the demo for more examples that you can also execute on your own
 machine. For more information about Robot Framework test data syntax in
 general see the <a class="reference external" href="http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html">Robot Framework User Guide</a>.</p>
 </div>
 <div class="section" id="extending-seleniumlibrary">
-<h1><a class="toc-backref" href="#id10">Extending SeleniumLibrary</a></h1>
+<h1><a class="toc-backref" href="#id11">Extending SeleniumLibrary</a></h1>
 <p>Before creating your own library which extends the <span class="docutils literal">SeleniumLibrary</span>, please consider would
 the extension be also useful also for general usage. If it could be useful also for general
 usage, please create a new issue describing the enhancement request and even better if the
@@ -162,7 +170,7 @@ available, which are useful for creating new libraries. Please see <a class="ref
 for more details about the available methods and for examples how the library can be extended.</p>
 </div>
 <div class="section" id="support">
-<h1><a class="toc-backref" href="#id11">Support</a></h1>
+<h1><a class="toc-backref" href="#id12">Support</a></h1>
 <p>If the provided documentation is not enough, there are various support forums
 available:</p>
 <ul class="simple">
@@ -175,7 +183,7 @@ requests</p></li>
 </ul>
 </div>
 <div class="section" id="versions">
-<h1><a class="toc-backref" href="#id12">Versions</a></h1>
+<h1><a class="toc-backref" href="#id13">Versions</a></h1>
 <p>SeleniumLibrary has over the years lived under SeleniumLibrary and
 Selenium2Library names and different library versions have supported
 different Selenium and Python versions. This is summarized in the table
@@ -225,7 +233,7 @@ a bit more.</p>
 </table>
 </div>
 <div class="section" id="history">
-<h1><a class="toc-backref" href="#id13">History</a></h1>
+<h1><a class="toc-backref" href="#id14">History</a></h1>
 <p>SeleniumLibrary originally used the Selenium Remote Controller (RC) API.
 When Selenium 2 was introduced with the new but backwards incompatible
 WebDriver API, SeleniumLibrary kept using Selenium RC and separate
