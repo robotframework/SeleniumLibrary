@@ -47,17 +47,17 @@ SeleniumLibrary project handles the enhancement requests can be read from the CO
 Public API
 ==========
 The plugin API and extending SeleniumLibrary have same access to the SeleniumLibrary public API.
-All the methods, which are exposed as keywords, are available in the library public API. Generally
-keywords are converted to lover case and spaces are converted to underscores. Example `Open Browser`_
-keyword is available as ``open_browser`` method. The method name can be overwritten with the
-``@keyword`` decorator, but the SeleniumLibrary 4.0.0 release does not contain keywords
-where the keyword name would differ from the method name (other than the keyword case.) Please
-note that keywords created by the plugin API may not follow these rules and it is good to verify
-the method name from the plugin API source.
+All the methods, which are exposed as keywords, are available in the SeleniumLibrary public API.
+Generally keywords are converted to lover case and spaces are converted to underscores. Example
+`Open Browser`_ keyword is available as ``open_browser`` method. The method name can be
+overwritten with the ``@keyword`` decorator, but the SeleniumLibrary 4.0.0 release does not
+contain keywords where the keyword name would differ from the method name (other than the keyword
+case.) Please note that keywords created by the plugins may not follow these rules and it is good
+to verify the method name from the plugin API source.
 
 Methods and attributes which are not keywords but are available in the public API
 ---------------------------------------------------------------------------------
-The SeleniumLibrary also contains methods and attributes which are not keywords but are
+The SeleniumLibrary also contains methods and attributes which are not keywords, but are
 useful when creating plugin or extending the SeleniumLibrary. The available methods are:
 
 ================  ================================================================================
@@ -117,8 +117,7 @@ Plugin arguments
 ----------------
 When SeleniumLibrary creates instances from the plugin classes, it will by default initiate the class
 with a single argument, called ``ctx`` (context). ``ctx`` is the instance of the SeleniummLibrary and
-it provides access to the SeleniumLibrary `Public API`_. But is recommended to use wrappers
-provided by the `LibraryComponent`_ class.
+it provides access to the SeleniumLibrary `Public API`_.
 
 It is also possible to provide optional arguments to the plugins. Arguments must be separated with a
 semicolon from the plugin. SeleniumLibrary will not convert arguments to any specific type and everything
@@ -134,6 +133,7 @@ All arguments must be separated with semicolon. Example if plugin __init__ is de
     class Plugin(LibraryComponent):
 
         def __init__(self, ctx, arg, *varargs, **kwargs):
+            # Code to implement the plugin.
 
 Then, for example, it is possible to plugin with these arguments::
 
