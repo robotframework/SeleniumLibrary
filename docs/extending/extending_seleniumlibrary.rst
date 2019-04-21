@@ -38,19 +38,19 @@ new libraries are created than what the plugin API offers.
 
 Contributing to SeleniumLibrary project
 ---------------------------------------
-Before making your own plugin or library on top of the SeleniumLibrary, private or public, please consider
-would the plugin or extension be generally useful in the SeleniumLibrary. If the plugin or extension would
-be useful for others, then please create an issue and perhaps a pull request. More details how
-SeleniumLibrary project handles the enhancement requests can be read from the CONTRIBUTING.rst
-`Enhancement requests`_ chapter.
+Before making your own plugin or library on top of the SeleniumLibrary, private or public,
+please consider if the plugin or extension be generally useful in the SeleniumLibrary. If the
+plugin or extension would be useful for others, then please create an issue and perhaps a pull
+request. More details on how the SeleniumLibrary project handles the enhancement requests can
+be found in the CONTRIBUTING.rst `Enhancement requests`_ chapter.
 
 Public API
 ==========
 The plugin API and extending SeleniumLibrary have same access to the SeleniumLibrary public API.
 All the methods, which are exposed as keywords, are available in the SeleniumLibrary public API.
-Generally keywords are converted to lover case and spaces are converted to underscores. Example
-`Open Browser`_ keyword is available as ``open_browser`` method. The method name can be
-overwritten with the ``@keyword`` decorator, but the SeleniumLibrary 4.0.0 release does not
+Generally keywords are converted to lower case and spaces are converted to underscores. For
+example, the `Open Browser`_ keyword is available as ``open_browser`` method. The method name can
+be overwritten with the ``@keyword`` decorator, but the SeleniumLibrary 4.0.0 release does not
 contain keywords where the keyword name would differ from the method name (other than the keyword
 case.) Please note that keywords created by the plugins may not follow these rules and it is good
 to verify the method name from the plugin API source.
@@ -266,36 +266,38 @@ read the Robot Framework `dynamic library API`_ documentation.
 General principles for extending SeleniumLibrary
 ------------------------------------------------
 The principles described in the Robot Framework User Guide, `Extending existing test libraries`_
-chapter also apply when extending the SeleniumLibrary. There are two different ways to
+chapter also apply when extending SeleniumLibrary. There are two different ways to
 extend the SeleniumLibrary.
 
-1) Create a library which also the contains existing SeleniumLibrary keywords, example by using `inheritance`_.
+1) Create a library which also contains the existing SeleniumLibrary keywords, example by using `inheritance`_.
 2) Create library which contains only new keywords.
 
 When creating a library, which also includes the existing SeleniumLibrary keywords, there are
 extra steps which needs to be taken account, because SeleniumLibrary uses `PythonLibCore`_
 and the `dynamic library API`_. All methods which should be published as keywords must be
-decorated with ``@keyword`` decorator. The ``@keyword`` decorator can be imported in following way::
+decorated with the ``@keyword`` decorator. The ``@keyword`` decorator can be imported in
+the following way::
 
     from robot.api.deco import keyword
 
 Keywords should be inside of a ``class`` and the ``add_library_components`` method
 must be called to add keywords. The ``add_library_components`` method is inherited from the
-`PythonLibCore`_ project and the method must contains list of classes which contains the
+`PythonLibCore`_ project and the method must contain list of classes which contain the
 new keywords.
 
 Creating a new library by using inheritance
 -------------------------------------------
 Perhaps the easiest way to extend the SeleniumLibrary is to inherit the SeleniumLibrary and add
-new keywords methods to a new library. The `inheritance example`_ shows how to declare new
-keyword ``Get Browser Desired Capabilities`` and how to overwrite existing ``Open Browser`` keyword.
+new keywords methods to a new library. The `inheritance example`_ shows how to declare a new
+keyword ``Get Browser Desired Capabilities`` and how to overwrite the existing ``Open Browser``
+keyword.
 
-Because the ``InheritSeleniumLibrary`` class foes not overwrite the SeleniumLibrary ``init`` method,
-the ``add_library_components`` is called automatically. Then the ``InheritSeleniumLibrary`` class methods
-which are  decorated with ``@keyword`` decorator are added to the ``InheritSeleniumLibrary``
-library keywords. Also existing keywords from SeleniumLibrary are added as library keywords.
+Because the ``InheritSeleniumLibrary`` class does not overwrite the SeleniumLibrary ``init``
+method, the ``add_library_components`` is called automatically. Then the ``InheritSeleniumLibrary``
+class methods which are  decorated with ``@keyword`` decorator are added to the
+``InheritSeleniumLibrary`` library keywords. Also existing keywords from SeleniumLibrary are added as library keywords.
 
-Because the methods are not directly available in the SeleniumLibrary class, it not
+Because the methods are no longer  directly available in the SeleniumLibrary class, it's not
 possible to call the original method example like this::
 
     super(ClassName, self).open_browser(url, browser, alias, remote_url,
@@ -308,29 +310,29 @@ Instead user must call the method from the class instance which implements the k
 
 Creating a new library from multiple classes
 --------------------------------------------
-Decomposition is a good way to split library to smaller name spaces and it usually eases the
-library testing. The `decomposition example`_ shows how the ``Get Browser Desired Capabilities``
-and ``Open Browser`` keywords can divided to own classes.
+Decomposition is a good way to split library into smaller namespaces and it usually eases the
+testing of the library. The `decomposition example`_ shows how the ``Get Browser Desired Capabilities``
+and ``Open Browser`` keywords can be divided into their own classes.
 
 The example also shows the usage of the ``ctx`` (context) object and the `LibraryComponent`_ class.
-The ``ctx`` object is a instance of the SeleniumLibrary which provides access to the
+The ``ctx`` object is an instance of the SeleniumLibrary which provides access to the
 SeleniumLibrary `Public API`_ for the ``BrowserKeywords``  and ``DesiredCapabilitiesKeywords`` classes.
 
-The ``LibraryComponent`` is a wrapper class, which provides easier shortcuts the ``ctx`` object
-methods and example provides general logging methods. Example the Selenium WebDriver instance in
-the context: ``self.ctx.driver``, but the ``LibraryComponent`` provides a shortcut and it can be
+The ``LibraryComponent`` is a wrapper class, which provides easier shortcuts to the ``ctx`` object
+methods and the example provides general logging methods. Example the Selenium WebDriver instance
+in the context: ``self.ctx.driver``, but the ``LibraryComponent`` provides a shortcut and it can be
 accessed with: ``self.driver``
 
 
 Creating a new library by getting active library instance
 ---------------------------------------------------------
-Getting the active library instance provides way to create a new library that it does not
+Getting the active library instance provides a way to create a new library that does not
 automatically contain keywords from the SeleniumLibrary. This eases the name space
-handling and if only new keywords are created, user does not have to prefix the keywords with the
-library name. This way also allows user to freely choose the Robot Framework `library API`_.
-The `instance example`_ shows a way how the active SeleniumLibrary is get from the Robot Framework.
+handling and if only new keywords are created, the user does not have to prefix the keywords
+with the library name. This way also allows users to freely choose the Robot Framework `library API`_.
+The `instance example`_ shows a way to get the active SeleniumLibrary from the Robot Framework.
 The example shows how to declare ``Get Browser Desired Capabilities`` and ``Open Browser`` keywords
-to the new library and the `instance example`_ uses the `static keyword API`_ to declare new
+in the new library and the `instance example`_ uses the `static keyword API`_ to declare new
 keywords.
 
 .. _EventFiringWebDriver: https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver
