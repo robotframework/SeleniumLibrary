@@ -11,6 +11,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         ctx = mock()
         ctx.event_firing_webdriver = None
         ctx._browser = mock()
+        ctx._drivers = mock()
         self.brorser = BrowserManagementKeywords(ctx)
 
     def tearDown(self):

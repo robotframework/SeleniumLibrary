@@ -85,6 +85,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_open_browser_speed(self):
         ctx = mock()
+        ctx._drivers = mock()
         ctx.event_firing_webdriver = None
         ctx.speed = 5.0
         browser = mock()
@@ -96,6 +97,7 @@ class BrowserManagementTests(unittest.TestCase):
 
     def test_create_webdriver_speed(self):
         ctx = mock()
+        ctx._drivers = mock()
         ctx.event_firing_webdriver = None
         ctx.speed = 0.0
         browser = mock()

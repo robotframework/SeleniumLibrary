@@ -123,6 +123,18 @@ class BrowserManagementKeywords(LibraryComponent):
         Applying ``desired_capabilities`` argument also for local browser is
         new in SeleniumLibrary 3.1.
         """
+        index = self.drivers.get_alias_or_index(alias)
+        if index:
+            self.info('Using existing browser from index %s.' % index)
+            self.switch_browser(alias)
+            self.go_to(url)
+            return index
+        return self._make_new_browser(url, browser, alias, remote_url,
+                                      desired_capabilities, ff_profile_dir)
+
+    def _make_new_browser(self, url, browser='firefox', alias=None,
+                          remote_url=False, desired_capabilities=None,
+                          ff_profile_dir=None):
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))

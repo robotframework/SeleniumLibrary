@@ -83,3 +83,35 @@ class WebDriverCacheTests(unittest.TestCase):
         verify(browser1, times=1).quit()
         verify(browser2, times=1).quit()
         verify(browser3, times=1).quit()
+
+
+    def test_resolve_alias_or_index(self):
+        cache = WebDriverCache()
+
+        cache.register(mock(), 'foo')
+        cache.register(mock())
+        cache.register(mock())
+
+        index = cache.get_alias_or_index('foo')
+        self.assertEqual(index, 1)
+
+        index = cache.get_alias_or_index(1)
+        self.assertEqual(index, 1)
+
+        index = cache.get_alias_or_index(3)
+        self.assertEqual(index, 3)
+
+    def test_resolve_alias_or_index_error(self):
+        cache = WebDriverCache()
+
+        cache.register(mock(), 'foo')
+        cache.register(mock())
+
+        index = cache.get_alias_or_index('bar')
+        self.assertEqual(index, None)
+
+        index = cache.get_alias_or_index(12)
+        self.assertEqual(index, None)
+
+        index = cache.get_alias_or_index(-1)
+        self.assertEqual(index, None)
