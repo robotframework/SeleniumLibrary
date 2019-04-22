@@ -2,7 +2,6 @@
 Suite Teardown    Close All Browsers
 Resource          resource.robot
 
-
 *** Test Cases ***
 Open First Browser
     [Documentation]
