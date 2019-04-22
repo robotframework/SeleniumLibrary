@@ -230,3 +230,26 @@ class WebDriverCache(ConnectionCache):
                 driver.quit()
         self.empty_cache()
         return self.current
+
+    def get_index(self, alias_or_index):
+        index = self._get_index(alias_or_index)
+        try:
+            driver = self.get_connection(index)
+        except RuntimeError:
+            return None
+        return None if driver in self._closed else index
+
+    def _get_index(self, alias_or_index):
+        alias_or_index = None if alias_or_index == 'None' else alias_or_index
+        try:
+            return self.resolve_alias_or_index(alias_or_index)
+        except AttributeError:
+            pass
+        except ValueError:
+            return None
+        # TODO: This try/except block can be removed when minimum
+        #  required Robot Framework version is 3.3 or greater.
+        try:
+            return self._resolve_alias_or_index(alias_or_index)
+        except ValueError:
+            return None

@@ -88,11 +88,17 @@ class BrowserManagementKeywords(LibraryComponent):
         and require Selenium 3.8.0 or newer.
 
         Optional ``alias`` is an alias given for this browser instance and
-        it can be used for switching between browsers. An alternative
-        approach for switching is using an index returned by this keyword.
-        These indices start from 1, are incremented when new browsers are
-        opened, and reset back to 1 when `Close All Browsers` is called.
-        See `Switch Browser` for more information and examples.
+        it can be used for switching between browsers. When same ``alias``
+        is given with two `Open Browser` keywords, the first keyword will
+        open new browser. But the second one will switch to the already
+        opened browser and will not open new browser. The ``alias``
+        definition overrules ``browser`` definition. When same ``alias``
+        is used but different ``browser`` is defined, then switch to
+        browser with same alias is done and new browser is not opened.
+        An alternative approach for switching is using an index returned
+        by this keyword. These indices start from 1, are incremented when new
+        browsers are opened, and reset back to 1 when `Close All Browsers`
+        is called. See `Switch Browser` for more information and examples.
 
         Optional ``remote_url`` is the URL for a
         [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid].
@@ -116,13 +122,37 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Open Browser` | http://example.com | Firefox | alias=Firefox |
         | `Open Browser` | http://example.com | Edge    | remote_url=http://127.0.0.1:4444/wd/hub |
 
+        Alias examples:
+        | ${1_index} =    | `Open Browser` | http://example.com | Chrome  | alias=Chrome     | # Opens new browser because alias is new.         |
+        | ${2_index} =    | `Open Browser` | http://example.com | Firefox |                  | # Opens new browser because alias is not defined. |
+        | ${3_index} =    | `Open Browser` | http://example.com | Chrome  | alias=Chrome     | # Switches to the browser with Chrome alias.      |
+        | ${4_index} =    | `Open Browser` | http://example.com | Chrome  | alias=${1_index} | # Switches to the browser with Chrome alias.      |
+        | Should Be Equal | ${1_index}     | ${3_index}         |         |                  |                                                   |
+        | Should Be Equal | ${1_index}     | ${4_index}         |         |                  |                                                   |
+        | Should Be Equal | ${2_index}     | ${2}               |         |                  |                                                   |
+
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
         more.
 
         Applying ``desired_capabilities`` argument also for local browser is
         new in SeleniumLibrary 3.1.
+
+        Using ``alias`` to decide, is the new browser opened is new
+        in SeleniumLibrary 4.0.
         """
+        index = self.drivers.get_index(alias)
+        if index:
+            self.info('Using existing browser from index %s.' % index)
+            self.switch_browser(alias)
+            self.go_to(url)
+            return index
+        return self._make_new_browser(url, browser, alias, remote_url,
+                                      desired_capabilities, ff_profile_dir)
+
+    def _make_new_browser(self, url, browser='firefox', alias=None,
+                          remote_url=False, desired_capabilities=None,
+                          ff_profile_dir=None):
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
