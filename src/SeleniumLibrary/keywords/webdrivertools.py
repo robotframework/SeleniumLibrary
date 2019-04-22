@@ -231,7 +231,15 @@ class WebDriverCache(ConnectionCache):
         self.empty_cache()
         return self.current
 
-    def get_alias_or_index(self, alias_or_index):
+    def get_index(self, alias_or_index):
+        index = self._get_index(alias_or_index)
+        try:
+            driver = self.get_connection(index)
+        except RuntimeError:
+            return None
+        return None if driver in self._closed else index
+
+    def _get_index(self, alias_or_index):
         alias_or_index = None if alias_or_index == 'None' else alias_or_index
         try:
             return self.resolve_alias_or_index(alias_or_index)

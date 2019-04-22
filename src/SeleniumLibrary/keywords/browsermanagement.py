@@ -141,7 +141,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Using ``alias`` to decide, is the new browser opened is new
         in SeleniumLibrary 4.0.
         """
-        index = self.drivers.get_alias_or_index(alias)
+        index = self.drivers.get_index(alias)
         if index:
             self.info('Using existing browser from index %s.' % index)
             self.switch_browser(alias)

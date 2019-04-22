@@ -92,19 +92,19 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock())
         cache.register(mock())
 
-        index = cache.get_alias_or_index('foo')
+        index = cache.get_index('foo')
         self.assertEqual(index, 1)
 
-        index = cache.get_alias_or_index(1)
+        index = cache.get_index(1)
         self.assertEqual(index, 1)
 
-        index = cache.get_alias_or_index(3)
+        index = cache.get_index(3)
         self.assertEqual(index, 3)
 
-        index = cache.get_alias_or_index(None)
+        index = cache.get_index(None)
         self.assertEqual(index, None)
 
-        index = cache.get_alias_or_index('None')
+        index = cache.get_index('None')
         self.assertEqual(index, None)
 
     def test_resolve_alias_or_index_with_none(self):
@@ -113,16 +113,16 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock(), 'foo')
         cache.register(mock(), 'None')
 
-        index = cache.get_alias_or_index('foo')
+        index = cache.get_index('foo')
         self.assertEqual(index, 1)
 
-        index = cache.get_alias_or_index(1)
+        index = cache.get_index(1)
         self.assertEqual(index, 1)
 
-        index = cache.get_alias_or_index(None)
+        index = cache.get_index(None)
         self.assertEqual(index, None)
 
-        index = cache.get_alias_or_index('None')
+        index = cache.get_index('None')
         self.assertEqual(index, None)
 
     def test_resolve_alias_or_index_error(self):
@@ -131,11 +131,26 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock(), 'foo')
         cache.register(mock())
 
-        index = cache.get_alias_or_index('bar')
+        index = cache.get_index('bar')
         self.assertEqual(index, None)
 
-        index = cache.get_alias_or_index(12)
+        index = cache.get_index(12)
         self.assertEqual(index, None)
 
-        index = cache.get_alias_or_index(-1)
+        index = cache.get_index(-1)
+        self.assertEqual(index, None)
+
+    def test_close_and_same_alias(self):
+        cache = WebDriverCache()
+
+        cache.register(mock(), 'foo')
+        cache.register(mock(), 'bar')
+        cache.close()
+        index = cache.get_index('bar')
+        self.assertEqual(index, None)
+
+    def test_same_alias_new_browser(self):
+        cache = WebDriverCache()
+        cache.close()
+        index = cache.get_index('bar')
         self.assertEqual(index, None)
