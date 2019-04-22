@@ -101,6 +101,30 @@ class WebDriverCacheTests(unittest.TestCase):
         index = cache.get_alias_or_index(3)
         self.assertEqual(index, 3)
 
+        index = cache.get_alias_or_index(None)
+        self.assertEqual(index, None)
+
+        index = cache.get_alias_or_index('None')
+        self.assertEqual(index, None)
+
+    def test_resolve_alias_or_index_with_none(self):
+        cache = WebDriverCache()
+
+        cache.register(mock(), 'foo')
+        cache.register(mock(), 'None')
+
+        index = cache.get_alias_or_index('foo')
+        self.assertEqual(index, 1)
+
+        index = cache.get_alias_or_index(1)
+        self.assertEqual(index, 1)
+
+        index = cache.get_alias_or_index(None)
+        self.assertEqual(index, None)
+
+        index = cache.get_alias_or_index('None')
+        self.assertEqual(index, None)
+
     def test_resolve_alias_or_index_error(self):
         cache = WebDriverCache()
 

@@ -232,6 +232,7 @@ class WebDriverCache(ConnectionCache):
         return self.current
 
     def get_alias_or_index(self, alias_or_index):
+        alias_or_index = None if alias_or_index == 'None' else alias_or_index
         try:
             return self.resolve_alias_or_index(alias_or_index)
         except AttributeError:
