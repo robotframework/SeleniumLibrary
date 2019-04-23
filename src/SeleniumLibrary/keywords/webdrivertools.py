@@ -20,7 +20,7 @@ import warnings
 from robot.utils import ConnectionCache
 from selenium import webdriver
 
-from SeleniumLibrary.utils import is_falsy, is_truthy
+from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney
 
 
 class WebDriverCreator(object):
@@ -240,7 +240,7 @@ class WebDriverCache(ConnectionCache):
         return None if driver in self._closed else index
 
     def _get_index(self, alias_or_index):
-        alias_or_index = None if alias_or_index == 'None' else alias_or_index
+        alias_or_index = None if is_noney(alias_or_index) else alias_or_index
         try:
             return self.resolve_alias_or_index(alias_or_index)
         except AttributeError:
