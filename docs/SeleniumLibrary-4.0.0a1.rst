@@ -261,6 +261,6 @@ Altogether 18 issues. View on the `issue tracker <https://github.com/robotframew
 .. _#449: https://github.com/robotframework/SeleniumLibrary/issues/449
 .. _#1279: https://github.com/robotframework/SeleniumLibrary/issues/1279
 .. _#1301: https://github.com/robotframework/SeleniumLibrary/issues/1301
-.. _plugin API: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending_seleniumlibrary.rst
-.. _EventFiringWebdriver documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending_seleniumlibrary.rst
+.. _plugin API: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst
+.. _EventFiringWebdriver documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst
 .. _Selenium EventFiringWebdriver: https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html
