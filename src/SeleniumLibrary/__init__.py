@@ -319,7 +319,7 @@ class SeleniumLibrary(DynamicCore):
 
     SeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal
     functionality without creating new library or hacking the source code. See
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending_seleniumlibrary.rst#Plugins|plugin API]
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#Plugins|plugin API]
     documentation for further details.
 
     Plugin API is new SeleniumLibrary 4.0
@@ -329,7 +329,7 @@ class SeleniumLibrary(DynamicCore):
     The SeleniumLibrary offers support for
     [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
     See the Selenium and SeleniumLibrary
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending_seleniumlibrary.rst#EventFiringWebDriver|EventFiringWebDriver support]
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#EventFiringWebDriver|EventFiringWebDriver support]
     documentation for futher details.
 
     EventFiringWebDriver is new in SeleniumLibrary 4.0
