@@ -19,6 +19,7 @@ import warnings
 
 from robot.utils import ConnectionCache
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 
 from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney
 
@@ -220,16 +221,28 @@ class WebDriverCache(ConnectionCache):
     def close(self):
         if self.current:
             driver = self.current
-            driver.quit()
+            error = self._quit(driver, None)
             self.current = self._no_current
             self._closed.add(driver)
+            if error:
+                raise error
 
     def close_all(self):
+        error = None
         for driver in self._connections:
             if driver not in self._closed:
-                driver.quit()
+                error = self._quit(driver, error)
         self.empty_cache()
+        if error:
+            raise error
         return self.current
+
+    def _quit(self, driver, error):
+        try:
+            driver.quit()
+        except WebDriverException as exception:
+            error = exception
+        return error
 
     def get_index(self, alias_or_index):
         index = self._get_index(alias_or_index)
