@@ -93,12 +93,12 @@ class WebDriverCreator(object):
             caps['browserName'] = default_capabilities['browserName']
         return {'desired_capabilities': caps}
 
-    def create_chrome(self, desired_capabilities, remote_url, options=None):
+    def create_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url, options=options)
-        return webdriver.Chrome(options=options, **desired_capabilities)
+        return webdriver.Chrome(options=options, service_log_path=service_log_path, **desired_capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url):
         options = webdriver.ChromeOptions()
@@ -209,6 +209,7 @@ class WebDriverCreator(object):
             if formatted == log_file or not os.path.exists(formatted):
                 return formatted
             index += 1
+
 
 class WebDriverCache(ConnectionCache):
 

@@ -108,13 +108,14 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_chrome(self):
         expected_webdriver = mock()
-        when(webdriver).Chrome(options=None).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_chrome_with_desired_capabilities(self):
         expected_webdriver = mock()
-        when(webdriver).Chrome(desired_capabilities={'key': 'value'}, options=None).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(desired_capabilities={'key': 'value'},
+                               options=None, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({'desired_capabilities': {'key': 'value'}}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -155,7 +156,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         options = mock()
         when(webdriver).ChromeOptions().thenReturn(options)
-        when(webdriver).Chrome(options=options).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(options=options, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_chrome({}, None)
         verify(options).set_headless()
         self.assertEqual(driver, expected_webdriver)
@@ -551,7 +552,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_create_driver_chrome(self):
         expected_webdriver = mock()
-        when(webdriver).Chrome(options=None).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
         for browser in ['chrome', 'googlechrome', 'gc']:
             driver = self.creator.create_driver(browser, None, None)
             self.assertEqual(driver, expected_webdriver)

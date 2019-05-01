@@ -1,6 +1,9 @@
 import os
 import unittest
 
+from mockito import mock, verify, when, unstub
+from selenium import webdriver
+
 from SeleniumLibrary.keywords import WebDriverCreator
 
 
@@ -42,3 +45,16 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
             file.close()
         file_name = self.creator._get_log_path(log_file)
         self.assertEqual(file_name, log_file.format(index='2'))
+
+    def test_create_chrome_with_service_log_path_none(self):
+        expected_webdriver = mock()
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({}, None, service_log_path=None)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_chrome_with_service_log_path_real_path(self):
+        log_file = os.path.join(self.output_dir, 'firefox-{index}.log')
+        expected_webdriver = mock()
+        when(webdriver).Chrome(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({}, None, service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
