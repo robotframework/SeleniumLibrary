@@ -2,6 +2,7 @@
 .pydevproject
 .idea
 atest/results
+utest/output_dir
 *.pyc
 *.orig
 *py.class

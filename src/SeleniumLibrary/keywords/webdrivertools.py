@@ -199,6 +199,16 @@ class WebDriverCreator(object):
                                 browser_profile=profile_dir, options=options,
                                 **desired_capabilities)
 
+    def _get_log_path(self, log_file):
+        if is_noney(log_file):
+            return None
+        index = 1
+        while True:
+            formatted = log_file.format(index=index)
+            # filename didn't contain {index} or unique path was found
+            if formatted == log_file or not os.path.exists(formatted):
+                return formatted
+            index += 1
 
 class WebDriverCache(ConnectionCache):
 

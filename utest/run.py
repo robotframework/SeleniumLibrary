@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 
 import os
+import shutil
 import sys
 from os.path import abspath, dirname, join
 from unittest import defaultTestLoader, TextTestRunner
 
 
 CURDIR = dirname(abspath(__file__))
+
+
+def remove_output_dir():
+    output_dir = os.path.join(CURDIR, 'output_dir')
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.mkdir(output_dir)
 
 
 def run_unit_tests():
@@ -20,4 +28,5 @@ def run_unit_tests():
 
 
 if __name__ == '__main__':
+    remove_output_dir()
     sys.exit(run_unit_tests())
