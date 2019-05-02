@@ -58,3 +58,14 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         when(webdriver).Chrome(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
+
+    def test_create_firefox_with_service_log_path_none(self):
+        log_file = os.path.join(self.output_dir, 'firefox-{index}.log')
+        expected_webdriver = mock()
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        when(webdriver).Firefox(options=None,
+                                firefox_profile=profile,
+                                service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_firefox({}, None, None, service_log_path=None)
+        self.assertEqual(driver, expected_webdriver)
