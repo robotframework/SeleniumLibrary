@@ -368,6 +368,24 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
+    def element_css_attribute_should_be(self, locator, prop, expected):
+	"""Verifies the element identified by `locator` has the expected
+	    value for the targeted `prop`.
+	    | *Argument* | *Description* | *Example* |
+	    | locator | Selenium 2 element locator | id=my_id |
+	    | prop | targeted css attribute | background-color |
+	    | expected | expected value | rgba(0, 128, 0, 1) |"""
+
+	self.info("Verifying element '%s' has css attribute '%s' with a value of '%s'" % (locator, prop, expected))
+        element = self.find_element(locator)
+
+	value = element.value_of_css_property(prop)
+	if (value != expected):
+	    raise AssertionError("Element locator '%s' css property '%s' had a \
+            value of '%s' while it should have been '%s'" % (locator, prop,
+                                                             value, expected))
+
+    @keyword
     def get_element_attribute(self, locator, attribute):
         """Returns value of ``attribute`` from element ``locator``.
 
