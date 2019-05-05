@@ -63,7 +63,6 @@ before_script:
       export PATH="~/jython/bin:$PATH";
       export INTERPRETER=~/jython/bin/jython;
     fi
-  - python -m pip install robotstatuschecker
   - echo $INTERPRETER
   - $INTERPRETER --version
   - $INTERPRETER -m pip install .
