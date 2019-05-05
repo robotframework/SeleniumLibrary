@@ -198,6 +198,19 @@ class WebDriverCacheTests(unittest.TestCase):
             cache.close_all()
         self.verify_cache(cache)
 
+    def test_close_all_cache_not_selenium_error(self):
+        cache = WebDriverCache()
+        driver0, driver1, driver2 = mock(), mock(), mock()
+        when(driver0).quit().thenRaise(RemoteDriverServerException('stuff.'))
+        when(driver1).quit().thenRaise(ValueError('stuff.'))
+        when(driver2).quit().thenRaise(TimeoutException('timeout.'))
+        cache.register(driver0, 'bar0')
+        cache.register(driver1, 'bar1')
+        cache.register(driver2, 'bar2')
+        with self.assertRaises(TimeoutException):
+            cache.close_all()
+        self.verify_cache(cache)
+
     def test_close_all_no_error(self):
         cache = WebDriverCache()
         driver0, driver1, driver2 = mock(), mock(), mock()

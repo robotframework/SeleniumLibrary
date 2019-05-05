@@ -17,9 +17,9 @@
 import os
 import warnings
 
+from robot.api import logger
 from robot.utils import ConnectionCache
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
 
 from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney
 
@@ -240,7 +240,8 @@ class WebDriverCache(ConnectionCache):
     def _quit(self, driver, error):
         try:
             driver.quit()
-        except WebDriverException as exception:
+        except Exception as exception:
+            logger.error('When closing browser, received exception: %s' % exception)
             error = exception
         return error
 
