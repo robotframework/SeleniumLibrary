@@ -68,7 +68,7 @@ before_script:
   - $INTERPRETER -m pip install .
   - if [ "$JYTHON" == "true" ]; then
       $INTERPRETER -m pip install mockito;
-      $INTERPRETER -m pip install robotstatuschecker;
+      python -m pip install robotstatuschecker;
       $INTERPRETER -m pip install -r requirements.txt;
     else
       $INTERPRETER -m pip install -r requirements-dev.txt;
