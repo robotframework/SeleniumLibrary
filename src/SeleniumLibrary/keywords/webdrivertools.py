@@ -127,11 +127,11 @@ class WebDriverCreator(object):
         return self._get_log_path(os.path.join(self.log_dir, 'geckodriver-{index}.log'))
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
-                                ff_profile_dir):
+                                ff_profile_dir, service_log_path=None):
         options = webdriver.FirefoxOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
         options.set_headless()
-        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options)
+        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path)
 
     def create_ie(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
