@@ -106,16 +106,15 @@ class WebDriverCreator(object):
         options.set_headless()
         return self.create_chrome(desired_capabilities, remote_url, options)
 
-    def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir,
-                       options=None):
+    def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
-        desired_capabilities.update(self._geckodriver_log)
-        return webdriver.Firefox(options=options, firefox_profile=profile,
+        service_log_path = service_log_path if service_log_path else self._geckodriver_log
+        return webdriver.Firefox(options=options, firefox_profile=profile, service_log_path=service_log_path,
                                  **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -125,15 +124,14 @@ class WebDriverCreator(object):
 
     @property
     def _geckodriver_log(self):
-        return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
+        return self._get_log_path(os.path.join(self.log_dir, 'geckodriver-{index}.log'))
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
                                 ff_profile_dir):
         options = webdriver.FirefoxOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
         options.set_headless()
-        return self.create_firefox(desired_capabilities, remote_url,
-                                   ff_profile_dir, options)
+        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options)
 
     def create_ie(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):

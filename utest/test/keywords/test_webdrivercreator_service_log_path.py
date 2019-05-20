@@ -60,7 +60,7 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         self.assertEqual(driver, expected_webdriver)
 
     def test_create_firefox_with_service_log_path_none(self):
-        log_file = os.path.join(self.output_dir, 'firefox-{index}.log')
+        log_file = os.path.join(self.output_dir, 'geckodriver-1.log')
         expected_webdriver = mock()
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)

@@ -181,7 +181,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         log_file = self.get_geckodriver_log()
         when(webdriver).Firefox(options=None,
                                 firefox_profile=profile,
-                                log_path=log_file).thenReturn(expected_webdriver)
+                                service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, None, None)
         self.assertEqual(driver, expected_webdriver)
         verify(webdriver).FirefoxProfile()
@@ -228,7 +228,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile_dir = '/profile/dir'
         when(webdriver).FirefoxProfile(profile_dir).thenReturn(profile)
         log_file = self.get_geckodriver_log()
-        when(webdriver).Firefox(options=None, log_path=log_file,
+        when(webdriver).Firefox(options=None, service_log_path=log_file,
                                 firefox_profile=profile).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, None, profile_dir)
         self.assertEqual(driver, expected_webdriver)
@@ -240,7 +240,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         options = mock()
         when(webdriver).FirefoxOptions().thenReturn(options)
         log_file = self.get_geckodriver_log()
-        when(webdriver).Firefox(options=options, log_path=log_file,
+        when(webdriver).Firefox(options=options, service_log_path=log_file,
                                 firefox_profile=profile).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_firefox({}, None, None)
         self.assertEqual(driver, expected_webdriver)
@@ -562,7 +562,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
         log_file = self.get_geckodriver_log()
-        when(webdriver).Firefox(options=None, log_path=log_file,
+        when(webdriver).Firefox(options=None, service_log_path=log_file,
                                 firefox_profile=profile).thenReturn(expected_webdriver)
         for browser in ['ff', 'firefox']:
             driver = self.creator.create_driver(browser, None, None, None)
@@ -576,4 +576,4 @@ class WebDriverCreatorTests(unittest.TestCase):
             self.assertEqual(driver, expected_webdriver)
 
     def get_geckodriver_log(self):
-        return os.path.join(self.log_dir, 'geckodriver.log')
+        return os.path.join(self.log_dir, 'geckodriver-1.log')
