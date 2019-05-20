@@ -59,6 +59,15 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         driver = self.creator.create_chrome({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_headlesschrome_with_service_log_path_real_path(self):
+        log_file = os.path.join(self.output_dir, 'firefox-{index}.log')
+        expected_webdriver = mock()
+        options = mock()
+        when(webdriver).ChromeOptions().thenReturn(options)
+        when(webdriver).Chrome(options=options, service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_headless_chrome({}, None, service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_create_firefox_with_service_log_path_none(self):
         log_file = os.path.join(self.output_dir, 'geckodriver-1.log')
         expected_webdriver = mock()

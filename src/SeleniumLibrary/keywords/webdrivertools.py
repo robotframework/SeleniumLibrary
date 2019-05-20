@@ -100,11 +100,11 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url, options=options)
         return webdriver.Chrome(options=options, service_log_path=service_log_path, **desired_capabilities)
 
-    def create_headless_chrome(self, desired_capabilities, remote_url):
+    def create_headless_chrome(self, desired_capabilities, remote_url, service_log_path=None):
         options = webdriver.ChromeOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
         options.set_headless()
-        return self.create_chrome(desired_capabilities, remote_url, options)
+        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
