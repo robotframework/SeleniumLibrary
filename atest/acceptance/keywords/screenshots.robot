@@ -84,7 +84,7 @@ Capture page screenshot computed name is unique
     ...  Remove files  ${OUTPUTDIR}/unique-screenshot-*.png
     ...  AND  Touch    ${OUTPUTDIR}/unique-screenshot-1.png
     ...  AND  Touch    ${OUTPUTDIR}/unique-screenshot-2.png
-    ...  # unique-screenshot-3 is purposely left out
+    # unique-screenshot-3 is purposely left out
     ...  AND  Touch    ${OUTPUTDIR}/unique-screenshot-4.png
     # we expect this to be screenshot 3
     ${expected}=    Normalize Path    ${OUTPUTDIR}/unique-screenshot-3.png
@@ -104,7 +104,7 @@ Capture page screenshot advanced formatting name is unique
     ...  Remove files  ${OUTPUTDIR}/advanced-screenshot-*.png
     ...  AND  Touch    ${OUTPUTDIR}/advanced-screenshot-002.png
     ...  AND  Touch    ${OUTPUTDIR}/advanced-screenshot-003.png
-    ...  # advanced-screenshot-4 is purposely left out
+    # advanced-screenshot-4 is purposely left out
     ...  AND  Touch    ${OUTPUTDIR}/advanced-screenshot-005.png
     # this should be screenshot 1, since it doesn't exist
     ${expected}=    Normalize Path    ${OUTPUTDIR}/advanced-screenshot-001.png
