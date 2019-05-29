@@ -171,14 +171,14 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Safari(**desired_capabilities)
 
-    def create_phantomjs(self, desired_capabilities, remote_url):
+    def create_phantomjs(self, desired_capabilities, remote_url, service_log_path=None):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
                       'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
-        return webdriver.PhantomJS(**desired_capabilities)
+        return webdriver.PhantomJS(service_log_path=service_log_path, **desired_capabilities)
 
     def create_htmlunit(self, desired_capabilities, remote_url):
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
