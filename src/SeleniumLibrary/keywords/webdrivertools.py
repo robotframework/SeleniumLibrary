@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import inspect
 import os
 import warnings
 
@@ -133,12 +133,19 @@ class WebDriverCreator(object):
         options.set_headless()
         return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path)
 
-    def create_ie(self, desired_capabilities, remote_url):
+    def create_ie(self, desired_capabilities, remote_url, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
+        if self._has_service_log_path(webdriver.Ie):
+            return webdriver.Ie(service_log_path=service_log_path, **desired_capabilities)
+        logger.warn('This version of Selenium does not support service_log_path argument.')
         return webdriver.Ie(**desired_capabilities)
+
+    def _has_service_log_path(self, web_driver):
+        signature = inspect.getargspec(web_driver.__init__)
+        return True if 'service_log_path' in signature.args else False
 
     def create_edge(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):

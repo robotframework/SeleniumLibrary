@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from mockito import mock, verify, when, unstub
+from mockito import mock, verify, when, unstub, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
@@ -99,3 +99,25 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
                                 service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_firefox({}, None, ff_profile_dir=None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
+
+    def test_create_ie_with_service_log_path_real_path(self):
+        log_file = os.path.join(self.output_dir, 'ie-1.log')
+        expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
+        when(webdriver).Ie(service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({}, None, service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_ie_with_service_log_path_old_selenium(self):
+        log_file = os.path.join(self.output_dir, 'ie-1.log')
+        expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(webdriver).Ie().thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({}, None, service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_has_service_log_path(self):
+        status = self.creator._has_service_log_path(webdriver.Ie)
+        self.assertTrue(status)
+        status = self.creator._has_service_log_path(webdriver.Safari)
+        self.assertFalse(status)
