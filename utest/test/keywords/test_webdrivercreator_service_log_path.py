@@ -23,11 +23,6 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         self.assertEqual(self.creator._get_log_path(None), None)
         self.assertEqual(self.creator._get_log_path('NoNe'), None)
 
-    def test_log_file_with_name(self):
-        log_file = 'C:\\path\\to\\own_name.txt'
-        file_name = self.creator._get_log_path(log_file)
-        self.assertEqual(file_name, log_file)
-
     def test_log_file_with_rf_file_separator(self):
         log_file = '/path/to/own_name.txt'
         file_name = self.creator._get_log_path(log_file)

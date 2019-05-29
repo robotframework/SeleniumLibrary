@@ -22,12 +22,12 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         remote_url = '"http://localhost:4444/wd/hub"'
         browser = mock()
         when(self.brorser)._make_driver('firefox', None,
-                                        None, False).thenReturn(browser)
+                                        None, False, None).thenReturn(browser)
         alias = self.brorser.open_browser(url)
         self.assertEqual(alias, None)
 
         when(self.brorser)._make_driver('firefox', None,
-                                        None, remote_url).thenReturn(browser)
+                                        None, remote_url, None).thenReturn(browser)
         alias = self.brorser.open_browser(url, alias='None',
                                           remote_url=remote_url)
         self.assertEqual(alias, None)

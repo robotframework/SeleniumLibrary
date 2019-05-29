@@ -50,14 +50,18 @@ class WebDriverCreator(object):
         self.log_dir = log_dir
 
     def create_driver(self, browser, desired_capabilities, remote_url,
-                      profile_dir=None):
+                      profile_dir=None, service_log_path=None):
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
+        service_log_path = self._get_log_path(service_log_path)
+        if service_log_path:
+            logger.info('Browser driver log file created to: %s' % service_log_path)
+            self._create_directory(service_log_path)
         if (creation_method == self.create_firefox
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url,
-                                   profile_dir)
-        return creation_method(desired_capabilities, remote_url)
+                                   profile_dir, service_log_path)
+        return creation_method(desired_capabilities, remote_url, service_log_path)
 
     def _get_creator_method(self, browser):
         browser = browser.lower().replace(' ', '')
@@ -124,7 +128,9 @@ class WebDriverCreator(object):
 
     @property
     def _geckodriver_log(self):
-        return self._get_log_path(os.path.join(self.log_dir, 'geckodriver-{index}.log'))
+        log_file = self._get_log_path(os.path.join(self.log_dir, 'geckodriver-{index}.log'))
+        logger.info('Firefox driver log is always forced to to: %s' % log_file)
+        return log_file
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
                                 ff_profile_dir, service_log_path=None):
@@ -221,10 +227,16 @@ class WebDriverCreator(object):
         index = 1
         while True:
             formatted = log_file.format(index=index)
+            path = os.path.join(self.log_dir, formatted)
             # filename didn't contain {index} or unique path was found
-            if formatted == log_file or not os.path.exists(formatted):
-                return formatted
+            if formatted == log_file or not os.path.exists(path):
+                return path
             index += 1
+
+    def _create_directory(self, path):
+        target_dir = os.path.dirname(path)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
 
 
 class WebDriverCache(ConnectionCache):
