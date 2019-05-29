@@ -319,7 +319,8 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_edge(self):
         expected_webdriver = mock()
-        when(webdriver).Edge().thenReturn(expected_webdriver)
+        when(webdriver).Edge(service_log_path=None).thenReturn(expected_webdriver)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_edge({}, None)
         self.assertEqual(driver, expected_webdriver)
 
