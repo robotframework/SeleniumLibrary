@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from mockito import mock, verify, when, unstub
+from mockito import mock, verify, when, unstub, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
@@ -279,6 +279,7 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_ie(self):
         expected_webdriver = mock()
         when(webdriver).Ie().thenReturn(expected_webdriver)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
         driver = self.creator.create_ie({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -570,6 +571,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_create_driver_ie(self):
         expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
         when(webdriver).Ie().thenReturn(expected_webdriver)
         for browser in ['ie', 'Internet Explorer']:
             driver = self.creator.create_driver(browser, None, None)
