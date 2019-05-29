@@ -180,22 +180,30 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url)
         return webdriver.PhantomJS(service_log_path=service_log_path, **desired_capabilities)
 
-    def create_htmlunit(self, desired_capabilities, remote_url):
+    def create_htmlunit(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('Htmlunit does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
-    def create_htmlunit_with_js(self, desired_capabilities, remote_url):
+    def create_htmlunit_with_js(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('Htmlunit does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
-    def create_android(self, desired_capabilities, remote_url):
+    def create_android(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('Android does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
-    def create_iphone(self, desired_capabilities, remote_url):
+    def create_iphone(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('iPhone does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
