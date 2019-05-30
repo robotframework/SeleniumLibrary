@@ -118,10 +118,10 @@ class BrowserManagementKeywords(LibraryComponent):
         contained its own profile that was used by default.
 
         Optional ``service_log_path`` argument defines the name of the
-        file where to write the browser driver logs. The
-        ``service_log_path``  may contain a  marker ``{index}``, it
+        file where to write the browser driver logs. If the
+        ``service_log_path``  argument contain a  marker ``{index}``, it
         will be automatically replaced with unique running
-        index preventing files to be overwritten. Indices start from 1,
+        index preventing files to be overwritten. Indices start's from 1,
         and how they are represented can be customized using Python's
         [https://docs.python.org/3/library/string.html#format-string-syntax|
         format string syntax].
