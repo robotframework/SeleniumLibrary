@@ -293,7 +293,7 @@ class SeleniumLibrary(DynamicCore):
     it is either empty or case-insensitively equal to ``false``, ``no``, ``off``,
      ``0`` or ``none``. Other strings are considered true regardless their value, and
     other argument types are tested using same
-    [https://docs.python.org/2/library/stdtypes.html#truth-value-testing|rules as in Python].
+    [https://docs.python.org/3/library/stdtypes.html#truth-value-testing|rules as in Python].
 
     True examples:
 
