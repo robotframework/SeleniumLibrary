@@ -65,7 +65,7 @@ class ScreenshotKeywords(LibraryComponent):
         ``{index}``, it will be automatically replaced with unique running
         index preventing files to be overwritten. Indices start from 1,
         and how they are represented can be customized using Python's
-        [https://docs.python.org/2/library/string.html#formatstrings|
+        [https://docs.python.org/3/library/string.html#format-string-syntax|
         format string syntax].
 
         An absolute path to the created screenshot file is returned.
