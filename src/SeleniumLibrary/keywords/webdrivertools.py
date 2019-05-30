@@ -61,7 +61,7 @@ class WebDriverCreator(object):
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url,
                                    profile_dir, service_log_path)
-        return creation_method(desired_capabilities, remote_url, service_log_path)
+        return creation_method(desired_capabilities, remote_url, service_log_path=service_log_path)
 
     def _get_creator_method(self, browser):
         browser = browser.lower().replace(' ', '')
