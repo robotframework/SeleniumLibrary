@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import inspect
 import os
 import warnings
 
@@ -50,14 +50,18 @@ class WebDriverCreator(object):
         self.log_dir = log_dir
 
     def create_driver(self, browser, desired_capabilities, remote_url,
-                      profile_dir=None):
+                      profile_dir=None, service_log_path=None):
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
+        service_log_path = self._get_log_path(service_log_path)
+        if service_log_path:
+            logger.info('Browser driver log file created to: %s' % service_log_path)
+            self._create_directory(service_log_path)
         if (creation_method == self.create_firefox
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url,
-                                   profile_dir)
-        return creation_method(desired_capabilities, remote_url)
+                                   profile_dir, service_log_path)
+        return creation_method(desired_capabilities, remote_url, service_log_path=service_log_path)
 
     def _get_creator_method(self, browser):
         browser = browser.lower().replace(' ', '')
@@ -93,29 +97,28 @@ class WebDriverCreator(object):
             caps['browserName'] = default_capabilities['browserName']
         return {'desired_capabilities': caps}
 
-    def create_chrome(self, desired_capabilities, remote_url, options=None):
+    def create_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url, options=options)
-        return webdriver.Chrome(options=options, **desired_capabilities)
+        return webdriver.Chrome(options=options, service_log_path=service_log_path, **desired_capabilities)
 
-    def create_headless_chrome(self, desired_capabilities, remote_url):
+    def create_headless_chrome(self, desired_capabilities, remote_url, service_log_path=None):
         options = webdriver.ChromeOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
         options.set_headless()
-        return self.create_chrome(desired_capabilities, remote_url, options)
+        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
 
-    def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir,
-                       options=None):
+    def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
-        desired_capabilities.update(self._geckodriver_log)
-        return webdriver.Firefox(options=options, firefox_profile=profile,
+        service_log_path = service_log_path if service_log_path else self._geckodriver_log
+        return webdriver.Firefox(options=options, firefox_profile=profile, service_log_path=service_log_path,
                                  **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -125,36 +128,47 @@ class WebDriverCreator(object):
 
     @property
     def _geckodriver_log(self):
-        return {'log_path': os.path.join(self.log_dir, 'geckodriver.log')}
+        log_file = self._get_log_path(os.path.join(self.log_dir, 'geckodriver-{index}.log'))
+        logger.info('Firefox driver log is always forced to to: %s' % log_file)
+        return log_file
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
-                                ff_profile_dir):
+                                ff_profile_dir, service_log_path=None):
         options = webdriver.FirefoxOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
         options.set_headless()
-        return self.create_firefox(desired_capabilities, remote_url,
-                                   ff_profile_dir, options)
+        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path)
 
-    def create_ie(self, desired_capabilities, remote_url):
+    def create_ie(self, desired_capabilities, remote_url, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
+        if self._has_service_log_path(webdriver.Ie):
+            return webdriver.Ie(service_log_path=service_log_path, **desired_capabilities)
+        logger.warn('This version of Selenium does not support service_log_path argument.')
         return webdriver.Ie(**desired_capabilities)
 
-    def create_edge(self, desired_capabilities, remote_url):
+    def _has_service_log_path(self, web_driver):
+        signature = inspect.getargspec(web_driver.__init__)
+        return True if 'service_log_path' in signature.args else False
+
+    def create_edge(self, desired_capabilities, remote_url, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
+        if self._has_service_log_path(webdriver.Ie):
+            return webdriver.Edge(service_log_path=service_log_path, **desired_capabilities)
+        logger.warn('This version of Selenium does not support service_log_path argument.')
         return webdriver.Edge(**desired_capabilities)
 
-    def create_opera(self, desired_capabilities, remote_url):
+    def create_opera(self, desired_capabilities, remote_url, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.OPERA.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
-        return webdriver.Opera(**desired_capabilities)
+        return webdriver.Opera(service_log_path=service_log_path, **desired_capabilities)
 
     def create_safari(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):
@@ -163,31 +177,39 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url)
         return webdriver.Safari(**desired_capabilities)
 
-    def create_phantomjs(self, desired_capabilities, remote_url):
+    def create_phantomjs(self, desired_capabilities, remote_url, service_log_path=None):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
                       'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
-        return webdriver.PhantomJS(**desired_capabilities)
+        return webdriver.PhantomJS(service_log_path=service_log_path, **desired_capabilities)
 
-    def create_htmlunit(self, desired_capabilities, remote_url):
+    def create_htmlunit(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('Htmlunit does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
-    def create_htmlunit_with_js(self, desired_capabilities, remote_url):
+    def create_htmlunit_with_js(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('Htmlunit does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
-    def create_android(self, desired_capabilities, remote_url):
+    def create_android(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('Android does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
 
-    def create_iphone(self, desired_capabilities, remote_url):
+    def create_iphone(self, desired_capabilities, remote_url, service_log_path=None):
+        if service_log_path:
+            logger.warn('iPhone does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)
@@ -198,6 +220,23 @@ class WebDriverCreator(object):
         return webdriver.Remote(command_executor=remote_url,
                                 browser_profile=profile_dir, options=options,
                                 **desired_capabilities)
+
+    def _get_log_path(self, log_file):
+        if is_noney(log_file):
+            return None
+        index = 1
+        while True:
+            formatted = log_file.format(index=index)
+            path = os.path.join(self.log_dir, formatted)
+            # filename didn't contain {index} or unique path was found
+            if formatted == log_file or not os.path.exists(path):
+                return path
+            index += 1
+
+    def _create_directory(self, path):
+        target_dir = os.path.dirname(path)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
 
 
 class WebDriverCache(ConnectionCache):

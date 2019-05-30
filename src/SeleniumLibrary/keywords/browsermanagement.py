@@ -58,7 +58,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(self, url, browser='firefox', alias=None,
                      remote_url=False, desired_capabilities=None,
-                     ff_profile_dir=None):
+                     ff_profile_dir=None, service_log_path=None):
         """Opens a new browser instance to the given ``url``.
 
         The ``browser`` argument specifies which browser to use, and the
@@ -117,6 +117,15 @@ class BrowserManagementKeywords(LibraryComponent):
         uses. Notice that prior to SeleniumLibrary 3.0, the library
         contained its own profile that was used by default.
 
+        Optional ``service_log_path`` argument defines the name of the
+        file where to write the browser driver logs. If the
+        ``service_log_path``  argument contain a  marker ``{index}``, it
+        will be automatically replaced with unique running
+        index preventing files to be overwritten. Indices start's from 1,
+        and how they are represented can be customized using Python's
+        [https://docs.python.org/3/library/string.html#format-string-syntax|
+        format string syntax].
+
         Examples:
         | `Open Browser` | http://example.com | Chrome  |
         | `Open Browser` | http://example.com | Firefox | alias=Firefox |
@@ -139,6 +148,7 @@ class BrowserManagementKeywords(LibraryComponent):
         new in SeleniumLibrary 3.1.
 
         Using ``alias`` to decide, is the new browser opened is new
+        in SeleniumLibrary 4.0. Also the ``service_log_path`` is new
         in SeleniumLibrary 4.0.
         """
         index = self.drivers.get_index(alias)
@@ -148,18 +158,20 @@ class BrowserManagementKeywords(LibraryComponent):
             self.go_to(url)
             return index
         return self._make_new_browser(url, browser, alias, remote_url,
-                                      desired_capabilities, ff_profile_dir)
+                                      desired_capabilities, ff_profile_dir,
+                                      service_log_path)
 
     def _make_new_browser(self, url, browser='firefox', alias=None,
                           remote_url=False, desired_capabilities=None,
-                          ff_profile_dir=None):
+                          ff_profile_dir=None, service_log_path=None):
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
         else:
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         driver = self._make_driver(browser, desired_capabilities,
-                                   ff_profile_dir, remote_url)
+                                   ff_profile_dir, remote_url,
+                                   service_log_path)
         driver = self._wrap_event_firing_webdriver(driver)
         try:
             driver.get(url)
@@ -489,10 +501,10 @@ class BrowserManagementKeywords(LibraryComponent):
         self.driver.implicitly_wait(timestr_to_secs(value))
 
     def _make_driver(self, browser, desired_capabilities=None,
-                     profile_dir=None, remote=None):
+                     profile_dir=None, remote=None, service_log_path=None):
         driver = WebDriverCreator(self.log_dir).create_driver(
             browser=browser, desired_capabilities=desired_capabilities,
-            remote_url=remote, profile_dir=profile_dir)
+            remote_url=remote, profile_dir=profile_dir, service_log_path=service_log_path)
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:

@@ -89,7 +89,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx.event_firing_webdriver = None
         ctx.speed = 5.0
         browser = mock()
-        when(webdriver).Chrome(options=None).thenReturn(browser)
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
         self.assertEqual(browser._speed, 5.0)
@@ -101,7 +101,7 @@ class BrowserManagementTests(unittest.TestCase):
         ctx.event_firing_webdriver = None
         ctx.speed = 0.0
         browser = mock()
-        when(webdriver).Chrome(options=None).thenReturn(browser)
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
         bm.open_browser('http://robotframework.org/', 'chrome')
         verify(browser, times=0).__call__('_speed')

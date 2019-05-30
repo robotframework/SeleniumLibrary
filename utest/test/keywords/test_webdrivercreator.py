@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from mockito import mock, verify, when, unstub
+from mockito import mock, verify, when, unstub, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
@@ -108,13 +108,14 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_chrome(self):
         expected_webdriver = mock()
-        when(webdriver).Chrome(options=None).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({}, None)
         self.assertEqual(driver, expected_webdriver)
 
     def test_chrome_with_desired_capabilities(self):
         expected_webdriver = mock()
-        when(webdriver).Chrome(desired_capabilities={'key': 'value'}, options=None).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(desired_capabilities={'key': 'value'},
+                               options=None, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({'desired_capabilities': {'key': 'value'}}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -155,7 +156,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         options = mock()
         when(webdriver).ChromeOptions().thenReturn(options)
-        when(webdriver).Chrome(options=options).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(options=options, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_chrome({}, None)
         verify(options).set_headless()
         self.assertEqual(driver, expected_webdriver)
@@ -180,7 +181,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         log_file = self.get_geckodriver_log()
         when(webdriver).Firefox(options=None,
                                 firefox_profile=profile,
-                                log_path=log_file).thenReturn(expected_webdriver)
+                                service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, None, None)
         self.assertEqual(driver, expected_webdriver)
         verify(webdriver).FirefoxProfile()
@@ -227,7 +228,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile_dir = '/profile/dir'
         when(webdriver).FirefoxProfile(profile_dir).thenReturn(profile)
         log_file = self.get_geckodriver_log()
-        when(webdriver).Firefox(options=None, log_path=log_file,
+        when(webdriver).Firefox(options=None, service_log_path=log_file,
                                 firefox_profile=profile).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, None, profile_dir)
         self.assertEqual(driver, expected_webdriver)
@@ -239,7 +240,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         options = mock()
         when(webdriver).FirefoxOptions().thenReturn(options)
         log_file = self.get_geckodriver_log()
-        when(webdriver).Firefox(options=options, log_path=log_file,
+        when(webdriver).Firefox(options=options, service_log_path=log_file,
                                 firefox_profile=profile).thenReturn(expected_webdriver)
         driver = self.creator.create_headless_firefox({}, None, None)
         self.assertEqual(driver, expected_webdriver)
@@ -278,6 +279,7 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_ie(self):
         expected_webdriver = mock()
         when(webdriver).Ie().thenReturn(expected_webdriver)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
         driver = self.creator.create_ie({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -317,7 +319,8 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_edge(self):
         expected_webdriver = mock()
-        when(webdriver).Edge().thenReturn(expected_webdriver)
+        when(webdriver).Edge(service_log_path=None).thenReturn(expected_webdriver)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_edge({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -353,7 +356,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_opera(self):
         expected_webdriver = mock()
-        when(webdriver).Opera().thenReturn(expected_webdriver)
+        when(webdriver).Opera(service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -425,7 +428,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_phantomjs(self):
         expected_webdriver = mock()
-        when(webdriver).PhantomJS().thenReturn(expected_webdriver)
+        when(webdriver).PhantomJS(service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_phantomjs({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -551,7 +554,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_create_driver_chrome(self):
         expected_webdriver = mock()
-        when(webdriver).Chrome(options=None).thenReturn(expected_webdriver)
+        when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
         for browser in ['chrome', 'googlechrome', 'gc']:
             driver = self.creator.create_driver(browser, None, None)
             self.assertEqual(driver, expected_webdriver)
@@ -561,7 +564,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         profile = mock()
         when(webdriver).FirefoxProfile().thenReturn(profile)
         log_file = self.get_geckodriver_log()
-        when(webdriver).Firefox(options=None, log_path=log_file,
+        when(webdriver).Firefox(options=None, service_log_path=log_file,
                                 firefox_profile=profile).thenReturn(expected_webdriver)
         for browser in ['ff', 'firefox']:
             driver = self.creator.create_driver(browser, None, None, None)
@@ -569,10 +572,11 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_create_driver_ie(self):
         expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
         when(webdriver).Ie().thenReturn(expected_webdriver)
         for browser in ['ie', 'Internet Explorer']:
             driver = self.creator.create_driver(browser, None, None)
             self.assertEqual(driver, expected_webdriver)
 
     def get_geckodriver_log(self):
-        return os.path.join(self.log_dir, 'geckodriver.log')
+        return os.path.join(self.log_dir, 'geckodriver-1.log')
