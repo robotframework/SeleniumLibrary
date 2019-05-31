@@ -95,6 +95,19 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         driver = self.creator.create_headless_firefox({}, None, ff_profile_dir=None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_firefox_from_create_driver(self):
+        log_file = os.path.join(self.output_dir, 'firefox-1.log')
+        expected_webdriver = mock()
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        options = mock()
+        when(webdriver).FirefoxOptions().thenReturn(options)
+        when(webdriver).Firefox(options=None, firefox_profile=profile,
+                                service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_driver('firefox ', {}, remote_url=None,  profile_dir=None,
+                                            service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_create_ie_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
