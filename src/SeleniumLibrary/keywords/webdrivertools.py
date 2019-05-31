@@ -309,3 +309,28 @@ class WebDriverCache(ConnectionCache):
             return self._resolve_alias_or_index(alias_or_index)
         except ValueError:
             return None
+
+
+class SeleniumOptions(object):
+
+    def parse(self, options):
+        result = []
+        for single_option in options.split(','):
+            options_split = single_option.split(':')
+            options_split = self._options_escape(options_split)
+            argument = {options_split[0]: options_split[1:]}
+            result.append(argument)
+        return result
+
+    def _options_escape(self, options_split):
+        escape_detected = False
+        result = []
+        for opt in options_split:
+            if opt.endswith('\\'):
+                escape_detected = opt[:-1]
+            elif escape_detected:
+                result.append('%s:%s' % (escape_detected, opt))
+                escape_detected = False
+            else:
+                result.append(opt)
+        return result

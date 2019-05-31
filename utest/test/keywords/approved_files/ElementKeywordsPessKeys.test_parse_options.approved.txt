@@ -1,0 +1,10 @@
+Selenium options string to dict
+
+0) [{'method': ['arg1']}]
+1) [{'method': ['arg1', 'arg2']}]
+2) [{'method': ['arg1']}, {'method': ['arg2']}]
+3) [{'method': []}]
+4) [{'method1': []}, {'method2': []}]
+5) [{'method': []}, {'method': []}]
+6) [{'add_argument': ['--disable-dev-shm-usage']}]
+7) [{'add_argument': ['--proxy-server=66.97.38.58:80']}]
