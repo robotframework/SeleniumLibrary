@@ -17,7 +17,7 @@ from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions
 from SeleniumLibrary.utils import PY3
 
 
-class ElementKeywordsPessKeys(unittest.TestCase):
+class SeleniumOptionsParserTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -32,7 +32,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         self.results = []
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
-    def test_parse_options(self):
+    def test_parse_options_string(self):
         self.results.append(self.options.parse('method:arg1'))
         self.results.append(self.options.parse('method:arg1:arg2'))
         self.results.append(self.options.parse('method:arg1,method:arg2'))
