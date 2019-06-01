@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import importlib
 import inspect
 import os
 import warnings
@@ -338,3 +339,17 @@ class SeleniumOptions(object):
             else:
                 result.append(opt)
         return result
+
+    def create(self, browser, options):
+        selenium_options = self._import_options(browser)
+        selenium_options = selenium_options()
+        for option in options:
+            for key in option:
+                attr = getattr(selenium_options, key)
+                attr(*option[key])
+        return selenium_options
+
+    def _import_options(self, browser):
+        browser = browser.replace('headless_', '', 1)
+        options = importlib.import_module('selenium.webdriver.%s.options' % browser)
+        return options.Options
