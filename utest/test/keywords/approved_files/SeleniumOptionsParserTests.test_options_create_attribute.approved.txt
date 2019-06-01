@@ -1,0 +1,6 @@
+Selenium options attribute
+
+0) ['--headless']
+1) ['--headless']
+2) chromedriver
+3) 'Options' object has no attribute 'not_here'

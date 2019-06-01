@@ -96,6 +96,28 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    def test_options_create_attribute(self):
+        options = [{'headless': [True]}]
+        sel_options = self.options.create('chrome', options)
+        self.results.append(sel_options.arguments)
+
+        sel_options = self.options.create('headless_chrome', options)
+        self.results.append(sel_options.arguments)
+
+        options.append({'binary_location': ['chromedriver']})
+        sel_options = self.options.create('chrome', options)
+        self.results.append(sel_options.binary_location)
+
+        options.append({'not_here': ['tidii']})
+        try:
+            self.options.create('chrome', options)
+        except AttributeError as error:
+            self.results.append(error)
+
+        self.result_formatter()
+        verify_all('Selenium options attribute', self.results, reporter=self.reporter)
+
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_importer(self):
         self.results.append(self.options._import_options('firefox'))
         self.results.append(self.options._import_options('headless_firefox'))

@@ -346,7 +346,10 @@ class SeleniumOptions(object):
         for option in options:
             for key in option:
                 attr = getattr(selenium_options, key)
-                attr(*option[key])
+                if callable(attr):
+                    attr(*option[key])
+                else:
+                    setattr(selenium_options, key, option[key][0])
         return selenium_options
 
     def _import_options(self, browser):
