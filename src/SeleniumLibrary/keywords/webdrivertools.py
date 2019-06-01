@@ -314,6 +314,10 @@ class WebDriverCache(ConnectionCache):
 class SeleniumOptions(object):
 
     def parse(self, options):
+        if is_falsy(options):
+            return []
+        if isinstance(options, list):
+            return options
         result = []
         for single_option in options.split(','):
             options_split = single_option.split(':')

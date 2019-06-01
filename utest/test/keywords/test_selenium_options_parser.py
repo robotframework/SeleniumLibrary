@@ -1,6 +1,7 @@
 import unittest
 import os
 
+from robot.libraries.BuiltIn import BuiltIn
 from robot.utils import JYTHON
 
 try:
@@ -43,6 +44,18 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options.parse('add_argument:--proxy-server=66.97.38.58\:80'))
         self.result_formatter()
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
+
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    def test_parse_options_other_types(self):
+        self.results.append(self.options.parse('None'))
+        self.results.append(self.options.parse(None))
+        self.results.append(self.options.parse(False))
+        self.results.append(self.options.parse('False'))
+        options = [{'add_argument': ['--disable-dev-shm-usage']}]
+        self.results.append(self.options.parse(options))
+        self.results.append(self.options.parse([]))
+        self.result_formatter()
+        verify_all('Selenium options other types to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_options_escape(self):
