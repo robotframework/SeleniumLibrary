@@ -83,6 +83,19 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    def test_options_create_many_args(self):
+        options = [{'add_experimental_option': ['profile.default_content_settings.popups', 0]}]
+        sel_options = self.options.create('chrome', options)
+        self.results.append(sel_options.experimental_options)
+
+        options.append({'add_experimental_option': ['foo', 'bar']})
+        sel_options = self.options.create('chrome', options)
+        self.results.append(sel_options.experimental_options)
+
+        self.result_formatter()
+        verify_all('Selenium options', self.results, reporter=self.reporter)
+
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_importer(self):
         self.results.append(self.options._import_options('firefox'))
         self.results.append(self.options._import_options('headless_firefox'))
