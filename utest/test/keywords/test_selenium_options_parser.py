@@ -1,7 +1,9 @@
 import unittest
 import os
 
+from mockito import mock, when, unstub, ANY
 from robot.utils import JYTHON
+from selenium import webdriver
 
 try:
     from approvaltests.approvals import verify_all
@@ -13,7 +15,7 @@ except ImportError:
     else:
         raise
 
-from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions
+from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
 from SeleniumLibrary.utils import PY3
 
 
@@ -154,3 +156,69 @@ class SeleniumOptionsParserTests(unittest.TestCase):
             method(arg)
         except Exception as error:
             return '%s %s' % (arg, error.__str__()[:15])
+
+
+class UsingSeleniumOptionsTests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        curr_dir = os.path.dirname(os.path.abspath(__file__))
+        cls.output_dir = os.path.abspath(
+            os.path.join(curr_dir, '..', '..', 'output_dir'))
+        cls.creator = WebDriverCreator(cls.output_dir)
+
+    def tearDown(self):
+        unstub()
+
+    def test_create_chrome_with_options(self):
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Chrome(service_log_path=None, options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_headless_chrome_with_options(self):
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Chrome(service_log_path=None, options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_headless_chrome({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_firefox_with_options(self):
+        log_file = os.path.join(self.output_dir, 'geckodriver-1.log')
+        options = mock()
+        profile = mock()
+        expected_webdriver = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        when(webdriver).Firefox(options=options, firefox_profile=profile,
+                                service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_firefox({}, None, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_headless_firefox_with_options(self):
+        log_file = os.path.join(self.output_dir, 'geckodriver-1.log')
+        options = mock()
+        profile = mock()
+        expected_webdriver = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        when(webdriver).Firefox(options=options, firefox_profile=profile,
+                                service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_headless_firefox({}, None, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_ie_with_options(self):
+        options = mock()
+        expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
+        when(self.creator)._has_options(ANY).thenReturn(True)
+        when(webdriver).Ie(service_log_path=None, options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_has_options(self):
+        self.assertTrue(self.creator._has_options(webdriver.Chrome))
+        self.assertTrue(self.creator._has_options(webdriver.Firefox))
+        self.assertTrue(self.creator._has_options(webdriver.Ie))
+        self.assertFalse(self.creator._has_options(webdriver.Edge))
+        self.assertTrue(self.creator._has_options(webdriver.Opera))
+        self.assertFalse(self.creator._has_options(webdriver.Safari))

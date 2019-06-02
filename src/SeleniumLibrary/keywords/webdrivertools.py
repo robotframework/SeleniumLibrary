@@ -107,11 +107,11 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url, options=options)
         return webdriver.Chrome(options=options, service_log_path=service_log_path, **desired_capabilities)
 
-    def create_headless_chrome(self, desired_capabilities, remote_url, service_log_path=None):
-        options = webdriver.ChromeOptions()
+    def create_headless_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+        chrome_options = webdriver.ChromeOptions() if not options else options
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
-        options.set_headless()
-        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
+        chrome_options.set_headless()
+        return self.create_chrome(desired_capabilities, remote_url, chrome_options, service_log_path)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
@@ -138,25 +138,29 @@ class WebDriverCreator(object):
         return log_file
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
-                                ff_profile_dir, service_log_path=None):
-        options = webdriver.FirefoxOptions()
+                                ff_profile_dir, options=None, service_log_path=None):
+        ff_options = webdriver.FirefoxOptions() if not options else options
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
-        options.set_headless()
-        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path)
+        ff_options.set_headless()
+        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, ff_options, service_log_path)
 
-    def create_ie(self, desired_capabilities, remote_url, service_log_path=None):
+    def create_ie(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
-        if self._has_service_log_path(webdriver.Ie):
-            return webdriver.Ie(service_log_path=service_log_path, **desired_capabilities)
-        logger.warn('This version of Selenium does not support service_log_path argument.')
+        if self._has_service_log_path(webdriver.Ie) and self._has_options(webdriver.Ie):
+            return webdriver.Ie(options=options, service_log_path=service_log_path, **desired_capabilities)
+        logger.warn('This version of Selenium does not support options and service_log_path argument.')
         return webdriver.Ie(**desired_capabilities)
 
     def _has_service_log_path(self, web_driver):
         signature = inspect.getargspec(web_driver.__init__)
         return True if 'service_log_path' in signature.args else False
+
+    def _has_options(self, web_driver):
+        signature = inspect.getargspec(web_driver.__init__)
+        return True if 'options' in signature.args else False
 
     def create_edge(self, desired_capabilities, remote_url, service_log_path=None):
         if is_truthy(remote_url):
