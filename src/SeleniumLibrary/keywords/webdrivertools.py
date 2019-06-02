@@ -50,9 +50,10 @@ class WebDriverCreator(object):
 
     def __init__(self, log_dir):
         self.log_dir = log_dir
+        self.selenium_options = SeleniumOptions()
 
     def create_driver(self, browser, desired_capabilities, remote_url,
-                      profile_dir=None, service_log_path=None):
+                      profile_dir=None, options=None, service_log_path=None):
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
         service_log_path = self._get_log_path(service_log_path)
@@ -314,7 +315,20 @@ class WebDriverCache(ConnectionCache):
 
 class SeleniumOptions(object):
 
-    def parse(self, options):
+    def create(self, browser, options):
+        options = self._parse(options)
+        selenium_options = self._import_options(browser)
+        selenium_options = selenium_options()
+        for option in options:
+            for key in option:
+                attr = getattr(selenium_options, key)
+                if callable(attr):
+                    attr(*option[key])
+                else:
+                    setattr(selenium_options, key, option[key][0])
+        return selenium_options
+
+    def _parse(self, options):
         if is_falsy(options):
             return []
         if isinstance(options, list):
@@ -339,18 +353,6 @@ class SeleniumOptions(object):
             else:
                 result.append(opt)
         return result
-
-    def create(self, browser, options):
-        selenium_options = self._import_options(browser)
-        selenium_options = selenium_options()
-        for option in options:
-            for key in option:
-                attr = getattr(selenium_options, key)
-                if callable(attr):
-                    attr(*option[key])
-                else:
-                    setattr(selenium_options, key, option[key][0])
-        return selenium_options
 
     def _import_options(self, browser):
         browser = browser.replace('headless_', '', 1)

@@ -1,7 +1,6 @@
 import unittest
 import os
 
-from robot.libraries.BuiltIn import BuiltIn
 from robot.utils import JYTHON
 
 try:
@@ -34,26 +33,26 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_parse_options_string(self):
-        self.results.append(self.options.parse('method:arg1'))
-        self.results.append(self.options.parse('method:arg1:arg2'))
-        self.results.append(self.options.parse('method:arg1,method:arg2'))
-        self.results.append(self.options.parse('method'))
-        self.results.append(self.options.parse('method1,method2'))
-        self.results.append(self.options.parse('method,method'))
-        self.results.append(self.options.parse('add_argument:--disable-dev-shm-usage'))
-        self.results.append(self.options.parse('add_argument:--proxy-server=66.97.38.58\:80'))
+        self.results.append(self.options._parse('method:arg1'))
+        self.results.append(self.options._parse('method:arg1:arg2'))
+        self.results.append(self.options._parse('method:arg1,method:arg2'))
+        self.results.append(self.options._parse('method'))
+        self.results.append(self.options._parse('method1,method2'))
+        self.results.append(self.options._parse('method,method'))
+        self.results.append(self.options._parse('add_argument:--disable-dev-shm-usage'))
+        self.results.append(self.options._parse('add_argument:--proxy-server=66.97.38.58\:80'))
         self.result_formatter()
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_parse_options_other_types(self):
-        self.results.append(self.options.parse('None'))
-        self.results.append(self.options.parse(None))
-        self.results.append(self.options.parse(False))
-        self.results.append(self.options.parse('False'))
+        self.results.append(self.options._parse('None'))
+        self.results.append(self.options._parse(None))
+        self.results.append(self.options._parse(False))
+        self.results.append(self.options._parse('False'))
         options = [{'add_argument': ['--disable-dev-shm-usage']}]
-        self.results.append(self.options.parse(options))
-        self.results.append(self.options.parse([]))
+        self.results.append(self.options._parse(options))
+        self.results.append(self.options._parse([]))
         self.result_formatter()
         verify_all('Selenium options other types to dict', self.results, reporter=self.reporter)
 
@@ -116,6 +115,15 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
         self.result_formatter()
         verify_all('Selenium options attribute', self.results, reporter=self.reporter)
+
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    def test_get_options(self):
+        options = 'add_argument:--proxy-server=66.97.38.58\:80'
+        sel_options = self.options.create('chrome', options)
+        self.results.append(sel_options.arguments)
+
+        self.result_formatter()
+        verify_all('Selenium options with string.', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_importer(self):
