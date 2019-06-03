@@ -43,7 +43,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('method,method'))
         self.results.append(self.options._parse('add_argument:--disable-dev-shm-usage'))
         self.results.append(self.options._parse('add_argument:--proxy-server=66.97.38.58\:80'))
-        self.result_formatter()
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -55,7 +54,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         options = [{'add_argument': ['--disable-dev-shm-usage']}]
         self.results.append(self.options._parse(options))
         self.results.append(self.options._parse([]))
-        self.result_formatter()
         verify_all('Selenium options other types to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -63,7 +61,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._options_escape('--proxy-server=66.97.38.58\:80'.split(':')))
         self.results.append(self.options._options_escape('arg1:arg2'.split(':')))
         self.results.append(self.options._options_escape('arg1'.split(':')))
-        self.result_formatter()
         verify_all('Selenium options escape string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -80,7 +77,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
-        self.result_formatter()
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -93,7 +89,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.experimental_options)
 
-        self.result_formatter()
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -115,7 +110,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         except AttributeError as error:
             self.results.append(error)
 
-        self.result_formatter()
         verify_all('Selenium options attribute', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -124,7 +118,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
-        self.result_formatter()
         verify_all('Selenium options with string.', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -143,13 +136,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.error_formatter(self.options._import_options, 'android'))
         self.results.append(self.error_formatter(self.options._import_options, 'iphone'))
         verify_all('Selenium options import', self.results, reporter=self.reporter)
-
-    def result_formatter(self):
-        if PY3:
-            pass
-        for index, result in enumerate(self.results):
-            result = str(result)
-            self.results[index] = result.replace("=u'", "='")
 
     def error_formatter(self, method, arg):
         try:
