@@ -85,10 +85,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.experimental_options)
 
-        options.append({'add_experimental_option': ['foo', 'bar']})
-        sel_options = self.options.create('chrome', options)
-        self.results.append(sel_options.experimental_options)
-
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
