@@ -150,7 +150,14 @@ class WebDriverCreator(object):
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         if self._has_service_log_path(webdriver.Ie) and self._has_options(webdriver.Ie):
+            # service_log_path is supported from Selenium 3.14 onwards
+            # If can be removed when minimum Selenium version is 3.14.0 or greater
             return webdriver.Ie(options=options, service_log_path=service_log_path, **desired_capabilities)
+        elif not self._has_service_log_path(webdriver.Ie) and self._has_options(webdriver.Ie):
+            # Options is supported from Selenium 3.10 onwards
+            # If can be removed when minimum Selenium version is 3.10.0 or greater
+            logger.warn('This version of Selenium does not support service_log_path argument.')
+            return webdriver.Ie(options=options, **desired_capabilities)
         logger.warn('This version of Selenium does not support options and service_log_path argument.')
         return webdriver.Ie(**desired_capabilities)
 

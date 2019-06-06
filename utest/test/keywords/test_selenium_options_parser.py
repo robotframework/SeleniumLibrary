@@ -196,6 +196,15 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         driver = self.creator.create_ie({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_ie_with_options_and_log_path(self):
+        options = mock()
+        expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(True)
+        when(webdriver).Ie(options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_has_options(self):
         self.assertTrue(self.creator._has_options(webdriver.Chrome))
         self.assertTrue(self.creator._has_options(webdriver.Firefox))
