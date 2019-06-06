@@ -1,3 +1,4 @@
+import inspect
 import unittest
 import os
 
@@ -212,3 +213,14 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         self.assertFalse(self.creator._has_options(webdriver.Edge))
         self.assertTrue(self.creator._has_options(webdriver.Opera))
         self.assertFalse(self.creator._has_options(webdriver.Safari))
+
+    @unittest.skipIf('options' not in inspect.getargspec(webdriver.Edge.__init__), "requires Selenium 4.0")
+    def test_create_edge_with_options(self):
+        # TODO: This test requires Selenium 4.0 in Travis
+        options = mock()
+        expected_webdriver = mock()
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
+        when(self.creator)._has_options(ANY).thenReturn(True)
+        when(webdriver).Edge(service_log_path=None, options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_edge({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)

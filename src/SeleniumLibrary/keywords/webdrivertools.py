@@ -154,7 +154,7 @@ class WebDriverCreator(object):
             # If can be removed when minimum Selenium version is 3.14.0 or greater
             return webdriver.Ie(options=options, service_log_path=service_log_path, **desired_capabilities)
         elif not self._has_service_log_path(webdriver.Ie) and self._has_options(webdriver.Ie):
-            # Options is supported from Selenium 3.10 onwards
+            # options is supported from Selenium 3.10 onwards
             # If can be removed when minimum Selenium version is 3.10.0 or greater
             logger.warn('This version of Selenium does not support service_log_path argument.')
             return webdriver.Ie(options=options, **desired_capabilities)
@@ -169,14 +169,21 @@ class WebDriverCreator(object):
         signature = inspect.getargspec(web_driver.__init__)
         return True if 'options' in signature.args else False
 
-    def create_edge(self, desired_capabilities, remote_url, service_log_path=None):
+    def create_edge(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
-        if self._has_service_log_path(webdriver.Ie):
+        if self._has_options(webdriver.Edge) and self._has_service_log_path(webdriver.Edge):
+            # options is supported from Selenium 4.0 onwards
+            # If can be removed when minimum Selenium version is 4.0 or greater
+            return webdriver.Edge(options=options, service_log_path=service_log_path, **desired_capabilities)
+        if not self._has_options(webdriver.Edge) and self._has_service_log_path(webdriver.Edge):
+            # service_log_path is supported from Selenium 3.14 onwards
+            # If can be removed when minimum Selenium version is 3.14.0 or greater
+            logger.warn('This version of Selenium does not support options argument.')
             return webdriver.Edge(service_log_path=service_log_path, **desired_capabilities)
-        logger.warn('This version of Selenium does not support service_log_path argument.')
+        logger.warn('This version of Selenium does not support options and service_log_path argument.')
         return webdriver.Edge(**desired_capabilities)
 
     def create_opera(self, desired_capabilities, remote_url, service_log_path=None):
