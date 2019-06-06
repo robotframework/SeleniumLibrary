@@ -298,6 +298,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         when(webdriver).Ie().thenReturn(expected_webdriver)
         when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         driver = self.creator.create_ie({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -339,6 +340,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         when(webdriver).Edge(service_log_path=None).thenReturn(expected_webdriver)
         when(self.creator)._has_service_log_path(ANY).thenReturn(True)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         driver = self.creator.create_edge({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -591,6 +593,7 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_create_driver_ie(self):
         expected_webdriver = mock()
         when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         when(webdriver).Ie().thenReturn(expected_webdriver)
         for browser in ['ie', 'Internet Explorer']:
             driver = self.creator.create_driver(browser, None, None)
