@@ -16,7 +16,6 @@ except ImportError:
         raise
 
 from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
-from SeleniumLibrary.utils import PY3
 
 
 class SeleniumOptionsParserTests(unittest.TestCase):
@@ -42,7 +41,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('method1,method2'))
         self.results.append(self.options._parse('method,method'))
         self.results.append(self.options._parse('add_argument:--disable-dev-shm-usage'))
-        self.results.append(self.options._parse('add_argument:--proxy-server=66.97.38.58\:80'))
+        self.results.append(self.options._parse(r'add_argument:--proxy-server=66.97.38.58\:80'))
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -58,7 +57,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_options_escape(self):
-        self.results.append(self.options._options_escape('--proxy-server=66.97.38.58\:80'.split(':')))
+        self.results.append(self.options._options_escape(r'--proxy-server=66.97.38.58\:80'.split(':')))
         self.results.append(self.options._options_escape('arg1:arg2'.split(':')))
         self.results.append(self.options._options_escape('arg1'.split(':')))
         verify_all('Selenium options escape string to dict', self.results, reporter=self.reporter)
@@ -110,7 +109,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_get_options(self):
-        options = 'add_argument:--proxy-server=66.97.38.58\:80'
+        options = r'add_argument:--proxy-server=66.97.38.58\:80'
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
