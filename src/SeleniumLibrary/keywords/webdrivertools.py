@@ -158,7 +158,7 @@ class WebDriverCreator(object):
             # If can be removed when minimum Selenium version is 3.10.0 or greater
             logger.warn('This version of Selenium does not support service_log_path argument.')
             return webdriver.Ie(options=options, **desired_capabilities)
-        logger.warn('This version of Selenium does not support options and service_log_path argument.')
+        logger.warn('This version of Selenium does not support options or service_log_path argument.')
         return webdriver.Ie(**desired_capabilities)
 
     def _has_service_log_path(self, web_driver):
@@ -183,7 +183,7 @@ class WebDriverCreator(object):
             # If can be removed when minimum Selenium version is 3.14.0 or greater
             logger.warn('This version of Selenium does not support options argument.')
             return webdriver.Edge(service_log_path=service_log_path, **desired_capabilities)
-        logger.warn('This version of Selenium does not support options and service_log_path argument.')
+        logger.warn('This version of Selenium does not support options or service_log_path argument.')
         return webdriver.Edge(**desired_capabilities)
 
     def create_opera(self, desired_capabilities, remote_url, options=None, service_log_path=None):
@@ -199,7 +199,7 @@ class WebDriverCreator(object):
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         if options or service_log_path:
-            logger.warn('Safari browser does not support Selenium options and service_log_path.')
+            logger.warn('Safari browser does not support Selenium options or service_log_path.')
         return webdriver.Safari(**desired_capabilities)
 
     def create_phantomjs(self, desired_capabilities, remote_url, options=None, service_log_path=None):
@@ -213,9 +213,9 @@ class WebDriverCreator(object):
             logger.warn('PhantomJS browser does not support Selenium options.')
         return webdriver.PhantomJS(service_log_path=service_log_path, **desired_capabilities)
 
-    def create_htmlunit(self, desired_capabilities, remote_url, service_log_path=None):
-        if service_log_path:
-            logger.warn('Htmlunit does not support service_log_path argument.')
+    def create_htmlunit(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+        if service_log_path or options:
+            logger.warn('Htmlunit does not support Selenium options or service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url)

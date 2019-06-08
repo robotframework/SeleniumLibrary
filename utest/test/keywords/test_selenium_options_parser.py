@@ -245,3 +245,14 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).PhantomJS(service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_phantomjs({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
+
+    def test_create_htmlunit_no_options_support(self):
+        caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_htmlunit({'desired_capabilities': caps}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
