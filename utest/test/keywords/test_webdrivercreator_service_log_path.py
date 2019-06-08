@@ -157,6 +157,13 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         driver = self.creator.create_opera({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_safari_no_support_for_service_log_path(self):
+        log_file = os.path.join(self.output_dir, 'ie-1.log')
+        expected_webdriver = mock()
+        when(webdriver).Safari().thenReturn(expected_webdriver)
+        driver = self.creator.create_safari({}, None, service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_create_phantomjs_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()

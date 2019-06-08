@@ -231,3 +231,10 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).Opera(options=options, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
+
+    def test_create_safari_no_options_or_service_log_path_support(self):
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Safari().thenReturn(expected_webdriver)
+        driver = self.creator.create_safari({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
