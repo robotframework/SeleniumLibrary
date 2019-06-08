@@ -186,12 +186,12 @@ class WebDriverCreator(object):
         logger.warn('This version of Selenium does not support options and service_log_path argument.')
         return webdriver.Edge(**desired_capabilities)
 
-    def create_opera(self, desired_capabilities, remote_url, service_log_path=None):
+    def create_opera(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.OPERA.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
-        return webdriver.Opera(service_log_path=service_log_path, **desired_capabilities)
+        return webdriver.Opera(options=options, service_log_path=service_log_path, **desired_capabilities)
 
     def create_safari(self, desired_capabilities, remote_url):
         if is_truthy(remote_url):

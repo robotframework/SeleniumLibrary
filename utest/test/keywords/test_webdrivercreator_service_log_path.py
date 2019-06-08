@@ -153,7 +153,7 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
     def test_create_opera_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
-        when(webdriver).Opera(service_log_path=log_file).thenReturn(expected_webdriver)
+        when(webdriver).Opera(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 

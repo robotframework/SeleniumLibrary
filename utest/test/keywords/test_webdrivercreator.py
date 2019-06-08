@@ -376,7 +376,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_opera(self):
         expected_webdriver = mock()
-        when(webdriver).Opera(service_log_path=None).thenReturn(expected_webdriver)
+        when(webdriver).Opera(options=None, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, None)
         self.assertEqual(driver, expected_webdriver)
 

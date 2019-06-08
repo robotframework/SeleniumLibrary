@@ -224,3 +224,10 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).Edge(service_log_path=None, options=options).thenReturn(expected_webdriver)
         driver = self.creator.create_edge({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
+
+    def test_create_opera_with_options(self):
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Opera(options=options, service_log_path=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_opera({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
