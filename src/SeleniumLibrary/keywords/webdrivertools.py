@@ -218,21 +218,21 @@ class WebDriverCreator(object):
             logger.warn('Htmlunit does not support Selenium options or service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
-        return self._remote(desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url, options=options)
 
     def create_htmlunit_with_js(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if service_log_path or options:
-            logger.warn('Htmlunit with JS does not support Selenium options or service_log_path argument.')
+            logger.warn('Htmlunit with JS does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
-        return self._remote(desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url, options=options)
 
-    def create_android(self, desired_capabilities, remote_url, service_log_path=None):
+    def create_android(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if service_log_path:
             logger.warn('Android does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
-        return self._remote(desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url, options=options)
 
     def create_iphone(self, desired_capabilities, remote_url, service_log_path=None):
         if service_log_path:
