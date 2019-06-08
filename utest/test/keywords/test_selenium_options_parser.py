@@ -159,6 +159,18 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         driver = self.creator.create_chrome({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_chrome_with_options_and_remote_url(self):
+        url = 'http://localhost:4444/wd/hub'
+        caps = webdriver.DesiredCapabilities.CHROME.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=caps,
+                               browser_profile=None,
+                               options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_chrome({}, url, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_create_headless_chrome_with_options(self):
         options = mock()
         expected_webdriver = mock()
@@ -175,6 +187,20 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, None, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_firefox_with_options_and_remote_url(self):
+        url = 'http://localhost:4444/wd/hub'
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        caps = webdriver.DesiredCapabilities.FIREFOX.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=caps,
+                               browser_profile=profile,
+                               options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_firefox({}, url, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
     def test_create_headless_firefox_with_options(self):
@@ -269,7 +295,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         self.assertEqual(driver, expected_webdriver)
 
     def test_android_no_options_support(self):
-        caps = webdriver.DesiredCapabilities.ANDROID
+        caps = webdriver.DesiredCapabilities.ANDROID.copy()
         options = mock()
         expected_webdriver = mock()
         when(webdriver).Remote(command_executor='None',
