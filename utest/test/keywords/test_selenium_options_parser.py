@@ -256,3 +256,14 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
                                options=None).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit({'desired_capabilities': caps}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
+
+    def test_create_htmlunit_wiht_js_no_options_support(self):
+        caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
+                               browser_profile=None,
+                               options=None).thenReturn(expected_webdriver)
+        driver = self.creator.create_htmlunit_with_js({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
