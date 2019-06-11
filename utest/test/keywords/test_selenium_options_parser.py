@@ -43,6 +43,8 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('method,method'))
         self.results.append(self.options._parse('add_argument:--disable-dev-shm-usage'))
         self.results.append(self.options._parse(r'add_argument:--proxy-server=66.97.38.58\:80'))
+        self.results.append(self.options._parse(r'add_argument:--arg_with_\_one_time'))
+        self.results.append(self.options._parse(r'add_argument:--arg_with_\\_two_times'))
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')

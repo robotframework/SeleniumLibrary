@@ -8,3 +8,5 @@ Selenium options string to dict
 5) [{'method': []}, {'method': []}]
 6) [{'add_argument': ['--disable-dev-shm-usage']}]
 7) [{'add_argument': ['--proxy-server=66.97.38.58:80']}]
+8) [{'add_argument': ['--arg_with_\\_one_time']}]
+9) [{'add_argument': ['--arg_with_\\\\_two_times']}]
