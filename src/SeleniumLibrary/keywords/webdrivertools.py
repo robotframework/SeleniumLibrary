@@ -148,7 +148,7 @@ class WebDriverCreator(object):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
-            return self._remote(desired_capabilities, remote_url)
+            return self._remote(desired_capabilities, remote_url, options=options)
         if self._has_service_log_path(webdriver.Ie) and self._has_options(webdriver.Ie):
             # service_log_path is supported from Selenium 3.14 onwards
             # If can be removed when minimum Selenium version is 3.14.0 or greater

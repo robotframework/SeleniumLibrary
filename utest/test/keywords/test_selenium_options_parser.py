@@ -223,6 +223,18 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         driver = self.creator.create_ie({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_ie_with_options_and_remote_url(self):
+        url = 'http://localhost:4444/wd/hub'
+        caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=caps,
+                               browser_profile=None,
+                               options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_ie({}, url, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_create_ie_with_options_and_log_path(self):
         options = mock()
         expected_webdriver = mock()
@@ -240,7 +252,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         self.assertTrue(self.creator._has_options(webdriver.Opera))
         self.assertFalse(self.creator._has_options(webdriver.Safari))
 
-    @unittest.skipIf('options' not in inspect.getargspec(webdriver.Edge.__init__), "requires Selenium 4.0")
+    @unittest.skipIf('options' not in inspect.getargspec(webdriver.Edge.__init__), "Requires Selenium 4.0.")
     def test_create_edge_with_options(self):
         # TODO: This test requires Selenium 4.0 in Travis
         options = mock()
