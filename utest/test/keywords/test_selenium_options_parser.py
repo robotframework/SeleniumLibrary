@@ -79,6 +79,11 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        sel_options = self.options.create('chrome', chrome_options)
+        self.results.append(sel_options.arguments)
+
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')

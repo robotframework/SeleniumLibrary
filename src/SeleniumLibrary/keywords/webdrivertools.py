@@ -338,8 +338,10 @@ class WebDriverCache(ConnectionCache):
 class SeleniumOptions(object):
 
     def create(self, browser, options):
-        options = self._parse(options)
         selenium_options = self._import_options(browser)
+        if isinstance(options, selenium_options):
+            return options
+        options = self._parse(options)
         selenium_options = selenium_options()
         for option in options:
             for key in option:
