@@ -270,6 +270,18 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         driver = self.creator.create_opera({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
+    def test_create_opera_with_options_and_remote_url(self):
+        url = 'http://localhost:4444/wd/hub'
+        caps = webdriver.DesiredCapabilities.OPERA.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor=url,
+                               desired_capabilities=caps,
+                               browser_profile=None,
+                               options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_opera({}, url, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
     def test_create_safari_no_options_support(self):
         options = mock()
         expected_webdriver = mock()
