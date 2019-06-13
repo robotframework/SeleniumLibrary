@@ -331,7 +331,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         driver = self.creator.create_htmlunit_with_js({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_android_no_options_support(self):
+    def test_android_options_support(self):
         caps = webdriver.DesiredCapabilities.ANDROID.copy()
         options = mock()
         expected_webdriver = mock()
@@ -340,4 +340,15 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
                                browser_profile=None,
                                options=options).thenReturn(expected_webdriver)
         driver = self.creator.create_android({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_iphone_options_support(self):
+        caps = webdriver.DesiredCapabilities.IPHONE.copy()
+        options = mock()
+        expected_webdriver = mock()
+        when(webdriver).Remote(command_executor='None',
+                               desired_capabilities=caps,
+                               browser_profile=None,
+                               options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_iphone({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)

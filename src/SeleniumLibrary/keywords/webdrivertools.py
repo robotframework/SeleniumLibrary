@@ -234,12 +234,12 @@ class WebDriverCreator(object):
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url, options=options)
 
-    def create_iphone(self, desired_capabilities, remote_url, service_log_path=None):
+    def create_iphone(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if service_log_path:
             logger.warn('iPhone does not support service_log_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
-        return self._remote(desired_capabilities, remote_url)
+        return self._remote(desired_capabilities, remote_url, options=options)
 
     def _remote(self, desired_capabilities, remote_url,
                 profile_dir=None, options=None):
