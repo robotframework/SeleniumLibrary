@@ -349,7 +349,7 @@ class SeleniumOptions(object):
                 if callable(attr):
                     attr(*option[key])
                 else:
-                    setattr(selenium_options, key, option[key][0])
+                    setattr(selenium_options, key, *option[key])
         return selenium_options
 
     def _parse(self, options):

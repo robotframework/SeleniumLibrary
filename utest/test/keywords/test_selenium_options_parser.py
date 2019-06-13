@@ -79,6 +79,12 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
+        options.append({'binary_location': ['too', 'many', 'args']})
+        try:
+            self.options.create('chrome', options)
+        except Exception as error:
+            self.results.append(error)
+
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--disable-dev-shm-usage')
         sel_options = self.options.create('chrome', chrome_options)
