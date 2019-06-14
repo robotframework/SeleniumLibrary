@@ -83,7 +83,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         try:
             self.options.create('chrome', options)
         except Exception as error:
-            self.results.append(error)
+            self.results.append(error.__str__()[:7])
 
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--disable-dev-shm-usage')
