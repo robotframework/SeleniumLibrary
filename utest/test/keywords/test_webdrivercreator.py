@@ -17,14 +17,21 @@ class WebDriverCreatorTests(unittest.TestCase):
     def tearDown(self):
         unstub()
 
+    def test_normalise_browser_name(self):
+        browser = self.creator._normalise_browser_name('chrome')
+        self.assertEqual(browser, 'chrome')
+
+        browser = self.creator._normalise_browser_name('ChrOmE')
+        self.assertEqual(browser, 'chrome')
+
+        browser = self.creator._normalise_browser_name(' Ch rO mE ')
+        self.assertEqual(browser, 'chrome')
+
     def test_get_creator_method(self):
         method = self.creator._get_creator_method('chrome')
         self.assertTrue(method)
 
-        method = self.creator._get_creator_method('Chrome')
-        self.assertTrue(method)
-
-        method = self.creator._get_creator_method('Fire Fox')
+        method = self.creator._get_creator_method('firefox')
         self.assertTrue(method)
 
         with self.assertRaisesRegexp(ValueError, 'foobar is not a supported browser.'):

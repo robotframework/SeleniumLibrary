@@ -5,3 +5,5 @@ Selenium options
 2) ['--disable-dev-shm-usage', '--headless', '--proxy-server=66.97.38.58:80']
 3) setattr expected 3 arguments, got 5
 4) ['--disable-dev-shm-usage']
+5) None
+6) None

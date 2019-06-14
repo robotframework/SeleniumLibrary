@@ -90,6 +90,12 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         sel_options = self.options.create('chrome', chrome_options)
         self.results.append(sel_options.arguments)
 
+        sel_options = self.options.create('chrome', None)
+        self.results.append(sel_options)
+
+        sel_options = self.options.create('chrome', 'None')
+        self.results.append(sel_options)
+
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -351,4 +357,28 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
                                browser_profile=None,
                                options=options).thenReturn(expected_webdriver)
         driver = self.creator.create_iphone({}, None, options=options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_driver_chrome(self):
+        str_options = 'add_argument:--disable-dev-shm-usage'
+        options = mock()
+        expected_webdriver = mock()
+        when(self.creator.selenium_options).create('chrome', str_options).thenReturn(options)
+        when(webdriver).Chrome(service_log_path=None, options=options).thenReturn(expected_webdriver)
+        driver = self.creator.create_driver('Chrome', desired_capabilities={}, remote_url=None,
+                                            options=str_options)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_driver_firefox(self):
+        log_file = os.path.join(self.output_dir, 'geckodriver-1.log')
+        str_options = 'add_argument:--disable-dev-shm-usage'
+        options = mock()
+        profile = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile)
+        expected_webdriver = mock()
+        when(self.creator.selenium_options).create('firefox', str_options).thenReturn(options)
+        when(webdriver).Firefox(options=options, firefox_profile=profile,
+                                service_log_path=log_file).thenReturn(expected_webdriver)
+        driver = self.creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
+                                            options=str_options)
         self.assertEqual(driver, expected_webdriver)

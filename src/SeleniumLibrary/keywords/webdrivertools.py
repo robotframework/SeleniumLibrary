@@ -54,20 +54,21 @@ class WebDriverCreator(object):
 
     def create_driver(self, browser, desired_capabilities, remote_url,
                       profile_dir=None, options=None, service_log_path=None):
+        browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
         service_log_path = self._get_log_path(service_log_path)
+        options = self.selenium_options.create(self.browser_names.get(browser), options)
         if service_log_path:
             logger.info('Browser driver log file created to: %s' % service_log_path)
             self._create_directory(service_log_path)
         if (creation_method == self.create_firefox
                 or creation_method == self.create_headless_firefox):
-            return creation_method(desired_capabilities, remote_url,
-                                   profile_dir, service_log_path=service_log_path)
-        return creation_method(desired_capabilities, remote_url, service_log_path=service_log_path)
+            return creation_method(desired_capabilities, remote_url, profile_dir,
+                                   options=options, service_log_path=service_log_path)
+        return creation_method(desired_capabilities, remote_url, options=options, service_log_path=service_log_path)
 
     def _get_creator_method(self, browser):
-        browser = browser.lower().replace(' ', '')
         if browser in self.browser_names:
             return getattr(self, 'create_{}'.format(self.browser_names[browser]))
         raise ValueError('{} is not a supported browser.'.format(browser))
@@ -265,6 +266,9 @@ class WebDriverCreator(object):
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
 
+    def _normalise_browser_name(self, browser):
+        return browser.lower().replace(' ', '')
+
 
 class WebDriverCache(ConnectionCache):
 
@@ -338,6 +342,8 @@ class WebDriverCache(ConnectionCache):
 class SeleniumOptions(object):
 
     def create(self, browser, options):
+        if is_falsy(options):
+            return None
         selenium_options = self._import_options(browser)
         if isinstance(options, selenium_options):
             return options
