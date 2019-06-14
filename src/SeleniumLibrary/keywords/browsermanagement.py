@@ -58,7 +58,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(self, url, browser='firefox', alias=None,
                      remote_url=False, desired_capabilities=None,
-                     ff_profile_dir=None, service_log_path=None):
+                     ff_profile_dir=None, options=None, service_log_path=None):
         """Opens a new browser instance to the given ``url``.
 
         The ``browser`` argument specifies which browser to use, and the
@@ -163,11 +163,11 @@ class BrowserManagementKeywords(LibraryComponent):
             return index
         return self._make_new_browser(url, browser, alias, remote_url,
                                       desired_capabilities, ff_profile_dir,
-                                      service_log_path)
+                                      options, service_log_path)
 
     def _make_new_browser(self, url, browser='firefox', alias=None,
                           remote_url=False, desired_capabilities=None,
-                          ff_profile_dir=None, service_log_path=None):
+                          ff_profile_dir=None, options=None, service_log_path=None):
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
@@ -175,7 +175,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         driver = self._make_driver(browser, desired_capabilities,
                                    ff_profile_dir, remote_url,
-                                   service_log_path)
+                                   options, service_log_path)
         driver = self._wrap_event_firing_webdriver(driver)
         try:
             driver.get(url)
@@ -504,11 +504,11 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         self.driver.implicitly_wait(timestr_to_secs(value))
 
-    def _make_driver(self, browser, desired_capabilities=None,
-                     profile_dir=None, remote=None, service_log_path=None):
+    def _make_driver(self, browser, desired_capabilities=None, profile_dir=None,
+                     remote=None, options=None, service_log_path=None):
         driver = WebDriverCreator(self.log_dir).create_driver(
-            browser=browser, desired_capabilities=desired_capabilities,
-            remote_url=remote, profile_dir=profile_dir, service_log_path=service_log_path)
+            browser=browser, desired_capabilities=desired_capabilities, remote_url=remote,
+            profile_dir=profile_dir, options=options, service_log_path=service_log_path)
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:
