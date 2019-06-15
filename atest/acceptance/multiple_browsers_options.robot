@@ -31,3 +31,10 @@ Chrome Browser With Selenium Options Object
     ${options} =    Get Chrome Options
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=${options}
+
+
+Chrome Browser With Selenium Options Invalid Argument
+
+    Run Keyword And Expect Error     AttributeError: 'Options' object has no attribute 'not_here_method'
+    ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=not_here_method:arg1:arg2
