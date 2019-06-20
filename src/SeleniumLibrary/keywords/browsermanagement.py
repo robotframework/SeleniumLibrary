@@ -119,6 +119,68 @@ class BrowserManagementKeywords(LibraryComponent):
         ``ff_profile_dir`` can also be instance of the
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html?highlight=firefoxprofile#selenium.webdriver.firefox.firefox_profile.FirefoxProfile|selenium.webdriver.FirefoxProfile].
 
+        Optional ``options`` argument allows to define browser specific
+        Selenium options. Example for Chrome, the ``options`` argument
+        allows defining the following
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|methods and attributes]
+        and for Firefox these
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]
+        are available. Please note that not all browsers supported by the
+        SeleniumLibrary have Selenium options available, please consult
+        the Selenium documentation which browser do support the Selenium
+        options. Selenium options are also supported, when ``remote_url``
+        argument is used.
+
+        The SeleniumLibrary ``options`` argument accepts Selenium
+        options in three different formats 1) As a sting, 2) List containing
+        dictionaries 3) Python object which is an instance of the
+        Selenium options object.
+
+        The sting format is allows to define Selenium options methods
+        or attributes and it's arguments in string format. Methods and
+        attributes are separated by a comma and arguments are separated
+        with a colon. Example like this:
+        `argument:arg1,other_argument:arg2:arg3,attribute:value`.
+
+        The method and attributes are case and space sensitive
+        and must match to the Selenium options methods and attributes names.
+        It is possible to have space before and after the comma for readability.
+        Example `argument:arg1,argument:arg2` and
+        `argument:arg1 , argument:arg2` are converted to same
+        object internally. Spaces around arguments are not removed.
+        Arguments are always stings and are not converted to other types.
+        If there is need to define a literal colon for an argument,
+        it can be escaped by using literal backslash. Please
+        note that backslash is an escape character in Robot Framework and
+        therefore backslash must escaped. Example:
+        `argument:arg1_with\\\\:colon`.
+
+        List containing dictionaries format is similar to the earlier
+        string format, but defines the methods and attributes and their
+        arguments using Robot Framework lists and dictionaries.
+        Method or attribute arguments, must be defined in a list. Method
+        or argument must be a dictionary key and argument list must be
+        the dictionary value. Dictionary must contain only one key
+        value pair. The dictionary must be placed in a list. Example:
+        `[{"argument": ["arg1"]}, {"other_argument": ["arg1", "arg2"]}]`
+
+        As in string format, dictionary key, which is the method or
+        attribute name, is case and space sensitive and must match to
+        the Selenium options methods and attributes names. Although
+        the format is more complex to define, it allows to use Robot Framework
+        Python object, like `${True}` or `${None}`.
+
+        As last format ``options`` argument also support receiving
+        the Selenium options as Python class instance. In this case, the
+        instance is used as is and the SeleniumLibrary will not convert
+        the instance to other formats.
+        Example, if the following code return valua is saved to `${options}`
+        variable in the Robot Framework data:
+        | options = webdriver.ChromeOptions()
+        | return options.add_argument('--disable-dev-shm-usage')
+        Then the `${options}` variable can be used as argument to
+        ``options``.
+
         Optional ``service_log_path`` argument defines the name of the
         file where to write the browser driver logs. If the
         ``service_log_path``  argument contain a  marker ``{index}``, it
@@ -142,6 +204,18 @@ class BrowserManagementKeywords(LibraryComponent):
         | Should Be Equal | ${1_index}     | ${4_index}         |         |                  |                                                   |
         | Should Be Equal | ${2_index}     | ${2}               |         |                  |                                                   |
 
+        Example when using
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
+        method:
+        | `Open Browser` | http://example.com | Chrome                  | options=add_argument:--disable-popup-blocking, add_argument:--ignore-certificate-errors | # Sting format              |
+        | `Open Browser` | http://example.com | Chrome                  | options=proxy-server=10.122.97.38.58\\:8080                                             | # Escaping colon            |
+        | ${argument} =  |     Create List    | --disable-dev-shm-usage |                                                                                         | # List and dict format      |
+        | ${method} =    | Create Dictionary  |  add_argument           | ${argument}                                                                             |                             |
+        | ${options 1} = |    Create List     | ${add_argument}         |                                                                                         |                             |
+        | `Open Browser` | http://example.com | Chrome                  | options=${options 1}                                                                    |                             |
+        | ${options 2} = |     Get Options    |                         |                                                                                         | # Selenium options instance |
+        | `Open Browser` | http://example.com | Chrome                  | options=${options 2}                                                                    |                             |
+
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
         more.
@@ -150,10 +224,10 @@ class BrowserManagementKeywords(LibraryComponent):
         new in SeleniumLibrary 3.1.
 
         Using ``alias`` to decide, is the new browser opened is new
-        in SeleniumLibrary 4.0. Also the ``service_log_path`` is new
-        in SeleniumLibrary 4.0. Support for ``ff_profile_dir`` accepting
-        instance of the `selenium.webdriver.FirefoxProfile` is new in
-        SeleniumLibrary 4.0.
+        in SeleniumLibrary 4.0. The ``options`` and ``service_log_path``
+        are new in SeleniumLibrary 4.0. Support for ``ff_profile_dir``
+        accepting instance of the `selenium.webdriver.FirefoxProfile`
+        is new in SeleniumLibrary 4.0.
         """
         index = self.drivers.get_index(alias)
         if index:
