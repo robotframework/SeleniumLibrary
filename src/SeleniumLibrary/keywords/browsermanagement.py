@@ -177,7 +177,9 @@ class BrowserManagementKeywords(LibraryComponent):
         Example, if the following code return valua is saved to `${options}`
         variable in the Robot Framework data:
         | options = webdriver.ChromeOptions()
-        | return options.add_argument('--disable-dev-shm-usage')
+        | options.add_argument('--disable-dev-shm-usage')
+        | return options
+        
         Then the `${options}` variable can be used as argument to
         ``options``.
 
