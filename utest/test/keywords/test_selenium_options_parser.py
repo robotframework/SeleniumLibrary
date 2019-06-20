@@ -38,6 +38,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('method:arg1'))
         self.results.append(self.options._parse('method:arg1:arg2'))
         self.results.append(self.options._parse('method:arg1,method:arg2'))
+        self.results.append(self.options._parse('method : arg1 , method : arg1 : arg2 '))
         self.results.append(self.options._parse('method'))
         self.results.append(self.options._parse('method1,method2'))
         self.results.append(self.options._parse('method,method'))

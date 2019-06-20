@@ -367,7 +367,7 @@ class SeleniumOptions(object):
         for single_option in options.split(','):
             options_split = single_option.split(':')
             options_split = self._options_escape(options_split)
-            argument = {options_split[0]: options_split[1:]}
+            argument = {options_split[0].strip(): options_split[1:]}
             result.append(argument)
         return result
 
