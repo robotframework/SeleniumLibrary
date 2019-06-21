@@ -167,7 +167,6 @@ class ElementFinder(ContextAware):
             tag, constraints)
 
     def _find_by_sc_locator(self, criteria, tag, constraints, parent):
-        logger.warn('scLocator is deprecated.')
         self._disallow_webelement_parent(parent)
         js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
         return self._filter_elements([self.driver.execute_script(js)],
