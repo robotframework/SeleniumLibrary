@@ -5,6 +5,7 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Location Should Be
+    [Tags]    NoGrid
     [Documentation]    LOG 2:4 Current location is '${FRONT PAGE}'.
     Location Should Be    ${FRONT PAGE}
     Location Should Be    ${FRONT PAGE}  message=taco
@@ -20,6 +21,7 @@ Location Should Be
     ...    Location Should Be    non existing  message=None
 
 Location Should Contain
+    [Tags]    NoGrid
     [Documentation]    LOG 2:4 Current location contains 'html'.
     Location Should Contain    html
     Location Should Contain    html  message=foobar
