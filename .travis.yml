@@ -57,13 +57,13 @@ matrix:
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python2
     - python: "3.7-dev"
-        env:
-          - BROWSER=headlesschrome
-          - SELENIUM=3.141.0
-          - ROBOTFRAMEWORK=3.1.2
-          - ROBOT_OPTIONS=--dotted
-          - INTERPRETER=python3
-          - GRID=true
+      env:
+        - BROWSER=headlesschrome
+        - SELENIUM=3.141.0
+        - ROBOTFRAMEWORK=3.1.2
+        - ROBOT_OPTIONS=--dotted
+        - INTERPRETER=python3
+        - GRID=true
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
