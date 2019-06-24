@@ -90,4 +90,4 @@ before_script:
   - $INTERPRETER -m pip install selenium==$SELENIUM
   - $INTERPRETER -m pip install robotframework==$ROBOTFRAMEWORK
 script:
-  - python atest/run.py $BROWSER --interpreter $INTERPRETER $ROBOT_OPTIONS
+  - python atest/run.py $BROWSER --interpreter $INTERPRETER --grid $GRID $ROBOT_OPTIONS

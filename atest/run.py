@@ -25,7 +25,7 @@ Examples:
     run.py chrome
     run.py headlesschrome
     run.py --interpreter jython firefox --suite javascript
-    run.py headlesschrome --nounit --grid
+    run.py headlesschrome --nounit --grid true
 """
 
 from __future__ import print_function
@@ -41,6 +41,8 @@ import subprocess
 import tempfile
 
 from robot import rebot_cli
+from robot.utils import is_truthy
+
 try:
     import robotstatuschecker
 except ImportError:
@@ -217,10 +219,10 @@ if __name__ == '__main__':
     parser.add_argument('--nounit', help='Does not run unit test when set.',
                         default=False, action='store_true')
     parser.add_argument('--grid', '-G', help='Run test by using Selenium grid',
-                        default=False, action='store_true')
+                        default=False)
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
-    selenium_grid = args.grid
+    selenium_grid = is_truthy(args.grid)
     interpreter = args.interpreter
     if args.nounit:
         print('Not running unit tests.')
