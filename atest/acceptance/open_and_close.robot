@@ -80,6 +80,7 @@ Open Browser desired_capabilities As Dictionary
      ...    remote_url=${REMOTE_URL}    desired_capabilities=${caps}
 
 When Closing Browsers Causes An Error
+    [Tags]    NoGrid
     [Documentation]
     ...    FAIL       AttributeError: 'NoneType' object has no attribute 'quit'
     ...    LOG 3:8    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'

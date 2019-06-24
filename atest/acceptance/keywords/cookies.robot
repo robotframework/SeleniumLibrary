@@ -104,6 +104,7 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 2:4 ${cookie} = name=another
     ...    value=value

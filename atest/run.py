@@ -7,15 +7,12 @@ afterwards using `robotstatuschecker` tool. The tool can be installed using
 from: https://github.com/robotframework/statuschecker/. Notice that initially
 some tests may fail.
 
-When running test by using browser from Sauce labs, it is required that the
-Sauce Connect is used. The Sauce Connect allows the browser from Sauce Labs
-reach the acceptance test web server. The acceptance test uses tunnel with
-name `localtunnel` and therefore when establishing the Sauce Connect tunnel
-use the following command:
-    `bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel`
-
-More details and to downlaod Sauce Connect visit:
-https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Setup
+It is possible to run test with Selenium Grid. the Grid requires that Java
+is available in the PATH and Grid is downloaded in the root of the repository.
+The Grid jar file name should start with "selenium-server-standalone" and
+this script will automatically start the Grid with hub and node roles.
+More details about the Selenium grid can be found from:
+https://github.com/SeleniumHQ/selenium/wiki/Grid2
 
 It is possible to pass Robot Framework command line arguments to the test
 execution as last arguments to the `run_tests.py` command. It is
@@ -28,12 +25,12 @@ Examples:
     run.py chrome
     run.py headlesschrome
     run.py --interpreter jython firefox --suite javascript
-    run.py chrome --sauceusername your_username --saucekey account_key --suite javascript
-
+    run.py headlesschrome --nounit --grid true
 """
 
 from __future__ import print_function
 
+import time
 from contextlib import contextmanager
 import os
 import sys
@@ -41,13 +38,17 @@ import argparse
 import textwrap
 import shutil
 import subprocess
+import tempfile
 
 from robot import rebot_cli
+from robot.utils import is_truthy
+
 try:
     import robotstatuschecker
 except ImportError:
     sys.exit('Required `robotstatuschecker` not installed.\n'
              'Install it with `pip install robotstatuschecker`.')
+import requests
 
 
 # Folder settings
@@ -59,13 +60,6 @@ RESULTS_DIR = os.path.join(ROOT_DIR, 'results')
 SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, os.pardir, 'src'))
 TEST_LIBS_DIR = os.path.join(RESOURCES_DIR, 'testlibs')
 HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, 'testserver', 'testserver.py')
-# Travis settings for pull request
-TRAVIS = os.environ.get('TRAVIS', False)
-TRAVIS_EVENT_TYPE = os.environ.get('TRAVIS_EVENT_TYPE', None)
-TRAVIS_JOB_NUMBER = os.environ.get('TRAVIS_JOB_NUMBER', 'localtunnel')
-SAUCE_USERNAME = os.environ.get('SAUCE_USERNAME', None)
-SAUCE_ACCESS_KEY = os.environ.get('SAUCE_ACCESS_KEY', None)
-TRAVIS_BROWSERS = ['chrome', 'firefox', 'headlesschrome']
 
 ROBOT_OPTIONS = [
     '--doc', 'SeleniumLibrary acceptance tests with {browser}',
@@ -91,21 +85,69 @@ def unit_tests():
         sys.exit(failures)
 
 
-def acceptance_tests(interpreter, browser, rf_options=None,
-                     sauce_username=None, sauce_key=None):
+def acceptance_tests(interpreter, browser, rf_options=None, grid=None):
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
     os.mkdir(RESULTS_DIR)
+    if grid:
+        hub, node = start_grid()
     with http_server():
-        execute_tests(interpreter, browser, rf_options,
-                      sauce_username, sauce_key)
+        execute_tests(interpreter, browser, rf_options, grid)
     failures = process_output(browser)
     if failures:
         print('\n{} critical test{} failed.'
               .format(failures, 's' if failures != 1 else ''))
     else:
         print('\nAll critical tests passed.')
+    if grid:
+        hub.kill()
+        node.kill()
     sys.exit(failures)
+
+
+def start_grid():
+    node_file = tempfile.TemporaryFile()
+    hub_file = tempfile.TemporaryFile()
+    selenium_jar = None
+    for file in os.listdir():
+        if file.startswith('selenium-server-standalone'):
+            selenium_jar = file
+            break
+    if not selenium_jar:
+        raise ValueError('Selenium server jar not found: %s' % selenium_jar)
+    hub = subprocess.Popen(['java', '-jar', selenium_jar, '-role', 'hub', '-host', 'localhost'],
+                           stderr=subprocess.STDOUT, stdout=hub_file)
+    time.sleep(1)  # It takes about seconds to start the hub.
+    ready = _grid_status(False, 'hub')
+    if not ready:
+        hub.kill()
+        raise ValueError('Selenium grid hub was not ready in 60 seconds.')
+    node = subprocess.Popen(['java', '-jar', selenium_jar, '-role', 'node'],
+                            stderr=subprocess.STDOUT, stdout=node_file)
+    ready = _grid_status(True, 'node')
+    if not ready:
+        hub.kill()
+        node.kill()
+        raise ValueError('Selenium grid node was not ready in 60 seconds.')
+    return hub, node
+
+
+def _grid_status(status=False, role='hub'):
+    count = 0
+    while True:
+        try:
+            response = requests.get('http://localhost:4444/wd/hub/status')
+            data = response.json()
+            if data['value']['ready'] == status:
+                print('Selenium grid %s ready/started.' % role)
+                return True
+        except Exception:
+            pass
+        count += 1
+        if count == 12:
+            raise ValueError('Selenium grid %s not ready/started in 60 seconds.' % role)
+        print('Selenium grid %s not ready/started.' % role)
+        time.sleep(5)
 
 
 @contextmanager
@@ -121,21 +163,20 @@ def http_server():
         serverlog.close()
 
 
-def execute_tests(interpreter, browser, rf_options, sauce_username, sauce_key):
+def execute_tests(interpreter, browser, rf_options, grid):
     options = []
     runner = interpreter.split() + ['-m', 'robot.run']
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
-    if sauce_username and sauce_key:
-        options.extend(get_sauce_conf(browser, sauce_username, sauce_key))
     command = runner
+    if grid:
+        command += ['--variable', 'REMOTE_URL:http://localhost:4444/wd/hub',
+                    '--exclude', 'NoGrid']
     command += options + [ACCEPTANCE_TEST_DIR]
-    log_start(command, sauce_username, sauce_key)
+    log_start(command)
     syslog = os.path.join(RESULTS_DIR, 'syslog.txt')
-    subprocess.call(
-        command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog)
-    )
+    subprocess.call(command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
 
 
 def log_start(command_list, *hiddens):
@@ -148,23 +189,6 @@ def log_start(command_list, *hiddens):
     print(command)
 
 
-def get_sauce_conf(browser, sauce_username, sauce_key):
-    if browser in TRAVIS_BROWSERS and TRAVIS:
-        return []
-    return [
-        '--variable', 'SAUCE_USERNAME:{}'.format(sauce_username),
-        '--variable', 'SAUCE_ACCESS_KEY:{}'.format(sauce_key),
-        '--variable',
-        'REMOTE_URL:http://{}:{}@ondemand.saucelabs.com:80/wd/hub'.format(
-            sauce_username, sauce_key
-        ),
-        '--variable',
-        'DESIRED_CAPABILITIES:build:{0}-{1},tunnel-identifier:{0},browserName:{1}'.format(
-            TRAVIS_JOB_NUMBER, browser
-        )
-    ]
-
-
 def process_output(browser):
     print('Verifying results...')
     options = []
@@ -175,16 +199,6 @@ def process_output(browser):
         rebot_cli(options + [output])
     except SystemExit as exit:
         return exit.code
-
-
-def sauce_credentials(sauce_username, sauce_key):
-    if TRAVIS and not sauce_username and not sauce_key:
-        username = SAUCE_USERNAME
-        key = SAUCE_ACCESS_KEY
-    else:
-        username = sauce_username
-        key = sauce_key
-    return username, key
 
 
 if __name__ == '__main__':
@@ -202,26 +216,13 @@ if __name__ == '__main__':
     parser.add_argument('browser',
                         help=('Any browser supported by the library '
                               '(e.g. `chrome`or `firefox`).'))
-    parser.add_argument('--sauceusername', '-U',
-                        help='Username to order browser from SauceLabs.')
-    parser.add_argument('--saucekey', '-K',
-                        help='Access key to order browser from SauceLabs.')
     parser.add_argument('--nounit', help='Does not run unit test when set.',
                         default=False, action='store_true')
+    parser.add_argument('--grid', '-G', help='Run test by using Selenium grid',
+                        default=False)
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
-    if TRAVIS and browser not in TRAVIS_BROWSERS and TRAVIS_EVENT_TYPE != 'cron':
-        # When running in Travis only Chrome and Firefox are available for PR.
-        print(
-            'Can not run test with browser "{}" from SauceLabs with PR.\n'
-            'SauceLabs can be used only when running with cron and from '
-            'SeleniumLibrary master branch, but your event type '
-            'was "{}". Only Chrome and Firefox are supported with PR and when using '
-            'Travis'.format(browser, TRAVIS_EVENT_TYPE)
-        )
-        sys.exit(0)
-    sauce_username, sauce_key = sauce_credentials(
-        args.sauceusername, args.saucekey)
+    selenium_grid = is_truthy(args.grid)
     interpreter = args.interpreter
     if args.nounit:
         print('Not running unit tests.')
@@ -230,5 +231,4 @@ if __name__ == '__main__':
         if rc != 0:
             print('Not running acceptance test, because unit tests failed.')
             sys.exit(rc)
-    acceptance_tests(interpreter, browser, rf_options,
-                     sauce_username, sauce_key)
+    acceptance_tests(interpreter, browser, rf_options, selenium_grid)

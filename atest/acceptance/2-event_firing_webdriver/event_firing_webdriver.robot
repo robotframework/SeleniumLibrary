@@ -1,5 +1,7 @@
 *** Settings ***
 Library           SeleniumLibrary    event_firing_webdriver=${CURDIR}/MyListener.py
+Suite Setup       Open Browser    ${FRONT PAGE}    ${BROWSER}    alias=event_firing_webdriver
+...                   remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
 Suite Teardown    Close All Browsers
 
 *** Variable ***
@@ -12,6 +14,7 @@ ${FRONT_PAGE}=              ${ROOT}/
 
 *** Test Cases ***
 Open Browser To Start Page
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 1:12 DEBUG  Wrapping driver to event_firing_webdriver.
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
@@ -24,6 +27,7 @@ Event Firing Webdriver Go To (WebDriver)
     Go To     ${ROOT}/forms/named_submit_buttons.html
 
 Event Firing Webdriver Input Text (WebElement)
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 1:5 INFO  Before clear and send_keys
     ...    LOG 1:9 INFO  After clear and send_keys
@@ -32,6 +36,7 @@ Event Firing Webdriver Input Text (WebElement)
     Input Text    //input[@name="textfield"]    FooBar
 
 Event Firing Webdriver Click Element (WebElement)
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 1:5 INFO  Before click
     ...    LOG 1:9 INFO  After click

@@ -6,6 +6,7 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Title Should Be
+    [Tags]    NoGrid
     [Documentation]    LOG 2:4 Page title is '(root)/index.html'.
     Title Should Be    (root)/index.html
     Run Keyword And Expect Error
@@ -16,6 +17,7 @@ Title Should Be
     ...    Title Should Be    not a title   message=Page title was not expected
 
 Page Should Contain
+    [Tags]    NoGrid
     [Documentation]    The last step fails and doesn't contain the html content.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 2:7 Current page contains text 'needle'.
@@ -31,6 +33,7 @@ Page Should Contain With Text Having Internal Elements
     Page Should Contain    Relative with text after
 
 Page Should Contain With Custom Log Level DEBUG
+    [Tags]    NoGrid
     [Documentation]    Html content is shown at DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 2:14 DEBUG REGEXP: (?i)<html.*</html>
@@ -38,6 +41,7 @@ Page Should Contain With Custom Log Level DEBUG
     Page Should Contain    non existing text    DEBUG
 
 Page Should Contain With Custom Log Level TRACE
+    [Tags]    NoGrid
     [Documentation]    Html content is shown at DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 3:15 TRACE REGEXP: (?i)<html.*</html>
@@ -59,6 +63,7 @@ Page Should Contain With Frames
     Page Should Contain    You're looking at right.
 
 Page Should Not Contain
+    [Tags]    NoGrid
     [Documentation]    Default log level does not have html output.
     ...    FAIL Page should not have contained text 'needle'.
     ...    LOG 2:11 Current page does not contain text 'non existing text'.
@@ -67,6 +72,7 @@ Page Should Not Contain
     Page Should Not Contain    needle
 
 Page Should Not Contain With Custom Log Level
+    [Tags]    NoGrid
     [Documentation]    LOG 2.1:10 DEBUG REGEXP: (?i)<html.*</html>
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
@@ -177,6 +183,7 @@ Get Text
     ...    Get Text    missing_id
 
 Page Should Contain Checkbox
+    [Tags]    NoGrid
     [Documentation]    LOG 2:7 Current page contains checkbox 'can_send_email'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Contain Checkbox    can_send_email
@@ -186,6 +193,7 @@ Page Should Contain Checkbox
     ...    Page Should Contain Checkbox    non-existing
 
 Page Should Not Contain Checkbox
+    [Tags]    NoGrid
     [Documentation]    LOG 2:7 Current page does not contain checkbox 'non-existing'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Not Contain Checkbox    non-existing
@@ -276,6 +284,7 @@ Page Should Not Contain Text Field
     ...    Page Should Not Contain Text Field    website
 
 TextField Should Contain
+    [Tags]    NoGrid
     [Documentation]    LOG 2:10 Text field 'name' contains text ''.
     [Setup]    Go To Page "forms/email_form.html"
     TextField Should contain    name    ${EMPTY}
@@ -292,6 +301,7 @@ TextField Should Contain
     ...    TextField Should contain    website    https://w3.org
 
 TextField Value Should Be
+    [Tags]    NoGrid
     [Documentation]    LOG 2:10 Content of text field 'name' is ''.
     [Setup]    Go To Page "forms/email_form.html"
     textfield Value Should Be    name    ${EMPTY}

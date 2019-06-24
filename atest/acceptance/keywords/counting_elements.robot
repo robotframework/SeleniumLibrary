@@ -52,11 +52,13 @@ Page Should Contain Element When Limit Is None
     Page Should Contain Element    name: div_name    limit=${None}
 
 Page Should Contain Element When Limit Is Number
+    [Tags]    NoGrid
     [Documentation]    LOG 2:4    INFO Current page contains 2 element(s).
     [Setup]    Go To Page "links.html"
     Page Should Contain Element    name: div_name    limit=2
 
 Page Should Contain Element Log Level Does Not Affect When Keyword Passes
+    [Tags]    NoGrid
     [Documentation]    LOG 2:4    INFO Current page contains 2 element(s).
     [Setup]    Go To Page "links.html"
     Page Should Contain Element    name: div_name    loglevel=debug    limit=2
@@ -77,6 +79,7 @@ Page Should Contain Element When Limit Is Not Number
     ...    Page Should Contain Element    name: div_name    limit=AA
 
 Page Should Contain Element When Error With Limit And Different Loglevels
+    [Tags]    NoGrid
     [Documentation]    Only at DEBUG loglevel is the html placed in the log.
     ...    FAIL Page should have contained "99" element(s), but it did contain "2" element(s).
     ...    LOG 2.1:7    FAIL Page should have contained "99" element(s), but it did contain "2" element(s).
