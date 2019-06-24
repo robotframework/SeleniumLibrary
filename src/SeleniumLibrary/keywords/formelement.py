@@ -196,20 +196,21 @@ class FormElementKeywords(LibraryComponent):
         """Inputs the ``file_path`` into file input field ``locator``.
 
         This keyword is most often used to input files into upload forms.
-        The file specified with ``file_path`` must be available on machine
-        where tests are executed. When using Selenium Grid, Seleniun will,
+        Keyword  does not check ``file_path`` is the file or folder
+        available on machine where tests are executed. If the ``file_path``
+        point sot a file and when using Selenium Grid, Selenium will,
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.command.html?highlight=upload#selenium.webdriver.remote.command.Command.UPLOAD_FILE|magically],
         transfer the file from the machine where test are executed
         to the Selenium Grid node where the browser is running. 
         Then Selenium will send the file path, from to node file 
         system, to the browser.
 
+        ``file_path`` is not checked is new in SeleniumLibrary 4.0
+
         Example:
         | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |
         """
-        if not os.path.isfile(file_path):
-            raise ValueError("File '%s' does not exist on the local file "
-                             "system." % file_path)
+        self.info('Sending %s to browser.' % os.path.abspath(file_path))
         self.find_element(locator).send_keys(file_path)
 
     @keyword
