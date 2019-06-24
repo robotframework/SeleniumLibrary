@@ -20,6 +20,7 @@ import warnings
 from robot.api import logger
 from robot.utils import ConnectionCache
 from selenium import webdriver
+from selenium.webdriver import FirefoxProfile
 
 from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney
 
@@ -122,6 +123,8 @@ class WebDriverCreator(object):
                                  **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
+        if isinstance(ff_profile_dir, FirefoxProfile):
+            return ff_profile_dir
         if is_falsy(ff_profile_dir):
             return webdriver.FirefoxProfile()
         return webdriver.FirefoxProfile(ff_profile_dir)

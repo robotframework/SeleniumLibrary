@@ -186,6 +186,24 @@ class WebDriverCreatorTests(unittest.TestCase):
         self.assertEqual(driver, expected_webdriver)
         verify(webdriver).FirefoxProfile()
 
+    def test_get_ff_profile_real_path(self):
+        profile_path = '/path/to/profile'
+        profile_mock = mock()
+        when(webdriver).FirefoxProfile(profile_path).thenReturn(profile_mock)
+        profile = self.creator._get_ff_profile(profile_path)
+        self.assertEqual(profile, profile_mock)
+
+    def test_get_ff_profile_no_path(self):
+        profile_mock = mock()
+        when(webdriver).FirefoxProfile().thenReturn(profile_mock)
+        profile = self.creator._get_ff_profile(None)
+        self.assertEqual(profile, profile_mock)
+
+    def test_get_ff_profile_instance_FirefoxProfile(self):
+        input_profile = webdriver.FirefoxProfile()
+        profile = self.creator._get_ff_profile(input_profile)
+        self.assertEqual(profile, input_profile)
+
     def test_firefox_remote_no_caps(self):
         url = 'http://localhost:4444/wd/hub'
         profile = mock()

@@ -115,7 +115,9 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``ff_profile_dir`` is the path to the Firefox profile
         directory if you wish to overwrite the default profile Selenium
         uses. Notice that prior to SeleniumLibrary 3.0, the library
-        contained its own profile that was used by default.
+        contained its own profile that was used by default. The
+        ``ff_profile_dir`` can also be instance of the
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html?highlight=firefoxprofile#selenium.webdriver.firefox.firefox_profile.FirefoxProfile|selenium.webdriver.FirefoxProfile].
 
         Optional ``service_log_path`` argument defines the name of the
         file where to write the browser driver logs. If the
@@ -149,7 +151,9 @@ class BrowserManagementKeywords(LibraryComponent):
 
         Using ``alias`` to decide, is the new browser opened is new
         in SeleniumLibrary 4.0. Also the ``service_log_path`` is new
-        in SeleniumLibrary 4.0.
+        in SeleniumLibrary 4.0. Support for ``ff_profile_dir`` accepting
+        instance of the `selenium.webdriver.FirefoxProfile` is new in
+        SeleniumLibrary 4.0.
         """
         index = self.drivers.get_index(alias)
         if index:
