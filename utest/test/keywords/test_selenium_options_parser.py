@@ -48,7 +48,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('attribute'))
         self.results.append(self.options._parse('method()'))
         self.results.append(self.options._parse('method("--proxy 10.10.1.3:2345")'))
-        self.results.append(self.options._parse('method("arg;with;semicolon")'))
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
