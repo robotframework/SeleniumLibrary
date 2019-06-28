@@ -1,0 +1,3 @@
+Selenium options string errors
+
+0) method("arg1) Unable to parse option: "method("arg1)"

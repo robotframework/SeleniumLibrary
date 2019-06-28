@@ -13,13 +13,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import ast
 import importlib
 import inspect
 import os
+import token
 import warnings
+from tokenize import generate_tokens
 
 from robot.api import logger
-from robot.utils import ConnectionCache
+from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
@@ -358,33 +361,30 @@ class SeleniumOptions(object):
                     setattr(selenium_options, key, *option[key])
         return selenium_options
 
-    def _parse(self, options):
-        if is_falsy(options):
-            return []
-        if isinstance(options, list):
-            return options
-        result = []
-        for single_option in options.split(','):
-            options_split = single_option.split(':')
-            options_split = self._options_escape(options_split)
-            argument = {options_split[0].strip(): options_split[1:]}
-            result.append(argument)
-        return result
-
-    def _options_escape(self, options_split):
-        escape_detected = False
-        result = []
-        for opt in options_split:
-            if opt.endswith('\\'):
-                escape_detected = opt[:-1]
-            elif escape_detected:
-                result.append('%s:%s' % (escape_detected, opt))
-                escape_detected = False
-            else:
-                result.append(opt)
-        return result
-
     def _import_options(self, browser):
         browser = browser.replace('headless_', '', 1)
         options = importlib.import_module('selenium.webdriver.%s.options' % browser)
         return options.Options
+
+    def _parse(self, options):
+        result = []
+        for item in options.split(';'):
+            try:
+                result.append(self._parse_to_tokens(item))
+            except ValueError:
+                raise ValueError('Unable to parse option: "%s"' % item)
+        return result
+
+    def _parse_to_tokens(self, item):
+        result = {}
+        method = None
+        arguments = []
+        for tokens in generate_tokens(StringIO(item).readline):
+            if tokens.type == token.NAME and not method:
+                method = tokens.string
+            elif tokens.type == token.STRING:
+                arguments.append(ast.literal_eval(tokens.string))
+            elif tokens.type in [token.NAME, token.NUMBER] and method:
+                arguments.append(ast.literal_eval(tokens.string))
+        result[method] = arguments
+        return result

@@ -1,8 +1,0 @@
-Selenium options other types to dict
-
-0) []
-1) []
-2) []
-3) []
-4) [{'add_argument': ['--disable-dev-shm-usage']}]
-5) []

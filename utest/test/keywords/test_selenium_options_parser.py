@@ -35,52 +35,38 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_parse_options_string(self):
-        self.results.append(self.options._parse('method:arg1'))
-        self.results.append(self.options._parse('method:arg1:arg2'))
-        self.results.append(self.options._parse('method:arg1,method:arg2'))
-        self.results.append(self.options._parse('method : arg1 , method : arg1 : arg2 '))
-        self.results.append(self.options._parse('method'))
-        self.results.append(self.options._parse('method1,method2'))
-        self.results.append(self.options._parse('method,method'))
-        self.results.append(self.options._parse('add_argument:--disable-dev-shm-usage'))
-        self.results.append(self.options._parse(r'add_argument:--proxy-server=66.97.38.58\:80'))
-        self.results.append(self.options._parse(r'add_argument:--arg_with_\_one_time'))
-        self.results.append(self.options._parse(r'add_argument:--arg_with_\\_two_times'))
+        self.results.append(self.options._parse('method("arg1")'))
+        self.results.append(self.options._parse('method("arg1", "arg2")'))
+        self.results.append(self.options._parse('method(True)'))
+        self.results.append(self.options._parse('method(1)'))
+        self.results.append(self.options._parse('method("arg1", 2, None, False, "arg2")'))
+        self.results.append(self.options._parse('method ( " arg1 " , 2 , None , False , " arg2 " )'))
+        self.results.append(self.options._parse('attribute="arg1"'))
+        self.results.append(self.options._parse('attribute = True'))
+        self.results.append(self.options._parse('method("arg1");attribute=True'))
+        self.results.append(self.options._parse('method("arg1") ; attribute=True ; method("arg2")'))
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
-    def test_parse_options_other_types(self):
-        self.results.append(self.options._parse('None'))
-        self.results.append(self.options._parse(None))
-        self.results.append(self.options._parse(False))
-        self.results.append(self.options._parse('False'))
-        options = [{'add_argument': ['--disable-dev-shm-usage']}]
-        self.results.append(self.options._parse(options))
-        self.results.append(self.options._parse([]))
-        verify_all('Selenium options other types to dict', self.results, reporter=self.reporter)
-
-    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
-    def test_options_escape(self):
-        self.results.append(self.options._options_escape(r'--proxy-server=66.97.38.58\:80'.split(':')))
-        self.results.append(self.options._options_escape('arg1:arg2'.split(':')))
-        self.results.append(self.options._options_escape('arg1'.split(':')))
-        verify_all('Selenium options escape string to dict', self.results, reporter=self.reporter)
+    def test_parse_options_string_errors(self):
+        self.results.append(self.error_formatter(self.options._parse, 'method("arg1)', True))
+        verify_all('Selenium options string errors', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_options_create(self):
-        options = [{'add_argument': ['--disable-dev-shm-usage']}]
+        options = 'add_argument("--disable-dev-shm-usage")'
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
-        options.append({'add_argument': ['--headless']})
+        options = '%s;add_argument("--headless")' % options
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
-        options.append({'add_argument': ['--proxy-server=66.97.38.58:80']})
+        options = '%s;add_argument("--proxy-server=66.97.38.58:80")' % options
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
 
-        options.append({'binary_location': ['too', 'many', 'args']})
+        options = '%s;binary_location("too", "many", "args")' % options
         try:
             self.options.create('chrome', options)
         except Exception as error:
@@ -99,41 +85,12 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
-    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
-    def test_options_create_many_args(self):
-        options = [{'add_experimental_option': ['profile.default_content_settings.popups', 0]}]
-        sel_options = self.options.create('chrome', options)
-        self.results.append(sel_options.experimental_options)
-
-        verify_all('Selenium options', self.results, reporter=self.reporter)
-
-    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
-    def test_options_create_attribute(self):
-        options = [{'headless': [True]}]
-        sel_options = self.options.create('chrome', options)
-        self.results.append(sel_options.arguments)
-
-        sel_options = self.options.create('headless_chrome', options)
-        self.results.append(sel_options.arguments)
-
-        options.append({'binary_location': ['chromedriver']})
-        sel_options = self.options.create('chrome', options)
-        self.results.append(sel_options.binary_location)
-
-        options.append({'not_here': ['tidii']})
-        try:
-            self.options.create('chrome', options)
-        except AttributeError as error:
-            self.results.append(error)
-
-        verify_all('Selenium options attribute', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_get_options(self):
-        options = r'add_argument:--proxy-server=66.97.38.58\:80'
+        options = 'add_argument("--proxy-server=66.97.38.58:80")'
         sel_options = self.options.create('chrome', options)
         self.results.append(sel_options.arguments)
-
         verify_all('Selenium options with string.', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -153,10 +110,12 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.error_formatter(self.options._import_options, 'iphone'))
         verify_all('Selenium options import', self.results, reporter=self.reporter)
 
-    def error_formatter(self, method, arg):
+    def error_formatter(self, method, arg, full=False):
         try:
             method(arg)
         except Exception as error:
+            if full:
+                return '%s %s' % (arg, error)
             return '%s %s' % (arg, error.__str__()[:15])
 
 

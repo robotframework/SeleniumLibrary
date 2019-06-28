@@ -1,3 +1,0 @@
-Selenium options
-
-0) {'profile.default_content_settings.popups': 0}
