@@ -10,3 +10,6 @@ Selenium options string to dict
 7) [{'attribute': [True]}]
 8) [{'method': ['arg1']}, {'attribute': [True]}]
 9) [{'method': ['arg1']}, {'attribute': [True]}, {'method': ['arg2']}]
+10) [{'attribute': []}]
+11) [{'method': []}]
+12) [{'method': ['--proxy 10.10.1.3:2345']}]

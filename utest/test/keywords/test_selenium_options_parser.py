@@ -45,11 +45,19 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('attribute = True'))
         self.results.append(self.options._parse('method("arg1");attribute=True'))
         self.results.append(self.options._parse('method("arg1") ; attribute=True ; method("arg2")'))
+        self.results.append(self.options._parse('attribute'))
+        self.results.append(self.options._parse('method()'))
+        self.results.append(self.options._parse('method("--proxy 10.10.1.3:2345")'))
+        self.results.append(self.options._parse('method("arg;with;semicolon")'))
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_parse_options_string_errors(self):
         self.results.append(self.error_formatter(self.options._parse, 'method("arg1)', True))
+        self.results.append(self.error_formatter(self.options._parse, 'method(arg1")', True))
+        self.results.append(self.error_formatter(self.options._parse, 'method(arg1)', True))
+        self.results.append(self.error_formatter(self.options._parse, 'attribute=arg1', True))
+        self.results.append(self.error_formatter(self.options._parse, 'attribute=webdriver', True))
         verify_all('Selenium options string errors', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -112,7 +120,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
     def error_formatter(self, method, arg, full=False):
         try:
-            method(arg)
+            return method(arg)
         except Exception as error:
             if full:
                 return '%s %s' % (arg, error)
