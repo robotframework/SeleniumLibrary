@@ -379,12 +379,13 @@ class SeleniumOptions(object):
         result = {}
         method = None
         arguments = []
-        for tokens in generate_tokens(StringIO(item).readline):
-            if tokens.type == token.NAME and not method:
-                method = tokens.string
-            elif tokens.type == token.STRING:
-                arguments.append(ast.literal_eval(tokens.string))
-            elif tokens.type in [token.NAME, token.NUMBER] and method:
-                arguments.append(ast.literal_eval(tokens.string))
+        tokens = generate_tokens(StringIO(item).readline)
+        for toknum, tokval, _, _, _ in tokens:
+            if toknum == token.NAME and not method:
+                method = tokval
+            elif toknum == token.STRING:
+                arguments.append(ast.literal_eval(tokval))
+            elif toknum in [token.NAME, token.NUMBER] and method:
+                arguments.append(ast.literal_eval(tokval))
         result[method] = arguments
         return result
