@@ -20,7 +20,7 @@ Chrome Browser With Selenium Options As String With Attirbute As True
     ...    LOG 1:2 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
     ...    LOG 1:2 DEBUG GLOB: *"--headless"*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("--disable-dev-shm-usage");headless=True
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; headless = True
 
 Chrome Browser With Selenium Options Object
     [Documentation]

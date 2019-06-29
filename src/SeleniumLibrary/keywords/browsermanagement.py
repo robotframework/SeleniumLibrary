@@ -127,54 +127,51 @@ class BrowserManagementKeywords(LibraryComponent):
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]
         are available. Please note that not all browsers supported by the
         SeleniumLibrary have Selenium options available, please consult
-        the Selenium documentation which browser do support the Selenium
+        the Selenium documentation which browsers do support the Selenium
         options. Selenium options are also supported, when ``remote_url``
         argument is used.
 
         The SeleniumLibrary ``options`` argument accepts Selenium
-        options in three different formats 1) As a sting, 2) List containing
-        dictionaries 3) Python object which is an instance of the
-        Selenium options object.
+        options in two different formats: as a string and as Python object
+        which is an instance of the Selenium options class.
 
-        The sting format is allows to define Selenium options methods
-        or attributes and it's arguments in string format. Methods and
-        attributes are separated by a comma and arguments are separated
-        with a colon. Example like this:
-        `argument:arg1,other_argument:arg2:arg3,attribute:value`.
+        The string format is allows to define Selenium options methods
+        or attributes and it's arguments in string format. The method
+        and attributes are case and space sensitive and must match to
+        the Selenium options methods and attributes names. When
+        defining a method, is must defined in similar way as in
+        python: method name, opening parenthesis, zero to many arguments
+        and closing parenthesis. If there is need to define multiple
+        arguments for a single method, arguments must be separated with
+        comma, just like in Python. Example: `add_argument("--headless")`
+        or `add_experimental_option("key", "value")`. Attributes are
+        defined in similar way as in Python: attribute name, equal sing
+        and attribute value. Example, `headless=True`. Multiple methods
+        and attributes must separated by a semicolon, example:
+        `add_argument("--headless");add_argument("start-maximized")`.
 
-        The method and attributes are case and space sensitive
-        and must match to the Selenium options methods and attributes names.
-        It is possible to have space before and after the comma for readability.
-        Example `argument:arg1,argument:arg2` and
-        `argument:arg1 , argument:arg2` are converted to same
-        object internally. Spaces around arguments are not removed.
-        Arguments are always stings and are not converted to other types.
-        If there is need to define a literal colon for an argument,
-        it can be escaped by using literal backslash. Please
-        note that backslash is an escape character in Robot Framework and
-        therefore backslash must escaped. Example:
-        `argument:arg1_with\\\\:colon`.
+        Arguments allow defining Python data types and arguments are
+        evaluated by using Python
+        [https://docs.python.org/3/library/ast.html#ast.literal_eval|ast.literal_eval].
+        Strings must be quoted with single or double quotes, example "value"
+        or 'value'. It is also possible define other Python builtin
+        data types, example `True` or `None`, by not using quotes
+        around the arguments.
 
-        List containing dictionaries format is similar to the earlier
-        string format, but defines the methods and attributes and their
-        arguments using Robot Framework lists and dictionaries.
-        Method or attribute arguments, must be defined in a list. Method
-        or argument must be a dictionary key and argument list must be
-        the dictionary value. Dictionary must contain only one key
-        value pair. The dictionary must be placed in a list. Example:
-        `[{"argument": ["arg1"]}, {"other_argument": ["arg1", "arg2"]}]`
-
-        As in string format, dictionary key, which is the method or
-        attribute name, is case and space sensitive and must match to
-        the Selenium options methods and attributes names. Although
-        the format is more complex to define, it allows to use Robot Framework
-        Python object, like `${True}` or `${None}`.
+        The string format is space friendly and usually spaces do not alter
+        the defining the methods or attributes. There are two exceptions.
+        In some Robot Framework test data formats, two or spaces are
+        considered as cell separator and instead of defining a single
+        argument, two or more cels may be defined. Spaces in string
+        arguments are not removed and are left as is. Example
+        `add_argument ( "--headless" )` is same as
+        `add_argument("--headless")`
 
         As last format ``options`` argument also support receiving
         the Selenium options as Python class instance. In this case, the
         instance is used as is and the SeleniumLibrary will not convert
         the instance to other formats.
-        Example, if the following code return valua is saved to `${options}`
+        Example, if the following code return value is saved to `${options}`
         variable in the Robot Framework data:
         | options = webdriver.ChromeOptions()
         | options.add_argument('--disable-dev-shm-usage')
@@ -209,14 +206,9 @@ class BrowserManagementKeywords(LibraryComponent):
         Example when using
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
         method:
-        | `Open Browser` | http://example.com | Chrome                  | options=add_argument:--disable-popup-blocking, add_argument:--ignore-certificate-errors | # Sting format              |
-        | `Open Browser` | http://example.com | Chrome                  | options=proxy-server=10.122.97.38.58\\:8080                                             | # Escaping colon            |
-        | ${argument} =  |     Create List    | --disable-dev-shm-usage |                                                                                         | # List and dict format      |
-        | ${method} =    | Create Dictionary  |  add_argument           | ${argument}                                                                             |                             |
-        | ${options 1} = |    Create List     | ${add_argument}         |                                                                                         |                             |
-        | `Open Browser` | http://example.com | Chrome                  | options=${options 1}                                                                    |                             |
-        | ${options 2} = |     Get Options    |                         |                                                                                         | # Selenium options instance |
-        | `Open Browser` | http://example.com | Chrome                  | options=${options 2}                                                                    |                             |
+        | `Open Browser` | http://example.com | Chrome                  | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format              |
+        |  ${options} =  |     Get Options    |                         |                                                                                               | # Selenium options instance |
+        | `Open Browser` | http://example.com | Chrome                  | options=${options 2}                                                                          |                             |
 
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
