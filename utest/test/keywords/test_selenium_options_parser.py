@@ -62,6 +62,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.error_formatter(self.options._parse, 'attribute=webdriver', True))
         verify_all('Selenium options string errors', self.results, reporter=self.reporter)
 
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_split_options(self):
         self.results.append(self.options._split('method("arg1");method("arg2")'))
         self.results.append(self.options._split('method("arg1")'))
