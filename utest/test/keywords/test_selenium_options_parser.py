@@ -59,6 +59,14 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.error_formatter(self.options._parse, 'attribute=webdriver', True))
         verify_all('Selenium options string errors', self.results, reporter=self.reporter)
 
+    def test_split_options(self):
+        self.results.append(self.options._split('method("arg1");method("arg2")'))
+        self.results.append(self.options._split('method("arg1")'))
+        self.results.append(self.options._split('attribute=True'))
+        self.results.append(self.options._split('attribute="semi;colons;middle";other_attribute=True'))
+        self.results.append(self.options._split('method("arg1;");method(";arg2;")'))
+        verify_all('Selenium options string splitting', self.results, reporter=self.reporter)
+
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_options_create(self):
         options = 'add_argument("--disable-dev-shm-usage")'

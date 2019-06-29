@@ -36,7 +36,9 @@ Chrome Browser With Selenium Options Invalid Method
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=not_here_method("arg1")
 
 
-Chrome Browser With Selenium Options Invalid Argument
-    Run Keyword And Expect Error     ValueError: Unable to parse option: "add_argument("has"
-    ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+Chrome Browser With Selenium Options Argument With Semicolon
+    [Documentation]
+    ...    LOG 1:2 DEBUG GLOB: *"goog:chromeOptions"*
+    ...    LOG 1:2 DEBUG GLOB: *["has;semicolon"*
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("has;semicolon")

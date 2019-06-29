@@ -368,7 +368,7 @@ class SeleniumOptions(object):
 
     def _parse(self, options):
         result = []
-        for item in options.split(';'):
+        for item in self._split(options):
             try:
                 result.append(self._parse_to_tokens(item))
             except ValueError:
@@ -389,3 +389,14 @@ class SeleniumOptions(object):
                 arguments.append(ast.literal_eval(tokval))
         result[method] = arguments
         return result
+
+    def _split(self, options):
+        split_options = []
+        start_position = 0
+        tokens = generate_tokens(StringIO(options).readline)
+        for toknum, tokval, tokpos, _, _ in tokens:
+            if toknum == token.OP and tokval == ';':
+                split_options.append(options[start_position:tokpos[1]])
+                start_position = tokpos[1] + 1
+        split_options.append(options[start_position:])
+        return split_options
