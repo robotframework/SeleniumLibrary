@@ -13,3 +13,4 @@ Selenium options string to dict
 10) [{'attribute': []}]
 11) [{'method': []}]
 12) [{'method': ['--proxy 10.10.1.3:2345']}]
+13) [{'method': [';arg1']}]

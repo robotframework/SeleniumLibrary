@@ -48,6 +48,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._parse('attribute'))
         self.results.append(self.options._parse('method()'))
         self.results.append(self.options._parse('method("--proxy 10.10.1.3:2345")'))
+        self.results.append(self.options._parse('method(";arg1")'))
         verify_all('Selenium options string to dict', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -65,6 +66,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.options._split('attribute=True'))
         self.results.append(self.options._split('attribute="semi;colons;middle";other_attribute=True'))
         self.results.append(self.options._split('method("arg1;");method(";arg2;")'))
+        self.results.append(self.options._split(' method ( " arg1 ") ; method ( " arg2 " ) '))
         verify_all('Selenium options string splitting', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
