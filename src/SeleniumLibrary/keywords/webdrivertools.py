@@ -170,11 +170,11 @@ class WebDriverCreator(object):
 
     def _has_service_log_path(self, web_driver):
         signature = inspect.getargspec(web_driver.__init__)
-        return True if 'service_log_path' in signature.args else False
+        return 'service_log_path' in signature.args
 
     def _has_options(self, web_driver):
         signature = inspect.getargspec(web_driver.__init__)
-        return True if 'options' in signature.args else False
+        return 'options' in signature.args
 
     def create_edge(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
