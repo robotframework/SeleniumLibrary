@@ -69,7 +69,8 @@ class WebDriverCreator(object):
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url, profile_dir,
                                    options=options, service_log_path=service_log_path)
-        return creation_method(desired_capabilities, remote_url, options=options, service_log_path=service_log_path)
+        return creation_method(desired_capabilities, remote_url, options=options,
+                               service_log_path=service_log_path)
 
     def _get_creator_method(self, browser):
         if browser in self.browser_names:
@@ -112,10 +113,11 @@ class WebDriverCreator(object):
         return webdriver.Chrome(options=options, service_log_path=service_log_path, **desired_capabilities)
 
     def create_headless_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None):
-        chrome_options = webdriver.ChromeOptions() if not options else options
+        if not options:
+            options = webdriver.ChromeOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
-        chrome_options.set_headless()
-        return self.create_chrome(desired_capabilities, remote_url, chrome_options, service_log_path)
+        options.set_headless()
+        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
@@ -143,10 +145,11 @@ class WebDriverCreator(object):
 
     def create_headless_firefox(self, desired_capabilities, remote_url,
                                 ff_profile_dir, options=None, service_log_path=None):
-        ff_options = webdriver.FirefoxOptions() if not options else options
+        if not options:
+            options = webdriver.FirefoxOptions()
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
-        ff_options.set_headless()
-        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, ff_options, service_log_path)
+        options.set_headless()
+        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path)
 
     def create_ie(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
