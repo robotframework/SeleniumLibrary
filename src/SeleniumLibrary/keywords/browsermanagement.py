@@ -126,20 +126,20 @@ class BrowserManagementKeywords(LibraryComponent):
         and for Firefox these
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]
         are available. Please note that not all browsers supported by the
-        SeleniumLibrary have Selenium options available, please consult
-        the Selenium documentation which browsers do support the Selenium
-        options. Selenium options are also supported, when ``remote_url``
-        argument is used.
+        SeleniumLibrary have Selenium options available. Therefore please
+        consult the Selenium documentation which browsers do support
+        the Selenium options. Selenium options are also supported,
+        when ``remote_url`` argument is used.
 
         The SeleniumLibrary ``options`` argument accepts Selenium
         options in two different formats: as a string and as Python object
         which is an instance of the Selenium options class.
 
-        The string format is allows to define Selenium options methods
-        or attributes and it's arguments in string format. The method
-        and attributes are case and space sensitive and must match to
-        the Selenium options methods and attributes names. When
-        defining a method, is must defined in similar way as in
+        The string format allows to define Selenium options methods
+        or attributes and their arguments in Robot Framework test data.
+        The method and attributes names are case and space sensitive and
+        must match to the Selenium options methods and attributes names.
+        When defining a method, is must defined in similar way as in
         python: method name, opening parenthesis, zero to many arguments
         and closing parenthesis. If there is need to define multiple
         arguments for a single method, arguments must be separated with
@@ -148,7 +148,7 @@ class BrowserManagementKeywords(LibraryComponent):
         defined in similar way as in Python: attribute name, equal sing
         and attribute value. Example, `headless=True`. Multiple methods
         and attributes must separated by a semicolon, example:
-        `add_argument("--headless");add_argument("start-maximized")`.
+        `add_argument("--headless");add_argument("--start-maximized")`.
 
         Arguments allow defining Python data types and arguments are
         evaluated by using Python
@@ -160,19 +160,21 @@ class BrowserManagementKeywords(LibraryComponent):
 
         The string format is space friendly and usually spaces do not alter
         the defining the methods or attributes. There are two exceptions.
-        In some Robot Framework test data formats, two or spaces are
+        In some Robot Framework test data formats, two or more spaces are
         considered as cell separator and instead of defining a single
-        argument, two or more cels may be defined. Spaces in string
+        argument, two or more arguments may be defined. Spaces in string
         arguments are not removed and are left as is. Example
         `add_argument ( "--headless" )` is same as
-        `add_argument("--headless")`
+        `add_argument("--headless")`. But `add_argument(" --headless ")` is
+        not same same as `add_argument ( "--headless" )`, because
+        spaces inside of quotes are not removed.
 
         As last format ``options`` argument also support receiving
         the Selenium options as Python class instance. In this case, the
         instance is used as is and the SeleniumLibrary will not convert
         the instance to other formats.
-        Example, if the following code return value is saved to `${options}`
-        variable in the Robot Framework data:
+        For example, if the following code return value is saved to
+        `${options}` variable in the Robot Framework data:
         | options = webdriver.ChromeOptions()
         | options.add_argument('--disable-dev-shm-usage')
         | return options
