@@ -365,6 +365,8 @@ class SeleniumOptions(object):
         return selenium_options
 
     def _import_options(self, browser):
+        if browser == 'android':
+            browser = 'chrome'  # Android uses ChromeOptions()
         browser = browser.replace('headless_', '', 1)
         options = importlib.import_module('selenium.webdriver.%s.options' % browser)
         return options.Options

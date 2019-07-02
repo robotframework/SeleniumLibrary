@@ -11,5 +11,5 @@ Selenium options import
 8) safari No module named
 9) htmlunit No module named
 10) htmlunit_with_js No module named
-11) android No module named
+11) <class 'selenium.webdriver.chrome.options.Options'>
 12) iphone No module named

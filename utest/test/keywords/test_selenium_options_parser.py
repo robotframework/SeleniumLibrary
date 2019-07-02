@@ -105,7 +105,6 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
-
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_get_options(self):
         options = 'add_argument("--proxy-server=66.97.38.58:80")'
@@ -126,7 +125,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.error_formatter(self.options._import_options, 'safari'))
         self.results.append(self.error_formatter(self.options._import_options, 'htmlunit'))
         self.results.append(self.error_formatter(self.options._import_options, 'htmlunit_with_js'))
-        self.results.append(self.error_formatter(self.options._import_options, 'android'))
+        self.results.append(self.options._import_options('android'))
         self.results.append(self.error_formatter(self.options._import_options, 'iphone'))
         verify_all('Selenium options import', self.results, reporter=self.reporter)
 
