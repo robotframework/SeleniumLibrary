@@ -26,7 +26,7 @@ from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
-from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney
+from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string
 
 
 class WebDriverCreator(object):
@@ -351,7 +351,7 @@ class SeleniumOptions(object):
         if is_falsy(options):
             return None
         selenium_options = self._import_options(browser)
-        if isinstance(options, selenium_options):
+        if not is_string(options):
             return options
         options = self._parse(options)
         selenium_options = selenium_options()

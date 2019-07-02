@@ -105,6 +105,13 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
+    def test_create_with_android(self):
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_experimental_option('androidPackage', 'com.android.chrome')
+        sel_options = self.options.create('android', chrome_options)
+        self.results.append([sel_options.arguments, sel_options.experimental_options])
+        verify_all('Selenium options with android', self.results, reporter=self.reporter)
+
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_get_options(self):
         options = 'add_argument("--proxy-server=66.97.38.58:80")'
