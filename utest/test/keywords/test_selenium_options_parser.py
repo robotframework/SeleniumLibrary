@@ -105,6 +105,7 @@ class SeleniumOptionsParserTests(unittest.TestCase):
 
         verify_all('Selenium options', self.results, reporter=self.reporter)
 
+    @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_create_with_android(self):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_experimental_option('androidPackage', 'com.android.chrome')
