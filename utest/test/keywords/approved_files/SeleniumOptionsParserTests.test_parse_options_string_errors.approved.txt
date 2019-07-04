@@ -1,0 +1,9 @@
+Selenium options string errors
+
+0) method("arg1) Unable to parse option: "method("arg1)"
+1) method(arg1") Unable to parse option: "method(arg1")"
+2) method(arg1) Unable to parse option: "method(arg1)"
+3) attribute=arg1 Unable to parse option: "attribute=arg1"
+4) attribute=webdriver Unable to parse option: "attribute=webdriver"
+5) method(argument="value") Unable to parse option: "method(argument="value")"
+6) [{'method': ['key', 'value']}]

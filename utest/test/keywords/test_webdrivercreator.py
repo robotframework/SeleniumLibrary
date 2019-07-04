@@ -17,14 +17,21 @@ class WebDriverCreatorTests(unittest.TestCase):
     def tearDown(self):
         unstub()
 
+    def test_normalise_browser_name(self):
+        browser = self.creator._normalise_browser_name('chrome')
+        self.assertEqual(browser, 'chrome')
+
+        browser = self.creator._normalise_browser_name('ChrOmE')
+        self.assertEqual(browser, 'chrome')
+
+        browser = self.creator._normalise_browser_name(' Ch rO mE ')
+        self.assertEqual(browser, 'chrome')
+
     def test_get_creator_method(self):
         method = self.creator._get_creator_method('chrome')
         self.assertTrue(method)
 
-        method = self.creator._get_creator_method('Chrome')
-        self.assertTrue(method)
-
-        method = self.creator._get_creator_method('Fire Fox')
+        method = self.creator._get_creator_method('firefox')
         self.assertTrue(method)
 
         with self.assertRaisesRegexp(ValueError, 'foobar is not a supported browser.'):
@@ -298,6 +305,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         when(webdriver).Ie().thenReturn(expected_webdriver)
         when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         driver = self.creator.create_ie({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -339,6 +347,7 @@ class WebDriverCreatorTests(unittest.TestCase):
         expected_webdriver = mock()
         when(webdriver).Edge(service_log_path=None).thenReturn(expected_webdriver)
         when(self.creator)._has_service_log_path(ANY).thenReturn(True)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         driver = self.creator.create_edge({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -374,7 +383,7 @@ class WebDriverCreatorTests(unittest.TestCase):
 
     def test_opera(self):
         expected_webdriver = mock()
-        when(webdriver).Opera(service_log_path=None).thenReturn(expected_webdriver)
+        when(webdriver).Opera(options=None, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -591,6 +600,7 @@ class WebDriverCreatorTests(unittest.TestCase):
     def test_create_driver_ie(self):
         expected_webdriver = mock()
         when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         when(webdriver).Ie().thenReturn(expected_webdriver)
         for browser in ['ie', 'Internet Explorer']:
             driver = self.creator.create_driver(browser, None, None)

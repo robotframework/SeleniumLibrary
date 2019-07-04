@@ -58,7 +58,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(self, url, browser='firefox', alias=None,
                      remote_url=False, desired_capabilities=None,
-                     ff_profile_dir=None, service_log_path=None):
+                     ff_profile_dir=None, options=None, service_log_path=None):
         """Opens a new browser instance to the given ``url``.
 
         The ``browser`` argument specifies which browser to use, and the
@@ -119,6 +119,71 @@ class BrowserManagementKeywords(LibraryComponent):
         ``ff_profile_dir`` can also be instance of the
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html?highlight=firefoxprofile#selenium.webdriver.firefox.firefox_profile.FirefoxProfile|selenium.webdriver.FirefoxProfile].
 
+        Optional ``options`` argument allows to define browser specific
+        Selenium options. Example for Chrome, the ``options`` argument
+        allows defining the following
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|methods and attributes]
+        and for Firefox these
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]
+        are available. Please note that not all browsers supported by the
+        SeleniumLibrary have Selenium options available. Therefore please
+        consult the Selenium documentation which browsers do support
+        the Selenium options. If ``browser`` argument is `android` then
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
+        is used. Selenium options are also supported, when ``remote_url``
+        argument is used.
+
+        The SeleniumLibrary ``options`` argument accepts Selenium
+        options in two different formats: as a string and as Python object
+        which is an instance of the Selenium options class.
+
+        The string format allows to define Selenium options methods
+        or attributes and their arguments in Robot Framework test data.
+        The method and attributes names are case and space sensitive and
+        must match to the Selenium options methods and attributes names.
+        When defining a method, is must defined in similar way as in
+        python: method name, opening parenthesis, zero to many arguments
+        and closing parenthesis. If there is need to define multiple
+        arguments for a single method, arguments must be separated with
+        comma, just like in Python. Example: `add_argument("--headless")`
+        or `add_experimental_option("key", "value")`. Attributes are
+        defined in similar way as in Python: attribute name, equal sing
+        and attribute value. Example, `headless=True`. Multiple methods
+        and attributes must separated by a semicolon, example:
+        `add_argument("--headless");add_argument("--start-maximized")`.
+
+        Arguments allow defining Python data types and arguments are
+        evaluated by using Python
+        [https://docs.python.org/3/library/ast.html#ast.literal_eval|ast.literal_eval].
+        Strings must be quoted with single or double quotes, example "value"
+        or 'value'. It is also possible define other Python builtin
+        data types, example `True` or `None`, by not using quotes
+        around the arguments.
+
+        The string format is space friendly and usually spaces do not alter
+        the defining the methods or attributes. There are two exceptions.
+        In some Robot Framework test data formats, two or more spaces are
+        considered as cell separator and instead of defining a single
+        argument, two or more arguments may be defined. Spaces in string
+        arguments are not removed and are left as is. Example
+        `add_argument ( "--headless" )` is same as
+        `add_argument("--headless")`. But `add_argument(" --headless ")` is
+        not same same as `add_argument ( "--headless" )`, because
+        spaces inside of quotes are not removed.
+
+        As last format ``options`` argument also support receiving
+        the Selenium options as Python class instance. In this case, the
+        instance is used as is and the SeleniumLibrary will not convert
+        the instance to other formats.
+        For example, if the following code return value is saved to
+        `${options}` variable in the Robot Framework data:
+        | options = webdriver.ChromeOptions()
+        | options.add_argument('--disable-dev-shm-usage')
+        | return options
+        
+        Then the `${options}` variable can be used as argument to
+        ``options``.
+
         Optional ``service_log_path`` argument defines the name of the
         file where to write the browser driver logs. If the
         ``service_log_path``  argument contain a  marker ``{index}``, it
@@ -142,6 +207,13 @@ class BrowserManagementKeywords(LibraryComponent):
         | Should Be Equal | ${1_index}     | ${4_index}         |         |                  |                                                   |
         | Should Be Equal | ${2_index}     | ${2}               |         |                  |                                                   |
 
+        Example when using
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
+        method:
+        | `Open Browser` | http://example.com | Chrome                  | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format              |
+        |  ${options} =  |     Get Options    |                         |                                                                                               | # Selenium options instance |
+        | `Open Browser` | http://example.com | Chrome                  | options=${options 2}                                                                          |                             |
+
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
         more.
@@ -150,10 +222,10 @@ class BrowserManagementKeywords(LibraryComponent):
         new in SeleniumLibrary 3.1.
 
         Using ``alias`` to decide, is the new browser opened is new
-        in SeleniumLibrary 4.0. Also the ``service_log_path`` is new
-        in SeleniumLibrary 4.0. Support for ``ff_profile_dir`` accepting
-        instance of the `selenium.webdriver.FirefoxProfile` is new in
-        SeleniumLibrary 4.0.
+        in SeleniumLibrary 4.0. The ``options`` and ``service_log_path``
+        are new in SeleniumLibrary 4.0. Support for ``ff_profile_dir``
+        accepting instance of the `selenium.webdriver.FirefoxProfile`
+        is new in SeleniumLibrary 4.0.
         """
         index = self.drivers.get_index(alias)
         if index:
@@ -163,11 +235,11 @@ class BrowserManagementKeywords(LibraryComponent):
             return index
         return self._make_new_browser(url, browser, alias, remote_url,
                                       desired_capabilities, ff_profile_dir,
-                                      service_log_path)
+                                      options, service_log_path)
 
     def _make_new_browser(self, url, browser='firefox', alias=None,
                           remote_url=False, desired_capabilities=None,
-                          ff_profile_dir=None, service_log_path=None):
+                          ff_profile_dir=None, options=None, service_log_path=None):
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
@@ -175,7 +247,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         driver = self._make_driver(browser, desired_capabilities,
                                    ff_profile_dir, remote_url,
-                                   service_log_path)
+                                   options, service_log_path)
         driver = self._wrap_event_firing_webdriver(driver)
         try:
             driver.get(url)
@@ -504,11 +576,11 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         self.driver.implicitly_wait(timestr_to_secs(value))
 
-    def _make_driver(self, browser, desired_capabilities=None,
-                     profile_dir=None, remote=None, service_log_path=None):
+    def _make_driver(self, browser, desired_capabilities=None, profile_dir=None,
+                     remote=None, options=None, service_log_path=None):
         driver = WebDriverCreator(self.log_dir).create_driver(
-            browser=browser, desired_capabilities=desired_capabilities,
-            remote_url=remote, profile_dir=profile_dir, service_log_path=service_log_path)
+            browser=browser, desired_capabilities=desired_capabilities, remote_url=remote,
+            profile_dir=profile_dir, options=options, service_log_path=service_log_path)
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:

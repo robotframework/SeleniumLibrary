@@ -1,0 +1,18 @@
+Selenium options string to dict
+
+0) [{'method': ['arg1']}]
+1) [{'method': ['arg1', 'arg2']}]
+2) [{'method': [True]}]
+3) [{'method': [1]}]
+4) [{'method': ['arg1', 2, None, False, 'arg2']}]
+5) [{'method': [' arg1 ', 2, None, False, ' arg2 ']}]
+6) [{'attribute': ['arg1']}]
+7) [{'attribute': [True]}]
+8) [{'method': ['arg1']}, {'attribute': [True]}]
+9) [{'method': ['arg1']}, {'attribute': [True]}, {'method': ['arg2']}]
+10) [{'attribute': []}]
+11) [{'method': []}]
+12) [{'method': ['--proxy 10.10.1.3:2345']}]
+13) [{'method': [';arg1']}]
+14) [{'method': ['arg1', 2, 'arg2']}]
+15) [{'method': ['arg1']}]

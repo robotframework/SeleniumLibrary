@@ -112,7 +112,8 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
         when(self.creator)._has_service_log_path(ANY).thenReturn(True)
-        when(webdriver).Ie(service_log_path=log_file).thenReturn(expected_webdriver)
+        when(self.creator)._has_options(ANY).thenReturn(True)
+        when(webdriver).Ie(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
@@ -120,6 +121,7 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
         when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         when(webdriver).Ie().thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
@@ -134,6 +136,7 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
         when(self.creator)._has_service_log_path(ANY).thenReturn(True)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         when(webdriver).Edge(service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_edge({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
@@ -142,6 +145,7 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
         when(self.creator)._has_service_log_path(ANY).thenReturn(False)
+        when(self.creator)._has_options(ANY).thenReturn(False)
         when(webdriver).Edge().thenReturn(expected_webdriver)
         driver = self.creator.create_edge({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
@@ -149,8 +153,15 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
     def test_create_opera_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
-        when(webdriver).Opera(service_log_path=log_file).thenReturn(expected_webdriver)
+        when(webdriver).Opera(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, None, service_log_path=log_file)
+        self.assertEqual(driver, expected_webdriver)
+
+    def test_create_safari_no_support_for_service_log_path(self):
+        log_file = os.path.join(self.output_dir, 'ie-1.log')
+        expected_webdriver = mock()
+        when(webdriver).Safari().thenReturn(expected_webdriver)
+        driver = self.creator.create_safari({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
     def test_create_phantomjs_with_service_log_path_real_path(self):
