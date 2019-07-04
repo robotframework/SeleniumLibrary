@@ -60,6 +60,8 @@ class SeleniumOptionsParserTests(unittest.TestCase):
         self.results.append(self.error_formatter(self.options._parse, 'method(arg1)', True))
         self.results.append(self.error_formatter(self.options._parse, 'attribute=arg1', True))
         self.results.append(self.error_formatter(self.options._parse, 'attribute=webdriver', True))
+        self.results.append(self.error_formatter(self.options._parse, 'method(argument="value")', True))
+        self.results.append(self.error_formatter(self.options._parse, 'method({"key": "value"})', True))
         verify_all('Selenium options string errors', self.results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
