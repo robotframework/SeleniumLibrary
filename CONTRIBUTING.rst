@@ -190,11 +190,12 @@ Finalizing pull requests
 Once you have code, documentation and tests ready, it is time to
 finalize the pull request.
 
-CHANGES.rst
-~~~~~~~~~~~
+Acknowledgments
+~~~~~~~~~~~~~~~
 
 If you have done any non-trivial change and would like to be credited,
-add yourself to `CHANGES.rst`_ file.
+remind us to add `acknowledge` tag to the issue. This way we will add
+your name to the release notes, when next release is made.
 
 Resolving conflicts
 ~~~~~~~~~~~~~~~~~~~
@@ -202,9 +203,6 @@ Resolving conflicts
 Conflicts can occur if there are new changes to the master that touch
 the same code as your changes. In that case you should
 `sync your fork`_ and `resolve conflicts`_ to allow for an easy merge.
-
-The most common conflicting file is the aforementioned
-`CHANGES.rst`_, but luckily fixing those conflicts is typically easy.
 
 .. _SeleniumLibrary project: https://github.com/robotframework/SeleniumLibrary
 .. _robotframework-users: http://groups.google.com/group/robotframework-users
@@ -222,6 +220,5 @@ The most common conflicting file is the aforementioned
 .. _invoke: http://www.pyinvoke.org/
 .. _Travis CI: https://travis-ci.org/robotframework/SeleniumLibrary
 .. _test/README.rst`: https://github.com/robotframework/SeleniumLibrary/blob/master/test/README.rst
-.. _CHANGES.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/CHANGES.rst
 .. _sync your fork: https://help.github.com/articles/syncing-a-fork/
 .. _resolve conflicts: https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line
