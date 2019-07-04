@@ -128,8 +128,10 @@ class BrowserManagementKeywords(LibraryComponent):
         are available. Please note that not all browsers supported by the
         SeleniumLibrary have Selenium options available. Therefore please
         consult the Selenium documentation which browsers do support
-        the Selenium options. Selenium options are also supported,
-        when ``remote_url`` argument is used.
+        the Selenium options. If ``browser`` argument is `android` then
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
+        is used. Selenium options are also supported, when ``remote_url``
+        argument is used.
 
         The SeleniumLibrary ``options`` argument accepts Selenium
         options in two different formats: as a string and as Python object
