@@ -25,10 +25,10 @@ different versions and the overall project history.
    :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 
 .. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
-   :target: http://www.apache.org/licenses/LICENSE-2.0
+   :target: https://www.apache.org/licenses/LICENSE-2.0
 
 .. image:: https://api.travis-ci.org/robotframework/SeleniumLibrary.png
-   :target: http://travis-ci.org/robotframework/SeleniumLibrary
+   :target: https://travis-ci.org/robotframework/SeleniumLibrary
 
 Keyword documentation
 ---------------------
@@ -260,8 +260,8 @@ SeleniumLibrary. This decision basically meant following changes:
 Going forward, all new development will happen in the new SeleniumLibrary
 project.
 
-.. _Robot Framework: http://robotframework.org
-.. _Selenium: http://seleniumhq.org
+.. _Robot Framework: https://robotframework.org
+.. _Selenium: https://seleniumhq.org
 .. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary
 .. _Selenium2Library: https://github.com/robotframework/Selenium2Library
 .. _Old SeleniumLibrary: https://github.com/robotframework/OldSeleniumLibrary
@@ -269,15 +269,15 @@ project.
 .. _PyPI: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 .. _GitHub: https://github.com/robotframework/SeleniumLibrary
 .. _Keyword Documentation: https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
-.. _Python: http://python.org
-.. _PyPy: http://pypy.org
-.. _Jython: http://jython.org
-.. _IronPython: http://ironpython.net
+.. _Python: https://python.org
+.. _PyPy: https://pypy.org
+.. _Jython: https://jython.org/
+.. _IronPython: https://ironpython.net/
 .. _demo project: https://github.com/robotframework/WebDemo
-.. _Robot Framework User Guide: http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
+.. _Robot Framework User Guide: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
-.. _robotframework-users: http://groups.google.com/group/robotframework-users
+.. _robotframework-users: https://groups.google.com/group/robotframework-users
 .. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/EXTENDING_SELENIUMLIBRARY.rst
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
-.. _Other support forums: http://robotframework.org/#support
+.. _Other support forums: https://robotframework.org/#support
