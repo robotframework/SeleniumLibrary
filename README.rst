@@ -268,7 +268,7 @@ project.
 .. _pip: http://pip-installer.org
 .. _PyPI: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 .. _GitHub: https://github.com/robotframework/SeleniumLibrary
-.. _Keyword Documentation: http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
+.. _Keyword Documentation: https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html
 .. _Python: http://python.org
 .. _PyPy: http://pypy.org
 .. _Jython: http://jython.org
