@@ -114,6 +114,8 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
+            if not browser == 'CURRENT':  # Todo: Option ALL is necessary but complicated.
+                self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
     @keyword
