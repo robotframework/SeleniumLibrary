@@ -31,7 +31,12 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def select_window(self, locator='MAIN', timeout=None):
-        """Selects browser window matching ``locator``.
+        """*DEPRECATED in SeleniumLibrary 4.0.* use `Switch Window` instead."""
+        self.switch_window(locator, timeout)
+
+    @keyword
+    def switch_window(self, locator='MAIN', timeout=None, browser='CURRENT'):
+        """Switches to browser window matching ``locator``.
 
         If the window is found, all subsequent commands use the selected
         window, until this keyword is used again. If the window is not
@@ -117,37 +122,37 @@ class WindowKeywords(LibraryComponent):
         self.driver.close()
 
     @keyword
-    def get_window_handles(self):
-        """Return all current window handles as a list.
+    def get_window_handles(self, browser='CURRENT'):
+        """Return all child window handles of the current browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
 
         Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.
         """
-        return self.driver.window_handles
+        return self._window_manager.get_window_handles(browser)
 
     @keyword
-    def get_window_identifiers(self):
-        """Returns and logs id attributes of all known browser windows."""
-        ids = [info.id for info in self._window_manager.get_window_infos()]
+    def get_window_identifiers(self, browser='CURRENT'):
+        """Returns and logs id attributes of the current browser windows."""
+        ids = [info.id for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(ids)
 
     @keyword
-    def get_window_names(self):
-        """Returns and logs names of all known browser windows."""
-        names = [info.name for info in self._window_manager.get_window_infos()]
+    def get_window_names(self, browser='CURRENT'):
+        """Returns and logs names of the current browser windows."""
+        names = [info.name for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(names)
 
     @keyword
-    def get_window_titles(self):
-        """Returns and logs titles of all known browser windows."""
-        titles = [info.title for info in self._window_manager.get_window_infos()]
+    def get_window_titles(self, browser='CURRENT'):
+        """Returns and logs titles of the current browser windows."""
+        titles = [info.title for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(titles)
 
     @keyword
-    def get_locations(self):
-        """Returns and logs URLs of all known browser windows."""
-        urls = [info.url for info in self._window_manager.get_window_infos()]
+    def get_locations(self, browser='CURRENT'):
+        """Returns and logs URLs of the current browser windows."""
+        urls = [info.url for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(urls)
 
     @keyword
