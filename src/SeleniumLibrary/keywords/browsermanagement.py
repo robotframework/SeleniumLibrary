@@ -350,6 +350,22 @@ class BrowserManagementKeywords(LibraryComponent):
         self.debug('Switched to browser with Selenium session id %s.'
                    % self.driver.session_id)
 
+    @ keyword
+    def get_browser_ids(self):
+        """Returns ids of all active browser as list.
+
+        New in SeleniumLibrary 4.0
+        """
+        return self.drivers.active_driver_ids
+
+    @keyword
+    def get_browser_aliases(self):
+        """Returns aliases of all active browser as list.
+
+        New in SeleniumLibrary 4.0
+        """
+        return self.drivers.active_aliases
+
     @keyword
     def get_session_id(self):
         """Returns the currently active browser session id.
