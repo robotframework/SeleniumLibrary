@@ -184,10 +184,11 @@ usage, please create a new issue describing the enhancement request and even bet
 issue is backed up by a pull request.
 
 If the enhancement is not generally useful, example solution is domain specific, then the
-SeleniumLibrary offers a public API which can be used to build own libraries. All keyword
-methods are available in the public API. There are also generally useful methods and attributes
-available, which are useful for creating new libraries. Please see `extending documentation`_
-for more details about the available methods and for examples how the library can be extended.
+SeleniumLibrary offers a public API's which can be used to build ownplugins and libraries.
+Plugin API allows to add new keywords, modify existing keywords and modify internal
+functionality of the library. Also new libraries can be build on top of the
+SeleniumLibrary. Please see `extending documentation`_ for more details about the
+available methods and for examples how the library can be extended.
 
 Support
 -------
@@ -217,7 +218,8 @@ a bit more.
 SeleniumLibrary 2.9.2 and earlier   Selenium 1 and 2            Python 2.5-2.7              The original SeleniumLibrary using Selenium RC API.
 Selenium2Library 1.8.0 and earlier  Selenium 2 and 3            Python 2.6-2.7              Fork of SeleniumLibrary using Selenium WebDriver API.
 SeleniumLibrary 3.0 and 3.1         Selenium 2 and 3            Python 2.7 and 3.3+         Selenium2Library renamed and with Python 3 support and new architecture.
-SeleniumLibrary 3.2 and newer       Selenium 3                  Python 2.7 and 3.4+         Drops Selenium 2 support.
+SeleniumLibrary 3.2                 Selenium 3                  Python 2.7 and 3.4+         Drops Selenium 2 support.
+SeleniumLibrary 4.0                 Selenium 3                  Python 2.7 and 3.4+         Plugin API and support for event friging webdriver.
 Selenium2Library 3.0                Depends on SeleniumLibrary  Depends on SeleniumLibrary  Thin wrapper for SeleniumLibrary 3.0 to ease transition.
 ==================================  ==========================  ==========================  ===============
 
@@ -277,7 +279,7 @@ project.
 .. _Robot Framework User Guide: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
 .. _robotframework-users: https://groups.google.com/group/robotframework-users
-.. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/EXTENDING_SELENIUMLIBRARY.rst
+.. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
 .. _Other support forums: https://robotframework.org/#support
