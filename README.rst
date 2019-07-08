@@ -184,10 +184,11 @@ usage, please create a new issue describing the enhancement request and even bet
 issue is backed up by a pull request.
 
 If the enhancement is not generally useful, example solution is domain specific, then the
-SeleniumLibrary offers a public API which can be used to build own libraries. All keyword
-methods are available in the public API. There are also generally useful methods and attributes
-available, which are useful for creating new libraries. Please see `extending documentation`_
-for more details about the available methods and for examples how the library can be extended.
+SeleniumLibrary offers a public API's which can be used to build ownplugins and libraries.
+Plugin API allows to add new keywords, modify existing keywords and modify internal
+functionality of the library. Also new libraries can be build on top of the
+SeleniumLibrary. Please see `extending documentation`_ for more details about the
+available methods and for examples how the library can be extended.
 
 Support
 -------
@@ -278,7 +279,7 @@ project.
 .. _Robot Framework User Guide: https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html
 .. _Robot Framework installation instructions: https://github.com/robotframework/robotframework/blob/master/INSTALL.rst
 .. _robotframework-users: https://groups.google.com/group/robotframework-users
-.. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/EXTENDING_SELENIUMLIBRARY.rst
+.. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
 .. _Other support forums: https://robotframework.org/#support
