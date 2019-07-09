@@ -40,7 +40,7 @@ class WindowManager(ContextAware):
         }
 
     def get_window_handles(self, browser):
-        if browser == 'ALL':
+        if is_string(browser) and browser == 'ALL':
             handles = []
             current_index = self.drivers.current_index
             for index, driver in enumerate(self.drivers, 1):
@@ -48,7 +48,7 @@ class WindowManager(ContextAware):
                 handles.extend(self.driver.window_handles)
             self.drivers.switch(current_index)
             return handles
-        elif browser == 'CURRENT':
+        elif is_string(browser) and browser == 'CURRENT':
             return self.driver.window_handles
         else:
             current_index = self.drivers.current_index
@@ -59,14 +59,14 @@ class WindowManager(ContextAware):
 
     def get_window_infos(self, browser='CURRENT'):
         current_index = self.drivers.current_index
-        if browser == 'ALL':
+        if is_string(browser) and browser.upper() == 'ALL':
             infos = []
             for index, driver in enumerate(self.drivers, 1):
                 self.drivers.switch(index)
                 infos.extend(self._get_window_infos())
             self.drivers.switch(current_index)
             return infos
-        elif browser == 'CURRENT':
+        elif is_string(browser) and browser.upper() == 'CURRENT':
             return self._get_window_infos()
         else:
             self.drivers.switch(browser)
@@ -90,7 +90,6 @@ class WindowManager(ContextAware):
         return infos
 
     def select(self, locator, timeout=0):
-        # Todo: try to select a windows with browser identifier. CURRENT, ALL, <id or alias>
         while True:
             try:
                 return self._select(locator)

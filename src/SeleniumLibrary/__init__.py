@@ -62,6 +62,7 @@ class SeleniumLibrary(DynamicCore):
     == Table of contents ==
 
     - `Locating elements`
+    - `Browsers and Windows`
     - `Timeouts, waits and delays`
     - `Run-on-failure functionality`
     - `Boolean arguments`
@@ -222,6 +223,72 @@ class SeleniumLibrary(DynamicCore):
     | `Click Element` | custom:example |
 
     See the `Add Location Strategy` keyword for more details.
+
+    = Browsers and Windows =
+
+    In this section the concept of Browsers or Webdrivers and its Windows
+    will be explained.
+
+    == Browsers ==
+
+    In Selenium Library there are two ways to start a Browser and control it.
+    The first one is the `Open Browser` keyword. This one should be used as
+    default keyword.
+    The second one is the `Create Webdriver` keyword which was useful, when
+    browser options needed to be set. Since Selenium Library 4.0.x `Open Browser`
+    also supports option why `Create Webdriver` will be deprecated.
+    When opening a browser a new Webdriver process is startet and connected to
+    Selenium Library. When using Selenium Grid this browser may be started on any
+    Grid node that has matching capabilities.
+    It is possible to start multiple independent browsers at the same test case.
+    These browsers do typically not share any data like sessions etc.
+    Each browser starts with one window. One Browser may have multiple windows.
+    In example when a Pop-Up has been opened or a new side is opened in a new
+    browser tab.
+
+    There are some browser related keywords:
+    - `Open Browser` to create a new browser object
+    - `Create Webdriver` to create a new browser object
+    - `Get Browser Ids` to get the IDs of all open browsers
+    _ `Get Browser Aliases` to get the aliases of all open browsers
+    - `Switch Browser` to use a different opened browser as current browser
+    - `Close Browser` closes the current browser and all its windows
+    - `Close All Browsers` closes all browsers that has been opened by this library instance
+
+    == Windows ==
+
+    Windows are the part of a browser that loads the web site and presents
+    it to the user. All Content of the site is content of the window.
+    Browser windows are children of a browser object. One browser may
+    have multiple windows. Windows can appear as tabs or as separate windows
+    with different position and size.
+    Windows of the same browser typically share the same sessions. This is
+    the reason why it is not possible to log in with two different users
+    of the same site in these windows. To solve this issue it is necessary
+    to work with two different browser objects.
+    There are multiple window related keywords.
+
+    When working with multiple windows these two keywords are mostly relevant.
+    - `Switch Window` to use a different open window of a browser
+    - `Close Window` to close the currently used window
+
+    To open a new window, the site has to open content as new tab.
+    It may also be possible to use `Execute Javascript` Keyword:
+
+    | `Execute Javascript` | window.open() |
+
+    == Example ==
+
+    In this example it is required that github.com is open once with a logged
+    in ``User-A`` and without any user logged in.
+    For this two browsers needed to be opened.
+
+    | Browser A |          | (firefox)                                                    |
+    |           | Window 1 | (location=https://robotframework.org)                        |
+    |           | Window 2 | (location=https://robocon.io)                                |
+    |           | Window 3 | (location=https://github.com/robotframework/SeleniumLibrary) |
+    | Browser B |          | (firefox)                                                    |
+    |           | Window 1 | (location=https://github.com/robotframework/SeleniumLibrary) |
 
     = Timeouts, waits and delays =
 

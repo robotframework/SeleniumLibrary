@@ -20,7 +20,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import plural_or_not
+from SeleniumLibrary.utils import (plural_or_not, is_string, is_noney)
 
 
 class WindowKeywords(LibraryComponent):
@@ -43,10 +43,7 @@ class WindowKeywords(LibraryComponent):
         found, this keyword fails. The previous window handle is returned,
         and can be used to return back to it later.
 
-        Notice that in this context _window_ means a pop-up window opened
-        when doing something on an existing window. It is not possible to
-        select windows opened with `Open Browser`, `Switch Browser` must
-        be used instead. Notice also that alerts should be handled with
+        Notice that alerts should be handled with
         `Handle Alert` or other alert related keywords.
 
         The ``locator`` can be specified using different strategies somewhat
@@ -96,6 +93,12 @@ class WindowKeywords(LibraryComponent):
         | `Select Window`   | ${excludes} |      | # Select window using excludes |
         | `Title Should Be` | Pop-up 3    |      |
 
+        The ``browser`` argument allows with ``index_or_alias`` to implicitly switch to
+        a specific browser when switching to a window. See `Switch Browser`
+
+        - If the ``browser`` is ``CURRENT`` (case-insensitive), no other browser is
+          selected.
+
         *NOTE:*
 
         - The ``strategy:value`` syntax is only supported by SeleniumLibrary
@@ -114,7 +117,7 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            if not browser == 'CURRENT':  # Todo: Option ALL is necessary but complicated.
+            if not is_string(browser) or not browser.upper() == 'CURRENT':
                 self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
@@ -125,9 +128,11 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def get_window_handles(self, browser='CURRENT'):
-        """Return all child window handles of the current browser as a list.
+        """Returns all child window handles of the selected browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`.
 
         Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.
         """
@@ -135,25 +140,44 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def get_window_identifiers(self, browser='CURRENT'):
-        """Returns and logs id attributes of the current browser windows."""
+        """Returns and logs id attributes of all windows of the selected browser.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`."""
         ids = [info.id for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(ids)
 
     @keyword
     def get_window_names(self, browser='CURRENT'):
-        """Returns and logs names of the current browser windows."""
+        """Returns and logs names of all windows of the selected browser.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`."""
         names = [info.name for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(names)
 
     @keyword
     def get_window_titles(self, browser='CURRENT'):
-        """Returns and logs titles of the current browser windows."""
+        """Returns and logs titles of all windows of the selected browser.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`."""
         titles = [info.title for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(titles)
 
     @keyword
     def get_locations(self, browser='CURRENT'):
-        """Returns and logs URLs of the current browser windows."""
+        """Returns and logs URLs of all windows of the selected browser.
+
+        *Browser Scope:*
+
+        The ``browser`` argument specifies the browser that shall return
+        its windows information.
+
+        - ``browser`` can be ``index_or_alias`` like in `Switch Browser`.
+
+        - If ``browser`` is ``CURRENT`` (default, case-insensitive)
+          the currently active browser is selected.
+
+        - If ``browser`` is ``ALL`` (case-insensitive)
+          the window information of all windows of all opened browsers are returned."""
         urls = [info.url for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(urls)
 
@@ -255,6 +279,119 @@ class WindowKeywords(LibraryComponent):
         | `Set Window Position` | 100 | 200 |
         """
         self.driver.set_window_position(int(x), int(y))
+
+
+    @keyword
+    def get_source(self):
+        """Returns the entire HTML source of the current page or frame."""
+        return self.driver.page_source
+
+    @keyword
+    def get_title(self):
+        """Returns the title of current page."""
+        return self.driver.title
+
+    @keyword
+    def get_location(self):
+        """Returns the current browser window URL."""
+        return self.driver.current_url
+
+    @keyword
+    def location_should_be(self, url, message=None):
+        """Verifies that current URL is exactly ``url``.
+
+        The ``url`` argument contains the exact url that should exist in browser.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument new in SeleniumLibrary 3.2.0.
+        """
+        actual = self.get_location()
+        if actual != url:
+            if is_noney(message):
+                message = ("Location should have been '%s' but "
+                           "was '%s'." % (url, actual))
+            raise AssertionError(message)
+        self.info("Current location is '%s'." % url)
+
+    @keyword
+    def location_should_contain(self, expected, message=None):
+        """Verifies that current URL contains ``expected``.
+
+        The ``expected`` argument contains the expected value in url.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument new in SeleniumLibrary 3.2.0.
+        """
+        actual = self.get_location()
+        if expected not in actual:
+            if is_noney(message):
+                message = ("Location should have contained '%s' but "
+                           "it was '%s'." % (expected, actual))
+            raise AssertionError(message)
+        self.info("Current location contains '%s'." % expected)
+
+    @keyword
+    def log_location(self):
+        """Logs and returns the current browser window URL."""
+        url = self.get_location()
+        self.info(url)
+        return url
+
+    @keyword
+    def log_source(self, loglevel='INFO'):
+        """Logs and returns the HTML source of the current page or frame.
+
+        The ``loglevel`` argument defines the used log level. Valid log
+        levels are ``WARN``, ``INFO`` (default), ``DEBUG``, ``TRACE``
+        and ``NONE`` (no logging).
+        """
+        source = self.get_source()
+        self.log(source, loglevel)
+        return source
+
+    @keyword
+    def log_title(self):
+        """Logs and returns the title of current page."""
+        title = self.get_title()
+        self.info(title)
+        return title
+
+    @keyword
+    def title_should_be(self, title, message=None):
+        """Verifies that current page title equals ``title``.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument is new in SeleniumLibrary 3.1.
+        """
+        actual = self.get_title()
+        if actual != title:
+            if is_noney(message):
+                message = "Title should have been '%s' but was '%s'." % (title, actual)
+            raise AssertionError(message)
+        self.info("Page title is '%s'." % title)
+
+    @keyword
+    def go_back(self):
+        """Simulates the user clicking the back button on their browser."""
+        self.driver.back()
+
+    @keyword
+    def go_to(self, url):
+        """Navigates the active browser instance to the provided ``url``."""
+        self.info("Opening url '%s'" % url)
+        self.driver.get(url)
+
+    @keyword
+    def reload_page(self):
+        """Simulates user reloading page."""
+        self.driver.refresh()
+
 
     def _log_list(self, items, what='item'):
         msg = [
