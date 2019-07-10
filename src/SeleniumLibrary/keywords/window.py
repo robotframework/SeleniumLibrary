@@ -31,7 +31,7 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def select_window(self, locator='MAIN', timeout=None):
-        """*DEPRECATED in SeleniumLibrary 4.0.* use `Switch Window` instead."""
+        """DEPRECATED in SeleniumLibrary 4.0. , use `Switch Window` instead."""
         self.switch_window(locator, timeout)
 
     @keyword
