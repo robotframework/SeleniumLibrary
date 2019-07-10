@@ -250,7 +250,7 @@ class SeleniumLibrary(DynamicCore):
     - `Open Browser` to create a new browser object
     - `Create Webdriver` to create a new browser object
     - `Get Browser Ids` to get the IDs of all open browsers
-    _ `Get Browser Aliases` to get the aliases of all open browsers
+    - `Get Browser Aliases` to get the aliases of all open browsers
     - `Switch Browser` to use a different opened browser as current browser
     - `Close Browser` closes the current browser and all its windows
     - `Close All Browsers` closes all browsers that has been opened by this library instance
@@ -258,7 +258,7 @@ class SeleniumLibrary(DynamicCore):
     == Window ==
 
     Windows are the part of a browser that loads the web site and presents
-    it to the user. All Content of the site is content of the window.
+    it to the user. All content of the site is content of the window.
     Browser windows are children of a browser object. One browser may
     have multiple windows. Windows can appear as tabs or as separate windows
     with different position and size.
@@ -279,9 +279,9 @@ class SeleniumLibrary(DynamicCore):
 
     == Example ==
 
-    In this example it is required that github.com is open once with a logged
-    in ``User-A`` and without any user logged in.
-    For this two browsers needed to be opened.
+    In this example there could be the required that the site github.com is open once with a logged
+    in ``User-A`` and once without any user logged in.
+    For this two browsers would be necessary to be opened.
 
     Structure:
     | Browser A            (firefox)
@@ -292,30 +292,20 @@ class SeleniumLibrary(DynamicCore):
     |     └────  Window 1  (location=https://github.com/)
 
     Robot Framework Example:
-    | `Open Browser`         https://robotframework.org    alias=BrowserA    # BrowserA with Window1 is open
-    | `Execute Javascript`   window.open()
-    | `Switch Window`        locator=NEW                                     # Window2 opened and switched to it
-    | `Go To`                https://robocon.io                              # Window2 go to robocon site
-    | `Execute Javascript`   window.open()
-    | ${handle}            `Switch Window`                 locator=NEW       # Window3 opened and switched to it
-    | `Go To`                https://github.com/robotframework/              # Window3 go to robocon site
-    | `Open Browser`         https://github.com            alias=BrowserB    # BrowserB with Window1 is open
-    | ${locations}         `Get Location`                                    # ${Location} is https://www.github.com
-    | `Switch Window`        ${handle}                     browser=BrowserA  # BrowserA Window2 is selected
-    | ${locations}         `Get Location`                                    # ${Location} = https://robocon.io/
-    | @{locations}         `Get Locations`                                   # @{Location} =
-    |                                                                      # [
-    |                                                                      #   'https://robotframework.org/',
-    |                                                                      #   'https://robocon.io/',
-    |                                                                      #   'https://github.com/robotframework/'
-    |                                                                      # ]
-    | @{locations}         `Get Locations`                 browser=ALL       # @{Location} =
-    |                                                                      # [
-    |                                                                      #   'https://robotframework.org/',
-    |                                                                      #   'https://robocon.io/',
-    |                                                                      #   'https://github.com/robotframework/',
-    |                                                                      #   'https://github.com/'
-    |                                                                      # ]
+    | `Open Browser`       | https://robotframework.org    | alias=BrowserA   | # BrowserA with Window1 is open |
+    | `Execute Javascript` | window.open()                 |                  |                                   |
+    | `Switch Window`      | locator=NEW                   |                  | # Window2 opened and switched to it |
+    | `Go To`              | https://robocon.io            |                  | # Window2 go to robocon site |
+    | `Execute Javascript` | window.open()                 |                  |                                   |
+    | ${handle}            | `Switch Window`               | locator=NEW      | # Window3 opened and switched to it |
+    | `Go To`              | https://github.com/robotframework/ |             | # Window3 go to robot framework github site |
+    | `Open Browser`       | https://github.com            | alias=BrowserB   | # BrowserB with Window1 is open |
+    | ${location}          | `Get Location`                |                  | # ${location} is https://www.github.com |
+    | `Switch Window`      | ${handle}                     | browser=BrowserA | # BrowserA Window2 is selected |
+    | ${location}          | `Get Location`                |                  | # ${location} = https://robocon.io/ |
+    | @{locations}         | `Get Locations`               |                  | # @{locations} = [ 'https://robotframework.org/', 'https://robocon.io/', 'https://github.com/robotframework/' ] |
+    | @{locations}         | `Get Locations`               |  browser=ALL     | # @{locations} = [ 'https://robotframework.org/', 'https://robocon.io/', 'https://github.com/robotframework/', 'https://github.com/' ] |
+
     = Timeouts, waits and delays =
 
     This section discusses different ways how to wait for elements to

@@ -350,7 +350,7 @@ class BrowserManagementKeywords(LibraryComponent):
         self.debug('Switched to browser with Selenium session id %s.'
                    % self.driver.session_id)
 
-    @ keyword
+    @keyword
     def get_browser_ids(self):
         """Returns index of all active browser as list.
 
@@ -362,7 +362,18 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_browser_aliases(self):
-        """Returns aliases of all active browser as list.
+        """Returns aliases of all active browser as NormalizedDict.
+        The dictionary contains the aliases as keys and the index as value.
+        This can be accessed as dictionary ``${aliases.key}`` or as list ``@{aliases}[0]``.
+
+        Example:
+        | `Open Browser` | https://example.com   | alias=BrowserA | |
+        | `Open Browser` | https://example.com   | alias=BrowserB | |
+        | &{aliases}     | `Get Browser Aliases` |                | # &{aliases} = { BrowserA=1|BrowserB=2 } |
+        | `Log`          | ${aliases.BrowserA}   |                | # logs ``1`` |
+        | FOR            | ${alias}              | IN             | @{aliases} |
+        |                | `Log`                 | ${alias}       | # logs ``BrowserA`` and ``BrowserB`` |
+        | END            |                       |                | |
 
         See `Switch Browser` for more information and examples.
 

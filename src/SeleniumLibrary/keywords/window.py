@@ -123,7 +123,7 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def close_window(self):
-        """Closes currently opened pop-up window."""
+        """Closes currently opened and selected browser window/tab. """
         self.driver.close()
 
     @keyword
@@ -383,7 +383,7 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def go_to(self, url):
-        """Navigates the active browser instance to the provided ``url``."""
+        """Navigates the current browser window to the provided ``url``."""
         self.info("Opening url '%s'" % url)
         self.driver.get(url)
 
