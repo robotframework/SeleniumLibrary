@@ -79,18 +79,18 @@ class WindowKeywords(LibraryComponent):
 
         Example:
         | `Click Link`      | popup1      |      | # Open new window |
-        | `Select Window`   | example     |      | # Select window using default strategy |
+        | `Switch Window`   | example     |      | # Select window using default strategy |
         | `Title Should Be` | Pop-up 1    |      |
         | `Click Button`    | popup2      |      | # Open another window |
-        | ${handle} = | `Select Window`   | NEW  | # Select latest opened window |
+        | ${handle} = | `Switch Window`   | NEW  | # Select latest opened window |
         | `Title Should Be` | Pop-up 2    |      |
-        | `Select Window`   | ${handle}   |      | # Select window using handle |
+        | `Switch Window`   | ${handle}   |      | # Select window using handle |
         | `Title Should Be` | Pop-up 1    |      |
-        | `Select Window`   | MAIN        |      | # Select the main window |
+        | `Switch Window`   | MAIN        |      | # Select the main window |
         | `Title Should Be` | Main        |      |
         | ${excludes} = | `Get Window Handles` | | # Get list of current windows |
         | `Click Link`      | popup3      |      | # Open one more window |
-        | `Select Window`   | ${excludes} |      | # Select window using excludes |
+        | `Switch Window`   | ${excludes} |      | # Select window using excludes |
         | `Title Should Be` | Pop-up 3    |      |
 
         The ``browser`` argument allows with ``index_or_alias`` to implicitly switch to

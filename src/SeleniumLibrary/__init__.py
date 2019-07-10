@@ -62,7 +62,7 @@ class SeleniumLibrary(DynamicCore):
     == Table of contents ==
 
     - `Locating elements`
-    - `Browsers and Windows`
+    - `Browser and Window`
     - `Timeouts, waits and delays`
     - `Run-on-failure functionality`
     - `Boolean arguments`
@@ -224,12 +224,12 @@ class SeleniumLibrary(DynamicCore):
 
     See the `Add Location Strategy` keyword for more details.
 
-    = Browsers and Windows =
+    = Browser and Window =
 
     In this section the concept of Browsers or Webdrivers and its Windows
     will be explained.
 
-    == Browsers ==
+    == Browser ==
 
     In Selenium Library there are two ways to start a Browser and control it.
     The first one is the `Open Browser` keyword. This one should be used as
@@ -255,7 +255,7 @@ class SeleniumLibrary(DynamicCore):
     - `Close Browser` closes the current browser and all its windows
     - `Close All Browsers` closes all browsers that has been opened by this library instance
 
-    == Windows ==
+    == Window ==
 
     Windows are the part of a browser that loads the web site and presents
     it to the user. All Content of the site is content of the window.
@@ -275,7 +275,7 @@ class SeleniumLibrary(DynamicCore):
     To open a new window, the site has to open content as new tab.
     It may also be possible to use `Execute Javascript` Keyword:
 
-    | `Execute Javascript` | window.open() |
+    | `Execute Javascript`    window.open()    # Opens a new window with location about:blank
 
     == Example ==
 
@@ -283,13 +283,39 @@ class SeleniumLibrary(DynamicCore):
     in ``User-A`` and without any user logged in.
     For this two browsers needed to be opened.
 
-    | Browser A |          | (firefox)                                                    |
-    |           | Window 1 | (location=https://robotframework.org)                        |
-    |           | Window 2 | (location=https://robocon.io)                                |
-    |           | Window 3 | (location=https://github.com/robotframework/SeleniumLibrary) |
-    | Browser B |          | (firefox)                                                    |
-    |           | Window 1 | (location=https://github.com/robotframework/SeleniumLibrary) |
+    Structure:
+    | Browser A            (firefox)
+    |     ├────  Window 1  (location=https://robotframework.org/)
+    |     ├────  Window 2  (location=https://robocon.io/)
+    |     └────  Window 3  (location=https://github.com/robotframework/)
+    | Browser B            (firefox)
+    |     └────  Window 1  (location=https://github.com/)
 
+    Robot Framework Example:
+    | `Open Browser`         https://robotframework.org    alias=BrowserA    # BrowserA with Window1 is open
+    | `Execute Javascript`   window.open()
+    | `Switch Window`        locator=NEW                                     # Window2 opened and switched to it
+    | `Go To`                https://robocon.io                              # Window2 go to robocon site
+    | `Execute Javascript`   window.open()
+    | ${handle}            `Switch Window`                 locator=NEW       # Window3 opened and switched to it
+    | `Go To`                https://github.com/robotframework/              # Window3 go to robocon site
+    | `Open Browser`         https://github.com            alias=BrowserB    # BrowserB with Window1 is open
+    | ${locations}         `Get Location`                                    # ${Location} is https://www.github.com
+    | `Switch Window`        ${handle}                     browser=BrowserA  # BrowserA Window2 is selected
+    | ${locations}         `Get Location`                                    # ${Location} = https://robocon.io/
+    | @{locations}         `Get Locations`                                   # @{Location} =
+    |                                                                      # [
+    |                                                                      #   'https://robotframework.org/',
+    |                                                                      #   'https://robocon.io/',
+    |                                                                      #   'https://github.com/robotframework/'
+    |                                                                      # ]
+    | @{locations}         `Get Locations`                 browser=ALL       # @{Location} =
+    |                                                                      # [
+    |                                                                      #   'https://robotframework.org/',
+    |                                                                      #   'https://robocon.io/',
+    |                                                                      #   'https://github.com/robotframework/',
+    |                                                                      #   'https://github.com/'
+    |                                                                      # ]
     = Timeouts, waits and delays =
 
     This section discusses different ways how to wait for elements to
