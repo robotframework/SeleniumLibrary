@@ -362,7 +362,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_browser_aliases(self):
-        """Returns aliases of all active browser as NormalizedDict.
+        """Returns aliases of all active browser that has an alias as NormalizedDict.
         The dictionary contains the aliases as keys and the index as value.
         This can be accessed as dictionary ``${aliases.key}`` or as list ``@{aliases}[0]``.
 
