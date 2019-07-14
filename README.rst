@@ -184,7 +184,7 @@ usage, please create a new issue describing the enhancement request and even bet
 issue is backed up by a pull request.
 
 If the enhancement is not generally useful, example solution is domain specific, then the
-SeleniumLibrary offers a public API's which can be used to build ownplugins and libraries.
+SeleniumLibrary offers a public API's which can be used to build own plugins and libraries.
 Plugin API allows to add new keywords, modify existing keywords and modify internal
 functionality of the library. Also new libraries can be build on top of the
 SeleniumLibrary. Please see `extending documentation`_ for more details about the
