@@ -22,7 +22,7 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import (is_truthy, secs_to_timestr,
+from SeleniumLibrary.utils import (is_truthy, is_noney, secs_to_timestr,
                                    timestr_to_secs)
 
 from .webdrivertools import WebDriverCreator
@@ -380,6 +380,117 @@ class BrowserManagementKeywords(LibraryComponent):
         New in SeleniumLibrary 4.0
         """
         return self.drivers.active_aliases
+
+    @keyword
+    def get_source(self):
+        """Returns the entire HTML source of the current page or frame."""
+        return self.driver.page_source
+
+    @keyword
+    def get_title(self):
+        """Returns the title of current page."""
+        return self.driver.title
+
+    @keyword
+    def get_location(self):
+        """Returns the current browser window URL."""
+        return self.driver.current_url
+
+    @keyword
+    def location_should_be(self, url, message=None):
+        """Verifies that current URL is exactly ``url``.
+
+        The ``url`` argument contains the exact url that should exist in browser.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument new in SeleniumLibrary 3.2.0.
+        """
+        actual = self.get_location()
+        if actual != url:
+            if is_noney(message):
+                message = ("Location should have been '%s' but "
+                           "was '%s'." % (url, actual))
+            raise AssertionError(message)
+        self.info("Current location is '%s'." % url)
+
+    @keyword
+    def location_should_contain(self, expected, message=None):
+        """Verifies that current URL contains ``expected``.
+
+        The ``expected`` argument contains the expected value in url.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument new in SeleniumLibrary 3.2.0.
+        """
+        actual = self.get_location()
+        if expected not in actual:
+            if is_noney(message):
+                message = ("Location should have contained '%s' but "
+                           "it was '%s'." % (expected, actual))
+            raise AssertionError(message)
+        self.info("Current location contains '%s'." % expected)
+
+    @keyword
+    def log_location(self):
+        """Logs and returns the current browser window URL."""
+        url = self.get_location()
+        self.info(url)
+        return url
+
+    @keyword
+    def log_source(self, loglevel='INFO'):
+        """Logs and returns the HTML source of the current page or frame.
+
+        The ``loglevel`` argument defines the used log level. Valid log
+        levels are ``WARN``, ``INFO`` (default), ``DEBUG``, ``TRACE``
+        and ``NONE`` (no logging).
+        """
+        source = self.get_source()
+        self.log(source, loglevel)
+        return source
+
+    @keyword
+    def log_title(self):
+        """Logs and returns the title of current page."""
+        title = self.get_title()
+        self.info(title)
+        return title
+
+    @keyword
+    def title_should_be(self, title, message=None):
+        """Verifies that current page title equals ``title``.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        ``message`` argument is new in SeleniumLibrary 3.1.
+        """
+        actual = self.get_title()
+        if actual != title:
+            if is_noney(message):
+                message = "Title should have been '%s' but was '%s'." % (title, actual)
+            raise AssertionError(message)
+        self.info("Page title is '%s'." % title)
+
+    @keyword
+    def go_back(self):
+        """Simulates the user clicking the back button on their browser."""
+        self.driver.back()
+
+    @keyword
+    def go_to(self, url):
+        """Navigates the current browser window to the provided ``url``."""
+        self.info("Opening url '%s'" % url)
+        self.driver.get(url)
+
+    @keyword
+    def reload_page(self):
+        """Simulates user reloading page."""
+        self.driver.refresh()
 
     @keyword
     def get_session_id(self):
