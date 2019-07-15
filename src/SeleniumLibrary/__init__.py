@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 # Copyright 2008-2011 Nokia Networks
 # Copyright 2011-2016 Ryan Tomac, Ed Manlove and contributors
 # Copyright 2016-     Robot Framework Foundation
