@@ -58,7 +58,10 @@ class WindowManager(ContextAware):
             return handles
 
     def get_window_infos(self, browser='CURRENT'):
-        current_index = self.drivers.current_index
+        try:
+            current_index = self.drivers.current_index
+        except AttributeError:
+            current_index = None
         if is_string(browser) and browser.upper() == 'ALL':
             infos = []
             for index, driver in enumerate(self.drivers, 1):
