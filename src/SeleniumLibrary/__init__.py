@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: UTF-8 -*-
-
 # Copyright 2008-2011 Nokia Networks
 # Copyright 2011-2016 Ryan Tomac, Ed Manlove and contributors
 # Copyright 2016-     Robot Framework Foundation
@@ -287,12 +284,13 @@ class SeleniumLibrary(DynamicCore):
     For this two browsers would be necessary to be opened.
 
     Structure:
-    | Browser A            (firefox)
-    |     ├────  Window 1  (location=https://robotframework.org/)
-    |     ├────  Window 2  (location=https://robocon.io/)
-    |     └────  Window 3  (location=https://github.com/robotframework/)
-    | Browser B            (firefox)
-    |     └────  Window 1  (location=https://github.com/)
+    | BrowserA             (firefox)
+    |            Window 1  (location=https://robotframework.org/)
+    |            Window 2  (location=https://robocon.io/)
+    |            Window 3  (location=https://github.com/robotframework/)
+    |
+    | BrowserB             (firefox)
+    |            Window 1  (location=https://github.com/)
 
     Robot Framework Example:
     | `Open Browser`       | https://robotframework.org    | alias=BrowserA   | # BrowserA with Window1 is open |
