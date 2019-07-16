@@ -17,10 +17,10 @@
 		<a href="javascript:return false;" onclick="add_content('target', 'added content'); return false;">add content</a><br/>
 		<a id="unicode" href="javascript:return false;" onclick="document.title='äää'; return false;">title to ääää</a><br/>
 		<p>
-		<input type="radio" name="group" value="title" 
-		 onclick="document.title='Changed by Button';" />Change Title<br/>
-        <input type="radio" name="group" value="content" 
-         onclick="add_content('button_target', 'added by button');"/>Add Content<br/>
+			<input type="radio" name="group" value="title" 
+			onclick="document.title='Changed by Button';" />Change Title<br/>
+			<input type="radio" name="group" value="content" 
+			onclick="add_content('button_target', 'added by button');"/>Add Content<br/>
         </p>
         <div id="target">
 		</div>
@@ -30,8 +30,18 @@
             <input type=button value="Change the title" 
             onClick="if(confirm('Really change the title?'))
             document.title += ' Changed!';" >
-        </form>
-
+		</form>
+		<p>
+			<form name=titleChanger>
+				<td>
+					<input type=text id=titleChangeTxt value="Enter Title here">
+				</td>
+				<td>
+					<input type=button id=titleChangeBtn value="Set Title" 
+					onClick="document.title = document.getElementById('titleChangeTxt').value;" >
+				</td>
+			</form>
+		</p>
 	</body>
 </html>
 
