@@ -46,9 +46,12 @@ Check Count of Identifiers
 
 Check Locations
     @{Locations}=    Get Locations    browser=ALL
-    FOR    ${index}    ${location}    IN ENUMERATE    @{Locations}
-        Should Be Equal As Strings    ${location}    ${FRONT_PAGE}javascript/dynamic_content.html?${index+1}
-    END
+    Should Be Equal As Strings    @{Locations}[0]    ${FRONT_PAGE}javascript/dynamic_content.html?1
+    Should Be Equal As Strings    @{Locations}[1]    ${FRONT_PAGE}javascript/dynamic_content.html?2
+    Should Be Equal As Strings    @{Locations}[2]    ${FRONT_PAGE}javascript/dynamic_content.html?3
+    Should Be Equal As Strings    @{Locations}[3]    ${FRONT_PAGE}javascript/dynamic_content.html?4
+    Should Be Equal As Strings    @{Locations}[4]    ${FRONT_PAGE}javascript/dynamic_content.html?5
+    Should Be Equal As Strings    @{Locations}[5]    ${FRONT_PAGE}javascript/dynamic_content.html?6
     ${count}    Get Length    ${Locations}
     Should Be Equal As Integers    6    ${count}
 
