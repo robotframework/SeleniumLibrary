@@ -180,7 +180,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | options = webdriver.ChromeOptions()
         | options.add_argument('--disable-dev-shm-usage')
         | return options
-        
+
         Then the `${options}` variable can be used as argument to
         ``options``.
 
@@ -388,7 +388,7 @@ class BrowserManagementKeywords(LibraryComponent):
         New in SeleniumLibrary 3.2
         """
         return self.driver.session_id
-    
+
     @keyword
     def get_source(self):
         """Returns the entire HTML source of the current page or frame."""

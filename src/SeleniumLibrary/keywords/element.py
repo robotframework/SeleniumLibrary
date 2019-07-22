@@ -435,12 +435,12 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def cover_element(self, locator):
         """Will cover elements identified by ``locator`` with a blue div without breaking page layout.
-        
+
         See the `Locating elements` section for details about the locator
         syntax.
-        
+
         New in SeleniumLibrary 3.3.0
-        
+
         Example:
         |`Cover Element` | css:div#container |
         """
