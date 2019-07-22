@@ -20,7 +20,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import (plural_or_not, is_string)
+from SeleniumLibrary.utils import plural_or_not, is_string
 
 
 class WindowKeywords(LibraryComponent):
