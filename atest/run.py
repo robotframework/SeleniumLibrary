@@ -77,14 +77,6 @@ REBOT_OPTIONS = [
 ]
 
 
-def unit_tests():
-    print('Running unit tests')
-    failures = run_unit_tests()
-    if failures:
-        print('\nUnit tests failed! Not running acceptance tests.')
-        sys.exit(failures)
-
-
 def acceptance_tests(interpreter, browser, rf_options=None, grid=None):
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
