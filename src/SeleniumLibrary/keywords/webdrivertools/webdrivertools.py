@@ -27,6 +27,7 @@ from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
 from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string
+from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import SelLibLocalFileDetector
 
 
 class WebDriverCreator(object):
@@ -251,9 +252,15 @@ class WebDriverCreator(object):
     def _remote(self, desired_capabilities, remote_url,
                 profile_dir=None, options=None):
         remote_url = str(remote_url)
+        file_detector = self._get_sl_file_detector()
         return webdriver.Remote(command_executor=remote_url,
                                 browser_profile=profile_dir, options=options,
+                                file_detector=file_detector,
                                 **desired_capabilities)
+
+    def _get_sl_file_detector(self):
+        # To ease unit testing.
+        return SelLibLocalFileDetector()
 
     def _get_log_path(self, log_file):
         if is_noney(log_file):

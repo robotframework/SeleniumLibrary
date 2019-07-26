@@ -400,13 +400,17 @@ class SeleniumLibrary(DynamicCore):
             self.event_firing_webdriver = self._parse_listener(event_firing_webdriver)
         else:
             self.event_firing_webdriver = None
+        self._running_keyword = None
 
     def run_keyword(self, name, args, kwargs):
+        self._running_keyword = name
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
             self.failure_occurred()
             raise
+        finally:
+            self._running_keyword = None
 
     def get_keyword_tags(self, name):
         tags = list(DynamicCore.get_keyword_tags(self, name))

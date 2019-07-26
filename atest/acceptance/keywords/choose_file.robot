@@ -22,6 +22,12 @@ Choose File And Folder
     Choose File    file_to_upload    ${CURDIR}
     Textfield Value Should Be    file_to_upload    C:\\fakepath\\keywords
 
+Input Text Should Work Same Way When Not Using Grid
+    [Setup]    Touch    ${CURDIR}${/}temp.txt
+    Input Text    file_to_upload    ${CURDIR}${/}temp.txt
+    Textfield Value Should Be    file_to_upload    C:\\fakepath\\temp.txt
+    [Teardown]    Remove File    ${CURDIR}${/}temp.txt
+
 *** Keywords ***
 Navigate To File Upload Form And Create Temp File To Upload
     Cannot Be Executed in IE

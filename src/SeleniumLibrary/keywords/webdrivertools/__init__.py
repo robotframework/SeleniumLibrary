@@ -17,4 +17,4 @@
 from .webdrivertools import WebDriverCreator
 from .webdrivertools import WebDriverCache
 from .webdrivertools import SeleniumOptions
-
+from .sl_file_detector import SelLibLocalFileDetector
