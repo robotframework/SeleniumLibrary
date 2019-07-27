@@ -1,7 +1,6 @@
 import unittest
 
 from mockito import mock, unstub, when
-from robot.api import logger
 
 from SeleniumLibrary.keywords import ElementKeywords
 

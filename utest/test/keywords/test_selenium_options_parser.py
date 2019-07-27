@@ -172,10 +172,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.CHROME.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_chrome({}, url, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -204,10 +205,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.FIREFOX.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=profile,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=profile, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_firefox({}, url, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -236,10 +238,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, url, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -283,10 +286,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.OPERA.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor=url,
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_opera({}, url, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -308,10 +312,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit({'desired_capabilities': caps}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -319,10 +324,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_htmlunit_with_js({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -330,10 +336,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.ANDROID.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_android({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -341,10 +348,11 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         caps = webdriver.DesiredCapabilities.IPHONE.copy()
         options = mock()
         expected_webdriver = mock()
+        file_detector = self.mock_file_detector()
         when(webdriver).Remote(command_executor='None',
                                desired_capabilities=caps,
-                               browser_profile=None,
-                               options=options).thenReturn(expected_webdriver)
+                               browser_profile=None, options=options,
+                               file_detector=file_detector).thenReturn(expected_webdriver)
         driver = self.creator.create_iphone({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -371,3 +379,8 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         driver = self.creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
                                             options=str_options)
         self.assertEqual(driver, expected_webdriver)
+
+    def mock_file_detector(self):
+        file_detector = mock()
+        when(self.creator)._get_sl_file_detector().thenReturn(file_detector)
+        return file_detector
