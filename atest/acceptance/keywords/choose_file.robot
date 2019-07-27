@@ -33,7 +33,7 @@ Choose File With Grid
 
 Input Text Should Work Same Way When Not Using Grid
     [Documentation]
-    ...    LOG 2:5 DEBUG GLOB:    */clear {"id": "*
+    ...    LOG 2:5 DEBUG GLOB:    POST*/session/*/clear {"*
     ...    LOG 2:7 DEBUG          Finished Request
     ...    LOG 2:8 DEBUG GLOB:    */value {"text": "*
     ...    LOG 2:10 DEBUG         Finished Request
