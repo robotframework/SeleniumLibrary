@@ -111,7 +111,7 @@ def start_grid():
     node_file = tempfile.TemporaryFile()
     hub_file = tempfile.TemporaryFile()
     selenium_jar = None
-    for file in os.listdir():
+    for file in os.listdir('.'):
         if file.startswith('selenium-server-standalone'):
             selenium_jar = file
             break

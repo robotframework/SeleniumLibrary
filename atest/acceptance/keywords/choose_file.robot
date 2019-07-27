@@ -24,7 +24,7 @@ Choose File And Folder
 
 Choose File With Grid
     [Documentation]
-    ...    LOG 2:6 DEBUG GLOB:    */file {"file": "*
+    ...    LOG 2:6 DEBUG GLOB:    POST*/session/*/file*"file": "*
     [Tags]    OnlyGrid
     [Setup]    Touch    ${CURDIR}${/}temp2.txt
     Choose File    file_to_upload    ${CURDIR}${/}temp2.txt
@@ -35,7 +35,7 @@ Input Text Should Work Same Way When Not Using Grid
     [Documentation]
     ...    LOG 2:5 DEBUG GLOB:    POST*/session/*/clear {"*
     ...    LOG 2:7 DEBUG          Finished Request
-    ...    LOG 2:8 DEBUG GLOB:    */value {"text": "*
+    ...    LOG 2:8 DEBUG GLOB:    POST*/session/*/value*"text": "*
     ...    LOG 2:10 DEBUG         Finished Request
     ...    LOG 2:11 DEBUG         NONE
     [Tags]    NoGrid
