@@ -7,24 +7,31 @@ Suite Teardown     Close All Browsers
 Resource          resource.robot
 
 *** Variables ***
-@{BrowserA_exp_Titles}=    WindowA1    WindowA2    WindowA3
-@{BrowserB_exp_Titles}=    WindowB1    WindowB2
-@{BrowserC_exp_Titles}=    WindowC1
-@{All_Browsers_exp_Titles}=    @{BrowserA_exp_Titles}    @{BrowserB_exp_Titles}    @{BrowserC_exp_Titles}
-@{exp_Aliases}=    BrowserA    BrowserB    BrowserC
-@{exp_IDs}=    ${1}    ${2}    ${3}
+@{BrowserA_EXP_TITLES}=    WindowA1    WindowA2    WindowA3
+@{BrowserB_EXP_TITLES}=    WindowB1    WindowB2
+@{BrowserC_EXP_TITLES}=    WindowC1
+@{ALL_BROWSERS_EXP_TITLES}=    @{BrowserA_EXP_TITLES}    @{BrowserB_EXP_TITLES}    @{BrowserC_EXP_TITLES}
+@{EXP_ALIASES}=    BrowserA    BrowserB    BrowserC
+@{EXP_IDS}=    ${1}    ${2}    ${3}
 
 
 *** Test Cases ***
 Check Titles of Multiple Browser-Windows 
     @{BrowserA_Titles}=    Get Window Titles    browser=BrowserA 
-    Should Be Equal    ${BrowserA_Titles}    ${BrowserA_exp_Titles}
+    Should Be Equal    ${BrowserA_Titles}    ${BrowserA_EXP_TITLES}
     @{BrowserB_Titles}=    Get Window Titles    browser=BrowserB
-    Should Be Equal    ${BrowserB_Titles}    ${BrowserB_exp_Titles}
+    Should Be Equal    ${BrowserB_Titles}    ${BrowserB_EXP_TITLES}
     @{BrowserC_Titles}=    Get Window Titles    browser=BrowserC
-    Should Be Equal    ${BrowserC_Titles}    ${BrowserC_exp_Titles}
+    Should Be Equal    ${BrowserC_Titles}    ${BrowserC_EXP_TITLES}
     @{All_Browsers_Titles}=    Get Window Titles  browser=ALL
-    Should Be Equal    ${All_Browsers_Titles}    ${All_Browsers_exp_Titles}
+    Should Be Equal    ${All_Browsers_Titles}    ${ALL_BROWSERS_EXP_TITLES}
+
+Test
+    @{browser_ids}=    Get Browser Ids
+    FOR    ${id}    IN    @{browser_ids}
+        @{window_titles}=    Get Window Titles    browser=${id}
+        Log    Browser ${id} has these windows: ${window_titles}
+    END
 
 Check Count of Handle
     Check Handle Count    3    BrowserA
@@ -57,13 +64,13 @@ Check Locations
 
 Get Browser Ids and Alias
     @{Aliases}=    Get Browser Aliases
-    Should Be Equal    ${Aliases}    ${exp_Aliases}
+    Should Be Equal    ${Aliases}    ${EXP_ALIASES}
     &{Aliases}=    Get Browser Aliases  
     Should Be Equal    ${Aliases.BrowserA}   ${1}
     Should Be Equal    ${Aliases.BrowserB}   ${2}
     Should Be Equal    ${Aliases.BrowserC}   ${3}
     @{IDs}=    Get Browser Ids  
-    Should Be Equal    ${IDs}    ${exp_IDs}
+    Should Be Equal    ${IDs}    ${EXP_IDS}
 
 Switch Window to Different Browser
     Switch Browser      BrowserC

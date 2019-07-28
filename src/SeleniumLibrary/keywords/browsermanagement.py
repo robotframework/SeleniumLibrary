@@ -354,6 +354,13 @@ class BrowserManagementKeywords(LibraryComponent):
     def get_browser_ids(self):
         """Returns index of all active browser as list.
 
+        Example:
+        | @{browser_ids}= | Get Browser Ids   |                   |                |
+        | FOR             | ${id}             | IN                | @{browser_ids} |
+        |                 | @{window_titles}= | Get Window Titles | browser=${id}  |
+        |                 | Log               | Browser ${id} has these windows: ${window_titles} | |
+        | END             |                   |                   |                |
+
         See `Switch Browser` for more information and examples.
 
         New in SeleniumLibrary 4.0
