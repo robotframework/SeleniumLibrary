@@ -14,7 +14,7 @@ addons:
 before_install:
   - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
   - echo $CDVERSION
-  - wget --no-verbose http://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip
+  - wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
