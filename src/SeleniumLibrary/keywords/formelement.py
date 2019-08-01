@@ -251,11 +251,19 @@ class FormElementKeywords(LibraryComponent):
         is not cleared from the element. Use `Input Password` if you
         do not want the given ``text`` to be logged.
 
+        If [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid]
+        is used and the ``text`` argument points to a file in the file system,
+        then this keyword prevents the Selenium to transfer the file to the
+        Selenium Grid hub. Instead this keyword will send the ``text`` string
+        as is to the element. If file should be transferred to the hub and
+        upload should be performed, please use `Choose File` keyword.
+
         See the `Locating elements` section for details about the locator
         syntax. See the `Boolean arguments` section how Boolean values are
         handled.
 
-        The `clear` argument is new in SeleniumLibrary 4.0
+        Disabling the file upload the Selenium Grid node and the `clear`
+        argument are new in SeleniumLibrary 4.0
         """
         self.info("Typing text '%s' into text field '%s'." % (text, locator))
         self._input_text_into_text_field(locator, text, clear)

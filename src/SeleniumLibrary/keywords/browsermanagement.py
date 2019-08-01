@@ -212,7 +212,7 @@ class BrowserManagementKeywords(LibraryComponent):
         method:
         | `Open Browser` | http://example.com | Chrome                  | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format              |
         |  ${options} =  |     Get Options    |                         |                                                                                               | # Selenium options instance |
-        | `Open Browser` | http://example.com | Chrome                  | options=${options 2}                                                                          |                             |
+        | `Open Browser` | http://example.com | Chrome                  | options=${options}                                                                            |                             |
 
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
