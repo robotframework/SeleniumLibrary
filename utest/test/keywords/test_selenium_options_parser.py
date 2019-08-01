@@ -195,6 +195,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_firefox({}, None, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -221,6 +222,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_headless_firefox({}, None, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -374,6 +376,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         expected_webdriver = mock()
         when(self.creator.selenium_options).create('firefox', str_options).thenReturn(options)
+        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
