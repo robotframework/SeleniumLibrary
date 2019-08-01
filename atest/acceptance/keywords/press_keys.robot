@@ -13,21 +13,33 @@ Press Keys Normal Keys
     Wait Until Page Contains    AAAAA
 
 Press Keys Normal Keys Many Times
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    AAAAA+BBB
     Click Button    OK
     Wait Until Page Contains    AAAAABBB
 
 Press Keys Sends c++
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    c++
     Click Button    OK
     Wait Until Page Contains    c+
 
 Press Keys Normal Keys Many Arguments
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    ccc    DDDD
     Click Button    OK
     Wait Until Page Contains    cccDDDD
 
 Press Keys Normal Keys Many Times With Many Args
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    a+b    C+D
     Click Button    OK
     Wait Until Page Contains    abCD
@@ -38,6 +50,9 @@ Press Keys Special Keys SHIFT
     Wait Until Page Contains    CC
 
 Press Keys Special Keys SHIFT Many Times
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    SHIFT+cc    SHIFT+dd
     Click Button    OK
     Wait Until Page Contains    CCDD     timeout=3
@@ -52,16 +67,25 @@ Press Keys To Multiple Elements
     Page Should Contain Element     //p[text()="tidii"]    limit=4
 
 Press Keys ASCII Code Send As Is
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    \\108    \\13
     Click Button    OK
     Wait Until Page Contains    \\108\\13     timeout=3
 
 Press Keys With Scandic Letters
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    ÖÄÖÄÖ    ÅÖÄP
     Click Button    OK
     Wait Until Page Contains    ÖÄÖÄÖÅÖÄP     timeout=3
 
 Press Keys With Asian Text
+    [Documentation]    Marked temporally as non-critical because Chrome 76 has bug with
+    ...    Selenium ActionChains
+    [Tags]    known issue chrome    known issue headlesschrome
     Press Keys    text_field    田中さんにあげ+て下    さい
     Click Button    OK
     Wait Until Page Contains    田中さんにあげて下さい     timeout=3
