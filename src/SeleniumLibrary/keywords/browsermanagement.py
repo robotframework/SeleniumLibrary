@@ -598,3 +598,4 @@ class BrowserManagementKeywords(LibraryComponent):
             driver._base_execute = driver.execute
             driver.execute = types.MethodType(execute, driver)
         driver._speed = self.ctx.speed
+
