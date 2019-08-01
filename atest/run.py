@@ -14,6 +14,16 @@ this script will automatically start the Grid with hub and node roles.
 More details about the Selenium grid can be found from:
 https://github.com/SeleniumHQ/selenium/wiki/Grid2
 
+When Selenium Grid is used, it is possible to include and exclude test.
+Generally speaking almost all test should work when Selenium Grid is used,
+but there few valid exceptions. If test uses `robotstatuschecker` tool
+to verify logging of the keyword, in some cases Selenium Grid adds
+some extra logging and causes test to fail. In this case, these test
+should be tagged with `NoGrid` tag to exclude the test when Selenium Grid
+is being used. Also there might be need write test that are only run
+when Selenium Grid is used. Then in this case, test should be tagged with
+`OnlyGrid` tag to include them only when Selenium Grid is used.
+
 It is possible to pass Robot Framework command line arguments to the test
 execution as last arguments to the `run_tests.py` command. It is
 recommended to use arguments to select required suite or test for the
@@ -77,14 +87,6 @@ REBOT_OPTIONS = [
 ]
 
 
-def unit_tests():
-    print('Running unit tests')
-    failures = run_unit_tests()
-    if failures:
-        print('\nUnit tests failed! Not running acceptance tests.')
-        sys.exit(failures)
-
-
 def acceptance_tests(interpreter, browser, rf_options=None, grid=None):
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
@@ -109,7 +111,7 @@ def start_grid():
     node_file = tempfile.TemporaryFile()
     hub_file = tempfile.TemporaryFile()
     selenium_jar = None
-    for file in os.listdir():
+    for file in os.listdir('.'):
         if file.startswith('selenium-server-standalone'):
             selenium_jar = file
             break
@@ -117,7 +119,7 @@ def start_grid():
         raise ValueError('Selenium server jar not found: %s' % selenium_jar)
     hub = subprocess.Popen(['java', '-jar', selenium_jar, '-role', 'hub', '-host', 'localhost'],
                            stderr=subprocess.STDOUT, stdout=hub_file)
-    time.sleep(1)  # It takes about seconds to start the hub.
+    time.sleep(2)  # It takes about two seconds to start the hub.
     ready = _grid_status(False, 'hub')
     if not ready:
         hub.kill()
@@ -173,6 +175,8 @@ def execute_tests(interpreter, browser, rf_options, grid):
     if grid:
         command += ['--variable', 'REMOTE_URL:http://localhost:4444/wd/hub',
                     '--exclude', 'NoGrid']
+    else:
+        command += ['--exclude', 'OnlyGrid']
     command += options + [ACCEPTANCE_TEST_DIR]
     log_start(command)
     syslog = os.path.join(RESULTS_DIR, 'syslog.txt')
