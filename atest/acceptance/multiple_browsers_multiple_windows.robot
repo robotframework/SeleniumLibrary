@@ -26,13 +26,6 @@ Check Titles of Multiple Browser-Windows
     @{All_Browsers_Titles}=    Get Window Titles  browser=ALL
     Should Be Equal    ${All_Browsers_Titles}    ${ALL_BROWSERS_EXP_TITLES}
 
-Test
-    @{browser_ids}=    Get Browser Ids
-    FOR    ${id}    IN    @{browser_ids}
-        @{window_titles}=    Get Window Titles    browser=${id}
-        Log    Browser ${id} has these windows: ${window_titles}
-    END
-
 Check Count of Handle
     Check Handle Count    3    BrowserA
     Check Handle Count    2    BrowserB
@@ -71,6 +64,14 @@ Get Browser Ids and Alias
     Should Be Equal    ${Aliases.BrowserC}   ${3}
     @{IDs}=    Get Browser Ids  
     Should Be Equal    ${IDs}    ${EXP_IDS}
+
+Select Window by Location
+    Switch Browser    BrowserA
+    Switch Window     WindowA1
+    Switch Window By Location    ${FRONT_PAGE}javascript/dynamic_content.html?5
+    ${location}    Get Location
+    Should Be Equal    ${FRONT_PAGE}javascript/dynamic_content.html?5    ${location}
+    Title Should Be    WindowB2
 
 Switch Window to Different Browser
     Switch Browser      BrowserC
@@ -152,3 +153,11 @@ Check Identifiers Count
     @{WinCountBrowser}=    Get Window Identifiers    ${browser_alias}
     ${len}=    Get Length     ${WinCountBrowser}
     Should Be Equal As Integers    ${len}   ${length}
+
+Switch Window By Location
+    [Arguments]    ${selected_location}
+    @{IDs}=    Get Browser Ids
+    :FOR     ${id}    IN    @{IDs}
+    \    @{locations}=    Get Locations    browser=${id}   
+    \    Run Keyword If    '${selected_location}' in $locations
+    ...    Switch Window    url:${selected_location}    browser=${id}
