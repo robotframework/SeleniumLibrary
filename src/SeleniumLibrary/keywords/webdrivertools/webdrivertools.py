@@ -123,13 +123,17 @@ class WebDriverCreator(object):
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
-            defaul_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
-            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
+            default_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
+            desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, default_caps)
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         service_log_path = service_log_path if service_log_path else self._geckodriver_log
-        return webdriver.Firefox(options=options, firefox_profile=profile, service_log_path=service_log_path,
-                                 **desired_capabilities)
+        if self._has_service_log_path(webdriver.Firefox):
+            # service_log_path is supported from Selenium 3.14 onwards
+            # If can be removed when minimum Selenium version is 3.14.0 or greater
+            return webdriver.Firefox(options=options, firefox_profile=profile,
+                                     service_log_path=service_log_path, **desired_capabilities)
+        return webdriver.Firefox(options=options, firefox_profile=profile, **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
         if isinstance(ff_profile_dir, FirefoxProfile):
