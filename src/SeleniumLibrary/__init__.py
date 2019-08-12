@@ -226,102 +226,73 @@ class SeleniumLibrary(DynamicCore):
 
     = Browser and Window =
 
-    In this section the concept of Browsers or WebDrivers and its Windows
-    will be explained.
+    There is different conseptual meaning when SeleniumLibrary talks
+    windows and browsers. This chapter explains those differences.
 
     == Browser ==
 
-    To control a browser, Selenium needs a BrowserDriver
-    that receives commands from [https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver].
-    (like GeckoDriver for Firefox, ChromeDriver for Chrome, etc)
-    These browser specific BrowserDrivers translates the WebDriver API to the browser specific API.
-    WebDriver Api is a [https://www.w3.org/TR/webdriver1/|W3C Standard].
-    Each browser vendor has different browser APIs that may change with the version
-    of these browsers as well.
-    That the reason why there must be a specific version of the BrowserDriver
-    for SeleniumLibrary available,
-    that matches to the version of the remotely controlled browser.
-    Each started browser is controlled by a separate instance of Selenium WebDriver.
-
-    In Selenium Library there are two keywords that start a browser
-    (and a WebDriver instance) to control the browser.
-    The first one is the `Open Browser` keyword, which can be used as
-    default keyword.
-    The second one is the `Create WebDriver` keyword which was useful, when
-    browser options needed to be set. Since Selenium Library 4.0.x `Open Browser`
-    also supports options why `Create WebDriver` will be deprecated.
-    When opening a browser, a new WebDriver process is started and connected to
-    Selenium Library. When using [https://www.seleniumhq.org/docs/07_selenium_grid.jsp|Selenium Grid]
-    , this browser may be started on any Grid Node that has matching capabilities.
-    It is possible to start multiple independent browser instances at the same time.
-    These browsers are usually independent to each other and do not share data
-    like cookies, sessions or profiles.
-
-    Each browser starts with one window. One Browser may have multiple windows.
-    In example when a Pop-Up has been opened or a new side is opened in a new
-    browser tab.
-
-    There are some browser related keywords:
-    - `Open Browser` to create a new browser/WebDriver object
-    - `Create Webdriver` to create a new browser/WebDriver object
-    - `Get Browser Ids` to get the IDs of all open browsers
-    - `Get Browser Aliases` to get the aliases of all open browsers
-    - `Switch Browser` to use a different opened browser as currently controlled browser
-    - `Close Browser` closes the current browser and all its windows
-    - `Close All Browsers` closes all browsers that has been opened by this library instance
-
+    When `Open Browser` or `Create WebDriver` keyword is called, it
+    will create a new Selenium WebDriver instance by using the 
+    [https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver]
+    API. In SeleniumLibrary terms, a new broser is created. It is 
+    possible to start multiple independent browsers (Selenium Webdriver 
+    instances) at the same time, by calling `Open Browser` or 
+    `Create WebDriver` multiple times. These browsers are usually 
+    independent to each other and do not share data like cookies, 
+    sessions or profiles. Typicall when browser starts, it 
+    creates a single window in the desktop.
+    
     == Window ==
 
     Windows are the part of a browser that loads the web site and presents
     it to the user. All content of the site is content of the window.
-    Browser windows are children of a browser object. One browser may
-    have multiple windows. Windows can appear as tabs or as separate windows
-    with different position and size.
-    Windows of the same browser typically share the same sessions. This is
-    the reason why it is not possible to log in with two different users
-    of the same site in these windows. To solve this issue it is necessary
-    to work with two different browser objects.
-    There are multiple window related keywords.
-
-    When working with multiple windows these two keywords are mostly relevant.
-    - `Switch Window` to use a different open window of a browser
-    - `Close Window` to close the currently used window
-
-    To open a new window, the site has to open content as new tab.
-    It may also be possible to use `Execute Javascript` Keyword:
+    Windows are children of a WebDriver instance, in SeleniumLibrary
+    WebDriver is referred as browser. One browser may have multiple
+    windows. Windows can appear as tabs or as separate windows with
+    different position and size. Windows belonning to the same browser
+    typically share the sessions detail, like cookies. If there is a
+    need to separate sessions detail, example login with two different
+    users, two browser (Selenium WebDriver instances) must be created.
+    New windows can be opened example by the application under test or
+    by example `Execute Javascript` keyword:
 
     | `Execute Javascript`    window.open()    # Opens a new window with location about:blank
 
-    == Example ==
-
-    In this example there could be the required that the site github.com is open once with a logged
-    in ``User-A`` and once without any user logged in.
-    For this two browsers would be necessary to be opened.
+    In the example in below opens multiple browser and windows,
+    to demonstrate how the different keywords can be used to interact 
+    with a browser and windows atteched to the browser.
 
     Structure:
-    | BrowserA             (firefox)
+    | BrowserA
     |            Window 1  (location=https://robotframework.org/)
     |            Window 2  (location=https://robocon.io/)
     |            Window 3  (location=https://github.com/robotframework/)
     |
-    | BrowserB             (firefox)
+    | BrowserB
     |            Window 1  (location=https://github.com/)
 
-    Robot Framework Example:
-    | `Open Browser`       | https://robotframework.org    | alias=BrowserA   | # BrowserA with Window1 is open |
-    | `Execute Javascript` | window.open()                 |                  |                                   |
-    | `Switch Window`      | locator=NEW                   |                  | # Window2 opened and switched to it |
-    | `Go To`              | https://robocon.io            |                  | # Window2 go to robocon site |
-    | `Execute Javascript` | window.open()                 |                  |                                   |
-    | ${handle}            | `Switch Window`               | locator=NEW      | # Window3 opened and switched to it |
-    | `Go To`              | https://github.com/robotframework/ |             | # Window3 go to robot framework github site |
-    | `Open Browser`       | https://github.com            | alias=BrowserB   | # BrowserB with Window1 is open |
-    | ${location}          | `Get Location`                |                  | # ${location} is https://www.github.com |
-    | `Switch Window`      | ${handle}                     | browser=BrowserA | # BrowserA Window2 is selected |
-    | ${location}          | `Get Location`                |                  | # ${location} = https://robocon.io/ |
-    | @{locations}         | `Get Locations`               |                  | # @{locations} = [ 'https://robotframework.org/', 'https://robocon.io/', 'https://github.com/robotframework/' ] |
-    | @{locations}         | `Get Locations`               |  browser=ALL     | # @{locations} = [ 'https://robotframework.org/', 'https://robocon.io/', 'https://github.com/robotframework/', 'https://github.com/' ] |
-
+    Example:
+    | `Open Browser`       | https://robotframework.org         | ${BROWSER}       | alias=BrowserA   | # BrowserA with first window is opened.                                       |
+    | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA second window is opened.                                        |
+    | `Switch Window`      | locator=NEW                        |                  |                  | # Switched to second window in BrowserA                                       |
+    | `Go To`              | https://robocon.io                 |                  |                  | # Second window navigates to to robocon site.                                 |
+    | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA third window is opened.                                         |
+    | ${handle}            | `Switch Window`                    | locator=NEW      |                  | # Switched to third window in BrowserA                                        |
+    | `Go To`              | https://github.com/robotframework/ |                  |                  | # Third windows goes to robot framework github site.                          |
+    | `Open Browser`       | https://github.com                 | ${BROWSER}       | alias=BrowserB   | # BrowserB with first windows is opened.                                      |
+    | ${location}          | `Get Location`                     |                  |                  | # ${location} is: https://www.github.com                                      |
+    | `Switch Window`      | ${handle}                          | browser=BrowserA |                  | # BrowserA second windows is selected.                                        |
+    | ${location}          | `Get Location`                     |                  |                  | # ${location} = https://robocon.io/                                           |
+    | @{locations 1}       | `Get Locations`                    |                  |                  | # By default lists locations under the currectly active browser.              |
+    | @{locations 2}       | `Get Locations`                    |  browser=ALL     |                  | # By using browser=ALL argument keyword list all locations from all browsers. |
+    
+    The above example, @{locations 1} contains the following items: 
+    https://robotframework.org/, https://robocon.io/ and 
+    https://github.com/robotframework/'. The @{locations 2}
+    contains the following items: https://robotframework.org/, 
+    https://robocon.io/, https://github.com/robotframework/'
+    and 'https://github.com/.
+    
     = Timeouts, waits and delays =
 
     This section discusses different ways how to wait for elements to
