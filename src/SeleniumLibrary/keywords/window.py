@@ -156,6 +156,16 @@ class WindowKeywords(LibraryComponent):
         self.driver.maximize_window()
 
     @keyword
+    def minimize_browser_window(self):
+        """Minimizes current browser window."""
+        self.driver.minimize_window()
+
+    @keyword
+    def fullscreen_browser_window(self):
+        """Fullscreens current browser window."""
+        self.driver.fullscreen_window()
+
+    @keyword
     def get_window_size(self, inner=False):
         """Returns current window width and height as integers.
 
