@@ -195,6 +195,40 @@ Select Window With Delay By Special Locator
     Select Window    main
     Title Should Be    Click link to show a popup window
 
+Maximize Window
+    [Documentation]    Maximizing the window does not change the window size
+    ...    in headlesschrome.
+    [Tags]    known issue headlesschrome
+    Set Window Size    301    302
+    ${width}    ${height}=    Get Window Size
+    Maximize Browser Window
+    ${max width}    ${max height}=    Get Window Size
+    Verify Window Size Does Not Equal
+    ...    ${width}    ${height}    ${max width}    ${max height}
+
+Minimize Window
+    [Documentation]    Minimizing the window does not change the window size
+    ...    in headlesschrome.
+    [Tags]    known issue headlesschrome
+    Set Window Size    301    302
+    Maximize Browser Window
+    ${width}    ${height}=    Get Window Size
+    Minimize Browser Window
+    ${min width}    ${min height}=    Get Window Size
+    Verify Window Size Does Not Equal
+    ...    ${width}    ${height}    ${min width}    ${min height}
+
+Fullscreen Window
+    [Documentation]    Fullscreening the window does not change the window size
+    ...    in headlesschrome.
+    [Tags]    known issue headlesschrome
+    Set Window Size    301    302
+    ${width}    ${height}=    Get Window Size
+    Fullscreen Browser Window
+    ${full width}    ${full height}=    Get Window Size
+    Verify Window Size Does Not Equal
+    ...    ${width}    ${height}    ${full width}    ${full height}
+
 *** Keywords ***
 Open Popup Window, Select It And Verify
     [Arguments]    ${window_id}
@@ -221,3 +255,8 @@ Wait Until New Window Is Open
 New Windows Should Be Open
     ${titles} =    Get Window Titles
     Should Be True    len(${titles}) > 1
+
+Verify Window Size Does Not Equal
+    [Arguments]    ${orig width}    ${orig height}    ${new width}    ${new height}
+    Should Not Be Equal As Numbers    ${orig width}    ${new width}
+    Should Not Be Equal As Numbers    ${orig height}    ${new height}
