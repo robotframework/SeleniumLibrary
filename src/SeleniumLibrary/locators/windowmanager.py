@@ -39,7 +39,45 @@ class WindowManager(ContextAware):
             'default': self._select_by_default
         }
 
-    def get_window_infos(self):
+    def get_window_handles(self, browser):
+        if is_string(browser) and browser == 'ALL':
+            handles = []
+            current_index = self.drivers.current_index
+            for index, driver in enumerate(self.drivers, 1):
+                self.drivers.switch(index)
+                handles.extend(self.driver.window_handles)
+            self.drivers.switch(current_index)
+            return handles
+        elif is_string(browser) and browser == 'CURRENT':
+            return self.driver.window_handles
+        else:
+            current_index = self.drivers.current_index
+            self.drivers.switch(browser)
+            handles = self.driver.window_handles
+            self.drivers.switch(current_index)
+            return handles
+
+    def get_window_infos(self, browser='CURRENT'):
+        try:
+            current_index = self.drivers.current_index
+        except AttributeError:
+            current_index = None
+        if is_string(browser) and browser.upper() == 'ALL':
+            infos = []
+            for index, driver in enumerate(self.drivers, 1):
+                self.drivers.switch(index)
+                infos.extend(self._get_window_infos())
+            self.drivers.switch(current_index)
+            return infos
+        elif is_string(browser) and browser.upper() == 'CURRENT':
+            return self._get_window_infos()
+        else:
+            self.drivers.switch(browser)
+            infos = self._get_window_infos()
+            self.drivers.switch(current_index)
+            return infos
+
+    def _get_window_infos(self):
         infos = []
         try:
             starting_handle = self.driver.current_window_handle

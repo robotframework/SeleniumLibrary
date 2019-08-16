@@ -52,7 +52,7 @@ class CookieKeywords(LibraryComponent):
         sending HTTP requests. The dictionary format is helpful when
         the result can be passed to requests library's Create Session
         keyword's optional cookies parameter.
-        
+
         The `` as_dict`` argument is new in SeleniumLibrary 3.3
         """
         if is_falsy(as_dict):

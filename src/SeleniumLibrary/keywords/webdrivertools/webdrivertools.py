@@ -305,6 +305,18 @@ class WebDriverCache(ConnectionCache):
                 open_drivers.append(driver)
         return open_drivers
 
+    @property
+    def active_driver_ids(self):
+        open_driver_ids = []
+        for index, driver in enumerate(self._connections):
+            if driver not in self._closed:
+                open_driver_ids.append(index + 1)
+        return open_driver_ids
+
+    @property
+    def active_aliases(self):
+        return self._aliases
+
     def close(self):
         if self.current:
             driver = self.current

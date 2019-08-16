@@ -62,6 +62,7 @@ class SeleniumLibrary(DynamicCore):
     == Table of contents ==
 
     - `Locating elements`
+    - `Browser and Window`
     - `Timeouts, waits and delays`
     - `Run-on-failure functionality`
     - `Boolean arguments`
@@ -223,6 +224,75 @@ class SeleniumLibrary(DynamicCore):
 
     See the `Add Location Strategy` keyword for more details.
 
+    = Browser and Window =
+
+    There is different conseptual meaning when SeleniumLibrary talks
+    windows and browsers. This chapter explains those differences.
+
+    == Browser ==
+
+    When `Open Browser` or `Create WebDriver` keyword is called, it
+    will create a new Selenium WebDriver instance by using the 
+    [https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver]
+    API. In SeleniumLibrary terms, a new broser is created. It is 
+    possible to start multiple independent browsers (Selenium Webdriver 
+    instances) at the same time, by calling `Open Browser` or 
+    `Create WebDriver` multiple times. These browsers are usually 
+    independent to each other and do not share data like cookies, 
+    sessions or profiles. Typicall when browser starts, it 
+    creates a single window in the desktop.
+    
+    == Window ==
+
+    Windows are the part of a browser that loads the web site and presents
+    it to the user. All content of the site is content of the window.
+    Windows are children of a WebDriver instance, in SeleniumLibrary
+    WebDriver is referred as browser. One browser may have multiple
+    windows. Windows can appear as tabs or as separate windows with
+    different position and size. Windows belonning to the same browser
+    typically share the sessions detail, like cookies. If there is a
+    need to separate sessions detail, example login with two different
+    users, two browser (Selenium WebDriver instances) must be created.
+    New windows can be opened example by the application under test or
+    by example `Execute Javascript` keyword:
+
+    | `Execute Javascript`    window.open()    # Opens a new window with location about:blank
+
+    In the example in below opens multiple browser and windows,
+    to demonstrate how the different keywords can be used to interact 
+    with a browser and windows atteched to the browser.
+
+    Structure:
+    | BrowserA
+    |            Window 1  (location=https://robotframework.org/)
+    |            Window 2  (location=https://robocon.io/)
+    |            Window 3  (location=https://github.com/robotframework/)
+    |
+    | BrowserB
+    |            Window 1  (location=https://github.com/)
+
+    Example:
+    | `Open Browser`       | https://robotframework.org         | ${BROWSER}       | alias=BrowserA   | # BrowserA with first window is opened.                                       |
+    | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA second window is opened.                                        |
+    | `Switch Window`      | locator=NEW                        |                  |                  | # Switched to second window in BrowserA                                       |
+    | `Go To`              | https://robocon.io                 |                  |                  | # Second window navigates to to robocon site.                                 |
+    | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA third window is opened.                                         |
+    | ${handle}            | `Switch Window`                    | locator=NEW      |                  | # Switched to third window in BrowserA                                        |
+    | `Go To`              | https://github.com/robotframework/ |                  |                  | # Third windows goes to robot framework github site.                          |
+    | `Open Browser`       | https://github.com                 | ${BROWSER}       | alias=BrowserB   | # BrowserB with first windows is opened.                                      |
+    | ${location}          | `Get Location`                     |                  |                  | # ${location} is: https://www.github.com                                      |
+    | `Switch Window`      | ${handle}                          | browser=BrowserA |                  | # BrowserA second windows is selected.                                        |
+    | ${location}          | `Get Location`                     |                  |                  | # ${location} = https://robocon.io/                                           |
+    | @{locations 1}       | `Get Locations`                    |                  |                  | # By default lists locations under the currectly active browser.              |
+    | @{locations 2}       | `Get Locations`                    |  browser=ALL     |                  | # By using browser=ALL argument keyword list all locations from all browsers. |
+    
+    The above example, @{locations 1} contains the following items: 
+    https://robotframework.org/, https://robocon.io/ and 
+    https://github.com/robotframework/'. The @{locations 2}
+    contains the following items: https://robotframework.org/, 
+    https://robocon.io/, https://github.com/robotframework/'
+    and 'https://github.com/.
+    
     = Timeouts, waits and delays =
 
     This section discusses different ways how to wait for elements to

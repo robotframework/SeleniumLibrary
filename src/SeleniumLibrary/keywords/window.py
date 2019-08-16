@@ -20,7 +20,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import plural_or_not
+from SeleniumLibrary.utils import plural_or_not, is_string
 
 
 class WindowKeywords(LibraryComponent):
@@ -31,17 +31,19 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def select_window(self, locator='MAIN', timeout=None):
-        """Selects browser window matching ``locator``.
+        """DEPRECATED in SeleniumLibrary 4.0. , use `Switch Window` instead."""
+        return self.switch_window(locator, timeout)
+
+    @keyword
+    def switch_window(self, locator='MAIN', timeout=None, browser='CURRENT'):
+        """Switches to browser window matching ``locator``.
 
         If the window is found, all subsequent commands use the selected
         window, until this keyword is used again. If the window is not
         found, this keyword fails. The previous window handle is returned,
         and can be used to return back to it later.
 
-        Notice that in this context _window_ means a pop-up window opened
-        when doing something on an existing window. It is not possible to
-        select windows opened with `Open Browser`, `Switch Browser` must
-        be used instead. Notice also that alerts should be handled with
+        Notice that alerts should be handled with
         `Handle Alert` or other alert related keywords.
 
         The ``locator`` can be specified using different strategies somewhat
@@ -77,19 +79,25 @@ class WindowKeywords(LibraryComponent):
 
         Example:
         | `Click Link`      | popup1      |      | # Open new window |
-        | `Select Window`   | example     |      | # Select window using default strategy |
+        | `Switch Window`   | example     |      | # Select window using default strategy |
         | `Title Should Be` | Pop-up 1    |      |
         | `Click Button`    | popup2      |      | # Open another window |
-        | ${handle} = | `Select Window`   | NEW  | # Select latest opened window |
+        | ${handle} = | `Switch Window`   | NEW  | # Select latest opened window |
         | `Title Should Be` | Pop-up 2    |      |
-        | `Select Window`   | ${handle}   |      | # Select window using handle |
+        | `Switch Window`   | ${handle}   |      | # Select window using handle |
         | `Title Should Be` | Pop-up 1    |      |
-        | `Select Window`   | MAIN        |      | # Select the main window |
+        | `Switch Window`   | MAIN        |      | # Select the main window |
         | `Title Should Be` | Main        |      |
         | ${excludes} = | `Get Window Handles` | | # Get list of current windows |
         | `Click Link`      | popup3      |      | # Open one more window |
-        | `Select Window`   | ${excludes} |      | # Select window using excludes |
+        | `Switch Window`   | ${excludes} |      | # Select window using excludes |
         | `Title Should Be` | Pop-up 3    |      |
+
+        The ``browser`` argument allows with ``index_or_alias`` to implicitly switch to
+        a specific browser when switching to a window. See `Switch Browser`
+
+        - If the ``browser`` is ``CURRENT`` (case-insensitive), no other browser is
+          selected.
 
         *NOTE:*
 
@@ -109,45 +117,68 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
+            if not is_string(browser) or not browser.upper() == 'CURRENT':
+                self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
     @keyword
     def close_window(self):
-        """Closes currently opened pop-up window."""
+        """Closes currently opened and selected browser window/tab. """
         self.driver.close()
 
     @keyword
-    def get_window_handles(self):
-        """Return all current window handles as a list.
+    def get_window_handles(self, browser='CURRENT'):
+        """Returns all child window handles of the selected browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
 
+        How to select the ``browser`` scope of this keyword, see `Get Locations`.
+
         Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.
         """
-        return self.driver.window_handles
+        return self._window_manager.get_window_handles(browser)
 
     @keyword
-    def get_window_identifiers(self):
-        """Returns and logs id attributes of all known browser windows."""
-        ids = [info.id for info in self._window_manager.get_window_infos()]
+    def get_window_identifiers(self, browser='CURRENT'):
+        """Returns and logs id attributes of all windows of the selected browser.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`."""
+        ids = [info.id for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(ids)
 
     @keyword
-    def get_window_names(self):
-        """Returns and logs names of all known browser windows."""
-        names = [info.name for info in self._window_manager.get_window_infos()]
+    def get_window_names(self, browser='CURRENT'):
+        """Returns and logs names of all windows of the selected browser.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`."""
+        names = [info.name for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(names)
 
     @keyword
-    def get_window_titles(self):
-        """Returns and logs titles of all known browser windows."""
-        titles = [info.title for info in self._window_manager.get_window_infos()]
+    def get_window_titles(self, browser='CURRENT'):
+        """Returns and logs titles of all windows of the selected browser.
+
+        How to select the ``browser`` scope of this keyword, see `Get Locations`."""
+        titles = [info.title for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(titles)
 
     @keyword
-    def get_locations(self):
-        """Returns and logs URLs of all known browser windows."""
-        urls = [info.url for info in self._window_manager.get_window_infos()]
+    def get_locations(self, browser='CURRENT'):
+        """Returns and logs URLs of all windows of the selected browser.
+
+        *Browser Scope:*
+
+        The ``browser`` argument specifies the browser that shall return
+        its windows information.
+
+        - ``browser`` can be ``index_or_alias`` like in `Switch Browser`.
+
+        - If ``browser`` is ``CURRENT`` (default, case-insensitive)
+          the currently active browser is selected.
+
+        - If ``browser`` is ``ALL`` (case-insensitive)
+          the window information of all windows of all opened browsers are returned."""
+        urls = [info.url for info in self._window_manager.get_window_infos(browser)]
         return self._log_list(urls)
 
     @keyword

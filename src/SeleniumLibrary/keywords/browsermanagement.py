@@ -180,7 +180,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | options = webdriver.ChromeOptions()
         | options.add_argument('--disable-dev-shm-usage')
         | return options
-        
+
         Then the `${options}` variable can be used as argument to
         ``options``.
 
@@ -351,6 +351,44 @@ class BrowserManagementKeywords(LibraryComponent):
                    % self.driver.session_id)
 
     @keyword
+    def get_browser_ids(self):
+        """Returns index of all active browser as list.
+
+        Example:
+        | @{browser_ids}= | Get Browser Ids   |                   |                |
+        | FOR             | ${id}             | IN                | @{browser_ids} |
+        |                 | @{window_titles}= | Get Window Titles | browser=${id}  |
+        |                 | Log               | Browser ${id} has these windows: ${window_titles} | |
+        | END             |                   |                   |                |
+
+        See `Switch Browser` for more information and examples.
+
+        New in SeleniumLibrary 4.0
+        """
+        return self.drivers.active_driver_ids
+
+    @keyword
+    def get_browser_aliases(self):
+        """Returns aliases of all active browser that has an alias as NormalizedDict.
+        The dictionary contains the aliases as keys and the index as value.
+        This can be accessed as dictionary ``${aliases.key}`` or as list ``@{aliases}[0]``.
+
+        Example:
+        | `Open Browser` | https://example.com   | alias=BrowserA | |
+        | `Open Browser` | https://example.com   | alias=BrowserB | |
+        | &{aliases}     | `Get Browser Aliases` |                | # &{aliases} = { BrowserA=1|BrowserB=2 } |
+        | `Log`          | ${aliases.BrowserA}   |                | # logs ``1`` |
+        | FOR            | ${alias}              | IN             | @{aliases} |
+        |                | `Log`                 | ${alias}       | # logs ``BrowserA`` and ``BrowserB`` |
+        | END            |                       |                | |
+
+        See `Switch Browser` for more information and examples.
+
+        New in SeleniumLibrary 4.0
+        """
+        return self.drivers.active_aliases
+
+    @keyword
     def get_session_id(self):
         """Returns the currently active browser session id.
 
@@ -370,7 +408,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_location(self):
-        """Returns the current browser URL."""
+        """Returns the current browser window URL."""
         return self.driver.current_url
 
     @keyword
@@ -413,7 +451,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def log_location(self):
-        """Logs and returns the current URL."""
+        """Logs and returns the current browser window URL."""
         url = self.get_location()
         self.info(url)
         return url
@@ -460,7 +498,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def go_to(self, url):
-        """Navigates the active browser instance to the provided ``url``."""
+        """Navigates the current browser window to the provided ``url``."""
         self.info("Opening url '%s'" % url)
         self.driver.get(url)
 
