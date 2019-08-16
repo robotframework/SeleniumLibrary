@@ -460,17 +460,16 @@ class SeleniumLibrary(DynamicCore):
             WaitingKeywords(self),
             WindowKeywords(self)
         ]
+        self.ROBOT_LIBRARY_LISTENER = LibraryListener()
+        self._running_keyword = None
+        self.event_firing_webdriver = None
+        if is_truthy(event_firing_webdriver):
+            self.event_firing_webdriver = self._parse_listener(event_firing_webdriver)
         if is_truthy(plugins):
             plugin_libs = self._parse_plugins(plugins)
             libraries = libraries + plugin_libs
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
-        self.ROBOT_LIBRARY_LISTENER = LibraryListener()
-        if is_truthy(event_firing_webdriver):
-            self.event_firing_webdriver = self._parse_listener(event_firing_webdriver)
-        else:
-            self.event_firing_webdriver = None
-        self._running_keyword = None
 
     def run_keyword(self, name, args, kwargs):
         self._running_keyword = name
