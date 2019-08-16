@@ -89,6 +89,15 @@ of the attributes are explained in the library `keyword documentation`_. please 
 plugins may alter the functionality of the method or attributes and documentation applies
 only for the core SeleniumLibrary.
 
+Initialisation order
+====================
+When instance is created from the SeleniumLibrary, example when library is imported in the
+test data, there is an order in the initialisation. At first all classes defining SeleniumLibrary
+keywords are discovered. As a second event, discovery for the EventFiringWebDriver is done.
+At third event, plugins are discovered. As a last event, keywords are found from SeleniumLibrary
+classes and plugins. Because plugins are discovered last, they may example alter the
+EventFiringWebDriver. Consult the plugin's documentation for more details.
+
 Plugins
 =======
 SeleniumLibrary offers plugins as a way to modify, add library keywords and modify some of the internal

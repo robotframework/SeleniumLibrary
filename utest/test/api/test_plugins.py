@@ -103,3 +103,9 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         no_inherit = os.path.join(self.root_dir, 'my_lib_not_inherit.py')
         with self.assertRaises(PluginError):
             SeleniumLibrary(plugins=no_inherit)
+
+    def test_plugin_as_last_in_init(self):
+        plugin_file = os.path.join(self.root_dir, 'plugin_tester.py')
+        event_firing_wd = os.path.join(self.root_dir, 'MyListener.py')
+        sl = SeleniumLibrary(plugins=plugin_file, event_firing_webdriver=event_firing_wd)
+        self.assertEqual(sl.event_firing_webdriver, 'should be last')
