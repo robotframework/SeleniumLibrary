@@ -22,6 +22,7 @@ Open Browser To Start Page
     ...    desired_capabilities=${DESIRED_CAPABILITIES}
 
 Event Firing Webdriver Go To (WebDriver)
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 1:2 INFO STARTS: Before navigate to
     ...    LOG 1:3 INFO Got driver also from SeleniumLibrary.
