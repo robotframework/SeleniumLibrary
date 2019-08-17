@@ -249,15 +249,15 @@ class BrowserManagementKeywords(LibraryComponent):
                                    ff_profile_dir, remote_url,
                                    options, service_log_path)
         driver = self._wrap_event_firing_webdriver(driver)
+        index = self.ctx.register_driver(driver, alias)
         try:
             driver.get(url)
         except Exception:
-            self.ctx.register_driver(driver, alias)
             self.debug("Opened browser with session id %s but failed "
                        "to open url '%s'." % (driver.session_id, url))
             raise
         self.debug('Opened browser with session id %s.' % driver.session_id)
-        return self.ctx.register_driver(driver, alias)
+        return index
 
     @keyword
     def create_webdriver(self, driver_name, alias=None, kwargs={},

@@ -17,13 +17,16 @@ Open Browser To Start Page
     [Tags]    NoGrid
     [Documentation]
     ...    LOG 1:12 DEBUG  Wrapping driver to event_firing_webdriver.
+    ...    LOG 1:14 INFO  Got driver also from SeleniumLibrary.
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}
 
 Event Firing Webdriver Go To (WebDriver)
+    [Tags]    NoGrid
     [Documentation]
-    ...    STARTS 1:2 Before navigate to
-    ...    STARTS 1:6 After navigate to
+    ...    LOG 1:2 INFO STARTS: Before navigate to
+    ...    LOG 1:3 INFO Got driver also from SeleniumLibrary.
+    ...    LOG 1:7 INFO STARTS: After navigate to
     Go To     ${ROOT}/forms/named_submit_buttons.html
 
 Event Firing Webdriver Input Text (WebElement)
