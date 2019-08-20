@@ -109,3 +109,9 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         event_firing_wd = os.path.join(self.root_dir, 'MyListener.py')
         sl = SeleniumLibrary(plugins=plugin_file, event_firing_webdriver=event_firing_wd)
         self.assertEqual(sl.event_firing_webdriver, 'should be last')
+
+    def test_easier_event_firing_webdriver_from_plugin(self):
+        plugin_file = os.path.join(self.root_dir, 'plugin_with_event_firing_webdriver.py')
+        sl = SeleniumLibrary(plugins=plugin_file)
+        self.assertEqual(sl._plugin_keywords, ['tidii'])
+        self.assertEqual(sl.event_firing_webdriver, 'event_firing_webdriver')
