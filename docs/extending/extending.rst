@@ -217,15 +217,16 @@ log                        Wrapper to ``robot.api.logger.write`` method.
 
 Also following attributes are available from the ``LibraryComponent`` class:
 
-==============  =====================================================================
-  Attribute                              Description
-==============  =====================================================================
-driver           Currently active browser/WebDriver instance in the SeleniumLibrary.
-drivers          `Cache`_ for the opened browsers/WebDriver instances.
-element_finder   Read/write attribute for the `ElementFinder`_ instance.
-ctx              Instance of the SeleniumLibrary.
-log_dir          Folder where output files are written.
-==============  =====================================================================
+======================  ==============================================================================
+      Attribute                                          Description
+======================  ==============================================================================
+driver                  Currently active browser/WebDriver instance in the SeleniumLibrary.
+drivers                 `Cache`_ for the opened browsers/WebDriver instances.
+element_finder          Read/write attribute for the `ElementFinder`_ instance.
+ctx                     Instance of the SeleniumLibrary.
+log_dir                 Folder where output files are written.
+event_firing_webdriver  Read/write attribute for the SeleniumLibrary `EventFiringWebDriver`_ instance.
+======================  ==============================================================================
 
 See the `SeleniumLibrary init`_, the `LibraryComponent`_ and the `ContextAware`_ classes for further
 implementation details.
