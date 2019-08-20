@@ -43,6 +43,14 @@ class ContextAware(object):
     def element_finder(self, value):
         self.ctx._element_finder = value
 
+    @property
+    def event_firing_webdriver(self):
+        return self.ctx.event_firing_webdriver
+
+    @event_firing_webdriver.setter
+    def event_firing_webdriver(self, event_firing_webdriver):
+        self.ctx.event_firing_webdriver = event_firing_webdriver
+
     def find_element(self, locator, tag=None, required=True, parent=None):
         """Find element matching `locator`.
 
