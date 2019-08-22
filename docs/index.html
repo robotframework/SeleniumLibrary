@@ -27,25 +27,25 @@
 </div>
 <div class="section" id="introduction">
 <h1><a class="toc-backref" href="#id6">Introduction</a></h1>
-<p><a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> is a web testing library for <a class="reference external" href="http://robotframework.org">Robot Framework</a> that
-utilizes the <a class="reference external" href="http://seleniumhq.org">Selenium</a> tool internally. The project is hosted on <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a>
+<p><a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> is a web testing library for <a class="reference external" href="https://robotframework.org">Robot Framework</a> that
+utilizes the <a class="reference external" href="https://seleniumhq.org">Selenium</a> tool internally. The project is hosted on <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a>
 and downloads can be found from <a class="reference external" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">PyPI</a>.</p>
 <p>SeleniumLibrary works with Selenium 3. It supports Python 2.7 as well as
-Python 3.4 or newer. In addition to the normal <a class="reference external" href="http://python.org">Python</a> interpreter, it
-works also with <a class="reference external" href="http://pypy.org">PyPy</a> and <a class="reference external" href="http://jython.org">Jython</a>. Unfortunately <a class="reference external" href="http://seleniumhq.org">Selenium</a> is not
-currently supported by <a class="reference external" href="http://ironpython.net">IronPython</a> and thus this library does not work with
+Python 3.4 or newer. In addition to the normal <a class="reference external" href="https://python.org">Python</a> interpreter, it
+works also with <a class="reference external" href="https://pypy.org">PyPy</a> and <a class="reference external" href="https://jython.org/">Jython</a>. Unfortunately <a class="reference external" href="https://seleniumhq.org">Selenium</a> is not
+currently supported by <a class="reference external" href="https://ironpython.net/">IronPython</a> and thus this library does not work with
 IronPython either.</p>
 <p>SeleniumLibrary is based on the <a class="reference external" href="https://github.com/robotframework/OldSeleniumLibrary">old SeleniumLibrary</a> that was forked to
 <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> and then later renamed back to SeleniumLibrary.
 See the <a class="reference internal" href="#versions">Versions</a> and <a class="reference internal" href="#history">History</a> sections below for more information about
 different versions and the overall project history.</p>
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary"><img alt="https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version" src="https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version" /></a>
-<a class="reference external image-reference" href="http://www.apache.org/licenses/LICENSE-2.0"><img alt="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" /></a>
-<a class="reference external image-reference" href="http://travis-ci.org/robotframework/SeleniumLibrary"><img alt="https://api.travis-ci.org/robotframework/SeleniumLibrary.png" src="https://api.travis-ci.org/robotframework/SeleniumLibrary.png" /></a>
+<a class="reference external image-reference" href="https://www.apache.org/licenses/LICENSE-2.0"><img alt="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" /></a>
+<a class="reference external image-reference" href="https://travis-ci.org/robotframework/SeleniumLibrary"><img alt="https://api.travis-ci.org/robotframework/SeleniumLibrary.png" src="https://api.travis-ci.org/robotframework/SeleniumLibrary.png" /></a>
 </div>
 <div class="section" id="keyword-documentation">
 <h1><a class="toc-backref" href="#id7">Keyword documentation</a></h1>
-<p>See <a class="reference external" href="http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> for available keywords and more information
+<p>See <a class="reference external" href="https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> for available keywords and more information
 about the library in general.</p>
 </div>
 <div class="section" id="installation">
@@ -105,7 +105,7 @@ webdrivermanager firefox chrome --linkpath /usr/local/bin</code></pre>
 <p>To use SeleniumLibrary in Robot Framework tests, the library needs to
 first be imported using the <span class="docutils literal">Library</span> setting as any other library.
 The library accepts some import time arguments, which are documented
-in the <a class="reference external" href="http://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> along with all the keywords provided
+in the <a class="reference external" href="https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> along with all the keywords provided
 by the library.</p>
 <p>When using Robot Framework, it is generally recommended to write as
 easy-to-understand tests as possible. The keywords provided by
@@ -155,7 +155,7 @@ ${</span><span class="name variable">BROWSER</span><span class="punctuation">}  
 <a class="reference external" href="https://github.com/robotframework/WebDemo">demo project</a> that illustrates using Robot Framework and SeleniumLibrary.
 See the demo for more examples that you can also execute on your own
 machine. For more information about Robot Framework test data syntax in
-general see the <a class="reference external" href="http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html">Robot Framework User Guide</a>.</p>
+general see the <a class="reference external" href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html">Robot Framework User Guide</a>.</p>
 </div>
 <div class="section" id="extending-seleniumlibrary">
 <h1><a class="toc-backref" href="#id11">Extending SeleniumLibrary</a></h1>
@@ -164,22 +164,23 @@ the extension be also useful also for general usage. If it could be useful also 
 usage, please create a new issue describing the enhancement request and even better if the
 issue is backed up by a pull request.</p>
 <p>If the enhancement is not generally useful, example solution is domain specific, then the
-SeleniumLibrary offers a public API which can be used to build own libraries. All keyword
-methods are available in the public API. There are also generally useful methods and attributes
-available, which are useful for creating new libraries. Please see <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/EXTENDING_SELENIUMLIBRARY.rst">extending documentation</a>
-for more details about the available methods and for examples how the library can be extended.</p>
+SeleniumLibrary offers a public API's which can be used to build own plugins and libraries.
+Plugin API allows to add new keywords, modify existing keywords and modify internal
+functionality of the library. Also new libraries can be build on top of the
+SeleniumLibrary. Please see <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst">extending documentation</a> for more details about the
+available methods and for examples how the library can be extended.</p>
 </div>
 <div class="section" id="support">
 <h1><a class="toc-backref" href="#id12">Support</a></h1>
 <p>If the provided documentation is not enough, there are various support forums
 available:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="http://groups.google.com/group/robotframework-users">robotframework-users</a> mailing list</p></li>
+<li><p><a class="reference external" href="https://groups.google.com/group/robotframework-users">robotframework-users</a> mailing list</p></li>
 <li><p><span class="docutils literal">#seleniumlibrary</span> and <span class="docutils literal"><span class="pre">#seleniumlibrary-dev</span></span> channels in
 Robot Framework <a class="reference external" href="https://robotframework-slack-invite.herokuapp.com">Slack community</a></p></li>
 <li><p>SeleniumLibrary <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary/issues">issue tracker</a> for bug reports and concrete enhancement
 requests</p></li>
-<li><p><a class="reference external" href="http://robotframework.org/#support">Other support forums</a> including paid support</p></li>
+<li><p><a class="reference external" href="https://robotframework.org/#support">Other support forums</a> including paid support</p></li>
 </ul>
 </div>
 <div class="section" id="versions">
@@ -219,10 +220,15 @@ a bit more.</p>
 <td><p>Python 2.7 and 3.3+</p></td>
 <td><p>Selenium2Library renamed and with Python 3 support and new architecture.</p></td>
 </tr>
-<tr><td><p>SeleniumLibrary 3.2 and newer</p></td>
+<tr><td><p>SeleniumLibrary 3.2</p></td>
 <td><p>Selenium 3</p></td>
 <td><p>Python 2.7 and 3.4+</p></td>
 <td><p>Drops Selenium 2 support.</p></td>
+</tr>
+<tr><td><p>SeleniumLibrary 4.0</p></td>
+<td><p>Selenium 3</p></td>
+<td><p>Python 2.7 and 3.4+</p></td>
+<td><p>Plugin API and support for event friging webdriver.</p></td>
 </tr>
 <tr><td><p>Selenium2Library 3.0</p></td>
 <td><p>Depends on SeleniumLibrary</p></td>
