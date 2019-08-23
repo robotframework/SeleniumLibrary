@@ -66,10 +66,10 @@ in the library. Now it is possible to do this:
 
 Change Open Browser keyword to register driver before selenium `get`is called (`#1426`_, beta 1)
 ------------------------------------------------------------------------------------------------
-The Open Browser keyword dod use Selenium `get` API was called. This caused that event firing WebDriver
-was called before the driver was registered in the SeleniumLibrary cache. In some cases it caused
-problems to build proper support for plugins. This is now fixed and driver is registed
-before event firing WebDriver API is triggered.
+The Open Browser keyword did not register driver, before keyword called Selenium get API. This 
+caused that event firing WebDriver was called before the driver was registered in the
+SeleniumLibrary cache. In some cases it caused problems to build proper support for plugins.
+This is now fixed and driver is registed before event firing WebDriver API is triggered.
 
 Open Browser keyword could take in Selenium browser specific options (`#1331`_, alpha 2)
 ----------------------------------------------------------------------------------------
@@ -172,10 +172,10 @@ not the only way to contribute. There has been lot of issues raised in
 the project issue tracker and feedback has been provided in the
 user group and in slack. I am grateful from all the feedback.
 
-Enahnce window related keywords to work with multiple browsers (`#1427`_, beta 1)
+Enhance window related keywords to work with multiple browsers (`#1427`_, beta 1)
 ---------------------------------------------------------------------------------
 In previous releases, the different window keywords did work only with the context
-of a single WebDriver. Now it is possible to change WebDriver with the window
+of a single browser/WebDriver. Now it is possible to change WebDriver with the window
 keywords and locate the desired window. Many thanks Snooz82 for making the
 enhancement.
 
