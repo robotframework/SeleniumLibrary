@@ -29,9 +29,10 @@ class PluginDocumentation(unittest.TestCase):
     def setUp(self):
         path = os.path.dirname(__file__)
         reporter_json = os.path.abspath(os.path.join(path, '..', 'approvals_reporters.json'))
-        factory = GenericDiffReporterFactory()
-        factory.load(reporter_json)
-        self.reporter = factory.get_first_working()
+        if not JYTHON:
+            factory = GenericDiffReporterFactory()
+            factory.load(reporter_json)
+            self.reporter = factory.get_first_working()
 
     def test_no_plugin(self):
         sl = SeleniumLibrary()
