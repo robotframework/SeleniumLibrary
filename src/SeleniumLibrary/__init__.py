@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
 from collections import namedtuple
 from inspect import getdoc, isclass
 
@@ -58,19 +59,7 @@ class SeleniumLibrary(DynamicCore):
     [https://github.com/robotframework/SeleniumLibrary#browser-drivers|Browser drivers chapter]
     for more details about WebDriver binary installation.
 
-    == Table of contents ==
-
-    - `Locating elements`
-    - `Browser and Window`
-    - `Timeouts, waits and delays`
-    - `Run-on-failure functionality`
-    - `Boolean arguments`
-    - `EventFiringWebDriver`
-    - `Thread support`
-    - `Plugins`
-    - `Importing`
-    - `Shortcuts`
-    - `Keywords`
+    %TOC%
 
     = Locating elements =
 
@@ -464,7 +453,7 @@ class SeleniumLibrary(DynamicCore):
         self.event_firing_webdriver = None
         if is_truthy(event_firing_webdriver):
             self.event_firing_webdriver = self._parse_listener(event_firing_webdriver)
-        self._plugins = None
+        self._plugins = []
         if is_truthy(plugins):
             plugin_libs = self._parse_plugins(plugins)
             self._plugins = plugin_libs
@@ -489,18 +478,31 @@ class SeleniumLibrary(DynamicCore):
         return tags
 
     def get_keyword_documentation(self, name):
-        if name == '__intro__' and self._plugins:
-            intro = DynamicCore.get_keyword_documentation(self, name)
-            intro = intro.splitlines()
-            toc_plugin_start = intro.index('- `Importing`')
-            for plugin_doc in self._parse_plugin_doc():
-                intro.insert(toc_plugin_start, '- `Plugin: %s`' % plugin_doc.name)
-                intro.extend(['', '= Plugin: %s =' % plugin_doc.name, ''])
-                intro.extend(plugin_doc.doc.splitlines())
-                toc_plugin_start += 1
-            intro = '\n'.join(intro)
-            return intro
+        if name == '__intro__':
+            return self._get_intro_documentation()
         return DynamicCore.get_keyword_documentation(self, name)
+
+    def _parse_plugin_doc(self):
+        Doc = namedtuple('Doc', 'doc, name')
+        for plugin in self._plugins:
+            yield Doc(doc=getdoc(plugin) or 'No plugin documentation found.',
+                      name=plugin.__class__.__name__)
+
+    def _get_intro_documentation(self):
+        intro = DynamicCore.get_keyword_documentation(self, '__intro__')
+        for plugin_doc in self._parse_plugin_doc():
+            intro += '\n\n'
+            intro = intro + '= Plugin: %s =' % plugin_doc.name + '\n\n'
+            intro = intro + plugin_doc.doc
+        return self._create_toc(intro)
+
+    def _create_toc(self, intro):
+        toc = ['== Table of contents ==', '']
+        all_match = re.findall(r'(^\=\s)(.+)(\s\=$)', intro, re.MULTILINE)
+        for match in all_match:
+            toc.append('- `%s`' % match[1])
+        toc.extend(['- `Importing`', '- `Shortcuts`', '- `Keywords`'])
+        return intro.replace('%TOC%', '\n'.join(toc))
 
     def register_driver(self, driver, alias):
         """Add's a `driver` to the library WebDriverCache.
@@ -589,12 +591,6 @@ class SeleniumLibrary(DynamicCore):
             self._store_plugin_keywords(plugin)
             libraries.append(plugin)
         return libraries
-
-    def _parse_plugin_doc(self):
-        Doc = namedtuple('Doc', 'doc, name')
-        for plugin in self._plugins:
-            yield Doc(doc=getdoc(plugin) or 'No plugin documentation found.',
-                      name=plugin.__class__.__name__)
 
     def _parse_listener(self, event_firing_webdriver):
         listener_module = self._string_to_modules(event_firing_webdriver)

@@ -21,8 +21,7 @@ for more details about WebDriver binary installation.
 - `EventFiringWebDriver`
 - `Thread support`
 - `Plugins`
-- `Plugin: my_lib`
-- `Plugin: plugin_with_event_firing_webdriver`
+- `Plugin: my_lib_args`
 - `Importing`
 - `Shortcuts`
 - `Keywords`
@@ -366,32 +365,6 @@ documentation for further details.
 
 Plugin API is new SeleniumLibrary 4.0
 
-= Plugin: my_lib =
+= Plugin: my_lib_args =
 
-Some dummy documentation.
-
-= Heading 1 =
-
-This is heading 1 documentation.
-
-== Heading 2 ==
-
- This is heading 2 documentation.
-
-= Plugin: plugin_with_event_firing_webdriver =
-
-This is example plugin documentation.
-
-It may contains many chapters and there might be many words
-in the documentation. This is really boring example but let
-see how it looks like in the SeleniumLibrary docs.
-
-There might be reference to keywords, like `Open Browser`
-
-= Heading 1 =
-
-This is chapter in heading 1.
-
-== Heading 2 ==
-
-This is chapter in heading 2
+No plugin documentation found.

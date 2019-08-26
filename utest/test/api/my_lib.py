@@ -4,11 +4,11 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 class my_lib(LibraryComponent):
     """Some dummy documentation.
 
-    = Heading 1 =
+    = my_lib Heading 1 =
 
     This is heading 1 documentation.
 
-    == Heading 2 ==
+    == my_lib Heading 2 ==
 
      This is heading 2 documentation.
     """
