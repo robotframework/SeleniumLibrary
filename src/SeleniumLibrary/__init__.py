@@ -13,9 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import re
 from collections import namedtuple
-from inspect import isclass
+from inspect import getdoc, isclass
 
 from robot.api import logger
 from robot.errors import DataError
@@ -59,19 +59,7 @@ class SeleniumLibrary(DynamicCore):
     [https://github.com/robotframework/SeleniumLibrary#browser-drivers|Browser drivers chapter]
     for more details about WebDriver binary installation.
 
-    == Table of contents ==
-
-    - `Locating elements`
-    - `Browser and Window`
-    - `Timeouts, waits and delays`
-    - `Run-on-failure functionality`
-    - `Boolean arguments`
-    - `Plugins`
-    - `EventFiringWebDriver`
-    - `Thread support`
-    - `Importing`
-    - `Shortcuts`
-    - `Keywords`
+    %TOC%
 
     = Locating elements =
 
@@ -232,14 +220,14 @@ class SeleniumLibrary(DynamicCore):
     == Browser ==
 
     When `Open Browser` or `Create WebDriver` keyword is called, it
-    will create a new Selenium WebDriver instance by using the 
+    will create a new Selenium WebDriver instance by using the
     [https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver]
-    API. In SeleniumLibrary terms, a new broser is created. It is 
-    possible to start multiple independent browsers (Selenium Webdriver 
-    instances) at the same time, by calling `Open Browser` or 
-    `Create WebDriver` multiple times. These browsers are usually 
-    independent to each other and do not share data like cookies, 
-    sessions or profiles. Typicall when browser starts, it 
+    API. In SeleniumLibrary terms, a new broser is created. It is
+    possible to start multiple independent browsers (Selenium Webdriver
+    instances) at the same time, by calling `Open Browser` or
+    `Create WebDriver` multiple times. These browsers are usually
+    independent to each other and do not share data like cookies,
+    sessions or profiles. Typicall when browser starts, it
     creates a single window in the desktop.
     
     == Window ==
@@ -259,8 +247,8 @@ class SeleniumLibrary(DynamicCore):
     | `Execute Javascript`    window.open()    # Opens a new window with location about:blank
 
     In the example in below opens multiple browser and windows,
-    to demonstrate how the different keywords can be used to interact 
-    with a browser and windows atteched to the browser.
+    to demonstrate how the different keywords can be used to interact
+    with a browser and windows attached to the browser.
 
     Structure:
     | BrowserA
@@ -286,13 +274,13 @@ class SeleniumLibrary(DynamicCore):
     | @{locations 1}       | `Get Locations`                    |                  |                  | # By default lists locations under the currectly active browser.              |
     | @{locations 2}       | `Get Locations`                    |  browser=ALL     |                  | # By using browser=ALL argument keyword list all locations from all browsers. |
     
-    The above example, @{locations 1} contains the following items: 
-    https://robotframework.org/, https://robocon.io/ and 
+    The above example, @{locations 1} contains the following items:
+    https://robotframework.org/, https://robocon.io/ and
     https://github.com/robotframework/'. The @{locations 2}
-    contains the following items: https://robotframework.org/, 
+    contains the following items: https://robotframework.org/,
     https://robocon.io/, https://github.com/robotframework/'
     and 'https://github.com/.
-    
+
     = Timeouts, waits and delays =
 
     This section discusses different ways how to wait for elements to
@@ -385,15 +373,6 @@ class SeleniumLibrary(DynamicCore):
     ``false``, ``no`` and ``none``, were considered true. Starting from
     SeleniumLibrary 4.0, strings ``0`` and ``off`` are considered as false.
 
-    = Plugins =
-
-    SeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal
-    functionality without creating new library or hacking the source code. See
-    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#Plugins|plugin API]
-    documentation for further details.
-
-    Plugin API is new SeleniumLibrary 4.0
-
     = EventFiringWebDriver =
 
     The SeleniumLibrary offers support for
@@ -411,6 +390,15 @@ class SeleniumLibrary(DynamicCore):
     Selenium tool is not thread safe] within one browser/driver instance.
     Because of the limitation in the Selenium side, the keywords or the
     API provided by the SeleniumLibrary is not thread safe.
+
+    = Plugins =
+
+    SeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal
+    functionality without creating new library or hacking the source code. See
+    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#Plugins|plugin API]
+    documentation for further details.
+
+    Plugin API is new SeleniumLibrary 4.0
     """
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
@@ -465,8 +453,10 @@ class SeleniumLibrary(DynamicCore):
         self.event_firing_webdriver = None
         if is_truthy(event_firing_webdriver):
             self.event_firing_webdriver = self._parse_listener(event_firing_webdriver)
+        self._plugins = []
         if is_truthy(plugins):
             plugin_libs = self._parse_plugins(plugins)
+            self._plugins = plugin_libs
             libraries = libraries + plugin_libs
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
@@ -486,6 +476,33 @@ class SeleniumLibrary(DynamicCore):
         if name in self._plugin_keywords:
             tags.append('plugin')
         return tags
+
+    def get_keyword_documentation(self, name):
+        if name == '__intro__':
+            return self._get_intro_documentation()
+        return DynamicCore.get_keyword_documentation(self, name)
+
+    def _parse_plugin_doc(self):
+        Doc = namedtuple('Doc', 'doc, name')
+        for plugin in self._plugins:
+            yield Doc(doc=getdoc(plugin) or 'No plugin documentation found.',
+                      name=plugin.__class__.__name__)
+
+    def _get_intro_documentation(self):
+        intro = DynamicCore.get_keyword_documentation(self, '__intro__')
+        for plugin_doc in self._parse_plugin_doc():
+            intro += '\n\n'
+            intro = intro + '= Plugin: %s =' % plugin_doc.name + '\n\n'
+            intro = intro + plugin_doc.doc
+        return self._create_toc(intro)
+
+    def _create_toc(self, intro):
+        toc = ['== Table of contents ==', '']
+        all_match = re.findall(r'(^\=\s)(.+)(\s\=$)', intro, re.MULTILINE)
+        for match in all_match:
+            toc.append('- `%s`' % match[1])
+        toc.extend(['- `Importing`', '- `Shortcuts`', '- `Keywords`'])
+        return intro.replace('%TOC%', '\n'.join(toc))
 
     def register_driver(self, driver, alias):
         """Add's a `driver` to the library WebDriverCache.
