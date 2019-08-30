@@ -17,3 +17,7 @@ Selenium move_to workaround Scroll Element Into View
 Selenium move_to workaround Mouse Out
     [Documentation]    LOG 1:8 DEBUG  Workaround for Selenium 3 bug.
     Mouse Out    id:some_id
+
+Selenium move_to workaround Mouse Over
+    [Documentation]    LOG 1:5 DEBUG  Workaround for Selenium 3 bug.
+    Mouse Over    id:some_id

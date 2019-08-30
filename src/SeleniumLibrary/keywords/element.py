@@ -764,7 +764,13 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.info("Simulating Mouse Over on element '%s'." % locator)
         element = self.find_element(locator)
         action = ActionChains(self.driver)
-        action.move_to_element(element).perform()
+        # Try/except can be removed when minimum required Selenium is 4.0 or greater.
+        try:
+            action.move_to_element(element).perform()
+        except AttributeError:
+            self.debug('Workaround for Selenium 3 bug.')
+            element = element.wrapped_element
+            action.move_to_element(element).perform()
 
     @keyword
     def mouse_up(self, locator):
