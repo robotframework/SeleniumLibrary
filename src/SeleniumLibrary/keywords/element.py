@@ -672,7 +672,13 @@ newDiv.parentNode.style.overflow = 'hidden';
         New in SeleniumLibrary 3.2.0
         """
         element = self.find_element(locator)
-        ActionChains(self.driver).move_to_element(element).perform()
+        # Try/except can be removed when minimum required Selenium is 4.0 or greater.
+        try:
+            ActionChains(self.driver).move_to_element(element).perform()
+        except AttributeError:
+            self.debug('Workaround for Selenium 3 bug.')
+            element = element.wrapped_element
+            ActionChains(self.driver).move_to_element(element).perform()
 
     @keyword
     def drag_and_drop(self, locator, target):
