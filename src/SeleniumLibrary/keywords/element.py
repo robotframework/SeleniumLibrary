@@ -627,7 +627,13 @@ newDiv.parentNode.style.overflow = 'hidden';
                   % (locator, xoffset, yoffset))
         element = self.find_element(locator)
         action = ActionChains(self.driver)
-        action.move_to_element(element)
+        # Try/except can be removed when minimum required Selenium is 4.0 or greater.
+        try:
+            action.move_to_element(element)
+        except AttributeError:
+            self.debug('Workaround for Selenium 3 bug.')
+            element = element.wrapped_element
+            action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
         action.perform()

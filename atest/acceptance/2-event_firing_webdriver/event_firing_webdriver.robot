@@ -1,16 +1,9 @@
 *** Settings ***
 Library           SeleniumLibrary    event_firing_webdriver=${CURDIR}/MyListener.py
+Resource          resource_event_firing_webdriver.robot
 Suite Setup       Open Browser    ${FRONT PAGE}    ${BROWSER}    alias=event_firing_webdriver
 ...                   remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
 Suite Teardown    Close All Browsers
-
-*** Variable ***
-${SERVER}=                  localhost:7000
-${BROWSER}=                 Chrome
-${REMOTE_URL}=              ${NONE}
-${DESIRED_CAPABILITIES}=    ${NONE}
-${ROOT}=                    http://${SERVER}/html
-${FRONT_PAGE}=              ${ROOT}/
 
 *** Test Cases ***
 Open Browser To Start Page
