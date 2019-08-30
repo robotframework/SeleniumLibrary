@@ -13,3 +13,7 @@ Selenium move_to workaround Click Element At Coordinates
 Selenium move_to workaround Scroll Element Into View
     [Documentation]    LOG 1:4 DEBUG  Workaround for Selenium 3 bug.
     Scroll Element Into View    id:some_id
+
+Selenium move_to workaround Mouse Out
+    [Documentation]    LOG 1:8 DEBUG  Workaround for Selenium 3 bug.
+    Mouse Out    id:some_id

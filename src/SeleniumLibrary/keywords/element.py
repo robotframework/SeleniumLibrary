@@ -744,7 +744,14 @@ newDiv.parentNode.style.overflow = 'hidden';
         offsetx = (size['width'] / 2) + 1
         offsety = (size['height'] / 2) + 1
         action = ActionChains(self.driver)
-        action.move_to_element(element).move_by_offset(offsetx, offsety)
+        # Try/except can be removed when minimum required Selenium is 4.0 or greater.
+        try:
+            action.move_to_element(element)
+        except AttributeError:
+            self.debug('Workaround for Selenium 3 bug.')
+            element = element.wrapped_element
+            action.move_to_element(element)
+        action.move_by_offset(offsetx, offsety)
         action.perform()
 
     @keyword
