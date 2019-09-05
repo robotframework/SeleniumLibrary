@@ -140,7 +140,19 @@ class WebDriverCreator(object):
             return ff_profile_dir
         if is_falsy(ff_profile_dir):
             return webdriver.FirefoxProfile()
-        return webdriver.FirefoxProfile(ff_profile_dir)
+        try:
+            return webdriver.FirefoxProfile(ff_profile_dir)
+        except FileNotFoundError:
+            ff_options = self.selenium_options._parse(ff_profile_dir)
+            ff_profile = webdriver.FirefoxProfile()
+            for option in ff_options:
+                for key in option:
+                    attr = getattr(ff_profile, key)
+                    if callable(attr):
+                        attr(*option[key])
+                    else:
+                        setattr(ff_profile, key, *option[key])
+            return ff_profile
 
     @property
     def _geckodriver_log(self):
