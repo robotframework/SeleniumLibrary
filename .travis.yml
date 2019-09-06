@@ -1,6 +1,6 @@
 language: python
 sudo: required
-dist: trusty
+dist: bionic
 env:
   global:
     - JYTHON=false
