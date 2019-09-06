@@ -1,6 +1,8 @@
 language: python
 sudo: required
 dist: bionic
+services:
+  - xvfb
 env:
   global:
     - JYTHON=false
@@ -65,8 +67,6 @@ matrix:
         - INTERPRETER=python3
         - GRID=true
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
   - if [ "$JYTHON" == "true" ]; then
       wget -O jython.jar http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.1/jython-installer-2.7.1.jar;
       java -jar jython.jar -s -d ~/jython;
