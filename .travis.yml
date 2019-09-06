@@ -1,6 +1,6 @@
 language: python
 sudo: required
-dist: bionic
+dist: xenial
 services:
   - xvfb
 env:
@@ -44,7 +44,7 @@ matrix:
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
         - JYTHON=true
-    - python: "3.5"
+    - python: "3.4"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
