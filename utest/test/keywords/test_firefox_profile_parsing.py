@@ -24,10 +24,11 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         cls.log_dir = '/log/dir'
         cls.creator = WebDriverCreator(cls.log_dir)
         path = os.path.dirname(__file__)
-        reporter_json = os.path.abspath(os.path.join(path, '..', 'approvals_reporters.json'))
-        factory = GenericDiffReporterFactory()
-        factory.load(reporter_json)
-        cls.reporter = factory.get_first_working()
+        if not JYTHON:
+            reporter_json = os.path.abspath(os.path.join(path, '..', 'approvals_reporters.json'))
+            factory = GenericDiffReporterFactory()
+            factory.load(reporter_json)
+            cls.reporter = factory.get_first_working()
 
     def setUp(self):
         self.results = []
@@ -38,7 +39,7 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         self._parse_result(
             self.creator._get_ff_profile('set_preference("key1", "arg1");set_preference("key1", "arg1")'))
         self._parse_result(
-            self.creator._get_ff_profile('set_preference("key1", "arg1");set_preference("key2", "arg2")'))
+            self.creator._get_ff_profile('set_preference("key1", "arg1") ; set_preference("key2", "arg2")'))
         profile = self.creator._get_ff_profile('update_preferences()')
         self.results.append(isinstance(profile, webdriver.FirefoxProfile))
         try:
