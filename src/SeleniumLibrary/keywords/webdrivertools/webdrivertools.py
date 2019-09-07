@@ -26,8 +26,10 @@ from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
-from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string
+from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string, PY3
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import SelLibLocalFileDetector
+if not PY3:
+    FileNotFoundError = object
 
 
 class WebDriverCreator(object):
@@ -142,7 +144,7 @@ class WebDriverCreator(object):
             return webdriver.FirefoxProfile()
         try:
             return webdriver.FirefoxProfile(ff_profile_dir)
-        except FileNotFoundError:
+        except (OSError, FileNotFoundError):
             ff_options = self.selenium_options._parse(ff_profile_dir)
             ff_profile = webdriver.FirefoxProfile()
             for option in ff_options:

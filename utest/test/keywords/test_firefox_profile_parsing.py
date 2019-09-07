@@ -43,6 +43,10 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         profile = self.creator._get_ff_profile('update_preferences()')
         self.results.append(isinstance(profile, webdriver.FirefoxProfile))
         try:
+            self.creator._get_ff_profile('wrong_name("key1", "arg1")')
+        except AttributeError as error:
+            self.results.append(error)
+        try:
             self.creator._get_ff_profile('set_proxy("foo")')
         except Exception as error:
             self.results.append(str(error))
