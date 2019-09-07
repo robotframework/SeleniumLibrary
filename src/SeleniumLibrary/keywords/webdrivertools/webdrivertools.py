@@ -26,8 +26,10 @@ from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
-from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string
+from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string, PY3
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import SelLibLocalFileDetector
+if not PY3:
+    FileNotFoundError = object
 
 
 class WebDriverCreator(object):
@@ -140,7 +142,19 @@ class WebDriverCreator(object):
             return ff_profile_dir
         if is_falsy(ff_profile_dir):
             return webdriver.FirefoxProfile()
-        return webdriver.FirefoxProfile(ff_profile_dir)
+        try:
+            return webdriver.FirefoxProfile(ff_profile_dir)
+        except (OSError, FileNotFoundError):
+            ff_options = self.selenium_options._parse(ff_profile_dir)
+            ff_profile = webdriver.FirefoxProfile()
+            for option in ff_options:
+                for key in option:
+                    attr = getattr(ff_profile, key)
+                    if callable(attr):
+                        attr(*option[key])
+                    else:
+                        setattr(ff_profile, key, *option[key])
+            return ff_profile
 
     @property
     def _geckodriver_log(self):

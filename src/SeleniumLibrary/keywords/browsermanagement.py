@@ -117,7 +117,12 @@ class BrowserManagementKeywords(LibraryComponent):
         uses. Notice that prior to SeleniumLibrary 3.0, the library
         contained its own profile that was used by default. The
         ``ff_profile_dir`` can also be instance of the
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html?highlight=firefoxprofile#selenium.webdriver.firefox.firefox_profile.FirefoxProfile|selenium.webdriver.FirefoxProfile].
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|selenium.webdriver.FirefoxProfile]
+        . As third option, it possible to use `FirefoxProfile` methods
+        and attributes to define the profile. Using method and attributes
+        in same way as with ``options`` argument. Example it is possible
+        to use FirefoxProfile `set_preference` to define different
+        profile settings.
 
         Optional ``options`` argument allows to define browser specific
         Selenium options. Example for Chrome, the ``options`` argument
@@ -210,9 +215,14 @@ class BrowserManagementKeywords(LibraryComponent):
         Example when using
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
         method:
-        | `Open Browser` | http://example.com | Chrome                  | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format              |
-        |  ${options} =  |     Get Options    |                         |                                                                                               | # Selenium options instance |
-        | `Open Browser` | http://example.com | Chrome                  | options=${options}                                                                            |                             |
+        | `Open Browser` | http://example.com | Chrome | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format              |
+        |  ${options} =  |     Get Options    |        |                                                                                               | # Selenium options instance |
+        | `Open Browser` | http://example.com | Chrome | options=${options}                                                                            |                             |
+
+        Example for FirefoxProfile
+        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=/path/to/profile                                                  | # Using profile from disk                       |
+        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=${FirefoxProfile_instance}                                        | # Using instance of FirefoxProfile              |
+        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=set_preference("key", "value");set_preference("other", "setting") | # Defining profile using FirefoxProfile mehtods |
 
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
@@ -225,7 +235,8 @@ class BrowserManagementKeywords(LibraryComponent):
         in SeleniumLibrary 4.0. The ``options`` and ``service_log_path``
         are new in SeleniumLibrary 4.0. Support for ``ff_profile_dir``
         accepting instance of the `selenium.webdriver.FirefoxProfile`
-        is new in SeleniumLibrary 4.0.
+        and support defining FirefoxProfile with methods and
+        attributes are new in SeleniumLibrary 4.0.
         """
         index = self.drivers.get_index(alias)
         if index:
