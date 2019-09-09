@@ -22,7 +22,7 @@ class RunOnFailureKeywords(LibraryComponent):
 
     @keyword
     def register_keyword_to_run_on_failure(self, keyword):
-        """Sets the keyword to execute when a SeleniumLibrary keyword fails.
+        """Sets the keyword to execute, when a SeleniumLibrary keyword fails.
 
         ``keyword`` is the name of a keyword that will be executed if a
         SeleniumLibrary keyword fails. It is possible to use any available

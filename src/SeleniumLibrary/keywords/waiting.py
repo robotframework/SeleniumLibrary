@@ -55,7 +55,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_location_is(self, expected, timeout=None, message=None):
-        """Wait until that current URL is ``expected``.
+        """Waits until the current URL is ``expected``.
 
         The ``expected`` argument is the expected value in url.
 
@@ -76,7 +76,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_location_contains(self, expected, timeout=None, message=None):
-        """Wait until that current URL contains ``expected``.
+        """Waits until the current URL contains ``expected``.
 
         The ``expected`` argument contains the expected value in url.
 
@@ -97,7 +97,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
-        """Waits until ``text`` appears on current page.
+        """Waits until ``text`` appears on the current page.
 
         Fails if ``timeout`` expires before the text appears. See
         the `Timeouts` section for more information about using timeouts
@@ -112,7 +112,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_page_does_not_contain(self, text, timeout=None,
                                          error=None):
-        """Waits until ``text`` disappears from current page.
+        """Waits until ``text`` disappears from the current page.
 
         Fails if ``timeout`` expires before the text disappears. See
         the `Timeouts` section for more information about using timeouts
@@ -127,7 +127,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_page_contains_element(self, locator, timeout=None,
                                          error=None):
-        """Waits until element ``locator`` appears on current page.
+        """Waits until the element ``locator`` appears on the current page.
 
         Fails if ``timeout`` expires before the element appears. See
         the `Timeouts` section for more information about using timeouts and
@@ -145,7 +145,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_page_does_not_contain_element(self, locator, timeout=None,
                                                  error=None):
-        """Waits until element ``locator`` disappears from current page.
+        """Waits until the element ``locator`` disappears from the current page.
 
         Fails if ``timeout`` expires before the element disappears. See
         the `Timeouts` section for more information about using timeouts and
@@ -163,7 +163,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_is_visible(self, locator, timeout=None,
                                       error=None):
-        """Waits until element ``locator`` is visible.
+        """Waits until the element ``locator`` is visible.
 
         Fails if ``timeout`` expires before the element is visible. See
         the `Timeouts` section for more information about using timeouts and
@@ -181,7 +181,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_is_not_visible(self, locator, timeout=None,
                                           error=None):
-        """Waits until element ``locator`` is not visible.
+        """Waits until the element ``locator`` is not visible.
 
         Fails if ``timeout`` expires before the element is not visible. See
         the `Timeouts` section for more information about using timeouts and
@@ -199,7 +199,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_is_enabled(self, locator, timeout=None,
                                       error=None):
-        """Waits until element ``locator`` is enabled.
+        """Waits until the element ``locator`` is enabled.
 
         Element is considered enabled if it is not disabled nor read-only.
 
@@ -222,7 +222,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_contains(self, locator, text, timeout=None,
                                     error=None):
-        """Waits until element ``locator`` contains ``text``.
+        """Waits until the element ``locator`` contains ``text``.
 
         Fails if ``timeout`` expires before the text appears. See
         the `Timeouts` section for more information about using timeouts and
@@ -240,7 +240,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_does_not_contain(self, locator, text, timeout=None,
                                             error=None):
-        """Waits until element ``locator`` does not contain ``text``.
+        """Waits until the element ``locator`` does not contain ``text``.
 
         Fails if ``timeout`` expires before the text disappears. See
         the `Timeouts` section for more information about using timeouts and

@@ -56,7 +56,7 @@ class FormElementKeywords(LibraryComponent):
         """Verifies checkbox ``locator`` is not selected/checked.
 
         See the `Locating elements` section for details about the locator
-        syntax..
+        syntax.
         """
         self.info("Verifying checkbox '%s' is not selected." % locator)
         element = self._get_checkbox(locator)
@@ -66,9 +66,9 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_checkbox(self, locator, message=None, loglevel='TRACE'):
-        """Verifies checkbox ``locator`` is found from current page.
+        """Verifies checkbox ``locator`` is found from the current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -78,9 +78,9 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_checkbox(self, locator, message=None, loglevel='TRACE'):
-        """Verifies checkbox ``locator`` is not found from current page.
+        """Verifies checkbox ``locator`` is not found from the current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -90,7 +90,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def select_checkbox(self, locator):
-        """Selects checkbox identified by ``locator``.
+        """Selects the checkbox identified by ``locator``.
 
         Does nothing if checkbox is already selected.
 
@@ -104,7 +104,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_checkbox(self, locator):
-        """Removes selection of checkbox identified by ``locator``.
+        """Removes the selection of checkbox identified by ``locator``.
 
         Does nothing if the checkbox is not selected.
 
@@ -120,7 +120,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_radio_button(self, locator, message=None, loglevel='TRACE'):
         """Verifies radio button ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -133,7 +133,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_radio_button(self, locator, message=None, loglevel='TRACE'):
         """Verifies radio button ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -174,7 +174,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def select_radio_button(self, group_name, value):
-        """Sets radio button group ``group_name`` to ``value``.
+        """Sets the radio button group ``group_name`` to ``value``.
 
         The radio button to be selected is located by two arguments:
         - ``group_name`` is the name of the radio button group.
@@ -193,19 +193,19 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def choose_file(self, locator, file_path):
-        """Inputs the ``file_path`` into file input field ``locator``.
+        """Inputs the ``file_path`` into the file input field ``locator``.
 
         This keyword is most often used to input files into upload forms.
-        Keyword  does not check ``file_path`` is the file or folder
-        available on machine where tests are executed. If the ``file_path``
-        point sot a file and when using Selenium Grid, Selenium will,
+        The keyword does not check ``file_path`` is the file or folder
+        available on the machine where tests are executed. If the ``file_path``
+        points at a file and when using Selenium Grid, Selenium will
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.command.html?highlight=upload#selenium.webdriver.remote.command.Command.UPLOAD_FILE|magically],
-        transfer the file from the machine where test are executed
+        transfer the file from the machine where the tests are executed
         to the Selenium Grid node where the browser is running. 
-        Then Selenium will send the file path, from to node file 
+        Then Selenium will send the file path, from the nodes file
         system, to the browser.
 
-        ``file_path`` is not checked is new in SeleniumLibrary 4.0
+        That ``file_path`` is not checked, is new in SeleniumLibrary 4.0.
 
         Example:
         | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |
@@ -215,7 +215,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def input_password(self, locator, password, clear=True):
-        """Types the given password into text field identified by ``locator``.
+        """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax. See `Input Text` for ``clear`` argument details.
@@ -233,9 +233,9 @@ class FormElementKeywords(LibraryComponent):
 
         Notice also that SeleniumLibrary logs all the communication with
         browser drivers using the DEBUG level, and the actual password can
-        be seen there. Additionally Robot Framework logs all arguments using
+        be seen there. Additionally, Robot Framework logs all arguments using
         the TRACE level. Tests must thus not be executed using level below
-        INFO if password should not be logged in any format.
+        INFO if the password should not be logged in any format.
 
         The `clear` argument is new in SeleniumLibrary 4.0
         """
@@ -244,18 +244,18 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def input_text(self, locator, text, clear=True):
-        """Types the given ``text`` into text field identified by ``locator``.
+        """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
-        text is typed to the element. When false, the previous text
+        the text is typed into the element. When false, the previous text
         is not cleared from the element. Use `Input Password` if you
         do not want the given ``text`` to be logged.
 
         If [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid]
         is used and the ``text`` argument points to a file in the file system,
         then this keyword prevents the Selenium to transfer the file to the
-        Selenium Grid hub. Instead this keyword will send the ``text`` string
-        as is to the element. If file should be transferred to the hub and
+        Selenium Grid hub. Instead, this keyword will send the ``text`` string
+        as is to the element. If a file should be transferred to the hub and
         upload should be performed, please use `Choose File` keyword.
 
         See the `Locating elements` section for details about the locator
@@ -272,7 +272,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_textfield(self, locator, message=None, loglevel='TRACE'):
         """Verifies text field ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -284,7 +284,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_textfield(self, locator, message=None, loglevel='TRACE'):
         """Verifies text field ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -364,12 +364,12 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_button(self, locator, message=None, loglevel='TRACE'):
         """Verifies button ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, buttons are
-        searched using ``id``, ``name`` and ``value``.
+        searched using ``id``, ``name``, and ``value``.
         """
         try:
             self.assert_page_contains(locator, 'input', message, loglevel)
@@ -380,12 +380,12 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_button(self, locator, message=None, loglevel='TRACE'):
         """Verifies button ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, buttons are
-        searched using ``id``, ``name`` and ``value``.
+        searched using ``id``, ``name``, and ``value``.
         """
         self.assert_page_not_contains(locator, 'button', message, loglevel)
         self.assert_page_not_contains(locator, 'input', message, loglevel)

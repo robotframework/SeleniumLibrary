@@ -40,8 +40,8 @@ class WindowKeywords(LibraryComponent):
 
         If the window is found, all subsequent commands use the selected
         window, until this keyword is used again. If the window is not
-        found, this keyword fails. The previous window handle is returned,
-        and can be used to return back to it later.
+        found, this keyword fails. The previous windows handle is returned
+        and can be used to switch back to it later.
 
         Notice that alerts should be handled with
         `Handle Alert` or other alert related keywords.
@@ -49,14 +49,14 @@ class WindowKeywords(LibraryComponent):
         The ``locator`` can be specified using different strategies somewhat
         similarly as when `locating elements` on pages.
 
-        - By default the ``locator`` is matched against window handle, name,
-          title, and URL. Matching is done in that order and the the first
+        - By default, the ``locator`` is matched against window handle, name,
+          title, and URL. Matching is done in that order and the first
           matching window is selected.
 
-        - The ``locator`` can specify an explicit strategy by using format
+        - The ``locator`` can specify an explicit strategy by using the format
           ``strategy:value`` (recommended) or ``strategy=value``. Supported
-          strategies are ``name``, ``title`` and ``url``, which match windows
-          using name, title, and URL, respectively. Additionally, ``default``
+          strategies are ``name``, ``title``, and ``url``. These matches windows
+          using their name, title, or URL, respectively. Additionally, ``default``
           can be used to explicitly use the default strategy explained above.
 
         - If the ``locator`` is ``NEW`` (case-insensitive), the latest
@@ -71,7 +71,7 @@ class WindowKeywords(LibraryComponent):
 
         - If the ``locator`` is not a string, it is expected to be a list
           of window handles _to exclude_. Such a list of excluded windows
-          can be get from `Get Window Handles` prior to doing an action that
+          can be got from `Get Window Handles` before doing an action that
           opens a new window.
 
         The ``timeout`` is used to specify how long keyword will poll to select
@@ -107,7 +107,7 @@ class WindowKeywords(LibraryComponent):
           and URL was case-insensitive.
         - Earlier versions supported aliases ``None``, ``null`` and the
           empty string for selecting the main window, and alias ``self``
-          for selecting the current window. Support for these aliases were
+          for selecting the current window. Support for these aliases was
           removed in SeleniumLibrary 3.2.
         """
         epoch = time.time()
@@ -194,7 +194,7 @@ class WindowKeywords(LibraryComponent):
 
         If ``inner`` parameter is set to True, keyword returns
         HTML DOM window.innerWidth and window.innerHeight properties.
-        See `Boolean arguments` for more details how to set boolean
+        See `Boolean arguments` for more details on how to set boolean
         arguments. The ``inner`` is new in SeleniumLibrary 4.0.
 
         Example:
@@ -215,15 +215,16 @@ class WindowKeywords(LibraryComponent):
         Values can be given using strings containing numbers or by using
         actual numbers. See also `Get Window Size`.
 
-        Browsers have a limit how small they can be set. Trying to set them
+        Browsers have a limit on their minimum size. Trying to set them
         smaller will cause the actual size to be bigger than the requested
         size.
 
         If ``inner`` parameter is set to True, keyword sets the necessary
-        window width and height to have the desired HTML DOM window.innerWidth
-        and window.innerHeight The ``inner`` is new in SeleniumLibrary 4.0.
-        See `Boolean arguments` for more details how to set boolean
+        window width and height to have the desired HTML DOM _window.innerWidth_
+        and _window.innerHeight_. See `Boolean arguments` for more details on how to set boolean
         arguments.
+
+        The ``inner`` argument is new since SeleniumLibrary 4.0.
 
         This ``inner`` argument does not support Frames. If a frame is selected,
         switch to default before running this.
@@ -254,7 +255,7 @@ class WindowKeywords(LibraryComponent):
     def get_window_position(self):
         """Returns current window position.
 
-        Position is relative to the top left corner of the screen. Returned
+        The position is relative to the top left corner of the screen. Returned
         values are integers. See also `Set Window Position`.
 
         Example:

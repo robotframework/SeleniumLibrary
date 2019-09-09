@@ -38,7 +38,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def close_all_browsers(self):
         """Closes all open browsers and resets the browser cache.
 
-        After this keyword new indexes returned from `Open Browser` keyword
+        After this keyword, new indexes returned from `Open Browser` keyword
         are reset to 1.
 
         This keyword should be used in test or suite teardown to make sure
@@ -61,8 +61,8 @@ class BrowserManagementKeywords(LibraryComponent):
                      ff_profile_dir=None, options=None, service_log_path=None):
         """Opens a new browser instance to the given ``url``.
 
-        The ``browser`` argument specifies which browser to use, and the
-        supported browser are listed in the table below. The browser names
+        The ``browser`` argument specifies which browser to use. The
+        supported browsers are listed in the table below. The browser names
         are case-insensitive and some browsers have multiple supported names.
 
         |    = Browser =    |        = Name(s) =       |
@@ -90,11 +90,11 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``alias`` is an alias given for this browser instance and
         it can be used for switching between browsers. When same ``alias``
         is given with two `Open Browser` keywords, the first keyword will
-        open new browser. But the second one will switch to the already
-        opened browser and will not open new browser. The ``alias``
+        open a new browser, but the second one will switch to the already
+        opened browser and will not open a new browser. The ``alias``
         definition overrules ``browser`` definition. When same ``alias``
-        is used but different ``browser`` is defined, then switch to
-        browser with same alias is done and new browser is not opened.
+        is used but a different ``browser`` is defined, then switch to
+        a browser with same alias is done and new browser is not opened.
         An alternative approach for switching is using an index returned
         by this keyword. These indices start from 1, are incremented when new
         browsers are opened, and reset back to 1 when `Close All Browsers`
@@ -106,7 +106,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``desired_capabilities`` can be used to configure, for example,
         logging preferences for a browser or a browser and operating system
         when using [http://saucelabs.com|Sauce Labs]. Desired capabilities can
-        be given either as a Python dictionary or as a string in format
+        be given either as a Python dictionary or as a string in the format
         ``key1:value1,key2:value2``.
         [https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities|
         Selenium documentation] lists possible capabilities that can be
@@ -116,22 +116,22 @@ class BrowserManagementKeywords(LibraryComponent):
         directory if you wish to overwrite the default profile Selenium
         uses. Notice that prior to SeleniumLibrary 3.0, the library
         contained its own profile that was used by default. The
-        ``ff_profile_dir`` can also be instance of the
+        ``ff_profile_dir`` can also be an instance of the
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|selenium.webdriver.FirefoxProfile]
-        . As third option, it possible to use `FirefoxProfile` methods
-        and attributes to define the profile. Using method and attributes
-        in same way as with ``options`` argument. Example it is possible
+        . As a third option, it is possible to use `FirefoxProfile` methods
+        and attributes to define the profile using methods and attributes
+        in the same way as with ``options`` argument. Example: It is possible
         to use FirefoxProfile `set_preference` to define different
         profile settings.
 
-        Optional ``options`` argument allows to define browser specific
+        Optional ``options`` argument allows defining browser specific
         Selenium options. Example for Chrome, the ``options`` argument
         allows defining the following
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|methods and attributes]
         and for Firefox these
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]
-        are available. Please note that not all browsers supported by the
-        SeleniumLibrary have Selenium options available. Therefore please
+        are available. Please note that not all browsers, supported by the
+        SeleniumLibrary, have Selenium options available. Therefore please
         consult the Selenium documentation which browsers do support
         the Selenium options. If ``browser`` argument is `android` then
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
@@ -142,31 +142,31 @@ class BrowserManagementKeywords(LibraryComponent):
         options in two different formats: as a string and as Python object
         which is an instance of the Selenium options class.
 
-        The string format allows to define Selenium options methods
+        The string format allows defining Selenium options methods
         or attributes and their arguments in Robot Framework test data.
         The method and attributes names are case and space sensitive and
         must match to the Selenium options methods and attributes names.
-        When defining a method, is must defined in similar way as in
+        When defining a method, it must be defined in a similar way as in
         python: method name, opening parenthesis, zero to many arguments
-        and closing parenthesis. If there is need to define multiple
+        and closing parenthesis. If there is a need to define multiple
         arguments for a single method, arguments must be separated with
         comma, just like in Python. Example: `add_argument("--headless")`
         or `add_experimental_option("key", "value")`. Attributes are
-        defined in similar way as in Python: attribute name, equal sing
+        defined in a similar way as in Python: attribute name, equal sign,
         and attribute value. Example, `headless=True`. Multiple methods
-        and attributes must separated by a semicolon, example:
+        and attributes must be separated by a semicolon. Example:
         `add_argument("--headless");add_argument("--start-maximized")`.
 
         Arguments allow defining Python data types and arguments are
         evaluated by using Python
         [https://docs.python.org/3/library/ast.html#ast.literal_eval|ast.literal_eval].
         Strings must be quoted with single or double quotes, example "value"
-        or 'value'. It is also possible define other Python builtin
+        or 'value'. It is also possible to define other Python builtin
         data types, example `True` or `None`, by not using quotes
         around the arguments.
 
-        The string format is space friendly and usually spaces do not alter
-        the defining the methods or attributes. There are two exceptions.
+        The string format is space friendly. Usually, spaces do not alter
+        the defining methods or attributes. There are two exceptions.
         In some Robot Framework test data formats, two or more spaces are
         considered as cell separator and instead of defining a single
         argument, two or more arguments may be defined. Spaces in string
@@ -176,9 +176,9 @@ class BrowserManagementKeywords(LibraryComponent):
         not same same as `add_argument ( "--headless" )`, because
         spaces inside of quotes are not removed.
 
-        As last format ``options`` argument also support receiving
+        As last format, ``options`` argument also supports receiving
         the Selenium options as Python class instance. In this case, the
-        instance is used as is and the SeleniumLibrary will not convert
+        instance is used as-is and the SeleniumLibrary will not convert
         the instance to other formats.
         For example, if the following code return value is saved to
         `${options}` variable in the Robot Framework data:
@@ -186,7 +186,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | options.add_argument('--disable-dev-shm-usage')
         | return options
 
-        Then the `${options}` variable can be used as argument to
+        Then the `${options}` variable can be used as an argument to
         ``options``.
 
         Optional ``service_log_path`` argument defines the name of the
@@ -199,9 +199,10 @@ class BrowserManagementKeywords(LibraryComponent):
         format string syntax].
 
         Examples:
-        | `Open Browser` | http://example.com | Chrome  |
-        | `Open Browser` | http://example.com | Firefox | alias=Firefox |
+        | `Open Browser` | http://example.com | Chrome  |                                         |
+        | `Open Browser` | http://example.com | Firefox | alias=Firefox                           |
         | `Open Browser` | http://example.com | Edge    | remote_url=http://127.0.0.1:4444/wd/hub |
+        | `Open Browser` | about:blank        |         |                                         |
 
         Alias examples:
         | ${1_index} =    | `Open Browser` | http://example.com | Chrome  | alias=Chrome     | # Opens new browser because alias is new.         |
@@ -234,7 +235,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Using ``alias`` to decide, is the new browser opened is new
         in SeleniumLibrary 4.0. The ``options`` and ``service_log_path``
         are new in SeleniumLibrary 4.0. Support for ``ff_profile_dir``
-        accepting instance of the `selenium.webdriver.FirefoxProfile`
+        accepting an instance of the `selenium.webdriver.FirefoxProfile`
         and support defining FirefoxProfile with methods and
         attributes are new in SeleniumLibrary 4.0.
         """
@@ -277,9 +278,9 @@ class BrowserManagementKeywords(LibraryComponent):
 
         Like `Open Browser`, but allows passing arguments to the created
         WebDriver instance directly. This keyword should only be used if
-        functionality provided by `Open Browser` is not adequate.
+        the functionality provided by `Open Browser` is not adequate.
 
-        ``driver_name`` must be an WebDriver implementation name like Firefox,
+        ``driver_name`` must be a WebDriver implementation name like Firefox,
         Chrome, Ie, Opera, Safari, PhantomJS, or Remote.
 
         The initialized WebDriver can be configured either with a Python
@@ -414,7 +415,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_title(self):
-        """Returns the title of current page."""
+        """Returns the title of the current page."""
         return self.driver.title
 
     @keyword
@@ -424,14 +425,14 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def location_should_be(self, url, message=None):
-        """Verifies that current URL is exactly ``url``.
+        """Verifies that the current URL is exactly ``url``.
 
         The ``url`` argument contains the exact url that should exist in browser.
 
         The ``message`` argument can be used to override the default error
         message.
 
-        ``message`` argument new in SeleniumLibrary 3.2.0.
+        ``message`` argument is new in SeleniumLibrary 3.2.0.
         """
         actual = self.get_location()
         if actual != url:
@@ -443,14 +444,14 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def location_should_contain(self, expected, message=None):
-        """Verifies that current URL contains ``expected``.
+        """Verifies that the current URL contains ``expected``.
 
         The ``expected`` argument contains the expected value in url.
 
         The ``message`` argument can be used to override the default error
         message.
 
-        ``message`` argument new in SeleniumLibrary 3.2.0.
+        ``message`` argument is new in SeleniumLibrary 3.2.0.
         """
         actual = self.get_location()
         if expected not in actual:
@@ -481,14 +482,14 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def log_title(self):
-        """Logs and returns the title of current page."""
+        """Logs and returns the title of the current page."""
         title = self.get_title()
         self.info(title)
         return title
 
     @keyword
     def title_should_be(self, title, message=None):
-        """Verifies that current page title equals ``title``.
+        """Verifies that the current page title equals ``title``.
 
         The ``message`` argument can be used to override the default error
         message.
@@ -522,7 +523,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def get_selenium_speed(self):
         """Gets the delay that is waited after each Selenium command.
 
-        The value is returned as a human readable string like ``1 second``.
+        The value is returned as a human-readable string like ``1 second``.
 
         See the `Selenium Speed` section above for more information.
         """
@@ -532,7 +533,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def get_selenium_timeout(self):
         """Gets the timeout that is used by various keywords.
 
-        The value is returned as a human readable string like ``1 second``.
+        The value is returned as a human-readable string like ``1 second``.
 
         See the `Timeout` section above for more information.
         """
@@ -542,7 +543,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def get_selenium_implicit_wait(self):
         """Gets the implicit wait value used by Selenium.
 
-        The value is returned as a human readable string like ``1 second``.
+        The value is returned as a human-readable string like ``1 second``.
 
         See the `Implicit wait` section above for more information.
         """
@@ -553,7 +554,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """Sets the delay that is waited after each Selenium command.
 
         The value can be given as a number that is considered to be
-        seconds or as a human readable string like ``1 second``.
+        seconds or as a human-readable string like ``1 second``.
         The previous value is returned and can be used to restore
         the original value later if needed.
 
@@ -573,7 +574,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """Sets the timeout that is used by various keywords.
 
         The value can be given as a number that is considered to be
-        seconds or as a human readable string like ``1 second``.
+        seconds or as a human-readable string like ``1 second``.
         The previous value is returned and can be used to restore
         the original value later if needed.
 
@@ -595,7 +596,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """Sets the implicit wait value used by Selenium.
 
         The value can be given as a number that is considered to be
-        seconds or as a human readable string like ``1 second``.
+        seconds or as a human-readable string like ``1 second``.
         The previous value is returned and can be used to restore
         the original value later if needed.
 

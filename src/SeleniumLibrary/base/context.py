@@ -63,7 +63,7 @@ class ContextAware(object):
             true, return `None` otherwise.
         :type required: True or False
         :param parent: Optional parent `WebElememt` to search child elements
-            from. By default search starts from the root using `WebDriver`.
+            from. By default, search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
         :return: Found `WebElement` or `None` if element not found and
             `required` is false.
@@ -82,7 +82,7 @@ class ContextAware(object):
         :param tag: Limit searching only to these elements.
         :type tag: str
         :param parent: Optional parent `WebElememt` to search child elements
-            from. By default search starts from the root using `WebDriver`.
+            from. By default, search starts from the root using `WebDriver`.
         :type parent: selenium.webdriver.remote.webelement.WebElement
         :return: list of found `WebElement` or empty if elements are not found.
         :rtype: list[selenium.webdriver.remote.webelement.WebElement]

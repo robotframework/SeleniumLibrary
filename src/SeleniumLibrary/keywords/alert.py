@@ -46,7 +46,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def alert_should_be_present(self, text='', action=ACCEPT, timeout=None):
-        """Verifies that an alert is present and, by default, accepts it.
+        """Verifies that an alert is present and by default, accepts it.
 
         Fails if no alert is present. If ``text`` is a non-empty string,
         then it is used to verify alert's message. The alert is accepted
@@ -57,8 +57,8 @@ class AlertKeywords(LibraryComponent):
         If it is not given, the global default `timeout` is used instead.
 
         ``action`` and ``timeout`` arguments are new in SeleniumLibrary 3.0.
-        In earlier versions the alert was always accepted and timeout was
-        hard coded to one second.
+        In earlier versions, the alert was always accepted and a timeout was
+        hardcoded to one second.
         """
         message = self.handle_alert(action, timeout)
         if text and text != message:
@@ -70,12 +70,12 @@ class AlertKeywords(LibraryComponent):
         """Verifies that no alert is present.
 
         If the alert actually exists, the ``action`` argument determines
-        how it should be handled. By default the alert is accepted, but
+        how it should be handled. By default, the alert is accepted, but
         it can be also dismissed or left open the same way as with the
         `Handle Alert` keyword.
 
         ``timeout`` specifies how long to wait for the alert to appear.
-        By default the alert is not waited at all, but a custom time can
+        By default, is not waited for the alert at all, but a custom time can
         be given if alert may be delayed. See the `time format` section
         for information about the syntax.
 
@@ -92,7 +92,7 @@ class AlertKeywords(LibraryComponent):
     def handle_alert(self, action=ACCEPT, timeout=None):
         """Handles the current alert and returns its message.
 
-        By default the alert is accepted, but this can be controlled
+        By default, the alert is accepted, but this can be controlled
         with the ``action`` argument that supports the following
         case-insensitive values:
 

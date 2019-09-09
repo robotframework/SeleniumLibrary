@@ -52,7 +52,7 @@ class ScreenshotKeywords(LibraryComponent):
 
     @keyword
     def capture_page_screenshot(self, filename='selenium-screenshot-{index}.png'):
-        """Takes screenshot of the current page and embeds it into log file.
+        """Takes a screenshot of the current page and embeds it into a log file.
 
         ``filename`` argument specifies the name of the file to write the
         screenshot into. The directory where screenshots are saved can be
@@ -62,8 +62,8 @@ class ScreenshotKeywords(LibraryComponent):
         written.
 
         Starting from SeleniumLibrary 1.8, if ``filename`` contains marker
-        ``{index}``, it will be automatically replaced with unique running
-        index preventing files to be overwritten. Indices start from 1,
+        ``{index}``, it will be automatically replaced with an unique running
+        index, preventing files to be overwritten. Indices start from 1,
         and how they are represented can be customized using Python's
         [https://docs.python.org/3/library/string.html#format-string-syntax|
         format string syntax].
@@ -95,7 +95,7 @@ class ScreenshotKeywords(LibraryComponent):
 
     @keyword
     def capture_element_screenshot(self, locator, filename='selenium-element-screenshot-{index}.png'):
-        """Captures screenshot from the element identified by ``locator`` and embeds it into log file.
+        """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 
         See `Capture Page Screenshot` for details about ``filename`` argument.
         See the `Locating elements` section for details about the locator
@@ -103,9 +103,9 @@ class ScreenshotKeywords(LibraryComponent):
 
         An absolute path to the created element screenshot is returned.
 
-        Support for capturing the screenshot from a element has limited support
+        Support for capturing the screenshot from an element has limited support
         among browser vendors. Please check the browser vendor driver documentation
-        does the browser support capturing a screenshot from a element.
+        does the browser support capturing a screenshot from an element.
 
         New in SeleniumLibrary 3.3
 
