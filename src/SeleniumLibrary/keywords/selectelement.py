@@ -48,9 +48,9 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def get_selected_list_label(self, locator):
-        """Returns label of selected option from selection list ``locator``.
+        """Returns the label of selected option from selection list ``locator``.
 
-        If there are multiple selected options, label of the first option
+        If there are multiple selected options, the label of the first option
         is returned.
 
         See the `Locating elements` section for details about the locator
@@ -64,7 +64,7 @@ class SelectElementKeywords(LibraryComponent):
         """Returns labels of selected options from selection list ``locator``.
 
         Starting from SeleniumLibrary 3.0, returns an empty list if there
-        are no selections. In earlier versions this caused an error.
+        are no selections. In earlier versions, this caused an error.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -74,9 +74,9 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def get_selected_list_value(self, locator):
-        """Returns value of selected option from selection list ``locator``.
+        """Returns the value of selected option from selection list ``locator``.
 
-        If there are multiple selected options, value of the first option
+        If there are multiple selected options, the value of the first option
         is returned.
 
         See the `Locating elements` section for details about the locator
@@ -90,7 +90,7 @@ class SelectElementKeywords(LibraryComponent):
         """Returns values of selected options from selection list ``locator``.
 
         Starting from SeleniumLibrary 3.0, returns an empty list if there
-        are no selections. In earlier versions this caused an error.
+        are no selections. In earlier versions, this caused an error.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -154,7 +154,7 @@ class SelectElementKeywords(LibraryComponent):
     def page_should_contain_list(self, locator, message=None, loglevel='TRACE'):
         """Verifies selection list ``locator`` is found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator
@@ -166,7 +166,7 @@ class SelectElementKeywords(LibraryComponent):
     def page_should_not_contain_list(self, locator, message=None, loglevel='TRACE'):
         """Verifies selection list ``locator`` is not found from current page.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
 
         See the `Locating elements` section for details about the locator

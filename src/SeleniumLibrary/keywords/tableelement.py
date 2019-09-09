@@ -21,7 +21,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def get_table_cell(self, locator, row, column, loglevel='TRACE'):
-        """Returns contents of table cell.
+        """Returns contents of a table cell.
 
         The table is located using the ``locator`` argument and its cell
         found using ``row`` and ``column``. See the `Locating elements`
@@ -35,7 +35,7 @@ class TableElementKeywords(LibraryComponent):
         All ``<th>`` and ``<td>`` elements anywhere in the table are
         considered to be cells.
 
-        See `Page Should Contain` for explanation about the ``loglevel``
+        See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
         """
         row = int(row)
@@ -80,7 +80,7 @@ class TableElementKeywords(LibraryComponent):
         """Verifies table cell contains text ``expected``.
 
         See `Get Table Cell` that this keyword uses internally for
-        explanation about accepted arguments.
+        an explanation about accepted arguments.
         """
         content = self.get_table_cell(locator, row, column, loglevel)
         if expected not in content:
@@ -106,7 +106,7 @@ class TableElementKeywords(LibraryComponent):
         If a table contains cells that span multiple columns, those merged
         cells count as a single column.
 
-        See `Page Should Contain Element` for explanation about the
+        See `Page Should Contain Element` for an explanation about the
         ``loglevel`` argument.
         """
         element = self._find_by_column(locator, column, expected)
@@ -125,7 +125,7 @@ class TableElementKeywords(LibraryComponent):
         The table is located using the ``locator`` argument. See the
         `Locating elements` section for details about the locator syntax.
 
-        See `Page Should Contain Element` for explanation about the
+        See `Page Should Contain Element` for an explanation about the
         ``loglevel`` argument.
         """
         element = self._find_by_footer(locator, expected)
@@ -144,7 +144,7 @@ class TableElementKeywords(LibraryComponent):
         The table is located using the ``locator`` argument. See the
         `Locating elements` section for details about the locator syntax.
 
-        See `Page Should Contain Element` for explanation about the
+        See `Page Should Contain Element` for an explanation about the
         ``loglevel`` argument.
         """
         element = self._find_by_header(locator, expected)
@@ -168,7 +168,7 @@ class TableElementKeywords(LibraryComponent):
         If a table contains cells that span multiple rows, a match
         only occurs for the uppermost row of those merged cells.
 
-        See `Page Should Contain Element` for explanation about the
+        See `Page Should Contain Element` for an explanation about the
         ``loglevel`` argument.
         """
         element = self._find_by_row(locator, row, expected)
@@ -184,7 +184,7 @@ class TableElementKeywords(LibraryComponent):
         The table is located using the ``locator`` argument. See the
         `Locating elements` section for details about the locator syntax.
 
-        See `Page Should Contain Element` for explanation about the
+        See `Page Should Contain Element` for an explanation about the
         ``loglevel`` argument.
         """
         element = self._find_by_content(locator, expected)
