@@ -53,10 +53,10 @@ class JavaScriptKeywords(LibraryComponent):
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
         arguments] as part of ``code`` argument. The JavaScript code and
         arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` markers
-        and must used exactly with this format. If the Javascript code is
+        and must be used exactly with this format. If the Javascript code is
         first, then the `JAVASCRIPT` marker is optional. The order of
-        `JAVASCRIPT` and `ARGUMENTS` markers can swapped, but if `ARGUMENTS`
-        is first marker, then `JAVASCRIPT` marker is mandatory. It is only
+        `JAVASCRIPT` and `ARGUMENTS` markers can be swapped, but if `ARGUMENTS`
+        is the first marker, then `JAVASCRIPT` marker is mandatory. It is only
         allowed to use `JAVASCRIPT` and `ARGUMENTS` markers only one time in the
         ``code`` argument.
 

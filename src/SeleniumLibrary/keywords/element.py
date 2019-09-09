@@ -39,13 +39,13 @@ class ElementKeywords(LibraryComponent):
 
     @keyword(name='Get WebElements')
     def get_webelements(self, locator):
-        """Returns list of WebElement objects matching the ``locator``.
+        """Returns a list of WebElement objects matching the ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
         Starting from SeleniumLibrary 3.0, the keyword returns an empty
-        list if there are no matching elements. In previous releases the
+        list if there are no matching elements. In previous releases, the
         keyword failed in this case.
         """
         return self.find_elements(locator)
@@ -63,7 +63,7 @@ class ElementKeywords(LibraryComponent):
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False. New in SeleniumLibrary 3.1.
 
-        ``ignore_case`` argument new in SeleniumLibrary 3.1.
+        ``ignore_case`` argument is new in SeleniumLibrary 3.1.
 
         Use `Element Text Should Be` if you want to match the exact text,
         not a substring.
@@ -82,7 +82,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_not_contain(self, locator, expected, message=None, ignore_case=False):
-        """Verifies that element ``locator`` does not contains text ``expected``.
+        """Verifies that element ``locator`` does not contain text ``expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -140,7 +140,7 @@ class ElementKeywords(LibraryComponent):
         contain one or more elements. When limit is a number, page must
         contain same number of elements.
 
-        See `Page Should Contain` for explanation about the ``loglevel``
+        See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
 
         Examples assumes that locator matches to two elements.
@@ -185,7 +185,7 @@ class ElementKeywords(LibraryComponent):
     def page_should_not_contain(self, text, loglevel='TRACE'):
         """Verifies the current page does not contain ``text``.
 
-        See `Page Should Contain` for explanation about the ``loglevel``
+        See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
         """
         if self._page_contains(text):
@@ -201,7 +201,7 @@ class ElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
 
-        See `Page Should Contain` for explanation about ``message`` and
+        See `Page Should Contain` for an explanation about ``message`` and
         ``loglevel`` arguments.
         """
         self.assert_page_not_contains(locator, message=message,
@@ -209,7 +209,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def assign_id_to_element(self, locator, id):
-        """Assigns temporary ``id`` to element specified by ``locator``.
+        """Assigns a temporary ``id`` to the element specified by ``locator``.
 
         This is mainly useful if the locator is complicated and/or slow XPath
         expression and it is needed multiple times. Identifier expires when
@@ -228,7 +228,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_be_disabled(self, locator):
-        """Verifies that element identified with ``locator`` is disabled.
+        """Verifies that element identified by ``locator`` is disabled.
 
         This keyword considers also elements that are read-only to be
         disabled.
@@ -241,7 +241,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_be_enabled(self, locator):
-        """Verifies that element identified with ``locator`` is enabled.
+        """Verifies that element identified by ``locator`` is enabled.
 
         This keyword considers also elements that are read-only to be
         disabled.
@@ -254,7 +254,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_be_focused(self, locator):
-        """Verifies that element identified with ``locator`` is focused.
+        """Verifies that element identified by ``locator`` is focused.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -295,7 +295,7 @@ class ElementKeywords(LibraryComponent):
     def element_should_not_be_visible(self, locator, message=None):
         """Verifies that the element identified by ``locator`` is NOT visible.
 
-        Passes if element does not exists. See `Element Should Be Visible`
+        Passes if the element does not exists. See `Element Should Be Visible`
         for more information about visibility and supported arguments.
         """
         element = self.find_element(locator, required=False)
@@ -311,7 +311,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_be(self, locator, expected, message=None, ignore_case=False):
-        """Verifies that element ``locator`` contains exact text ``expected``.
+        """Verifies that element ``locator`` contains exact the text ``expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -322,7 +322,7 @@ class ElementKeywords(LibraryComponent):
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
 
-        ``ignore_case`` argument new in SeleniumLibrary 3.1.
+        ``ignore_case`` argument is new in SeleniumLibrary 3.1.
 
         Use `Element Should Contain` if a substring match is desired.
         """
@@ -341,7 +341,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_not_be(self, locator, not_expected, message=None, ignore_case=False):
-        """Verifies that element ``locator`` does not contain exact text ``not_expected``.
+        """Verifies that element ``locator`` does not contain exact the text ``not_expected``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -354,7 +354,7 @@ class ElementKeywords(LibraryComponent):
 
         New in SeleniumLibrary 3.1.1
         """
-        self.info("Verifying element '%s' does not contains exact text '%s'."
+        self.info("Verifying element '%s' does not contain exact text '%s'."
                   % (locator, not_expected))
         text = self.find_element(locator).text
         before_not_expected = not_expected
@@ -369,7 +369,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_element_attribute(self, locator, attribute):
-        """Returns value of ``attribute`` from element ``locator``.
+        """Returns the value of ``attribute`` from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -405,7 +405,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_horizontal_position(self, locator):
-        """Returns horizontal position of element identified by ``locator``.
+        """Returns the horizontal position of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -419,7 +419,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_element_size(self, locator):
-        """Returns width and height of element identified by ``locator``.
+        """Returns width and height of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -467,7 +467,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def get_value(self, locator):
-        """Returns the value attribute of element identified by ``locator``.
+        """Returns the value attribute of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -476,7 +476,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def get_text(self, locator):
-        """Returns the text value of element identified by ``locator``.
+        """Returns the text value of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -485,7 +485,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def clear_element_text(self, locator):
-        """Clears the value of text entry element identified by ``locator``.
+        """Clears the value of the text-input-element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -494,7 +494,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def get_vertical_position(self, locator):
-        """Returns vertical position of element identified by ``locator``.
+        """Returns the vertical position of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -508,11 +508,11 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_button(self, locator, modifier=False):
-        """Clicks button identified by ``locator``.
+        """Clicks the button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, buttons are
-        searched using ``id``, ``name`` and ``value``.
+        searched using ``id``, ``name``, and ``value``.
 
         See the `Click Element` keyword for details about the
         ``modifier`` argument.
@@ -572,7 +572,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_element(self, locator, modifier=False):
-        """Click element identified by ``locator``.
+        """Click the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -581,7 +581,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys|Selenium Keys]
         when clicking the element. The `+` can be used as a separator
         for different Selenium Keys. The `CTRL` is internally translated to
-        `CONTROL` key. The ``modifier`` is space and case insensitive, example
+        the `CONTROL` key. The ``modifier`` is space and case insensitive, example
         "alt" and " aLt " are supported formats to
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
         . If ``modifier`` does not match to Selenium Keys, keyword fails.
@@ -615,9 +615,9 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_element_at_coordinates(self, locator, xoffset, yoffset):
-        """Click element ``locator`` at ``xoffset/yoffset``.
+        """Click the element ``locator`` at ``xoffset/yoffset``.
 
-        Cursor is moved and the center of the element and x/y coordinates are
+        The Cursor is moved and the center of the element and x/y coordinates are
         calculated from that point.
 
         See the `Locating elements` section for details about the locator
@@ -640,7 +640,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def double_click_element(self, locator):
-        """Double click element identified by ``locator``.
+        """Double clicks the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -652,7 +652,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def set_focus_to_element(self, locator):
-        """Sets focus to element identified by ``locator``.
+        """Sets the focus to the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -664,7 +664,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def scroll_element_into_view(self, locator):
-        """Scrolls an element identified by ``locator`` into view.
+        """Scrolls the element identified by ``locator`` into view.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -682,7 +682,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def drag_and_drop(self, locator, target):
-        """Drags element identified by ``locator`` into ``target`` element.
+        """Drags the element identified by ``locator`` into the ``target`` element.
 
         The ``locator`` argument is the locator of the dragged element
         and the ``target`` is the locator of the target. See the
@@ -698,12 +698,12 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def drag_and_drop_by_offset(self, locator, xoffset, yoffset):
-        """Drags element identified with ``locator`` by ``xoffset/yoffset``.
+        """Drags the element identified with ``locator`` by ``xoffset/yoffset``.
 
         See the `Locating elements` section for details about the locator
         syntax.
 
-        Element will be moved by ``xoffset`` and ``yoffset``, each of which
+        The element will be moved by ``xoffset`` and ``yoffset``, each of which
         is a negative or positive number specifying the offset.
 
         Example:
@@ -733,7 +733,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def mouse_out(self, locator):
-        """Simulates moving mouse away from the element ``locator``.
+        """Simulates moving the mouse away from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -756,7 +756,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def mouse_over(self, locator):
-        """Simulates hovering mouse over the element ``locator``.
+        """Simulates hovering the mouse over the element ``locator``.
 
         See the `Locating elements` section for details about the locator
         syntax.
@@ -785,14 +785,14 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def open_context_menu(self, locator):
-        """Opens context menu on element identified by ``locator``."""
+        """Opens the context menu on the element identified by ``locator``."""
         element = self.find_element(locator)
         action = ActionChains(self.driver)
         action.context_click(element).perform()
 
     @keyword
     def simulate_event(self, locator, event):
-        """Simulates ``event`` on element identified by ``locator``.
+        """Simulates ``event`` on the element identified by ``locator``.
 
         This keyword is useful if element has ``OnEvent`` handler that
         needs to be explicitly invoked.
@@ -825,7 +825,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def press_keys(self, locator=None, *keys):
-        """Simulates user pressing key(s) to an element or on the active browser.
+        """Simulates the user pressing key(s) to an element or on the active browser.
 
 
         If ``locator`` evaluates as false, see `Boolean arguments` for more
@@ -947,7 +947,7 @@ return !element.dispatchEvent(evt);
         syntax. When using the default locator strategy, links are searched
         using ``id``, ``name``, ``href`` and the link text.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
         """
         self.assert_page_contains(locator, 'link', message, loglevel)
@@ -960,7 +960,7 @@ return !element.dispatchEvent(evt);
         syntax. When using the default locator strategy, links are searched
         using ``id``, ``name``, ``href`` and the link text.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
         """
         self.assert_page_not_contains(locator, 'link', message, loglevel)
@@ -985,7 +985,7 @@ return !element.dispatchEvent(evt);
         syntax. When using the default locator strategy, images are searched
         using ``id``, ``name``, ``src`` and ``alt``.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
         """
         self.assert_page_contains(locator, 'image', message, loglevel)
@@ -998,14 +998,14 @@ return !element.dispatchEvent(evt);
         syntax. When using the default locator strategy, images are searched
         using ``id``, ``name``, ``src`` and ``alt``.
 
-        See `Page Should Contain Element` for explanation about ``message``
+        See `Page Should Contain Element` for an explanation about ``message``
         and ``loglevel`` arguments.
         """
         self.assert_page_not_contains(locator, 'image', message, loglevel)
 
     @keyword
     def get_element_count(self, locator):
-        """Returns number of elements matching ``locator``.
+        """Returns the number of elements matching ``locator``.
 
         If you wish to assert the number of matching elements, use
         `Page Should Contain Element` with ``limit`` argument. Keyword will
@@ -1023,7 +1023,7 @@ return !element.dispatchEvent(evt);
     def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
         """Adds a custom location strategy.
 
-        See `Custom locators` for information how to create and use
+        See `Custom locators` for information on how to create and use
         custom strategies. `Remove Location Strategy` can be used to
         remove a registered strategy.
 
@@ -1038,7 +1038,7 @@ return !element.dispatchEvent(evt);
     def remove_location_strategy(self, strategy_name):
         """Removes a previously added custom location strategy.
 
-        See `Custom locators` for information how to create and use
+        See `Custom locators` for information on how to create and use
         custom strategies.
         """
         self.element_finder.unregister(strategy_name)
