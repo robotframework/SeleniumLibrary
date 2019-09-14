@@ -385,7 +385,7 @@ class FormElementKeywords(LibraryComponent):
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, buttons are
-        searched using ``id``, ``name``, and ``value``.
+        searched using ``id``, ``name`` and ``value``.
         """
         self.assert_page_not_contains(locator, 'button', message, loglevel)
         self.assert_page_not_contains(locator, 'input', message, loglevel)

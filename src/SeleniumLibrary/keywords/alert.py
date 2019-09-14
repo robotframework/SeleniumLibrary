@@ -75,7 +75,7 @@ class AlertKeywords(LibraryComponent):
         `Handle Alert` keyword.
 
         ``timeout`` specifies how long to wait for the alert to appear.
-        By default, is not waited for the alert at all, but a custom time can
+        By default, the alert is not waited at all, but a custom time can
         be given if alert may be delayed. See the `time format` section
         for information about the syntax.
 

@@ -512,7 +512,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, buttons are
-        searched using ``id``, ``name``, and ``value``.
+        searched using ``id``, ``name`` and ``value``.
 
         See the `Click Element` keyword for details about the
         ``modifier`` argument.

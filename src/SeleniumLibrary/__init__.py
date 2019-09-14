@@ -138,7 +138,7 @@ class SeleniumLibrary(DynamicCore):
     Different locator strategies have different pros and cons. Using ids,
     either explicitly like ``id:foo`` or by using the `default locator
     strategy` simply like ``foo``, is recommended when possible, because
-    the syntax is simple and locating elements by id is fast for browsers.
+    the syntax is simple and locating elements by an id is fast for browsers.
     If an element does not have an id or the id is not stable, other
     solutions need to be used. If an element has a unique tag name or class,
     using ``tag``, ``class`` or ``css`` strategy like ``tag:h1``,
@@ -281,12 +281,12 @@ class SeleniumLibrary(DynamicCore):
     https://robocon.io/, https://github.com/robotframework/'
     and 'https://github.com/.
 
-    = Timeouts, waits, and delays =
+    = Timeouts, waits and delays =
 
     This section discusses different ways how to wait for elements to
     appear on web pages and to slow down execution speed otherwise.
     It also explains the `time format` that can be used when setting various
-    timeouts, waits, and delays.
+    timeouts, waits and delays.
 
     == Timeout ==
 
@@ -385,11 +385,11 @@ class SeleniumLibrary(DynamicCore):
 
     = Thread support =
 
-    SeleniumLibrary is not thread-safe. This is mainly due because the underlying
+    SeleniumLibrary is not thread safe. This is mainly due because the underlying
     [https://github.com/SeleniumHQ/selenium/wiki/Frequently-Asked-Questions#q-is-webdriver-thread-safe|
-    Selenium tool is not thread-safe] within one browser/driver instance.
+    Selenium tool is not thread safe] within one browser/driver instance.
     Because of the limitation in the Selenium side, the keywords or the
-    API provided by the SeleniumLibrary is not thread-safe.
+    API provided by the SeleniumLibrary is not thread safe.
 
     = Plugins =
 

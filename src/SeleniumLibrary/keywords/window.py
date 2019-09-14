@@ -56,7 +56,7 @@ class WindowKeywords(LibraryComponent):
         - The ``locator`` can specify an explicit strategy by using the format
           ``strategy:value`` (recommended) or ``strategy=value``. Supported
           strategies are ``name``, ``title``, and ``url``. These matches windows
-          using their name, title, or URL, respectively. Additionally, ``default``
+          using their name, title or URL, respectively. Additionally, ``default``
           can be used to explicitly use the default strategy explained above.
 
         - If the ``locator`` is ``NEW`` (case-insensitive), the latest
@@ -221,13 +221,13 @@ class WindowKeywords(LibraryComponent):
 
         If ``inner`` parameter is set to True, keyword sets the necessary
         window width and height to have the desired HTML DOM _window.innerWidth_
-        and _window.innerHeight_. See `Boolean arguments` for more details on how to set boolean
-        arguments.
-
-        The ``inner`` argument is new since SeleniumLibrary 4.0.
+        and _window.innerHeight_. See `Boolean arguments` for more details on
+        how to set boolean arguments.
 
         This ``inner`` argument does not support Frames. If a frame is selected,
         switch to default before running this.
+
+        The ``inner`` argument is new since SeleniumLibrary 4.0.
 
         Example:
         | `Set Window Size` | 800 | 600 |      |
