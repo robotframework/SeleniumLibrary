@@ -35,7 +35,7 @@ matrix:
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
-    - python: "3.4"
+    - python: "3.5"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
