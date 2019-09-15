@@ -6,6 +6,7 @@ services:
 env:
   global:
     - GRID=False
+    - PYPY=False
 addons:
   apt:
     sources:
@@ -28,13 +29,14 @@ matrix:
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
-    - python: "pypy3.6"
+    - python: "3.7"
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
+        - PYPY=TRUE
     - python: "3.5"
       env:
         - BROWSER=headlesschrome
@@ -58,6 +60,9 @@ matrix:
         - INTERPRETER=python3
         - GRID=true
 before_script:
+  - if [ "$PYPY" == "true" ]; then
+      sudo snap install pypy3 --classic
+    fi
   - echo $INTERPRETER
   - $INTERPRETER --version
   - $INTERPRETER -m pip install .
