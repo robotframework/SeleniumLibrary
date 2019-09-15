@@ -36,7 +36,7 @@ matrix:
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
-        - PYPY=TRUE
+        - PYPY=True
     - python: "3.5"
       env:
         - BROWSER=headlesschrome
@@ -60,7 +60,7 @@ matrix:
         - INTERPRETER=python3
         - GRID=true
 before_script:
-  - if [ "$PYPY" == "true" ]; then
+  - if [ "$PYPY" == "True" ]; then
       sudo snap install pypy3 --classic
     fi
   - echo $INTERPRETER
