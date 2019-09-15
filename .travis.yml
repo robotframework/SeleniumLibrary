@@ -60,6 +60,9 @@ matrix:
         - INTERPRETER=python3
         - GRID=True
 before_script:
+  - if [ "$PYPY" == "True" ]; then
+      sudo snap install pypy3 --classic;
+    fi
   - echo $INTERPRETER
   - $INTERPRETER --version
   - $INTERPRETER -m pip install .
