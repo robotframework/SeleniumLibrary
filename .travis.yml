@@ -63,7 +63,7 @@ before_script:
   - if [ "$PYPY" == "True" ]; then
       sudo snap install pypy3 --classic;
       sudo apt-get install virtualenv;
-      virtualenv -p pypy3 pypy3ve
+      virtualenv -p pypy3 pypy3ve;
       . pypy3ve/bin/activate;
     fi
   - echo $INTERPRETER
