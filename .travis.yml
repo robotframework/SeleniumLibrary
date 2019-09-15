@@ -28,7 +28,7 @@ matrix:
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
-    - python: "pypy3.6-7.0.0"
+    - python: "pypy3.6"
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
