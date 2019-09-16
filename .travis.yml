@@ -1,10 +1,12 @@
 language: python
 sudo: required
-dist: trusty
+dist: bionic
+services:
+  - xvfb
 env:
   global:
-    - JYTHON=false
     - GRID=False
+    - PYPY=False
 addons:
   apt:
     sources:
@@ -14,35 +16,28 @@ addons:
 before_install:
   - CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
   - echo $CDVERSION
-  - wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
+  - wget --no-verbose http://chromedriver.storage.googleapis.com/76.0.3809.68/chromedriver_linux64.zip
   - unzip chromedriver_linux64.zip
   - sudo chmod u+x chromedriver
   - sudo mv chromedriver /usr/bin/
 matrix:
   include:
-    - python: "3.7-dev"
+    - python: "3.7"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
-    - python: "pypy3.5"
+    - python: "3.7"
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=pypy3
-    - python: "3.6"
-      env:
-        - BROWSER=headlesschrome
-        - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=3.1.2
-        - ROBOT_OPTIONS=--dotted
-        - INTERPRETER=python3
-        - JYTHON=true
-    - python: "3.4"
+        - PYPY=True
+    - python: "3.5"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
@@ -56,34 +51,26 @@ matrix:
         - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python2
-    - python: "3.7-dev"
+    - python: "3.7"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
-        - GRID=true
+        - GRID=True
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - if [ "$JYTHON" == "true" ]; then
-      wget -O jython.jar http://search.maven.org/remotecontent?filepath=org/python/jython-installer/2.7.1/jython-installer-2.7.1.jar;
-      java -jar jython.jar -s -d ~/jython;
-      export PATH="~/jython/bin:$PATH";
-      export INTERPRETER=~/jython/bin/jython;
+  - if [ "$PYPY" == "True" ]; then
+      sudo snap install pypy3 --classic;
+      sudo apt-get install virtualenv;
+      virtualenv -p pypy3 pypy3ve;
+      . pypy3ve/bin/activate;
     fi
   - echo $INTERPRETER
   - $INTERPRETER --version
   - $INTERPRETER -m pip install .
-  - if [ "$JYTHON" == "true" ]; then
-      $INTERPRETER -m pip install mockito;
-      python -m pip install requests;
-      python -m pip install robotstatuschecker;
-    else
-      $INTERPRETER -m pip install -r requirements-dev.txt;
-    fi
-  - if [ "$GRID" == "true" ]; then
+  - $INTERPRETER -m pip install -r requirements-dev.txt;
+  - if [ "$GRID" == "True" ]; then
       wget --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar;
       sudo chmod u+x ./selenium-server-standalone.jar;
     fi
