@@ -232,7 +232,7 @@ class FormElementKeywords(LibraryComponent):
         | Input Password | password_field | ${PASSWORD} |
 
         Notice also that SeleniumLibrary logs all the communication with
-        browser drivers using the DEBUG level, and the actual password can
+        browser drivers using the DEBUG level and the actual password can
         be seen there. Additionally, Robot Framework logs all arguments using
         the TRACE level. Tests must thus not be executed using level below
         INFO if the password should not be logged in any format.
