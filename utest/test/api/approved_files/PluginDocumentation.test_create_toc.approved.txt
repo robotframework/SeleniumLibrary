@@ -15,7 +15,7 @@ for more details about WebDriver binary installation.
 
 - `Locating elements`
 - `Browser and Window`
-- `Timeouts, waits and delays`
+- `Timeouts, waits, and delays`
 - `Run-on-failure functionality`
 - `Boolean arguments`
 - `EventFiringWebDriver`
@@ -42,7 +42,7 @@ implicit.
 
 === Default locator strategy ===
 
-By default locators are considered to use the keyword specific default
+By default, locators are considered to use the keyword specific default
 locator strategy. All keywords support finding elements based on ``id``
 and ``name`` attributes, but some keywords support additional attributes
 or other values that make sense in their context. For example, `Click
@@ -70,7 +70,7 @@ Examples:
 
 The explicit locator strategy is specified with a prefix using either
 syntax ``strategy:value`` or ``strategy=value``. The former syntax
-is preferred, because the latter is identical to Robot Framework's
+is preferred because the latter is identical to Robot Framework's
 [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#named-argument-syntax|
 named argument syntax] and that can cause problems. Spaces around
 the separator are ignored, so ``id:foo``, ``id: foo`` and ``id : foo``
@@ -102,7 +102,7 @@ matches some of the explicit strategies.
 Different locator strategies have different pros and cons. Using ids,
 either explicitly like ``id:foo`` or by using the `default locator
 strategy` simply like ``foo``, is recommended when possible, because
-the syntax is simple and locating elements by an id is fast for browsers.
+the syntax is simple and locating elements by id is fast for browsers.
 If an element does not have an id or the id is not stable, other
 solutions need to be used. If an element has a unique tag name or class,
 using ``tag``, ``class`` or ``css`` strategy like ``tag:h1``,
@@ -162,8 +162,8 @@ a WebElement that should be acted on:
 
 This keyword is a reimplementation of the basic functionality of the
 ``id`` locator where ``${browser}`` is a reference to a WebDriver
-instance and ``${locator}`` is name of the locator strategy. To use
-this locator it must first be registered by using the
+instance and ``${locator}`` is the name of the locator strategy. To use
+this locator, it must first be registered by using the
 `Add Location Strategy` keyword:
 
 | `Add Location Strategy` | custom | Custom Locator Strategy |
@@ -178,41 +178,41 @@ See the `Add Location Strategy` keyword for more details.
 
 = Browser and Window =
 
-There is different conseptual meaning when SeleniumLibrary talks
-windows and browsers. This chapter explains those differences.
+There is different conceptual meaning when SeleniumLibrary talks
+about windows or browsers. This chapter explains those differences.
 
 == Browser ==
 
 When `Open Browser` or `Create WebDriver` keyword is called, it
 will create a new Selenium WebDriver instance by using the
 [https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver]
-API. In SeleniumLibrary terms, a new broser is created. It is
+API. In SeleniumLibrary terms, a new browser is created. It is
 possible to start multiple independent browsers (Selenium Webdriver
 instances) at the same time, by calling `Open Browser` or
 `Create WebDriver` multiple times. These browsers are usually
-independent to each other and do not share data like cookies,
-sessions or profiles. Typicall when browser starts, it
-creates a single window in the desktop.
+independent of each other and do not share data like cookies,
+sessions or profiles. Typically when the browser starts, it
+creates a single window which is shown to the user.
 
 == Window ==
 
 Windows are the part of a browser that loads the web site and presents
-it to the user. All content of the site is content of the window.
-Windows are children of a WebDriver instance, in SeleniumLibrary
-WebDriver is referred as browser. One browser may have multiple
-windows. Windows can appear as tabs or as separate windows with
-different position and size. Windows belonning to the same browser
+it to the user. All content of the site is the content of the window.
+Windows are children of a browser. In SeleniumLibrary browser is a
+synonym for WebDriver instance. One browser may have multiple
+windows. Windows can appear as tabs, as separate windows or pop-ups with
+different position and size. Windows belonging to the same browser
 typically share the sessions detail, like cookies. If there is a
 need to separate sessions detail, example login with two different
-users, two browser (Selenium WebDriver instances) must be created.
+users, two browsers (Selenium WebDriver instances) must be created.
 New windows can be opened example by the application under test or
 by example `Execute Javascript` keyword:
 
 | `Execute Javascript`    window.open()    # Opens a new window with location about:blank
 
-In the example in below opens multiple browser and windows,
+The example below opens multiple browsers and windows,
 to demonstrate how the different keywords can be used to interact
-with a browser and windows attached to the browser.
+with browsers, and windows attached to these browsers.
 
 Structure:
 | BrowserA
@@ -227,7 +227,7 @@ Example:
 | `Open Browser`       | https://robotframework.org         | ${BROWSER}       | alias=BrowserA   | # BrowserA with first window is opened.                                       |
 | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA second window is opened.                                        |
 | `Switch Window`      | locator=NEW                        |                  |                  | # Switched to second window in BrowserA                                       |
-| `Go To`              | https://robocon.io                 |                  |                  | # Second window navigates to to robocon site.                                 |
+| `Go To`              | https://robocon.io                 |                  |                  | # Second window navigates to robocon site.                                    |
 | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA third window is opened.                                         |
 | ${handle}            | `Switch Window`                    | locator=NEW      |                  | # Switched to third window in BrowserA                                        |
 | `Go To`              | https://github.com/robotframework/ |                  |                  | # Third windows goes to robot framework github site.                          |
@@ -235,7 +235,7 @@ Example:
 | ${location}          | `Get Location`                     |                  |                  | # ${location} is: https://www.github.com                                      |
 | `Switch Window`      | ${handle}                          | browser=BrowserA |                  | # BrowserA second windows is selected.                                        |
 | ${location}          | `Get Location`                     |                  |                  | # ${location} = https://robocon.io/                                           |
-| @{locations 1}       | `Get Locations`                    |                  |                  | # By default lists locations under the currectly active browser.              |
+| @{locations 1}       | `Get Locations`                    |                  |                  | # By default, lists locations under the currectly active browser (BrowserA).   |
 | @{locations 2}       | `Get Locations`                    |  browser=ALL     |                  | # By using browser=ALL argument keyword list all locations from all browsers. |
 
 The above example, @{locations 1} contains the following items:
@@ -245,12 +245,12 @@ contains the following items: https://robotframework.org/,
 https://robocon.io/, https://github.com/robotframework/'
 and 'https://github.com/.
 
-= Timeouts, waits and delays =
+= Timeouts, waits, and delays =
 
 This section discusses different ways how to wait for elements to
 appear on web pages and to slow down execution speed otherwise.
 It also explains the `time format` that can be used when setting various
-timeouts, waits and delays.
+timeouts, waits, and delays.
 
 == Timeout ==
 
@@ -258,8 +258,8 @@ SeleniumLibrary contains various keywords that have an optional
 ``timeout`` argument that specifies how long these keywords should
 wait for certain events or actions. These keywords include, for example,
 ``Wait ...`` keywords and keywords related to alerts. Additionally
-`Execute Async Javascript`. although it does not have ``timeout``,
-argument, uses timeout to define how long asynchronous JavaScript
+`Execute Async Javascript`. Although it does not have ``timeout``,
+argument, uses a timeout to define how long asynchronous JavaScript
 can run.
 
 The default timeout these keywords use can be set globally either by
@@ -282,7 +282,7 @@ See `time format` below for supported syntax.
 Selenium execution speed can be slowed down globally by using `Set
 Selenium speed` keyword. This functionality is designed to be used for
 demonstrating or debugging purposes. Using it to make sure that elements
-appear on a page is not a good idea, and the above explained timeouts
+appear on a page is not a good idea. The above-explained timeouts
 and waits should be used instead.
 
 See `time format` below for supported syntax.
@@ -298,14 +298,14 @@ the time syntax see the
 = Run-on-failure functionality =
 
 SeleniumLibrary has a handy feature that it can automatically execute
-a keyword if any of its own keywords fails. By default it uses the
+a keyword if any of its own keywords fails. By default, it uses the
 `Capture Page Screenshot` keyword, but this can be changed either by
 using the `Register Keyword To Run On Failure` keyword or with the
 ``run_on_failure`` argument when `importing` the library. It is
 possible to use any keyword from any imported library or resource file.
 
-The run-on-failure functionality can be disabled by using a special
-value ``NOTHING`` or anything considered false (see `Boolean arguments`)
+The run-on-failure functionality can be disabled by using a special value
+``NOTHING`` or anything considered false (see `Boolean arguments`)
 such as ``NONE``.
 
 = Boolean arguments =
@@ -313,8 +313,8 @@ such as ``NONE``.
 Some keywords accept arguments that are handled as Boolean values true or
 false. If such an argument is given as a string, it is considered false if
 it is either empty or case-insensitively equal to ``false``, ``no``, ``off``,
- ``0`` or ``none``. Other strings are considered true regardless their value, and
-other argument types are tested using same
+ ``0`` or ``none``. Other strings are considered true regardless of their value and
+other argument types are tested using the same
 [https://docs.python.org/3/library/stdtypes.html#truth-value-testing|rules as in Python].
 
 True examples:
@@ -343,22 +343,22 @@ The SeleniumLibrary offers support for
 [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
 See the Selenium and SeleniumLibrary
 [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#EventFiringWebDriver|EventFiringWebDriver support]
-documentation for futher details.
+documentation for further details.
 
 EventFiringWebDriver is new in SeleniumLibrary 4.0
 
 = Thread support =
 
-SeleniumLibrary is not thread safe. This is mainly due because the underlying
+SeleniumLibrary is not thread-safe. This is mainly due because the underlying
 [https://github.com/SeleniumHQ/selenium/wiki/Frequently-Asked-Questions#q-is-webdriver-thread-safe|
-Selenium tool is not thread safe] within one browser/driver instance.
+Selenium tool is not thread-safe] within one browser/driver instance.
 Because of the limitation in the Selenium side, the keywords or the
-API provided by the SeleniumLibrary is not thread safe.
+API provided by the SeleniumLibrary is not thread-safe.
 
 = Plugins =
 
 SeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal
-functionality without creating new library or hacking the source code. See
+functionality without creating a new library or hacking the source code. See
 [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#Plugins|plugin API]
 documentation for further details.
 
