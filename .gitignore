@@ -10,6 +10,7 @@ MANIFEST
 *.egg-info
 *.egg
 chromedriver.log
+.pytest_cache
 
 dist
 build
