@@ -8,7 +8,7 @@ Before running the test, install the dependencies::
 
 Unit Tests
 ----------
-Units tests are written by using the Python default `unittest`_ framework.
+Units tests are written by using the `pytest`_  framework.
 Unit test can be executed by running::
 
     python utest/run.py
@@ -33,7 +33,7 @@ must handled with `try/except ImportError:` and skipped with:
 imported from `from robot.utils import JYTHON`
 
 
-.. _unittest: https://docs.python.org/3/library/unittest.html
+.. _pytest: https://docs.pytest.org/en/latest/
 .. _ApprovalTests: https://github.com/approvals/ApprovalTests.Python
 .. _ApprovalTests blog post: http://blog.approvaltests.com/
 .. _Jython: http://www.jython.org/

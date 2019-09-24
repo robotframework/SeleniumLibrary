@@ -4,10 +4,12 @@ import os
 import shutil
 import sys
 from os.path import abspath, dirname, join
-from unittest import defaultTestLoader, TextTestRunner
+
+from pytest import main as py_main
 
 
 CURDIR = dirname(abspath(__file__))
+SRC = join(CURDIR, os.pardir, 'src')
 
 
 def remove_output_dir():
@@ -18,13 +20,12 @@ def remove_output_dir():
 
 
 def run_unit_tests():
-    sys.path.insert(0, join(CURDIR, os.pardir, 'src'))
+    sys.path.insert(0, SRC)
     try:
-        suite = defaultTestLoader.discover(join(CURDIR, 'test'), 'test_*.py')
-        result = TextTestRunner().run(suite)
+        result = py_main(['--rootdir=%s' % CURDIR])
     finally:
         sys.path.pop(0)
-    return min(len(result.failures) + len(result.errors), 255)
+    return result
 
 
 if __name__ == '__main__':
