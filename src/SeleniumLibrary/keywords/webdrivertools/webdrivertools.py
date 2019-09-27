@@ -52,7 +52,7 @@ class WebDriverCreator(object):
         'htmlunitwithjs': 'htmlunit_with_js',
         'android': 'android',
         'iphone': 'iphone',
-        'chromium_based': 'chromium_based'
+        'chromium_app': 'chromium_app'
     }
 
     def __init__(self, log_dir):
@@ -74,7 +74,7 @@ class WebDriverCreator(object):
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url, profile_dir,
                                    options=options, service_log_path=service_log_path)
-        elif (creation_method == self.create_chromium_based):
+        elif (creation_method == self.create_chromium_app):
             return creation_method(app_binary, debug_port, desired_capabilities,
                                    remote_url, options, service_log_path)
         return creation_method(desired_capabilities, remote_url, options=options,
@@ -127,7 +127,7 @@ class WebDriverCreator(object):
         options.set_headless()
         return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
 
-    def create_chromium_based(self, app_binary, debug_port, desired_capabilities, remote_url,
+    def create_chromium_app(self, app_binary, debug_port, desired_capabilities, remote_url,
                               options=None, service_log_path=None):
         if not options:
             options = webdriver.ChromeOptions()

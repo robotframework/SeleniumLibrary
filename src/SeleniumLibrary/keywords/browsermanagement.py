@@ -254,11 +254,11 @@ class BrowserManagementKeywords(LibraryComponent):
                           alias=None, desired_capabilities=None,
                           options=None, service_log_path=None):
         """
-        Similar to Open Browser except opens a specified chromium_based application
+        Similar to Open Browser except opens a specified chromium_app application
         instead of a browser. The desired_capabilities, remote_url, alias,
         options, and service_log_path arguments are the same and are all optional.
 
-        ``app_binary`` is the path to the desired chromium_based desktop
+        ``app_binary`` is the path to the desired chromium_app desktop
         application. This includes Qt-based applications with QtWebEngine content
         from Qt versions >= 5.6.
 
@@ -269,7 +269,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | Open Chromium App | /path/to/custom/application | 9001 |
         """
         return self._make_new_browser(url='',
-                                      browser='chromium_based',
+                                      browser='chromium_app',
                                       remote_url=remote_url,
                                       desired_capabilities=desired_capabilities,
                                       options=options, alias=alias,
@@ -281,7 +281,7 @@ class BrowserManagementKeywords(LibraryComponent):
                           remote_url=False, desired_capabilities=None,
                           ff_profile_dir=None, options=None, service_log_path=None,
                           app_binary=None, debug_port=None):
-        if browser == 'chromium_based':
+        if browser == 'chromium_app':
             if is_truthy(app_binary) and is_truthy(debug_port):
                 if is_truthy(remote_url):
                     self.info("Opening chromium-based application '{}' "
