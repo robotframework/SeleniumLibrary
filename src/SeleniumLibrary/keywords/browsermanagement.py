@@ -305,7 +305,7 @@ class BrowserManagementKeywords(LibraryComponent):
                                    debug_port)
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
-        if is_truthy(url):
+        if browser != 'chromium_app':
             try:
                 driver.get(url)
             except Exception:
