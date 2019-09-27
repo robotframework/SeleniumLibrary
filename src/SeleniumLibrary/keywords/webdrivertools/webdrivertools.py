@@ -51,7 +51,8 @@ class WebDriverCreator(object):
         'htmlunit': 'htmlunit',
         'htmlunitwithjs': 'htmlunit_with_js',
         'android': 'android',
-        'iphone': 'iphone'
+        'iphone': 'iphone',
+        'chromium_based': 'chromium_based'
     }
 
     def __init__(self, log_dir):
@@ -59,7 +60,8 @@ class WebDriverCreator(object):
         self.selenium_options = SeleniumOptions()
 
     def create_driver(self, browser, desired_capabilities, remote_url,
-                      profile_dir=None, options=None, service_log_path=None):
+                      profile_dir=None, options=None, service_log_path=None,
+                      app_binary=None, debug_port=None):
         browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
@@ -72,6 +74,9 @@ class WebDriverCreator(object):
                 or creation_method == self.create_headless_firefox):
             return creation_method(desired_capabilities, remote_url, profile_dir,
                                    options=options, service_log_path=service_log_path)
+        elif (creation_method == self.create_chromium_based):
+            return creation_method(app_binary, debug_port, desired_capabilities, options,
+                                   service_log_path)
         return creation_method(desired_capabilities, remote_url, options=options,
                                service_log_path=service_log_path)
 
@@ -121,6 +126,17 @@ class WebDriverCreator(object):
         # Can be changed to options.headless = True when minimum Selenium version is 3.12.0 or greater.
         options.set_headless()
         return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
+
+    def create_chromium_based(self, app_binary, debug_port, desired_capabilities, options=None,
+                              service_log_path=None):
+        """
+        TODO: Incorporate remote execution
+        """
+        if not options:
+            options = webdriver.ChromeOptions()
+        options.binary_location = app_binary
+        options.add_argument("remote-debugging-port={}".format(debug_port))
+        return self.create_chrome(desired_capabilities, options, service_log_path, remote_url=None)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)

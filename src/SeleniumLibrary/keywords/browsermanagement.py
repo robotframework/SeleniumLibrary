@@ -79,6 +79,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | PhantomJS         | phantomjs                |
         | HTMLUnit          | htmlunit                 |
         | HTMLUnit with Javascript | htmlunitwithjs    |
+        | Chromium-Based App | chromium_based          |
 
         To be able to actually use one of these browsers, you need to have
         a matching Selenium browser driver available. See the
@@ -249,25 +250,50 @@ class BrowserManagementKeywords(LibraryComponent):
                                       desired_capabilities, ff_profile_dir,
                                       options, service_log_path)
 
+    @keyword
+    def open_chromium_app(self, app_binary, debug_port, desired_capabilities=None,
+                          options=None, service_log_path=None):
+        """
+        Opens a chromium-based application instead of a browser
+        """
+        return self._make_new_browser(url='',
+                                      browser='chromium_based',
+                                      desired_capabilities=desired_capabilities,
+                                      options=options,
+                                      service_log_path=service_log_path,
+                                      app_binary=app_binary,
+                                      debug_port=debug_port)
+
     def _make_new_browser(self, url, browser='firefox', alias=None,
                           remote_url=False, desired_capabilities=None,
-                          ff_profile_dir=None, options=None, service_log_path=None):
-        if is_truthy(remote_url):
+                          ff_profile_dir=None, options=None, service_log_path=None,
+                          app_binary=None, debug_port=None):
+        if browser == 'chromium_based':
+            if is_truthy(app_binary) and is_truthy(debug_port):
+                self.info("Opening chromium-based application '{}'"
+                          .format(app_binary))
+            else:
+                self.info("Need to have an application binary and debug port "
+                          "for chromium-based apps")
+                raise
+        elif is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
         else:
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         driver = self._make_driver(browser, desired_capabilities,
                                    ff_profile_dir, remote_url,
-                                   options, service_log_path)
+                                   options, service_log_path, app_binary,
+                                   debug_port)
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
-        try:
-            driver.get(url)
-        except Exception:
-            self.debug("Opened browser with session id %s but failed "
-                       "to open url '%s'." % (driver.session_id, url))
-            raise
+        if is_truthy(url):
+            try:
+                driver.get(url)
+            except Exception:
+                self.debug("Opened browser with session id %s but failed "
+                        "to open url '%s'." % (driver.session_id, url))
+                raise
         self.debug('Opened browser with session id %s.' % driver.session_id)
         return index
 
@@ -627,10 +653,11 @@ class BrowserManagementKeywords(LibraryComponent):
         self.driver.implicitly_wait(timestr_to_secs(value))
 
     def _make_driver(self, browser, desired_capabilities=None, profile_dir=None,
-                     remote=None, options=None, service_log_path=None):
+                     remote=None, options=None, service_log_path=None, app_binary=None):
         driver = WebDriverCreator(self.log_dir).create_driver(
             browser=browser, desired_capabilities=desired_capabilities, remote_url=remote,
-            profile_dir=profile_dir, options=options, service_log_path=service_log_path)
+            profile_dir=profile_dir, options=options, service_log_path=service_log_path,
+            app_binary=app_binary)
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:
