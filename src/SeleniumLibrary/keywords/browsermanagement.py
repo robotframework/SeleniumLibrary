@@ -653,11 +653,12 @@ class BrowserManagementKeywords(LibraryComponent):
         self.driver.implicitly_wait(timestr_to_secs(value))
 
     def _make_driver(self, browser, desired_capabilities=None, profile_dir=None,
-                     remote=None, options=None, service_log_path=None, app_binary=None):
+                     remote=None, options=None, service_log_path=None,
+                     app_binary=None, debug_port=None):
         driver = WebDriverCreator(self.log_dir).create_driver(
             browser=browser, desired_capabilities=desired_capabilities, remote_url=remote,
             profile_dir=profile_dir, options=options, service_log_path=service_log_path,
-            app_binary=app_binary)
+            app_binary=app_binary, debug_port=debug_port)
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:
