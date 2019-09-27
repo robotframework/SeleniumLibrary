@@ -250,12 +250,13 @@ class BrowserManagementKeywords(LibraryComponent):
                                       options, service_log_path)
 
     @keyword
-    def open_chromium_app(self, app_binary, debug_port, desired_capabilities=None,
+    def open_chromium_app(self, app_binary, debug_port, remote_url=False,
+                          alias=None, desired_capabilities=None,
                           options=None, service_log_path=None):
         """
         Similar to Open Browser except opens a specified chromium_based application
-        instead of a browser. The desired_capabilities, options, and service_log_path
-        arguments are the same and are all optional.
+        instead of a browser. The desired_capabilities, remote_url, alias,
+        options, and service_log_path arguments are the same and are all optional.
 
         ``app_binary`` is the path to the desired chromium_based desktop
         application. This includes Qt-based applications with QtWebEngine content
@@ -269,8 +270,9 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         return self._make_new_browser(url='',
                                       browser='chromium_based',
+                                      remote_url=remote_url,
                                       desired_capabilities=desired_capabilities,
-                                      options=options,
+                                      options=options, alias=alias,
                                       service_log_path=service_log_path,
                                       app_binary=app_binary,
                                       debug_port=debug_port)
@@ -281,8 +283,13 @@ class BrowserManagementKeywords(LibraryComponent):
                           app_binary=None, debug_port=None):
         if browser == 'chromium_based':
             if is_truthy(app_binary) and is_truthy(debug_port):
-                self.info("Opening chromium-based application '{}'"
-                          .format(app_binary))
+                if is_truthy(remote_url):
+                    self.info("Opening chromium-based application '{}' "
+                              "on port '{}' through remote server at '{}'."
+                              .format(app_binary, debug_port, remote_url))
+                else:
+                    self.info("Opening chromium-based application '{}' "
+                              "on port '{}'.".format(app_binary, debug_port))
             else:
                 self.info("Need to have an application binary and debug port "
                           "for chromium-based apps")

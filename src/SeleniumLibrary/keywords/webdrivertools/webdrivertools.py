@@ -75,8 +75,8 @@ class WebDriverCreator(object):
             return creation_method(desired_capabilities, remote_url, profile_dir,
                                    options=options, service_log_path=service_log_path)
         elif (creation_method == self.create_chromium_based):
-            return creation_method(app_binary, debug_port, desired_capabilities, options,
-                                   service_log_path)
+            return creation_method(app_binary, debug_port, desired_capabilities,
+                                   remote_url, options, service_log_path)
         return creation_method(desired_capabilities, remote_url, options=options,
                                service_log_path=service_log_path)
 
@@ -127,16 +127,13 @@ class WebDriverCreator(object):
         options.set_headless()
         return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
 
-    def create_chromium_based(self, app_binary, debug_port, desired_capabilities, options=None,
-                              service_log_path=None):
-        """
-        TODO: Incorporate remote execution
-        """
+    def create_chromium_based(self, app_binary, debug_port, desired_capabilities, remote_url,
+                              options=None, service_log_path=None):
         if not options:
             options = webdriver.ChromeOptions()
         options.binary_location = app_binary
         options.add_argument("remote-debugging-port={}".format(debug_port))
-        return self.create_chrome(desired_capabilities, None, options, service_log_path)
+        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
