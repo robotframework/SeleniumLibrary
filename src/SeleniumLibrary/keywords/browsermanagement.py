@@ -79,7 +79,6 @@ class BrowserManagementKeywords(LibraryComponent):
         | PhantomJS         | phantomjs                |
         | HTMLUnit          | htmlunit                 |
         | HTMLUnit with Javascript | htmlunitwithjs    |
-        | Chromium-Based App | chromium_based          |
 
         To be able to actually use one of these browsers, you need to have
         a matching Selenium browser driver available. See the
@@ -254,7 +253,19 @@ class BrowserManagementKeywords(LibraryComponent):
     def open_chromium_app(self, app_binary, debug_port, desired_capabilities=None,
                           options=None, service_log_path=None):
         """
-        Opens a chromium-based application instead of a browser
+        Similar to Open Browser except opens a specified chromium_based application
+        instead of a browser. The desired_capabilities, options, and service_log_path
+        arguments are the same and are all optional.
+
+        The 'app_binary' argument is the path to the desired chromium_based desktop
+        application. This includes Qt-based applications with QtWebEngine content
+        from Qt versions >= 5.6.
+
+        'debug-port' - In order to hook into the process, ChromeDriver requires
+        that a --remote-debugging-port is specified.
+
+        Examples:
+        | Open Chromium App | /path/to/custom/application | 9001 |
         """
         return self._make_new_browser(url='',
                                       browser='chromium_based',
