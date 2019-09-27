@@ -136,7 +136,7 @@ class WebDriverCreator(object):
             options = webdriver.ChromeOptions()
         options.binary_location = app_binary
         options.add_argument("remote-debugging-port={}".format(debug_port))
-        return self.create_chrome(desired_capabilities, options, service_log_path, remote_url=None)
+        return self.create_chrome(desired_capabilities, None, options, service_log_path)
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)
