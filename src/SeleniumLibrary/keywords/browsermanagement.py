@@ -257,11 +257,11 @@ class BrowserManagementKeywords(LibraryComponent):
         instead of a browser. The desired_capabilities, options, and service_log_path
         arguments are the same and are all optional.
 
-        The 'app_binary' argument is the path to the desired chromium_based desktop
+        ``app_binary`` is the path to the desired chromium_based desktop
         application. This includes Qt-based applications with QtWebEngine content
         from Qt versions >= 5.6.
 
-        'debug-port' - In order to hook into the process, ChromeDriver requires
+        ``debug-port`` - In order to hook into the process, ChromeDriver requires
         that a --remote-debugging-port is specified.
 
         Examples:
