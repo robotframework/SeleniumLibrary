@@ -639,6 +639,28 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
+    def click_element_native(self, locator):
+        """Click the element ``locator`` using native mouse click (ActionChain).
+
+        The Cursor is moved and the center of the element and a click is issued.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+        """
+        self.info("Clicking element '%s'" % (locator))
+        element = self.find_element(locator)
+        action = ActionChains(self.driver)
+        # Try/except can be removed when minimum required Selenium is 4.0 or greater.
+        try:
+            action.move_to_element(element)
+        except AttributeError:
+            self.debug('Workaround for Selenium 3 bug.')
+            element = element.wrapped_element
+            action.move_to_element(element)
+        action.click()
+        action.perform()
+        
+    @keyword
     def double_click_element(self, locator):
         """Double clicks the element identified by ``locator``.
 
