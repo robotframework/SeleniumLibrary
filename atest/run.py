@@ -214,7 +214,7 @@ if __name__ == '__main__':
                         default='python',
                         help=textwrap.dedent("""\
                             Any Python interpreter supported by the library.
-                            E.g. `python`, `jython` or `c:\\Python27\\python.exe`.
+                            E.g. `python`, `jython` or `c:\\Python37\\python.exe`.
                             By default set to `python`."""))
     parser.add_argument('browser',
                         help=('Any browser supported by the library '

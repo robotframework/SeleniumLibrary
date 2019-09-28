@@ -20,7 +20,6 @@ https://github.com/robotframework/PythonLibCore
 """
 
 import inspect
-import sys
 
 try:
     from robot.api.deco import keyword
@@ -34,8 +33,6 @@ except ImportError:  # Support RF < 2.9
             return func
         return decorator
 
-
-PY2 = sys.version_info < (3,)
 
 __version__ = '1.0.1.dev1'
 
@@ -85,10 +82,7 @@ class HybridCore:
                              .format(type(self).__name__, name))
 
     def __dir__(self):
-        if PY2:
-            my_attrs = dir(type(self)) + list(self.__dict__)
-        else:
-            my_attrs = super().__dir__()
+        my_attrs = super().__dir__()
         return sorted(set(my_attrs) | set(self.attributes))
 
     def get_keyword_names(self):
@@ -112,12 +106,8 @@ class DynamicCore(HybridCore):
         return args
 
     def _get_arg_spec(self, kw):
-        if PY2:
-            spec = inspect.getargspec(kw)
-            keywords = spec.keywords
-        else:
-            spec = inspect.getfullargspec(kw)
-            keywords = spec.varkw
+        spec = inspect.getfullargspec(kw)
+        keywords = spec.varkw
         args = spec.args[1:] if inspect.ismethod(kw) else spec.args  # drop self
         defaults = spec.defaults or ()
         nargs = len(args) - len(defaults)

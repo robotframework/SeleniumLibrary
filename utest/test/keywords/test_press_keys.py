@@ -14,7 +14,6 @@ except ImportError:
         raise
 
 from SeleniumLibrary.keywords import ElementKeywords
-from SeleniumLibrary.utils import PY3
 
 
 class ElementKeywordsPessKeys(unittest.TestCase):
@@ -45,7 +44,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_keys('alt'))
         results.append(self.element_keywords._parse_keys('IS ALT HERE'))
         results.append(self.element_keywords._parse_keys('IS', 'ALT', 'HERE'))
-        results = self.result_formatter(results)
         verify_all('index', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -56,7 +54,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_aliases('CONTROL'))
         results.append(self.element_keywords._parse_aliases('BB'))
         results.append(self.element_keywords._parse_aliases('END'))
-        results = self.result_formatter(results)
         verify_all('Alias testing', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -71,7 +68,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._separate_key('+'))
         results.append(self.element_keywords._separate_key('++'))
         results.append(self.element_keywords._separate_key('+++'))
-        results = self.result_formatter(results)
         verify_all('Separate key', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -81,13 +77,4 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._convert_special_keys(['AA', 'CCC']))
         results.append(self.element_keywords._convert_special_keys(['ALT', 'B']))
         results.append(self.element_keywords._convert_special_keys(['ALT', 'CTRL']))
-        results = self.result_formatter(results)
         verify_all('To Selenium Special Keys', results, reporter=self.reporter)
-
-    def result_formatter(self, results):
-        if PY3:
-            return results
-        for index, result in enumerate(results):
-            result = str(result)
-            results[index] = result.replace("=u'", "='")
-        return results

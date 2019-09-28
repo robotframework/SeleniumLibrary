@@ -20,7 +20,6 @@
 # also support string NONE as Python False. Also string 0 is evaluated
 # as False in RF 3.1 but not in 3.0.4.
 from robot.utils import is_string
-from robot.utils import PY3
 
 
 def is_truthy(item):

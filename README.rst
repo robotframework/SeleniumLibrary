@@ -10,11 +10,10 @@ SeleniumLibrary_ is a web testing library for `Robot Framework`_ that
 utilizes the Selenium_ tool internally. The project is hosted on GitHub_
 and downloads can be found from PyPI_.
 
-SeleniumLibrary works with Selenium 3. It supports Python 2.7 as well as
-Python 3.4 or newer. In addition to the normal Python_ interpreter, it
-works also with PyPy_ and Jython_. Unfortunately Selenium_ is not
-currently supported by IronPython_ and thus this library does not work with
-IronPython either.
+SeleniumLibrary works with Selenium 3. It supports Python 3.5 or newer.
+In addition to the normal Python_ interpreter, it works also with PyPy_
+and Jython_. Unfortunately Selenium_ is not currently supported by
+IronPython_ and thus this library does not work with IronPython either.
 
 SeleniumLibrary is based on the `old SeleniumLibrary`_ that was forked to
 Selenium2Library_ and then later renamed back to SeleniumLibrary.
@@ -220,6 +219,7 @@ Selenium2Library 1.8.0 and earlier  Selenium 2 and 3            Python 2.6-2.7  
 SeleniumLibrary 3.0 and 3.1         Selenium 2 and 3            Python 2.7 and 3.3+         Selenium2Library renamed and with Python 3 support and new architecture.
 SeleniumLibrary 3.2                 Selenium 3                  Python 2.7 and 3.4+         Drops Selenium 2 support.
 SeleniumLibrary 4.0                 Selenium 3                  Python 2.7 and 3.4+         Plugin API and support for event friging webdriver.
+SeleniumLibrary 4.1                 Selenium 3                  Python 3.5+                 Drops Python 2 and 3.4 support.
 Selenium2Library 3.0                Depends on SeleniumLibrary  Depends on SeleniumLibrary  Thin wrapper for SeleniumLibrary 3.0 to ease transition.
 ==================================  ==========================  ==========================  ===============
 
