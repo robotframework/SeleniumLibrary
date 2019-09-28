@@ -12,8 +12,11 @@ Development Status :: 5 - Production/Stable
 License :: OSI Approved :: Apache Software License
 Operating System :: OS Independent
 Programming Language :: Python
-Programming Language :: Python :: 2
 Programming Language :: Python :: 3
+Programming Language :: Python :: 3.5
+Programming Language :: Python :: 3.6
+Programming Language :: Python :: 3.7
+Programming Language :: Python :: 3 :: Only
 Topic :: Software Development :: Testing
 Framework :: Robot Framework
 Framework :: Robot Framework :: Library
@@ -36,6 +39,7 @@ setup(
     license          = 'Apache License 2.0',
     keywords         = 'robotframework testing testautomation selenium webdriver web',
     platforms        = 'any',
+    python_requires = '>=3.5',
     classifiers      = CLASSIFIERS,
     install_requires = REQUIREMENTS,
     package_dir      = {'': 'src'},
