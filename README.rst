@@ -27,8 +27,8 @@ different versions and the overall project history.
 .. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
    :target: https://www.apache.org/licenses/LICENSE-2.0
 
-.. image:: https://api.travis-ci.org/robotframework/SeleniumLibrary.png
-   :target: https://travis-ci.org/robotframework/SeleniumLibrary
+.. image:: https://travis-ci.org/robotframework/SeleniumLibrary.svg?branch=master
+    :target: https://travis-ci.org/robotframework/SeleniumLibrary
 
 Keyword documentation
 ---------------------
