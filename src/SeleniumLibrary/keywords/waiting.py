@@ -233,7 +233,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: text in self.find_element(locator).text,
-            "Element '%s' did not get text '%s' in <TIMEOUT>." % (locator, text),
+            "Element '{}' did not get text '{}' in <TIMEOUT>.".format(locator, text),
             timeout, error
         )
 
@@ -251,7 +251,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: text not in self.find_element(locator).text,
-            "Element '%s' still had text '%s' after <TIMEOUT>." % (locator, text),
+            "Element '{}' still had text '{}' after <TIMEOUT>.".format(locator, text),
             timeout, error
         )
 

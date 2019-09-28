@@ -265,7 +265,7 @@ class FormElementKeywords(LibraryComponent):
         Disabling the file upload the Selenium Grid node and the `clear`
         argument are new in SeleniumLibrary 4.0
         """
-        self.info("Typing text '%s' into text field '%s'." % (text, locator))
+        self.info("Typing text '{}' into text field '{}'.".format(text, locator))
         self._input_text_into_text_field(locator, text, clear)
 
     @keyword
@@ -307,7 +307,7 @@ class FormElementKeywords(LibraryComponent):
                 message = "Text field '%s' should have contained text '%s' "\
                           "but it contained '%s'." % (locator, expected, actual)
             raise AssertionError(message)
-        self.info("Text field '%s' contains text '%s'." % (locator, expected))
+        self.info("Text field '{}' contains text '{}'.".format(locator, expected))
 
     @keyword
     def textfield_value_should_be(self, locator, expected, message=None):
@@ -324,7 +324,7 @@ class FormElementKeywords(LibraryComponent):
                 message = "Value of text field '%s' should have been '%s' "\
                           "but was '%s'." % (locator, expected, actual)
             raise AssertionError(message)
-        self.info("Content of text field '%s' is '%s'." % (locator, expected))
+        self.info("Content of text field '{}' is '{}'.".format(locator, expected))
 
     @keyword
     def textarea_should_contain(self, locator, expected, message=None):
@@ -341,7 +341,7 @@ class FormElementKeywords(LibraryComponent):
                 message = "Text area '%s' should have contained text '%s' " \
                           "but it had '%s'." % (locator, expected, actual)
             raise AssertionError(message)
-        self.info("Text area '%s' contains text '%s'." % (locator, expected))
+        self.info("Text area '{}' contains text '{}'.".format(locator, expected))
 
     @keyword
     def textarea_value_should_be(self, locator, expected, message=None):
@@ -358,7 +358,7 @@ class FormElementKeywords(LibraryComponent):
                 message = "Text area '%s' should have had text '%s' " \
                           "but it had '%s'." % (locator, expected, actual)
             raise AssertionError(message)
-        self.info("Content of text area '%s' is '%s'." % (locator, expected))
+        self.info("Content of text area '{}' is '{}'.".format(locator, expected))
 
     @keyword
     def page_should_contain_button(self, locator, message=None, loglevel='TRACE'):

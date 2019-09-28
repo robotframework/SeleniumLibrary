@@ -78,7 +78,7 @@ class ElementKeywords(LibraryComponent):
                 message = "Element '%s' should have contained text '%s' but "\
                           "its text was '%s'." % (locator, expected_before, actual_before)
             raise AssertionError(message)
-        self.info("Element '%s' contains text '%s'." % (locator, expected_before))
+        self.info("Element '{}' contains text '{}'.".format(locator, expected_before))
 
     @keyword
     def element_should_not_contain(self, locator, expected, message=None, ignore_case=False):
@@ -222,7 +222,7 @@ class ElementKeywords(LibraryComponent):
         | `Assign ID to Element` | //ul[@class='example' and ./li[contains(., 'Stuff')]] | my id |
         | `Page Should Contain Element` | my id |
         """
-        self.info("Assigning temporary id '%s' to element '%s'." % (id, locator))
+        self.info("Assigning temporary id '{}' to element '{}'.".format(id, locator))
         element = self.find_element(locator)
         self.driver.execute_script("arguments[0].id = '%s';" % id, element)
 
@@ -401,7 +401,7 @@ class ElementKeywords(LibraryComponent):
                 message = ("Element '%s' attribute should have value '%s' but "
                            "its value was '%s'." % (locator, expected, current_expected))
             raise AssertionError(message)
-        self.info("Element '%s' attribute '%s' contains value '%s'." % (locator, attribute, expected))
+        self.info("Element '{}' attribute '{}' contains value '{}'.".format(locator, attribute, expected))
 
     @keyword
     def get_horizontal_position(self, locator):
@@ -600,7 +600,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, [None, None], modifier)
 
     def _click_with_modifier(self, locator, tag, modifier):
-        self.info("Clicking %s '%s' with %s." % (tag if tag[0] else 'element', locator, modifier))
+        self.info("Clicking {} '{}' with {}.".format(tag if tag[0] else 'element', locator, modifier))
         modifier = self.parse_modifier(modifier)
         action = ActionChains(self.driver)
         for item in modifier:
@@ -874,7 +874,7 @@ return !element.dispatchEvent(evt);
         """
         parsed_keys = self._parse_keys(*keys)
         if is_truthy(locator):
-            self.info('Sending key(s) %s to %s element.' % (keys, locator))
+            self.info('Sending key(s) {} to {} element.'.format(keys, locator))
         else:
             self.info('Sending key(s) %s to page.' % str(keys))
         self._press_keys(locator, parsed_keys)
@@ -899,7 +899,7 @@ return !element.dispatchEvent(evt);
             actions.perform()
 
     def _press_keys_normal_keys(self, actions, element, key):
-        self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
+        self.info('Sending key{} {}'.format(plural_or_not(key.converted), key.converted))
         if element:
             actions.send_keys_to_element(element, key.converted)
         else:

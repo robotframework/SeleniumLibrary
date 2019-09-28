@@ -180,9 +180,9 @@ class ElementFinder(ContextAware):
         xpath_criteria = escape_xpath_value(criteria)
         xpath_tag = tag if tag is not None else '*'
         xpath_constraints = self._get_xpath_constraints(constraints)
-        xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
+        xpath_searchers = ["{}={}".format(attr, xpath_criteria) for attr in key_attrs]
         xpath_searchers.extend(self._get_attrs_with_url(key_attrs, criteria))
-        xpath = "//%s[%s%s(%s)]" % (
+        xpath = "//{}[{}{}({})]".format(
             xpath_tag,
             ' and '.join(xpath_constraints),
             ' and ' if xpath_constraints else '',
@@ -197,9 +197,9 @@ class ElementFinder(ContextAware):
 
     def _get_xpath_constraint(self, name, value):
         if isinstance(value, list):
-            return "@%s[. = '%s']" % (name, "' or . = '".join(value))
+            return "@{}[. = '{}']".format(name, "' or . = '".join(value))
         else:
-            return "@%s='%s'" % (name, value)
+            return "@{}='{}'".format(name, value)
 
     def _get_tag_and_constraints(self, tag):
         if tag is None:
@@ -276,7 +276,7 @@ class ElementFinder(ContextAware):
                 if url is None or xpath_url is None:
                     url = self._get_base_url() + "/" + criteria
                     xpath_url = escape_xpath_value(url)
-                attrs.append("%s=%s" % (attr, xpath_url))
+                attrs.append("{}={}".format(attr, xpath_url))
         return attrs
 
     def _get_base_url(self):

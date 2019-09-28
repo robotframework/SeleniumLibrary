@@ -10,4 +10,4 @@ class PluginWithArgs(LibraryComponent):
 
         @keyword
         def return_arg1_arg2_as_string(self):
-            return '%s %s' % (self.arg1, self.arg2)
+            return '{} {}'.format(self.arg1, self.arg2)

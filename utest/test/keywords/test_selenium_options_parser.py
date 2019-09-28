@@ -144,8 +144,8 @@ class SeleniumOptionsParserTests(unittest.TestCase):
             return method(arg)
         except Exception as error:
             if full:
-                return '%s %s' % (arg, error)
-            return '%s %s' % (arg, error.__str__()[:15])
+                return '{} {}'.format(arg, error)
+            return '{} {}'.format(arg, error.__str__()[:15])
 
 
 class UsingSeleniumOptionsTests(unittest.TestCase):

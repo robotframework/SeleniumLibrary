@@ -131,7 +131,7 @@ class SelectElementKeywords(LibraryComponent):
                                     self._format_selection(labels, values)))
 
     def _format_selection(self, labels, values):
-        return ' | '.join('%s (%s)' % (label, value)
+        return ' | '.join('{} ({})'.format(label, value)
                           for label, value in zip(labels, values))
 
     @keyword

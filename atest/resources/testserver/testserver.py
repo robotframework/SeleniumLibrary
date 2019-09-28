@@ -1,7 +1,6 @@
 # Initially based on:
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/336012
 
-from __future__ import print_function
 
 import os
 import sys

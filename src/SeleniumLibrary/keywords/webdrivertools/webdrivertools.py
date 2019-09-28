@@ -32,7 +32,7 @@ if not PY3:
     FileNotFoundError = object
 
 
-class WebDriverCreator(object):
+class WebDriverCreator:
 
     browser_names = {
         'googlechrome': "chrome",
@@ -382,7 +382,7 @@ class WebDriverCache(ConnectionCache):
             return None
 
 
-class SeleniumOptions(object):
+class SeleniumOptions:
 
     def create(self, browser, options):
         if is_falsy(options):

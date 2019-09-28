@@ -5,7 +5,7 @@ import platform
 from robot.api import logger
 
 
-class BigListOfNaughtyStrings(object):
+class BigListOfNaughtyStrings:
     """The  Big List of Naughty Strings is originally copied from here:
     https://github.com/minimaxir/big-list-of-naughty-strings
     """

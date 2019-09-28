@@ -90,7 +90,7 @@ class FrameKeywords(LibraryComponent):
             self.log_source(loglevel)
             raise AssertionError("Frame '%s' should have contained text '%s' "
                                  "but did not." % (locator, text))
-        self.info("Frame '%s' contains text '%s'." % (locator, text))
+        self.info("Frame '{}' contains text '{}'.".format(locator, text))
 
     def _frame_contains(self, locator, text):
         element = self.find_element(locator)

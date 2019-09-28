@@ -149,7 +149,7 @@ class CookieKeywords(LibraryComponent):
             return int(convert_date(expiry, result_format='epoch'))
 
 
-class CookieInformation(object):
+class CookieInformation:
 
     def __init__(self, name, value, path=None, domain=None, secure=False,
                  httpOnly=False, expiry=None, **extra):
@@ -164,8 +164,8 @@ class CookieInformation(object):
 
     def __str__(self):
         items = 'name value path domain secure httpOnly expiry'.split()
-        string = '\n'.join('%s=%s' % (item, getattr(self, item))
+        string = '\n'.join('{}={}'.format(item, getattr(self, item))
                            for item in items)
         if self.extra:
-            string = '%s\n%s=%s\n' % (string, 'extra', self.extra)
+            string = '{}\n{}={}\n'.format(string, 'extra', self.extra)
         return string

@@ -256,7 +256,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
         else:
-            self.info("Opening browser '%s' to base url '%s'." % (browser, url))
+            self.info("Opening browser '{}' to base url '{}'.".format(browser, url))
         driver = self._make_driver(browser, desired_capabilities,
                                    ff_profile_dir, remote_url,
                                    options, service_log_path)
@@ -499,7 +499,7 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_title()
         if actual != title:
             if is_noney(message):
-                message = "Title should have been '%s' but was '%s'." % (title, actual)
+                message = "Title should have been '{}' but was '{}'.".format(title, actual)
             raise AssertionError(message)
         self.info("Page title is '%s'." % title)
 

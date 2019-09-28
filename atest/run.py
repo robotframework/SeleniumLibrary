@@ -38,7 +38,6 @@ Examples:
     run.py headlesschrome --nounit --grid true
 """
 
-from __future__ import print_function
 
 import time
 from contextlib import contextmanager

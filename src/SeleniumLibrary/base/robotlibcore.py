@@ -40,7 +40,7 @@ PY2 = sys.version_info < (3,)
 __version__ = '1.0.1.dev1'
 
 
-class HybridCore(object):
+class HybridCore:
 
     def __init__(self, library_components):
         self.keywords = {}

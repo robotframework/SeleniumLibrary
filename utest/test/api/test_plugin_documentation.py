@@ -40,7 +40,7 @@ class PluginDocumentation(unittest.TestCase):
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     def test_many_plugins(self):
-        sl = SeleniumLibrary(plugins='%s, %s' % (self.plugin_1, self.plugin_2))
+        sl = SeleniumLibrary(plugins='{}, {}'.format(self.plugin_1, self.plugin_2))
         verify(sl.get_keyword_documentation('__intro__'), self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
