@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import re
+import sys
+import warnings
 from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
 
@@ -24,6 +26,13 @@ with open(join(CURDIR, 'README.rst')) as f:
     DESCRIPTION = f.read()
 with open(join(CURDIR, 'requirements.txt')) as f:
     REQUIREMENTS = f.read().splitlines()
+
+if sys.version < (3, ):
+    warnings.warn('You are using SeleniumLibrary with Python 2. '
+                  'Release made in 2020 will only support Python 3, '
+                  'please upgrade your environment to use Python 3. '
+                  'See issue https://github.com/robotframework/SeleniumLibrary/issues/1444 '
+                  'for more details.', UserWarning)
 
 setup(
     name             = 'robotframework-seleniumlibrary',
