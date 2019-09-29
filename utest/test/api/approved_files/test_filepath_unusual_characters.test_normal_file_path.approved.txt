@@ -1,0 +1,8 @@
+Different file paths.
+
+0) /foo/file.log
+1) /foo/file-1.log
+2) /foo/file-0001.log
+3) /foo/file-{foo}.log
+4) /{foo}/file-1.log
+5) /foo/file-001.log
