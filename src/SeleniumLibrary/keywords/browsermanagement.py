@@ -189,6 +189,21 @@ class BrowserManagementKeywords(LibraryComponent):
         Then the `${options}` variable can be used as an argument to
         ``options``.
 
+        The ``options`` argument also makes it easy to test Chomium-based
+        applications which utilize the Chromium Embedded Framework (aka CEF)
+        such as those created using QtWebEngine. This is accomplished
+        using the ChromeDriver webdriver included with Selenium.
+        All that is needed is a binary location of the application under
+        test and a remote debugging port for ChromeDriver to interface
+        with.
+        (https://bitbucket.org/chromiumembedded/cef/wiki/UsingChromeDriver)
+
+        Example:
+        | `Open Browser` | browser=Chrome | options=binary_location="<path/to/binary>";add_argument("remote-debugging-port=<port>") |
+
+        Once opened, the user can interact with the embedded web-content of
+        the application under test.
+
         Optional ``service_log_path`` argument defines the name of the
         file where to write the browser driver logs. If the
         ``service_log_path``  argument contain a  marker ``{index}``, it
