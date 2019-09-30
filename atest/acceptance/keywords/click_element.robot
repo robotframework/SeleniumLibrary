@@ -38,6 +38,7 @@ Double Click Element Error
 
 Click Element Action Chain
     [Documentation]   Clicks an element using the 'action_chain' argument without a modifier
+    ...               LOG 2     REGEXP: Clicking '.*' using an action chain.
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
 

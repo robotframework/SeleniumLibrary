@@ -44,6 +44,7 @@ Click Element Wrong Modifier
 
 Click Element Action Chain and modifier
     [Documentation]   Clicks an element with both a valid modifier and action_chain argument. Modifier should should take precedent
+    ...               LOG 2     REGEXP: Clicking .* '.*' with .*.
     Click Element    Button    modifier=CTRL    action_chain=True
     Element Text Should Be    output    CTRL click
     
