@@ -36,6 +36,11 @@ Double Click Element Error
     [Setup]    Go To Page "javascript/click.html"
     Double Click Element    id:öööö
 
+Click Element Action Chain
+    [Documentation]   Clicks an element using the 'action_chain' argument without a modifier
+    Click Element    singleClickButton      action_chain=True
+    Element Text Should Be    output    single clicked
+
 *** Keywords ***
 Initialize Page
     [Documentation]    Initialize Page
