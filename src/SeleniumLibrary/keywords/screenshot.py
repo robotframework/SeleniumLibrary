@@ -20,6 +20,7 @@ from robot.utils import get_link_path
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_noney
+from SeleniumLibrary.utils.path_formatter import _format_path
 
 
 class ScreenshotKeywords(LibraryComponent):
@@ -130,7 +131,7 @@ class ScreenshotKeywords(LibraryComponent):
         index = 0
         while True:
             index += 1
-            formatted = filename.format(index=index)
+            formatted = _format_path(filename, index)
             path = os.path.join(directory, formatted)
             # filename didn't contain {index} or unique path was found
             if formatted == filename or not os.path.exists(path):

@@ -53,12 +53,12 @@ Set Screenshot Directory set back to previous value
 Capture page screenshot with unique index
     [Setup]    Remove Directory    ${OUTPUTDIR}/screenshot-and-index    recursive
     ${file1} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/other-{index}-name.png
-    ${file2} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/some-other-name-{index}.png
+    ${file2} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/some-{other}-name-{index}.png
     ${file3} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/other-{index}-name.png
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/other-1-name.png
     Should Be Equal    ${file1}    ${OUTPUTDIR}${/}screenshot-and-index${/}other-1-name.png
-    File Should Exist    ${OUTPUTDIR}/screenshot-and-index/some-other-name-1.png
-    Should Be Equal    ${file2}    ${OUTPUTDIR}${/}screenshot-and-index${/}some-other-name-1.png
+    File Should Exist    ${OUTPUTDIR}/screenshot-and-index/some-{other}-name-1.png
+    Should Be Equal    ${file2}    ${OUTPUTDIR}${/}screenshot-and-index${/}some-{other}-name-1.png
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/other-2-name.png
     Should Be Equal    ${file3}    ${OUTPUTDIR}${/}screenshot-and-index${/}other-2-name.png
 
