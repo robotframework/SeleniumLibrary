@@ -571,7 +571,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ['link', 'link'], modifier)
 
     @keyword
-    def click_element(self, locator, modifier=False):
+    def click_element(self, locator, modifier=False, action_chain=False):
         """Click the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -586,16 +586,29 @@ newDiv.parentNode.style.overflow = 'hidden';
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
         . If ``modifier`` does not match to Selenium Keys, keyword fails.
 
+        The ``action_chain`` argument can be set to True to use an ActionChain
+        based click instead of the <web_element>.click() function. In this case,
+        an action chain is created which locates the element, moves the mouse to
+        that element, then clicks the mouse.
+
         Example:
         | Click Element | id:button | | # Would click element without any modifiers. |
         | Click Element | id:button | CTRL | # Would click element with CTLR key pressed down. |
         | Click Element | id:button | CTRL+ALT | # Would click element with CTLR and ALT keys pressed down. |
+        | Click Element | id:button | action_chain=True | # Clicks the button using an action chain |
 
         The ``modifier`` argument is new in SeleniumLibrary 3.2
         """
         if is_falsy(modifier):
-            self.info("Clicking element '%s'." % locator)
-            self.find_element(locator).click()
+            if is_falsy(action_chain):
+                self.info("Clicking element '%s'." % locator)
+                self.find_element(locator).click()
+            else:
+                action = ActionChains(self.driver)
+                element = self.find_element(locator)
+                action.move_to_element(element)
+                action.click()
+                action.perform()
         else:
             self._click_with_modifier(locator, [None, None], modifier)
 
