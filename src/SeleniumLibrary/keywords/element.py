@@ -589,7 +589,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         The ``action_chain`` argument can be set to True to use an ActionChain
         based click instead of the <web_element>.click() function. In this case,
         an action chain is created which locates the element, moves the mouse to
-        that element, then clicks the mouse.
+        that element, then clicks the mouse. If both ``action_chain`` and ``modifier``
+        are valid, the click will be performed using ``modifier``, and ``action_chain``
+        will be ignored.
 
         Example:
         | Click Element | id:button | | # Would click element without any modifiers. |
@@ -599,18 +601,22 @@ newDiv.parentNode.style.overflow = 'hidden';
 
         The ``modifier`` argument is new in SeleniumLibrary 3.2
         """
-        if is_falsy(modifier):
-            if is_falsy(action_chain):
+        if is_truthy(modifier):
+            self._click_with_modifier(locator, [None, None], modifier)
+        else:
+            if is_truthy(action_chain):
+                self._click_with_action_chain(locator)
+            else:
                 self.info("Clicking element '%s'." % locator)
                 self.find_element(locator).click()
-            else:
-                action = ActionChains(self.driver)
-                element = self.find_element(locator)
-                action.move_to_element(element)
-                action.click()
-                action.perform()
-        else:
-            self._click_with_modifier(locator, [None, None], modifier)
+
+    def _click_with_action_chain(self, locator):
+        self.info("Clicking '%s' using an action chain." % locator)
+        action = ActionChains(self.driver)
+        element = self.find_element(locator)
+        action.move_to_element(element)
+        action.click()
+        action.perform()
 
     def _click_with_modifier(self, locator, tag, modifier):
         self.info("Clicking %s '%s' with %s." % (tag if tag[0] else 'element', locator, modifier))
