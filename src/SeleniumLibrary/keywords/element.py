@@ -590,7 +590,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         based click instead of the <web_element>.click() function. In this case,
         an action chain is created which locates the element, moves the mouse to
         that element, then clicks the mouse. If both ``action_chain`` and ``modifier``
-        are valid, the click will be performed using ``modifier``, and ``action_chain``
+        are valid, the click will be performed using ``modifier`` and ``action_chain``
         will be ignored.
 
         Example:
