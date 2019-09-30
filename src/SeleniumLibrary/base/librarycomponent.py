@@ -79,15 +79,3 @@ class LibraryComponent(ContextAware):
             return os.path.dirname(logfile)
         except RobotNotRunningError:
             return os.getcwdu() if PY2 else os.getcwd()
-
-    def format_path(self, file_path, index):
-        if PY2:
-            import string
-            return string.Formatter().vformat(file_path, (), SafeFormatter(index=index))
-        return file_path.format_map(SafeFormatter(index=index))
-
-
-class SafeFormatter(dict):
-
-    def __missing__(self, key):
-        return '{%s}' % key
