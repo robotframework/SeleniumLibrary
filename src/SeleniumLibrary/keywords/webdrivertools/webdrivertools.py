@@ -28,6 +28,8 @@ from selenium.webdriver import FirefoxProfile
 
 from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string, PY3
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import SelLibLocalFileDetector
+from SeleniumLibrary.utils.path_formatter import _format_path
+
 if not PY3:
     FileNotFoundError = object
 
@@ -285,7 +287,7 @@ class WebDriverCreator(object):
             return None
         index = 1
         while True:
-            formatted = log_file.format(index=index)
+            formatted = _format_path(log_file, index)
             path = os.path.join(self.log_dir, formatted)
             # filename didn't contain {index} or unique path was found
             if formatted == log_file or not os.path.exists(path):
