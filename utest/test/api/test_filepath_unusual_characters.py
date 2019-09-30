@@ -38,4 +38,7 @@ def test_normal_file_path(reporter):
     results.append(lib.format_path('/foo/file-{foo}.log', 1))
     results.append(lib.format_path('/{foo}/file-{index}.log', 1))
     results.append(lib.format_path('/foo/file-{index:03}.log', 1))
+    results.append(lib.format_path('/foo/{index}-file-{index}.log', '1234'))
+    results.append(lib.format_path('/foo/file-{in dex}.log', '1234'))
+    results.append(lib.format_path('/foo/file-{in@dex}.log', '1234'))
     verify_all('Different file paths.', results, reporter=reporter)

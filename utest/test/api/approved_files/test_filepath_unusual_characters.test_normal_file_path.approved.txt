@@ -6,3 +6,6 @@ Different file paths.
 3) /foo/file-{foo}.log
 4) /{foo}/file-1.log
 5) /foo/file-001.log
+6) /foo/1234-file-1234.log
+7) /foo/file-{in dex}.log
+8) /foo/file-{in@dex}.log
