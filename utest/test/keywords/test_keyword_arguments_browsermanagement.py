@@ -31,3 +31,8 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         alias = self.brorser.open_browser(url, alias='None',
                                           remote_url=remote_url)
         self.assertEqual(alias, None)
+
+        when(self.brorser)._make_driver('firefox', None,
+                                        None, False, None, None).thenReturn(browser)
+        alias = self.brorser.open_browser()
+        self.assertEqual(alias, None)
