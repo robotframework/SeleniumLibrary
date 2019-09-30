@@ -1,54 +1,63 @@
-import unittest
-
+import pytest
 from mockito import mock, unstub
 from selenium.webdriver.common.keys import Keys
 
 from SeleniumLibrary.keywords import ElementKeywords
 
 
-class ParsingModifierKeys(unittest.TestCase):
+@pytest.fixture(scope='module')
+def element():
+    ctx = mock()
+    return ElementKeywords(ctx)
 
-    @classmethod
-    def setUpClass(cls):
-        cls.ctx = mock()
-        cls.element = ElementKeywords(cls.ctx)
 
-    @classmethod
-    def tearDownClass(cls):
-        unstub()
+def teardown_module():
+    unstub()
 
-    def test_parsing_one_mofier(self):
-        parsed = self.element.parse_modifier('CTRL')
-        self.assertEqual(parsed, [Keys.CONTROL])
-        parsed = self.element.parse_modifier('esc')
-        self.assertEqual(parsed, [Keys.ESCAPE])
-        parsed = self.element.parse_modifier('ESCAPE')
-        self.assertEqual(parsed, [Keys.ESCAPE])
-        parsed = self.element.parse_modifier('control')
-        self.assertEqual(parsed, [Keys.CONTROL])
-        parsed = self.element.parse_modifier('alt')
-        self.assertEqual(parsed, [Keys.ALT])
-        parsed = self.element.parse_modifier('sHifT')
-        self.assertEqual(parsed, [Keys.SHIFT])
 
-    def test_parsing_multiple_modifiers(self):
-        parsed = self.element.parse_modifier('ctrl+shift')
-        self.assertEqual(parsed, [Keys.CONTROL, Keys.SHIFT])
-        parsed = self.element.parse_modifier('ctrl+alt+shift')
-        self.assertEqual(parsed, [Keys.CONTROL, Keys.ALT, Keys.SHIFT])
-        parsed = self.element.parse_modifier(' ctrl + alt +shift ')
-        self.assertEqual(parsed, [Keys.CONTROL, Keys.ALT, Keys.SHIFT])
+def test_parsing_one_modifier(element):
+    parsed = element.parse_modifier('CTRL')
+    assert parsed == [Keys.CONTROL]
+    parsed = element.parse_modifier('esc')
+    assert parsed == [Keys.ESCAPE]
+    parsed = element.parse_modifier('ESCAPE')
+    assert parsed == [Keys.ESCAPE]
+    parsed = element.parse_modifier('control')
+    assert parsed == [Keys.CONTROL]
+    parsed = element.parse_modifier('alt')
+    assert parsed == [Keys.ALT]
+    parsed = element.parse_modifier('sHifT')
+    assert parsed == [Keys.SHIFT]
 
-    def test_invalid_modifier(self):
-        with self.assertRaisesRegexp(ValueError, "'FOO' modifier "):
-            self.element.parse_modifier('FOO')
-        with self.assertRaisesRegexp(ValueError, "'FOO' modifier "):
-            self.element.parse_modifier('FOO+CTRL')
-        with self.assertRaisesRegexp(ValueError, "'FOO' modifier "):
-            self.element.parse_modifier('CTRL+FOO')
-        with self.assertRaisesRegexp(ValueError, "'CTRLFOO' modifier "):
-            self.element.parse_modifier('CTRLFOO')
 
-    def test_invalid_key_separator(self):
-        with self.assertRaisesRegexp(ValueError, "'CTRL-CTRL' modifier "):
-            self.element.parse_modifier('CTRL-CTRL')
+def test_parsing_multiple_modifiers(element):
+    parsed = element.parse_modifier('ctrl+shift')
+    assert parsed == [Keys.CONTROL, Keys.SHIFT]
+    parsed = element.parse_modifier('ctrl+alt+shift')
+    assert parsed == [Keys.CONTROL, Keys.ALT, Keys.SHIFT]
+    parsed = element.parse_modifier(' ctrl + alt +shift ')
+    assert parsed == [Keys.CONTROL, Keys.ALT, Keys.SHIFT]
+
+
+def test_invalid_modifier(element):
+    with pytest.raises(ValueError) as error:
+        element.parse_modifier('FOO')
+    assert "'FOO' modifier " in str(error.value)
+
+    with pytest.raises(ValueError) as error:
+        element.parse_modifier('FOO+CTRL')
+    assert "'FOO' modifier " in str(error.value)
+
+    with pytest.raises(ValueError) as error:
+        element.parse_modifier('CTRL+FOO')
+    assert "'FOO' modifier " in str(error.value)
+
+    with pytest.raises(ValueError) as error:
+        element.parse_modifier('CTRLFOO')
+    assert "'CTRLFOO' modifier " in str(error.value)
+
+
+def test_invalid_key_separator(element):
+    with pytest.raises(ValueError) as error:
+        element.parse_modifier('CTRL-CTRL')
+    assert "'CTRL-CTRL' modifier " in str(error.value)
