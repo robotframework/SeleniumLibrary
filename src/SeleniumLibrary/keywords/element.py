@@ -600,6 +600,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         | Click Element | id:button | action_chain=True | # Clicks the button using an action chain |
 
         The ``modifier`` argument is new in SeleniumLibrary 3.2
+        The ``action_chain`` argument is new in SeleniumLibrary 4.1
         """
         if is_truthy(modifier):
             self._click_with_modifier(locator, [None, None], modifier)
