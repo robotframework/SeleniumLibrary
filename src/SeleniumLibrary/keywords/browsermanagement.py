@@ -59,9 +59,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def open_browser(self, url=None, browser='firefox', alias=None,
                      remote_url=False, desired_capabilities=None,
                      ff_profile_dir=None, options=None, service_log_path=None):
-        """Opens a new browser instance to the given ``url`` (if specified).
-        If no ``url`` is specified, simply opens the browser without navigating
-        to any page.
+        """Opens a new browser instance to the optional ``url``.
 
         The ``browser`` argument specifies which browser to use. The
         supported browsers are listed in the table below. The browser names
@@ -88,6 +86,9 @@ class BrowserManagementKeywords(LibraryComponent):
         project documentation] for more details. Headless Firefox and
         Headless Chrome are new additions in SeleniumLibrary 3.1.0
         and require Selenium 3.8.0 or newer.
+
+        After opening the browser, it is possible to use optional 
+        ``url`` to navigate the browser to the desired address.
 
         Optional ``alias`` is an alias given for this browser instance and
         it can be used for switching between browsers. When same ``alias``
@@ -241,6 +242,8 @@ class BrowserManagementKeywords(LibraryComponent):
         accepting an instance of the `selenium.webdriver.FirefoxProfile`
         and support defining FirefoxProfile with methods and
         attributes are new in SeleniumLibrary 4.0.
+        
+        Making ``url`` optional is new in SeleniumLibrary 4.1.
         """
         index = self.drivers.get_index(alias)
         if index:
