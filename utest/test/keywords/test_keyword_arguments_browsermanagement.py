@@ -38,6 +38,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         alias = 'tidii'
         driver = mock()
         driver.session_id = 'foobar'
+        self.ctx.driver = driver
         when(self.ctx._drivers).get_index(alias).thenReturn(1)
         when(self.ctx._drivers).switch(1).thenReturn(driver)
         self.brorser.open_browser(url=url, alias=alias)
@@ -54,6 +55,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         alias = 'tidii'
         driver = mock()
         driver.session_id = 'foobar'
+        self.ctx.driver = driver
         when(self.ctx._drivers).get_index(alias).thenReturn(1)
         when(self.ctx._drivers).switch(1).thenReturn(driver)
         self.brorser.open_browser(alias=alias)
