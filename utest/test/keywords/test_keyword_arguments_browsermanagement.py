@@ -59,4 +59,4 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         when(self.ctx._drivers).get_index(alias).thenReturn(1)
         when(self.ctx._drivers).switch(1).thenReturn(driver)
         self.brorser.open_browser(alias=alias)
-        verify(driver, times=0).get(url)
+        verify(driver, times=0).get(ANY)
