@@ -56,10 +56,10 @@ class BrowserManagementKeywords(LibraryComponent):
             self.drivers.close()
 
     @keyword
-    def open_browser(self, url, browser='firefox', alias=None,
+    def open_browser(self, url=None, browser='firefox', alias=None,
                      remote_url=False, desired_capabilities=None,
                      ff_profile_dir=None, options=None, service_log_path=None):
-        """Opens a new browser instance to the given ``url``.
+        """Opens a new browser instance to the optional ``url``.
 
         The ``browser`` argument specifies which browser to use. The
         supported browsers are listed in the table below. The browser names
@@ -86,6 +86,9 @@ class BrowserManagementKeywords(LibraryComponent):
         project documentation] for more details. Headless Firefox and
         Headless Chrome are new additions in SeleniumLibrary 3.1.0
         and require Selenium 3.8.0 or newer.
+
+        After opening the browser, it is possible to use optional 
+        ``url`` to navigate the browser to the desired address.
 
         Optional ``alias`` is an alias given for this browser instance and
         it can be used for switching between browsers. When same ``alias``
@@ -212,6 +215,7 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Open Browser` | http://example.com | Firefox | alias=Firefox                           |
         | `Open Browser` | http://example.com | Edge    | remote_url=http://127.0.0.1:4444/wd/hub |
         | `Open Browser` | about:blank        |         |                                         |
+        | `Open Browser` | browser=Chrome     |         |                                         |
 
         Alias examples:
         | ${1_index} =    | `Open Browser` | http://example.com | Chrome  | alias=Chrome     | # Opens new browser because alias is new.         |
@@ -248,18 +252,21 @@ class BrowserManagementKeywords(LibraryComponent):
         accepting an instance of the `selenium.webdriver.FirefoxProfile`
         and support defining FirefoxProfile with methods and
         attributes are new in SeleniumLibrary 4.0.
+        
+        Making ``url`` optional is new in SeleniumLibrary 4.1.
         """
         index = self.drivers.get_index(alias)
         if index:
             self.info('Using existing browser from index %s.' % index)
             self.switch_browser(alias)
-            self.go_to(url)
+            if is_truthy(url):
+                self.go_to(url)
             return index
         return self._make_new_browser(url, browser, alias, remote_url,
                                       desired_capabilities, ff_profile_dir,
                                       options, service_log_path)
 
-    def _make_new_browser(self, url, browser='firefox', alias=None,
+    def _make_new_browser(self, url=None, browser='firefox', alias=None,
                           remote_url=False, desired_capabilities=None,
                           ff_profile_dir=None, options=None, service_log_path=None):
         if is_truthy(remote_url):
@@ -272,12 +279,13 @@ class BrowserManagementKeywords(LibraryComponent):
                                    options, service_log_path)
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
-        try:
-            driver.get(url)
-        except Exception:
-            self.debug("Opened browser with session id %s but failed "
-                       "to open url '%s'." % (driver.session_id, url))
-            raise
+        if is_truthy(url):
+            try:
+                driver.get(url)
+            except Exception:
+                self.debug("Opened browser with session id %s but failed "
+                        "to open url '%s'." % (driver.session_id, url))
+                raise
         self.debug('Opened browser with session id %s.' % driver.session_id)
         return index
 
