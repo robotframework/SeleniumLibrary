@@ -14,6 +14,8 @@ def _raise(*a):
 
 @pytest.fixture(scope='module')
 def waiting():
+    ctx = mock()
+    ctx.timeout = TIMEOUT
     return WaitingKeywords(mock())
 
 
