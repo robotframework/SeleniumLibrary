@@ -37,7 +37,7 @@ Double Click Element Error
     Double Click Element    id:öööö
 
 Click Element Action Chain
-    [Documentation]   LOG 2     REGEXP: Clicking '.*' using an action chain.
+    [Documentation]   LOG 2:5 DEBUG GLOB: *actions {"actions": [{"type": "pointer",*
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
 
