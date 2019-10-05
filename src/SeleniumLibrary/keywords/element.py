@@ -603,12 +603,11 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         if is_truthy(modifier):
             self._click_with_modifier(locator, [None, None], modifier)
+        elif is_truthy(action_chain):
+            self._click_with_action_chain(locator)
         else:
-            if is_truthy(action_chain):
-                self._click_with_action_chain(locator)
-            else:
-                self.info("Clicking element '%s'." % locator)
-                self.find_element(locator).click()
+            self.info("Clicking element '%s'." % locator)
+            self.find_element(locator).click()
 
     def _click_with_action_chain(self, locator):
         self.info("Clicking '%s' using an action chain." % locator)
