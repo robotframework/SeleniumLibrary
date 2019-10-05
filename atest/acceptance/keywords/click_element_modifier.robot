@@ -47,7 +47,6 @@ Click Element Action Chain and modifier
     Click Element    Button    modifier=CTRL    action_chain=True
     Element Text Should Be    output    CTRL click
     
-
 *** Keywords ***
 Initialize Page
     Reload Page
