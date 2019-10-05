@@ -586,18 +586,17 @@ newDiv.parentNode.style.overflow = 'hidden';
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
         . If ``modifier`` does not match to Selenium Keys, keyword fails.
 
-        The ``action_chain`` argument can be set to True to use an ActionChain
-        based click instead of the <web_element>.click() function. In this case,
-        an action chain is created which locates the element, moves the mouse to
-        that element, then clicks the mouse. If both ``action_chain`` and ``modifier``
-        are valid, the click will be performed using ``modifier`` and ``action_chain``
-        will be ignored.
+        If ``action_chain`` argument is true, see `Boolean arguments` for more
+        details on how to set boolean argument, then keyword uses ActionChain
+        based click instead of the <web_element>.click() function. If both
+        ``action_chain`` and ``modifier`` are defined, the click will be
+        performed using ``modifier`` and ``action_chain`` will be ignored.
 
         Example:
-        | Click Element | id:button | | # Would click element without any modifiers. |
-        | Click Element | id:button | CTRL | # Would click element with CTLR key pressed down. |
-        | Click Element | id:button | CTRL+ALT | # Would click element with CTLR and ALT keys pressed down. |
-        | Click Element | id:button | action_chain=True | # Clicks the button using an action chain |
+        | Click Element | id:button |                   | # Would click element without any modifiers.               |
+        | Click Element | id:button | CTRL              | # Would click element with CTLR key pressed down.          |
+        | Click Element | id:button | CTRL+ALT          | # Would click element with CTLR and ALT keys pressed down. |
+        | Click Element | id:button | action_chain=True | # Clicks the button using an Selenium  ActionChains        |
 
         The ``modifier`` argument is new in SeleniumLibrary 3.2
         The ``action_chain`` argument is new in SeleniumLibrary 4.1
