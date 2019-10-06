@@ -37,6 +37,7 @@ Double Click Element Error
     Double Click Element    id:öööö
 
 Click Element Action Chain
+    [Tags]    NoGrid
     [Documentation]
     ...    LOB 1:1 INFO        Clicking 'singleClickButton' using an action chain.
     ...    LOG 2:5 DEBUG GLOB: *actions {"actions": [{"type": "pointer",*
