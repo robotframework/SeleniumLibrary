@@ -42,6 +42,11 @@ Click Element Wrong Modifier
     ...    ValueError: 'FOOBAR' modifier does not match to Selenium Keys
     ...    Click Element    Button    Foobar
 
+Click Element Action Chain and modifier
+    [Documentation]     LOG 2:1 INFO Clicking element 'Button' with CTRL.
+    Click Element    Button    modifier=CTRL    action_chain=True
+    Element Text Should Be    output    CTRL click
+    
 *** Keywords ***
 Initialize Page
     Reload Page

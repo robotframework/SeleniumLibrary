@@ -36,6 +36,14 @@ Double Click Element Error
     [Setup]    Go To Page "javascript/click.html"
     Double Click Element    id:öööö
 
+Click Element Action Chain
+    [Tags]    NoGrid
+    [Documentation]
+    ...    LOB 1:1 INFO        Clicking 'singleClickButton' using an action chain.
+    ...    LOG 2:5 DEBUG GLOB: *actions {"actions": [{*
+    Click Element    singleClickButton      action_chain=True
+    Element Text Should Be    output    single clicked
+
 *** Keywords ***
 Initialize Page
     [Documentation]    Initialize Page
