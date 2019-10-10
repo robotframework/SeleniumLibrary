@@ -30,3 +30,9 @@ Should Give Error Message When Content Not Found In Table
     Run Keyword And Expect Error
     ...    Table 'simpleTable' did not contain text 'Not here'.
     ...    Table Should Contain    simpleTable    Not here
+
+
+Should Give Error Message When Content Not Found In Table But Is In Table In Below
+    Run Keyword And Expect Error
+    ...    Table 'simpleTable' did not contain text 'impleTableName_C4'.
+    ...    Table Should Contain    simpleTable    impleTableName_C4

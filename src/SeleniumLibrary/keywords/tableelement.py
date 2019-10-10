@@ -194,13 +194,13 @@ class TableElementKeywords(LibraryComponent):
                                  % (locator, expected))
 
     def _find_by_content(self, table_locator, content):
-        return self._find(table_locator, '//*', content)
+        return self._find(table_locator, 'xpath:.//*', content)
 
     def _find_by_header(self, table_locator, content):
-        return self._find(table_locator, '//th', content)
+        return self._find(table_locator, 'xpath:.//th', content)
 
     def _find_by_footer(self, table_locator, content):
-        return self._find(table_locator, '//tfoot//td', content)
+        return self._find(table_locator, 'xpath:.//tfoot//td', content)
 
     def _find_by_row(self, table_locator, row, content):
         position = self._index_to_position(row)

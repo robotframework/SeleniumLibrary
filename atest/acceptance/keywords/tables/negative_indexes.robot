@@ -27,4 +27,4 @@ Test negative index for XPath strategy in 'Table Cell Should Contain'
 
 Test negative index for CSS strategy in 'Table Cell Should Contain'
     Table Cell Should Contain    xpath=//*[@name='simpleTableName']
-    ...    -1    -2    simpleTableName_B3
+    ...    -1    -2    simpleTableName_B4

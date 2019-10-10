@@ -17,3 +17,8 @@ Should Give Error Message When Content Not Found In Table Header
     Run Keyword And Expect Error
     ...    Table 'withHeadAndFoot' header did not contain text 'withHeadAndFoot_B2'.
     ...    Table Header Should Contain    withHeadAndFoot    withHeadAndFoot_B2
+
+Should Give Error Message When Content Not Found In Table Header But Is Other Table
+    Run Keyword And Expect Error
+    ...    Table 'tableWithSingleHeader' header did not contain text 'tableWithTwoHeaders_C1'.
+    ...    Table Header Should Contain    tableWithSingleHeader    tableWithTwoHeaders_C1
