@@ -13,3 +13,8 @@ Should Give Error Message When Content Not Found In Table Footer
     Run Keyword And Expect Error
     ...    Table 'withHeadAndFoot' footer did not contain text 'withHeadAndFoot_B2'.
     ...    Table Footer Should Contain    withHeadAndFoot    withHeadAndFoot_B2
+
+Should Give Error Message When Content Not Found In Table Footer But Is Other Table
+    Run Keyword And Expect Error
+    ...    Table 'tableWithSingleHeader' footer did not contain text 'SimpleWithHeadAndFoot_CF1'.
+    ...    Table Footer Should Contain    tableWithSingleHeader    SimpleWithHeadAndFoot_CF1
