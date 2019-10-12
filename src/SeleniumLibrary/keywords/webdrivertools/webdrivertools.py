@@ -337,6 +337,9 @@ class WebDriverCache(ConnectionCache):
         if self.current:
             driver = self.current
             error = self._quit(driver, None)
+            for alias in self._aliases:
+                if self._aliases[alias] == self.current_index:
+                    del self._aliases[alias]
             self.current = self._no_current
             self._closed.add(driver)
             if error:
