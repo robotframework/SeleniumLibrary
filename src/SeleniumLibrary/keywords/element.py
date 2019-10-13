@@ -898,36 +898,38 @@ return !element.dispatchEvent(evt);
 
     def _press_keys(self, locator, parsed_keys):
         element = self.find_element(locator) if is_truthy(locator) else None
+        if element:
+            ActionChains(self.driver).click(element).perform()
         for parsed_key in parsed_keys:
             actions = ActionChains(self.driver)
             for key in parsed_key:
                 if key.special:
                     self._press_keys_special_keys(actions, element, parsed_key, key)
                 else:
-                    self._press_keys_normal_keys(actions, element, key)
-            for key in parsed_key:
-                if key.special:
-                    self.info('Releasing special key %s.' % key.original)
-                    actions.key_up(key.converted)
+                    self._press_keys_normal_keys(actions, key)
+            self._special_key_up(actions, parsed_key)
             actions.perform()
 
-    def _press_keys_normal_keys(self, actions, element, key):
+    def _press_keys_normal_keys(self, actions, key):
         self.info('Sending key%s %s' % (plural_or_not(key.converted), key.converted))
-        if element:
-            actions.send_keys_to_element(element, key.converted)
-        else:
-            actions.send_keys(key.converted)
+        actions.send_keys(key.converted)
 
     def _press_keys_special_keys(self, actions, element, parsed_key, key):
         if len(parsed_key) == 1 and element:
             self.info('Pressing special key %s to element.' % key.original)
-            actions.send_keys_to_element(element, key.converted)
+            actions.send_keys(key.converted)
         elif len(parsed_key) == 1 and not element:
             self.info('Pressing special key %s to browser.' % key.original)
             actions.send_keys(key.converted)
         else:
             self.info('Pressing special key %s down.' % key.original)
             actions.key_down(key.converted)
+
+    def _special_key_up(self, actions, parsed_key):
+        for key in parsed_key:
+            if key.special:
+                self.info('Releasing special key %s.' % key.original)
+                actions.key_up(key.converted)
 
     @keyword
     def get_all_links(self):
