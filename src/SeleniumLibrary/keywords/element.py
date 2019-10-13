@@ -892,14 +892,11 @@ return !element.dispatchEvent(evt);
         parsed_keys = self._parse_keys(*keys)
         if is_truthy(locator):
             self.info('Sending key(s) %s to %s element.' % (keys, locator))
+            element = self.find_element(locator)
+            ActionChains(self.driver).click(element).perform()
         else:
             self.info('Sending key(s) %s to page.' % str(keys))
-        self._press_keys(locator, parsed_keys)
-
-    def _press_keys(self, locator, parsed_keys):
-        element = self.find_element(locator) if is_truthy(locator) else None
-        if element:
-            ActionChains(self.driver).click(element).perform()
+            element = None
         for parsed_key in parsed_keys:
             actions = ActionChains(self.driver)
             for key in parsed_key:
