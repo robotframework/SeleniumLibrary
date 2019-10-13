@@ -1155,14 +1155,14 @@ return !element.dispatchEvent(evt);
         return list_keys
 
     def _convert_special_keys(self, keys):
-        KeysRecord = namedtuple('KeysRecord', 'converted, original')
+        KeysRecord = namedtuple('KeysRecord', 'converted, original special')
         converted_keys = []
         for key in keys:
             key = self._parse_aliases(key)
             if self._selenium_keys_has_attr(key):
-                converted_keys.append(KeysRecord(getattr(Keys, key), key))
+                converted_keys.append(KeysRecord(getattr(Keys, key), key, True))
             else:
-                converted_keys.append(KeysRecord(key, key))
+                converted_keys.append(KeysRecord(key, key, False))
         return converted_keys
 
     def _selenium_keys_has_attr(self, key):
