@@ -220,6 +220,7 @@ Selenium2Library 1.8.0 and earlier  Selenium 2 and 3            Python 2.6-2.7  
 SeleniumLibrary 3.0 and 3.1         Selenium 2 and 3            Python 2.7 and 3.3+         Selenium2Library renamed and with Python 3 support and new architecture.
 SeleniumLibrary 3.2                 Selenium 3                  Python 2.7 and 3.4+         Drops Selenium 2 support.
 SeleniumLibrary 4.0                 Selenium 3                  Python 2.7 and 3.4+         Plugin API and support for event friging webdriver.
+SeleniumLibrary 4.1                 Selenium 3                  Python 2.7 and 3.5+         Drops Python 3.4 support.
 Selenium2Library 3.0                Depends on SeleniumLibrary  Depends on SeleniumLibrary  Thin wrapper for SeleniumLibrary 3.0 to ease transition.
 ==================================  ==========================  ==========================  ===============
 
