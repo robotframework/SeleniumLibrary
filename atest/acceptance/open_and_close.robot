@@ -35,10 +35,9 @@ Switch to closed browser is possible
     Close Browser
     Switch Browser    Browser 3
     Page Should Contain    Name:
-    Switch Browser    Browser 2
     Run Keyword And Expect Error
-    ...    *
-    ...    Page Should Contain    Name:
+    ...    No browser with index or alias 'Browser 2' found.
+    ...    Switch Browser    Browser 2
     Close All Browsers
 
 Closing all browsers clears cache
