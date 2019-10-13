@@ -845,7 +845,6 @@ return !element.dispatchEvent(evt);
     def press_keys(self, locator=None, *keys):
         """Simulates the user pressing key(s) to an element or on the active browser.
 
-
         If ``locator`` evaluates as false, see `Boolean arguments` for more
         details, then the ``keys`` are sent to the currently active browser.
         Otherwise element is searched and ``keys`` are send to the element
@@ -898,22 +897,18 @@ return !element.dispatchEvent(evt);
         self._press_keys(locator, parsed_keys)
 
     def _press_keys(self, locator, parsed_keys):
-        if is_truthy(locator):
-            element = self.find_element(locator)
-        else:
-            element = None
+        element = self.find_element(locator) if is_truthy(locator) else None
         for parsed_key in parsed_keys:
             actions = ActionChains(self.driver)
-            special_keys = []
             for key in parsed_key:
-                if self._selenium_keys_has_attr(key.original):
-                    special_keys = self._press_keys_special_keys(actions, element, parsed_key,
-                                                                 key, special_keys)
+                if key.special:
+                    self._press_keys_special_keys(actions, element, parsed_key, key)
                 else:
                     self._press_keys_normal_keys(actions, element, key)
-            for special_key in special_keys:
-                self.info('Releasing special key %s.' % special_key.original)
-                actions.key_up(special_key.converted)
+            for key in parsed_key:
+                if key.special:
+                    self.info('Releasing special key %s.' % key.original)
+                    actions.key_up(key.converted)
             actions.perform()
 
     def _press_keys_normal_keys(self, actions, element, key):
@@ -923,7 +918,7 @@ return !element.dispatchEvent(evt);
         else:
             actions.send_keys(key.converted)
 
-    def _press_keys_special_keys(self, actions, element, parsed_key, key, special_keys):
+    def _press_keys_special_keys(self, actions, element, parsed_key, key):
         if len(parsed_key) == 1 and element:
             self.info('Pressing special key %s to element.' % key.original)
             actions.send_keys_to_element(element, key.converted)
@@ -933,8 +928,6 @@ return !element.dispatchEvent(evt);
         else:
             self.info('Pressing special key %s down.' % key.original)
             actions.key_down(key.converted)
-            special_keys.append(key)
-        return special_keys
 
     @keyword
     def get_all_links(self):
