@@ -195,7 +195,6 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_firefox({}, None, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -222,15 +221,12 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_headless_firefox({}, None, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
     def test_create_ie_with_options(self):
         options = mock()
         expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
-        when(self.creator)._has_options(ANY).thenReturn(True)
         when(webdriver).Ie(service_log_path=None, options=options).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
@@ -251,9 +247,7 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
     def test_create_ie_with_options_and_log_path(self):
         options = mock()
         expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
-        when(self.creator)._has_options(ANY).thenReturn(True)
-        when(webdriver).Ie(options=options).thenReturn(expected_webdriver)
+        when(webdriver).Ie(options=options, service_log_path=None).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, None, options=options)
         self.assertEqual(driver, expected_webdriver)
 
@@ -270,7 +264,6 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         # TODO: This test requires Selenium 4.0 in Travis
         options = mock()
         expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         when(self.creator)._has_options(ANY).thenReturn(True)
         when(webdriver).Edge(service_log_path=None, options=options).thenReturn(expected_webdriver)
         driver = self.creator.create_edge({}, None, options=options)
@@ -376,7 +369,6 @@ class UsingSeleniumOptionsTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         expected_webdriver = mock()
         when(self.creator.selenium_options).create('firefox', str_options).thenReturn(options)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
