@@ -70,7 +70,6 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         when(webdriver).Firefox(options=None, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_firefox({}, None, None, service_log_path=None)
         self.assertEqual(driver, expected_webdriver)
 
@@ -81,18 +80,9 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         when(webdriver).FirefoxProfile().thenReturn(profile)
         when(webdriver).Firefox(options=None, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_firefox({}, None, ff_profile_dir=None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_create_firefox_with_older_selenium(self):
-        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
-        expected_webdriver = mock()
-        profile = mock()
-        when(webdriver).FirefoxProfile().thenReturn(profile)
-        when(webdriver).Firefox(options=None, firefox_profile=profile).thenReturn(expected_webdriver)
-        driver = self.creator.create_firefox({}, None, ff_profile_dir=None)
-        self.assertEqual(driver, expected_webdriver)
 
     def test_create_headlessfirefox_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'firefox-{index}.log')
@@ -103,7 +93,6 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         when(webdriver).FirefoxOptions().thenReturn(options)
         when(webdriver).Firefox(options=options, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_headless_firefox({}, None, ff_profile_dir=None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
@@ -116,7 +105,6 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
         when(webdriver).FirefoxOptions().thenReturn(options)
         when(webdriver).Firefox(options=None, firefox_profile=profile,
                                 service_log_path=log_file).thenReturn(expected_webdriver)
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         driver = self.creator.create_driver('firefox ', {}, remote_url=None,  profile_dir=None,
                                             service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
@@ -124,42 +112,15 @@ class WebDriverCreatorServiceLogPathTests(unittest.TestCase):
     def test_create_ie_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
-        when(self.creator)._has_options(ANY).thenReturn(True)
         when(webdriver).Ie(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
         driver = self.creator.create_ie({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
-    def test_create_ie_with_service_log_path_old_selenium(self):
-        log_file = os.path.join(self.output_dir, 'ie-1.log')
-        expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
-        when(self.creator)._has_options(ANY).thenReturn(False)
-        when(webdriver).Ie().thenReturn(expected_webdriver)
-        driver = self.creator.create_ie({}, None, service_log_path=log_file)
-        self.assertEqual(driver, expected_webdriver)
-
-    def test_has_service_log_path(self):
-        status = self.creator._has_service_log_path(webdriver.Ie)
-        self.assertTrue(status)
-        status = self.creator._has_service_log_path(webdriver.Safari)
-        self.assertFalse(status)
-
     def test_create_edge_with_service_log_path_real_path(self):
         log_file = os.path.join(self.output_dir, 'ie-1.log')
         expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(True)
         when(self.creator)._has_options(ANY).thenReturn(False)
         when(webdriver).Edge(service_log_path=log_file).thenReturn(expected_webdriver)
-        driver = self.creator.create_edge({}, None, service_log_path=log_file)
-        self.assertEqual(driver, expected_webdriver)
-
-    def test_create_edge_with_service_log_path_old_selenium(self):
-        log_file = os.path.join(self.output_dir, 'ie-1.log')
-        expected_webdriver = mock()
-        when(self.creator)._has_service_log_path(ANY).thenReturn(False)
-        when(self.creator)._has_options(ANY).thenReturn(False)
-        when(webdriver).Edge().thenReturn(expected_webdriver)
         driver = self.creator.create_edge({}, None, service_log_path=log_file)
         self.assertEqual(driver, expected_webdriver)
 
