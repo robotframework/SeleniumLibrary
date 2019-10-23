@@ -21,9 +21,43 @@ Capture Element Screenshot When Path Does Not Exist
     File Should Exist    ${OUTPUTDIR}${/}elements_pictures${/}selenium-element-screenshot-1.png
     Should Be Equal    ${path}    ${OUTPUTDIR}${/}elements_pictures${/}selenium-element-screenshot-1.png
 
+
+Set Screenshot Directory As EMBED And Not Specifying Filename Whenever Taking Element Screenshots Makes Screenshots To Be Embedded
+    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+    ${previous} =    Set Screenshot Directory    EMBED
+    ${path} =    Capture Element Screenshot    id:nothing
+    ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
+    Should Be Equal As Integers    ${count}    0
+    [Teardown]    Set Screenshot Directory    ${previous}
+
+Set Screenshot Directory As EMBED And Specifying Filename Whenever Taking Element Screenshots Makes Screenshots To Be Saved As Files
+    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+    ${previous} =    Set Screenshot Directory    EMBED
+    ${path} =    Capture Element Screenshot    id:nothing    custom-element-screenshot.png
+    File Should Exist    ${OUTPUTDIR}/custom-element-screenshot.png
+    ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
+    Should Be Equal As Integers    ${count}    1
+    [Teardown]    Set Screenshot Directory    ${previous}
+
+Capture Element Screenshot And Embed It If Using Specific EMBED As Screenshot Filename, Even If Screenshot Directory Has Been Set
+    [Setup]    Remove Directory    ${OUTPUTDIR}/custom-root    recursive
+    ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}/custom-root
+    ${path} =    Capture Element Screenshot    id:nothing    EMBED
+    Should Be Equal    ${path}    EMBED
+    Directory Should Not Exist    ${OUTPUTDIR}/custom-root
+    [Teardown]    Set Screenshot Directory    ${previous}
+
+Capture Element Screenshot And Embed It If Using Specific EMBED As Screenshot Filename, Even If Screenshot Directory Is The Default
+    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+    ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}
+    ${path} =    Capture Element Screenshot    id:nothing    EMBED
+    Should Be Equal    ${path}    EMBED
+    ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
+    Should Be Equal As Integers    ${count}    0
+    [Teardown]    Set Screenshot Directory    ${previous}
+
 Capture Element Screenshot When No Browser Is Open
     [Setup]    Close All Browsers
     ${path} =    Capture Element Screenshot    id:nothing
     Should Not Be True    ${path}
-    [Teardown]  Open Browser To Start Page
-
+    [Teardown]    Open Browser To Start Page

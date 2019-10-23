@@ -152,4 +152,36 @@ Set screenshot directory when importing
     Set Screenshot Directory    ${OUTPUTDIR}/screenshots
     Capture Page Screenshot    custom-name-{index}.png
     File Should Exist    ${OUTPUTDIR}/screenshots/custom-name-1.png
+
+Set Screenshot Directory as EMBED and not specifying filename whenever taking screenshots makes screenshots to be embedded
+    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+    ${previous} =    Set Screenshot Directory    EMBED
+    ${file} =    Capture Page Screenshot
+    ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
+    Should Be Equal As Integers    ${count}    0
+    [Teardown]    Set Screenshot Directory    ${previous}
+
+Set Screenshot Directory as EMBED and specifying filename whenever taking screenshots makes screenshots to be saved as files
+    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+    ${previous} =    Set Screenshot Directory    EMBED
+    ${file} =    Capture Page Screenshot    custom-screenshot.png
+    File Should Exist    ${OUTPUTDIR}/custom-screenshot.png
+    ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
+    Should Be Equal As Integers    ${count}    1
+    [Teardown]    Set Screenshot Directory    ${previous}
+
+
+Capture page screenshot and embed it if using specific EMBED as screenshot filename, even if Screenshot Directory has been set
+    [Setup]    Remove Directory    ${OUTPUTDIR}/custom-root    recursive
+    ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}/custom-root
+    Capture Page Screenshot    EMBED
+    Directory Should Not Exist    ${OUTPUTDIR}/custom-root
+    [Teardown]    Set Screenshot Directory    ${previous}
+
+Capture page screenshot and embed it if using specific EMBED as screenshot filename, even if Screenshot Directory is the default
+    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+    ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}
+    Capture Page Screenshot    EMBED
+    ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
+    Should Be Equal As Integers    ${count}    0
     [Teardown]    Close Browser
