@@ -143,7 +143,7 @@ class ScreenshotKeywords(LibraryComponent):
         path = self._get_screenshot_path(filename)
         if path == ScreenshotKeywords.EMBED_FLAG:
             element = self.find_element(locator, required=True)
-            screenshot_base64_data =  element.screenshot_as_png
+            screenshot_base64_data =  base64.b64encode(element.screenshot_as_png)
             self._embed_to_log(screenshot_base64_data, 400)
         else:
             self._create_directory(path)

@@ -153,35 +153,34 @@ Set screenshot directory when importing
     Capture Page Screenshot    custom-name-{index}.png
     File Should Exist    ${OUTPUTDIR}/screenshots/custom-name-1.png
 
-Set Screenshot Directory as EMBED and not specifying filename whenever taking screenshots makes screenshots to be embedded
-    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+Set Screenshot directory as EMBED and not specifying filename whenever taking screenshots makes screenshots to be embedded
+    ${previous_count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
     ${previous} =    Set Screenshot Directory    EMBED
     ${file} =    Capture Page Screenshot
     ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
-    Should Be Equal As Integers    ${count}    0
+    Should Be Equal As Integers    ${count}    ${previous_count}
     [Teardown]    Set Screenshot Directory    ${previous}
 
-Set Screenshot Directory as EMBED and specifying filename whenever taking screenshots makes screenshots to be saved as files
-    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+Set Screenshot directory as EMBED and specifying filename whenever taking screenshots makes screenshots to be saved as files
+    ${previous_count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
     ${previous} =    Set Screenshot Directory    EMBED
-    ${file} =    Capture Page Screenshot    custom-screenshot.png
-    File Should Exist    ${OUTPUTDIR}/custom-screenshot.png
+    ${file} =    Capture Page Screenshot    custom-screenshot2.png
+    File Should Exist    ${OUTPUTDIR}/custom-screenshot2.png
     ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
-    Should Be Equal As Integers    ${count}    1
+    Should Be Equal As Integers    ${count}    ${previous_count+1}
     [Teardown]    Set Screenshot Directory    ${previous}
 
-
-Capture page screenshot and embed it if using specific EMBED as screenshot filename, even if Screenshot Directory has been set
-    [Setup]    Remove Directory    ${OUTPUTDIR}/custom-root    recursive
-    ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}/custom-root
+Capture page screenshot and embed it if using specific EMBED as screenshot filename, even if screenshot directory has been set
+    [Setup]    Remove Directory    ${OUTPUTDIR}/custom-root2    recursive
+    ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}/custom-root2
     Capture Page Screenshot    EMBED
-    Directory Should Not Exist    ${OUTPUTDIR}/custom-root
+    Directory Should Not Exist    ${OUTPUTDIR}/custom-root2
     [Teardown]    Set Screenshot Directory    ${previous}
 
-Capture page screenshot and embed it if using specific EMBED as screenshot filename, even if Screenshot Directory is the default
-    [Setup]    Remove Files    ${OUTPUTDIR}/*.png
+Capture page screenshot and embed it if using specific EMBED as screenshot filename, even if screenshot directory is the default
+    ${previous_count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
     ${previous} =    Set Screenshot Directory    ${OUTPUTDIR}
     Capture Page Screenshot    EMBED
     ${count} =    Count Files In Directory    ${OUTPUTDIR}    *.png
-    Should Be Equal As Integers    ${count}    0
+    Should Be Equal As Integers    ${count}    ${previous_count}
     [Teardown]    Close Browser
