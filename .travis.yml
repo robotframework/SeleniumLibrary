@@ -17,14 +17,14 @@ before_install:
   - sudo mv chromedriver /usr/bin/
 matrix:
   include:
-    - python: "3.7"
+    - python: "3.8"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
         - ROBOTFRAMEWORK=3.1.2
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python3
-    - python: "3.7"
+    - python: "3.8"
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
@@ -46,7 +46,7 @@ matrix:
         - ROBOTFRAMEWORK=3.0.4
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python2
-    - python: "3.7"
+    - python: "3.8"
       env:
         - BROWSER=headlesschrome
         - SELENIUM=3.141.0
