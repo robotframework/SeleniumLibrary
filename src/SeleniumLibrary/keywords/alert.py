@@ -136,6 +136,6 @@ class AlertKeywords(LibraryComponent):
         except TimeoutException:
             raise AssertionError('Alert not found in %s.'
                              % secs_to_timestr(timeout))
-        except WebDriverException as e:
+        except WebDriverException as err:
             raise AssertionError('An exception occurred waiting for alert: %s'
-                                 % str(e))
+                                 % err)
