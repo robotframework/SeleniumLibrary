@@ -46,10 +46,9 @@ Set Driver Variables
     ...    htmlunitwithjs=HTMLUNITWITHJS    android=ANDROID    iphone=IPHONE
     ...    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
     ${dc name}=    Get From Dictionary    ${dc names}    ${BROWSER.lower().replace(' ', '')}
-    ${caps}=    Evaluate    sys.modules['selenium.webdriver'].DesiredCapabilities.${dc name}
-    ...    selenium.webdriver,sys
-    ${url as str}=    Evaluate    str('${REMOTE_URL}')    # cannot be unicode for versions >= 2.32
+    ${caps}=    Evaluate    selenium.webdriver.DesiredCapabilities.${dc name}
+    ...                     modules=selenium, selenium.webdriver
     ${kwargs}=    Create Dictionary
     Run Keyword If    "${name}"=="Remote"    Set To Dictionary    ${kwargs}    command_executor
-    ...    ${url as str}    desired_capabilities    ${caps}
+    ...    ${REMOTE_URL}    desired_capabilities    ${caps}
     Set Test Variable    ${KWARGS}    ${kwargs}
