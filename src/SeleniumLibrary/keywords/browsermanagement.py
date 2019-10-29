@@ -308,13 +308,13 @@ class BrowserManagementKeywords(LibraryComponent):
         Selenium API documentation] for details about the supported arguments.
 
         Examples:
-        | # Use proxy with Firefox   |                |                                           |                         |
-        | ${proxy}=                  | `Evaluate`     | sys.modules['selenium.webdriver'].Proxy() | sys, selenium.webdriver |
-        | ${proxy.http_proxy}=       | `Set Variable` | localhost:8888                            |                         |
-        | `Create Webdriver`         | Firefox        | proxy=${proxy}                            |                         |
-        | # Use proxy with PhantomJS |                |                                           |                         |
-        | ${service args}=           | `Create List`  | --proxy=192.168.132.104:8888              |                         |
-        | `Create Webdriver`         | PhantomJS      | service_args=${service args}              |                         |
+        | # Use proxy with Firefox   |                |                                           |                                      |
+        | ${proxy}=                  | `Evaluate`     |  selenium.webdriver.Proxy()               | modules=selenium, selenium.webdriver |
+        | ${proxy.http_proxy}=       | `Set Variable` | localhost:8888                            |                                      |
+        | `Create Webdriver`         | Firefox        | proxy=${proxy}                            |                                      |
+        | # Use proxy with PhantomJS |                |                                           |                                      |
+        | ${service args}=           | `Create List`  | --proxy=192.168.132.104:8888              |                                      |
+        | `Create Webdriver`         | PhantomJS      | service_args=${service args}              |                                      |
 
         Returns the index of this browser instance which can be used later to
         switch back to it. Index starts from 1 and is reset back to it when
