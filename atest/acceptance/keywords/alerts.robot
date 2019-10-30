@@ -125,10 +125,11 @@ Handle Alert when popup window closes
     ...    'Handle Alert' keyword is waiting for alert
     [Setup]    Go To Page "javascript/self_closing_popup.html"
     Click Button    Self Closing
-    Switch Window   NEW
+    ${handle} =    Switch Window   NEW
     Run Keyword And Expect Error
     ...    STARTS:An exception occurred waiting for alert
     ...    Handle Alert 
+    Switch Window    ${handle}
 
 *** Keywords ***
 Wait For Title Change
