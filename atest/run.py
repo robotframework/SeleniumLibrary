@@ -168,7 +168,7 @@ def http_server():
 def execute_tests(interpreter, browser, rf_options, grid):
     options = []
     if grid:
-        runner = interpreter.split() + ['-m', 'pabot.pabot', '--processes', '2']
+        runner = interpreter.split() + ['-m', 'pabot.pabot', '--verbose', '--processes', '2']
     else:
         runner = interpreter.split() + ['-m', 'robot.run']
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
