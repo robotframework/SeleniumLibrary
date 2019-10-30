@@ -128,8 +128,8 @@ Handle Alert when popup window closes
     ${handle} =    Switch Window   NEW
     Run Keyword And Expect Error
     ...    STARTS:An exception occurred waiting for alert
-    ...    Handle Alert 
-    Switch Window    ${handle}
+    ...    Handle Alert  timeout=10s
+    [Teardown]    Switch Window    ${handle}
 
 *** Keywords ***
 Wait For Title Change
