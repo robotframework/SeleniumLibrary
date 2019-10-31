@@ -123,12 +123,11 @@ Alert Should Be Present with custom timeout
 Handle Alert when popup window closes
     [Documentation]    Popup window is closed by javascript while
     ...    'Handle Alert' keyword is waiting for alert
+    ...    FAIL GLOB: An exception occurred waiting for alert*
     [Setup]    Go To Page "javascript/self_closing_popup.html"
     Click Button    Self Closing
     ${handle} =    Switch Window   NEW
-    Run Keyword And Expect Error
-    ...    STARTS:An exception occurred waiting for alert
-    ...    Handle Alert  timeout=10s
+    Handle Alert  timeout=10s
     [Teardown]    Switch Window    ${handle}
 
 *** Keywords ***
