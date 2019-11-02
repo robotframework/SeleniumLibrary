@@ -36,6 +36,21 @@ system settings, which python is used by default. It is possible to run test
 by using different interpreter by using the `--interpreter` command line
 argument.
 
+Running test with Selenium Grid
+-------------------------------
+It is possible to run test by using `Selenium Grid`_ if keywords contains
+some grid specific implementation. Running test Selenium Grid requires
+that latest released  selenium-server-standalone-*.jar is downloaded
+in the project root and Java is installed. The `run.py` will start and
+stop Selenium servers automatically. The testing with Selenium Grid
+can done by using `--grid true` argument. In some cases Selenium Grid adds
+some extra logging and causes test to fail when `robotstatuschecker`_ is
+used. In this case, these test should be tagged with `NoGrid` tag to
+exclude the test when Selenium Grid is being used. Also there might
+be need write test that are only run when Selenium Grid is used.
+Then in this case, test should be tagged with `OnlyGrid` tag to
+include them only when Selenium Grid is used.
+
 Robot Framework command line arguments
 --------------------------------------
 It is possible to pass Robot Framework command line arguments to the test
@@ -44,26 +59,13 @@ to use arguments to select required suite or test for the execution when
 developing new functionality for the library. Example like --test, --suite,
 --include and --exclude.
 
-Using Sauce Labs for acceptance tests
--------------------------------------
-When running test by using browser from Sauce labs, it is required that the
-Sauce Connect is used. The Sauce Connect allows the browser from Sauce Labs
-reach the acceptance test web server. The acceptance test uses tunnel with
-name `localtunnel` and therefore when establishing the Sauce Connect tunnel
-use the following command::
-
-    bin/sc -u YOUR_USERNAME -k YOUR_ACCESS_KEY -i localtunnel
-
-More details and to download Sauce Connect visit:
-https://wiki.saucelabs.com/display/DOCS/High+Availability+Sauce+Connect+Proxy+Setup
-
 Examples
 --------
 Examples::
 
     run.py chrome
     run.py --interpreter jython firefox --suite javascript
-    run.py chrome --sauceusername your_username --saucekey account_key --suite javascript
+    run.py headlesschrome --nounit --grid true
     run.py --interpreter "py -2" chrome --suite javascript
 
 To run just the unit tests, run::
@@ -79,13 +81,12 @@ Travis CI integration
 `Travis CI`_ is used to automatically test all new pull request to the
 repository. The detailed information about execution matrix can be found
 from the `.travis.yam`_. Generally speaking the test are automatically run
-by using Chrome and Firefox browsers. The project uses Python 2.7, Python 3.4,
-Python 3.6 and PyPy 3.5 for test execution. The project uses and latest available 
-Selenium 3 version for test execution. Test uses Robot Framework versions 
-2.9.2 and 3.0.4 for acceptance test execution.
+by using Chrome browser and by using supported Python and Robot Framework
+versions. But in Travis only the latest released Selenium version is used.
 
 .. _browser driver: https://github.com/robotframework/SeleniumLibrary#browser-drivers
 .. _PATH: https://en.wikipedia.org/wiki/PATH_(variable)
 .. _robotstatuschecker: https://github.com/robotframework/statuschecker/
 .. _Travis CI: https://travis-ci.org/robotframework/SeleniumLibrary
 .. _.travis.yam: https://github.com/robotframework/SeleniumLibrary/blob/master/.travis.yml
+.. _Selenium Grid: https://github.com/SeleniumHQ/selenium/wiki/Grid2
