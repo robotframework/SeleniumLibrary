@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title>Self Closing Popup</title>
+        <script type="text/javascript">
+            function openCloseAfterDelay() {
+                var popupWindow = window.open("alert.html");
+                window.setTimeout(function(){
+                    popupWindow.close();
+                },500);
+            }
+        </script>
+    </head>
+    <body>
+		<p>When you click this button, another window / tab will open and automatically close 0.5s later</p>
+        <button onclick="openCloseAfterDelay()">Self Closing</button>
+    </body>
+</html>
