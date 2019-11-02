@@ -16,6 +16,8 @@
 
 import os
 
+from robot.libraries.BuiltIn import BuiltIn
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.utils import is_noney, is_truthy
@@ -231,16 +233,15 @@ class FormElementKeywords(LibraryComponent):
 
         | Input Password | password_field | ${PASSWORD} |
 
-        Notice also that SeleniumLibrary logs all the communication with
-        browser drivers using the DEBUG level, and the actual password can
-        be seen there. Additionally, Robot Framework logs all arguments using
-        the TRACE level. Tests must thus not be executed using level below
-        INFO if the password should not be logged in any format.
+        Please notice that Robot Framework logs all arguments using
+        the TRACE level and tests must not be executed using level below
+        DEBUG if the password should not be logged in any format.
 
-        The `clear` argument is new in SeleniumLibrary 4.0
+        The `clear` argument is new in SeleniumLibrary 4.0. Hiding password
+        logging from Selenium logs is new in SeleniumLibrary 4.2.
         """
         self.info("Typing password into text field '%s'." % locator)
-        self._input_text_into_text_field(locator, password, clear)
+        self._input_text_into_text_field(locator, password, clear, True)
 
     @keyword
     def input_text(self, locator, text, clear=True):
@@ -266,7 +267,7 @@ class FormElementKeywords(LibraryComponent):
         argument are new in SeleniumLibrary 4.0
         """
         self.info("Typing text '%s' into text field '%s'." % (text, locator))
-        self._input_text_into_text_field(locator, text, clear)
+        self._input_text_into_text_field(locator, text, clear, False)
 
     @keyword
     def page_should_contain_textfield(self, locator, message=None, loglevel='TRACE'):
@@ -421,8 +422,15 @@ class FormElementKeywords(LibraryComponent):
                 return element.get_attribute('value')
         return None
 
-    def _input_text_into_text_field(self, locator, text, clear):
+    def _input_text_into_text_field(self, locator, text, clear, disable_log):
         element = self.find_element(locator)
         if is_truthy(clear):
             element.clear()
-        element.send_keys(text)
+        if disable_log:
+            self.info('Temporally setting log level to: NONE')
+            previous_level = BuiltIn().set_log_level('NONE')
+        try:
+            element.send_keys(text)
+        finally:
+            if disable_log:
+                BuiltIn().set_log_level(previous_level)
