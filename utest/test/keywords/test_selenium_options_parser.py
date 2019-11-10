@@ -58,6 +58,8 @@ def test_parse_options_string(options, reporter):
     results.append(options._parse('method(";arg1")'))
     results.append(options._parse('method  (   "arg1"  ,    2    ,"arg2"   )'))
     results.append(options._parse("method('arg1')"))
+    results.append(options._parse('add_argument("-profile"); add_argument("C:\\\\path\\to\\\\profile")'))
+    results.append(options._parse(r'add_argument("-profile"); add_argument("C:\\path\\to\\profile")'))
     verify_all('Selenium options string to dict', results, reporter=reporter)
 
 
