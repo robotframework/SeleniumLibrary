@@ -241,7 +241,7 @@ class FormElementKeywords(LibraryComponent):
         logging from Selenium logs is new in SeleniumLibrary 4.2.
         """
         self.info("Typing password into text field '%s'." % locator)
-        self._input_text_into_text_field(locator, password, clear, True)
+        self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
     def input_text(self, locator, text, clear=True):
@@ -267,7 +267,7 @@ class FormElementKeywords(LibraryComponent):
         argument are new in SeleniumLibrary 4.0
         """
         self.info("Typing text '%s' into text field '%s'." % (text, locator))
-        self._input_text_into_text_field(locator, text, clear, False)
+        self._input_text_into_text_field(locator, text, clear)
 
     @keyword
     def page_should_contain_textfield(self, locator, message=None, loglevel='TRACE'):
@@ -422,7 +422,7 @@ class FormElementKeywords(LibraryComponent):
                 return element.get_attribute('value')
         return None
 
-    def _input_text_into_text_field(self, locator, text, clear, disable_log):
+    def _input_text_into_text_field(self, locator, text, clear=True, disable_log=False):
         element = self.find_element(locator)
         if is_truthy(clear):
             element.clear()
