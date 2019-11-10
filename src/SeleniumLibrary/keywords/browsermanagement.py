@@ -125,7 +125,8 @@ class BrowserManagementKeywords(LibraryComponent):
         and attributes to define the profile using methods and attributes
         in the same way as with ``options`` argument. Example: It is possible
         to use FirefoxProfile `set_preference` to define different
-        profile settings.
+        profile settings. See ``options`` argument documentation in below
+        how to handle backslash escaping.
 
         Optional ``options`` argument allows defining browser specific
         Selenium options. Example for Chrome, the ``options`` argument
@@ -177,7 +178,16 @@ class BrowserManagementKeywords(LibraryComponent):
         `add_argument ( "--headless" )` is same as
         `add_argument("--headless")`. But `add_argument(" --headless ")` is
         not same same as `add_argument ( "--headless" )`, because
-        spaces inside of quotes are not removed.
+        spaces inside of quotes are not removed. Please note that if
+        options string contains backslash, example a Windows OS path,
+        the backslash needs escaping both in Robot Framework data and
+        in Python side. This means single backslash must be writen using
+        four backslash characters. Example, Windows path:
+        "C:\\path\\to\\profile" must be written as
+        "C:\\\\\\\\path\\\\\\to\\\\\\\\profile". Another way to write
+        backslash is use Python
+        [https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals|raw strings]
+        and example write: r"C:\\\\path\\\\to\\\\profile".
 
         As last format, ``options`` argument also supports receiving
         the Selenium options as Python class instance. In this case, the
@@ -229,15 +239,16 @@ class BrowserManagementKeywords(LibraryComponent):
         Example when using
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
         method:
-        | `Open Browser` | http://example.com | Chrome | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format                    |
-        |  ${options} =  |     Get Options    |        |                                                                                               | # Selenium options instance       |
-        | `Open Browser` | http://example.com | Chrome | options=${options}                                                                            |                                   |
-        | `Open Browser` | None               | Chrome | options=binary_location="/path/to/binary";add_argument("remote-debugging-port=port")          | # Start Chomium-based application |
+        | `Open Browser` | http://example.com | Chrome | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format.                    |
+        |  ${options} =  |     Get Options    |        |                                                                                               | # Selenium options instance.       |
+        | `Open Browser` | http://example.com | Chrome | options=${options}                                                                            |                                    |
+        | `Open Browser` | None               | Chrome | options=binary_location="/path/to/binary";add_argument("remote-debugging-port=port")          | # Start Chomium-based application. |
+        | `Open Browser` | None               | Chrome | options=binary_location=r"C:\\\\path\\\\to\\\\binary"                                         | # Windows OS path escaping.        |
 
         Example for FirefoxProfile
-        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=/path/to/profile                                                  | # Using profile from disk                       |
-        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=${FirefoxProfile_instance}                                        | # Using instance of FirefoxProfile              |
-        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=set_preference("key", "value");set_preference("other", "setting") | # Defining profile using FirefoxProfile mehtods |
+        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=/path/to/profile                                                  | # Using profile from disk.                       |
+        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=${FirefoxProfile_instance}                                        | # Using instance of FirefoxProfile.              |
+        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=set_preference("key", "value");set_preference("other", "setting") | # Defining profile using FirefoxProfile mehtods. |
 
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even
