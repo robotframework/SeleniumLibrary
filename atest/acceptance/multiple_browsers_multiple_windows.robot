@@ -18,13 +18,13 @@ Resource          resource.robot
 *** Test Cases ***
 Check Titles of Multiple Browser-Windows 
     @{BrowserA_Titles}=    Get Window Titles    browser=BrowserA 
-    Should Be Equal    ${BrowserA_Titles}    ${BrowserA_EXP_TITLES}
+    Should Be Equal        ${BrowserA_Titles}    ${BrowserA_EXP_TITLES}
     @{BrowserB_Titles}=    Get Window Titles    browser=BrowserB
-    Should Be Equal    ${BrowserB_Titles}    ${BrowserB_EXP_TITLES}
+    Should Be Equal        ${BrowserB_Titles}    ${BrowserB_EXP_TITLES}
     @{BrowserC_Titles}=    Get Window Titles    browser=BrowserC
-    Should Be Equal    ${BrowserC_Titles}    ${BrowserC_EXP_TITLES}
+    Should Be Equal        ${BrowserC_Titles}    ${BrowserC_EXP_TITLES}
     @{All_Browsers_Titles}=    Get Window Titles  browser=ALL
-    Should Be Equal    ${All_Browsers_Titles}    ${ALL_BROWSERS_EXP_TITLES}
+    Should Be Equal            ${All_Browsers_Titles}    ${ALL_BROWSERS_EXP_TITLES}
 
 Check Count of Handle
     Check Handle Count    3    BrowserA
