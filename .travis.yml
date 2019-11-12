@@ -43,7 +43,7 @@ matrix:
       env:
         - BROWSER=chrome
         - SELENIUM=3.141.0
-        - ROBOTFRAMEWORK=3.0.4
+        - ROBOTFRAMEWORK=3.2a1
         - ROBOT_OPTIONS=--dotted
         - INTERPRETER=python2
     - python: "3.8"
