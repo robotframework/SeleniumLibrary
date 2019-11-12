@@ -130,6 +130,7 @@ Open Browser With Alias And Title
     Open Browser    ${FRONT_PAGE}javascript/dynamic_content.html?${id}    ${BROWSER}    alias=${alias}
     Set Window Title    ${title}
 
+
 Set Window Title
     [Arguments]    ${title}
     Input Text    id:titleChangeTxt    ${title}
