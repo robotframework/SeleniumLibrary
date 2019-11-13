@@ -8,8 +8,9 @@ Big List Of Naughty Strings
     ...    https://github.com/minimaxir/big-list-of-naughty-strings
     Open Browser To Start Page
     ${blns} =    blns.Get Blns
-    :FOR    ${string}    IN    @{blns}
-    \    Check Blns Error Check    ${string}
+    FOR    ${string}    IN    @{blns}
+        Check Blns Error Check    ${string}
+    END
 
 *** Keywords ***
 Check Blns Error Check

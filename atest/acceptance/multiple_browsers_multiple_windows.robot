@@ -18,13 +18,13 @@ Resource          resource.robot
 *** Test Cases ***
 Check Titles of Multiple Browser-Windows 
     @{BrowserA_Titles}=    Get Window Titles    browser=BrowserA 
-    Should Be Equal    ${BrowserA_Titles}    ${BrowserA_EXP_TITLES}
+    Should Be Equal        ${BrowserA_Titles}    ${BrowserA_EXP_TITLES}
     @{BrowserB_Titles}=    Get Window Titles    browser=BrowserB
-    Should Be Equal    ${BrowserB_Titles}    ${BrowserB_EXP_TITLES}
+    Should Be Equal        ${BrowserB_Titles}    ${BrowserB_EXP_TITLES}
     @{BrowserC_Titles}=    Get Window Titles    browser=BrowserC
-    Should Be Equal    ${BrowserC_Titles}    ${BrowserC_EXP_TITLES}
+    Should Be Equal        ${BrowserC_Titles}    ${BrowserC_EXP_TITLES}
     @{All_Browsers_Titles}=    Get Window Titles  browser=ALL
-    Should Be Equal    ${All_Browsers_Titles}    ${ALL_BROWSERS_EXP_TITLES}
+    Should Be Equal            ${All_Browsers_Titles}    ${ALL_BROWSERS_EXP_TITLES}
 
 Check Count of Handle
     Check Handle Count    3    BrowserA
@@ -46,12 +46,12 @@ Check Count of Identifiers
 
 Check Locations
     @{Locations}=    Get Locations    browser=ALL
-    Should Be Equal As Strings    @{Locations}[0]    ${FRONT_PAGE}javascript/dynamic_content.html?1
-    Should Be Equal As Strings    @{Locations}[1]    ${FRONT_PAGE}javascript/dynamic_content.html?2
-    Should Be Equal As Strings    @{Locations}[2]    ${FRONT_PAGE}javascript/dynamic_content.html?3
-    Should Be Equal As Strings    @{Locations}[3]    ${FRONT_PAGE}javascript/dynamic_content.html?4
-    Should Be Equal As Strings    @{Locations}[4]    ${FRONT_PAGE}javascript/dynamic_content.html?5
-    Should Be Equal As Strings    @{Locations}[5]    ${FRONT_PAGE}javascript/dynamic_content.html?6
+    Should Be Equal As Strings    ${Locations}[0]    ${FRONT_PAGE}javascript/dynamic_content.html?1
+    Should Be Equal As Strings    ${Locations}[1]    ${FRONT_PAGE}javascript/dynamic_content.html?2
+    Should Be Equal As Strings    ${Locations}[2]    ${FRONT_PAGE}javascript/dynamic_content.html?3
+    Should Be Equal As Strings    ${Locations}[3]    ${FRONT_PAGE}javascript/dynamic_content.html?4
+    Should Be Equal As Strings    ${Locations}[4]    ${FRONT_PAGE}javascript/dynamic_content.html?5
+    Should Be Equal As Strings    ${Locations}[5]    ${FRONT_PAGE}javascript/dynamic_content.html?6
     ${count}    Get Length    ${Locations}
     Should Be Equal As Integers    6    ${count}
 
@@ -87,12 +87,12 @@ Get Specific Locations and Title
     Switch Window     title:WindowA1
     Location Should Be    ${FRONT_PAGE}javascript/dynamic_content.html?1
     @{Locations}=    Get Locations    browser=BrowserB
-    Should Be Equal    @{Locations}[0]    ${FRONT_PAGE}javascript/dynamic_content.html?4
-    Should Be Equal    @{Locations}[1]    ${FRONT_PAGE}javascript/dynamic_content.html?5
+    Should Be Equal    ${Locations}[0]    ${FRONT_PAGE}javascript/dynamic_content.html?4
+    Should Be Equal    ${Locations}[1]    ${FRONT_PAGE}javascript/dynamic_content.html?5
     ${count}=    Get Length    ${Locations}
     Should Be Equal As Integers    ${count}    2
     @{Titles}=    Get Window Titles    browser=BrowserC
-    Should Be Equal    @{Titles}[0]    WindowC1
+    Should Be Equal    ${Titles}[0]    WindowC1
     ${count}=    Get Length    ${Titles}
     Should Be Equal As Integers    ${count}    1
     
@@ -157,7 +157,8 @@ Check Identifiers Count
 Switch Window By Location
     [Arguments]    ${selected_location}
     @{IDs}=    Get Browser Ids
-    :FOR     ${id}    IN    @{IDs}
-    \    @{locations}=    Get Locations    browser=${id}   
-    \    Run Keyword If    '${selected_location}' in $locations
-    ...    Switch Window    url:${selected_location}    browser=${id}
+    FOR     ${id}    IN    @{IDs}
+        @{locations}=    Get Locations    browser=${id}
+        Run Keyword If    '${selected_location}' in $locations
+        ...    Switch Window    url:${selected_location}    browser=${id}
+    END
