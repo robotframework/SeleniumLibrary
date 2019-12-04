@@ -16,7 +16,7 @@ Get Zero Elements
 Get Web Element
     @{links}=    Get WebElements    //div[@id="div_id"]/a
     ${link}=    Get WebElement    //div[@id="div_id"]/a
-    Should Be Equal    @{links}[0]    ${link}
+    Should Be Equal    ${links}[0]    ${link}
 
 Get Web Element Should Fail If Element Is Not Found
     Run Keyword and Expect Error
@@ -27,14 +27,18 @@ More Get Elements
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     @{checkboxes}=    Get WebElements    //input[@type="checkbox"]
     Length Should Be    ${checkboxes}    2
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Unselect Checkbox    ${checkbox}
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Checkbox Should Not Be Selected    ${checkbox}
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Select Checkbox    ${checkbox}
-    : FOR    ${checkbox}    IN    @{checkboxes}
-    \    Checkbox Should Be Selected    ${checkbox}
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Unselect Checkbox    ${checkbox}
+    END
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Checkbox Should Not Be Selected    ${checkbox}
+    END
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Select Checkbox    ${checkbox}
+    END
+    FOR    ${checkbox}    IN    @{checkboxes}
+        Checkbox Should Be Selected    ${checkbox}
+    END
 
 Assign Id To Element
     Page Should Not Contain Element    my id

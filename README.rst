@@ -264,7 +264,7 @@ Going forward, all new development will happen in the new SeleniumLibrary
 project.
 
 .. _Robot Framework: https://robotframework.org
-.. _Selenium: https://seleniumhq.org
+.. _Selenium: https://www.seleniumhq.org/
 .. _SeleniumLibrary: https://github.com/robotframework/SeleniumLibrary
 .. _Selenium2Library: https://github.com/robotframework/Selenium2Library
 .. _Old SeleniumLibrary: https://github.com/robotframework/OldSeleniumLibrary

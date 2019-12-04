@@ -22,7 +22,7 @@ def remove_output_dir():
 def run_unit_tests():
     sys.path.insert(0, SRC)
     try:
-        result = py_main(['--rootdir=%s' % CURDIR])
+        result = py_main(['--rootdir=%s' % CURDIR, '-p', 'no:cacheprovider', CURDIR])
     finally:
         sys.path.pop(0)
     return result

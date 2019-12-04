@@ -16,3 +16,5 @@ Selenium options string to dict
 13) [{'method': [';arg1']}]
 14) [{'method': ['arg1', 2, 'arg2']}]
 15) [{'method': ['arg1']}]
+16) [{'add_argument': ['-profile']}, {'add_argument': ['C:\\path\to\\profile']}]
+17) [{'add_argument': ['-profile']}, {'add_argument': ['C:\\path\\to\\profile']}]
