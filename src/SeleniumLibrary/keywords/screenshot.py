@@ -103,17 +103,15 @@ class ScreenshotKeywords(LibraryComponent):
         if not self.drivers.current:
             self.info('Cannot capture screenshot because no browser is open.')
             return
-        path = self._get_screenshot_path(filename)
-        if (path == ScreenshotKeywords.EMBED_FLAG):
+        if self.screenshot_should_be_embedded(filename):
             screenshot_base64_data =  self.driver.get_screenshot_as_base64()
-            self._embed_to_log(screenshot_base64_data, 800)
-            #return ScreenshotKeywords.EMBED_FLAG
+            return self._embed_to_log(screenshot_base64_data, 800)
         else:
+            path = self._get_screenshot_path(filename)
             self._create_directory(path)
             if not self.driver.save_screenshot(path):
                 raise RuntimeError("Failed to save screenshot '{}'.".format(path))
-            self._embed_reference_to_log(path, 800)
-        return path
+            return self._embed_reference_to_log(path, 800)
 
     @keyword
     def capture_element_screenshot(self, locator, filename=DEFAULT_FILENAME_CAPTURE_ELEMENT_SCREENSHOT):
@@ -140,34 +138,31 @@ class ScreenshotKeywords(LibraryComponent):
         if not self.drivers.current:
             self.info('Cannot capture screenshot from element because no browser is open.')
             return
-        path = self._get_screenshot_path(filename)
-        if path == ScreenshotKeywords.EMBED_FLAG:
+        if self.screenshot_should_be_embedded(filename):
             element = self.find_element(locator, required=True)
             screenshot_base64_data =  base64.b64encode(element.screenshot_as_png)
-            self._embed_to_log(screenshot_base64_data, 400)
+            return self._embed_to_log(screenshot_base64_data, 400)
         else:
+            path = self._get_screenshot_path(filename)
             self._create_directory(path)
             element = self.find_element(locator, required=True)
             if not element.screenshot(path):
                 raise RuntimeError("Failed to save element screenshot '{}'.".format(path))
-            self._embed_reference_to_log(path, 400)
-        return path
+            return self._embed_reference_to_log(path, 400)
 
     def _screenshot_root_directory_is_embed(self):
-        return (self.ctx.screenshot_root_directory is not None and self.ctx.screenshot_root_directory.upper() == ScreenshotKeywords.EMBED_FLAG)
+        return self.ctx.screenshot_root_directory is not None and self.ctx.screenshot_root_directory.upper() == ScreenshotKeywords.EMBED_FLAG
 
-    def _screenshot_should_be_embedded(self, path):
-        # screenshot should be embedded if path=EMBED or if filename is not defined (i.e. is the default) and screenshot_root_directory is EMBED
-        if (path.upper() == ScreenshotKeywords.EMBED_FLAG) or \
-              ((path == ScreenshotKeywords.DEFAULT_FILENAME_CAPTURE_PAGE_SCREENSHOT or path == ScreenshotKeywords.DEFAULT_FILENAME_CAPTURE_ELEMENT_SCREENSHOT) and self._screenshot_root_directory_is_embed() == True):
+    def screenshot_should_be_embedded(self, filename):
+        if filename == ScreenshotKeywords.EMBED_FLAG:
             return True
-        else:
-            return False
+        if self._screenshot_root_directory_is_embed() and filename == ScreenshotKeywords.DEFAULT_FILENAME_CAPTURE_PAGE_SCREENSHOT:
+            return True
+        if self._screenshot_root_directory_is_embed() and filename == ScreenshotKeywords.DEFAULT_FILENAME_CAPTURE_ELEMENT_SCREENSHOT:
+            return True
+        return False
 
     def _get_screenshot_path(self, filename):
-        if self._screenshot_should_be_embedded(filename) == True:
-            return ScreenshotKeywords.EMBED_FLAG
-
         if self._screenshot_root_directory_is_embed():
             if os.path.isabs(filename):
                 return filename
@@ -197,6 +192,7 @@ class ScreenshotKeywords(LibraryComponent):
         self.info('</td></tr><tr><td colspan="3">'
                   '<img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,{screenshot_data}" width="{width}px">'
                   .format(screenshot_data=screenshot_base64_data, width=width), html=True)
+        return ScreenshotKeywords.EMBED_FLAG
 
     def _embed_reference_to_log(self, path, width):
         # Image is shown on its own row and thus previous row is closed on
@@ -204,3 +200,4 @@ class ScreenshotKeywords(LibraryComponent):
         self.info('</td></tr><tr><td colspan="3">'
                   '<a href="{src}"><img src="{src}" width="{width}px"></a>'
                   .format(src=get_link_path(path, self.log_dir), width=width), html=True)
+        return path
