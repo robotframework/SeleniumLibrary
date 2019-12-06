@@ -137,12 +137,13 @@ class ScreenshotKeywords(LibraryComponent):
     def _screenshot_root_directory(self, value):
         self.ctx.screenshot_root_directory = value
 
-    def _decide_embedded(self, file_name):
-        if file_name == DEFAULT_FILENAME_PAGE and self._screenshot_root_directory == EMBED:
+    def _decide_embedded(self, filename):
+        filename = filename.lower()
+        if filename == DEFAULT_FILENAME_PAGE and self._screenshot_root_directory == EMBED:
             return True
-        if file_name == DEFAULT_FILENAME_ELEMENT and self._screenshot_root_directory == EMBED:
+        if filename == DEFAULT_FILENAME_ELEMENT and self._screenshot_root_directory == EMBED:
             return True
-        if file_name == EMBED:
+        if filename == EMBED.lower():
             return True
         return False
 

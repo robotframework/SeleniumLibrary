@@ -27,7 +27,9 @@ def test_defaults(screen_shot):
 def test_screen_shotdir_embeded(screen_shot):
     screen_shot.ctx.screenshot_root_directory = EMBED
     assert screen_shot._decide_embedded(SCREENSHOT_FILE_NAME) is True
+    assert screen_shot._decide_embedded(SCREENSHOT_FILE_NAME.upper()) is True
     assert screen_shot._decide_embedded(ELEMENT_FILE_NAME) is True
+    assert screen_shot._decide_embedded(ELEMENT_FILE_NAME.upper()) is True
     assert screen_shot._decide_embedded('other.psn') is False
 
 
