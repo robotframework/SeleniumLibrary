@@ -47,8 +47,8 @@ class ScreenshotKeywords(LibraryComponent):
         else:
             path = os.path.abspath(path)
             self._create_directory(path)
-        previous = self.ctx.screenshot_root_directory
-        self.ctx.screenshot_root_directory = path
+        previous = self._screenshot_root_directory
+        self._screenshot_root_directory = path
         return previous
 
     @keyword
@@ -125,8 +125,16 @@ class ScreenshotKeywords(LibraryComponent):
         self._embed_to_log(path, 400)
         return path
 
+    @property
+    def _screenshot_root_directory(self):
+        return self.ctx.screenshot_root_directory
+
+    @_screenshot_root_directory.setter
+    def _screenshot_root_directory(self, value):
+        self.ctx.screenshot_root_directory = value
+
     def _get_screenshot_path(self, filename):
-        directory = self.ctx.screenshot_root_directory or self.log_dir
+        directory = self._screenshot_root_directory or self.log_dir
         filename = filename.replace('/', os.sep)
         index = 0
         while True:
