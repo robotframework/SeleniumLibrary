@@ -48,6 +48,8 @@ class ScreenshotKeywords(LibraryComponent):
         """
         if is_noney(path):
             path = None
+        elif path.upper() == EMBED:
+            path = EMBED
         else:
             path = os.path.abspath(path)
             self._create_directory(path)

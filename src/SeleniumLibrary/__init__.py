@@ -20,6 +20,7 @@ from inspect import getdoc, isclass
 from robot.api import logger
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
+from robot.utils import is_string
 from robot.utils.importer import Importer
 
 from SeleniumLibrary.base import DynamicCore, LibraryComponent
@@ -38,6 +39,7 @@ from SeleniumLibrary.keywords import (AlertKeywords,
                                       WaitingKeywords,
                                       WebDriverCache,
                                       WindowKeywords)
+from SeleniumLibrary.keywords.screenshot import EMBED
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, timestr_to_secs, is_truthy
 
@@ -427,10 +429,10 @@ class SeleniumLibrary(DynamicCore):
         self.timeout = timestr_to_secs(timeout)
         self.implicit_wait = timestr_to_secs(implicit_wait)
         self.speed = 0.0
-        self.run_on_failure_keyword \
-            = RunOnFailureKeywords.resolve_keyword(run_on_failure)
+        self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(run_on_failure)
         self._running_on_failure_keyword = False
         self.screenshot_root_directory = screenshot_root_directory
+        self._resolve_screenshot_root_directory()
         self._element_finder = ElementFinder(self)
         self._plugin_keywords = []
         libraries = [
@@ -628,3 +630,9 @@ class SeleniumLibrary(DynamicCore):
     def _store_plugin_keywords(self, plugin):
         dynamic_core = DynamicCore([plugin])
         self._plugin_keywords.extend(dynamic_core.get_keyword_names())
+
+    def _resolve_screenshot_root_directory(self):
+        screenshot_root_directory = self.screenshot_root_directory
+        if is_string(screenshot_root_directory):
+            if screenshot_root_directory.upper() == EMBED:
+                self.screenshot_root_directory = EMBED
