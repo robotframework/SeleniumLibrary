@@ -22,6 +22,10 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_noney
 from SeleniumLibrary.utils.path_formatter import _format_path
 
+DEFAULT_FILENAME_PAGE = 'selenium-screenshot-{index}.png'
+DEFAULT_FILENAME_ELEMENT = 'selenium-element-screenshot-{index}.png'
+EMBED = 'EMBED'
+
 
 class ScreenshotKeywords(LibraryComponent):
 
@@ -52,7 +56,7 @@ class ScreenshotKeywords(LibraryComponent):
         return previous
 
     @keyword
-    def capture_page_screenshot(self, filename='selenium-screenshot-{index}.png'):
+    def capture_page_screenshot(self, filename=DEFAULT_FILENAME_PAGE):
         """Takes a screenshot of the current page and embeds it into a log file.
 
         ``filename`` argument specifies the name of the file to write the
@@ -95,7 +99,7 @@ class ScreenshotKeywords(LibraryComponent):
         return path
 
     @keyword
-    def capture_element_screenshot(self, locator, filename='selenium-element-screenshot-{index}.png'):
+    def capture_element_screenshot(self, locator, filename=DEFAULT_FILENAME_ELEMENT):
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 
         See `Capture Page Screenshot` for details about ``filename`` argument.
@@ -132,6 +136,15 @@ class ScreenshotKeywords(LibraryComponent):
     @_screenshot_root_directory.setter
     def _screenshot_root_directory(self, value):
         self.ctx.screenshot_root_directory = value
+
+    def _decide_embedded(self, file_name):
+        if file_name == DEFAULT_FILENAME_PAGE and self._screenshot_root_directory == EMBED:
+            return True
+        if file_name == DEFAULT_FILENAME_ELEMENT and self._screenshot_root_directory == EMBED:
+            return True
+        if file_name == EMBED:
+            return True
+        return False
 
     def _get_screenshot_path(self, filename):
         directory = self._screenshot_root_directory or self.log_dir
