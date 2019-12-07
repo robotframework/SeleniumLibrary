@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import os
 
 from robot.utils import get_link_path
@@ -93,12 +92,22 @@ class ScreenshotKeywords(LibraryComponent):
         if not self.drivers.current:
             self.info('Cannot capture screenshot because no browser is open.')
             return
+        if self._decide_embedded(filename):
+            return self._capture_page_screen_to_log()
+        return self._capture_page_screenshot_to_file(filename)
+
+    def _capture_page_screenshot_to_file(self, filename):
         path = self._get_screenshot_path(filename)
         self._create_directory(path)
         if not self.driver.save_screenshot(path):
             raise RuntimeError("Failed to save screenshot '{}'.".format(path))
-        self._embed_to_log(path, 800)
+        self._embed_to_log_as_file(path, 800)
         return path
+
+    def _capture_page_screen_to_log(self):
+        screenshot_as_base64 = self.driver.get_screenshot_as_base64()
+        self._embed_to_log_as_base64(screenshot_as_base64, 800)
+        return EMBED
 
     @keyword
     def capture_element_screenshot(self, locator, filename=DEFAULT_FILENAME_ELEMENT):
@@ -123,13 +132,22 @@ class ScreenshotKeywords(LibraryComponent):
         if not self.drivers.current:
             self.info('Cannot capture screenshot from element because no browser is open.')
             return
+        element = self.find_element(locator, required=True)
+        if self._decide_embedded(filename):
+            return self._capture_element_screen_to_log(element)
+        return self._capture_element_screenshot_to_file(element, filename)
+
+    def _capture_element_screenshot_to_file(self, element, filename):
         path = self._get_screenshot_path(filename)
         self._create_directory(path)
-        element = self.find_element(locator, required=True)
         if not element.screenshot(path):
             raise RuntimeError("Failed to save element screenshot '{}'.".format(path))
-        self._embed_to_log(path, 400)
+        self._embed_to_log_as_file(path, 400)
         return path
+
+    def _capture_element_screen_to_log(self, element):
+        self._embed_to_log_as_base64(element.screenshot_as_base64, 400)
+        return EMBED
 
     @property
     def _screenshot_root_directory(self):
@@ -166,7 +184,15 @@ class ScreenshotKeywords(LibraryComponent):
         if not os.path.exists(target_dir):
             os.makedirs(target_dir)
 
-    def _embed_to_log(self, path, width):
+    def _embed_to_log_as_base64(self, screenshot_as_base64, width):
+        # base64 image is shown as on its own row and thus previous row is closed on
+        # purpose. Depending on Robot's log structure is a bit risky.
+        self.info('</td></tr><tr><td colspan="3">'
+                  '<img alt="screenshot" class="robot-seleniumlibrary-screenshot" '
+                  'src="data:image/png;base64,{screenshot_data}" width="{width}px">'
+                  .format(screenshot_data=screenshot_as_base64, width=width), html=True)
+
+    def _embed_to_log_as_file(self, path, width):
         # Image is shown on its own row and thus previous row is closed on
         # purpose. Depending on Robot's log structure is a bit risky.
         self.info('</td></tr><tr><td colspan="3">'
