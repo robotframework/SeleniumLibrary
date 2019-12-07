@@ -418,8 +418,9 @@ class SeleniumLibrary(DynamicCore):
         - ``run_on_failure``:
           Default action for the `run-on-failure functionality`.
         - ``screenshot_root_directory``:
-          Location where possible screenshots are created. If not given,
-          the directory where the log file is written is used.
+          Path to folder where possible screenshots are created or EMBED.
+          See `Set Screenshot Directory` keyword for further details about EMBED.
+          If not given, the directory where the log file is written is used.
         - ``plugins``:
           Allows extending the SeleniumLibrary with external Python classes.
         - ``event_firing_webdriver``:

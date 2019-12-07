@@ -39,11 +39,18 @@ class ScreenshotKeywords(LibraryComponent):
         screenshots are saved to the same directory where Robot Framework's
         log file is written.
 
+        If ``path`` equals to EMBED (case insensitive) and
+        `Capture Page Screenshot` or `capture Element Screenshot` keywords
+        filename argument is not changed from the default value, then
+        the page or element screenshot is embedded as Base64 image to
+        the log.html.
+
         The previous value is returned and can be used to restore
         the original value later if needed.
 
         Returning the previous value is new in SeleniumLibrary 3.0.
-        The persist argument was removed in SeleniumLibrary 3.2.
+        The persist argument was removed in SeleniumLibrary 3.2 and
+        EMBED is new in SeleniumLibrary 4.2.
         """
         if is_noney(path):
             path = None
@@ -67,6 +74,10 @@ class ScreenshotKeywords(LibraryComponent):
         are saved to the same directory where Robot Framework's log file is
         written.
 
+        If ``filename`` equals to EMBED (case insensitive), then screenshot
+        is embedded as Base64 image to the log.html. In this case file is not
+        created in the filesystem.
+
         Starting from SeleniumLibrary 1.8, if ``filename`` contains marker
         ``{index}``, it will be automatically replaced with an unique running
         index, preventing files to be overwritten. Indices start from 1,
@@ -74,7 +85,10 @@ class ScreenshotKeywords(LibraryComponent):
         [https://docs.python.org/3/library/string.html#format-string-syntax|
         format string syntax].
 
-        An absolute path to the created screenshot file is returned.
+        An absolute path to the created screenshot file is returned or if
+        ``filename``  equals to EMBED, word `EMBED` is returned.
+
+        Support for EMBED is new in SeleniumLibrary 4.2
 
         Examples:
         | `Capture Page Screenshot` |                                        |
@@ -88,6 +102,8 @@ class ScreenshotKeywords(LibraryComponent):
         | `File Should Exist`       | ${OUTPUTDIR}/custom_with_index_1.png   |
         | `Capture Page Screenshot` | formatted_index_{index:03}.png         |
         | `File Should Exist`       | ${OUTPUTDIR}/formatted_index_001.png   |
+        | `Capture Page Screenshot` | EMBED                                  |
+        | `File Should Not Exist`   | EMBED                                  |
         """
         if not self.drivers.current:
             self.info('Cannot capture screenshot because no browser is open.')
@@ -123,11 +139,12 @@ class ScreenshotKeywords(LibraryComponent):
         among browser vendors. Please check the browser vendor driver documentation
         does the browser support capturing a screenshot from an element.
 
-        New in SeleniumLibrary 3.3
+        New in SeleniumLibrary 3.3. Support for EMBED is new in SeleniumLibrary 4.2.
 
         Examples:
         | `Capture Element Screenshot` | id:image_id |                                |
         | `Capture Element Screenshot` | id:image_id | ${OUTPUTDIR}/id_image_id-1.png |
+        | `Capture Element Screenshot` | id:image_id | EMBED                          |
         """
         if not self.drivers.current:
             self.info('Cannot capture screenshot from element because no browser is open.')

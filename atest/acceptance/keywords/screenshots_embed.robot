@@ -33,7 +33,6 @@ Capture Element Screenshot EMBED As File Name
     Should Be Equal    ${file}    EMBED
     Verify That .png Files Do Not Exist
 
-
 *** Keywords ***
 Remove .png Files
     Remove Files     ${OUTPUTDIR}/*.png
