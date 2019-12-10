@@ -115,7 +115,7 @@ class JavaScriptKeywords(LibraryComponent):
             raise ValueError('JavaScript code was not found from code argument.')
         js_code = ''.join(js_code)
         path = js_code.replace('/', os.sep)
-        if os.path.isfile(path):
+        if os.path.isabs(path) and os.path.isfile(path):
             js_code = self._read_javascript_from_file(path)
         return js_code, js_args
 
