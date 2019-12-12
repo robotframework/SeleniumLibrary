@@ -2,7 +2,7 @@
 Documentation     Test custom locators
 Suite Setup       Go To Page "index.html"
 Resource          ../resource.robot
-Library           custom_locator
+Library           ../../resources/testlibs/custom_locator.py 
 
 *** Test Cases ***
 Test Custom Locator
