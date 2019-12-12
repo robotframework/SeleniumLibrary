@@ -2,12 +2,20 @@
 Documentation     Test custom locators
 Suite Setup       Go To Page "index.html"
 Resource          ../resource.robot
+Library           ../../resources/testlibs/custom_locator.py 
 
 *** Test Cases ***
 Test Custom Locator
     [Setup]    Setup Custom Locator
     Page Should Contain Element    custom=some_id
     Page Should Not Contain Element    custom=invalid_id
+
+Test Library Custom Locator
+    [Setup]    Add Location Strategy    tidii    Custom Library Locator
+    Click Element            tidii:span
+    Run Keyword And Expect Error
+    ...    Button with locator 'tidii:span' not found.
+    ...    Click Button             tidii:span
 
 Ensure Locator Auto Unregisters
     [Documentation]    Checks to see if the custom locator registered in the last
