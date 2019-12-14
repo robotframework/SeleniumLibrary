@@ -7,6 +7,7 @@ from mockito import mock, when, unstub, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
+from SeleniumLibrary.utils import WINDOWS
 
 
 @pytest.fixture(scope='module')
@@ -29,7 +30,7 @@ def test_no_log_file(creator):
 
 
 def test_log_file_with_rf_file_separator(creator):
-    log_file = '/path/to/own_name.txt'
+    log_file = 'C:\\path\\to\\own_name.txt' if WINDOWS else '/path/to/own_name.txt'
     file_name = creator.creator._get_log_path(log_file)
     log_file = log_file.replace('/', os.sep)
     assert file_name == log_file
