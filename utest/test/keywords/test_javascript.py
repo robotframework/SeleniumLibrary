@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from robot.utils import JYTHON
+from robot.utils import JYTHON, WINDOWS
 
 try:
     from approvaltests.approvals import verify, verify_all
@@ -20,6 +20,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
 
     @classmethod
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def setUpClass(cls):
         cls.code_examples = [(),
             ('code1',), ('code1', 'code2'),
@@ -43,12 +44,14 @@ class JavaScriptKeywordsTest(unittest.TestCase):
         cls.reporter = factory.get_first_working()
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_get_javascript(self):
         code, args = self.js._get_javascript_to_execute(('code', 'here'))
         result = '%s + %s' % (code, args)
         verify(result, self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_get_javascript_no_code(self):
         code = ('ARGUMENTS', 'arg1', 'arg1')
         try:
@@ -58,6 +61,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
         verify(result, self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_separate_code_and_args(self):
         all_results = []
         for code in self.code_examples:
@@ -65,6 +69,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
         verify_all('code and args', all_results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_indexing(self):
         all_results = []
         for code in self.code_examples:
@@ -72,6 +77,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
         verify_all('index', all_results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_check_marker_error(self):
         examples = [
             (),

@@ -1,7 +1,7 @@
 import unittest
 import os
 
-from robot.utils import JYTHON
+from robot.utils import JYTHON, WINDOWS
 
 try:
     from approvaltests.approvals import verify_all
@@ -31,6 +31,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         self.reporter = factory.get_first_working()
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_parse_keys(self):
         results = []
         results.append(self.element_keywords._parse_keys('A', 'B', 'C'))
@@ -49,6 +50,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         verify_all('index', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_parse_keys_aliases(self):
         results = []
         results.append(self.element_keywords._parse_aliases('CTRL'))
@@ -60,6 +62,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         verify_all('Alias testing', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_separate_key(self):
         results = []
         results.append(self.element_keywords._separate_key('BB'))
@@ -75,6 +78,7 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         verify_all('Separate key', results, reporter=self.reporter)
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_convert_key(self):
         results = []
         results.append(self.element_keywords._convert_special_keys(['B']))
