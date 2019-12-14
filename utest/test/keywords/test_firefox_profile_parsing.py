@@ -1,8 +1,7 @@
 import os
 import unittest
 
-import selenium
-from robot.utils import JYTHON
+from robot.utils import JYTHON, WINDOWS
 from selenium import webdriver
 try:
     from approvaltests.approvals import verify_all
@@ -34,6 +33,7 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         self.results = []
 
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+    @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def test_single_method(self):
         self._parse_result(self.creator._get_ff_profile('set_preference("key1", "arg1")'))
         self._parse_result(

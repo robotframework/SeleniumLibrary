@@ -17,7 +17,7 @@
 from robot.utils import plural_or_not, secs_to_timestr, timestr_to_secs
 
 from .librarylistener import LibraryListener
-from .types import is_falsy, is_noney, is_string, is_truthy, PY3
+from .types import is_falsy, is_noney, is_string, is_truthy, PY3, WINDOWS
 
 
 def escape_xpath_value(value):

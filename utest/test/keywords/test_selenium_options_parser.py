@@ -4,7 +4,7 @@ import unittest
 
 import pytest
 from mockito import mock, when, unstub, ANY
-from robot.utils import JYTHON
+from robot.utils import JYTHON, WINDOWS
 from selenium import webdriver
 from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
 try:
@@ -40,6 +40,7 @@ def teardown_function():
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_parse_options_string(options, reporter):
     results = []
     results.append(options._parse('method("arg1")'))
@@ -64,6 +65,7 @@ def test_parse_options_string(options, reporter):
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_parse_options_string_errors(options, reporter):
     results = []
     results.append(error_formatter(options._parse, 'method("arg1)', True))
@@ -77,6 +79,7 @@ def test_parse_options_string_errors(options, reporter):
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_split_options(options, reporter):
     results = []
     results.append(options._split('method("arg1");method("arg2")'))
@@ -89,6 +92,7 @@ def test_split_options(options, reporter):
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_options_create(options, reporter):
     results = []
     options_str = 'add_argument("--disable-dev-shm-usage")'
@@ -124,6 +128,7 @@ def test_options_create(options, reporter):
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_create_with_android(options, reporter):
     results = []
     chrome_options = webdriver.ChromeOptions()
@@ -134,6 +139,7 @@ def test_create_with_android(options, reporter):
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_get_options(options, reporter):
     options_str = 'add_argument("--proxy-server=66.97.38.58:80")'
     sel_options = options.create('chrome', options_str)
@@ -142,6 +148,7 @@ def test_get_options(options, reporter):
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
 def test_importer(options, reporter):
     results = []
     results.append(options._import_options('firefox'))

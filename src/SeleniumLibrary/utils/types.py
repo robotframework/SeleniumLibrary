@@ -13,9 +13,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
 
 from robot.utils import is_string
 from robot.utils import PY3, is_truthy, is_falsy
+
+# Need only for unit tests and can be removed when Approval tests fixes:
+# https://github.com/approvals/ApprovalTests.Python/issues/41
+WINDOWS = os.name == 'nt'
 
 
 def is_noney(item):
