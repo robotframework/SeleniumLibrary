@@ -63,17 +63,18 @@ Get Window Identifiers
 
 Get and Set Window Size
     [Tags]  Known Issue Internet Explorer    Known Issue Safari
-    Set Window Size    ${600}    ${800}
+    Set Window Size    ${600}    ${738}
+    Sleep  2s
     ${width}    ${height}=    Get Window Size
     Should Be Equal    ${width}    ${600}
-    Should Be Equal    ${height}    ${800}
+    Should Be Equal    ${height}    ${738}
 
 Set Window Size using strings
     [Tags]  Known Issue Internet Explorer    Known Issue Safari
-    Set Window Size    600    800
+    Set Window Size    600    738
     ${width}    ${height}=    Get Window Size
     Should Be Equal    ${width}    ${600}
-    Should Be Equal    ${height}    ${800}
+    Should Be Equal    ${height}    ${738}
 
 Get and Set Inner Window Size
     Set Window Size    ${800}    ${600}    ${True}

@@ -109,7 +109,7 @@ class ElementKeywords(LibraryComponent):
                   % (locator, expected_before))
 
     @keyword
-    def page_should_contain(self, text, loglevel='TRACE'):
+    def page_should_contain(self, text, loglevel='TRACE', ignore_case = False):
         """Verifies that current page contains ``text``.
 
         If this keyword fails, it automatically logs the page source
@@ -118,7 +118,7 @@ class ElementKeywords(LibraryComponent):
         ``WARN``, and ``NONE``. If the log level is ``NONE`` or below
         the current active log level the source will not be logged.
         """
-        if not self._page_contains(text):
+        if not self._page_contains(text, ignore_case):
             self.ctx.log_source(loglevel)
             raise AssertionError("Page should have contained text '%s' "
                                  "but did not." % text)
@@ -182,13 +182,13 @@ class ElementKeywords(LibraryComponent):
                   % (count, locator))
 
     @keyword
-    def page_should_not_contain(self, text, loglevel='TRACE'):
+    def page_should_not_contain(self, text, loglevel='TRACE', ignore_case=False):
         """Verifies the current page does not contain ``text``.
 
         See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
         """
-        if self._page_contains(text):
+        if self._page_contains(text, ignore_case):
             self.ctx.log_source(loglevel)
             raise AssertionError("Page should not have contained text '%s'."
                                  % text)
@@ -1086,10 +1086,10 @@ return !element.dispatchEvent(evt);
             self.debug(message)
             raise ValueError(message)
 
-    def _page_contains(self, text):
+    def _page_contains(self, text, ignore_case):
         self.driver.switch_to.default_content()
 
-        if self.is_text_present(text):
+        if self.is_text_present(text, ignore_case):
             return True
 
         subframes = self.find_elements("xpath://frame|//iframe")

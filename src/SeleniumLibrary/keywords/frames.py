@@ -16,7 +16,6 @@
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 
-
 class FrameKeywords(LibraryComponent):
 
     @keyword
@@ -48,7 +47,7 @@ class FrameKeywords(LibraryComponent):
         self.driver.switch_to.default_content()
 
     @keyword
-    def current_frame_should_contain(self, text, loglevel='TRACE'):
+    def current_frame_should_contain(self, text, loglevel='TRACE', ignore_case=False):
         """Verifies that the current frame contains ``text``.
 
         See `Page Should Contain` for an explanation about the ``loglevel``
@@ -57,27 +56,28 @@ class FrameKeywords(LibraryComponent):
         Prior to SeleniumLibrary 3.0 this keyword was named
         `Current Frame Contains`.
         """
-        if not self.is_text_present(text):
+        if (not self.is_text_present(text, ignore_case)):
             self.log_source(loglevel)
+            self.debug(self.is_text_present(text,ignore_case))
             raise AssertionError("Frame should have contained text '%s' "
                                  "but did not." % text)
         self.info("Current frame contains text '%s'." % text)
 
     @keyword
-    def current_frame_should_not_contain(self, text, loglevel='TRACE'):
+    def current_frame_should_not_contain(self, text, loglevel='TRACE', ignore_case=False):
         """Verifies that the current frame does not contain ``text``.
 
         See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
         """
-        if self.is_text_present(text):
+        if self.is_text_present(text, ignore_case):
             self.log_source(loglevel)
             raise AssertionError("Frame should not have contained text '%s' "
                                  "but it did." % text)
         self.info("Current frame did not contain text '%s'." % text)
 
     @keyword
-    def frame_should_contain(self, locator, text, loglevel='TRACE'):
+    def frame_should_contain(self, locator, text, loglevel='TRACE', ignore_case=False):
         """Verifies that frame identified by ``locator`` contains ``text``.
 
         See the `Locating elements` section for details about the locator
@@ -86,16 +86,16 @@ class FrameKeywords(LibraryComponent):
         See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
         """
-        if not self._frame_contains(locator, text):
+        if not self._frame_contains(locator, text, ignore_case):
             self.log_source(loglevel)
             raise AssertionError("Frame '%s' should have contained text '%s' "
                                  "but did not." % (locator, text))
         self.info("Frame '%s' contains text '%s'." % (locator, text))
 
-    def _frame_contains(self, locator, text):
+    def _frame_contains(self, locator, text, ignore_case=False):
         element = self.find_element(locator)
         self.driver.switch_to.frame(element)
         self.info("Searching for text from frame '%s'." % locator)
-        found = self.is_text_present(text)
+        found = self.is_text_present(text, ignore_case)
         self.driver.switch_to.default_content()
         return found

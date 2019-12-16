@@ -96,7 +96,7 @@ class WaitingKeywords(LibraryComponent):
 
 
     @keyword
-    def wait_until_page_contains(self, text, timeout=None, error=None):
+    def wait_until_page_contains(self, text, timeout=None, error=None, ignore_case=False):
         """Waits until ``text`` appears on the current page.
 
         Fails if ``timeout`` expires before the text appears. See
@@ -105,13 +105,13 @@ class WaitingKeywords(LibraryComponent):
 
         ``error`` can be used to override the default error message.
         """
-        self._wait_until(lambda: self.is_text_present(text),
+        self._wait_until(lambda: self.is_text_present(text, ignore_case),
                          "Text '%s' did not appear in <TIMEOUT>." % text,
                          timeout, error)
 
     @keyword
     def wait_until_page_does_not_contain(self, text, timeout=None,
-                                         error=None):
+                                         error=None, ignore_case=False):
         """Waits until ``text`` disappears from the current page.
 
         Fails if ``timeout`` expires before the text disappears. See
@@ -120,7 +120,8 @@ class WaitingKeywords(LibraryComponent):
 
         ``error`` can be used to override the default error message.
         """
-        self._wait_until(lambda: not self.is_text_present(text),
+
+        self._wait_until(lambda: not self.is_text_present(text, ignore_case),
                          "Text '%s' did not disappear in <TIMEOUT>." % text,
                          timeout, error)
 

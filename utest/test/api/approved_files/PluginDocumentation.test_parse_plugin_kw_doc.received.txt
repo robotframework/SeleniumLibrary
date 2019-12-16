@@ -1,0 +1,36 @@
+Executes the given JavaScript code with possible arguments.
+
+``code`` may be divided into multiple cells in the test data and
+``code`` may contain multiple lines of code and arguments. In that case,
+the JavaScript code parts are concatenated together without adding
+spaces and optional arguments are separated from ``code``.
+
+If ``code`` is a path to an existing file, the JavaScript
+to execute will be read from that file. Forward slashes work as
+a path separator on all operating systems.
+
+The JavaScript executes in the context of the currently selected
+frame or window as the body of an anonymous function. Use ``window``
+to refer to the window of your application and ``document`` to refer
+to the document object of the current frame or window, e.g.
+``document.getElementById('example')``.
+
+This keyword returns whatever the executed JavaScript code returns.
+Return values are converted to the appropriate Python types.
+
+Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
+[https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
+arguments] as part of ``code`` argument. The JavaScript code and
+arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` markers
+and must be used exactly with this format. If the Javascript code is
+first, then the `JAVASCRIPT` marker is optional. The order of
+`JAVASCRIPT` and `ARGUMENTS` markers can be swapped, but if `ARGUMENTS`
+is the first marker, then `JAVASCRIPT` marker is mandatory. It is only
+allowed to use `JAVASCRIPT` and `ARGUMENTS` markers only one time in the
+``code`` argument.
+
+Examples:
+| `Execute JavaScript` | window.myFunc('arg1', 'arg2') |
+| `Execute JavaScript` | ${CURDIR}/js_to_execute.js    |
+| `Execute JavaScript` | alert(arguments[0]); | ARGUMENTS | 123 |
+| `Execute JavaScript` | ARGUMENTS | 123 | JAVASCRIPT | alert(arguments[0]); |

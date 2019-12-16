@@ -1,0 +1,17 @@
+code and args
+
+0) There must be at least one argument defined.
+1) (['code1'], [])
+2) (['code1', 'code2'], [])
+3) (['code1', 'code2'], [])
+4) (['code1', 'code2'], ['arg1', 'arg2'])
+5) (['code1', 'code2', 'arguments', 'arg1', 'arg2'], [])
+6) (['javascript', 'code1', 'code2'], [])
+7) (['code1', 'code2'], [])
+8) (['code1', 'code2', 'argUMENTs'], [])
+9) (['code1', 'code2'], [])
+10) (['code1', 'code2'], ['arg1', 'arg2'])
+11) (['code1', 'code2'], ['arg1', 'arg2'])
+12) (['aRGUMENTS', 'arg1', 'arg2', 'jAVASCRIPT', 'code1', 'code2'], [])
+13) (['JAVASCRIPTCODE', 'code1', 'code2'], [])
+14) (['code1', 'code2', 'ARGUMENTS ARG2', 'arg3'], [])

@@ -38,6 +38,7 @@ Select And Unselect Frame
     Click Link    foo
     Unselect Frame
     Select Frame    right
+    Sleep  1s
     Current Frame Should Contain    You're looking at foo.
 
 Select And Unselect Frame should also work with iframes
@@ -47,6 +48,8 @@ Select And Unselect Frame should also work with iframes
     Unselect Frame
     Select Frame    right
     Current Frame Should Contain    You're looking at foo.
+
+
 
 Select Frame with non-unique name attribute
     [Setup]    Go To Page "frames/poorlynamedframe.html"

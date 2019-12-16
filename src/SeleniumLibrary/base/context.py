@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from SeleniumLibrary.utils import escape_xpath_value
-
+from robot.utils import is_truthy
 
 class ContextAware(object):
 
@@ -89,8 +89,14 @@ class ContextAware(object):
         """
         return self.element_finder.find(locator, tag, False, False, parent)
 
-    def is_text_present(self, text):
-        locator = "xpath://*[contains(., %s)]" % escape_xpath_value(text)
+    def is_text_present(self, text, ignore_case=False):
+        escaped_text = escape_xpath_value(text)
+        if is_truthy(ignore_case):
+            u = escape_xpath_value(text.upper())
+            l = escape_xpath_value(text.lower())
+            locator = "xpath://*[contains(translate(., %s %s), translate(%s, %s, %s))]" % (u,l,escaped_text, u, l)
+        else:
+            locator = "xpath://*[contains(., %s)]" % escape_xpath_value(text)
         return self.find_element(locator, required=False) is not None
 
     def is_element_enabled(self, locator, tag=None):

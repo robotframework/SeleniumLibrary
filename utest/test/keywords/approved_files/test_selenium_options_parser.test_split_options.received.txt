@@ -1,0 +1,8 @@
+Selenium options string splitting
+
+0) ['method("arg1")', 'method("arg2")']
+1) ['method("arg1")']
+2) ['attribute=True']
+3) ['attribute="semi;colons;middle"', 'other_attribute=True']
+4) ['method("arg1;")', 'method(";arg2;")']
+5) [' method ( " arg1 ") ', ' method ( " arg2 " ) ']

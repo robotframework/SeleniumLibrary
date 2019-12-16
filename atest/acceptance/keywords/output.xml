@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.4 on win32)" generated="20191216 01:48:45.018" rpa="false">
+<suite id="s1" name="Frames" source="C:\Users\risaboo\AppData\Local\Continuum\anaconda3\Lib\site-packages\SeleniumLibrary-master\atest\acceptance\keywords\frames.robot">
+<test id="s1-t1" name="Frame Should Contain">
+<kw name="Go To Page &quot;frames/frameset.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.492" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.492" endtime="20191216 01:48:45.492"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.491" endtime="20191216 01:48:45.492"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.495" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.495" endtime="20191216 01:48:45.495">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.490" endtime="20191216 01:48:45.495" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t2" name="Frame Should Contain should also work with iframes">
+<kw name="Go To Page &quot;frames/iframes.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.500" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.500" endtime="20191216 01:48:45.501"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.499" endtime="20191216 01:48:45.501"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.503" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.503" endtime="20191216 01:48:45.503">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.498" endtime="20191216 01:48:45.504" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t3" name="Current Frame Should (Not) Contain">
+<kw name="Go To Page &quot;frames/frameset.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.512" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.512" endtime="20191216 01:48:45.512"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.510" endtime="20191216 01:48:45.512"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.514" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.514" endtime="20191216 01:48:45.514">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.509" endtime="20191216 01:48:45.515" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t4" name="Page Should Contain Text Within Frames">
+<kw name="Go To Page &quot;frames/frameset.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.522" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.521" endtime="20191216 01:48:45.522"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.520" endtime="20191216 01:48:45.522"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.528" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.528" endtime="20191216 01:48:45.528">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.519" endtime="20191216 01:48:45.528" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t5" name="Page Should Contain Text Within Frames should also work with iframes">
+<kw name="Go To Page &quot;frames/iframes.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.535" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.535" endtime="20191216 01:48:45.535"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.532" endtime="20191216 01:48:45.535"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.537" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.537" endtime="20191216 01:48:45.537">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.532" endtime="20191216 01:48:45.537" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t6" name="Select And Unselect Frame should also work with iframes">
+<kw name="Go To Page &quot;frames/iframes.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.544" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.544" endtime="20191216 01:48:45.544"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.542" endtime="20191216 01:48:45.544"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.547" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.547" endtime="20191216 01:48:45.547">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.542" endtime="20191216 01:48:45.547" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t7" name="Select And Unselect Frame">
+<kw name="Go To Page &quot;frames/frameset.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.550" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.550" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<doc>LOG 2 Selecting frame 'left'.</doc>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<test id="s1-t8" name="Select Frame with non-unique name attribute">
+<kw name="Go To Page &quot;frames/poorlynamedframe.html&quot;" library="resource" type="setup">
+<doc>Goes to page</doc>
+<kw name="Go To">
+<arguments>
+<arg>${ROOT}/${relative url}</arg>
+</arguments>
+<msg timestamp="20191216 01:48:45.550" level="FAIL">No keyword with name 'Go To' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550"></status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550"></status>
+</kw>
+<kw name="UnSelect Frame" type="teardown">
+<msg timestamp="20191216 01:48:45.550" level="FAIL">No keyword with name 'UnSelect Frame' found.</msg>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550">No keyword with name 'UnSelect Frame' found.</status>
+</kw>
+<status status="FAIL" starttime="20191216 01:48:45.550" endtime="20191216 01:48:45.550" critical="yes">Setup failed:
+No keyword with name 'Go To' found.
+
+Also teardown failed:
+No keyword with name 'UnSelect Frame' found.</status>
+</test>
+<doc>Tests frames</doc>
+<status status="FAIL" starttime="20191216 01:48:45.022" endtime="20191216 01:48:45.570"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="8">Critical Tests</stat>
+<stat pass="0" fail="8">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="8" id="s1" name="Frames">Frames</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20191216 01:48:45.472" level="ERROR">Error in file 'C:\Users\risaboo\AppData\Local\Continuum\anaconda3\Lib\site-packages\SeleniumLibrary-master\atest\acceptance\resource.robot': Importing test library 'SeleniumLibrary' failed: SyntaxError: non-default argument follows default argument (element.py, line 112)
+Traceback (most recent call last):
+  File "c:\users\risaboo\appdata\local\continuum\anaconda3\lib\site-packages\SeleniumLibrary\__init__.py", line 27, in &lt;module&gt;
+    from SeleniumLibrary.keywords import (AlertKeywords,
+  File "c:\users\risaboo\appdata\local\continuum\anaconda3\lib\site-packages\SeleniumLibrary\keywords\__init__.py", line 20, in &lt;module&gt;
+    from .element import ElementKeywords
+PYTHONPATH:
+  C:\Users\risaboo\AppData\Local\Continuum\anaconda3\Scripts\robot.exe
+  c:\users\risaboo\appdata\local\continuum\anaconda3\python37.zip
+  c:\users\risaboo\appdata\local\continuum\anaconda3\DLLs
+  c:\users\risaboo\appdata\local\continuum\anaconda3\lib
+  c:\users\risaboo\appdata\local\continuum\anaconda3
+  c:\users\risaboo\appdata\local\continuum\anaconda3\lib\site-packages
+  c:\users\risaboo\appdata\local\continuum\anaconda3\lib\site-packages\win32
+  c:\users\risaboo\appdata\local\continuum\anaconda3\lib\site-packages\win32\lib
+  c:\users\risaboo\appdata\local\continuum\anaconda3\lib\site-packages\Pythonwin</msg>
+</errors>
+</robot>

@@ -1,0 +1,7 @@
+Alias testing
+
+0) CONTROL
+1) ESCAPE
+2) CONTROL
+3) BB
+4) END

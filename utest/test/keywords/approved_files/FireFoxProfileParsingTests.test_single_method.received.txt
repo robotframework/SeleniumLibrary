@@ -1,0 +1,8 @@
+Firefox profile parsing
+
+0)  key1 arg1
+1)  key1 arg1
+2)  key1 arg1 key2 arg2
+3) True
+4) 'FirefoxProfile' object has no attribute 'wrong_name'
+5) 'str' object has no attribute 'proxy_type'

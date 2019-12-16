@@ -1,0 +1,14 @@
+index
+
+0) [[KeysRecord(converted='A', original='A', special=False)], [KeysRecord(converted='B', original='B', special=False)], [KeysRecord(converted='C', original='C', special=False)]]
+1) [[KeysRecord(converted='AAA', original='AAA', special=False)], [KeysRecord(converted='\ue009', original='CONTROL', special=True)], [KeysRecord(converted='C', original='C', special=False)]]
+2) [[KeysRecord(converted='AAA', original='AAA', special=False)], [KeysRecord(converted='\ue009', original='CONTROL', special=True), KeysRecord(converted='B', original='B', special=False)], [KeysRecord(converted='C', original='C', special=False)]]
+3) [[KeysRecord(converted='\ue009', original='CONTROL', special=True), KeysRecord(converted='A', original='A', special=False)], [KeysRecord(converted='\ue00a', original='ALT', special=True), KeysRecord(converted='B', original='B', special=False)]]
+4) [[KeysRecord(converted='\ue009', original='CONTROL', special=True), KeysRecord(converted='\ue00a', original='ALT', special=True), KeysRecord(converted='b', original='b', special=False)]]
+5) [[KeysRecord(converted='Press CTRL', original='Press CTRL', special=False), KeysRecord(converted='C to', original='C to', special=False)]]
+6) [[KeysRecord(converted='Press CTRL', original='Press CTRL', special=False), KeysRecord(converted='+C to', original='+C to', special=False)]]
+7) [[KeysRecord(converted='\ue010', original='END', special=True), KeysRecord(converted='E', original='E', special=False), KeysRecord(converted='N', original='N', special=False), KeysRecord(converted='D', original='D', special=False)]]
+8) [[KeysRecord(converted='AALTO', original='AALTO', special=False)]]
+9) [[KeysRecord(converted='alt', original='alt', special=False)]]
+10) [[KeysRecord(converted='IS ALT HERE', original='IS ALT HERE', special=False)]]
+11) [[KeysRecord(converted='IS', original='IS', special=False)], [KeysRecord(converted='\ue00a', original='ALT', special=True)], [KeysRecord(converted='HERE', original='HERE', special=False)]]
