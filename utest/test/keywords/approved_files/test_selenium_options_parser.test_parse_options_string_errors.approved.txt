@@ -6,4 +6,3 @@ Selenium options string errors
 3) attribute=arg1 Unable to parse option: "attribute=arg1"
 4) attribute=webdriver Unable to parse option: "attribute=webdriver"
 5) method(argument="value") Unable to parse option: "method(argument="value")"
-6) [{'method': ['key', 'value']}]
