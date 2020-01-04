@@ -1,0 +1,7 @@
+Parse arguments from complex object
+
+0) [('arg1',)]
+1) ['arg1']
+2) [{'key': 'value'}]
+3) [['value1', 'value2']]
+4) ['foo', {'key': 'value'}]

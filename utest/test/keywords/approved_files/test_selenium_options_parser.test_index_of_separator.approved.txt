@@ -1,0 +1,6 @@
+Get argument index
+
+0) (6, True)
+1) (9, False)
+2) (6, True)
+3) (9, False)

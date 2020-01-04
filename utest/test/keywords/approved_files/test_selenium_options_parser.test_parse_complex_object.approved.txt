@@ -1,0 +1,7 @@
+Parse complex Python object
+
+0) {'method': [{'key': 'value'}]}
+1) {'method': [{'key1': 'value1', 'key2': 'value2'}]}
+2) {'attribute': [{'key': 'value'}]}
+3) {'attribute': [('value1', 'value2')]}
+4) {'method': ['foo', {'key': 'value'}]}

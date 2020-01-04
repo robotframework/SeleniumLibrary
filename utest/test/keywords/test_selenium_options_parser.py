@@ -50,18 +50,56 @@ def test_parse_options_string(options, reporter):
     results.append(options._parse('method("arg1", 2, None, False, "arg2")'))
     results.append(options._parse('method ( " arg1 " , 2 , None , False , " arg2 " )'))
     results.append(options._parse('attribute="arg1"'))
-    results.append(options._parse('attribute = True'))
+    results.append(options._parse('  attribute = True  '))
     results.append(options._parse('method("arg1");attribute=True'))
     results.append(options._parse('method("arg1") ; attribute=True ; method("arg2")'))
     results.append(options._parse('attribute'))
     results.append(options._parse('method()'))
+    results.append(options._parse('method(None)'))
     results.append(options._parse('method("--proxy 10.10.1.3:2345")'))
     results.append(options._parse('method(";arg1")'))
     results.append(options._parse('method  (   "arg1"  ,    2    ,"arg2"   )'))
     results.append(options._parse("method('arg1')"))
     results.append(options._parse('add_argument("-profile"); add_argument("C:\\\\path\\to\\\\profile")'))
     results.append(options._parse(r'add_argument("-profile"); add_argument("C:\\path\\to\\profile")'))
+    results.append(options._parse('attribute=None'))
+    results.append(options._parse('method("foo", {"key": False});attribute=True;method("bar", {"key": None})'))
     verify_all('Selenium options string to dict', results, reporter=reporter)
+
+
+@unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
+def test_index_of_separator(options, reporter):
+    results = []
+    results.append(options._get_arument_index('method({"key": "value"})'))
+    results.append(options._get_arument_index('attribute={"key": "value"}'))
+    results.append(options._get_arument_index('method(foo={"key": "value"})'))
+    results.append(options._get_arument_index('attribute=("value1", "value2")'))
+    verify_all('Get argument index', results, reporter=reporter)
+
+
+@unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
+def test_parse_complex_object(options, reporter):
+    results = []
+    results.append(options._parse_to_tokens('method({"key": "value"})'))
+    results.append(options._parse_to_tokens('method({"key1": "value1", "key2": "value2"})'))
+    results.append(options._parse_to_tokens('attribute={"key": "value"}'))
+    results.append(options._parse_to_tokens('attribute=("value1", "value2")'))
+    results.append(options._parse_to_tokens('method("foo", {"key": "value"})'))
+    verify_all('Parse complex Python object', results, reporter=reporter)
+
+
+@unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
+@unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
+def test_parse_arguemnts(options, reporter):
+    results = []
+    results.append(options._parse_arguments(("arg1", ), True))
+    results.append(options._parse_arguments("arg1", False))
+    results.append(options._parse_arguments({"key": "value"}, False))
+    results.append(options._parse_arguments(["value1", "value2"], False))
+    results.append(options._parse_arguments(("foo", {"key": "value"}), False))
+    verify_all('Parse arguments from complex object', results, reporter=reporter)
 
 
 @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
@@ -74,7 +112,6 @@ def test_parse_options_string_errors(options, reporter):
     results.append(error_formatter(options._parse, 'attribute=arg1', True))
     results.append(error_formatter(options._parse, 'attribute=webdriver', True))
     results.append(error_formatter(options._parse, 'method(argument="value")', True))
-    results.append(error_formatter(options._parse, 'method({"key": "value"})', True))
     verify_all('Selenium options string errors', results, reporter=reporter)
 
 

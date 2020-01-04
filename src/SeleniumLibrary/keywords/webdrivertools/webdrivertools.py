@@ -392,24 +392,47 @@ class SeleniumOptions(object):
         for item in self._split(options):
             try:
                 result.append(self._parse_to_tokens(item))
-            except ValueError:
+            except (ValueError, SyntaxError):
                 raise ValueError('Unable to parse option: "%s"' % item)
         return result
 
     def _parse_to_tokens(self, item):
         result = {}
-        method = None
-        arguments = []
-        tokens = generate_tokens(StringIO(item).readline)
-        for toknum, tokval, _, _, _ in tokens:
-            if toknum == token.NAME and not method:
-                method = tokval
-            elif toknum == token.STRING:
-                arguments.append(ast.literal_eval(tokval))
-            elif toknum in [token.NAME, token.NUMBER] and method:
-                arguments.append(ast.literal_eval(tokval))
-        result[method] = arguments
+        index, method = self._get_arument_index(item)
+        if index == -1:
+            result[item] = []
+            return result
+        if method:
+            args_as_string = item[index + 1:-1].strip()
+            if args_as_string:
+                args = ast.literal_eval(args_as_string)
+            else:
+                args = args_as_string
+            is_tuple = args_as_string.startswith('(')
+        else:
+            args_as_string = item[index + 1:].strip()
+            args = ast.literal_eval(args_as_string)
+            is_tuple = args_as_string.startswith('(')
+        method_or_attribute = item[:index].strip()
+        result[method_or_attribute] = self._parse_arguments(args, is_tuple)
         return result
+
+    def _parse_arguments(self, argument, is_tuple=False):
+        if argument == '':
+            return []
+        if is_tuple:
+            return [argument]
+        if not is_tuple and isinstance(argument, tuple):
+            return list(argument)
+        return [argument]
+
+    def _get_arument_index(self, item):
+        if '=' not in item:
+            return item.find('('), True
+        if '(' not in item:
+            return item.find('='), False
+        index = min(item.find('('), item.find('='))
+        return index, item.find('(') == index
 
     def _split(self, options):
         split_options = []
@@ -417,7 +440,7 @@ class SeleniumOptions(object):
         tokens = generate_tokens(StringIO(options).readline)
         for toknum, tokval, tokpos, _, _ in tokens:
             if toknum == token.OP and tokval == ';':
-                split_options.append(options[start_position:tokpos[1]])
+                split_options.append(options[start_position:tokpos[1]].strip())
                 start_position = tokpos[1] + 1
         split_options.append(options[start_position:])
         return split_options
