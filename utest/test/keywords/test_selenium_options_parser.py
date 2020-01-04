@@ -83,7 +83,6 @@ def test_index_of_separator(options, reporter):
 def test_parse_complex_object(options, reporter):
     results = []
     results.append(options._parse_to_tokens('method({"key": "value"})'))
-    results.append(options._parse_to_tokens('method({"key1": "value1", "key2": "value2"})'))
     results.append(options._parse_to_tokens('attribute={"key": "value"}'))
     results.append(options._parse_to_tokens('attribute=("value1", "value2")'))
     results.append(options._parse_to_tokens('method("foo", {"key": "value"})'))
