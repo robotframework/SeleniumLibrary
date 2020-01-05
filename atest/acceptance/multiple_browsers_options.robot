@@ -23,6 +23,7 @@ Chrome Browser With Selenium Options As String With Attirbute As True
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; headless = True
 
 Chrome Browser With Selenium Options With Complex Object
+    [Tags]    NoGrid
     [Documentation]
     ...    LOG 1:2 DEBUG GLOB: *"goog:chromeOptions"*
     ...    LOG 1:2 DEBUG GLOB: *"mobileEmulation": {"deviceName": "Galaxy S5"*
