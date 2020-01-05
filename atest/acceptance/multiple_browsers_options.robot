@@ -22,6 +22,15 @@ Chrome Browser With Selenium Options As String With Attirbute As True
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; headless = True
 
+Chrome Browser With Selenium Options With Complex Object
+    [Tags]    NoGrid
+    [Documentation]
+    ...    LOG 1:2 DEBUG GLOB: *"goog:chromeOptions"*
+    ...    LOG 1:2 DEBUG GLOB: *"mobileEmulation": {"deviceName": "Galaxy S5"*
+    ...    LOG 1:2 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; add_experimental_option( "mobileEmulation" , { 'deviceName' : 'Galaxy S5'})
+
 Chrome Browser With Selenium Options Object
     [Documentation]
     ...    LOG 2:2 DEBUG GLOB: *"goog:chromeOptions"*
