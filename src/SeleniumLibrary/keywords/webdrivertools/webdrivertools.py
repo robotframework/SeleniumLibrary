@@ -60,8 +60,8 @@ class WebDriverCreator(object):
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
 
-    def create_driver(self, browser, desired_capabilities, remote_url,
-                      profile_dir=None, options=None, service_log_path=None):
+    def create_driver(self, browser, desired_capabilities, remote_url, profile_dir=None,
+                      options=None, service_log_path=None, executable_path=None):
         browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
@@ -110,18 +110,37 @@ class WebDriverCreator(object):
             caps['browserName'] = default_capabilities['browserName']
         return {'desired_capabilities': caps}
 
-    def create_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+    def create_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                      executable_path='chromedriver'):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url, options=options)
-        return webdriver.Chrome(options=options, service_log_path=service_log_path, **desired_capabilities)
+        if is_falsy(executable_path):
+            executable_path = self._get_executable_path(webdriver.Chrome)
+        return webdriver.Chrome(options=options, service_log_path=service_log_path, executable_path=executable_path,
+                                **desired_capabilities)
 
-    def create_headless_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+    def create_headless_chrome(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                               executable_path='chromedriver'):
         if not options:
             options = webdriver.ChromeOptions()
         options.headless = True
-        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path)
+        return self.create_chrome(desired_capabilities, remote_url, options, service_log_path, executable_path)
+
+    def _get_executable_path(self, webdriver):
+        if PY3:
+            signature = inspect.signature(webdriver.__init__)
+            parameters = signature.parameters
+            executable_path = parameters.get('executable_path')
+            if not executable_path:
+                return None
+            return executable_path.default
+        else:  # TODO: Remove else when Python 2 is dropped.
+            signature = inspect.getargspec(webdriver.__init__)
+            if 'executable_path' in signature.args:
+                index = signature.args.index('executable_path')
+                return signature.defaults[index - 1]
 
     def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
         profile = self._get_ff_profile(ff_profile_dir)

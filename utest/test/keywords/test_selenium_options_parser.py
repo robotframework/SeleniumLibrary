@@ -231,7 +231,8 @@ def output_dir():
 def test_create_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).Chrome(service_log_path=None, options=options).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(service_log_path=None, options=options,
+                           executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None, options=options)
     assert driver == expected_webdriver
 
@@ -253,7 +254,8 @@ def test_create_chrome_with_options_and_remote_url(creator):
 def test_create_headless_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).Chrome(service_log_path=None, options=options).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(service_log_path=None, options=options,
+                           executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None, options=options)
     assert driver == expected_webdriver
 
@@ -442,7 +444,8 @@ def test_create_driver_chrome(creator):
     options = mock()
     expected_webdriver = mock()
     when(creator.selenium_options).create('chrome', str_options).thenReturn(options)
-    when(webdriver).Chrome(service_log_path=None, options=options).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(service_log_path=None, options=options,
+                           executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_driver('Chrome', desired_capabilities={}, remote_url=None,
                                    options=str_options)
     assert driver == expected_webdriver
