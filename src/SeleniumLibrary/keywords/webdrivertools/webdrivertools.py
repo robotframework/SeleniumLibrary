@@ -190,12 +190,16 @@ class WebDriverCreator(object):
         return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path,
                                    executable_path)
 
-    def create_ie(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+    def create_ie(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                  executable_path='IEDriverServer.exe'):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url, options=options)
-        return webdriver.Ie(options=options, service_log_path=service_log_path, **desired_capabilities)
+        if is_falsy(executable_path):
+            executable_path = self._get_executable_path(webdriver.Firefox)
+        return webdriver.Ie(options=options, service_log_path=service_log_path, executable_path=executable_path,
+                            **desired_capabilities)
 
     def _has_options(self, web_driver):
         signature = inspect.getargspec(web_driver.__init__)

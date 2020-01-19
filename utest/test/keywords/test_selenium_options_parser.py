@@ -303,7 +303,8 @@ def test_create_headless_firefox_with_options(creator, output_dir):
 def test_create_ie_with_options(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).Ie(service_log_path=None, options=options).thenReturn(expected_webdriver)
+    when(webdriver).Ie(service_log_path=None, options=options,
+                       executable_path='IEDriverServer.exe').thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
 
@@ -325,7 +326,8 @@ def test_create_ie_with_options_and_remote_url(creator):
 def test_create_ie_with_options_and_log_path(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).Ie(options=options, service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Ie(options=options, service_log_path=None,
+                       executable_path='IEDriverServer.exe').thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
 

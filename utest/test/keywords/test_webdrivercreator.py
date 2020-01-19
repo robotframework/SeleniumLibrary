@@ -344,12 +344,13 @@ def test_firefox_headless_with_grid_no_caps(creator):
 
 def test_ie(creator):
     expected_webdriver = mock()
-    when(webdriver).Ie(options=None, service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Ie(options=None, service_log_path=None,
+                       executable_path='IEDriverServer.exe').thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None)
     assert driver == expected_webdriver
 
     when(webdriver).Ie(capabilities={'key': 'value'}, options=None,
-                       service_log_path=None).thenReturn(expected_webdriver)
+                       service_log_path=None, executable_path='IEDriverServer.exe').thenReturn(expected_webdriver)
     driver = creator.create_ie(desired_capabilities={'capabilities': {'key': 'value'}}, remote_url=None,
                                options=None, service_log_path=None)
     assert driver == expected_webdriver
@@ -695,8 +696,8 @@ def test_create_driver_firefox(creator):
 
 def test_create_driver_ie(creator):
     expected_webdriver = mock()
-    when(webdriver).Ie(options=None,
-                       service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Ie(options=None, service_log_path=None,
+                       executable_path='IEDriverServer.exe').thenReturn(expected_webdriver)
     for browser in ['ie', 'Internet Explorer']:
         driver = creator.create_driver(browser, None, None)
         assert driver == expected_webdriver
