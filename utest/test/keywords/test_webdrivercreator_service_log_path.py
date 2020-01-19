@@ -83,7 +83,7 @@ def test_create_firefox_with_service_log_path_none(creator):
     expected_webdriver = mock()
     profile = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
-    when(webdriver).Firefox(options=None, firefox_profile=profile,
+    when(webdriver).Firefox(options=None, firefox_profile=profile, executable_path='geckodriver',
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.creator.create_firefox({}, None, None, service_log_path=None)
     assert driver == expected_webdriver
@@ -94,7 +94,7 @@ def test_create_firefox_with_service_log_path_real_path(creator):
     expected_webdriver = mock()
     profile = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
-    when(webdriver).Firefox(options=None, firefox_profile=profile,
+    when(webdriver).Firefox(options=None, firefox_profile=profile, executable_path='geckodriver',
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.creator.create_firefox({}, None, ff_profile_dir=None, service_log_path=log_file)
     assert driver == expected_webdriver
@@ -107,8 +107,8 @@ def test_create_headlessfirefox_with_service_log_path_real_path(creator):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     options = mock()
     when(webdriver).FirefoxOptions().thenReturn(options)
-    when(webdriver).Firefox(options=options, firefox_profile=profile,
-                            service_log_path=log_file).thenReturn(expected_webdriver)
+    when(webdriver).Firefox(options=options, firefox_profile=profile, service_log_path=log_file,
+                            executable_path='geckodriver').thenReturn(expected_webdriver)
     driver = creator.creator.create_headless_firefox({}, None, ff_profile_dir=None, service_log_path=log_file)
     assert driver == expected_webdriver
 
@@ -120,8 +120,8 @@ def test_create_firefox_from_create_driver(creator):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     options = mock()
     when(webdriver).FirefoxOptions().thenReturn(options)
-    when(webdriver).Firefox(options=None, firefox_profile=profile,
-                            service_log_path=log_file).thenReturn(expected_webdriver)
+    when(webdriver).Firefox(options=None, firefox_profile=profile, service_log_path=log_file,
+                            executable_path='geckodriver').thenReturn(expected_webdriver)
     driver = creator.creator.create_driver('firefox ', {}, remote_url=None,  profile_dir=None,
                                            service_log_path=log_file)
     assert driver == expected_webdriver
