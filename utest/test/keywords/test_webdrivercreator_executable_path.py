@@ -133,6 +133,25 @@ def test_create_headless_firefox_executable_path_set(creator):
     assert driver == expected_webdriver
 
 
+def test_create_ie_executable_path_set(creator):
+    executable_path = '/path/to/IEDriverServer.exe'
+    expected_webdriver = mock()
+    when(webdriver).Ie(options=None, service_log_path=None,
+                       executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_ie({}, None, executable_path=executable_path)
+    assert driver == expected_webdriver
+
+
+def test_create_ie_executable_path_not_set(creator):
+    executable_path = 'IEDriverServer.exe'
+    expected_webdriver = mock()
+    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
+    when(webdriver).Ie(options=None, service_log_path=None,
+                       executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_ie({}, None, executable_path=None)
+    assert driver == expected_webdriver
+
+
 def mock_file_detector(creator):
     file_detector = mock()
     when(creator)._get_sl_file_detector().thenReturn(file_detector)
