@@ -123,15 +123,16 @@ def test_capabilities_resolver_chrome(creator):
 
 def test_chrome(creator):
     expected_webdriver = mock()
-    when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(options=None, service_log_path=None,
+                           executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None)
     assert driver == expected_webdriver
 
 
 def test_chrome_with_desired_capabilities(creator):
     expected_webdriver = mock()
-    when(webdriver).Chrome(desired_capabilities={'key': 'value'},
-                           options=None, service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(desired_capabilities={'key': 'value'}, options=None,
+                           service_log_path=None, executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_chrome({'desired_capabilities': {'key': 'value'}}, None)
     assert driver == expected_webdriver
 
@@ -179,7 +180,8 @@ def test_chrome_healdless(creator):
     expected_webdriver = mock()
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
-    when(webdriver).Chrome(options=options, service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(options=options, service_log_path=None,
+                           executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None)
     assert options.headless == True
     assert driver == expected_webdriver
@@ -673,7 +675,8 @@ def test_iphone_no_browser_name(creator):
 
 def test_create_driver_chrome(creator):
     expected_webdriver = mock()
-    when(webdriver).Chrome(options=None, service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Chrome(options=None, service_log_path=None,
+                           executable_path='chromedriver').thenReturn(expected_webdriver)
     for browser in ['chrome', 'googlechrome', 'gc']:
         driver = creator.create_driver(browser, None, None)
         assert driver == expected_webdriver
