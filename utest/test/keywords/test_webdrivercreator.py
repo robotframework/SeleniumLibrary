@@ -208,8 +208,7 @@ def test_firefox(creator):
     profile = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
     log_file = get_geckodriver_log()
-    when(webdriver).Firefox(options=None,
-                            firefox_profile=profile,
+    when(webdriver).Firefox(options=None, firefox_profile=profile, executable_path='geckodriver',
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.create_firefox({}, None, None)
     assert driver == expected_webdriver
@@ -288,7 +287,7 @@ def test_firefox_profile(creator):
     profile_dir = '/profile/dir'
     when(webdriver).FirefoxProfile(profile_dir).thenReturn(profile)
     log_file = get_geckodriver_log()
-    when(webdriver).Firefox(options=None, service_log_path=log_file,
+    when(webdriver).Firefox(options=None, service_log_path=log_file, executable_path='geckodriver',
                             firefox_profile=profile).thenReturn(expected_webdriver)
     driver = creator.create_firefox({}, None, profile_dir)
     assert driver == expected_webdriver
@@ -301,7 +300,7 @@ def test_firefox_headless(creator):
     options = mock()
     when(webdriver).FirefoxOptions().thenReturn(options)
     log_file = get_geckodriver_log()
-    when(webdriver).Firefox(options=options, service_log_path=log_file,
+    when(webdriver).Firefox(options=options, service_log_path=log_file, executable_path='geckodriver',
                             firefox_profile=profile).thenReturn(expected_webdriver)
     driver = creator.create_headless_firefox({}, None, None)
     assert driver == expected_webdriver
@@ -687,7 +686,7 @@ def test_create_driver_firefox(creator):
     profile = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
     log_file = get_geckodriver_log()
-    when(webdriver).Firefox(options=None, service_log_path=log_file,
+    when(webdriver).Firefox(options=None, service_log_path=log_file, executable_path='geckodriver',
                             firefox_profile=profile).thenReturn(expected_webdriver)
     for browser in ['ff', 'firefox']:
         driver = creator.create_driver(browser, None, None, None)

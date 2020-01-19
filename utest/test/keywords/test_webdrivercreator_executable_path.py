@@ -7,6 +7,9 @@ from selenium import webdriver
 from SeleniumLibrary.keywords import WebDriverCreator
 
 
+LOG_DIR = '/log/dir'
+
+
 @pytest.fixture(scope='module')
 def creator():
     curr_dir = os.path.dirname(os.path.abspath(__file__))
@@ -76,7 +79,65 @@ def test_create_heasless_chrome_executable_path_set(creator):
     assert driver == expected_webdriver
 
 
+def test_create_firefox_executable_path_set(creator):
+    executable = '/path/to/geckodriver'
+    expected_webdriver = mock()
+    profile = mock()
+    when(webdriver).FirefoxProfile().thenReturn(profile)
+    log_file = get_geckodriver_log()
+    when(webdriver).Firefox(options=None, firefox_profile=profile, service_log_path=log_file,
+                            executable_path=executable).thenReturn(expected_webdriver)
+    driver = creator.create_firefox({}, None, None, service_log_path=log_file, executable_path=executable)
+    assert driver == expected_webdriver
+
+
+def test_create_firefox_executable_path_not_set(creator):
+    executable = 'geckodriver'
+    expected_webdriver = mock()
+    profile = mock()
+    when(webdriver).FirefoxProfile().thenReturn(profile)
+    log_file = get_geckodriver_log()
+    when(creator)._get_executable_path(ANY).thenReturn(executable)
+    when(webdriver).Firefox(options=None, firefox_profile=profile, service_log_path=log_file,
+                            executable_path=executable).thenReturn(expected_webdriver)
+    driver = creator.create_firefox({}, None, None, service_log_path=log_file, executable_path=None)
+    assert driver == expected_webdriver
+
+
+def test_create_firefox_executable_path_and_remote(creator):
+    url = 'http://localhost:4444/wd/hub'
+    expected_webdriver = mock()
+    capabilities = webdriver.DesiredCapabilities.FIREFOX.copy()
+    file_detector = mock_file_detector(creator)
+    profile = mock()
+    when(webdriver).FirefoxProfile().thenReturn(profile)
+    when(webdriver).Remote(command_executor=url,
+                           browser_profile=profile,
+                           desired_capabilities=capabilities, options=None,
+                           file_detector=file_detector).thenReturn(expected_webdriver)
+    driver = creator.create_firefox({}, url, None, executable_path='/path/to/chromedriver')
+    assert driver == expected_webdriver
+
+
+def test_create_headless_firefox_executable_path_set(creator):
+    executable = '/path/to/geckodriver'
+    expected_webdriver = mock()
+    profile = mock()
+    when(webdriver).FirefoxProfile().thenReturn(profile)
+    log_file = get_geckodriver_log()
+    options = mock()
+    when(webdriver).FirefoxOptions().thenReturn(options)
+    when(webdriver).Firefox(options=options, firefox_profile=profile, service_log_path=log_file,
+                            executable_path=executable).thenReturn(expected_webdriver)
+    driver = creator.create_headless_firefox({}, None, None, service_log_path=log_file, executable_path=executable)
+    assert driver == expected_webdriver
+
+
 def mock_file_detector(creator):
     file_detector = mock()
     when(creator)._get_sl_file_detector().thenReturn(file_detector)
     return file_detector
+
+
+def get_geckodriver_log():
+    return os.path.join(LOG_DIR, 'geckodriver-1.log')

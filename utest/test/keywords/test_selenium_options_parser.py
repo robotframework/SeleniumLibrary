@@ -266,7 +266,7 @@ def test_create_firefox_with_options(creator, output_dir):
     profile = mock()
     expected_webdriver = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
-    when(webdriver).Firefox(options=options, firefox_profile=profile,
+    when(webdriver).Firefox(options=options, firefox_profile=profile, executable_path='geckodriver',
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.create_firefox({}, None, None, options=options)
     assert driver == expected_webdriver
@@ -294,7 +294,7 @@ def test_create_headless_firefox_with_options(creator, output_dir):
     profile = mock()
     expected_webdriver = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
-    when(webdriver).Firefox(options=options, firefox_profile=profile,
+    when(webdriver).Firefox(options=options, firefox_profile=profile, executable_path='geckodriver',
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.create_headless_firefox({}, None, None, options=options)
     assert driver == expected_webdriver
@@ -459,7 +459,7 @@ def test_create_driver_firefox(creator, output_dir):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     expected_webdriver = mock()
     when(creator.selenium_options).create('firefox', str_options).thenReturn(options)
-    when(webdriver).Firefox(options=options, firefox_profile=profile,
+    when(webdriver).Firefox(options=options, firefox_profile=profile, executable_path='geckodriver',
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
                                         options=str_options)

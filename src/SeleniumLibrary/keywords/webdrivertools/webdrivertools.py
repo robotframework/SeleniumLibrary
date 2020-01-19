@@ -142,7 +142,8 @@ class WebDriverCreator(object):
                 index = signature.args.index('executable_path')
                 return signature.defaults[index - 1]
 
-    def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None):
+    def create_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None, service_log_path=None,
+                       executable_path='geckodriver'):
         profile = self._get_ff_profile(ff_profile_dir)
         if is_truthy(remote_url):
             default_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
@@ -150,8 +151,11 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url,
                                 profile, options)
         service_log_path = service_log_path if service_log_path else self._geckodriver_log
+        if is_falsy(executable_path):
+            executable_path = self._get_executable_path(webdriver.Firefox)
         return webdriver.Firefox(options=options, firefox_profile=profile,
-                                 service_log_path=service_log_path, **desired_capabilities)
+                                 service_log_path=service_log_path, executable_path=executable_path,
+                                 **desired_capabilities)
 
     def _get_ff_profile(self, ff_profile_dir):
         if isinstance(ff_profile_dir, FirefoxProfile):
@@ -178,12 +182,13 @@ class WebDriverCreator(object):
         logger.info('Firefox driver log is always forced to to: %s' % log_file)
         return log_file
 
-    def create_headless_firefox(self, desired_capabilities, remote_url,
-                                ff_profile_dir, options=None, service_log_path=None):
+    def create_headless_firefox(self, desired_capabilities, remote_url, ff_profile_dir, options=None,
+                                service_log_path=None, executable_path='geckodriver'):
         if not options:
             options = webdriver.FirefoxOptions()
         options.headless = True
-        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path)
+        return self.create_firefox(desired_capabilities, remote_url, ff_profile_dir, options, service_log_path,
+                                   executable_path)
 
     def create_ie(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):
