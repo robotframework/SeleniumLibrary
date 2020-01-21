@@ -231,14 +231,17 @@ class WebDriverCreator(object):
         return webdriver.Opera(options=options, service_log_path=service_log_path, executable_path=executable_path,
                                **desired_capabilities)
 
-    def create_safari(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+    def create_safari(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                      executable_path='/usr/bin/safaridriver'):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.SAFARI.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url)
         if options or service_log_path:
             logger.warn('Safari browser does not support Selenium options or service_log_path.')
-        return webdriver.Safari(**desired_capabilities)
+        if is_falsy(executable_path):
+            executable_path = self._get_executable_path(webdriver.Safari)
+        return webdriver.Safari(executable_path=executable_path, **desired_capabilities)
 
     def create_phantomjs(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '

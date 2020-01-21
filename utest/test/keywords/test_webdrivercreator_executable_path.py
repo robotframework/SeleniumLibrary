@@ -208,6 +208,23 @@ def test_create_opera_executable_path_not_set(creator):
     assert driver == expected_webdriver
 
 
+def test_create_safari_executable_path_set(creator):
+    executable_path = '/path/to/safaridriver'
+    expected_webdriver = mock()
+    when(webdriver).Safari(executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_safari({}, None, executable_path=executable_path)
+    assert driver == expected_webdriver
+
+
+def test_create_safari_executable_path_not_set(creator):
+    executable_path = '/usr/bin/safaridriver'
+    expected_webdriver = mock()
+    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
+    when(webdriver).Safari(executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_safari({}, None, executable_path=None)
+    assert driver == expected_webdriver
+
+
 def mock_file_detector(creator):
     file_detector = mock()
     when(creator)._get_sl_file_detector().thenReturn(file_detector)

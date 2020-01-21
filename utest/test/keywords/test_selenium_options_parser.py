@@ -379,7 +379,8 @@ def test_create_opera_with_options_and_remote_url(creator):
 def test_create_safari_no_options_support(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).Safari().thenReturn(expected_webdriver)
+    executable_path = '/usr/bin/safaridriver'
+    when(webdriver).Safari(executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_safari({}, None, options=options)
     assert driver == expected_webdriver
 
