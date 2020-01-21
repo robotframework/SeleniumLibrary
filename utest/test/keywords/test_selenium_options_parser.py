@@ -355,7 +355,9 @@ def test_create_edge_with_options(creator):
 def test_create_opera_with_options(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).Opera(options=options, service_log_path=None).thenReturn(expected_webdriver)
+    executable_path = 'operadriver'
+    when(webdriver).Opera(options=options, service_log_path=None,
+                          executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_opera({}, None, options=options)
     assert driver == expected_webdriver
 
