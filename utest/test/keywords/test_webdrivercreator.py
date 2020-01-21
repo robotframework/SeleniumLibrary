@@ -393,8 +393,9 @@ def test_ie_no_browser_name(creator):
 
 
 def test_edge(creator):
+    executable_path = 'MicrosoftWebDriver.exe'
     expected_webdriver = mock()
-    when(webdriver).Edge(service_log_path=None).thenReturn(expected_webdriver)
+    when(webdriver).Edge(service_log_path=None, executable_path=executable_path).thenReturn(expected_webdriver)
     when(creator)._has_options(ANY).thenReturn(False)
     driver = creator.create_edge({}, None)
     assert driver == expected_webdriver
