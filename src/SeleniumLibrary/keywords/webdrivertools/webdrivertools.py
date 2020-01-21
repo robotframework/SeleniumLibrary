@@ -258,30 +258,34 @@ class WebDriverCreator(object):
         return webdriver.PhantomJS(service_log_path=service_log_path, executable_path=executable_path,
                                    **desired_capabilities)
 
-    def create_htmlunit(self, desired_capabilities, remote_url, options=None, service_log_path=None):
-        if service_log_path or options:
-            logger.warn('Htmlunit does not support Selenium options or service_log_path argument.')
+    def create_htmlunit(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                        executable_path=None):
+        if service_log_path or options or executable_path:
+            logger.warn('Htmlunit does not support Selenium options, service_log_path or executable_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url, options=options)
 
-    def create_htmlunit_with_js(self, desired_capabilities, remote_url, options=None, service_log_path=None):
-        if service_log_path or options:
-            logger.warn('Htmlunit with JS does not support service_log_path argument.')
+    def create_htmlunit_with_js(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                                executable_path=None):
+        if service_log_path or options or executable_path:
+            logger.warn('Htmlunit with JS does not support Selenium options, service_log_path or executable_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url, options=options)
 
-    def create_android(self, desired_capabilities, remote_url, options=None, service_log_path=None):
-        if service_log_path:
-            logger.warn('Android does not support service_log_path argument.')
+    def create_android(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                       executable_path=None):
+        if service_log_path or executable_path:
+            logger.warn('Android does not support Selenium options or executable_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url, options=options)
 
-    def create_iphone(self, desired_capabilities, remote_url, options=None, service_log_path=None):
-        if service_log_path:
-            logger.warn('iPhone does not support service_log_path argument.')
+    def create_iphone(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                      executable_path=None):
+        if service_log_path or executable_path:
+            logger.warn('iPhone does not support service_log_path or executable_path argument.')
         defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
         desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
         return self._remote(desired_capabilities, remote_url, options=options)
