@@ -1,4 +1,6 @@
+import inspect
 import os
+import unittest
 
 import pytest
 from mockito import mock, unstub, when, ANY
@@ -158,15 +160,29 @@ def test_create_ie_executable_path_not_set(creator):
 def test_create_edge_executable_path_set(creator):
     executable_path = '/path/to/MicrosoftWebDriver.exe'
     expected_webdriver = mock()
+    when(creator)._has_options(ANY).thenReturn(False)
     when(webdriver).Edge(service_log_path=None,
                          executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_edge({}, None, executable_path=executable_path)
     assert driver == expected_webdriver
 
+
+@unittest.skipIf('options' not in inspect.getargspec(webdriver.Edge.__init__), "Requires Selenium 4.0.")
+def test_create_edge_executable_path_set_selenium_4(creator):
+    executable_path = '/path/to/MicrosoftWebDriver.exe'
+    expected_webdriver = mock()
+    when(creator)._has_options(ANY).thenReturn(True)
+    when(webdriver).Edge(service_log_path=None,
+                         executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_edge({}, None, executable_path=executable_path)
+    assert driver == expected_webdriver
+
+
 def test_create_edge_executable_path_not_set(creator):
     executable_path = 'MicrosoftWebDriver.exe'
     expected_webdriver = mock()
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
+    when(creator)._has_options(ANY).thenReturn(False)
     when(webdriver).Edge(service_log_path=None,
                          executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_edge({}, None, executable_path=None)
