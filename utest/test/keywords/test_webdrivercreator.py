@@ -526,7 +526,8 @@ def test_safari_no_broser_name(creator):
 
 def test_phantomjs(creator):
     expected_webdriver = mock()
-    when(webdriver).PhantomJS(service_log_path=None).thenReturn(expected_webdriver)
+    executable_path = 'phantomjs'
+    when(webdriver).PhantomJS(service_log_path=None, executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_phantomjs({}, None)
     assert driver == expected_webdriver
 

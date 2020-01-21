@@ -388,7 +388,8 @@ def test_create_safari_no_options_support(creator):
 def test_create_phantomjs_no_options_support(creator):
     options = mock()
     expected_webdriver = mock()
-    when(webdriver).PhantomJS(service_log_path=None).thenReturn(expected_webdriver)
+    executable_path = 'phantomjs'
+    when(webdriver).PhantomJS(service_log_path=None, executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_phantomjs({}, None, options=options)
     assert driver == expected_webdriver
 
