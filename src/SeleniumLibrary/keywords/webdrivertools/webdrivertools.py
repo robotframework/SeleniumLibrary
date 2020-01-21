@@ -62,6 +62,7 @@ class WebDriverCreator(object):
 
     def create_driver(self, browser, desired_capabilities, remote_url, profile_dir=None,
                       options=None, service_log_path=None, executable_path=None):
+        executable_path = None if is_falsy(executable_path) else executable_path
         browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
@@ -72,10 +73,10 @@ class WebDriverCreator(object):
             self._create_directory(service_log_path)
         if (creation_method == self.create_firefox
                 or creation_method == self.create_headless_firefox):
-            return creation_method(desired_capabilities, remote_url, profile_dir,
-                                   options=options, service_log_path=service_log_path)
+            return creation_method(desired_capabilities, remote_url, profile_dir, options=options,
+                                   service_log_path=service_log_path, executable_path=executable_path)
         return creation_method(desired_capabilities, remote_url, options=options,
-                               service_log_path=service_log_path)
+                               service_log_path=service_log_path, executable_path=executable_path)
 
     def _get_creator_method(self, browser):
         if browser in self.browser_names:
