@@ -147,9 +147,11 @@ def test_create_edge_with_service_log_path_real_path(creator):
 
 
 def test_create_opera_with_service_log_path_real_path(creator):
+    executable_path = 'operadriver'
     log_file = os.path.join(creator.output_dir, 'ie-1.log')
     expected_webdriver = mock()
-    when(webdriver).Opera(options=None, service_log_path=log_file).thenReturn(expected_webdriver)
+    when(webdriver).Opera(options=None, service_log_path=log_file,
+                          executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.creator.create_opera({}, None, service_log_path=log_file)
     assert driver == expected_webdriver
 

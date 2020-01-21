@@ -163,7 +163,6 @@ def test_create_edge_executable_path_set(creator):
     driver = creator.create_edge({}, None, executable_path=executable_path)
     assert driver == expected_webdriver
 
-
 def test_create_edge_executable_path_not_set(creator):
     executable_path = 'MicrosoftWebDriver.exe'
     expected_webdriver = mock()
@@ -171,6 +170,25 @@ def test_create_edge_executable_path_not_set(creator):
     when(webdriver).Edge(service_log_path=None,
                          executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_edge({}, None, executable_path=None)
+    assert driver == expected_webdriver
+
+
+def test_create_opera_executable_path_set(creator):
+    executable_path = '/path/to/operadriver'
+    expected_webdriver = mock()
+    when(webdriver).Opera(service_log_path=None, options=None,
+                          executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_opera({}, None, executable_path=executable_path)
+    assert driver == expected_webdriver
+
+
+def test_create_opera_executable_path_not_set(creator):
+    executable_path = 'operadriver'
+    expected_webdriver = mock()
+    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
+    when(webdriver).Opera(service_log_path=None, options=None,
+                          executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_opera({}, None, executable_path=None)
     assert driver == expected_webdriver
 
 

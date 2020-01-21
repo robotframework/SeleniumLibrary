@@ -220,12 +220,16 @@ class WebDriverCreator(object):
                                   **desired_capabilities)
         return webdriver.Edge(service_log_path=service_log_path, executable_path=executable_path, **desired_capabilities)
 
-    def create_opera(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+    def create_opera(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                     executable_path='operadriver'):
         if is_truthy(remote_url):
             defaul_caps = webdriver.DesiredCapabilities.OPERA.copy()
             desired_capabilities = self._remote_capabilities_resolver(desired_capabilities, defaul_caps)
             return self._remote(desired_capabilities, remote_url, options=options)
-        return webdriver.Opera(options=options, service_log_path=service_log_path, **desired_capabilities)
+        if is_falsy(executable_path):
+            executable_path = self._get_executable_path(webdriver.Opera)
+        return webdriver.Opera(options=options, service_log_path=service_log_path, executable_path=executable_path,
+                               **desired_capabilities)
 
     def create_safari(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if is_truthy(remote_url):

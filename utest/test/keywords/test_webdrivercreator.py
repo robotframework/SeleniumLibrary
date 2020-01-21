@@ -438,7 +438,9 @@ def test_edge_no_browser_name(creator):
 
 def test_opera(creator):
     expected_webdriver = mock()
-    when(webdriver).Opera(options=None, service_log_path=None).thenReturn(expected_webdriver)
+    executable_path = 'operadriver'
+    when(webdriver).Opera(options=None, service_log_path=None,
+                          executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_opera({}, None)
     assert driver == expected_webdriver
 
