@@ -243,7 +243,8 @@ class WebDriverCreator(object):
             executable_path = self._get_executable_path(webdriver.Safari)
         return webdriver.Safari(executable_path=executable_path, **desired_capabilities)
 
-    def create_phantomjs(self, desired_capabilities, remote_url, options=None, service_log_path=None):
+    def create_phantomjs(self, desired_capabilities, remote_url, options=None, service_log_path=None,
+                         executable_path='phantomjs'):
         warnings.warn('SeleniumLibrary support for PhantomJS has been deprecated, '
                       'please use headlesschrome or headlessfirefox instead.')
         if is_truthy(remote_url):
@@ -252,7 +253,10 @@ class WebDriverCreator(object):
             return self._remote(desired_capabilities, remote_url)
         if options:
             logger.warn('PhantomJS browser does not support Selenium options.')
-        return webdriver.PhantomJS(service_log_path=service_log_path, **desired_capabilities)
+        if is_falsy(executable_path):
+            executable_path = self._get_executable_path(webdriver.PhantomJS)
+        return webdriver.PhantomJS(service_log_path=service_log_path, executable_path=executable_path,
+                                   **desired_capabilities)
 
     def create_htmlunit(self, desired_capabilities, remote_url, options=None, service_log_path=None):
         if service_log_path or options:
