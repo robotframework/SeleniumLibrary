@@ -55,6 +55,9 @@ def test_get_executable_path(creator):
     executable_path = creator._get_executable_path(webdriver.Opera)
     assert executable_path == None
 
+    executable_path = creator._get_executable_path(webdriver.Edge)
+    assert executable_path == 'MicrosoftWebDriver.exe'
+
 
 def test_create_chrome_executable_path_and_remote(creator):
     url = 'http://localhost:4444/wd/hub'
@@ -149,6 +152,25 @@ def test_create_ie_executable_path_not_set(creator):
     when(webdriver).Ie(options=None, service_log_path=None,
                        executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, executable_path=None)
+    assert driver == expected_webdriver
+
+
+def test_create_edge_executable_path_set(creator):
+    executable_path = '/path/to/MicrosoftWebDriver.exe'
+    expected_webdriver = mock()
+    when(webdriver).Edge(service_log_path=None,
+                         executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_edge({}, None, executable_path=executable_path)
+    assert driver == expected_webdriver
+
+
+def test_create_edge_executable_path_not_set(creator):
+    executable_path = 'MicrosoftWebDriver.exe'
+    expected_webdriver = mock()
+    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
+    when(webdriver).Edge(service_log_path=None,
+                         executable_path=executable_path).thenReturn(expected_webdriver)
+    driver = creator.create_edge({}, None, executable_path=None)
     assert driver == expected_webdriver
 
 
