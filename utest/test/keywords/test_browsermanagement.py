@@ -1,6 +1,6 @@
 import unittest
 
-from mockito import when, mock, verify, verifyNoMoreInteractions, unstub
+from mockito import when, mock, verify, verifyNoMoreInteractions, unstub, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import BrowserManagementKeywords
@@ -89,8 +89,10 @@ class BrowserManagementTests(unittest.TestCase):
         ctx.event_firing_webdriver = None
         ctx.speed = 5.0
         browser = mock()
-        when(webdriver).Chrome(options=None, service_log_path=None, executable_path='chromedriver').thenReturn(browser)
+        executable_path = 'chromedriver'
+        when(webdriver).Chrome(options=None, service_log_path=None, executable_path=executable_path).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
+        when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
         bm.open_browser('http://robotframework.org/', 'chrome')
         self.assertEqual(browser._speed, 5.0)
         unstub()
@@ -101,8 +103,10 @@ class BrowserManagementTests(unittest.TestCase):
         ctx.event_firing_webdriver = None
         ctx.speed = 0.0
         browser = mock()
-        when(webdriver).Chrome(options=None, service_log_path=None, executable_path='chromedriver').thenReturn(browser)
+        executable_path = 'chromedriver'
+        when(webdriver).Chrome(options=None, service_log_path=None, executable_path=executable_path).thenReturn(browser)
         bm = BrowserManagementKeywords(ctx)
+        when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
         bm.open_browser('http://robotframework.org/', 'chrome')
         verify(browser, times=0).__call__('_speed')
         unstub()

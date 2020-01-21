@@ -33,6 +33,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
         self._window_manager = WindowManager(ctx)
+        self._webdriver_creator = WebDriverCreator(self.log_dir)
 
     @keyword
     def close_all_browsers(self):
@@ -58,7 +59,8 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(self, url=None, browser='firefox', alias=None,
                      remote_url=False, desired_capabilities=None,
-                     ff_profile_dir=None, options=None, service_log_path=None):
+                     ff_profile_dir=None, options=None, service_log_path=None,
+                     executable_path=None):
         """Opens a new browser instance to the optional ``url``.
 
         The ``browser`` argument specifies which browser to use. The
@@ -275,11 +277,12 @@ class BrowserManagementKeywords(LibraryComponent):
             return index
         return self._make_new_browser(url, browser, alias, remote_url,
                                       desired_capabilities, ff_profile_dir,
-                                      options, service_log_path)
+                                      options, service_log_path, executable_path)
 
     def _make_new_browser(self, url=None, browser='firefox', alias=None,
                           remote_url=False, desired_capabilities=None,
-                          ff_profile_dir=None, options=None, service_log_path=None):
+                          ff_profile_dir=None, options=None, service_log_path=None,
+                          executable_path=None):
         if is_truthy(remote_url):
             self.info("Opening browser '%s' to base url '%s' through "
                       "remote server at '%s'." % (browser, url, remote_url))
@@ -287,7 +290,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
         driver = self._make_driver(browser, desired_capabilities,
                                    ff_profile_dir, remote_url,
-                                   options, service_log_path)
+                                   options, service_log_path, executable_path)
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
         if is_truthy(url):
@@ -656,10 +659,10 @@ class BrowserManagementKeywords(LibraryComponent):
         self.driver.implicitly_wait(timestr_to_secs(value))
 
     def _make_driver(self, browser, desired_capabilities=None, profile_dir=None,
-                     remote=None, options=None, service_log_path=None):
-        driver = WebDriverCreator(self.log_dir).create_driver(
-            browser=browser, desired_capabilities=desired_capabilities, remote_url=remote,
-            profile_dir=profile_dir, options=options, service_log_path=service_log_path)
+                     remote=None, options=None, service_log_path=None, executable_path=None):
+        driver = self._webdriver_creator.create_driver(
+            browser=browser, desired_capabilities=desired_capabilities, remote_url=remote, profile_dir=profile_dir,
+            options=options, service_log_path=service_log_path, executable_path=executable_path)
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:

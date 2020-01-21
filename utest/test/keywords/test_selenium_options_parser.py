@@ -450,8 +450,10 @@ def test_create_driver_chrome(creator):
     options = mock()
     expected_webdriver = mock()
     when(creator.selenium_options).create('chrome', str_options).thenReturn(options)
+    executable_path = 'chromedriver'
+    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Chrome(service_log_path=None, options=options,
-                           executable_path='chromedriver').thenReturn(expected_webdriver)
+                           executable_path=executable_path).thenReturn(expected_webdriver)
     driver = creator.create_driver('Chrome', desired_capabilities={}, remote_url=None,
                                    options=str_options)
     assert driver == expected_webdriver
@@ -465,7 +467,9 @@ def test_create_driver_firefox(creator, output_dir):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     expected_webdriver = mock()
     when(creator.selenium_options).create('firefox', str_options).thenReturn(options)
-    when(webdriver).Firefox(options=options, firefox_profile=profile, executable_path='geckodriver',
+    executable_path = 'geckodriver'
+    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
+    when(webdriver).Firefox(options=options, firefox_profile=profile, executable_path=executable_path,
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
                                         options=str_options)

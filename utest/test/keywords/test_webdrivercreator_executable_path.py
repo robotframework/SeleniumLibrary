@@ -6,6 +6,7 @@ import pytest
 from mockito import mock, unstub, when, ANY
 from selenium import webdriver
 
+from SeleniumLibrary import BrowserManagementKeywords
 from SeleniumLibrary.keywords import WebDriverCreator
 
 
@@ -291,6 +292,14 @@ def test_create_iphone_executable_path_set(creator):
                            browser_profile=None, options=None,
                            file_detector=file_detector).thenReturn(expected_webdriver)
     driver = creator.create_iphone({}, None, executable_path=executable_path)
+    assert driver == expected_webdriver
+
+
+def test_open_browser_executable_path_set(creator):
+    expected_webdriver = mock()
+    when(webdriver).Chrome(options=None, service_log_path=None,
+                           executable_path='/path/to/chromedriver').thenReturn(expected_webdriver)
+    driver = creator.create_driver('Chrome', {}, None, executable_path='/path/to/chromedriver')
     assert driver == expected_webdriver
 
 
