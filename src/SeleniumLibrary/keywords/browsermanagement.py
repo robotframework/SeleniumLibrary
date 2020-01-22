@@ -222,6 +222,11 @@ class BrowserManagementKeywords(LibraryComponent):
         [https://docs.python.org/3/library/string.html#format-string-syntax|
         format string syntax].
 
+        Optional ``executable_path`` argument defines the path to the driver
+        executable, example to a chromedriver or a geckodriver. If not defined
+        it is assumed the executable is in the
+        [https://en.wikipedia.org/wiki/PATH_(variable)|$PATH].
+
         Examples:
         | `Open Browser` | http://example.com | Chrome  |                                         |
         | `Open Browser` | http://example.com | Firefox | alias=Firefox                           |
@@ -267,6 +272,8 @@ class BrowserManagementKeywords(LibraryComponent):
         attributes are new in SeleniumLibrary 4.0.
         
         Making ``url`` optional is new in SeleniumLibrary 4.1.
+
+        The ``executable_path`` argument is new in SeleniumLibrary 4.2.
         """
         index = self.drivers.get_index(alias)
         if index:
