@@ -17,6 +17,7 @@
 from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import ElementNotFound
@@ -102,7 +103,7 @@ class ElementFinder(ContextAware):
 
     def _is_webelement(self, element):
         # Hook for unit tests
-        return isinstance(element, WebElement)
+        return isinstance(element, (WebElement, EventFiringWebElement))
 
     def _disallow_webelement_parent(self, element):
         if self._is_webelement(element):

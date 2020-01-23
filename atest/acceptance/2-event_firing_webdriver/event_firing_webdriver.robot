@@ -31,9 +31,8 @@ Event Firing Webdriver Input Text (WebElement)
     ...    LOG 1:14 INFO  After clear and send_keys
     Input Text    //input[@name="textfield"]    FooBar
 
-Event Firing Webdriver Click Element (WebElement)
+Event Firing Webdriver With Get WebElement (WebElement)
     [Tags]    NoGrid
-    [Documentation]
-    ...    LOG 1:5 INFO  Before click
-    ...    LOG 1:9 INFO  After click
-    Click Element    //input[@name="ok_button"]
+    Go To     ${ROOT}/nested_divs.html
+    ${link}=        Get WebElement    //a[@id="needleC"]
+    Wait Until Element Contains   ${link}   top/c/needle
