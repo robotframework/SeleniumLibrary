@@ -104,6 +104,10 @@ Close Browser does not delete alias (`#1416`_, rc 1)
 ----------------------------------------------------
 Many thanks to anton264 improving closing browser functionality so that browser alias is deleted.
 
+add ability of embedding screenshots as base64 encoded images in the ... (`#1497`_, rc 1)
+-----------------------------------------------------------------------------------------
+Many thanks to bitcoder for enabling embedding screenshot in to the log.html file.
+
 Full list of fixes and enhancements
 ===================================
 
