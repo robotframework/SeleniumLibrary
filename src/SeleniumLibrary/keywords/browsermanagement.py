@@ -89,7 +89,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Headless Chrome are new additions in SeleniumLibrary 3.1.0
         and require Selenium 3.8.0 or newer.
 
-        After opening the browser, it is possible to use optional 
+        After opening the browser, it is possible to use optional
         ``url`` to navigate the browser to the desired address.
 
         Optional ``alias`` is an alias given for this browser instance and
@@ -205,7 +205,7 @@ class BrowserManagementKeywords(LibraryComponent):
         ``options``.
 
         Example the ``options`` argument can be used to launch Chomium-based
-        applications which utilize the 
+        applications which utilize the
         [https://bitbucket.org/chromiumembedded/cef/wiki/UsingChromeDriver|Chromium Embedded Framework]
         . To lauch Chomium-based application, use ``options`` to define
         `binary_location` attribute and use `add_argument` method to define
@@ -270,7 +270,7 @@ class BrowserManagementKeywords(LibraryComponent):
         accepting an instance of the `selenium.webdriver.FirefoxProfile`
         and support defining FirefoxProfile with methods and
         attributes are new in SeleniumLibrary 4.0.
-        
+
         Making ``url`` optional is new in SeleniumLibrary 4.1.
 
         The ``executable_path`` argument is new in SeleniumLibrary 4.2.
@@ -304,8 +304,7 @@ class BrowserManagementKeywords(LibraryComponent):
             try:
                 driver.get(url)
             except Exception:
-                self.debug("Opened browser with session id %s but failed "
-                        "to open url '%s'." % (driver.session_id, url))
+                self.debug("Opened browser with session id %s but failed to open url '%s'." % (driver.session_id, url))
                 raise
         self.debug('Opened browser with session id %s.' % driver.session_id)
         return index

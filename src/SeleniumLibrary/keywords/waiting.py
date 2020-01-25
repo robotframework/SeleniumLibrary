@@ -94,7 +94,6 @@ class WaitingKeywords(LibraryComponent):
                          "Location did not contain '%s' in <TIMEOUT>." % expected,
                          timeout, message)
 
-
     @keyword
     def wait_until_page_contains(self, text, timeout=None, error=None):
         """Waits until ``text`` appears on the current page.

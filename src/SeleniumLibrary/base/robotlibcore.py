@@ -28,6 +28,7 @@ except ImportError:  # Support RF < 2.9
     def keyword(name=None, tags=()):
         if callable(name):
             return keyword()(name)
+
         def decorator(func):
             func.robot_name = name
             func.robot_tags = tags
