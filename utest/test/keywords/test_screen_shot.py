@@ -52,7 +52,7 @@ def test_sl_init_embed():
 
 def test_sl_init_not_embed():
     sl = SeleniumLibrary(screenshot_root_directory=None)
-    assert sl.screenshot_root_directory == None
+    assert sl.screenshot_root_directory is None
 
     sl = SeleniumLibrary(screenshot_root_directory='None')
     assert sl.screenshot_root_directory == 'None'

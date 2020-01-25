@@ -20,10 +20,10 @@ def teardown_function():
 
 def test_normalise_browser_name(creator):
     browser = creator._normalise_browser_name('chrome')
-    assert browser =='chrome'
+    assert browser == 'chrome'
 
     browser = creator._normalise_browser_name('ChrOmE')
-    assert browser =='chrome'
+    assert browser == 'chrome'
 
     browser = creator._normalise_browser_name(' Ch rO mE ')
     assert browser == 'chrome'
@@ -48,7 +48,7 @@ def test_parse_capabilities(creator):
 
     caps = creator._parse_capabilities('key1:value1,key2:value2', 'ie')
     expected = {'capabilities': {'key1': 'value1', 'key2': 'value2'}}
-    assert  caps == expected
+    assert caps == expected
 
     caps = creator._parse_capabilities('key1:value1,key2:value2', 'firefox')
     assert caps == expected
@@ -183,7 +183,7 @@ def test_chrome_healdless(creator):
     when(webdriver).Chrome(options=options, service_log_path=None,
                            executable_path='chromedriver').thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None)
-    assert options.headless == True
+    assert options.headless is True
     assert driver == expected_webdriver
 
 
@@ -199,7 +199,7 @@ def test_chrome_healdless_with_grid(creator):
                            desired_capabilities=capabilities,
                            file_detector=file_detector).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, remote_url)
-    assert options.headless == True
+    assert options.headless is True
     assert driver == expected_webdriver
 
 
@@ -321,7 +321,7 @@ def test_firefox_headless_with_grid_caps(creator):
                            file_detector=file_detector).thenReturn(expected_webdriver)
     driver = creator.create_headless_firefox({'capabilities': {'key': 'value'}}, remote_url, None)
     assert driver == expected_webdriver
-    assert options.headless == True
+    assert options.headless is True
 
 
 def test_firefox_headless_with_grid_no_caps(creator):
@@ -411,6 +411,7 @@ def test_edge_remote_no_caps(creator):
                            file_detector=file_detector).thenReturn(expected_webdriver)
     driver = creator.create_edge({}, url)
     assert driver == expected_webdriver
+
 
 def test_edge_remote_caps(creator):
     url = 'http://localhost:4444/wd/hub'
@@ -511,6 +512,7 @@ def test_safari_remote_caps(creator):
                            options=None, file_detector=file_detector).thenReturn(expected_webdriver)
     driver = creator.create_safari({'desired_capabilities': capabilities}, url)
     assert driver == expected_webdriver
+
 
 def test_safari_no_broser_name(creator):
     file_detector = mock_file_detector(creator)

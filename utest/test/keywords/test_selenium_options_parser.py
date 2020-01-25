@@ -432,6 +432,7 @@ def test_android_options_support(creator):
     driver = creator.create_android({}, None, options=options)
     assert driver == expected_webdriver
 
+
 def test_iphone_options_support(creator):
     caps = webdriver.DesiredCapabilities.IPHONE.copy()
     options = mock()
@@ -472,7 +473,7 @@ def test_create_driver_firefox(creator, output_dir):
     when(webdriver).Firefox(options=options, firefox_profile=profile, executable_path=executable_path,
                             service_log_path=log_file).thenReturn(expected_webdriver)
     driver = creator.create_driver('FireFox', desired_capabilities={}, remote_url=None,
-                                        options=str_options)
+                                   options=str_options)
     assert driver == expected_webdriver
 
 

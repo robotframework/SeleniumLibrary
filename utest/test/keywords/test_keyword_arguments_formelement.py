@@ -25,10 +25,12 @@ def test_submit_form_false(form):
         form.submit_form()
     form.submit_form()
 
+
 def test_submit_form_true(form):
     element = mock()
     when(form).find_element('//form', tag='form').thenReturn(element)
     form.submit_form('//form')
+
 
 def test_textfield_should_contain(form):
     locator = '//input'

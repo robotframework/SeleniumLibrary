@@ -6,7 +6,6 @@ import pytest
 from mockito import mock, unstub, when, ANY
 from selenium import webdriver
 
-from SeleniumLibrary import BrowserManagementKeywords
 from SeleniumLibrary.keywords import WebDriverCreator
 
 
@@ -50,13 +49,13 @@ def test_get_executable_path(creator):
     assert executable_path == 'geckodriver'
 
     executable_path = creator._get_executable_path(webdriver.Android)
-    assert executable_path == None
+    assert executable_path is None
 
     executable_path = creator._get_executable_path(webdriver.Ie)
     assert executable_path == 'IEDriverServer.exe'
 
     executable_path = creator._get_executable_path(webdriver.Opera)
-    assert executable_path == None
+    assert executable_path is None
 
     executable_path = creator._get_executable_path(webdriver.Edge)
     assert executable_path == 'MicrosoftWebDriver.exe'
