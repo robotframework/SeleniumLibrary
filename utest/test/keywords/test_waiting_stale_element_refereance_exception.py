@@ -11,7 +11,6 @@ def _raise(*a):
     raise StaleElementReferenceException('Darn')
 
 
-
 @pytest.fixture(scope='module')
 def waiting():
     ctx = mock()

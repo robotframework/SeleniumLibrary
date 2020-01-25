@@ -22,7 +22,8 @@ class JavaScriptKeywordsTest(unittest.TestCase):
     @unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')
     @unittest.skipIf(WINDOWS, reason='ApprovalTest do not support different line feeds')
     def setUpClass(cls):
-        cls.code_examples = [(),
+        cls.code_examples = [
+            (),
             ('code1',), ('code1', 'code2'),
             ('JAVASCRIPT', 'code1', 'code2'),
             ('code1', 'code2', 'ARGUMENTS', 'arg1', 'arg2'),

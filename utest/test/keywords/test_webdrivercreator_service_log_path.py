@@ -25,8 +25,8 @@ def teardown_function():
 
 
 def test_no_log_file(creator):
-    assert creator.creator._get_log_path(None) == None
-    assert creator.creator._get_log_path('NoNe') == None
+    assert creator.creator._get_log_path(None) is None
+    assert creator.creator._get_log_path('NoNe') is None
 
 
 def test_log_file_with_rf_file_separator(creator):
@@ -124,7 +124,7 @@ def test_create_firefox_from_create_driver(creator):
     when(creator.creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Firefox(options=None, firefox_profile=profile, service_log_path=log_file,
                             executable_path=executable_path).thenReturn(expected_webdriver)
-    driver = creator.creator.create_driver('firefox ', {}, remote_url=None,  profile_dir=None,
+    driver = creator.creator.create_driver('firefox ', {}, remote_url=None, profile_dir=None,
                                            service_log_path=log_file)
     assert driver == expected_webdriver
 

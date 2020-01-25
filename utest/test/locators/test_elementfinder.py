@@ -546,8 +546,8 @@ def test_find_with_sloppy_criteria(finder):
 def test_find_by_id_with_synonym_and_constraints(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'input', 'span', 'input',
-                                        'a', 'input', 'div', 'input',
-                                        'input')
+                                   'a', 'input', 'div', 'input',
+                                   'input')
     elements[1].set_attribute('type', 'radio')
     elements[3].set_attribute('type', 'checkbox')
     elements[5].set_attribute('type', 'text')

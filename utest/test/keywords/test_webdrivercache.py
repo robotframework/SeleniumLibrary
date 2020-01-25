@@ -89,7 +89,6 @@ class WebDriverCacheTests(unittest.TestCase):
         verify(browser2, times=1).quit()
         verify(browser3, times=1).quit()
 
-
     def test_resolve_alias_or_index(self):
         cache = WebDriverCache()
 
