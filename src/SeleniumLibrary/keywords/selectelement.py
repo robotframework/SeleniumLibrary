@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import Select
 
 from SeleniumLibrary.base import LibraryComponent, keyword

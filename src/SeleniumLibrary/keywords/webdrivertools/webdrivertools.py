@@ -71,8 +71,7 @@ class WebDriverCreator(object):
         if service_log_path:
             logger.info('Browser driver log file created to: %s' % service_log_path)
             self._create_directory(service_log_path)
-        if (creation_method == self.create_firefox
-                or creation_method == self.create_headless_firefox):
+        if creation_method == self.create_firefox or creation_method == self.create_headless_firefox:
             return creation_method(desired_capabilities, remote_url, profile_dir, options=options,
                                    service_log_path=service_log_path, executable_path=executable_path)
         return creation_method(desired_capabilities, remote_url, options=options,

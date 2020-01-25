@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from SeleniumLibrary.base import keyword, LibraryComponent
-from SeleniumLibrary.utils import is_truthy, secs_to_timestr
+from SeleniumLibrary.utils import secs_to_timestr
 
 
 class AlertKeywords(LibraryComponent):
@@ -134,8 +134,6 @@ class AlertKeywords(LibraryComponent):
         try:
             return wait.until(EC.alert_is_present())
         except TimeoutException:
-            raise AssertionError('Alert not found in %s.'
-                             % secs_to_timestr(timeout))
+            raise AssertionError('Alert not found in %s.' % secs_to_timestr(timeout))
         except WebDriverException as err:
-            raise AssertionError('An exception occurred waiting for alert: %s'
-                                 % err)
+            raise AssertionError('An exception occurred waiting for alert: %s' % err)

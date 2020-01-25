@@ -240,7 +240,7 @@ class ElementFinder(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index+1:].lstrip()
+                return prefix, locator[index + 1:].lstrip()
         return 'default', locator
 
     def _get_locator_separator_index(self, locator):

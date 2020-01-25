@@ -43,11 +43,11 @@ class CookieKeywords(LibraryComponent):
     def get_cookies(self, as_dict=False):
         """Returns all cookies of the current page.
 
-        If ``as_dict`` argument evaluates as false, see `Boolean arguments` 
-        for more details, then cookie information is returned as 
+        If ``as_dict`` argument evaluates as false, see `Boolean arguments`
+        for more details, then cookie information is returned as
         a single string in format ``name1=value1; name2=value2; name3=value3``.
         When ``as_dict`` argument evaluates as true, cookie information
-        is returned as Robot Framework dictionary format. The string format 
+        is returned as Robot Framework dictionary format. The string format
         can be used, for example, for logging purposes or in headers when
         sending HTTP requests. The dictionary format is helpful when
         the result can be passed to requests library's Create Session

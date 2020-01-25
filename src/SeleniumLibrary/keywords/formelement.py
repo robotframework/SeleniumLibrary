@@ -203,7 +203,7 @@ class FormElementKeywords(LibraryComponent):
         points at a file and when using Selenium Grid, Selenium will
         [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.command.html?highlight=upload#selenium.webdriver.remote.command.Command.UPLOAD_FILE|magically],
         transfer the file from the machine where the tests are executed
-        to the Selenium Grid node where the browser is running. 
+        to the Selenium Grid node where the browser is running.
         Then Selenium will send the file path, from the nodes file
         system, to the browser.
 
