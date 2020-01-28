@@ -75,6 +75,25 @@ class WaitingKeywords(LibraryComponent):
                          timeout, message)
 
     @keyword
+    def wait_until_location_is_not(self, location, timeout=None, message=None):
+        """Waits until the current URL is not ``location``.
+
+        The ``location`` argument is the unexpected value in url.
+
+        Fails if ``timeout`` expires before the location is not. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        """
+        location = str(location)
+        self._wait_until(lambda: location != self.driver.current_url,
+                         "Location is '%s' in <TIMEOUT>." % location,
+                         timeout, message)
+
+    @keyword
     def wait_until_location_contains(self, expected, timeout=None, message=None):
         """Waits until the current URL contains ``expected``.
 
@@ -92,6 +111,25 @@ class WaitingKeywords(LibraryComponent):
         expected = str(expected)
         self._wait_until(lambda: expected in self.driver.current_url,
                          "Location did not contain '%s' in <TIMEOUT>." % expected,
+                         timeout, message)
+
+    @keyword
+    def wait_until_location_does_not_contain(self, location, timeout=None, message=None):
+        """Waits until the current URL does not contains ``location``.
+
+        The ``location`` argument contains value not expected in url.
+
+        Fails if ``timeout`` expires before the location not contains. See
+        the `Timeouts` section for more information about using timeouts
+        and their default value.
+
+        The ``message`` argument can be used to override the default error
+        message.
+
+        """
+        location = str(location)
+        self._wait_until(lambda: location not in self.driver.current_url,
+                         "Location did contain '%s' in <TIMEOUT>." % location,
                          timeout, message)
 
     @keyword
