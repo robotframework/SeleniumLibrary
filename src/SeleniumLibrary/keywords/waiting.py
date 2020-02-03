@@ -16,10 +16,13 @@
 
 import time
 
+from selenium.common.exceptions import StaleElementReferenceException
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.utils import is_noney, secs_to_timestr
-from selenium.common.exceptions import StaleElementReferenceException
+from robot.utils import plural_or_not
+
 
 
 class WaitingKeywords(LibraryComponent):
@@ -133,6 +136,12 @@ class WaitingKeywords(LibraryComponent):
         about the locator syntax.
 
         ``error`` can be used to override the default error message.
+
+        The ``limit`` argument can used to define how many elements the
+        page should contain. When ``limit`` is ``None`` (default) page can
+        contain one or more elements. When limit is a number, page must
+        contain same number of elements.
+
         """
         if is_noney(limit):
             self._wait_until(
@@ -143,11 +152,11 @@ class WaitingKeywords(LibraryComponent):
         else:
             limit = int(limit)
             self._wait_until(
-                lambda: len(self.find_elements(locator)) is limit,
-                'Page should have contained "{}" element(s),'
-                'but it did contain "{}" element(s).'
+                lambda: len(self.find_elements(locator)) == limit,
+                'Page should have contained "{}" element{},'
+                'but it did contain "{}" element{}.'
                 'using locator "{}" did not appear in <TIMEOUT>.'.format(
-                    limit, len(self.find_elements(locator)), locator)
+                    limit, plural_or_not(limit), len(self.find_elements(locator)), plural_or_not(len(self.find_elements(locator))), locator)
                 , timeout, error
             )
 
@@ -162,6 +171,12 @@ class WaitingKeywords(LibraryComponent):
         about the locator syntax.
 
         ``error`` can be used to override the default error message.
+
+        The ``limit`` argument can used to define how many elements the
+        page should not contain. When ``limit`` is ``None`` (default) page can`t
+        contain one or more elements. When limit is a number, page must not
+        contain same number of elements.
+
         """
         if is_noney(limit):
             self._wait_until(
@@ -172,9 +187,9 @@ class WaitingKeywords(LibraryComponent):
         else:
             limit = int(limit)
             self._wait_until(
-                lambda: len(self.find_elements(locator)) is not limit,
-                "Page should not have contained '{}' element(s) but had '{}' using locator '{}' did not appear in <TIMEOUT>.".format(
-                    limit, len(self.find_elements(locator)), locator)
+                lambda: len(self.find_elements(locator)) != limit,
+                "Page should not have contained '{}' element{} but had '{}' using locator '{}' did not appear in <TIMEOUT>.".format(
+                    limit, plural_or_not(limit), len(self.find_elements(locator)), locator)
                 , timeout, error
             )
 
