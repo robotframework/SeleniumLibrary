@@ -87,7 +87,7 @@ class WaitingKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
-        New in SeleniumLibrary 5.0
+        New in SeleniumLibrary 4.3
         """
         location = str(location)
         self._wait_until(lambda: location != self.driver.current_url,
@@ -127,7 +127,7 @@ class WaitingKeywords(LibraryComponent):
         The ``message`` argument can be used to override the default error
         message.
 
-        New in SeleniumLibrary 5.0
+        New in SeleniumLibrary 4.3
         """
         location = str(location)
         self._wait_until(lambda: location not in self.driver.current_url,
