@@ -7,7 +7,7 @@ SeleniumLibrary 4.3.0
 
 
 SeleniumLibrary_ is a web testing library for `Robot Framework`_ that utilizes
-the Selenium_ tool internally. SSeleniumLibrary 4.3.0rc1 is a new pre-release with
+the Selenium_ tool internally. SeleniumLibrary 4.3.0 is a new release with
 fixing Open Browser keyword for Ie browser.
 
 All issues targeted for SeleniumLibrary v4.3.0 can be found
