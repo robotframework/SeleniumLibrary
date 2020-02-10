@@ -45,13 +45,13 @@ Wait Until Page Contains Element
 
 Wait Until Page Contains Element Limit
     [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
+    Run Keyword And Expect Error    Page should have contained "5" elements,but it did contain "0" elements.using locator "%cnon-existent" did not appear in 100 milliseconds.    Wait Until Page Contains Element    %cnon-existent    0.1 seconds    limit=5
+    Run Keyword And Expect Error    Page should have contained "10" elements,but it did contain "5" elements.using locator "//div" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //div    0.1 seconds    limit=10
+    Wait Until Page Contains Element    //divNotExists    0.1 seconds    limit=0
+    Run Keyword And Expect Error    Page should have contained "-1" elements,but it did contain "0" elements.using locator "//divNotExists" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //divNotExists    0.1 seconds    limit=-1
     Wait Until Page Contains Element    new div    2 seconds    limit=1
-    Run Keyword And Expect Error
-    ...    Element '%cnon-existent' did not appear in 100 milliseconds.
-    ...    Wait Until Page Contains Element    %cnon-existent    0.1 seconds
-    Run Keyword And Expect Error
-    ...    Element 'id:ääööåå' did not appear in 100 milliseconds.
-    ...    Wait Until Page Contains Element    id:ääööåå    0.1 seconds
+    Wait Until Page Contains Element    //div    2 seconds    limit=5
+
 
 Wait Until Page Does Not Contain Element
     [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
