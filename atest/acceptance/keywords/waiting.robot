@@ -63,16 +63,14 @@ Wait Until Page Does Not Contain Element
     ...    Custom Error ää ÖÖ
     ...    Wait Until Page Does Not Contain Element    content    0.1 seconds    Custom Error ää ÖÖ
 
-Wait Until Page Does Not Contain Element
+Wait Until Page Does Not Contain Element Limit
     [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
+    Wait Until Page Does Not Contain Element    //div    0.1 seconds    limit=4
+    Run Keyword And Expect Error    Page should not have contained '5' elements but had '5' using locator '//div' did not appear in 100 milliseconds.    Wait Until Page Does Not Contain Element    //div    0.1 seconds    limit=5
+    Wait Until Page Does Not Contain Element    not_present    0.1 seconds    limit=-1
+    Wait Until Page Does Not Contain Element    not_present    0.1 seconds    limit=0
     Wait Until Page Does Not Contain Element    not_present    2 seconds    limit=1
-    Run Keyword And Expect Error
-    ...    Element 'content' did not disappear in 100 milliseconds.
-    ...    Wait Until Page Does Not Contain Element    content    0.1 seconds
-    Run Keyword And Expect Error
-    ...    Custom Error ää ÖÖ
-    ...    Wait Until Page Does Not Contain Element    content    0.1 seconds    Custom Error ää ÖÖ
-
+    
 Wait Until Element Is Enabled
     Run Keyword And Expect Error
     ...    Element 'id=disabled' was not enabled in 2 milliseconds.
