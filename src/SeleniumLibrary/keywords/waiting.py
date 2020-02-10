@@ -193,8 +193,8 @@ class WaitingKeywords(LibraryComponent):
             limit = int(limit)
             self._wait_until(
                 lambda: len(self.find_elements(locator)) == limit,
-                'Page should have contained "{}" element{},'
-                'but it did contain "{}" element{}.'
+                'Page should have contained "{}" element{}, '
+                'but it did contain "{}" element{}, '
                 'using locator "{}" did not appear in <TIMEOUT>.'.format(
                     limit, plural_or_not(limit), len(self.find_elements(locator)), plural_or_not(len(self.find_elements(locator))), locator)
                 , timeout, error
