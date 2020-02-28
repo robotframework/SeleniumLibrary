@@ -101,8 +101,8 @@ class CookieKeywords(LibraryComponent):
         Example:
         | `Add Cookie`      | foo             | bar |
         | ${cookie} =       | `Get Cookie`    | foo |
-        | `Should Be Equal` | ${cookie.name}  | bar |
-        | `Should Be Equal` | ${cookie.value} | foo |
+        | `Should Be Equal` | ${cookie.name}  | foo |
+        | `Should Be Equal` | ${cookie.value} | bar |
         | `Should Be True`  | ${cookie.expiry.year} > 2017 |
 
         New in SeleniumLibrary 3.0.
