@@ -138,10 +138,11 @@ class WaitingKeywords(LibraryComponent):
         ``error`` can be used to override the default error message.
 
         The ``limit`` argument can used to define how many elements the
-        page should contain. When ``limit`` is ``None`` (default) page can
+        page should contain. When ``limit`` is `None` (default) page can
         contain one or more elements. When limit is a number, page must
         contain same number of elements.
 
+        ``limit`` is new in SeleniumLibrary 5.0
         """
         if is_noney(limit):
             self._wait_until(
@@ -153,11 +154,10 @@ class WaitingKeywords(LibraryComponent):
             limit = int(limit)
             self._wait_until(
                 lambda: len(self.find_elements(locator)) == limit,
-                'Page should have contained "{}" element{}, '
-                'but it did contain "{}" element{}, '
-                'using locator "{}" did not appear in <TIMEOUT>.'.format(
-                    limit, plural_or_not(limit), len(self.find_elements(locator)), plural_or_not(len(self.find_elements(locator))), locator)
-                , timeout, error
+                ('Page should have contained "%s" element%s, but it did contain '
+                 '"%s" element%s, using locator "%s" within <TIMEOUT>.'
+                 % (limit, plural_or_not(limit), len(self.find_elements(locator)), plural_or_not(len(self.find_elements(locator)))),
+                 locator), timeout, error
             )
 
     @keyword
@@ -173,10 +173,11 @@ class WaitingKeywords(LibraryComponent):
         ``error`` can be used to override the default error message.
 
         The ``limit`` argument can used to define how many elements the
-        page should not contain. When ``limit`` is ``None`` (default) page can`t
-        contain one or more elements. When limit is a number, page must not
+        page should not contain. When ``limit`` is `None` (default) page can`t
+        contain any elements. When limit is a number, page must not
         contain same number of elements.
 
+        ``limit`` is new in SeleniumLibrary 5.0
         """
         if is_noney(limit):
             self._wait_until(
@@ -188,9 +189,8 @@ class WaitingKeywords(LibraryComponent):
             limit = int(limit)
             self._wait_until(
                 lambda: len(self.find_elements(locator)) != limit,
-                "Page should not have contained '{}' element{} but had '{}' using locator '{}' did not appear in <TIMEOUT>.".format(
-                    limit, plural_or_not(limit), len(self.find_elements(locator)), locator)
-                , timeout, error
+                'Page should not have contained "%s" element%s but had "%s" using locator "%s" within <TIMEOUT>.'
+                % (limit, plural_or_not(limit), len(self.find_elements(locator)), locator), timeout, error
             )
 
     @keyword
