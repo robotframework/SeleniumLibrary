@@ -42,21 +42,25 @@ Wait Until Page Contains Element
     ...    Element 'id:ääööåå' did not appear in 100 milliseconds.
     ...    Wait Until Page Contains Element    id:ääööåå    0.1 seconds
 
+Wait Until Page Contains Element Limit No Elements
+    Run Keyword And Expect Error    Page should have contained "5" elements, but it did contain "0" elements, using locator "%cnon-existent" did not appear in 100 milliseconds.    Wait Until Page Contains Element    %cnon-existent    0.1 seconds    limit=5
+
+Wait Until Page Contains Element Limit Too Few Elements
+    Run Keyword And Expect Error    Page should have contained "10" elements, but it did contain "5" elements, using locator "//div" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //div    0.1 seconds    limit=10
+
+Wait Until Page Contains Element Limit Too Many Elements
+    Run Keyword And Expect Error    Page should have contained "1" element, but it did contain "5" elements, using locator "//div" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //div    0.1 seconds    limit=1
+
+Wait Until Page Contains Element Limit Zero Elements And Zero Required
+    Wait Until Page Contains Element    //divNotExists    0.1 seconds    limit=0
+
+Wait Until Page Contains Element Limit With Negative Limit
+    Run Keyword And Expect Error    Page should have contained "-1" elements, but it did contain "0" elements, using locator "//divNotExists" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //divNotExists    0.1 seconds    limit=-1
 
 Wait Until Page Contains Element Limit
-    [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
-    Run Keyword And Expect Error    Page should have contained "5" elements, but it did contain "0" elements, using locator "%cnon-existent" did not appear in 100 milliseconds.    Wait Until Page Contains Element    %cnon-existent    0.1 seconds    limit=5
-    Run Keyword And Expect Error    Page should have contained "10" elements, but it did contain "5" elements, using locator "//div" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //div    0.1 seconds    limit=10
-    Run Keyword And Expect Error    Page should have contained "1" element, but it did contain "5" elements, using locator "//div" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //div    0.1 seconds    limit=1
-    Wait Until Page Contains Element    //divNotExists    0.1 seconds    limit=0
-    Run Keyword And Expect Error    Page should have contained "-1" elements, but it did contain "0" elements, using locator "//divNotExists" did not appear in 100 milliseconds.    Wait Until Page Contains Element    //divNotExists    0.1 seconds    limit=-1
     Wait Until Page Contains Element    new div    2 seconds    limit=1
-    Wait Until Page Contains Element    //div    2 seconds    limit=5
-
-
 
 Wait Until Page Does Not Contain Element
-    [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
     Wait Until Page Does Not Contain Element    not_present    2 seconds
     Run Keyword And Expect Error
     ...    Element 'content' did not disappear in 100 milliseconds.
@@ -65,13 +69,17 @@ Wait Until Page Does Not Contain Element
     ...    Custom Error ää ÖÖ
     ...    Wait Until Page Does Not Contain Element    content    0.1 seconds    Custom Error ää ÖÖ
 
-Wait Until Page Does Not Contain Element Limit
-    [Documentation]    Tests also that format characters (e.g. %c) are handled correctly in error messages
+Wait Until Page Does Not Contain Element Limit Not Found
     Wait Until Page Does Not Contain Element    //div    0.1 seconds    limit=4
+
+Wait Until Page Does Not Contain Element Limit Found
     Run Keyword And Expect Error    Page should not have contained '5' elements but had '5' using locator '//div' did not appear in 100 milliseconds.    Wait Until Page Does Not Contain Element    //div    0.1 seconds    limit=5
+
+Wait Until Page Does Not Contain Element Limit Negative Limit
     Wait Until Page Does Not Contain Element    not_present    0.1 seconds    limit=-1
+
+Wait Until Page Does Not Contain Element Limit As Zero
     Wait Until Page Does Not Contain Element    not_present    0.1 seconds    limit=0
-    Wait Until Page Does Not Contain Element    not_present    2 seconds    limit=1
     
 Wait Until Element Is Enabled
     Run Keyword And Expect Error
