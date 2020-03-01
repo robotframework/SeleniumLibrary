@@ -21,7 +21,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
     - name: Install ChromeDriver
-    - run: |
+      run: |
         CDVERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
         echo $CDVERSION
         wget --no-verbose http://chromedriver.storage.googleapis.com/$CDVERSION/chromedriver_linux64.zip
