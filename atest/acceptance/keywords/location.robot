@@ -77,7 +77,7 @@ Wait Until Location Is Fails
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Click Element   button
     Run Keyword And Expect Error
-    ...     Location did not is 'not_me' in 2 seconds.
+    ...     Location did not become 'not_me' in 2 seconds.
     ...     Wait Until Location Is     not_me
     Set Selenium Timeout    ${orig_timeout}
 
