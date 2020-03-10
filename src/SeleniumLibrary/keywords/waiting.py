@@ -71,7 +71,7 @@ class WaitingKeywords(LibraryComponent):
 
         expected = str(expected)
         self._wait_until(lambda: expected == self.driver.current_url,
-                         "Location did not is '%s' in <TIMEOUT>." % expected,
+                         "Location did not become '%s' in <TIMEOUT>." % expected,
                          timeout, message)
 
     @keyword
