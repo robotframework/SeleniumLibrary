@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.6, 3.7, 3.8]
+        python-version: [2.7, 3.6, 3.7, 3.8, pypy3]
         rf-version: [3.1.2, 3.2rc1]
 
     steps:
@@ -28,6 +28,7 @@ jobs:
       run: |
         python atest/run.py headlesschrome
     - uses: actions/upload-artifact@v1
+      if: failure()
       with:
         name: atest_results
         path: atest/results
