@@ -24,14 +24,6 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
-    - name: Install ChromeDriver
-      run: |
-        CHROME_DRIVER_VERSION=`google-chrome --version | cut -d " " -f 3`
-        echo "$CHROME_DRIVER_VERSION"
-        wget --no-verbose http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        sudo chmod u+x chromedriver
-        sudo mv chromedriver /usr/bin/
     - name: Run acceptance  tests
       run: |
         python atest/run.py headlesschrome
