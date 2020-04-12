@@ -20,23 +20,19 @@ https://github.com/robotframework/PythonLibCore
 """
 
 import inspect
+import os
 import sys
 
 try:
-    from robot.api.deco import keyword
-except ImportError:  # Support RF < 2.9
-    def keyword(name=None, tags=()):
-        if callable(name):
-            return keyword()(name)
+    import typing
+except ImportError:
+    typing = None
 
-        def decorator(func):
-            func.robot_name = name
-            func.robot_tags = tags
-            return func
-        return decorator
-
+from robot.api.deco import keyword  # noqa F401
+from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
+RF32 = robot_version > '3.2'
 
 __version__ = '1.0.1.dev1'
 
@@ -51,7 +47,7 @@ class HybridCore(object):
 
     def add_library_components(self, library_components):
         for component in library_components:
-            for name, func in self._get_members(component):
+            for name, func in self.__get_members(component):
                 if callable(func) and hasattr(func, 'robot_name'):
                     kw = getattr(component, name)
                     kw_name = func.robot_name or name
@@ -60,7 +56,7 @@ class HybridCore(object):
                     # method names as well as possible custom names.
                     self.attributes[name] = self.attributes[kw_name] = kw
 
-    def _get_members(self, component):
+    def __get_members(self, component):
         if inspect.ismodule(component):
             return inspect.getmembers(component)
         if inspect.isclass(component):
@@ -70,9 +66,9 @@ class HybridCore(object):
             raise TypeError('Libraries must be modules or new-style class '
                             'instances, got old-style class {!r} instead.'
                             .format(component.__class__.__name__))
-        return self._get_members_from_instance(component)
+        return self.__get_members_from_instance(component)
 
-    def _get_members_from_instance(self, instance):
+    def __get_members_from_instance(self, instance):
         # Avoid calling properties by getting members from class, not instance.
         cls = type(instance)
         for name in dir(instance):
@@ -97,37 +93,20 @@ class HybridCore(object):
 
 
 class DynamicCore(HybridCore):
-    _get_keyword_tags_supported = False  # get_keyword_tags is new in RF 3.0.2
+    __get_keyword_tags_supported = False  # get_keyword_tags is new in RF 3.0.2
 
-    def run_keyword(self, name, args, kwargs):
-        return self.keywords[name](*args, **kwargs)
+    def run_keyword(self, name, args, kwargs=None):
+        return self.keywords[name](*args, **(kwargs or {}))
 
     def get_keyword_arguments(self, name):
-        kw = self.keywords[name] if name != '__init__' else self.__init__
-        args, defaults, varargs, kwargs = self._get_arg_spec(kw)
-        args += ['{}={}'.format(name, value) for name, value in defaults]
-        if varargs:
-            args.append('*{}'.format(varargs))
-        if kwargs:
-            args.append('**{}'.format(kwargs))
-        return args
-
-    def _get_arg_spec(self, kw):
-        if PY2:
-            spec = inspect.getargspec(kw)
-            keywords = spec.keywords
-        else:
-            spec = inspect.getfullargspec(kw)
-            keywords = spec.varkw
-        args = spec.args[1:] if inspect.ismethod(kw) else spec.args  # drop self
-        defaults = spec.defaults or ()
-        nargs = len(args) - len(defaults)
-        mandatory = args[:nargs]
-        defaults = zip(args[nargs:], defaults)
-        return mandatory, defaults, spec.varargs, keywords
+        kw_method = self.__get_keyword(name)
+        if kw_method is None:
+            return None
+        spec = ArgumentSpec.from_function(kw_method)
+        return spec.get_arguments()
 
     def get_keyword_tags(self, name):
-        self._get_keyword_tags_supported = True
+        self.__get_keyword_tags_supported = True
         return self.keywords[name].robot_tags
 
     def get_keyword_documentation(self, name):
@@ -137,13 +116,148 @@ class DynamicCore(HybridCore):
             return inspect.getdoc(self.__init__) or ''
         kw = self.keywords[name]
         doc = inspect.getdoc(kw) or ''
-        if kw.robot_tags and not self._get_keyword_tags_supported:
+        if kw.robot_tags and not self.__get_keyword_tags_supported:
             tags = 'Tags: {}'.format(', '.join(kw.robot_tags))
             doc = '{}\n\n{}'.format(doc, tags) if doc else tags
         return doc
+
+    def get_keyword_types(self, keyword_name):
+        method = self.__get_keyword(keyword_name)
+        if method is None:
+            return method
+        types = getattr(method, 'robot_types', ())
+        if types is None:
+            return types
+        if not types:
+            types = self.__get_typing_hints(method)
+        types = self.__join_defaults_with_types(method, types)
+        return types
+
+    def __get_keyword(self, keyword_name):
+        if keyword_name == '__init__':
+            return self.__init__
+        if keyword_name.startswith('__') and keyword_name.endswith('__'):
+            return None
+        method = self.keywords.get(keyword_name)
+        if not method:
+            raise ValueError('Keyword "%s" not found.' % keyword_name)
+        return method
+
+    def __get_typing_hints(self, method):
+        if PY2:
+            return {}
+        try:
+            hints = typing.get_type_hints(method)
+        except Exception:
+            hints = method.__annotations__
+        hints.pop('return', None)
+        return hints
+
+    def __join_defaults_with_types(self, method, types):
+        spec = ArgumentSpec.from_function(method)
+        for name, value in spec.defaults:
+            if name not in types and isinstance(value, (bool, type(None))):
+                types[name] = type(value)
+        for name, value in spec.kwonlydefaults:
+            if name not in types and isinstance(value, (bool, type(None))):
+                types[name] = type(value)
+        return types
+
+    def get_keyword_source(self, keyword_name):
+        method = self.__get_keyword(keyword_name)
+        path = self.__get_keyword_path(method)
+        line_number = self.__get_keyword_line(method)
+        if path and line_number:
+            return '%s:%s' % (path, line_number)
+        if path:
+            return path
+        if line_number:
+            return ':%s' % line_number
+        return None
+
+    def __get_keyword_line(self, method):
+        try:
+            lines, line_number = inspect.getsourcelines(method)
+        except (OSError, IOError, TypeError):
+            return None
+        for increment, line in enumerate(lines):
+            if line.strip().startswith('def '):
+                return line_number + increment
+        return line_number
+
+    def __get_keyword_path(self, method):
+        try:
+            return os.path.normpath(inspect.getfile(method))
+        except TypeError:
+            return None
 
 
 class StaticCore(HybridCore):
 
     def __init__(self):
         HybridCore.__init__(self, [])
+
+
+class ArgumentSpec(object):
+
+    def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None,
+                 kwonlydefaults=None, kwargs=None):
+        self.positional = positional or []
+        self.defaults = defaults or []
+        self.varargs = varargs
+        self.kwonlyargs = kwonlyargs or []
+        self.kwonlydefaults = kwonlydefaults or []
+        self.kwargs = kwargs
+
+    def get_arguments(self):
+        args = self._format_positional(self.positional, self.defaults)
+        args += self._format_default(self.defaults)
+        if self.varargs:
+            args.append('*%s' % self.varargs)
+        args += self._format_positional(self.kwonlyargs, self.kwonlydefaults)
+        args += self._format_default(self.kwonlydefaults)
+        if self.kwargs:
+            args.append('**%s' % self.kwargs)
+        return args
+
+    def _format_positional(self, positional, defaults):
+        for argument, _ in defaults:
+            positional.remove(argument)
+        return positional
+
+    def _format_default(self, defaults):
+        if RF32:
+            return [default for default in defaults]
+        return ['%s=%s' % (argument, default) for argument, default in defaults]
+
+    @classmethod
+    def from_function(cls, function):
+        if PY2:
+            spec = inspect.getargspec(function)
+        else:
+            spec = inspect.getfullargspec(function)
+        args = spec.args[1:] if inspect.ismethod(function) else spec.args  # drop self
+        defaults = cls._get_defaults(spec)
+        kwonlyargs, kwonlydefaults, kwargs = cls._get_kw_args(spec)
+        return cls(positional=args,
+                   defaults=defaults,
+                   varargs=spec.varargs,
+                   kwonlyargs=kwonlyargs,
+                   kwonlydefaults=kwonlydefaults,
+                   kwargs=kwargs)
+
+    @classmethod
+    def _get_defaults(cls, spec):
+        if not spec.defaults:
+            return []
+        names = spec.args[-len(spec.defaults):]
+        return list(zip(names, spec.defaults))
+
+    @classmethod
+    def _get_kw_args(cls, spec):
+        if PY2:
+            return [], [], spec.keywords
+        kwonlyargs = spec.kwonlyargs or []
+        defaults = spec.kwonlydefaults or {}
+        kwonlydefaults = [(arg, name) for arg, name in defaults.items()]
+        return kwonlyargs, kwonlydefaults, spec.varkw
