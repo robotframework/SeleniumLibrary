@@ -27,7 +27,7 @@ jobs:
     - name: Install Chrome
       run: |
         cat /etc/apt/sources.list.d/google-chrome.list
-        sudo apt-get upgrade google-chrome
+        sudo apt-get upgrade google-chrome-stable -y
     - name: Run acceptance  tests
       run: |
         python atest/run.py headlesschrome
