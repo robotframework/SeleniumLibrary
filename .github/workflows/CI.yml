@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [2.7, 3.6, 3.7, 3.8, pypy3]
+        python-version: [2.7, 3.6, 3.8, pypy3]
         rf-version: [3.1.2, 3.2rc1]
 
     steps:
@@ -24,6 +24,10 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
+    - name: Install Chrome
+      run: |
+        cat /etc/apt/sources.list.d/google-chrome.list
+        sudo apt-get upgrade google-chrome
     - name: Run acceptance  tests
       run: |
         python atest/run.py headlesschrome
