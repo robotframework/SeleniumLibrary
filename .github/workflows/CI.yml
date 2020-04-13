@@ -26,9 +26,8 @@ jobs:
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Run acceptance  tests
       run: |
-        python atest/run.py headlesschrome
+        python atest/run.py --zip headlesschrome
     - uses: actions/upload-artifact@v1
-      if: failure()
       with:
-        name: atest_results
-        path: atest/results
+        name: Test results
+        path: atest/zip_results
