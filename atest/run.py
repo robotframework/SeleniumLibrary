@@ -260,7 +260,6 @@ if __name__ == '__main__':
             print('Not running acceptance test, because unit tests failed.')
             sys.exit(rc)
     failures = acceptance_tests(interpreter, browser, rf_options, selenium_grid)
-    print(f'ZIP: {args.zip}')
     if args.zip:
         create_zip()
     sys.exit(failures)
