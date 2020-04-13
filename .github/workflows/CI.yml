@@ -24,14 +24,9 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
-    - name: Install and start xvfb
-      run: |
-        sudo apt-get install -y xvfb
-        Xvfb :99 &
-        export DISPLAY=:99
     - name: Run acceptance  tests
       run: |
-        python atest/run.py chrome
+        python atest/run.py headlesschrome
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
