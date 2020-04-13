@@ -24,13 +24,9 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
-    - name: Install Chrome
-      run: |
-        cat /etc/apt/sources.list.d/google-chrome.list
-        sudo apt-get upgrade google-chrome-stable -y
     - name: Run acceptance  tests
       run: |
-        python atest/run.py headlesschrome
+        python atest/run.py chrome
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
