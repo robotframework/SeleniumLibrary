@@ -223,7 +223,9 @@ def create_zip():
     zip_file = zipfile.ZipFile(zip_path, 'w')
     for root, dirs, files in os.walk(RESULTS_DIR):
         for file in files:
-            zip_file.write(os.path.join(root, file))
+            file_path = os.path.join(root, file)
+            arcname = os.path.join('SeleniumLibrary/atest/result', file)
+            zip_file.write(file_path, arcname)
     zip_file.close()
 
 

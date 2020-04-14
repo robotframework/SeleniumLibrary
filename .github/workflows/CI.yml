@@ -34,5 +34,9 @@ jobs:
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
-        name: Test results
+        name: Failed Test results
+        path: atest/zip_results
+    - uses: actions/upload-artifact@v1
+      with:
+        name: Passed Test results
         path: atest/zip_results
