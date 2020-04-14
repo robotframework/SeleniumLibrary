@@ -35,7 +35,10 @@ jobs:
         ls -l
         sudo chmod u+x chromedriver
         echo "$CHROMEWEBDRIVER"
-        sudo mv chromedriver $CHROMEWEBDRIVER
+        sudo mv chromedriver /usr/bin/
+        echo VERSIONS
+        google-chrome --version
+        chromedriver --version
     - name: Run acceptance  tests
       run: |
         python atest/run.py --zip headlesschrome
