@@ -17,9 +17,8 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install xvfb
+    - name: Start xvfb
       run: |
-        sudo apt-get install xvfb -y
         export DISPLAY=:99.0
         Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
     - name: Install dependencies
@@ -31,7 +30,7 @@ jobs:
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Run acceptance  tests
       run: |
-        python atest/run.py --zip headlesschrome
+        xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
