@@ -26,12 +26,13 @@ jobs:
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Update Chrome
       run: |
-        sudo apt-get update
-        sudo apt-get upgrade google-chrome-stable -y
+        sudo apt-get update -q
+        sudo apt-get upgrade google-chrome-stable -y -q
         CHROME_DRIVER_VERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
         echo "$CHROME_DRIVER_VERSION"
         wget --no-verbose http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
         unzip chromedriver_linux64.zip
+        ls -l
         sudo chmod u+x chromedriver
         echo "$CHROMEWEBDRIVER"
         sudo mv chromedriver $CHROMEWEBDRIVER
