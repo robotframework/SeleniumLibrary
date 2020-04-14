@@ -40,7 +40,9 @@ Examples:
 
 from __future__ import print_function
 
+import platform
 import time
+import zipfile
 from contextlib import contextmanager
 import os
 import sys
@@ -51,6 +53,7 @@ import subprocess
 import tempfile
 
 from robot import rebot_cli
+from robot import __version__ as robot_version
 from robot.utils import is_truthy
 
 try:
@@ -67,6 +70,7 @@ ACCEPTANCE_TEST_DIR = os.path.join(ROOT_DIR, 'acceptance')
 UNIT_TEST_RUNNER = os.path.join(ROOT_DIR, os.pardir, 'utest', 'run.py')
 RESOURCES_DIR = os.path.join(ROOT_DIR, 'resources')
 RESULTS_DIR = os.path.join(ROOT_DIR, 'results')
+ZIP_DIR = os.path.join(ROOT_DIR, 'zip_results')
 SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, os.pardir, 'src'))
 TEST_LIBS_DIR = os.path.join(RESOURCES_DIR, 'testlibs')
 HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, 'testserver', 'testserver.py')
@@ -104,7 +108,7 @@ def acceptance_tests(interpreter, browser, rf_options=None, grid=None):
     if grid:
         hub.kill()
         node.kill()
-    sys.exit(failures)
+    return failures
 
 
 def start_grid():
@@ -208,6 +212,23 @@ def process_output(browser):
         return exit.code
 
 
+def create_zip():
+    if os.path.exists(ZIP_DIR):
+        shutil.rmtree(ZIP_DIR)
+    os.mkdir(ZIP_DIR)
+    python_version = platform.python_version()
+    zip_name = 'rf-%s-python-%s.zip' % (robot_version, python_version)
+    zip_path = os.path.join(ZIP_DIR, zip_name)
+    print('Zip created in: %s' % zip_path)
+    zip_file = zipfile.ZipFile(zip_path, 'w')
+    for root, dirs, files in os.walk(RESULTS_DIR):
+        for file in files:
+            file_path = os.path.join(root, file)
+            arcname = os.path.join('SeleniumLibrary/atest/result', file)
+            zip_file.write(file_path, arcname)
+    zip_file.close()
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description=__doc__.splitlines()[0],
@@ -227,6 +248,8 @@ if __name__ == '__main__':
                         default=False, action='store_true')
     parser.add_argument('--grid', '-G', help='Run test by using Selenium grid',
                         default=False)
+    parser.add_argument('--zip', help='Creates zip file from output dir.', default=False,
+                        action='store_true')
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
     selenium_grid = is_truthy(args.grid)
@@ -238,4 +261,7 @@ if __name__ == '__main__':
         if rc != 0:
             print('Not running acceptance test, because unit tests failed.')
             sys.exit(rc)
-    acceptance_tests(interpreter, browser, rf_options, selenium_grid)
+    failures = acceptance_tests(interpreter, browser, rf_options, selenium_grid)
+    if args.zip:
+        create_zip()
+    sys.exit(failures)
