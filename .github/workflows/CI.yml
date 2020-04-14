@@ -28,10 +28,18 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get upgrade google-chrome-stable -y
+        CHROME_DRIVER_VERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
+        echo "$CHROME_DRIVER_VERSION"
+        wget --no-verbose http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo chmod u+x chromedriver
+        echo "$CHROMEWEBDRIVER"
+        sudo mv chromedriver $CHROMEWEBDRIVER
     - name: Run acceptance  tests
       run: |
         python atest/run.py --zip headlesschrome
     - uses: actions/upload-artifact@v1
+      if: failure()
       with:
         name: Test results
         path: atest/zip_results
