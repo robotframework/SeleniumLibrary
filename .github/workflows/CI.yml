@@ -17,6 +17,11 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install xvfb
+      run: |
+        sudo apt-get install xvfb -y
+        export DISPLAY=:99.0
+        Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -24,21 +29,6 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
-    - name: Update Chrome
-      run: |
-        sudo apt-get update -q
-        sudo apt-get upgrade google-chrome-stable -y -q
-        CHROME_DRIVER_VERSION=`curl http://chromedriver.storage.googleapis.com/LATEST_RELEASE`
-        echo "$CHROME_DRIVER_VERSION"
-        wget --no-verbose http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-        unzip chromedriver_linux64.zip
-        ls -l
-        sudo chmod u+x chromedriver
-        echo "$CHROMEWEBDRIVER"
-        sudo mv chromedriver /usr/bin/
-        echo VERSIONS
-        google-chrome --version
-        chromedriver --version
     - name: Run acceptance  tests
       run: |
         python atest/run.py --zip headlesschrome
