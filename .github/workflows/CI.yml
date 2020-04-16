@@ -46,11 +46,7 @@ jobs:
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
     - uses: actions/upload-artifact@v1
-      if: failure()
+      if: success() || failure()
       with:
         name: Failed Test results
-        path: atest/zip_results
-    - uses: actions/upload-artifact@v1
-      with:
-        name: Passed Test results
         path: atest/zip_results
