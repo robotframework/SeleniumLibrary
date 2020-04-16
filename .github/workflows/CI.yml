@@ -28,9 +28,23 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
-    - name: Run acceptance  tests
+    - name: Get Selenium Grid for RF 3.1.2 and Python 3.8 only
+      if: matrix.rf-version == '3.1.2' && matrix.python-version == '3.8'
+      run: |
+        wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+        sudo chmod u+x ./selenium-server-standalone.jar
+    - name: Run tests with headless Chrome and with Python != 3.8
+      if: matrix.python-version != '3.8'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
+    - name: Run tests normal Chrome with Python 3.8
+      if: matrix.python-version == '3.8' && matrix.rf-version != '3.1.2'
+      run: |
+        xvfb-run --auto-servernum python atest/run.py --zip chrome
+    - name: Run tests with Selenium Grid
+      if: matrix.python-version == '3.8' && matrix.rf-version == '3.1.2'
+      run: |
+        xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
     - uses: actions/upload-artifact@v1
       if: failure()
       with:
