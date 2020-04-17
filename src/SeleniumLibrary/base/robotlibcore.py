@@ -113,8 +113,7 @@ class DynamicCore(HybridCore):
         if name == '__init__':
             return inspect.getdoc(self.__init__) or ''
         kw = self.keywords[name]
-        doc = inspect.getdoc(kw) or ''
-        return doc
+        return inspect.getdoc(kw) or ''
 
     def get_keyword_types(self, keyword_name):
         method = self.__get_keyword(keyword_name)
