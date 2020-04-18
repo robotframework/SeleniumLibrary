@@ -23,6 +23,9 @@ different versions and the overall project history.
 
 .. image:: https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version
    :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
+   
+.. image:: https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg
+   :target: https://pypi.python.org/pypi/robotframework-seleniumlibrary
 
 .. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
    :target: https://www.apache.org/licenses/LICENSE-2.0
