@@ -145,6 +145,11 @@ class DynamicCore(HybridCore):
         except Exception:
             hints = method.__annotations__
         hints.pop('return', None)
+        spec = ArgumentSpec.from_function(method)
+        for arg in hints.copy():
+            # Drop self
+            if arg not in spec.positional and arg not in spec.kwonlyargs:
+                hints.pop(arg)
         return hints
 
     def __join_defaults_with_types(self, method, types):
