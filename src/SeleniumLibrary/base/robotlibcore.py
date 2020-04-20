@@ -32,7 +32,7 @@ from robot.api.deco import keyword  # noqa F401
 from robot import __version__ as robot_version
 
 PY2 = sys.version_info < (3,)
-RF32 = robot_version > '3.2'
+RF31 = robot_version < '3.2'
 
 __version__ = '1.0.1.dev1'
 
@@ -140,17 +140,8 @@ class DynamicCore(HybridCore):
     def __get_typing_hints(self, method):
         if PY2:
             return {}
-        try:
-            hints = typing.get_type_hints(method)
-        except Exception:
-            hints = method.__annotations__
-        hints.pop('return', None)
         spec = ArgumentSpec.from_function(method)
-        for arg in hints.copy():
-            # Drop self
-            if arg not in spec.positional and arg not in spec.kwonlyargs:
-                hints.pop(arg)
-        return hints
+        return spec.get_typing_hints()
 
     def __join_defaults_with_types(self, method, types):
         spec = ArgumentSpec.from_function(method)
@@ -199,6 +190,8 @@ class StaticCore(HybridCore):
 
 class ArgumentSpec(object):
 
+    _function = None
+
     def __init__(self, positional=None, defaults=None, varargs=None, kwonlyargs=None,
                  kwonlydefaults=None, kwargs=None):
         self.positional = positional or []
@@ -207,6 +200,17 @@ class ArgumentSpec(object):
         self.kwonlyargs = kwonlyargs or []
         self.kwonlydefaults = kwonlydefaults or []
         self.kwargs = kwargs
+
+    def __contains__(self, item):
+        if item in self.positional:
+            return True
+        if self.varargs and item in self.varargs:
+            return True
+        if item in self.kwonlyargs:
+            return True
+        if self.kwargs and item in self.kwargs:
+            return True
+        return False
 
     def get_arguments(self):
         args = self._format_positional(self.positional, self.defaults)
@@ -219,18 +223,36 @@ class ArgumentSpec(object):
             args.append('**%s' % self.kwargs)
         return args
 
+    def get_typing_hints(self):
+        try:
+            hints = typing.get_type_hints(self._function)
+        except Exception:
+            hints = self._function.__annotations__
+        for arg in list(hints):
+            # remove return and self statements
+            if arg not in self:
+                hints.pop(arg)
+            if self.varargs and arg in self.varargs:
+                hints['*%s' % arg] = hints[arg]
+                del hints[arg]
+            if self.kwargs and arg in self.kwargs:
+                hints['**%s' % arg] = hints[arg]
+                del hints[arg]
+        return hints
+
     def _format_positional(self, positional, defaults):
         for argument, _ in defaults:
             positional.remove(argument)
         return positional
 
     def _format_default(self, defaults):
-        if RF32:
+        if not RF31:
             return [default for default in defaults]
         return ['%s=%s' % (argument, default) for argument, default in defaults]
 
     @classmethod
     def from_function(cls, function):
+        cls._function = function
         if PY2:
             spec = inspect.getargspec(function)
         else:
