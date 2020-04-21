@@ -232,12 +232,6 @@ class ArgumentSpec(object):
             # remove return and self statements
             if arg not in self:
                 hints.pop(arg)
-            if self.varargs and arg in self.varargs:
-                hints['*%s' % arg] = hints[arg]
-                del hints[arg]
-            if self.kwargs and arg in self.kwargs:
-                hints['**%s' % arg] = hints[arg]
-                del hints[arg]
         return hints
 
     def _format_positional(self, positional, defaults):
