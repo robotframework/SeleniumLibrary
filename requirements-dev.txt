@@ -5,6 +5,7 @@ mockito >= 1.0.0
 robotstatuschecker >= 1.4
 approvaltests >= 0.2.4
 pytest
+pytest-mockito
 requests
 robotframework-pabot
 
