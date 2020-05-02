@@ -1,10 +1,11 @@
+import os
+import shutil
 import sys
 from pathlib import Path
 
 from docutils.core import publish_cmdline
 from invoke import task
 from rellu import initialize_labels, ReleaseNotesGenerator, Version
-from rellu.tasks import clean
 from robot.libdoc import libdoc
 
 
@@ -152,3 +153,32 @@ def init_labels(ctx, username=None, password=None):
 def lint(ctx):
     ctx.run("black --config pyproject.toml src/ utest/ atest/")
     ctx.run("flake8 --config .flake8 src/ utest/ atest/")
+
+@task
+def clean(ctx, remove_dist=True, create_dirs=False):
+    """Clean the workspace.
+
+    By default deletes 'build' and 'dist' directories and removes '*.pyc',
+    '*$py.class' and '*~' files.
+
+    Args:
+        remove_dist: Remove also 'dist' (default).
+        create_dirs: Re-create 'build' and 'dist' after removing them.
+    """
+    for name in ['build', 'dist']:
+        if os.path.isdir(name) and (name != 'dist' or remove_dist):
+            print(f'Removing directory {name!r}.')
+            shutil.rmtree(name)
+        if create_dirs and not os.path.isdir(name):
+            print(f'Creating directory {name!r}.')
+            os.mkdir(name)
+    print('Removing temporary files.')
+    for directory, dirs, files in os.walk('.'):
+        for name in files:
+            if name.endswith(('.pyc', '$py.class', '~')):
+                os.remove(os.path.join(directory, name))
+        if '__pycache__' in dirs:
+            shutil.rmtree(os.path.join(directory, '__pycache__'))
+    if os.path.isdir('./stub_files'):
+        print('Removing stub files')
+        shutil.rmtree('./stub_files')
