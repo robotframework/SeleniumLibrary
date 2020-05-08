@@ -3,7 +3,7 @@
 - I have searched for similar issues in open tickets and cannot find a duplicate.
 - The issue still exists against the latest released version of SeleniumLibrary.
 - This is not a usage question or support request. For those, see more details in README.rst: https://github.com/robotframework/SeleniumLibrary#support
-- You are not using the Java Selenium2Library: https://github.com/Hi-Fi/robotframework-seleniumlibrary-java
+- You are not using the Java Selenium2Library: https://github.com/MarketSquare/robotframework-seleniumlibrary-java
 - Remember that this is a public forum, so remember to remove all sensitive
 information, like username and password.
 
