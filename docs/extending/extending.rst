@@ -10,7 +10,7 @@ API, `EventFiringWebDriver`_ and building new libraries on top the SeleniumLibra
 referred as extending SeleniumLibrary.) Plugin API and extending SeleniumLibrary allows
 similar access to the SeleniumLibrary public API and offers their own pros and cons for
 building custom functionality on top the SeleniumLibrary. The EventFiringWebDriver offers
-lister like interface to the Selenium API. The plugin API and EventFiringWebDriver
+listener-like interface to the Selenium API. The plugin API and EventFiringWebDriver
 are new in SeleniumLibrary 4.0.
 
 Plugin API
