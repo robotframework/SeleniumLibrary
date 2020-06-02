@@ -16,14 +16,6 @@ Input field type date
     ${value} =    Get Value       id:date
     Should Not Be Empty           ${value}
 
-Input field type datetime-local
-    [Documentation]    Date and time formats are difficult test because format
-    ...    depends on the users machine where the test is run. Therefore only
-    ...    checking that value is not empty and it should work in most locales.
-    Input Text    id:datetime-local    04-03-002019 01:45PM
-    ${value} =    Get Value            id:datetime-local
-    Should Not Be Empty                ${value}
-
 Input field type email
     Input Text    id:email        foo@bar.com
     ${value} =    Get Value       id:email
