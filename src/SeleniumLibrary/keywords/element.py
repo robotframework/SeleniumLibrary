@@ -196,7 +196,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_element(self, locator, message=None, loglevel='TRACE'):
-        """Verifies that element ``locator`` is found on the current page.
+        """Verifies that element ``locator`` is not found on the current page.
 
         See the `Locating elements` section for details about the locator
         syntax.
