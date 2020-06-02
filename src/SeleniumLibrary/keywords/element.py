@@ -1002,7 +1002,7 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def page_should_not_contain_image(self, locator, message=None, loglevel='TRACE'):
-        """Verifies image identified by ``locator`` is found from current page.
+        """Verifies image identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
         syntax. When using the default locator strategy, images are searched
