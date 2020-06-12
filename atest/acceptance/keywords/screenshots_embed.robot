@@ -33,6 +33,16 @@ Capture Element Screenshot EMBED As File Name
     Should Be Equal    ${file}    EMBED
     Verify That .png Files Do Not Exist
 
+Capture Page Screenshot Override EMBED
+    [Tags]    NoGrid
+    [Setup]    Remove .png Files
+    Set Screenshot Directory    EMBED
+    ${file}=    Capture Page Screenshot    override-embed-screenshot.png
+    Should Be Equal    ${file}    ${OUTPUTDIR}/override-embed-screenshot.png
+    File Should Exist    ${OUTPUTDIR}/override-embed-screenshot.png
+    File Should Not Exist    ${EXECDIR}/*.png
+    File Should Not Exist    ${EXECDIR}/EMBED/*.png
+
 *** Keywords ***
 Remove .png Files
     Remove Files     ${OUTPUTDIR}/*.png
@@ -42,4 +52,4 @@ Remove .png Files
 Verify That .png Files Do Not Exist
     File Should Not Exist    ${OUTPUTDIR}/*.png
     File Should Not Exist    ${EXECDIR}/*.png
-    File Should Not Exist    ${EXECDIR}/Embed/*.png
+    File Should Not Exist    ${EXECDIR}/EMBED/*.png
