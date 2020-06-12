@@ -1,4 +1,4 @@
-from os.path import dirname, abspath
+from os.path import dirname, abspath, join
 
 import pytest
 from mockito import mock, unstub
@@ -40,6 +40,13 @@ def test_file_name_embeded(screen_shot):
     assert screen_shot._decide_embedded('other.psn') is False
     screen_shot.ctx.screenshot_root_directory = EMBED
     assert screen_shot._decide_embedded(EMBED) is True
+
+
+def test_screenshot_path_embedded(screen_shot):
+    screen_shot.ctx.screenshot_root_directory = EMBED
+    assert screen_shot._get_screenshot_path('override.png') == join(
+        screen_shot.log_dir, 'override.png'
+    )
 
 
 def test_sl_init_embed():

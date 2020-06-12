@@ -185,7 +185,10 @@ class ScreenshotKeywords(LibraryComponent):
         return False
 
     def _get_screenshot_path(self, filename):
-        directory = self._screenshot_root_directory or self.log_dir
+        if self._screenshot_root_directory != EMBED:
+            directory = self._screenshot_root_directory or self.log_dir
+        else:
+            directory = self.log_dir
         filename = filename.replace('/', os.sep)
         index = 0
         while True:
