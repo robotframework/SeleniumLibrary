@@ -202,7 +202,7 @@ available:
 - `robotframework-users`_ mailing list
 - ``#seleniumlibrary`` and ``#seleniumlibrary-dev`` channels in
   Robot Framework `Slack community`_
-- ``Robot Framework forum`` has channel for SeleniumLibrary.
+- `Robot Framework forum`_ has channel for SeleniumLibrary.
 - SeleniumLibrary `issue tracker`_ for bug reports and concrete enhancement
   requests
 - `Other support forums`_ including paid support
