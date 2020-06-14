@@ -202,6 +202,7 @@ available:
 - `robotframework-users`_ mailing list
 - ``#seleniumlibrary`` and ``#seleniumlibrary-dev`` channels in
   Robot Framework `Slack community`_
+- ``Robot Framework forum`` has channel for SeleniumLibrary.
 - SeleniumLibrary `issue tracker`_ for bug reports and concrete enhancement
   requests
 - `Other support forums`_ including paid support
@@ -287,5 +288,6 @@ project.
 .. _robotframework-users: https://groups.google.com/group/robotframework-users
 .. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
+.. _Robot Framework forum: https://forum.robotframework.org/
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
 .. _Other support forums: https://robotframework.org/#support
