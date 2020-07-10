@@ -23,7 +23,9 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.utils import is_string
 from robot.utils.importer import Importer
 
-from SeleniumLibrary.base import DynamicCore, LibraryComponent
+from robotlibcore import DynamicCore
+
+from SeleniumLibrary.base import LibraryComponent
 from SeleniumLibrary.errors import NoOpenBrowser, PluginError
 from SeleniumLibrary.keywords import (AlertKeywords,
                                       BrowserManagementKeywords,
