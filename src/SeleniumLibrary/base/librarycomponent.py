@@ -18,11 +18,11 @@ import os
 
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
+from robotlibcore import PY2
 
 from SeleniumLibrary.utils import is_noney, timestr_to_secs
 
 from .context import ContextAware
-from .robotlibcore import PY2
 
 
 class LibraryComponent(ContextAware):
