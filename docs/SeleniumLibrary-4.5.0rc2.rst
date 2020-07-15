@@ -7,7 +7,7 @@ SeleniumLibrary 4.5.0rc2
 
 
 SeleniumLibrary_ is a web testing library for `Robot Framework`_ that utilizes
-the Selenium_ tool internally. SeleniumLibrary 4.5.0rc1 is a new release with
+the Selenium_ tool internally. SeleniumLibrary 4.5.0rc2 is a new pre-release with
 updated PythonLibCore to 2.1.0. The Updated PythonLibCore improves documentation
 readability and offers better support IDE using Language Server Protocol with
 Robot Framework test data. Compared to rc1, the rc2 fixes regression in
