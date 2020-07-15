@@ -31,6 +31,17 @@ Choose File With Grid
     Textfield Value Should Be    file_to_upload    C:\\fakepath\\temp2.txt
     [Teardown]    Remove File    ${CURDIR}${/}temp2.txt
 
+Choose File With Grid From Library Using SL choose_file method
+    [Documentation]
+    ...    LOG 4:6 DEBUG GLOB:    POST*/session/*/file*"file": "*
+    [Tags]    OnlyGrid
+    [Setup]    Go To Page "forms/file_upload_form.html"
+    Touch    ${CURDIR}${/}temp42.txt
+    Import Library    ${CURDIR}/../../resources/testlibs/ChooseFileLib.py
+    ChooseFileLib.my_choose_file    file_to_upload    ${CURDIR}${/}temp42.txt
+    Textfield Value Should Be    file_to_upload    C:\\fakepath\\temp42.txt
+    [Teardown]    Remove File    ${CURDIR}${/}temp42.txt
+
 Input Text Should Work Same Way When Not Using Grid
     [Documentation]
     ...    LOG 2:5 DEBUG GLOB:    POST*/session/*/clear {"*
@@ -50,32 +61,6 @@ Input Text Should Work Same Way When Using Grid
     Input Text    file_to_upload    ${CURDIR}${/}temp3.txt
     Textfield Value Should Be    file_to_upload    C:\\fakepath\\temp3.txt
     [Teardown]    Remove File    ${CURDIR}${/}temp3.txt
-
-Running Keyword Is Saved Correctly
-    ${keyword_method} =     get_running_keyword
-    Should Be Equal    get_running_keyword    ${keyword_method}
-    ${keyword_method} =     Get Running Keyword
-    Should Be Equal    get_running_keyword    ${keyword_method}
-    ${keyword_method} =     Get Running Keyword By Decorator
-    Should Be Equal    Get Running Keyword By Decorator    ${keyword_method}
-    ${keyword_method} =     get_running_keyword_by_decorator
-    Should Be Equal    Get Running Keyword By Decorator    ${keyword_method}
-
-Running Keyword Is Cleared Correctly
-    ${sl} =    Get Library Instance    SeleniumLibrary
-    Should Be Equal    ${sl._running_keyword}    ${None}
-    ${keyword_method} =     Get Running Keyword
-    Should Be Equal    get_running_keyword    ${keyword_method}
-    ${sl} =    Get Library Instance    SeleniumLibrary
-    Should Be Equal    ${sl._running_keyword}    ${None}
-
-Running Keyword Is Cleared Correctly When Error
-    ${sl} =    Get Library Instance    SeleniumLibrary
-    Should Be Equal    ${sl._running_keyword}    ${None}
-    Run Keyword And Expect Error    Page should have contained text 'Is not here' but did not.
-    ...    Page Should Contain    Is not here
-    ${sl} =    Get Library Instance    SeleniumLibrary
-    Should Be Equal    ${sl._running_keyword}    ${None}
 
 *** Keywords ***
 Navigate To File Upload Form And Create Temp File To Upload
