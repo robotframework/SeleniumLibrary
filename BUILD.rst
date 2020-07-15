@@ -256,8 +256,11 @@ Announcements
 4. `Robot Framework LinkedIn
    <https://www.linkedin.com/groups/Robot-Framework-3710899>`_ group.
    At least with major updates.
+   
+5. `forum.robotframework <https://forum.robotframework.org/c/libraries/lib-seleniumlibrary>`_
+   SeleniumLibrary channel. 
 
-5. Consider sending announcements, at least with major releases, also to other
+6. Consider sending announcements, at least with major releases, also to other
    forums where we want to make the library more well known. This includes
    Selenium forums as well as general testing and test automation forums.
 
