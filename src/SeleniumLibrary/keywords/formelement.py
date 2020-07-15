@@ -212,8 +212,12 @@ class FormElementKeywords(LibraryComponent):
         Example:
         | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |
         """
-        self.info('Sending %s to browser.' % os.path.abspath(file_path))
-        self.find_element(locator).send_keys(file_path)
+        self.ctx._running_keyword = 'choose_file'
+        try:
+            self.info('Sending %s to browser.' % os.path.abspath(file_path))
+            self.find_element(locator).send_keys(file_path)
+        finally:
+            self.ctx._running_keyword = None
 
     @keyword
     def input_password(self, locator, password, clear=True):

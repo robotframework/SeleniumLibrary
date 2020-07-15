@@ -1,5 +1,5 @@
 *** Setting ***
-Library           SeleniumLibrary    run_on_failure=Nothing    implicit_wait=0.2 seconds    plugins=RunningKeyword.RunningKeyword
+Library           SeleniumLibrary    run_on_failure=Nothing    implicit_wait=0.2 seconds
 Library           Collections
 Library           OperatingSystem
 Library           DateTime
