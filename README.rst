@@ -193,10 +193,10 @@ functionality of the library. Also new libraries can be build on top of the
 SeleniumLibrary. Please see `extending documentation`_ for more details about the
 available methods and for examples how the library can be extended.
 
-Support
--------
+Community
+---------
 
-If the provided documentation is not enough, there are various support forums
+If the provided documentation is not enough, there are various community channels
 available:
 
 - `robotframework-users`_ mailing list
@@ -205,7 +205,7 @@ available:
 - `Robot Framework forum`_ has channel for SeleniumLibrary.
 - SeleniumLibrary `issue tracker`_ for bug reports and concrete enhancement
   requests
-- `Other support forums`_ including paid support
+- `Other community channels`_ including paid support
 
 Versions
 --------
@@ -290,4 +290,4 @@ project.
 .. _Slack community: https://robotframework-slack-invite.herokuapp.com
 .. _Robot Framework forum: https://forum.robotframework.org/
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
-.. _Other support forums: https://robotframework.org/#support
+.. _Other community channels: https://robotframework.org/#community
