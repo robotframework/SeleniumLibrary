@@ -18,6 +18,7 @@ from robot.api import logger
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
+from selenium.webdriver.common.by import By
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import ElementNotFound
@@ -110,20 +111,20 @@ class ElementFinder(ContextAware):
             raise ValueError('This method does not allow WebElement as parent')
 
     def _find_by_identifier(self, criteria, tag, constraints, parent):
-        elements = self._normalize(parent.find_elements_by_id(criteria)) \
-            + self._normalize(parent.find_elements_by_name(criteria))
+        elements = self._normalize(parent.find_elements(By.ID, criteria)) \
+            + self._normalize(parent.find_elements(By.NAME, criteria))
         return self._filter_elements(elements, tag, constraints)
 
     def _find_by_id(self, criteria, tag, constraints, parent):
-        return self._filter_elements(parent.find_elements_by_id(criteria),
+        return self._filter_elements(parent.find_elements(By.ID, criteria),
                                      tag, constraints)
 
     def _find_by_name(self, criteria, tag, constraints, parent):
-        return self._filter_elements(parent.find_elements_by_name(criteria),
+        return self._filter_elements(parent.find_elements(By.NAME, criteria),
                                      tag, constraints)
 
     def _find_by_xpath(self, criteria, tag, constraints, parent):
-        return self._filter_elements(parent.find_elements_by_xpath(criteria),
+        return self._filter_elements(parent.find_elements(By.XPATH, criteria),
                                      tag, constraints)
 
     def _find_by_dom(self, criteria, tag, constraints, parent):
@@ -144,27 +145,27 @@ class ElementFinder(ContextAware):
 
     def _find_by_link_text(self, criteria, tag, constraints, parent):
         return self._filter_elements(
-            parent.find_elements_by_link_text(criteria),
+            parent.find_elements(By.LINK_TEXT, criteria),
             tag, constraints)
 
     def _find_by_partial_link_text(self, criteria, tag, constraints, parent):
         return self._filter_elements(
-            parent.find_elements_by_partial_link_text(criteria),
+            parent.find_elements(By.PARTIAL_LINK_TEXT, criteria),
             tag, constraints)
 
     def _find_by_css_selector(self, criteria, tag, constraints, parent):
         return self._filter_elements(
-            parent.find_elements_by_css_selector(criteria),
+            parent.find_elements(By.CSS_SELECTOR, criteria),
             tag, constraints)
 
     def _find_by_class_name(self, criteria, tag, constraints, parent):
         return self._filter_elements(
-            parent.find_elements_by_class_name(criteria),
+            parent.find_elements(By.CLASS_NAME, criteria),
             tag, constraints)
 
     def _find_by_tag_name(self, criteria, tag, constraints, parent):
         return self._filter_elements(
-            parent.find_elements_by_tag_name(criteria),
+            parent.find_elements(By.TAG_NAME, criteria),
             tag, constraints)
 
     def _find_by_sc_locator(self, criteria, tag, constraints, parent):
@@ -189,7 +190,7 @@ class ElementFinder(ContextAware):
             ' and ' if xpath_constraints else '',
             ' or '.join(xpath_searchers)
         )
-        return self._normalize(parent.find_elements_by_xpath(xpath))
+        return self._normalize(parent.find_elements(By.XPATH, xpath))
 
     def _get_xpath_constraints(self, constraints):
         xpath_constraints = [self._get_xpath_constraint(name, value)
