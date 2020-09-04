@@ -1,5 +1,6 @@
 import pytest
 from mockito import any, mock, verify, when, unstub
+from selenium.webdriver.common.by import By
 
 from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.locators.elementfinder import ElementFinder
@@ -84,38 +85,39 @@ def test_find_by_xpath_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('//div').thenReturn(False)
-    when(webelement).find_elements_by_xpath('//div').thenReturn([mock()])
+    when(webelement).find_elements(By.XPATH, '//div').thenReturn([mock()])
     finder.find('//div', parent=webelement)
-    verify(webelement).find_elements_by_xpath('//div')
+    verify(webelement).find_elements(By.XPATH, '//div')
 
 
 def test_find_by_identifier_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('identifier=value').thenReturn(False)
-    when(webelement).find_elements_by_id('value').thenReturn([mock()])
-    when(webelement).find_elements_by_name('value').thenReturn([mock()])
+    when(webelement).find_elements(By.ID, 'value').thenReturn([mock()])
+    when(webelement).find_elements(By.NAME, 'value').thenReturn([mock()])
     finder.find('identifier=value', parent=webelement)
-    verify(webelement).find_elements_by_name('value')
-    verify(webelement).find_elements_by_id('value')
+    verify(webelement).find_elements(By.NAME, 'value')
+    verify(webelement).find_elements(By.ID, 'value')
 
 
 def test_find_by_id_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('id=value').thenReturn(False)
-    when(webelement).find_elements_by_id('value').thenReturn([mock()])
+    # when(webelement).find_elements(By.ID, 'value').thenReturn([mock()])
+    when(webelement).find_elements(By.ID, 'value').thenReturn([mock()])
     finder.find('id=value', parent=webelement)
-    verify(webelement).find_elements_by_id("value")
+    verify(webelement).find_elements(By.ID, 'value')
 
 
 def test_find_by_name_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('name=value').thenReturn(False)
-    when(webelement).find_elements_by_name('value').thenReturn([mock()])
+    when(webelement).find_elements(By.NAME, 'value').thenReturn([mock()])
     finder.find('name=value', parent=webelement)
-    verify(webelement).find_elements_by_name("value")
+    verify(webelement).find_elements(By.NAME, "value")
 
 
 def test_find_by_dom__parent_is_webelement(finder):
@@ -144,50 +146,50 @@ def test_find_by_link_text_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('link=My Link').thenReturn(False)
-    when(webelement).find_elements_by_link_text(
+    when(webelement).find_elements(By.LINK_TEXT, 
         'My Link').thenReturn([mock()])
     finder.find('link=My Link', parent=webelement)
-    verify(webelement).find_elements_by_link_text("My Link")
+    verify(webelement).find_elements(By.LINK_TEXT, "My Link")
 
 
 def test_find_by_partial_link_text_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('partial link=My L').thenReturn(False)
-    when(webelement).find_elements_by_partial_link_text(
+    when(webelement).find_elements(By.PARTIAL_LINK_TEXT, 
         'My L').thenReturn([mock()])
     finder.find('partial link=My L', parent=webelement)
-    verify(webelement).find_elements_by_partial_link_text("My L")
+    verify(webelement).find_elements(By.PARTIAL_LINK_TEXT, "My L")
 
 
 def test_find_by_css_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('css=div').thenReturn(False)
-    when(webelement).find_elements_by_css_selector(
+    when(webelement).find_elements(By.CSS_SELECTOR, 
         'div').thenReturn([mock()])
     finder.find('css=div', parent=webelement)
-    verify(webelement).find_elements_by_css_selector("div")
+    verify(webelement).find_elements(By.CSS_SELECTOR, "div")
 
 
 def test_find_by_class_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('class=name').thenReturn(False)
-    when(webelement).find_elements_by_class_name(
+    when(webelement).find_elements(By.CLASS_NAME,   
         'name').thenReturn([mock()])
     finder.find('class=name', parent=webelement)
-    verify(webelement).find_elements_by_class_name("name")
+    verify(webelement).find_elements(By.CLASS_NAME, "name")
 
 
 def test_find_by_tag_name_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('tag=name').thenReturn(False)
-    when(webelement).find_elements_by_tag_name(
+    when(webelement).find_elements(By.TAG_NAME,    
         'name').thenReturn([mock()])
     finder.find('tag=name', parent=webelement)
-    verify(webelement).find_elements_by_tag_name("name")
+    verify(webelement).find_elements(By.TAG_NAME, "name")
 
 
 def test_find_sc_locator_parent_is_webelement(finder):
@@ -206,10 +208,10 @@ def test_find_by_default_parent_is_webelement(finder):
     webelement = mock()
     when(finder)._is_webelement(webelement).thenReturn(True)
     when(finder)._is_webelement('default=name').thenReturn(False)
-    when(webelement).find_elements_by_xpath(
+    when(webelement).find_elements(By.XPATH, 
         xpath).thenReturn([mock()])
     finder.find('default=name', parent=webelement)
-    verify(webelement).find_elements_by_xpath(xpath)
+    verify(webelement).find_elements(By.XPATH, xpath)
 
 
 def test_non_existing_prefix(finder):
@@ -223,14 +225,14 @@ def test_non_existing_prefix(finder):
 def test_find_with_no_tag(finder):
     driver = _get_driver(finder)
     finder.find("test1", required=False)
-    verify(driver).find_elements_by_xpath("//*[(@id='test1' or "
+    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or "
                                           "@name='test1')]")
 
 
 def test_find_with_explicit_default_strategy(finder):
     driver = _get_driver(finder)
     finder.find("default=test1", required=False)
-    verify(driver).find_elements_by_xpath("//*[(@id='test1' or "
+    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or "
                                           "@name='test1')]")
 
 
@@ -238,7 +240,7 @@ def test_find_with_explicit_default_strategy_and_equals(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("default=page.do?foo=bar", tag='a', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//a[(@id='page.do?foo=bar' or @name='page.do?foo=bar' or "
         "@href='page.do?foo=bar' or "
         "normalize-space(descendant-or-self::text())='page.do?foo=bar' or "
@@ -248,28 +250,28 @@ def test_find_with_explicit_default_strategy_and_equals(finder):
 def test_find_with_tag(finder):
     driver = _get_driver(finder)
     finder.find("test1", tag='div', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//div[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_locator_with_apos(finder):
     driver = _get_driver(finder)
     finder.find("test '1'", required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//*[(@id=\"test '1'\" or @name=\"test '1'\")]")
 
 
 def test_find_with_locator_with_quote(finder):
     driver = _get_driver(finder)
     finder.find("test \"1\"", required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//*[(@id='test \"1\"' or @name='test \"1\"')]")
 
 
 def test_find_with_locator_with_quote_and_apos(finder):
     driver = _get_driver(finder)
     finder.find("test \"1\" and '2'", required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//*[(@id=concat('test \"1\" and ', \"'\", '2', \"'\", '') "
         "or @name=concat('test \"1\" and ', \"'\", '2', \"'\", ''))]")
 
@@ -278,7 +280,7 @@ def test_find_with_a(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='a', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//a[(@id='test1' or @name='test1' or @href='test1' or "
         "normalize-space(descendant-or-self::text())='test1' or "
         "@href='http://localhost/test1')]")
@@ -288,7 +290,7 @@ def test_find_with_link_synonym(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='link', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//a[(@id='test1' or @name='test1' or @href='test1' or "
         "normalize-space(descendant-or-self::text())='test1' or "
         "@href='http://localhost/test1')]")
@@ -298,7 +300,7 @@ def test_find_with_img(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='img', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//img[(@id='test1' or @name='test1' or @src='test1' or "
         "@alt='test1' or @src='http://localhost/test1')]")
 
@@ -307,7 +309,7 @@ def test_find_with_image_synonym(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='image', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//img[(@id='test1' or @name='test1' or @src='test1' or "
         "@alt='test1' or @src='http://localhost/test1')]")
 
@@ -316,7 +318,7 @@ def test_find_with_input(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='input', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//input[(@id='test1' or @name='test1' or @value='test1' or "
         "@src='test1' or @src='http://localhost/test1')]")
 
@@ -325,7 +327,7 @@ def test_find_with_radio_button_synonym(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='radio button', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//input[@type='radio' and (@id='test1' or @name='test1' or "
         "@value='test1' or @src='test1' or "
         "@src='http://localhost/test1')]")
@@ -335,7 +337,7 @@ def test_find_with_checkbox_synonym(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='checkbox', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//input[@type='checkbox' and (@id='test1' or @name='test1' or "
         "@value='test1' or @src='test1' or "
         "@src='http://localhost/test1')]")
@@ -345,7 +347,7 @@ def test_find_with_file_upload_synonym(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='file upload', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//input[@type='file' and (@id='test1' or @name='test1' or "
         "@value='test1' or @src='test1' or "
         "@src='http://localhost/test1')]")
@@ -355,7 +357,7 @@ def test_find_with_text_field_synonym(finder):
     driver = _get_driver(finder)
     driver.current_url = "http://localhost/mypage.html"
     finder.find("test1", tag='text field', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//input[@type[. = 'date' or . = 'datetime-local' or . = 'email' or "
         ". = 'month' or . = 'number' or . = 'password' or . = 'search' or "
         ". = 'tel' or . = 'text' or . = 'time' or . = 'url' or . = 'week' or . = 'file'] and "
@@ -366,7 +368,7 @@ def test_find_with_text_field_synonym(finder):
 def test_find_with_button(finder):
     driver = _get_driver(finder)
     finder.find("test1", tag='button', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//button[(@id='test1' or @name='test1' or @value='test1' or "
         "normalize-space(descendant-or-self::text())='test1')]")
 
@@ -374,21 +376,21 @@ def test_find_with_button(finder):
 def test_find_with_select(finder):
     driver = _get_driver(finder)
     finder.find("test1", tag='select', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//select[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_list_synonym(finder):
     driver = _get_driver(finder)
     finder.find("test1", tag='list', required=False)
-    verify(driver).find_elements_by_xpath(
+    verify(driver).find_elements(By.XPATH, 
         "//select[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_implicit_xpath(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_xpath(
+    when(driver).find_elements(By.XPATH, 
         "//*[(@test='1')]").thenReturn(elements)
     result = finder.find("//*[(@test='1')]", first_only=False)
     assert result == elements
@@ -402,9 +404,9 @@ def test_find_by_identifier(finder):
     driver = _get_driver(finder)
     id_elements = _make_mock_elements('div', 'a')
     name_elements = _make_mock_elements('span', 'a')
-    when(driver).find_elements_by_id("test1").thenReturn(
+    when(driver).find_elements(By.ID, "test1").thenReturn(
         list(id_elements)).thenReturn(list(id_elements))
-    when(driver).find_elements_by_name("test1").thenReturn(
+    when(driver).find_elements(By.NAME, "test1").thenReturn(
         list(name_elements)).thenReturn(list(name_elements))
     all_elements = list(id_elements)
     all_elements.extend(name_elements)
@@ -418,7 +420,7 @@ def test_find_by_identifier(finder):
 def test_find_by_id(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_id("test1").thenReturn(
+    when(driver).find_elements(By.ID, "test1").thenReturn(
         elements)
     result = finder.find("id=test1", first_only=False)
     assert result == elements
@@ -429,7 +431,7 @@ def test_find_by_id(finder):
 def test_find_by_name(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_name("test1").thenReturn(elements)
+    when(driver).find_elements(By.NAME, "test1").thenReturn(elements)
     result = finder.find("name=test1", first_only=False)
     assert result == elements
     result = finder.find("name=test1", tag='a', first_only=False)
@@ -439,7 +441,7 @@ def test_find_by_name(finder):
 def test_find_by_xpath(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_xpath(
+    when(driver).find_elements(By.XPATH, 
         "//*[(@test='1')]").thenReturn(elements)
     result = finder.find("xpath=//*[(@test='1')]", first_only=False)
     assert result == elements
@@ -462,7 +464,7 @@ def test_find_by_dom(finder):
 def test_find_by_link_text(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_link_text(
+    when(driver).find_elements(By.LINK_TEXT, 
         "my link").thenReturn(elements)
     result = finder.find("link=my link", first_only=False)
     assert result == elements
@@ -473,7 +475,7 @@ def test_find_by_link_text(finder):
 def test_find_by_partial_link_text(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_partial_link_text(
+    when(driver).find_elements(By.PARTIAL_LINK_TEXT, 
         "my link").thenReturn(elements)
     result = finder.find("partial link=my link", first_only=False)
     assert result == elements
@@ -485,7 +487,7 @@ def test_find_by_partial_link_text(finder):
 def test_find_by_css_selector(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_css_selector(
+    when(driver).find_elements(By.CSS_SELECTOR, 
         "#test1").thenReturn(elements)
     result = finder.find("css=#test1", first_only=False)
     assert result == elements
@@ -496,7 +498,7 @@ def test_find_by_css_selector(finder):
 def test_find_by_class_names(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_class_name(
+    when(driver).find_elements(By.CLASS_NAME, 
         "test1").thenReturn(elements)
     result = finder.find("class=test1", first_only=False)
     assert result == elements
@@ -507,7 +509,7 @@ def test_find_by_class_names(finder):
 def test_find_by_tag_name(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_tag_name(
+    when(driver).find_elements(By.TAG_NAME, 
         "div").thenReturn(elements)
     result = finder.find("tag=div", first_only=False)
     assert result == elements
@@ -518,8 +520,8 @@ def test_find_by_tag_name(finder):
 def test_find_with_sloppy_prefix(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_id("test1").thenReturn(elements)
-    when(driver).find_elements_by_partial_link_text(
+    when(driver).find_elements(By.ID, "test1").thenReturn(elements)
+    when(driver).find_elements(By.PARTIAL_LINK_TEXT, 
         "test1").thenReturn(elements)
     result = finder.find("ID=test1", first_only=False)
     assert result == elements
@@ -538,7 +540,7 @@ def test_find_with_sloppy_prefix(finder):
 def test_find_with_sloppy_criteria(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements('div', 'a', 'span', 'a')
-    when(driver).find_elements_by_id("test1  ").thenReturn(elements)
+    when(driver).find_elements(By.ID, "test1  ").thenReturn(elements)
     result = finder.find("id= test1  ", first_only=False)
     assert result == elements
 
@@ -553,7 +555,7 @@ def test_find_by_id_with_synonym_and_constraints(finder):
     elements[5].set_attribute('type', 'text')
     elements[7].set_attribute('type', 'file')
     elements[8].set_attribute('type', 'email')
-    when(driver).find_elements_by_id("test1").thenReturn(elements)
+    when(driver).find_elements(By.ID, "test1").thenReturn(elements)
     result = finder.find("id=test1", first_only=False)
     assert result == elements
     result = finder.find("id=test1", tag='input', first_only=False)
@@ -577,14 +579,13 @@ def test_find_returns_bad_values(finder):
     # and ChromeDriver has also returned None:
     # https://github.com/SeleniumHQ/selenium/issues/4555
     driver = _get_driver(finder)
-    locators = ('find_elements_by_id', 'find_elements_by_name',
-                'find_elements_by_xpath', 'find_elements_by_link_text',
-                'find_elements_by_css_selector',
-                'find_elements_by_tag_name')
+    func_name = 'find_elements'
+    locator_strategies = (By.ID, By.NAME, By.XPATH,
+                          By.LINK_TEXT, By.CSS_SELECTOR, By.TAG_NAME)
     for bad_value in (None, {'': None}):
-        for func_name in locators:
+        for locator_strategy in locator_strategies:
             when_find_func = getattr(when(driver), func_name)
-            when_find_func(any()).thenReturn(bad_value)
+            when_find_func(locator_strategy, any()).thenReturn(bad_value)
         for locator in ("identifier=it", "id=it", "name=it", "xpath=//div",
                         "link=it", "css=div.it", "tag=div", "default"):
             result = finder.find(locator, required=False,

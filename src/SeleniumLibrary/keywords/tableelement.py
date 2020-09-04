@@ -14,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from SeleniumLibrary.base import LibraryComponent, keyword
+from selenium.webdriver.common.by import By
 
+from SeleniumLibrary.base import LibraryComponent, keyword
 
 class TableElementKeywords(LibraryComponent):
 
@@ -57,7 +58,7 @@ class TableElementKeywords(LibraryComponent):
                                  "rows but had only %d."
                                  % (locator, abs(row), len(rows)))
         index = row - 1 if row > 0 else row
-        cells = rows[index].find_elements_by_xpath('./th|./td')
+        cells = rows[index].find_elements(By.XPATH, './th|./td')
         if len(cells) < abs(column):
             raise AssertionError("Table '%s' row %d should have had at "
                                  "least %d columns but had only %d."
@@ -68,11 +69,11 @@ class TableElementKeywords(LibraryComponent):
     def _get_rows(self, locator, count):
         # Get rows in same order as browsers render them.
         table = self.find_element(locator, tag='table')
-        rows = table.find_elements_by_xpath("./thead/tr")
+        rows = table.find_elements(By.XPATH, "./thead/tr")
         if count < 0 or len(rows) < count:
-            rows.extend(table.find_elements_by_xpath("./tbody/tr"))
+            rows.extend(table.find_elements(By.XPATH, "./tbody/tr"))
         if count < 0 or len(rows) < count:
-            rows.extend(table.find_elements_by_xpath("./tfoot/tr"))
+            rows.extend(table.find_elements(By.XPATH, "./tfoot/tr"))
         return rows
 
     @keyword
