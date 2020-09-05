@@ -1,20 +1,12 @@
 import os
 import unittest
 
-from robot.utils import JYTHON, WINDOWS
+from approvaltests.approvals import verify_all
+from approvaltests.reporters.generic_diff_reporter_factory import (
+    GenericDiffReporterFactory,
+)
+from robot.utils import WINDOWS
 from selenium import webdriver
-
-try:
-    from approvaltests.approvals import verify_all
-    from approvaltests.reporters.generic_diff_reporter_factory import (
-        GenericDiffReporterFactory,
-    )
-except ImportError:
-    if JYTHON:
-        verify = None
-        GenericDiffReporterFactory = None
-    else:
-        raise
 
 from SeleniumLibrary.keywords import WebDriverCreator
 
@@ -25,18 +17,16 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         cls.log_dir = "/log/dir"
         cls.creator = WebDriverCreator(cls.log_dir)
         path = os.path.dirname(__file__)
-        if not JYTHON:
-            reporter_json = os.path.abspath(
-                os.path.join(path, "..", "approvals_reporters.json")
-            )
-            factory = GenericDiffReporterFactory()
-            factory.load(reporter_json)
-            cls.reporter = factory.get_first_working()
+        reporter_json = os.path.abspath(
+            os.path.join(path, "..", "approvals_reporters.json")
+        )
+        factory = GenericDiffReporterFactory()
+        factory.load(reporter_json)
+        cls.reporter = factory.get_first_working()
 
     def setUp(self):
         self.results = []
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_single_method(self):
         self._parse_result(
