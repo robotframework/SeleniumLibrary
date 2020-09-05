@@ -1,21 +1,13 @@
 import os
 import unittest
 
-from robot.utils import JYTHON, WINDOWS
+from approvaltests.approvals import verify
+from approvaltests.reporters.generic_diff_reporter_factory import (
+    GenericDiffReporterFactory,
+)
+from robot.utils import WINDOWS
 
 from SeleniumLibrary import SeleniumLibrary
-
-try:
-    from approvaltests.approvals import verify
-    from approvaltests.reporters.generic_diff_reporter_factory import (
-        GenericDiffReporterFactory,
-    )
-except ImportError:
-    if JYTHON:
-        verify = None
-        GenericDiffReporterFactory = None
-    else:
-        raise
 
 
 class PluginDocumentation(unittest.TestCase):
@@ -35,37 +27,31 @@ class PluginDocumentation(unittest.TestCase):
         factory.load(reporter_json)
         self.reporter = factory.get_first_working()
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_plugin_no_doc(self):
         sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_many_plugins(self):
         sl = SeleniumLibrary(plugins="%s, %s" % (self.plugin_1, self.plugin_2))
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_no_doc(self):
         sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_create_toc(self):
         sl = SeleniumLibrary()
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_plugin_init_doc(self):
         sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
         verify(sl.get_keyword_documentation("__init__"), self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_plugin_kw_doc(self):
         sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))

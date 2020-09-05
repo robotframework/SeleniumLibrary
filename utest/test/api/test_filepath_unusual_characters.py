@@ -1,38 +1,26 @@
 import os
 
 import pytest
-from robot.utils import JYTHON, WINDOWS
-
-try:
-    from approvaltests.approvals import verify_all
-    from approvaltests.reporters.generic_diff_reporter_factory import (
-        GenericDiffReporterFactory,
-    )
-except ImportError:
-    if JYTHON:
-        verify = None
-        GenericDiffReporterFactory = None
-    else:
-        raise
+from approvaltests.approvals import verify_all
+from approvaltests.reporters.generic_diff_reporter_factory import (
+    GenericDiffReporterFactory,
+)
+from robot.utils import WINDOWS
 
 from SeleniumLibrary.utils.path_formatter import _format_path
 
 
 @pytest.fixture(scope="module")
 def reporter():
-    if JYTHON:
-        return None
-    else:
-        path = os.path.dirname(__file__)
-        reporter_json = os.path.abspath(
-            os.path.join(path, "..", "approvals_reporters.json")
-        )
-        factory = GenericDiffReporterFactory()
-        factory.load(reporter_json)
-        return factory.get_first_working()
+    path = os.path.dirname(__file__)
+    reporter_json = os.path.abspath(
+        os.path.join(path, "..", "approvals_reporters.json")
+    )
+    factory = GenericDiffReporterFactory()
+    factory.load(reporter_json)
+    return factory.get_first_working()
 
 
-@pytest.mark.skipif(JYTHON, reason="ApprovalTest does not work with Jython")
 @pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_normal_file_path(reporter):
     results = []

@@ -1,19 +1,11 @@
 import unittest
 import os
 
-from robot.utils import JYTHON, WINDOWS
-
-try:
-    from approvaltests.approvals import verify_all
-    from approvaltests.reporters.generic_diff_reporter_factory import (
-        GenericDiffReporterFactory,
-    )
-except ImportError:
-    if JYTHON:
-        verify = None
-        GenericDiffReporterFactory = None
-    else:
-        raise
+from approvaltests.approvals import verify_all
+from approvaltests.reporters.generic_diff_reporter_factory import (
+    GenericDiffReporterFactory,
+)
+from robot.utils import WINDOWS
 
 from SeleniumLibrary.keywords import ElementKeywords
 from SeleniumLibrary.utils import PY3
@@ -33,7 +25,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         factory.load(reporter_json)
         self.reporter = factory.get_first_working()
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_keys(self):
         results = []
@@ -52,7 +43,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results = self.result_formatter(results)
         verify_all("index", results, reporter=self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_keys_aliases(self):
         results = []
@@ -64,7 +54,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results = self.result_formatter(results)
         verify_all("Alias testing", results, reporter=self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_separate_key(self):
         results = []
@@ -80,7 +69,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results = self.result_formatter(results)
         verify_all("Separate key", results, reporter=self.reporter)
 
-    @unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_convert_key(self):
         results = []

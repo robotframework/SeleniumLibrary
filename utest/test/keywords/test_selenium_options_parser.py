@@ -3,22 +3,15 @@ import os
 import unittest
 
 import pytest
+from approvaltests.approvals import verify_all
+from approvaltests.reporters.generic_diff_reporter_factory import (
+    GenericDiffReporterFactory,
+)
 from mockito import mock, when, unstub, ANY
-from robot.utils import JYTHON, WINDOWS
+from robot.utils import WINDOWS
 from selenium import webdriver
-from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
 
-try:
-    from approvaltests.approvals import verify_all
-    from approvaltests.reporters.generic_diff_reporter_factory import (
-        GenericDiffReporterFactory,
-    )
-except ImportError:
-    if JYTHON:
-        verify = None
-        GenericDiffReporterFactory = None
-    else:
-        raise
+from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
 
 
 @pytest.fixture(scope="module")
@@ -28,23 +21,19 @@ def options():
 
 @pytest.fixture(scope="module")
 def reporter():
-    if JYTHON:
-        return None
-    else:
-        path = os.path.dirname(__file__)
-        reporter_json = os.path.abspath(
-            os.path.join(path, "..", "approvals_reporters.json")
-        )
-        factory = GenericDiffReporterFactory()
-        factory.load(reporter_json)
-        return factory.get_first_working()
+    path = os.path.dirname(__file__)
+    reporter_json = os.path.abspath(
+        os.path.join(path, "..", "approvals_reporters.json")
+    )
+    factory = GenericDiffReporterFactory()
+    factory.load(reporter_json)
+    return factory.get_first_working()
 
 
 def teardown_function():
     unstub()
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_options_string(options, reporter):
     results = []
@@ -84,7 +73,6 @@ def test_parse_options_string(options, reporter):
     verify_all("Selenium options string to dict", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_index_of_separator(options, reporter):
     results = []
@@ -95,7 +83,6 @@ def test_index_of_separator(options, reporter):
     verify_all("Get argument index", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_complex_object(options, reporter):
     results = []
@@ -106,7 +93,6 @@ def test_parse_complex_object(options, reporter):
     verify_all("Parse complex Python object", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_arguemnts(options, reporter):
     results = []
@@ -118,7 +104,6 @@ def test_parse_arguemnts(options, reporter):
     verify_all("Parse arguments from complex object", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_options_string_errors(options, reporter):
     results = []
@@ -131,7 +116,6 @@ def test_parse_options_string_errors(options, reporter):
     verify_all("Selenium options string errors", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_split_options(options, reporter):
     results = []
@@ -146,7 +130,6 @@ def test_split_options(options, reporter):
     verify_all("Selenium options string splitting", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_options_create(options, reporter):
     results = []
@@ -182,7 +165,6 @@ def test_options_create(options, reporter):
     verify_all("Selenium options", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_create_with_android(options, reporter):
     results = []
@@ -193,7 +175,6 @@ def test_create_with_android(options, reporter):
     verify_all("Selenium options with android", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_get_options(options, reporter):
     options_str = 'add_argument("--proxy-server=66.97.38.58:80")'
@@ -202,7 +183,6 @@ def test_get_options(options, reporter):
     verify_all("Selenium options with string.", results, reporter=reporter)
 
 
-@unittest.skipIf(JYTHON, "ApprovalTest does not work with Jython")
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_importer(options, reporter):
     results = []
