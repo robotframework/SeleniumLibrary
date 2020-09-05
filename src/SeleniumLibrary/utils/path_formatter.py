@@ -13,15 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from robotlibcore import PY2
 
 
-# Cab be deleted when Python 2 is not anymore supported.
 def _format_path(file_path, index):
-    if PY2:
-        import string
-
-        return string.Formatter().vformat(file_path, (), _SafeFormatter(index=index))
     return file_path.format_map(_SafeFormatter(index=index))
 
 

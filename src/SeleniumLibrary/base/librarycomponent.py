@@ -18,7 +18,6 @@ import os
 
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
-from robotlibcore import PY2
 
 from SeleniumLibrary.utils import is_noney, timestr_to_secs
 
@@ -81,4 +80,4 @@ class LibraryComponent(ContextAware):
                 return BuiltIn().get_variable_value("${OUTPUTDIR}")
             return os.path.dirname(logfile)
         except RobotNotRunningError:
-            return os.getcwdu() if PY2 else os.getcwd()
+            return os.getcwd()
