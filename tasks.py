@@ -151,3 +151,4 @@ def init_labels(ctx, username=None, password=None):
 @task
 def lint(ctx):
     ctx.run("black --config pyproject.toml src/ utest/ atest/")
+    ctx.run("flake8 --config .flake8 src/ utest/ atest/")

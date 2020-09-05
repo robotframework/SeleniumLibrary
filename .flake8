@@ -1,0 +1,4 @@
+[flake8]
+exclude =
+   __pycache__,
+ignore = E501
