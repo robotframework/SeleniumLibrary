@@ -25,33 +25,33 @@ def test_set_selenium_timeout_only_affects_open_browsers():
 
 def test_selenium_implicit_wait_default():
     sl = SeleniumLibrary()
-    assert sl.implicit_wait == 0.0, 'Wait should have 0.0'
+    assert sl.implicit_wait == 0.0, "Wait should have 0.0"
 
 
 def test_set_selenium_implicit_wait():
     sl = SeleniumLibrary()
-    sl.set_selenium_implicit_wait('5.0')
+    sl.set_selenium_implicit_wait("5.0")
     assert sl.implicit_wait == 5.0
 
-    sl.set_selenium_implicit_wait('1 min')
+    sl.set_selenium_implicit_wait("1 min")
     assert sl.implicit_wait == 60.0
 
 
 def test_selenium_implicit_wait_error():
     with pytest.raises(ValueError):
-        SeleniumLibrary(implicit_wait='False')
-    sl = SeleniumLibrary(implicit_wait='3')
+        SeleniumLibrary(implicit_wait="False")
+    sl = SeleniumLibrary(implicit_wait="3")
     with pytest.raises(ValueError):
-        sl.set_selenium_implicit_wait('1 vuosi')
+        sl.set_selenium_implicit_wait("1 vuosi")
 
 
 def test_selenium_implicit_wait_get():
-    sl = SeleniumLibrary(implicit_wait='3')
-    assert sl.get_selenium_implicit_wait() == '3 seconds'
+    sl = SeleniumLibrary(implicit_wait="3")
+    assert sl.get_selenium_implicit_wait() == "3 seconds"
 
-    org_value = sl.set_selenium_implicit_wait('1 min')
-    assert sl.get_selenium_implicit_wait() == '1 minute'
-    assert org_value == '3 seconds'
+    org_value = sl.set_selenium_implicit_wait("1 min")
+    assert sl.get_selenium_implicit_wait() == "1 minute"
+    assert org_value == "3 seconds"
 
 
 def test_bad_browser_name():
@@ -72,15 +72,15 @@ def test_create_webdriver():
     driver = mock()
     when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
     when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
-    when(ctx).register_driver(driver, 'fake1').thenReturn(0)
+    when(ctx).register_driver(driver, "fake1").thenReturn(0)
     webdriver.FakeWebDriver = FakeWebDriver
     try:
-        index = bm.create_webdriver('FakeWebDriver', 'fake1', some_arg=1)
-        verify(ctx).register_driver(driver, 'fake1')
+        index = bm.create_webdriver("FakeWebDriver", "fake1", some_arg=1)
+        verify(ctx).register_driver(driver, "fake1")
         assert index == 0
-        my_kwargs = {'some_arg': 2}
-        bm.create_webdriver('FakeWebDriver', 'fake2', kwargs=my_kwargs)
-        verify(ctx).register_driver(driver, 'fake2')
+        my_kwargs = {"some_arg": 2}
+        bm.create_webdriver("FakeWebDriver", "fake2", kwargs=my_kwargs)
+        verify(ctx).register_driver(driver, "fake2")
     finally:
         del webdriver.FakeWebDriver
 
@@ -91,11 +91,13 @@ def test_open_browser_speed():
     ctx.event_firing_webdriver = None
     ctx.speed = 5.0
     browser = mock()
-    executable_path = 'chromedriver'
-    when(webdriver).Chrome(options=None, service_log_path=None, executable_path=executable_path).thenReturn(browser)
+    executable_path = "chromedriver"
+    when(webdriver).Chrome(
+        options=None, service_log_path=None, executable_path=executable_path
+    ).thenReturn(browser)
     bm = BrowserManagementKeywords(ctx)
     when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
-    bm.open_browser('http://robotframework.org/', 'chrome')
+    bm.open_browser("http://robotframework.org/", "chrome")
     assert browser._speed == 5.0
 
 
@@ -105,9 +107,11 @@ def test_create_webdriver_speed():
     ctx.event_firing_webdriver = None
     ctx.speed = 0.0
     browser = mock()
-    executable_path = 'chromedriver'
-    when(webdriver).Chrome(options=None, service_log_path=None, executable_path=executable_path).thenReturn(browser)
+    executable_path = "chromedriver"
+    when(webdriver).Chrome(
+        options=None, service_log_path=None, executable_path=executable_path
+    ).thenReturn(browser)
     bm = BrowserManagementKeywords(ctx)
     when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
-    bm.open_browser('http://robotframework.org/', 'chrome')
-    verify(browser, times=0).__call__('_speed')
+    bm.open_browser("http://robotframework.org/", "chrome")
+    verify(browser, times=0).__call__("_speed")

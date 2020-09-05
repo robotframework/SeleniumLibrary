@@ -17,30 +17,28 @@
 import time
 from collections import namedtuple
 
-from selenium.common.exceptions import (NoSuchWindowException,
-                                        WebDriverException)
+from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import WindowNotFound
 from SeleniumLibrary.utils import is_string
 
 
-WindowInfo = namedtuple('WindowInfo', 'handle, id, name, title, url')
+WindowInfo = namedtuple("WindowInfo", "handle, id, name, title, url")
 
 
 class WindowManager(ContextAware):
-
     def __init__(self, ctx):
         ContextAware.__init__(self, ctx)
         self._strategies = {
-            'title': self._select_by_title,
-            'name': self._select_by_name,
-            'url': self._select_by_url,
-            'default': self._select_by_default
+            "title": self._select_by_title,
+            "name": self._select_by_name,
+            "url": self._select_by_url,
+            "default": self._select_by_default,
         }
 
     def get_window_handles(self, browser):
-        if is_string(browser) and browser == 'ALL':
+        if is_string(browser) and browser == "ALL":
             handles = []
             current_index = self.drivers.current_index
             for index, driver in enumerate(self.drivers, 1):
@@ -48,7 +46,7 @@ class WindowManager(ContextAware):
                 handles.extend(self.driver.window_handles)
             self.drivers.switch(current_index)
             return handles
-        elif is_string(browser) and browser == 'CURRENT':
+        elif is_string(browser) and browser == "CURRENT":
             return self.driver.window_handles
         else:
             current_index = self.drivers.current_index
@@ -57,19 +55,19 @@ class WindowManager(ContextAware):
             self.drivers.switch(current_index)
             return handles
 
-    def get_window_infos(self, browser='CURRENT'):
+    def get_window_infos(self, browser="CURRENT"):
         try:
             current_index = self.drivers.current_index
         except AttributeError:
             current_index = None
-        if is_string(browser) and browser.upper() == 'ALL':
+        if is_string(browser) and browser.upper() == "ALL":
             infos = []
             for index, driver in enumerate(self.drivers, 1):
                 self.drivers.switch(index)
                 infos.extend(self._get_window_infos())
             self.drivers.switch(current_index)
             return infos
-        elif is_string(browser) and browser.upper() == 'CURRENT':
+        elif is_string(browser) and browser.upper() == "CURRENT":
             return self._get_window_infos()
         else:
             self.drivers.switch(browser)
@@ -104,11 +102,11 @@ class WindowManager(ContextAware):
     def _select(self, locator):
         if not is_string(locator):
             self._select_by_excludes(locator)
-        elif locator.upper() == 'CURRENT':
+        elif locator.upper() == "CURRENT":
             pass
-        elif locator.upper() == 'MAIN':
+        elif locator.upper() == "MAIN":
             self._select_main_window()
-        elif locator.upper() == 'NEW':
+        elif locator.upper() == "NEW":
             self._select_by_last_index()
         else:
             strategy, locator = self._parse_locator(locator)
@@ -119,32 +117,32 @@ class WindowManager(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index + 1:].lstrip()
-        return 'default', locator
+                return prefix, locator[index + 1 :].lstrip()
+        return "default", locator
 
     def _get_locator_separator_index(self, locator):
-        if '=' not in locator:
-            return locator.find(':')
-        if ':' not in locator:
-            return locator.find('=')
-        return min(locator.find('='), locator.find(':'))
+        if "=" not in locator:
+            return locator.find(":")
+        if ":" not in locator:
+            return locator.find("=")
+        return min(locator.find("="), locator.find(":"))
 
     def _select_by_title(self, title):
         self._select_matching(
             lambda window_info: window_info.title == title,
-            "Unable to locate window with title '%s'." % title
+            "Unable to locate window with title '%s'." % title,
         )
 
     def _select_by_name(self, name):
         self._select_matching(
             lambda window_info: window_info.name == name,
-            "Unable to locate window with name '%s'." % name
+            "Unable to locate window with name '%s'." % name,
         )
 
     def _select_by_url(self, url):
         self._select_matching(
             lambda window_info: window_info.url == url,
-            "Unable to locate window with URL '%s'." % url
+            "Unable to locate window with URL '%s'." % url,
         )
 
     def _select_main_window(self):
@@ -165,14 +163,16 @@ class WindowManager(ContextAware):
                     return
         if starting_handle:
             self.driver.switch_to.window(starting_handle)
-        raise WindowNotFound("No window matching handle, name, title or URL "
-                             "'%s' found." % criteria)
+        raise WindowNotFound(
+            "No window matching handle, name, title or URL " "'%s' found." % criteria
+        )
 
     def _select_by_last_index(self):
         handles = self.driver.window_handles
         if handles[-1] == self.driver.current_window_handle:
-            raise WindowNotFound('Window with last index is same as '
-                                 'the current window.')
+            raise WindowNotFound(
+                "Window with last index is same as " "the current window."
+            )
         self.driver.switch_to.window(handles[-1])
 
     def _select_by_excludes(self, excludes):
@@ -180,8 +180,7 @@ class WindowManager(ContextAware):
             if handle not in excludes:
                 self.driver.switch_to.window(handle)
                 return
-        raise WindowNotFound('No window not matching excludes %s found.'
-                             % excludes)
+        raise WindowNotFound("No window not matching excludes %s found." % excludes)
 
     def _select_matching(self, matcher, error):
         try:
@@ -198,14 +197,15 @@ class WindowManager(ContextAware):
 
     def _get_current_window_info(self):
         try:
-            id, name = self.driver.execute_script(
-                "return [ window.id, window.name ];")
+            id, name = self.driver.execute_script("return [ window.id, window.name ];")
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
             id = name = None
-        return WindowInfo(self.driver.current_window_handle,
-                          id if id is not None else 'undefined',
-                          name or 'undefined',
-                          self.driver.title or 'undefined',
-                          self.driver.current_url or 'undefined')
+        return WindowInfo(
+            self.driver.current_window_handle,
+            id if id is not None else "undefined",
+            name or "undefined",
+            self.driver.title or "undefined",
+            self.driver.current_url or "undefined",
+        )

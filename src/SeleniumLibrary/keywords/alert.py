@@ -23,9 +23,9 @@ from SeleniumLibrary.utils import secs_to_timestr
 
 
 class AlertKeywords(LibraryComponent):
-    ACCEPT = 'ACCEPT'
-    DISMISS = 'DISMISS'
-    LEAVE = 'LEAVE'
+    ACCEPT = "ACCEPT"
+    DISMISS = "DISMISS"
+    LEAVE = "LEAVE"
     _next_alert_action = ACCEPT
 
     @keyword
@@ -45,7 +45,7 @@ class AlertKeywords(LibraryComponent):
         self._handle_alert(alert, action)
 
     @keyword
-    def alert_should_be_present(self, text='', action=ACCEPT, timeout=None):
+    def alert_should_be_present(self, text="", action=ACCEPT, timeout=None):
         """Verifies that an alert is present and by default, accepts it.
 
         Fails if no alert is present. If ``text`` is a non-empty string,
@@ -62,8 +62,10 @@ class AlertKeywords(LibraryComponent):
         """
         message = self.handle_alert(action, timeout)
         if text and text != message:
-            raise AssertionError("Alert message should have been '%s' but it "
-                                 "was '%s'." % (text, message))
+            raise AssertionError(
+                "Alert message should have been '%s' but it "
+                "was '%s'." % (text, message)
+            )
 
     @keyword
     def alert_should_not_be_present(self, action=ACCEPT, timeout=0):
@@ -119,7 +121,7 @@ class AlertKeywords(LibraryComponent):
 
     def _handle_alert(self, alert, action):
         action = action.upper()
-        text = ' '.join(alert.text.splitlines())
+        text = " ".join(alert.text.splitlines())
         if action == self.ACCEPT:
             alert.accept()
         elif action == self.DISMISS:
@@ -134,6 +136,6 @@ class AlertKeywords(LibraryComponent):
         try:
             return wait.until(EC.alert_is_present())
         except TimeoutException:
-            raise AssertionError('Alert not found in %s.' % secs_to_timestr(timeout))
+            raise AssertionError("Alert not found in %s." % secs_to_timestr(timeout))
         except WebDriverException as err:
-            raise AssertionError('An exception occurred waiting for alert: %s' % err)
+            raise AssertionError("An exception occurred waiting for alert: %s" % err)

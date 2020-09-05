@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import os
 import sys
+
 try:
     from httplib import HTTPConnection
     from BaseHTTPServer import HTTPServer
@@ -42,15 +43,15 @@ def stop_server(port=7000):
 
 def start_server(path, port=7000):
     os.chdir(path)
-    server = ThreadingHttpServer(('', port), StoppableHttpRequestHandler)
+    server = ThreadingHttpServer(("", port), StoppableHttpRequestHandler)
     server.serve_forever()
 
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2 or sys.argv[1] not in ['start', 'stop']:
-        print('usage: %s start|stop' % sys.argv[0])
+if __name__ == "__main__":
+    if len(sys.argv) != 2 or sys.argv[1] not in ["start", "stop"]:
+        print("usage: %s start|stop" % sys.argv[0])
         sys.exit(1)
-    if sys.argv[1] == 'start':
+    if sys.argv[1] == "start":
         path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         start_server(path)
     else:

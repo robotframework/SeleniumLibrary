@@ -24,18 +24,17 @@ from SeleniumLibrary.utils import plural_or_not, is_string
 
 
 class WindowKeywords(LibraryComponent):
-
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
         self._window_manager = WindowManager(ctx)
 
     @keyword
-    def select_window(self, locator='MAIN', timeout=None):
+    def select_window(self, locator="MAIN", timeout=None):
         """DEPRECATED in SeleniumLibrary 4.0. , use `Switch Window` instead."""
         return self.switch_window(locator, timeout)
 
     @keyword
-    def switch_window(self, locator='MAIN', timeout=None, browser='CURRENT'):
+    def switch_window(self, locator="MAIN", timeout=None, browser="CURRENT"):
         """Switches to browser window matching ``locator``.
 
         If the window is found, all subsequent commands use the selected
@@ -117,7 +116,7 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            if not is_string(browser) or not browser.upper() == 'CURRENT':
+            if not is_string(browser) or not browser.upper() == "CURRENT":
                 self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
@@ -127,7 +126,7 @@ class WindowKeywords(LibraryComponent):
         self.driver.close()
 
     @keyword
-    def get_window_handles(self, browser='CURRENT'):
+    def get_window_handles(self, browser="CURRENT"):
         """Returns all child window handles of the selected browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
@@ -139,7 +138,7 @@ class WindowKeywords(LibraryComponent):
         return self._window_manager.get_window_handles(browser)
 
     @keyword
-    def get_window_identifiers(self, browser='CURRENT'):
+    def get_window_identifiers(self, browser="CURRENT"):
         """Returns and logs id attributes of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -147,7 +146,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(ids)
 
     @keyword
-    def get_window_names(self, browser='CURRENT'):
+    def get_window_names(self, browser="CURRENT"):
         """Returns and logs names of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -155,7 +154,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(names)
 
     @keyword
-    def get_window_titles(self, browser='CURRENT'):
+    def get_window_titles(self, browser="CURRENT"):
         """Returns and logs titles of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -163,7 +162,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(titles)
 
     @keyword
-    def get_locations(self, browser='CURRENT'):
+    def get_locations(self, browser="CURRENT"):
         """Returns and logs URLs of all windows of the selected browser.
 
         *Browser Scope:*
@@ -206,7 +205,7 @@ class WindowKeywords(LibraryComponent):
             inner_height = int(self.driver.execute_script("return window.innerHeight;"))
             return inner_width, inner_height
         size = self.driver.get_window_size()
-        return size['width'], size['height']
+        return size["width"], size["height"]
 
     @keyword
     def set_window_size(self, width, height, inner=False):
@@ -239,12 +238,15 @@ class WindowKeywords(LibraryComponent):
         self.driver.set_window_size(width, height)
         inner_width = int(self.driver.execute_script("return window.innerWidth;"))
         inner_height = int(self.driver.execute_script("return window.innerHeight;"))
-        self.info('window.innerWidth is %s and window.innerHeight is %s' % (inner_width, inner_height))
+        self.info(
+            "window.innerWidth is %s and window.innerHeight is %s"
+            % (inner_width, inner_height)
+        )
         width_offset = width - inner_width
         height_offset = height - inner_height
         window_width = width + width_offset
         window_height = height + height_offset
-        self.info('Setting window size to %s %s' % (window_width, window_height))
+        self.info("Setting window size to %s %s" % (window_width, window_height))
         self.driver.set_window_size(window_width, window_height)
         result_width = int(self.driver.execute_script("return window.innerWidth;"))
         result_height = int(self.driver.execute_script("return window.innerHeight;"))
@@ -262,7 +264,7 @@ class WindowKeywords(LibraryComponent):
         | ${x} | ${y}= | `Get Window Position` |
         """
         position = self.driver.get_window_position()
-        return position['x'], position['y']
+        return position["x"], position["y"]
 
     @keyword
     def set_window_position(self, x, y):
@@ -281,12 +283,9 @@ class WindowKeywords(LibraryComponent):
         """
         self.driver.set_window_position(int(x), int(y))
 
-    def _log_list(self, items, what='item'):
-        msg = [
-            'Altogether %s %s%s.'
-            % (len(items), what, plural_or_not(items))
-        ]
+    def _log_list(self, items, what="item"):
+        msg = ["Altogether %s %s%s." % (len(items), what, plural_or_not(items))]
         for index, item in enumerate(items):
-            msg.append('%s: %s' % (index + 1, item))
-        self.info('\n'.join(msg))
+            msg.append("%s: %s" % (index + 1, item))
+        self.info("\n".join(msg))
         return items

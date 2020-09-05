@@ -27,8 +27,8 @@ class plugin_with_event_firing_webdriver(LibraryComponent):
         also a boring example.
         """
         LibraryComponent.__init__(self, ctx)
-        self.event_firing_webdriver = 'event_firing_webdriver'
+        self.event_firing_webdriver = "event_firing_webdriver"
 
     @keyword
     def tidii(self):
-        self.info('foo')
+        self.info("foo")

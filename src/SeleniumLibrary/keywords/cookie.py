@@ -25,7 +25,6 @@ from SeleniumLibrary.utils import is_truthy, is_noney, is_falsy
 
 
 class CookieKeywords(LibraryComponent):
-
     @keyword
     def delete_all_cookies(self):
         """Deletes all cookies."""
@@ -58,12 +57,12 @@ class CookieKeywords(LibraryComponent):
         if is_falsy(as_dict):
             pairs = []
             for cookie in self.driver.get_cookies():
-                pairs.append(cookie['name'] + "=" + cookie['value'])
-            return '; '.join(pairs)
+                pairs.append(cookie["name"] + "=" + cookie["value"])
+            return "; ".join(pairs)
         else:
             pairs = DotDict()
             for cookie in self.driver.get_cookies():
-                pairs[cookie['name']] = cookie['value']
+                pairs[cookie["name"]] = cookie["value"]
             return pairs
 
     @keyword
@@ -113,8 +112,7 @@ class CookieKeywords(LibraryComponent):
         return CookieInformation(**cookie)
 
     @keyword
-    def add_cookie(self, name, value, path=None, domain=None, secure=None,
-                   expiry=None):
+    def add_cookie(self, name, value, path=None, domain=None, secure=None, expiry=None):
         """Adds a cookie to your current session.
 
         ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``
@@ -130,29 +128,37 @@ class CookieKeywords(LibraryComponent):
 
         Prior to SeleniumLibrary 3.0 setting expiry did not work.
         """
-        new_cookie = {'name': name, 'value': value}
+        new_cookie = {"name": name, "value": value}
         if not is_noney(path):
-            new_cookie['path'] = path
+            new_cookie["path"] = path
         if not is_noney(domain):
-            new_cookie['domain'] = domain
+            new_cookie["domain"] = domain
         # Secure must be True or False
         if not is_noney(secure):
-            new_cookie['secure'] = is_truthy(secure)
+            new_cookie["secure"] = is_truthy(secure)
         if not is_noney(expiry):
-            new_cookie['expiry'] = self._expiry(expiry)
+            new_cookie["expiry"] = self._expiry(expiry)
         self.driver.add_cookie(new_cookie)
 
     def _expiry(self, expiry):
         try:
             return int(expiry)
         except ValueError:
-            return int(convert_date(expiry, result_format='epoch'))
+            return int(convert_date(expiry, result_format="epoch"))
 
 
 class CookieInformation(object):
-
-    def __init__(self, name, value, path=None, domain=None, secure=False,
-                 httpOnly=False, expiry=None, **extra):
+    def __init__(
+        self,
+        name,
+        value,
+        path=None,
+        domain=None,
+        secure=False,
+        httpOnly=False,
+        expiry=None,
+        **extra,
+    ):
         self.name = name
         self.value = value
         self.path = path
@@ -163,9 +169,8 @@ class CookieInformation(object):
         self.extra = extra
 
     def __str__(self):
-        items = 'name value path domain secure httpOnly expiry'.split()
-        string = '\n'.join('%s=%s' % (item, getattr(self, item))
-                           for item in items)
+        items = "name value path domain secure httpOnly expiry".split()
+        string = "\n".join("%s=%s" % (item, getattr(self, item)) for item in items)
         if self.extra:
-            string = '%s\n%s=%s\n' % (string, 'extra', self.extra)
+            string = "%s\n%s=%s\n" % (string, "extra", self.extra)
         return string

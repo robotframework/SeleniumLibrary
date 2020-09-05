@@ -3,7 +3,6 @@ from SeleniumLibrary.base import keyword
 
 
 class ExtSL(SeleniumLibrary):
-
     @keyword
     def ext_web_element(self, locator):
         return self.get_webelements(locator)

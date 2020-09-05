@@ -5,7 +5,6 @@ from SeleniumLibrary.base import keyword
 
 
 class CustomSeleniumKeywords(SeleniumLibrary):
-
     def __init__(self, *args, **kwargs):
         """Share `SeleniumLibrary`'s cache of browsers, so that
         we don't have to open a separate browser instance for the

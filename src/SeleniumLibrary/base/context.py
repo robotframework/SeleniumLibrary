@@ -18,7 +18,6 @@ from SeleniumLibrary.utils import escape_xpath_value
 
 
 class ContextAware(object):
-
     def __init__(self, ctx):
         """Base class exposing attributes from the common context.
 
@@ -95,7 +94,7 @@ class ContextAware(object):
 
     def is_element_enabled(self, locator, tag=None):
         element = self.find_element(locator, tag)
-        return element.is_enabled() and element.get_attribute('readonly') is None
+        return element.is_enabled() and element.get_attribute("readonly") is None
 
     def is_visible(self, locator):
         element = self.find_element(locator, required=False)

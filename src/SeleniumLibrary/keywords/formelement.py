@@ -24,7 +24,6 @@ from SeleniumLibrary.utils import is_noney, is_truthy
 
 
 class FormElementKeywords(LibraryComponent):
-
     @keyword
     def submit_form(self, locator=None):
         """Submits a form identified by ``locator``.
@@ -36,8 +35,8 @@ class FormElementKeywords(LibraryComponent):
         """
         self.info("Submitting form '%s'." % locator)
         if is_noney(locator):
-            locator = 'tag:form'
-        element = self.find_element(locator, tag='form')
+            locator = "tag:form"
+        element = self.find_element(locator, tag="form")
         element.submit()
 
     @keyword
@@ -50,8 +49,9 @@ class FormElementKeywords(LibraryComponent):
         self.info("Verifying checkbox '%s' is selected." % locator)
         element = self._get_checkbox(locator)
         if not element.is_selected():
-            raise AssertionError("Checkbox '%s' should have been selected "
-                                 "but was not." % locator)
+            raise AssertionError(
+                "Checkbox '%s' should have been selected " "but was not." % locator
+            )
 
     @keyword
     def checkbox_should_not_be_selected(self, locator):
@@ -63,11 +63,12 @@ class FormElementKeywords(LibraryComponent):
         self.info("Verifying checkbox '%s' is not selected." % locator)
         element = self._get_checkbox(locator)
         if element.is_selected():
-            raise AssertionError("Checkbox '%s' should not have been "
-                                 "selected." % locator)
+            raise AssertionError(
+                "Checkbox '%s' should not have been " "selected." % locator
+            )
 
     @keyword
-    def page_should_contain_checkbox(self, locator, message=None, loglevel='TRACE'):
+    def page_should_contain_checkbox(self, locator, message=None, loglevel="TRACE"):
         """Verifies checkbox ``locator`` is found from the current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -76,10 +77,10 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.assert_page_contains(locator, 'checkbox', message, loglevel)
+        self.assert_page_contains(locator, "checkbox", message, loglevel)
 
     @keyword
-    def page_should_not_contain_checkbox(self, locator, message=None, loglevel='TRACE'):
+    def page_should_not_contain_checkbox(self, locator, message=None, loglevel="TRACE"):
         """Verifies checkbox ``locator`` is not found from the current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -88,7 +89,7 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.assert_page_not_contains(locator, 'checkbox', message, loglevel)
+        self.assert_page_not_contains(locator, "checkbox", message, loglevel)
 
     @keyword
     def select_checkbox(self, locator):
@@ -119,7 +120,7 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def page_should_contain_radio_button(self, locator, message=None, loglevel='TRACE'):
+    def page_should_contain_radio_button(self, locator, message=None, loglevel="TRACE"):
         """Verifies radio button ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -129,10 +130,12 @@ class FormElementKeywords(LibraryComponent):
         syntax. When using the default locator strategy, radio buttons are
         searched using ``id``, ``name`` and ``value``.
         """
-        self.assert_page_contains(locator, 'radio button', message, loglevel)
+        self.assert_page_contains(locator, "radio button", message, loglevel)
 
     @keyword
-    def page_should_not_contain_radio_button(self, locator, message=None, loglevel='TRACE'):
+    def page_should_not_contain_radio_button(
+        self, locator, message=None, loglevel="TRACE"
+    ):
         """Verifies radio button ``locator`` is not found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -142,8 +145,7 @@ class FormElementKeywords(LibraryComponent):
         syntax. When using the default locator strategy, radio buttons are
         searched using ``id``, ``name`` and ``value``.
         """
-        self.assert_page_not_contains(locator, 'radio button', message,
-                                      loglevel)
+        self.assert_page_not_contains(locator, "radio button", message, loglevel)
 
     @keyword
     def radio_button_should_be_set_to(self, group_name, value):
@@ -151,14 +153,16 @@ class FormElementKeywords(LibraryComponent):
 
         ``group_name`` is the ``name`` of the radio button group.
         """
-        self.info("Verifying radio button '%s' has selection '%s'."
-                  % (group_name, value))
+        self.info(
+            "Verifying radio button '%s' has selection '%s'." % (group_name, value)
+        )
         elements = self._get_radio_buttons(group_name)
         actual_value = self._get_value_from_radio_buttons(elements)
         if actual_value is None or actual_value != value:
-            raise AssertionError("Selection of radio button '%s' should have "
-                                 "been '%s' but was '%s'."
-                                 % (group_name, value, actual_value))
+            raise AssertionError(
+                "Selection of radio button '%s' should have "
+                "been '%s' but was '%s'." % (group_name, value, actual_value)
+            )
 
     @keyword
     def radio_button_should_not_be_selected(self, group_name):
@@ -170,9 +174,10 @@ class FormElementKeywords(LibraryComponent):
         elements = self._get_radio_buttons(group_name)
         actual_value = self._get_value_from_radio_buttons(elements)
         if actual_value is not None:
-            raise AssertionError("Radio button group '%s' should not have "
-                                 "had selection, but '%s' was selected."
-                                 % (group_name, actual_value))
+            raise AssertionError(
+                "Radio button group '%s' should not have "
+                "had selection, but '%s' was selected." % (group_name, actual_value)
+            )
 
     @keyword
     def select_radio_button(self, group_name, value):
@@ -187,8 +192,7 @@ class FormElementKeywords(LibraryComponent):
         | `Select Radio Button` | size    | XL    |
         | `Select Radio Button` | contact | email |
         """
-        self.info("Selecting '%s' from radio button '%s'."
-                  % (value, group_name))
+        self.info("Selecting '%s' from radio button '%s'." % (value, group_name))
         element = self._get_radio_button_with_value(group_name, value)
         if not element.is_selected():
             element.click()
@@ -212,9 +216,9 @@ class FormElementKeywords(LibraryComponent):
         Example:
         | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |
         """
-        self.ctx._running_keyword = 'choose_file'
+        self.ctx._running_keyword = "choose_file"
         try:
-            self.info('Sending %s to browser.' % os.path.abspath(file_path))
+            self.info("Sending %s to browser." % os.path.abspath(file_path))
             self.find_element(locator).send_keys(file_path)
         finally:
             self.ctx._running_keyword = None
@@ -274,7 +278,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, text, clear)
 
     @keyword
-    def page_should_contain_textfield(self, locator, message=None, loglevel='TRACE'):
+    def page_should_contain_textfield(self, locator, message=None, loglevel="TRACE"):
         """Verifies text field ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -283,10 +287,12 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.assert_page_contains(locator, 'text field', message, loglevel)
+        self.assert_page_contains(locator, "text field", message, loglevel)
 
     @keyword
-    def page_should_not_contain_textfield(self, locator, message=None, loglevel='TRACE'):
+    def page_should_not_contain_textfield(
+        self, locator, message=None, loglevel="TRACE"
+    ):
         """Verifies text field ``locator`` is not found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -295,7 +301,7 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.assert_page_not_contains(locator, 'text field', message, loglevel)
+        self.assert_page_not_contains(locator, "text field", message, loglevel)
 
     @keyword
     def textfield_should_contain(self, locator, expected, message=None):
@@ -306,11 +312,13 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        actual = self._get_value(locator, 'text field')
+        actual = self._get_value(locator, "text field")
         if expected not in actual:
             if is_noney(message):
-                message = "Text field '%s' should have contained text '%s' "\
-                          "but it contained '%s'." % (locator, expected, actual)
+                message = (
+                    "Text field '%s' should have contained text '%s' "
+                    "but it contained '%s'." % (locator, expected, actual)
+                )
             raise AssertionError(message)
         self.info("Text field '%s' contains text '%s'." % (locator, expected))
 
@@ -323,11 +331,13 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        actual = self._get_value(locator, 'text field')
+        actual = self._get_value(locator, "text field")
         if actual != expected:
             if is_noney(message):
-                message = "Value of text field '%s' should have been '%s' "\
-                          "but was '%s'." % (locator, expected, actual)
+                message = (
+                    "Value of text field '%s' should have been '%s' "
+                    "but was '%s'." % (locator, expected, actual)
+                )
             raise AssertionError(message)
         self.info("Content of text field '%s' is '%s'." % (locator, expected))
 
@@ -340,11 +350,13 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        actual = self._get_value(locator, 'text area')
+        actual = self._get_value(locator, "text area")
         if expected not in actual:
             if is_noney(message):
-                message = "Text area '%s' should have contained text '%s' " \
-                          "but it had '%s'." % (locator, expected, actual)
+                message = (
+                    "Text area '%s' should have contained text '%s' "
+                    "but it had '%s'." % (locator, expected, actual)
+                )
             raise AssertionError(message)
         self.info("Text area '%s' contains text '%s'." % (locator, expected))
 
@@ -357,16 +369,18 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        actual = self._get_value(locator, 'text area')
+        actual = self._get_value(locator, "text area")
         if expected != actual:
             if is_noney(message):
-                message = "Text area '%s' should have had text '%s' " \
-                          "but it had '%s'." % (locator, expected, actual)
+                message = (
+                    "Text area '%s' should have had text '%s' "
+                    "but it had '%s'." % (locator, expected, actual)
+                )
             raise AssertionError(message)
         self.info("Content of text area '%s' is '%s'." % (locator, expected))
 
     @keyword
-    def page_should_contain_button(self, locator, message=None, loglevel='TRACE'):
+    def page_should_contain_button(self, locator, message=None, loglevel="TRACE"):
         """Verifies button ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -377,12 +391,12 @@ class FormElementKeywords(LibraryComponent):
         searched using ``id``, ``name``, and ``value``.
         """
         try:
-            self.assert_page_contains(locator, 'input', message, loglevel)
+            self.assert_page_contains(locator, "input", message, loglevel)
         except AssertionError:
-            self.assert_page_contains(locator, 'button', message, loglevel)
+            self.assert_page_contains(locator, "button", message, loglevel)
 
     @keyword
-    def page_should_not_contain_button(self, locator, message=None, loglevel='TRACE'):
+    def page_should_not_contain_button(self, locator, message=None, loglevel="TRACE"):
         """Verifies button ``locator`` is not found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -392,38 +406,41 @@ class FormElementKeywords(LibraryComponent):
         syntax. When using the default locator strategy, buttons are
         searched using ``id``, ``name``, and ``value``.
         """
-        self.assert_page_not_contains(locator, 'button', message, loglevel)
-        self.assert_page_not_contains(locator, 'input', message, loglevel)
+        self.assert_page_not_contains(locator, "button", message, loglevel)
+        self.assert_page_not_contains(locator, "input", message, loglevel)
 
     def _get_value(self, locator, tag):
-        return self.find_element(locator, tag).get_attribute('value')
+        return self.find_element(locator, tag).get_attribute("value")
 
     def _get_checkbox(self, locator):
-        return self.find_element(locator, tag='checkbox')
+        return self.find_element(locator, tag="checkbox")
 
     def _get_radio_buttons(self, group_name):
         xpath = "xpath://input[@type='radio' and @name='%s']" % group_name
-        self.debug('Radio group locator: ' + xpath)
+        self.debug("Radio group locator: " + xpath)
         elements = self.find_elements(xpath)
         if not elements:
-            raise ElementNotFound("No radio button with name '%s' found."
-                                  % group_name)
+            raise ElementNotFound("No radio button with name '%s' found." % group_name)
         return elements
 
     def _get_radio_button_with_value(self, group_name, value):
-        xpath = "xpath://input[@type='radio' and @name='%s' and " \
-                "(@value='%s' or @id='%s')]" % (group_name, value, value)
-        self.debug('Radio group locator: ' + xpath)
+        xpath = (
+            "xpath://input[@type='radio' and @name='%s' and "
+            "(@value='%s' or @id='%s')]" % (group_name, value, value)
+        )
+        self.debug("Radio group locator: " + xpath)
         try:
             return self.find_element(xpath)
         except ElementNotFound:
-            raise ElementNotFound("No radio button with name '%s' and "
-                                  "value '%s' found." % (group_name, value))
+            raise ElementNotFound(
+                "No radio button with name '%s' and "
+                "value '%s' found." % (group_name, value)
+            )
 
     def _get_value_from_radio_buttons(self, elements):
         for element in elements:
             if element.is_selected():
-                return element.get_attribute('value')
+                return element.get_attribute("value")
         return None
 
     def _input_text_into_text_field(self, locator, text, clear=True, disable_log=False):
@@ -431,8 +448,8 @@ class FormElementKeywords(LibraryComponent):
         if is_truthy(clear):
             element.clear()
         if disable_log:
-            self.info('Temporally setting log level to: NONE')
-            previous_level = BuiltIn().set_log_level('NONE')
+            self.info("Temporally setting log level to: NONE")
+            previous_level = BuiltIn().set_log_level("NONE")
         try:
             element.send_keys(text)
         finally:

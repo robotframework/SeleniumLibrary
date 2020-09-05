@@ -24,8 +24,8 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 
 class JavaScriptKeywords(LibraryComponent):
 
-    js_marker = 'JAVASCRIPT'
-    arg_marker = 'ARGUMENTS'
+    js_marker = "JAVASCRIPT"
+    arg_marker = "ARGUMENTS"
 
     @keyword
     def execute_javascript(self, *code):
@@ -67,7 +67,7 @@ class JavaScriptKeywords(LibraryComponent):
         | `Execute JavaScript` | ARGUMENTS | 123 | JAVASCRIPT | alert(arguments[0]); |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self._js_logger('Executing JavaScript', js_code, js_args)
+        self._js_logger("Executing JavaScript", js_code, js_args)
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
@@ -97,24 +97,27 @@ class JavaScriptKeywords(LibraryComponent):
         | `Should Be Equal` | ${result} | text |
         """
         js_code, js_args = self._get_javascript_to_execute(code)
-        self._js_logger('Executing Asynchronous JavaScript', js_code, js_args)
+        self._js_logger("Executing Asynchronous JavaScript", js_code, js_args)
         return self.driver.execute_async_script(js_code, *js_args)
 
     def _js_logger(self, base, code, args):
-        message = '%s:\n%s\n' % (base, code)
+        message = "%s:\n%s\n" % (base, code)
         if args:
-            message = ('%sBy using argument%s:\n%s'
-                       % (message, plural_or_not(args), seq2str(args)))
+            message = "%sBy using argument%s:\n%s" % (
+                message,
+                plural_or_not(args),
+                seq2str(args),
+            )
         else:
-            message = '%sWithout any arguments.' % message
+            message = "%sWithout any arguments." % message
         self.info(message)
 
     def _get_javascript_to_execute(self, code):
         js_code, js_args = self._separate_code_and_args(code)
         if not js_code:
-            raise ValueError('JavaScript code was not found from code argument.')
-        js_code = ''.join(js_code)
-        path = js_code.replace('/', os.sep)
+            raise ValueError("JavaScript code was not found from code argument.")
+        js_code = "".join(js_code)
+        path = js_code.replace("/", os.sep)
         if os.path.isabs(path) and os.path.isfile(path):
             js_code = self._read_javascript_from_file(path)
         return js_code, js_args
@@ -124,20 +127,20 @@ class JavaScriptKeywords(LibraryComponent):
         self._check_marker_error(code)
         index = self._get_marker_index(code)
         if self.arg_marker not in code:
-            return code[index.js + 1:], []
+            return code[index.js + 1 :], []
         if self.js_marker not in code:
-            return code[0:index.arg], code[index.arg + 1:]
+            return code[0 : index.arg], code[index.arg + 1 :]
         else:
             if index.js == 0:
-                return code[index.js + 1:index.arg], code[index.arg + 1:]
+                return code[index.js + 1 : index.arg], code[index.arg + 1 :]
             else:
-                return code[index.js + 1:], code[index.arg + 1:index.js]
+                return code[index.js + 1 :], code[index.arg + 1 : index.js]
 
     def _check_marker_error(self, code):
         if not code:
-            raise ValueError('There must be at least one argument defined.')
+            raise ValueError("There must be at least one argument defined.")
         message = None
-        template = '%s marker was found two times in the code.'
+        template = "%s marker was found two times in the code."
         if code.count(self.js_marker) > 1:
             message = template % self.js_marker
         if code.count(self.arg_marker) > 1:
@@ -149,7 +152,7 @@ class JavaScriptKeywords(LibraryComponent):
             raise ValueError(message)
 
     def _get_marker_index(self, code):
-        Index = namedtuple('Index', 'js arg')
+        Index = namedtuple("Index", "js arg")
         if self.js_marker in code:
             js = code.index(self.js_marker)
         else:
@@ -161,7 +164,10 @@ class JavaScriptKeywords(LibraryComponent):
         return Index(js=js, arg=arg)
 
     def _read_javascript_from_file(self, path):
-        self.info('Reading JavaScript from file <a href="file://%s">%s</a>.'
-                  % (path.replace(os.sep, '/'), path), html=True)
+        self.info(
+            'Reading JavaScript from file <a href="file://%s">%s</a>.'
+            % (path.replace(os.sep, "/"), path),
+            html=True,
+        )
         with open(path) as file:
             return file.read().strip()

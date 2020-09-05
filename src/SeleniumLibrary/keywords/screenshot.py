@@ -21,13 +21,12 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_noney
 from SeleniumLibrary.utils.path_formatter import _format_path
 
-DEFAULT_FILENAME_PAGE = 'selenium-screenshot-{index}.png'
-DEFAULT_FILENAME_ELEMENT = 'selenium-element-screenshot-{index}.png'
-EMBED = 'EMBED'
+DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
+DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
+EMBED = "EMBED"
 
 
 class ScreenshotKeywords(LibraryComponent):
-
     @keyword
     def set_screenshot_directory(self, path):
         """Sets the directory for captured screenshots.
@@ -106,7 +105,7 @@ class ScreenshotKeywords(LibraryComponent):
         | `File Should Not Exist`   | EMBED                                  |
         """
         if not self.drivers.current:
-            self.info('Cannot capture screenshot because no browser is open.')
+            self.info("Cannot capture screenshot because no browser is open.")
             return
         if self._decide_embedded(filename):
             return self._capture_page_screen_to_log()
@@ -147,7 +146,9 @@ class ScreenshotKeywords(LibraryComponent):
         | `Capture Element Screenshot` | id:image_id | EMBED                          |
         """
         if not self.drivers.current:
-            self.info('Cannot capture screenshot from element because no browser is open.')
+            self.info(
+                "Cannot capture screenshot from element because no browser is open."
+            )
             return
         element = self.find_element(locator, required=True)
         if self._decide_embedded(filename):
@@ -176,9 +177,15 @@ class ScreenshotKeywords(LibraryComponent):
 
     def _decide_embedded(self, filename):
         filename = filename.lower()
-        if filename == DEFAULT_FILENAME_PAGE and self._screenshot_root_directory == EMBED:
+        if (
+            filename == DEFAULT_FILENAME_PAGE
+            and self._screenshot_root_directory == EMBED
+        ):
             return True
-        if filename == DEFAULT_FILENAME_ELEMENT and self._screenshot_root_directory == EMBED:
+        if (
+            filename == DEFAULT_FILENAME_ELEMENT
+            and self._screenshot_root_directory == EMBED
+        ):
             return True
         if filename == EMBED.lower():
             return True
@@ -189,7 +196,7 @@ class ScreenshotKeywords(LibraryComponent):
             directory = self._screenshot_root_directory or self.log_dir
         else:
             directory = self.log_dir
-        filename = filename.replace('/', os.sep)
+        filename = filename.replace("/", os.sep)
         index = 0
         while True:
             index += 1
@@ -207,14 +214,22 @@ class ScreenshotKeywords(LibraryComponent):
     def _embed_to_log_as_base64(self, screenshot_as_base64, width):
         # base64 image is shown as on its own row and thus previous row is closed on
         # purpose. Depending on Robot's log structure is a bit risky.
-        self.info('</td></tr><tr><td colspan="3">'
-                  '<img alt="screenshot" class="robot-seleniumlibrary-screenshot" '
-                  'src="data:image/png;base64,{screenshot_data}" width="{width}px">'
-                  .format(screenshot_data=screenshot_as_base64, width=width), html=True)
+        self.info(
+            '</td></tr><tr><td colspan="3">'
+            '<img alt="screenshot" class="robot-seleniumlibrary-screenshot" '
+            'src="data:image/png;base64,{screenshot_data}" width="{width}px">'.format(
+                screenshot_data=screenshot_as_base64, width=width
+            ),
+            html=True,
+        )
 
     def _embed_to_log_as_file(self, path, width):
         # Image is shown on its own row and thus previous row is closed on
         # purpose. Depending on Robot's log structure is a bit risky.
-        self.info('</td></tr><tr><td colspan="3">'
-                  '<a href="{src}"><img src="{src}" width="{width}px"></a>'
-                  .format(src=get_link_path(path, self.log_dir), width=width), html=True)
+        self.info(
+            '</td></tr><tr><td colspan="3">'
+            '<a href="{src}"><img src="{src}" width="{width}px"></a>'.format(
+                src=get_link_path(path, self.log_dir), width=width
+            ),
+            html=True,
+        )

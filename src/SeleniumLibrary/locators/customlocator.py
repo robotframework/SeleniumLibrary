@@ -26,7 +26,6 @@ except NameError:
 
 
 class CustomLocator(ContextAware):
-
     def __init__(self, ctx, name, finder):
         ContextAware.__init__(self, ctx)
         self.name = name
@@ -35,16 +34,18 @@ class CustomLocator(ContextAware):
     def find(self, criteria, tag, constraints, parent):
         # Allow custom locators to be keywords or normal methods
         if isinstance(self.finder, basestring):
-            element = BuiltIn().run_keyword(self.finder, parent,
-                                            criteria, tag, constraints)
-        elif hasattr(self.finder, '__call__'):
+            element = BuiltIn().run_keyword(
+                self.finder, parent, criteria, tag, constraints
+            )
+        elif hasattr(self.finder, "__call__"):
             element = self.finder(parent, criteria, tag, constraints)
         else:
-            raise AttributeError('Invalid type provided for Custom Locator %s'
-                                 % self.name)
+            raise AttributeError(
+                "Invalid type provided for Custom Locator %s" % self.name
+            )
 
         # Always return an array
-        if hasattr(element, '__len__') and not isinstance(element, basestring):
+        if hasattr(element, "__len__") and not isinstance(element, basestring):
             return element
         else:
             return [element]

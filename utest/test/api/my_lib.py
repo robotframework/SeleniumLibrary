@@ -15,7 +15,7 @@ class my_lib(LibraryComponent):
 
     @keyword
     def foo(self):
-        self.info('foo')
+        self.info("foo")
 
     @keyword
     def bar(self, arg):
