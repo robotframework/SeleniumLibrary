@@ -29,5 +29,5 @@ class EventFiringWebDriverSeleniumLibrary(unittest.TestCase):
     def test_too_many_event_firing_webdriver(self):
         with self.assertRaises(ValueError):
             SeleniumLibrary(
-                event_firing_webdriver="%s,%s" % (self.listener, self.listener)
+                event_firing_webdriver=f"{self.listener},{self.listener}"
             )

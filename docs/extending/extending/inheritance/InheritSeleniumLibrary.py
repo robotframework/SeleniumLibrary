@@ -8,7 +8,7 @@ class InheritSeleniumLibrary(SeleniumLibrary):
 
     @keyword
     def open_browser(self, host):
-        url = 'http://{}.com/'.format(host)
+        url = f'http://{host}.com/'
         browser_management = BrowserManagementKeywords(self)
         browser_management.open_browser(url, 'chrome')
 

@@ -9,7 +9,7 @@ class CustomSeleniumKeywords(SeleniumLibrary):
         """Share `SeleniumLibrary`'s cache of browsers, so that
         we don't have to open a separate browser instance for the
         `Run On Failure Keyword Only Called Once` test."""
-        super(CustomSeleniumKeywords, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         sl = BuiltIn().get_library_instance("SeleniumLibrary")
         self._drivers = sl._drivers
 

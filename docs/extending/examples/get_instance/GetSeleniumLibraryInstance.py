@@ -3,7 +3,7 @@ from robot.libraries.BuiltIn import BuiltIn
 
 
 def open_browser(host):
-    url = 'http://{}.com/'.format(host)
+    url = f'http://{host}.com/'
     sl = BuiltIn().get_library_instance('SeleniumLibrary')
     sl.open_browser(url, 'chrome')
 

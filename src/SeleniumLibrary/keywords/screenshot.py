@@ -115,7 +115,7 @@ class ScreenshotKeywords(LibraryComponent):
         path = self._get_screenshot_path(filename)
         self._create_directory(path)
         if not self.driver.save_screenshot(path):
-            raise RuntimeError("Failed to save screenshot '{}'.".format(path))
+            raise RuntimeError(f"Failed to save screenshot '{path}'.")
         self._embed_to_log_as_file(path, 800)
         return path
 
@@ -159,7 +159,7 @@ class ScreenshotKeywords(LibraryComponent):
         path = self._get_screenshot_path(filename)
         self._create_directory(path)
         if not element.screenshot(path):
-            raise RuntimeError("Failed to save element screenshot '{}'.".format(path))
+            raise RuntimeError(f"Failed to save element screenshot '{path}'.")
         self._embed_to_log_as_file(path, 400)
         return path
 

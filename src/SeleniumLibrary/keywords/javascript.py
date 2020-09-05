@@ -101,9 +101,9 @@ class JavaScriptKeywords(LibraryComponent):
         return self.driver.execute_async_script(js_code, *js_args)
 
     def _js_logger(self, base, code, args):
-        message = "%s:\n%s\n" % (base, code)
+        message = f"{base}:\n{code}\n"
         if args:
-            message = "%sBy using argument%s:\n%s" % (
+            message = "{}By using argument{}:\n{}".format(
                 message,
                 plural_or_not(args),
                 seq2str(args),

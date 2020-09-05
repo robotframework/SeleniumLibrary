@@ -10,5 +10,5 @@ class PluginWithVarArgs(LibraryComponent):
     def return_var_args_as_string(self):
         joined_str = "start:"
         for arg in self.args:
-            joined_str = "%s %s," % (joined_str, arg)
+            joined_str = f"{joined_str} {arg},"
         return joined_str[:-1]

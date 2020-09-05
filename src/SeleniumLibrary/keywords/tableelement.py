@@ -206,7 +206,7 @@ class TableElementKeywords(LibraryComponent):
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Table '%s' did not contain text '%s'." % (locator, expected)
+                f"Table '{locator}' did not contain text '{expected}'."
             )
 
     def _find_by_content(self, table_locator, content):
@@ -220,12 +220,12 @@ class TableElementKeywords(LibraryComponent):
 
     def _find_by_row(self, table_locator, row, content):
         position = self._index_to_position(row)
-        locator = "//tr[{}]".format(position)
+        locator = f"//tr[{position}]"
         return self._find(table_locator, locator, content)
 
     def _find_by_column(self, table_locator, col, content):
         position = self._index_to_position(col)
-        locator = "//tr//*[self::td or self::th][{}]".format(position)
+        locator = f"//tr//*[self::td or self::th][{position}]"
         return self._find(table_locator, locator, content)
 
     def _index_to_position(self, index):

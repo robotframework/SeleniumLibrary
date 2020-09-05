@@ -33,7 +33,7 @@ from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import (
 from SeleniumLibrary.utils.path_formatter import _format_path
 
 
-class WebDriverCreator(object):
+class WebDriverCreator:
 
     browser_names = {
         "googlechrome": "chrome",
@@ -101,7 +101,7 @@ class WebDriverCreator(object):
     def _get_creator_method(self, browser):
         if browser in self.browser_names:
             return getattr(self, "create_{}".format(self.browser_names[browser]))
-        raise ValueError("{} is not a supported browser.".format(browser))
+        raise ValueError(f"{browser} is not a supported browser.")
 
     def _parse_capabilities(self, capabilities, browser=None):
         if is_falsy(capabilities):
@@ -576,7 +576,7 @@ class WebDriverCache(ConnectionCache):
             return None
 
 
-class SeleniumOptions(object):
+class SeleniumOptions:
     def create(self, browser, options):
         if is_falsy(options):
             return None

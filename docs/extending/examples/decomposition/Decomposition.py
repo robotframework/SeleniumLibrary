@@ -10,7 +10,7 @@ class BrowserKeywords(LibraryComponent):
 
     @keyword
     def open_browser(self, host):
-        url = 'http://{}.com/'.format(host)
+        url = f'http://{host}.com/'
         browser_management = BrowserManagementKeywords(self.ctx)
         browser_management.open_browser(url, 'chrome')
 
