@@ -22,9 +22,19 @@ jobs:
         export DISPLAY=:99.0
         Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
     - name: Install dependencies
+      if: matrix.python-version != 'pypy3'
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
+    - name: Install dependencies for pypy
+        if: matrix.python-version == 'pypy3'
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install mockito >= 1.0.0
+          pip install robotstatuschecker >= 1.4
+          pip install approvaltests >= 0.2.4
+          pip install pytest pytest-mockito pytest-approvaltests requests robotframework-pabot
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
