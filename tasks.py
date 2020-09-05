@@ -147,3 +147,7 @@ def init_labels(ctx, username=None, password=None):
     when labels it uses have changed.
     """
     initialize_labels(REPOSITORY, username, password)
+
+@task
+def lint(ctx):
+    ctx.run("black --config pyproject.toml src/ utest/ atest/")
