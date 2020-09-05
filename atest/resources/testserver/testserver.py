@@ -6,15 +6,9 @@ from __future__ import print_function
 import os
 import sys
 
-try:
-    from httplib import HTTPConnection
-    from BaseHTTPServer import HTTPServer
-    from SimpleHTTPServer import SimpleHTTPRequestHandler
-    from SocketServer import ThreadingMixIn
-except ImportError:  # Python 3
-    from http.client import HTTPConnection
-    from http.server import SimpleHTTPRequestHandler, HTTPServer
-    from socketserver import ThreadingMixIn
+from http.client import HTTPConnection
+from http.server import SimpleHTTPRequestHandler, HTTPServer
+from socketserver import ThreadingMixIn
 
 
 class StoppableHttpRequestHandler(SimpleHTTPRequestHandler):
