@@ -57,7 +57,7 @@ class CookieKeywords(LibraryComponent):
         if is_falsy(as_dict):
             pairs = []
             for cookie in self.driver.get_cookies():
-                pairs.append(cookie["name"] + "=" + cookie["value"])
+                pairs.append(f"{cookie['name']}={cookie['value']}")
             return "; ".join(pairs)
         else:
             pairs = DotDict()
@@ -108,7 +108,7 @@ class CookieKeywords(LibraryComponent):
         """
         cookie = self.driver.get_cookie(name)
         if not cookie:
-            raise CookieNotFound("Cookie with name '%s' not found." % name)
+            raise CookieNotFound(f"Cookie with name '{name}' not found.")
         return CookieInformation(**cookie)
 
     @keyword
@@ -170,7 +170,7 @@ class CookieInformation:
 
     def __str__(self):
         items = "name value path domain secure httpOnly expiry".split()
-        string = "\n".join("{}={}".format(item, getattr(self, item)) for item in items)
+        string = "\n".join(f"{item}={getattr(self, item)}" for item in items)
         if self.extra:
-            string = "{}\n{}={}\n".format(string, "extra", self.extra)
+            string = f"{string}\nextra={self.extra}\n"
         return string

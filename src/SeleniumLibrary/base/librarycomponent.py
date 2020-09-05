@@ -42,30 +42,26 @@ class LibraryComponent(ContextAware):
         self.ctx.log_source(loglevel)
 
     def assert_page_contains(self, locator, tag=None, message=None, loglevel="TRACE"):
+        tag_message = tag or "element"
         if not self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
-                message = "Page should have contained {} '{}' but did not.".format(
-                    tag or "element",
-                    locator,
+                message = (
+                    f"Page should have contained {tag_message} '{locator}' but did not."
                 )
             raise AssertionError(message)
-        logger.info("Current page contains {} '{}'.".format(tag or "element", locator))
+        logger.info(f"Current page contains {tag_message} '{locator}'.")
 
     def assert_page_not_contains(
         self, locator, tag=None, message=None, loglevel="TRACE"
     ):
+        tag_message = tag or "element"
         if self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
-                message = "Page should not have contained {} '{}'.".format(
-                    tag or "element",
-                    locator,
-                )
+                message = f"Page should not have contained {tag_message} '{locator}'."
             raise AssertionError(message)
-        logger.info(
-            "Current page does not contain {} '{}'.".format(tag or "element", locator)
-        )
+        logger.info(f"Current page does not contain {tag_message} '{locator}'.")
 
     def get_timeout(self, timeout=None):
         if is_noney(timeout):
