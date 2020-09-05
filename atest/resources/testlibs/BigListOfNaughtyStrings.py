@@ -11,9 +11,11 @@ class BigListOfNaughtyStrings(object):
     """
 
     def get_blns(self):
-        if platform.system() == 'Windows':
-            logger.warn('Rading Big List of Naughty Strings does not work in Windows OS')
+        if platform.system() == "Windows":
+            logger.warn(
+                "Rading Big List of Naughty Strings does not work in Windows OS"
+            )
             return []
         cur_dir = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(cur_dir, 'blns.json'), 'r') as blns:
+        with open(os.path.join(cur_dir, "blns.json"), "r") as blns:
             return json.load(blns)

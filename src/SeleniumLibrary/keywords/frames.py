@@ -18,7 +18,6 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class FrameKeywords(LibraryComponent):
-
     @keyword
     def select_frame(self, locator):
         """Sets frame identified by ``locator`` as the current frame.
@@ -48,7 +47,7 @@ class FrameKeywords(LibraryComponent):
         self.driver.switch_to.default_content()
 
     @keyword
-    def current_frame_should_contain(self, text, loglevel='TRACE'):
+    def current_frame_should_contain(self, text, loglevel="TRACE"):
         """Verifies that the current frame contains ``text``.
 
         See `Page Should Contain` for an explanation about the ``loglevel``
@@ -59,12 +58,13 @@ class FrameKeywords(LibraryComponent):
         """
         if not self.is_text_present(text):
             self.log_source(loglevel)
-            raise AssertionError("Frame should have contained text '%s' "
-                                 "but did not." % text)
+            raise AssertionError(
+                "Frame should have contained text '%s' " "but did not." % text
+            )
         self.info("Current frame contains text '%s'." % text)
 
     @keyword
-    def current_frame_should_not_contain(self, text, loglevel='TRACE'):
+    def current_frame_should_not_contain(self, text, loglevel="TRACE"):
         """Verifies that the current frame does not contain ``text``.
 
         See `Page Should Contain` for an explanation about the ``loglevel``
@@ -72,12 +72,13 @@ class FrameKeywords(LibraryComponent):
         """
         if self.is_text_present(text):
             self.log_source(loglevel)
-            raise AssertionError("Frame should not have contained text '%s' "
-                                 "but it did." % text)
+            raise AssertionError(
+                "Frame should not have contained text '%s' " "but it did." % text
+            )
         self.info("Current frame did not contain text '%s'." % text)
 
     @keyword
-    def frame_should_contain(self, locator, text, loglevel='TRACE'):
+    def frame_should_contain(self, locator, text, loglevel="TRACE"):
         """Verifies that frame identified by ``locator`` contains ``text``.
 
         See the `Locating elements` section for details about the locator
@@ -88,8 +89,10 @@ class FrameKeywords(LibraryComponent):
         """
         if not self._frame_contains(locator, text):
             self.log_source(loglevel)
-            raise AssertionError("Frame '%s' should have contained text '%s' "
-                                 "but did not." % (locator, text))
+            raise AssertionError(
+                "Frame '%s' should have contained text '%s' "
+                "but did not." % (locator, text)
+            )
         self.info("Frame '%s' contains text '%s'." % (locator, text))
 
     def _frame_contains(self, locator, text):

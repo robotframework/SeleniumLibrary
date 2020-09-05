@@ -20,11 +20,11 @@ from robotlibcore import PY2
 def _format_path(file_path, index):
     if PY2:
         import string
+
         return string.Formatter().vformat(file_path, (), _SafeFormatter(index=index))
     return file_path.format_map(_SafeFormatter(index=index))
 
 
 class _SafeFormatter(dict):
-
     def __missing__(self, key):
-        return '{%s}' % key
+        return "{%s}" % key

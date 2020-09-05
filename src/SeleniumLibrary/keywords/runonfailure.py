@@ -19,7 +19,6 @@ from SeleniumLibrary.utils import is_noney, is_string
 
 
 class RunOnFailureKeywords(LibraryComponent):
-
     @keyword
     def register_keyword_to_run_on_failure(self, keyword):
         """Sets the keyword to execute, when a SeleniumLibrary keyword fails.
@@ -58,11 +57,11 @@ class RunOnFailureKeywords(LibraryComponent):
         old_keyword = self.ctx.run_on_failure_keyword
         keyword = self.resolve_keyword(keyword)
         self.ctx.run_on_failure_keyword = keyword
-        self.info('%s will be run on failure.' % (keyword or 'No keyword'))
+        self.info("%s will be run on failure." % (keyword or "No keyword"))
         return old_keyword
 
     @staticmethod
     def resolve_keyword(name):
-        if is_noney(name) or is_string(name) and name.upper() == 'NOTHING':
+        if is_noney(name) or is_string(name) and name.upper() == "NOTHING":
             return None
         return name

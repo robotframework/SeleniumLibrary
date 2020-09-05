@@ -22,14 +22,12 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import (is_truthy, is_noney, secs_to_timestr,
-                                   timestr_to_secs)
+from SeleniumLibrary.utils import is_truthy, is_noney, secs_to_timestr, timestr_to_secs
 
 from .webdrivertools import WebDriverCreator
 
 
 class BrowserManagementKeywords(LibraryComponent):
-
     def __init__(self, ctx):
         LibraryComponent.__init__(self, ctx)
         self._window_manager = WindowManager(ctx)
@@ -45,22 +43,31 @@ class BrowserManagementKeywords(LibraryComponent):
         This keyword should be used in test or suite teardown to make sure
         all browsers are closed.
         """
-        self.debug('Closing all browsers.')
+        self.debug("Closing all browsers.")
         self.drivers.close_all()
 
     @keyword
     def close_browser(self):
         """Closes the current browser."""
         if self.drivers.current:
-            self.debug('Closing browser with session id {}.'
-                       .format(self.driver.session_id))
+            self.debug(
+                "Closing browser with session id {}.".format(self.driver.session_id)
+            )
             self.drivers.close()
 
     @keyword
-    def open_browser(self, url=None, browser='firefox', alias=None,
-                     remote_url=False, desired_capabilities=None,
-                     ff_profile_dir=None, options=None, service_log_path=None,
-                     executable_path=None):
+    def open_browser(
+        self,
+        url=None,
+        browser="firefox",
+        alias=None,
+        remote_url=False,
+        desired_capabilities=None,
+        ff_profile_dir=None,
+        options=None,
+        service_log_path=None,
+        executable_path=None,
+    ):
         """Opens a new browser instance to the optional ``url``.
 
         The ``browser`` argument specifies which browser to use. The
@@ -277,41 +284,67 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         index = self.drivers.get_index(alias)
         if index:
-            self.info('Using existing browser from index %s.' % index)
+            self.info("Using existing browser from index %s." % index)
             self.switch_browser(alias)
             if is_truthy(url):
                 self.go_to(url)
             return index
-        return self._make_new_browser(url, browser, alias, remote_url,
-                                      desired_capabilities, ff_profile_dir,
-                                      options, service_log_path, executable_path)
+        return self._make_new_browser(
+            url,
+            browser,
+            alias,
+            remote_url,
+            desired_capabilities,
+            ff_profile_dir,
+            options,
+            service_log_path,
+            executable_path,
+        )
 
-    def _make_new_browser(self, url=None, browser='firefox', alias=None,
-                          remote_url=False, desired_capabilities=None,
-                          ff_profile_dir=None, options=None, service_log_path=None,
-                          executable_path=None):
+    def _make_new_browser(
+        self,
+        url=None,
+        browser="firefox",
+        alias=None,
+        remote_url=False,
+        desired_capabilities=None,
+        ff_profile_dir=None,
+        options=None,
+        service_log_path=None,
+        executable_path=None,
+    ):
         if is_truthy(remote_url):
-            self.info("Opening browser '%s' to base url '%s' through "
-                      "remote server at '%s'." % (browser, url, remote_url))
+            self.info(
+                "Opening browser '%s' to base url '%s' through "
+                "remote server at '%s'." % (browser, url, remote_url)
+            )
         else:
             self.info("Opening browser '%s' to base url '%s'." % (browser, url))
-        driver = self._make_driver(browser, desired_capabilities,
-                                   ff_profile_dir, remote_url,
-                                   options, service_log_path, executable_path)
+        driver = self._make_driver(
+            browser,
+            desired_capabilities,
+            ff_profile_dir,
+            remote_url,
+            options,
+            service_log_path,
+            executable_path,
+        )
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
         if is_truthy(url):
             try:
                 driver.get(url)
             except Exception:
-                self.debug("Opened browser with session id %s but failed to open url '%s'." % (driver.session_id, url))
+                self.debug(
+                    "Opened browser with session id %s but failed to open url '%s'."
+                    % (driver.session_id, url)
+                )
                 raise
-        self.debug('Opened browser with session id %s.' % driver.session_id)
+        self.debug("Opened browser with session id %s." % driver.session_id)
         return index
 
     @keyword
-    def create_webdriver(self, driver_name, alias=None, kwargs={},
-                         **init_kwargs):
+    def create_webdriver(self, driver_name, alias=None, kwargs={}, **init_kwargs):
         """Creates an instance of Selenium WebDriver.
 
         Like `Open Browser`, but allows passing arguments to the created
@@ -354,15 +387,17 @@ class BrowserManagementKeywords(LibraryComponent):
             raise RuntimeError("'%s' is not a valid WebDriver name." % driver_name)
         self.info("Creating an instance of the %s WebDriver." % driver_name)
         driver = creation_func(**init_kwargs)
-        self.debug("Created %s WebDriver instance with session id %s."
-                   % (driver_name, driver.session_id))
+        self.debug(
+            "Created %s WebDriver instance with session id %s."
+            % (driver_name, driver.session_id)
+        )
         driver = self._wrap_event_firing_webdriver(driver)
         return self.ctx.register_driver(driver, alias)
 
     def _wrap_event_firing_webdriver(self, driver):
         if not self.ctx.event_firing_webdriver:
             return driver
-        self.debug('Wrapping driver to event_firing_webdriver.')
+        self.debug("Wrapping driver to event_firing_webdriver.")
         return EventFiringWebDriver(driver, self.ctx.event_firing_webdriver())
 
     @keyword
@@ -395,10 +430,12 @@ class BrowserManagementKeywords(LibraryComponent):
         try:
             self.drivers.switch(index_or_alias)
         except RuntimeError:
-            raise RuntimeError("No browser with index or alias '%s' found."
-                               % index_or_alias)
-        self.debug('Switched to browser with Selenium session id %s.'
-                   % self.driver.session_id)
+            raise RuntimeError(
+                "No browser with index or alias '%s' found." % index_or_alias
+            )
+        self.debug(
+            "Switched to browser with Selenium session id %s." % self.driver.session_id
+        )
 
     @keyword
     def get_browser_ids(self):
@@ -475,8 +512,10 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if actual != url:
             if is_noney(message):
-                message = ("Location should have been '%s' but "
-                           "was '%s'." % (url, actual))
+                message = "Location should have been '%s' but " "was '%s'." % (
+                    url,
+                    actual,
+                )
             raise AssertionError(message)
         self.info("Current location is '%s'." % url)
 
@@ -494,8 +533,10 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if expected not in actual:
             if is_noney(message):
-                message = ("Location should have contained '%s' but "
-                           "it was '%s'." % (expected, actual))
+                message = "Location should have contained '%s' but " "it was '%s'." % (
+                    expected,
+                    actual,
+                )
             raise AssertionError(message)
         self.info("Current location contains '%s'." % expected)
 
@@ -507,7 +548,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return url
 
     @keyword
-    def log_source(self, loglevel='INFO'):
+    def log_source(self, loglevel="INFO"):
         """Logs and returns the HTML source of the current page or frame.
 
         The ``loglevel`` argument defines the used log level. Valid log
@@ -664,11 +705,25 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         self.driver.implicitly_wait(timestr_to_secs(value))
 
-    def _make_driver(self, browser, desired_capabilities=None, profile_dir=None,
-                     remote=None, options=None, service_log_path=None, executable_path=None):
+    def _make_driver(
+        self,
+        browser,
+        desired_capabilities=None,
+        profile_dir=None,
+        remote=None,
+        options=None,
+        service_log_path=None,
+        executable_path=None,
+    ):
         driver = self._webdriver_creator.create_driver(
-            browser=browser, desired_capabilities=desired_capabilities, remote_url=remote, profile_dir=profile_dir,
-            options=options, service_log_path=service_log_path, executable_path=executable_path)
+            browser=browser,
+            desired_capabilities=desired_capabilities,
+            remote_url=remote,
+            profile_dir=profile_dir,
+            options=options,
+            service_log_path=service_log_path,
+            executable_path=executable_path,
+        )
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
         if self.ctx.speed:
@@ -678,11 +733,12 @@ class BrowserManagementKeywords(LibraryComponent):
     def _monkey_patch_speed(self, driver):
         def execute(self, driver_command, params=None):
             result = self._base_execute(driver_command, params)
-            speed = self._speed if hasattr(self, '_speed') else 0.0
+            speed = self._speed if hasattr(self, "_speed") else 0.0
             if speed > 0:
                 time.sleep(speed)
             return result
-        if not hasattr(driver, '_base_execute'):
+
+        if not hasattr(driver, "_base_execute"):
             driver._base_execute = driver.execute
             driver.execute = types.MethodType(execute, driver)
         driver._speed = self.ctx.speed

@@ -6,7 +6,6 @@ from SeleniumLibrary import SeleniumLibrary
 
 
 class SeleniumLibraryRunOnFailureTest(unittest.TestCase):
-
     def tearDown(self):
         unstub()
 

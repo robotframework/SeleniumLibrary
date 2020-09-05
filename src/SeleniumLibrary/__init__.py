@@ -27,26 +27,28 @@ from robotlibcore import DynamicCore
 
 from SeleniumLibrary.base import LibraryComponent
 from SeleniumLibrary.errors import NoOpenBrowser, PluginError
-from SeleniumLibrary.keywords import (AlertKeywords,
-                                      BrowserManagementKeywords,
-                                      CookieKeywords,
-                                      ElementKeywords,
-                                      FormElementKeywords,
-                                      FrameKeywords,
-                                      JavaScriptKeywords,
-                                      RunOnFailureKeywords,
-                                      ScreenshotKeywords,
-                                      SelectElementKeywords,
-                                      TableElementKeywords,
-                                      WaitingKeywords,
-                                      WebDriverCache,
-                                      WindowKeywords)
+from SeleniumLibrary.keywords import (
+    AlertKeywords,
+    BrowserManagementKeywords,
+    CookieKeywords,
+    ElementKeywords,
+    FormElementKeywords,
+    FrameKeywords,
+    JavaScriptKeywords,
+    RunOnFailureKeywords,
+    ScreenshotKeywords,
+    SelectElementKeywords,
+    TableElementKeywords,
+    WaitingKeywords,
+    WebDriverCache,
+    WindowKeywords,
+)
 from SeleniumLibrary.keywords.screenshot import EMBED
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, timestr_to_secs, is_truthy
 
 
-__version__ = '5.0.0.dev1'
+__version__ = "5.0.0.dev1"
 
 
 class SeleniumLibrary(DynamicCore):
@@ -404,13 +406,19 @@ class SeleniumLibrary(DynamicCore):
 
     Plugin API is new SeleniumLibrary 4.0
     """
-    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+
+    ROBOT_LIBRARY_SCOPE = "GLOBAL"
     ROBOT_LIBRARY_VERSION = __version__
 
-    def __init__(self, timeout=5.0, implicit_wait=0.0,
-                 run_on_failure='Capture Page Screenshot',
-                 screenshot_root_directory=None, plugins=None,
-                 event_firing_webdriver=None):
+    def __init__(
+        self,
+        timeout=5.0,
+        implicit_wait=0.0,
+        run_on_failure="Capture Page Screenshot",
+        screenshot_root_directory=None,
+        plugins=None,
+        event_firing_webdriver=None,
+    ):
         """SeleniumLibrary can be imported with several optional arguments.
 
         - ``timeout``:
@@ -432,7 +440,9 @@ class SeleniumLibrary(DynamicCore):
         self.timeout = timestr_to_secs(timeout)
         self.implicit_wait = timestr_to_secs(implicit_wait)
         self.speed = 0.0
-        self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(run_on_failure)
+        self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(
+            run_on_failure
+        )
         self._running_on_failure_keyword = False
         self.screenshot_root_directory = screenshot_root_directory
         self._resolve_screenshot_root_directory()
@@ -451,7 +461,7 @@ class SeleniumLibrary(DynamicCore):
             SelectElementKeywords(self),
             TableElementKeywords(self),
             WaitingKeywords(self),
-            WindowKeywords(self)
+            WindowKeywords(self),
         ]
         self.ROBOT_LIBRARY_LISTENER = LibraryListener()
         self._running_keyword = None
@@ -476,35 +486,37 @@ class SeleniumLibrary(DynamicCore):
     def get_keyword_tags(self, name):
         tags = list(DynamicCore.get_keyword_tags(self, name))
         if name in self._plugin_keywords:
-            tags.append('plugin')
+            tags.append("plugin")
         return tags
 
     def get_keyword_documentation(self, name):
-        if name == '__intro__':
+        if name == "__intro__":
             return self._get_intro_documentation()
         return DynamicCore.get_keyword_documentation(self, name)
 
     def _parse_plugin_doc(self):
-        Doc = namedtuple('Doc', 'doc, name')
+        Doc = namedtuple("Doc", "doc, name")
         for plugin in self._plugins:
-            yield Doc(doc=getdoc(plugin) or 'No plugin documentation found.',
-                      name=plugin.__class__.__name__)
+            yield Doc(
+                doc=getdoc(plugin) or "No plugin documentation found.",
+                name=plugin.__class__.__name__,
+            )
 
     def _get_intro_documentation(self):
-        intro = DynamicCore.get_keyword_documentation(self, '__intro__')
+        intro = DynamicCore.get_keyword_documentation(self, "__intro__")
         for plugin_doc in self._parse_plugin_doc():
-            intro += '\n\n'
-            intro = intro + '= Plugin: %s =' % plugin_doc.name + '\n\n'
+            intro += "\n\n"
+            intro = intro + "= Plugin: %s =" % plugin_doc.name + "\n\n"
             intro = intro + plugin_doc.doc
         return self._create_toc(intro)
 
     def _create_toc(self, intro):
-        toc = ['== Table of contents ==', '']
-        all_match = re.findall(r'(^\=\s)(.+)(\s\=$)', intro, re.MULTILINE)
+        toc = ["== Table of contents ==", ""]
+        all_match = re.findall(r"(^\=\s)(.+)(\s\=$)", intro, re.MULTILINE)
         for match in all_match:
-            toc.append('- `%s`' % match[1])
-        toc.extend(['- `Importing`', '- `Shortcuts`', '- `Keywords`'])
-        return intro.replace('%TOC%', '\n'.join(toc))
+            toc.append("- `%s`" % match[1])
+        toc.extend(["- `Importing`", "- `Shortcuts`", "- `Keywords`"])
+        return intro.replace("%TOC%", "\n".join(toc))
 
     def register_driver(self, driver, alias):
         """Add's a `driver` to the library WebDriverCache.
@@ -531,8 +543,10 @@ class SeleniumLibrary(DynamicCore):
             self._running_on_failure_keyword = True
             BuiltIn().run_keyword(self.run_on_failure_keyword)
         except Exception as err:
-            logger.warn("Keyword '%s' could not be run on failure: %s"
-                        % (self.run_on_failure_keyword, err))
+            logger.warn(
+                "Keyword '%s' could not be run on failure: %s"
+                % (self.run_on_failure_keyword, err)
+            )
         finally:
             self._running_on_failure_keyword = False
 
@@ -544,7 +558,7 @@ class SeleniumLibrary(DynamicCore):
         :raises SeleniumLibrary.errors.NoOpenBrowser: If browser is not open.
         """
         if not self._drivers.current:
-            raise NoOpenBrowser('No browser is open.')
+            raise NoOpenBrowser("No browser is open.")
         return self._drivers.current
 
     def find_element(self, locator, parent=None):
@@ -574,21 +588,23 @@ class SeleniumLibrary(DynamicCore):
         :return: list of found `WebElement` or e,mpty if elements are not found.
         :rtype: list[selenium.webdriver.remote.webelement.WebElement]
         """
-        return self._element_finder.find(locator, first_only=False,
-                                         required=False, parent=parent)
+        return self._element_finder.find(
+            locator, first_only=False, required=False, parent=parent
+        )
 
     def _parse_plugins(self, plugins):
         libraries = []
-        importer = Importer('test library')
+        importer = Importer("test library")
         for parsed_plugin in self._string_to_modules(plugins):
             plugin = importer.import_class_or_module(parsed_plugin.module)
             if not isclass(plugin):
                 message = "Importing test library: '%s' failed." % parsed_plugin.module
                 raise DataError(message)
-            plugin = plugin(self, *parsed_plugin.args,
-                            **parsed_plugin.kw_args)
+            plugin = plugin(self, *parsed_plugin.args, **parsed_plugin.kw_args)
             if not isinstance(plugin, LibraryComponent):
-                message = 'Plugin does not inherit SeleniumLibrary.base.LibraryComponent'
+                message = (
+                    "Plugin does not inherit SeleniumLibrary.base.LibraryComponent"
+                )
                 raise PluginError(message)
             self._store_plugin_keywords(plugin)
             libraries.append(plugin)
@@ -596,30 +612,36 @@ class SeleniumLibrary(DynamicCore):
 
     def _parse_listener(self, event_firing_webdriver):
         listener_module = self._string_to_modules(event_firing_webdriver)
-        listener_count = len(listener_module )
+        listener_count = len(listener_module)
         if listener_count > 1:
-            message = 'Is is possible import only one listener but there was %s listeners.' % listener_count
+            message = (
+                "Is is possible import only one listener but there was %s listeners."
+                % listener_count
+            )
             raise ValueError(message)
         listener_module = listener_module[0]
-        importer = Importer('test library')
+        importer = Importer("test library")
         listener = importer.import_class_or_module(listener_module.module)
         if not isclass(listener):
-            message = "Importing test Selenium lister class '%s' failed." % listener_module.module
+            message = (
+                "Importing test Selenium lister class '%s' failed."
+                % listener_module.module
+            )
             raise DataError(message)
         return listener
 
     def _string_to_modules(self, modules):
-        Module = namedtuple('Module', 'module, args, kw_args')
+        Module = namedtuple("Module", "module, args, kw_args")
         parsed_modules = []
-        for module in modules.split(','):
+        for module in modules.split(","):
             module = module.strip()
-            module_and_args = module.split(';')
+            module_and_args = module.split(";")
             module_name = module_and_args.pop(0)
             kw_args = {}
             args = []
             for argument in module_and_args:
-                if '=' in argument:
-                    key, value = argument.split('=')
+                if "=" in argument:
+                    key, value = argument.split("=")
                     kw_args[key] = value
                 else:
                     args.append(argument)

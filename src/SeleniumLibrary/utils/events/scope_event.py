@@ -20,17 +20,16 @@ from .event import Event
 
 
 class ScopeEvent(Event):
-
     def __init__(self, scope, action, *args, **kwargs):
         self.scope = scope
         self.action = action
         self.action_args = args
         self.action_kwargs = kwargs
 
-        if scope == 'current':
-            suite = BuiltIn().get_variable_value('${SUITE NAME}')
-            test = BuiltIn().get_variable_value('${TEST NAME}', '')
-            self.scope = suite + '.' + test if test != '' else suite
+        if scope == "current":
+            suite = BuiltIn().get_variable_value("${SUITE NAME}")
+            test = BuiltIn().get_variable_value("${TEST NAME}", "")
+            self.scope = suite + "." + test if test != "" else suite
 
     def trigger(self, *args, **kwargs):
         if args[0] == self.scope:
@@ -38,8 +37,8 @@ class ScopeEvent(Event):
 
 
 class ScopeStart(ScopeEvent):
-    name = 'scope_start'
+    name = "scope_start"
 
 
 class ScopeEnd(ScopeEvent):
-    name = 'scope_end'
+    name = "scope_end"

@@ -8,7 +8,6 @@ from SeleniumLibrary.keywords import WebDriverCache
 
 
 class WebDriverCacheTests(unittest.TestCase):
-
     def tearDown(self):
         unstub()
 
@@ -92,11 +91,11 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_resolve_alias_or_index(self):
         cache = WebDriverCache()
 
-        cache.register(mock(), 'foo')
+        cache.register(mock(), "foo")
         cache.register(mock())
         cache.register(mock())
 
-        index = cache.get_index('foo')
+        index = cache.get_index("foo")
         self.assertEqual(index, 1)
 
         index = cache.get_index(1)
@@ -108,16 +107,16 @@ class WebDriverCacheTests(unittest.TestCase):
         index = cache.get_index(None)
         self.assertEqual(index, None)
 
-        index = cache.get_index('None')
+        index = cache.get_index("None")
         self.assertEqual(index, None)
 
     def test_resolve_alias_or_index_with_none(self):
         cache = WebDriverCache()
 
-        cache.register(mock(), 'foo')
-        cache.register(mock(), 'None')
+        cache.register(mock(), "foo")
+        cache.register(mock(), "None")
 
-        index = cache.get_index('foo')
+        index = cache.get_index("foo")
         self.assertEqual(index, 1)
 
         index = cache.get_index(1)
@@ -126,19 +125,19 @@ class WebDriverCacheTests(unittest.TestCase):
         index = cache.get_index(None)
         self.assertEqual(index, None)
 
-        index = cache.get_index('None')
+        index = cache.get_index("None")
         self.assertEqual(index, None)
 
-        index = cache.get_index('NoNe')
+        index = cache.get_index("NoNe")
         self.assertEqual(index, None)
 
     def test_resolve_alias_or_index_error(self):
         cache = WebDriverCache()
 
-        cache.register(mock(), 'foo')
+        cache.register(mock(), "foo")
         cache.register(mock())
 
-        index = cache.get_index('bar')
+        index = cache.get_index("bar")
         self.assertEqual(index, None)
 
         index = cache.get_index(12)
@@ -150,23 +149,23 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_close_and_same_alias(self):
         cache = WebDriverCache()
 
-        cache.register(mock(), 'foo')
-        cache.register(mock(), 'bar')
+        cache.register(mock(), "foo")
+        cache.register(mock(), "bar")
         cache.close()
-        index = cache.get_index('bar')
+        index = cache.get_index("bar")
         self.assertEqual(index, None)
 
     def test_same_alias_new_browser(self):
         cache = WebDriverCache()
         cache.close()
-        index = cache.get_index('bar')
+        index = cache.get_index("bar")
         self.assertEqual(index, None)
 
     def test_close_all_cache_first_quite_fails(self):
         cache = WebDriverCache()
         driver = mock()
-        when(driver).quit().thenRaise(TimeoutException('timeout.'))
-        cache.register(driver, 'bar')
+        when(driver).quit().thenRaise(TimeoutException("timeout."))
+        cache.register(driver, "bar")
         with self.assertRaises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
@@ -175,11 +174,11 @@ class WebDriverCacheTests(unittest.TestCase):
         cache = WebDriverCache()
         driver0, driver1, driver2 = mock(), mock(), mock()
         when(driver0).quit().thenReturn(None)
-        when(driver1).quit().thenRaise(TimeoutException('timeout.'))
+        when(driver1).quit().thenRaise(TimeoutException("timeout."))
         when(driver2).quit().thenReturn(None)
-        cache.register(driver0, 'bar0')
-        cache.register(driver1, 'bar1')
-        cache.register(driver2, 'bar2')
+        cache.register(driver0, "bar0")
+        cache.register(driver1, "bar1")
+        cache.register(driver2, "bar2")
         with self.assertRaises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
@@ -187,12 +186,12 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_close_all_cache_all_quite_fails(self):
         cache = WebDriverCache()
         driver0, driver1, driver2 = mock(), mock(), mock()
-        when(driver0).quit().thenRaise(RemoteDriverServerException('stuff.'))
-        when(driver1).quit().thenRaise(RemoteDriverServerException('stuff.'))
-        when(driver2).quit().thenRaise(TimeoutException('timeout.'))
-        cache.register(driver0, 'bar0')
-        cache.register(driver1, 'bar1')
-        cache.register(driver2, 'bar2')
+        when(driver0).quit().thenRaise(RemoteDriverServerException("stuff."))
+        when(driver1).quit().thenRaise(RemoteDriverServerException("stuff."))
+        when(driver2).quit().thenRaise(TimeoutException("timeout."))
+        cache.register(driver0, "bar0")
+        cache.register(driver1, "bar1")
+        cache.register(driver2, "bar2")
         with self.assertRaises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
@@ -200,12 +199,12 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_close_all_cache_not_selenium_error(self):
         cache = WebDriverCache()
         driver0, driver1, driver2 = mock(), mock(), mock()
-        when(driver0).quit().thenRaise(RemoteDriverServerException('stuff.'))
-        when(driver1).quit().thenRaise(ValueError('stuff.'))
-        when(driver2).quit().thenRaise(TimeoutException('timeout.'))
-        cache.register(driver0, 'bar0')
-        cache.register(driver1, 'bar1')
-        cache.register(driver2, 'bar2')
+        when(driver0).quit().thenRaise(RemoteDriverServerException("stuff."))
+        when(driver1).quit().thenRaise(ValueError("stuff."))
+        when(driver2).quit().thenRaise(TimeoutException("timeout."))
+        cache.register(driver0, "bar0")
+        cache.register(driver1, "bar1")
+        cache.register(driver2, "bar2")
         with self.assertRaises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
@@ -222,8 +221,8 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_close_quite_fails(self):
         cache = WebDriverCache()
         driver = mock()
-        when(driver).quit().thenRaise(TimeoutException('timeout.'))
-        cache.register(driver, 'bar')
+        when(driver).quit().thenRaise(TimeoutException("timeout."))
+        cache.register(driver, "bar")
         with self.assertRaises(TimeoutException):
             cache.close()
         self.assertTrue(isinstance(cache.current, NoConnection))
@@ -233,7 +232,7 @@ class WebDriverCacheTests(unittest.TestCase):
         cache = WebDriverCache()
         driver = mock()
         when(driver).quit().thenReturn(None)
-        cache.register(driver, 'bar')
+        cache.register(driver, "bar")
         cache.close()
         self.assertTrue(isinstance(cache.current, NoConnection))
         self.assertTrue(driver in cache._closed)

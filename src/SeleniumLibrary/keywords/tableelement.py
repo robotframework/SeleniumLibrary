@@ -18,10 +18,10 @@ from selenium.webdriver.common.by import By
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 
-class TableElementKeywords(LibraryComponent):
 
+class TableElementKeywords(LibraryComponent):
     @keyword
-    def get_table_cell(self, locator, row, column, loglevel='TRACE'):
+    def get_table_cell(self, locator, row, column, loglevel="TRACE"):
         """Returns contents of a table cell.
 
         The table is located using the ``locator`` argument and its cell
@@ -42,8 +42,10 @@ class TableElementKeywords(LibraryComponent):
         row = int(row)
         column = int(column)
         if row == 0 or column == 0:
-            raise ValueError('Both row and column must be non-zero, '
-                             'got row %d and column %d.' % (row, column))
+            raise ValueError(
+                "Both row and column must be non-zero, "
+                "got row %d and column %d." % (row, column)
+            )
         try:
             cell = self._get_cell(locator, row, column)
         except AssertionError:
@@ -54,21 +56,24 @@ class TableElementKeywords(LibraryComponent):
     def _get_cell(self, locator, row, column):
         rows = self._get_rows(locator, row)
         if len(rows) < abs(row):
-            raise AssertionError("Table '%s' should have had at least %d "
-                                 "rows but had only %d."
-                                 % (locator, abs(row), len(rows)))
+            raise AssertionError(
+                "Table '%s' should have had at least %d "
+                "rows but had only %d." % (locator, abs(row), len(rows))
+            )
         index = row - 1 if row > 0 else row
-        cells = rows[index].find_elements(By.XPATH, './th|./td')
+        cells = rows[index].find_elements(By.XPATH, "./th|./td")
         if len(cells) < abs(column):
-            raise AssertionError("Table '%s' row %d should have had at "
-                                 "least %d columns but had only %d."
-                                 % (locator, row, abs(column), len(cells)))
+            raise AssertionError(
+                "Table '%s' row %d should have had at "
+                "least %d columns but had only %d."
+                % (locator, row, abs(column), len(cells))
+            )
         index = column - 1 if column > 0 else column
         return cells[index]
 
     def _get_rows(self, locator, count):
         # Get rows in same order as browsers render them.
-        table = self.find_element(locator, tag='table')
+        table = self.find_element(locator, tag="table")
         rows = table.find_elements(By.XPATH, "./thead/tr")
         if count < 0 or len(rows) < count:
             rows.extend(table.find_elements(By.XPATH, "./tbody/tr"))
@@ -77,7 +82,9 @@ class TableElementKeywords(LibraryComponent):
         return rows
 
     @keyword
-    def table_cell_should_contain(self, locator, row, column, expected, loglevel='TRACE'):
+    def table_cell_should_contain(
+        self, locator, row, column, expected, loglevel="TRACE"
+    ):
         """Verifies table cell contains text ``expected``.
 
         See `Get Table Cell` that this keyword uses internally for
@@ -86,14 +93,15 @@ class TableElementKeywords(LibraryComponent):
         content = self.get_table_cell(locator, row, column, loglevel)
         if expected not in content:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table '%s' cell on row %s and column %s "
-                                 "should have contained text '%s' but it had "
-                                 "'%s'."
-                                 % (locator, row, column, expected, content))
+            raise AssertionError(
+                "Table '%s' cell on row %s and column %s "
+                "should have contained text '%s' but it had "
+                "'%s'." % (locator, row, column, expected, content)
+            )
         self.info("Table cell contains '%s'." % content)
 
     @keyword
-    def table_column_should_contain(self, locator, column, expected, loglevel='TRACE'):
+    def table_column_should_contain(self, locator, column, expected, loglevel="TRACE"):
         """Verifies table column contains text ``expected``.
 
         The table is located using the ``locator`` argument and its column
@@ -113,11 +121,13 @@ class TableElementKeywords(LibraryComponent):
         element = self._find_by_column(locator, column, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table '%s' column %s did not contain text "
-                                 "'%s'." % (locator, column, expected))
+            raise AssertionError(
+                "Table '%s' column %s did not contain text "
+                "'%s'." % (locator, column, expected)
+            )
 
     @keyword
-    def table_footer_should_contain(self, locator, expected, loglevel='TRACE'):
+    def table_footer_should_contain(self, locator, expected, loglevel="TRACE"):
         """Verifies table footer contains text ``expected``.
 
         Any ``<td>`` element inside ``<tfoot>`` element is considered to
@@ -132,11 +142,12 @@ class TableElementKeywords(LibraryComponent):
         element = self._find_by_footer(locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table '%s' footer did not contain text "
-                                 "'%s'." % (locator, expected))
+            raise AssertionError(
+                "Table '%s' footer did not contain text " "'%s'." % (locator, expected)
+            )
 
     @keyword
-    def table_header_should_contain(self, locator, expected, loglevel='TRACE'):
+    def table_header_should_contain(self, locator, expected, loglevel="TRACE"):
         """Verifies table header contains text ``expected``.
 
         Any ``<th>`` element anywhere in the table is considered to be
@@ -151,11 +162,12 @@ class TableElementKeywords(LibraryComponent):
         element = self._find_by_header(locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table '%s' header did not contain text "
-                                 "'%s'." % (locator, expected))
+            raise AssertionError(
+                "Table '%s' header did not contain text " "'%s'." % (locator, expected)
+            )
 
     @keyword
-    def table_row_should_contain(self, locator, row, expected, loglevel='TRACE'):
+    def table_row_should_contain(self, locator, row, expected, loglevel="TRACE"):
         """Verifies that table row contains text ``expected``.
 
         The table is located using the ``locator`` argument and its column
@@ -175,11 +187,13 @@ class TableElementKeywords(LibraryComponent):
         element = self._find_by_row(locator, row, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table '%s' row %s did not contain text "
-                                 "'%s'." % (locator, row, expected))
+            raise AssertionError(
+                "Table '%s' row %s did not contain text "
+                "'%s'." % (locator, row, expected)
+            )
 
     @keyword
-    def table_should_contain(self, locator, expected, loglevel='TRACE'):
+    def table_should_contain(self, locator, expected, loglevel="TRACE"):
         """Verifies table contains text ``expected``.
 
         The table is located using the ``locator`` argument. See the
@@ -191,37 +205,38 @@ class TableElementKeywords(LibraryComponent):
         element = self._find_by_content(locator, expected)
         if element is None:
             self.ctx.log_source(loglevel)
-            raise AssertionError("Table '%s' did not contain text '%s'."
-                                 % (locator, expected))
+            raise AssertionError(
+                "Table '%s' did not contain text '%s'." % (locator, expected)
+            )
 
     def _find_by_content(self, table_locator, content):
-        return self._find(table_locator, 'xpath:.//*', content)
+        return self._find(table_locator, "xpath:.//*", content)
 
     def _find_by_header(self, table_locator, content):
-        return self._find(table_locator, 'xpath:.//th', content)
+        return self._find(table_locator, "xpath:.//th", content)
 
     def _find_by_footer(self, table_locator, content):
-        return self._find(table_locator, 'xpath:.//tfoot//td', content)
+        return self._find(table_locator, "xpath:.//tfoot//td", content)
 
     def _find_by_row(self, table_locator, row, content):
         position = self._index_to_position(row)
-        locator = '//tr[{}]'.format(position)
+        locator = "//tr[{}]".format(position)
         return self._find(table_locator, locator, content)
 
     def _find_by_column(self, table_locator, col, content):
         position = self._index_to_position(col)
-        locator = '//tr//*[self::td or self::th][{}]'.format(position)
+        locator = "//tr//*[self::td or self::th][{}]".format(position)
         return self._find(table_locator, locator, content)
 
     def _index_to_position(self, index):
         index = int(index)
         if index == 0:
-            raise ValueError('Row and column indexes must be non-zero.')
+            raise ValueError("Row and column indexes must be non-zero.")
         if index > 0:
             return str(index)
         if index == -1:
-            return 'position()=last()'
-        return 'position()=last()-{}'.format(abs(index) - 1)
+            return "position()=last()"
+        return "position()=last()-{}".format(abs(index) - 1)
 
     def _find(self, table_locator, locator, content):
         table = self.find_element(table_locator)

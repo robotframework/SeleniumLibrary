@@ -26,44 +26,47 @@ from .context import ContextAware
 
 
 class LibraryComponent(ContextAware):
-
     def info(self, msg, html=False):
         logger.info(msg, html)
 
     def debug(self, msg, html=False):
         logger.debug(msg, html)
 
-    def log(self, msg, level='INFO', html=False):
+    def log(self, msg, level="INFO", html=False):
         if not is_noney(level):
             logger.write(msg, level.upper(), html)
 
     def warn(self, msg, html=False):
         logger.warn(msg, html)
 
-    def log_source(self, loglevel='INFO'):
+    def log_source(self, loglevel="INFO"):
         self.ctx.log_source(loglevel)
 
-    def assert_page_contains(self, locator, tag=None, message=None,
-                             loglevel='TRACE'):
+    def assert_page_contains(self, locator, tag=None, message=None, loglevel="TRACE"):
         if not self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
-                message = ("Page should have contained %s '%s' but did not."
-                           % (tag or 'element', locator))
+                message = "Page should have contained %s '%s' but did not." % (
+                    tag or "element",
+                    locator,
+                )
             raise AssertionError(message)
-        logger.info("Current page contains %s '%s'."
-                    % (tag or 'element', locator))
+        logger.info("Current page contains %s '%s'." % (tag or "element", locator))
 
-    def assert_page_not_contains(self, locator, tag=None, message=None,
-                                 loglevel='TRACE'):
+    def assert_page_not_contains(
+        self, locator, tag=None, message=None, loglevel="TRACE"
+    ):
         if self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
-                message = ("Page should not have contained %s '%s'."
-                           % (tag or 'element', locator))
+                message = "Page should not have contained %s '%s'." % (
+                    tag or "element",
+                    locator,
+                )
             raise AssertionError(message)
-        logger.info("Current page does not contain %s '%s'."
-                    % (tag or 'element', locator))
+        logger.info(
+            "Current page does not contain %s '%s'." % (tag or "element", locator)
+        )
 
     def get_timeout(self, timeout=None):
         if is_noney(timeout):
@@ -73,9 +76,9 @@ class LibraryComponent(ContextAware):
     @property
     def log_dir(self):
         try:
-            logfile = BuiltIn().get_variable_value('${LOG FILE}')
-            if logfile == 'NONE':
-                return BuiltIn().get_variable_value('${OUTPUTDIR}')
+            logfile = BuiltIn().get_variable_value("${LOG FILE}")
+            if logfile == "NONE":
+                return BuiltIn().get_variable_value("${OUTPUTDIR}")
             return os.path.dirname(logfile)
         except RobotNotRunningError:
             return os.getcwdu() if PY2 else os.getcwd()

@@ -20,7 +20,6 @@ import SeleniumLibrary
 
 
 class SelLibLocalFileDetector(FileDetector):
-
     def __init__(self):
         self.selenium_file_detector = LocalFileDetector()
 
@@ -34,7 +33,7 @@ class SelLibLocalFileDetector(FileDetector):
             sl = self._get_sl()
         except Exception:
             sl = None
-        if sl and sl._running_keyword == 'choose_file':
+        if sl and sl._running_keyword == "choose_file":
             return True
         return False
 
