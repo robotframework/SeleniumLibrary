@@ -1,7 +1,7 @@
 # Requirements needed for SeleniumLibrary development but not by end users.
 # Creating releases has its own requirements listed in requirements-build.txt.
 
-mockito >= 1.0.0
+mockito >= 1.2.1
 robotstatuschecker >= 1.4
 approvaltests >= 0.2.4
 pytest
