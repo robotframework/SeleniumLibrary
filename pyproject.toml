@@ -1,0 +1,17 @@
+[tool.black]
+target-version = ['py36']
+exclude = '''
+/(
+  | \.git
+  | \.venv
+  | _build
+  | dist
+  | generated
+  | src/SeleniumLibrary/__init__\.pyi
+)/
+'''
+
+[tool.isort]
+profile = "black"
+src_paths="."
+skip_glob = ["src/SeleniumLibrary/__init__.pyi"]
