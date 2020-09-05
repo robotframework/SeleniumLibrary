@@ -102,8 +102,8 @@ def test_all_args():
     assert cookie.value == "123"
     assert cookie.path == "/"
     assert cookie.domain == "not.Here"
-    assert cookie.secure == True
-    assert cookie.httpOnly == True
+    assert cookie.secure is True
+    assert cookie.httpOnly is True
     assert cookie.expiry == datetime.fromtimestamp(123)
     assert cookie.extra == {}
 

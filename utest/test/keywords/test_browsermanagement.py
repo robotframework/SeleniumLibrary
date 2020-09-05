@@ -1,5 +1,5 @@
 import pytest
-from mockito import when, mock, verify, verifyNoMoreInteractions, unstub, ANY
+from mockito import when, mock, verify, verifyNoMoreInteractions, ANY
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import BrowserManagementKeywords

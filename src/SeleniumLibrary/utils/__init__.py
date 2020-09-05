@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from robot.utils import plural_or_not, secs_to_timestr, timestr_to_secs
+from robot.utils import plural_or_not, secs_to_timestr, timestr_to_secs  # noqa
 
-from .librarylistener import LibraryListener
-from .types import is_falsy, is_noney, is_string, is_truthy, PY3, WINDOWS
+from .librarylistener import LibraryListener  # noqa
+from .types import is_falsy, is_noney, is_string, is_truthy, PY3, WINDOWS  # noqa
 
 
 def escape_xpath_value(value):
