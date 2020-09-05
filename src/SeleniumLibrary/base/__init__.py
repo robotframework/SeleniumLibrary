@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from robot.api.deco import keyword
+from robot.api.deco import keyword  # noqa
 
-from .context import ContextAware
-from .librarycomponent import LibraryComponent
+from .context import ContextAware  # noqa
+from .librarycomponent import LibraryComponent  # noqa

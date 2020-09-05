@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .webdrivertools import WebDriverCreator
-from .webdrivertools import WebDriverCache
-from .webdrivertools import SeleniumOptions
-from .sl_file_detector import SelLibLocalFileDetector
+from .webdrivertools import WebDriverCreator  # noqa
+from .webdrivertools import WebDriverCache  # noqa
+from .webdrivertools import SeleniumOptions  # noqa
+from .sl_file_detector import SelLibLocalFileDetector  # noqa

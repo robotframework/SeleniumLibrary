@@ -16,7 +16,7 @@
 import os
 
 from robot.utils import is_string
-from robot.utils import PY3, is_truthy, is_falsy
+from robot.utils import PY3, is_truthy, is_falsy  # noqa
 
 # Need only for unit tests and can be removed when Approval tests fixes:
 # https://github.com/approvals/ApprovalTests.Python/issues/41

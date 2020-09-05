@@ -14,6 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .customlocator import CustomLocator
-from .elementfinder import ElementFinder
-from .windowmanager import WindowManager
+from .customlocator import CustomLocator  # noqa
+from .elementfinder import ElementFinder  # noqa
+from .windowmanager import WindowManager  # noqa
