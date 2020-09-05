@@ -26,14 +26,11 @@ from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
-from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string, PY3
+from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import (
     SelLibLocalFileDetector,
 )
 from SeleniumLibrary.utils.path_formatter import _format_path
-
-if not PY3:
-    FileNotFoundError = object
 
 
 class WebDriverCreator(object):
@@ -173,18 +170,12 @@ class WebDriverCreator(object):
         )
 
     def _get_executable_path(self, webdriver):
-        if PY3:
-            signature = inspect.signature(webdriver.__init__)
-            parameters = signature.parameters
-            executable_path = parameters.get("executable_path")
-            if not executable_path:
-                return None
-            return executable_path.default
-        else:  # TODO: Remove else when Python 2 is dropped.
-            signature = inspect.getargspec(webdriver.__init__)
-            if "executable_path" in signature.args:
-                index = signature.args.index("executable_path")
-                return signature.defaults[index - 1]
+        signature = inspect.signature(webdriver.__init__)
+        parameters = signature.parameters
+        executable_path = parameters.get("executable_path")
+        if not executable_path:
+            return None
+        return executable_path.default
 
     def create_firefox(
         self,
