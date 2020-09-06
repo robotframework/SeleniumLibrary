@@ -207,8 +207,8 @@ def error_formatter(method, arg, full=False):
         return method(arg)
     except Exception as error:
         if full:
-            return "%s %s" % (arg, error)
-        return "%s %s" % (arg, error.__str__()[:15])
+            return f"{arg} {error}"
+        return "{} {}".format(arg, error.__str__()[:15])
 
 
 @pytest.fixture(scope="module")

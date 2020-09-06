@@ -34,11 +34,9 @@ Examples:
 
     run.py chrome
     run.py headlesschrome
-    run.py --interpreter jython firefox --suite javascript
+    run.py --interpreter c:\Python38\python.exe firefox --suite javascript
     run.py headlesschrome --nounit --grid true
 """
-
-from __future__ import print_function
 
 import platform
 import time
@@ -251,7 +249,7 @@ def create_zip():
         shutil.rmtree(ZIP_DIR)
     os.mkdir(ZIP_DIR)
     python_version = platform.python_version()
-    zip_name = "rf-%s-python-%s.zip" % (robot_version, python_version)
+    zip_name = f"rf-{robot_version}-python-{python_version}.zip"
     zip_path = os.path.join(ZIP_DIR, zip_name)
     print("Zip created in: %s" % zip_path)
     zip_file = zipfile.ZipFile(zip_path, "w")
@@ -276,7 +274,7 @@ if __name__ == "__main__":
         help=textwrap.dedent(
             """\
                             Any Python interpreter supported by the library.
-                            E.g. `python`, `jython` or `c:\\Python27\\python.exe`.
+                            E.g. `python` or `c:\\Python38\\python.exe`.
                             By default set to `python`."""
         ),
     )

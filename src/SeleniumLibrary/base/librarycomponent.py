@@ -45,12 +45,12 @@ class LibraryComponent(ContextAware):
         if not self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
-                message = "Page should have contained %s '%s' but did not." % (
+                message = "Page should have contained {} '{}' but did not.".format(
                     tag or "element",
                     locator,
                 )
             raise AssertionError(message)
-        logger.info("Current page contains %s '%s'." % (tag or "element", locator))
+        logger.info("Current page contains {} '{}'.".format(tag or "element", locator))
 
     def assert_page_not_contains(
         self, locator, tag=None, message=None, loglevel="TRACE"
@@ -58,13 +58,13 @@ class LibraryComponent(ContextAware):
         if self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
             if is_noney(message):
-                message = "Page should not have contained %s '%s'." % (
+                message = "Page should not have contained {} '{}'.".format(
                     tag or "element",
                     locator,
                 )
             raise AssertionError(message)
         logger.info(
-            "Current page does not contain %s '%s'." % (tag or "element", locator)
+            "Current page does not contain {} '{}'.".format(tag or "element", locator)
         )
 
     def get_timeout(self, timeout=None):

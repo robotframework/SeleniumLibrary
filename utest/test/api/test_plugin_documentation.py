@@ -29,17 +29,17 @@ class PluginDocumentation(unittest.TestCase):
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_plugin_no_doc(self):
-        sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
+        sl = SeleniumLibrary(plugins=f"{self.plugin_3};arg1=Text1;arg2=Text2")
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_many_plugins(self):
-        sl = SeleniumLibrary(plugins="%s, %s" % (self.plugin_1, self.plugin_2))
+        sl = SeleniumLibrary(plugins=f"{self.plugin_1}, {self.plugin_2}")
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_no_doc(self):
-        sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
+        sl = SeleniumLibrary(plugins=f"{self.plugin_3};arg1=Text1;arg2=Text2")
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
@@ -49,10 +49,10 @@ class PluginDocumentation(unittest.TestCase):
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_plugin_init_doc(self):
-        sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
+        sl = SeleniumLibrary(plugins=f"{self.plugin_3};arg1=Text1;arg2=Text2")
         verify(sl.get_keyword_documentation("__init__"), self.reporter)
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_plugin_kw_doc(self):
-        sl = SeleniumLibrary(plugins="{};arg1=Text1;arg2=Text2".format(self.plugin_3))
+        sl = SeleniumLibrary(plugins=f"{self.plugin_3};arg1=Text1;arg2=Text2")
         verify(sl.get_keyword_documentation("execute_javascript"), self.reporter)

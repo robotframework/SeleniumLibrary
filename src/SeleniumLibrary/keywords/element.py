@@ -80,7 +80,7 @@ class ElementKeywords(LibraryComponent):
                     "its text was '%s'." % (locator, expected_before, actual_before)
                 )
             raise AssertionError(message)
-        self.info("Element '%s' contains text '%s'." % (locator, expected_before))
+        self.info(f"Element '{locator}' contains text '{expected_before}'.")
 
     @keyword
     def element_should_not_contain(
@@ -112,7 +112,7 @@ class ElementKeywords(LibraryComponent):
                 )
             raise AssertionError(message)
         self.info(
-            "Element '%s' does not contain text '%s'." % (locator, expected_before)
+            f"Element '{locator}' does not contain text '{expected_before}'."
         )
 
     @keyword
@@ -167,7 +167,7 @@ class ElementKeywords(LibraryComponent):
         limit = int(limit)
         count = len(self.find_elements(locator))
         if count == limit:
-            self.info("Current page contains {} element(s).".format(count))
+            self.info(f"Current page contains {count} element(s).")
         else:
             if is_noney(message):
                 message = (
@@ -190,7 +190,7 @@ class ElementKeywords(LibraryComponent):
                 )
             self.ctx.log_source(loglevel)
             raise AssertionError(message)
-        self.info("Current page contains %s elements matching '%s'." % (count, locator))
+        self.info(f"Current page contains {count} elements matching '{locator}'.")
 
     @keyword
     def page_should_not_contain(self, text, loglevel="TRACE"):
@@ -231,7 +231,7 @@ class ElementKeywords(LibraryComponent):
         | `Assign ID to Element` | //ul[@class='example' and ./li[contains(., 'Stuff')]] | my id |
         | `Page Should Contain Element` | my id |
         """
-        self.info("Assigning temporary id '%s' to element '%s'." % (id, locator))
+        self.info(f"Assigning temporary id '{id}' to element '{locator}'.")
         element = self.find_element(locator)
         self.driver.execute_script("arguments[0].id = '%s';" % id, element)
 
@@ -340,7 +340,7 @@ class ElementKeywords(LibraryComponent):
         Use `Element Should Contain` if a substring match is desired.
         """
         self.info(
-            "Verifying element '%s' contains exact text '%s'." % (locator, expected)
+            f"Verifying element '{locator}' contains exact text '{expected}'."
         )
         text = before_text = self.find_element(locator).text
         if is_truthy(ignore_case):
@@ -382,7 +382,7 @@ class ElementKeywords(LibraryComponent):
             not_expected = not_expected.lower()
         if text == not_expected:
             if is_noney(message):
-                message = "The text of element '%s' was not supposed to be '%s'." % (
+                message = "The text of element '{}' was not supposed to be '{}'.".format(
                     locator,
                     before_not_expected,
                 )
@@ -923,7 +923,7 @@ return !element.dispatchEvent(evt);
         """
         parsed_keys = self._parse_keys(*keys)
         if is_truthy(locator):
-            self.info("Sending key(s) %s to %s element." % (keys, locator))
+            self.info(f"Sending key(s) {keys} to {locator} element.")
             element = self.find_element(locator)
             ActionChains(self.driver).click(element).perform()
         else:
@@ -940,7 +940,7 @@ return !element.dispatchEvent(evt);
             actions.perform()
 
     def _press_keys_normal_keys(self, actions, key):
-        self.info("Sending key%s %s" % (plural_or_not(key.converted), key.converted))
+        self.info("Sending key{} {}".format(plural_or_not(key.converted), key.converted))
         actions.send_keys(key.converted)
 
     def _press_keys_special_keys(self, actions, element, parsed_key, key):

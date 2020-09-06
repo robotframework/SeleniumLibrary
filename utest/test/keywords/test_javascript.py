@@ -43,7 +43,7 @@ class JavaScriptKeywordsTest(unittest.TestCase):
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_get_javascript(self):
         code, args = self.js._get_javascript_to_execute(("code", "here"))
-        result = "%s + %s" % (code, args)
+        result = f"{code} + {args}"
         verify(result, self.reporter)
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")

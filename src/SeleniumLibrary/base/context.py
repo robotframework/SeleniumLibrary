@@ -17,7 +17,7 @@
 from SeleniumLibrary.utils import escape_xpath_value
 
 
-class ContextAware(object):
+class ContextAware:
     def __init__(self, ctx):
         """Base class exposing attributes from the common context.
 

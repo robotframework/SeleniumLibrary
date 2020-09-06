@@ -93,7 +93,7 @@ class FrameKeywords(LibraryComponent):
                 "Frame '%s' should have contained text '%s' "
                 "but did not." % (locator, text)
             )
-        self.info("Frame '%s' contains text '%s'." % (locator, text))
+        self.info(f"Frame '{locator}' contains text '{text}'.")
 
     def _frame_contains(self, locator, text):
         element = self.find_element(locator)

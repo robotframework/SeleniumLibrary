@@ -4,7 +4,7 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators import ElementFinder
 
 
-class DummyFinder(object):
+class DummyFinder:
     def __init__(self, ctx):
         self.ctx = ctx
 

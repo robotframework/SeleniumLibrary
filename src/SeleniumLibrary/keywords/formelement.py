@@ -154,7 +154,7 @@ class FormElementKeywords(LibraryComponent):
         ``group_name`` is the ``name`` of the radio button group.
         """
         self.info(
-            "Verifying radio button '%s' has selection '%s'." % (group_name, value)
+            f"Verifying radio button '{group_name}' has selection '{value}'."
         )
         elements = self._get_radio_buttons(group_name)
         actual_value = self._get_value_from_radio_buttons(elements)
@@ -192,7 +192,7 @@ class FormElementKeywords(LibraryComponent):
         | `Select Radio Button` | size    | XL    |
         | `Select Radio Button` | contact | email |
         """
-        self.info("Selecting '%s' from radio button '%s'." % (value, group_name))
+        self.info(f"Selecting '{value}' from radio button '{group_name}'.")
         element = self._get_radio_button_with_value(group_name, value)
         if not element.is_selected():
             element.click()
@@ -274,7 +274,7 @@ class FormElementKeywords(LibraryComponent):
         Disabling the file upload the Selenium Grid node and the `clear`
         argument are new in SeleniumLibrary 4.0
         """
-        self.info("Typing text '%s' into text field '%s'." % (text, locator))
+        self.info(f"Typing text '{text}' into text field '{locator}'.")
         self._input_text_into_text_field(locator, text, clear)
 
     @keyword
@@ -320,7 +320,7 @@ class FormElementKeywords(LibraryComponent):
                     "but it contained '%s'." % (locator, expected, actual)
                 )
             raise AssertionError(message)
-        self.info("Text field '%s' contains text '%s'." % (locator, expected))
+        self.info(f"Text field '{locator}' contains text '{expected}'.")
 
     @keyword
     def textfield_value_should_be(self, locator, expected, message=None):
@@ -339,7 +339,7 @@ class FormElementKeywords(LibraryComponent):
                     "but was '%s'." % (locator, expected, actual)
                 )
             raise AssertionError(message)
-        self.info("Content of text field '%s' is '%s'." % (locator, expected))
+        self.info(f"Content of text field '{locator}' is '{expected}'.")
 
     @keyword
     def textarea_should_contain(self, locator, expected, message=None):
@@ -358,7 +358,7 @@ class FormElementKeywords(LibraryComponent):
                     "but it had '%s'." % (locator, expected, actual)
                 )
             raise AssertionError(message)
-        self.info("Text area '%s' contains text '%s'." % (locator, expected))
+        self.info(f"Text area '{locator}' contains text '{expected}'.")
 
     @keyword
     def textarea_value_should_be(self, locator, expected, message=None):
@@ -377,7 +377,7 @@ class FormElementKeywords(LibraryComponent):
                     "but it had '%s'." % (locator, expected, actual)
                 )
             raise AssertionError(message)
-        self.info("Content of text area '%s' is '%s'." % (locator, expected))
+        self.info(f"Content of text area '{locator}' is '{expected}'.")
 
     @keyword
     def page_should_contain_button(self, locator, message=None, loglevel="TRACE"):

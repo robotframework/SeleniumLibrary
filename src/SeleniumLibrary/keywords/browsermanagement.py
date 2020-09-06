@@ -51,7 +51,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """Closes the current browser."""
         if self.drivers.current:
             self.debug(
-                "Closing browser with session id {}.".format(self.driver.session_id)
+                f"Closing browser with session id {self.driver.session_id}."
             )
             self.drivers.close()
 
@@ -319,7 +319,7 @@ class BrowserManagementKeywords(LibraryComponent):
                 "remote server at '%s'." % (browser, url, remote_url)
             )
         else:
-            self.info("Opening browser '%s' to base url '%s'." % (browser, url))
+            self.info(f"Opening browser '{browser}' to base url '{url}'.")
         driver = self._make_driver(
             browser,
             desired_capabilities,
@@ -578,7 +578,7 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_title()
         if actual != title:
             if is_noney(message):
-                message = "Title should have been '%s' but was '%s'." % (title, actual)
+                message = f"Title should have been '{title}' but was '{actual}'."
             raise AssertionError(message)
         self.info("Page title is '%s'." % title)
 

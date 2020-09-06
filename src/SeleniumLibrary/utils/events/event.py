@@ -17,7 +17,7 @@
 import abc
 
 
-class Event(object):
+class Event:
     @abc.abstractmethod
     def trigger(self, *args, **kwargs):
         pass

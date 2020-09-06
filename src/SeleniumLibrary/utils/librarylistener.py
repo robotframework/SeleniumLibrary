@@ -17,7 +17,7 @@
 from .events import dispatch
 
 
-class LibraryListener(object):
+class LibraryListener:
     ROBOT_LISTENER_API_VERSION = 2
 
     def start_suite(self, name, attrs):

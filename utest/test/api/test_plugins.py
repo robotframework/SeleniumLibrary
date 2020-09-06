@@ -62,7 +62,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def test_parse_library_with_args(self):
         plugin = "path.to.MyLibrary"
         plugin_args = "arg1;arg2"
-        parsed_plugins = self.sl._string_to_modules("%s;%s" % (plugin, plugin_args))
+        parsed_plugins = self.sl._string_to_modules(f"{plugin};{plugin_args}")
         parsed_plugin = parsed_plugins[0]
         self.assertEqual(len(parsed_plugins), 1)
         self.assertEqual(parsed_plugin.module, plugin)
@@ -72,7 +72,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def test_parse_plugin_with_kw_args(self):
         plugin = "PluginWithKwArgs.py"
         plugin_args = "kw1=Text1;kw2=Text2"
-        parsed_plugins = self.sl._string_to_modules("%s;%s" % (plugin, plugin_args))
+        parsed_plugins = self.sl._string_to_modules(f"{plugin};{plugin_args}")
         parsed_plugin = parsed_plugins[0]
         self.assertEqual(len(parsed_plugins), 1)
         self.assertEqual(parsed_plugin.module, plugin)
@@ -91,7 +91,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         my_lib = os.path.join(self.root_dir, "my_lib.py")
         wrong_name = os.path.join(self.root_dir, "my_lib_wrong_name.py")
         with self.assertRaises(DataError):
-            SeleniumLibrary(plugins="%s, %s" % (my_lib, wrong_name))
+            SeleniumLibrary(plugins=f"{my_lib}, {wrong_name}")
 
     def test_sl_with_kw_args_plugin(self):
         kw_args_lib = os.path.join(
