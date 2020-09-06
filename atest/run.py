@@ -34,7 +34,7 @@ Examples:
 
     run.py chrome
     run.py headlesschrome
-    run.py --interpreter jython firefox --suite javascript
+    run.py --interpreter c:\Python38\python.exe firefox --suite javascript
     run.py headlesschrome --nounit --grid true
 """
 
@@ -274,7 +274,7 @@ if __name__ == "__main__":
         help=textwrap.dedent(
             """\
                             Any Python interpreter supported by the library.
-                            E.g. `python`, `jython` or `c:\\Python27\\python.exe`.
+                            E.g. `python` or `c:\\Python38\\python.exe`.
                             By default set to `python`."""
         ),
     )

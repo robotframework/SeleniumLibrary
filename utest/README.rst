@@ -26,13 +26,8 @@ ApprovalTests
 For unit test, it is possible to use `ApprovalTests`_ framework. ApprovalTests
 provides an easy and visual way to compare strings in unit tests. For more
 details, please read `ApprovalTests`_ documentation and `ApprovalTests blog post`_.
-The downside of ApprovalTests is that it does not work when using `Jython`_
-as an interpreter. Therefore all unit tests using ApprovalTests imports
-must handled with `try/except ImportError:` and skipped with:
-`@unittest.skipIf(JYTHON, 'ApprovalTest does not work with Jython')`. The `JYTHON` is
-imported from `from robot.utils import JYTHON`
 
-Another downside of ApprovalTests is that SeleniumLibrary is mainly developed
+The downside of ApprovalTests is that SeleniumLibrary is mainly developed
 in Linux and therefore unit tests using ApprovalTests are skipped in Windows
 OS. This needs to be done until ApprovalTests issue `#41`_ is fixed.
 To skip tests, mark test as:
@@ -42,5 +37,4 @@ To skip tests, mark test as:
 .. _pytest: https://docs.pytest.org/en/latest/
 .. _ApprovalTests: https://github.com/approvals/ApprovalTests.Python
 .. _ApprovalTests blog post: http://blog.approvaltests.com/
-.. _Jython: http://www.jython.org/
 .. _#41: https://github.com/approvals/ApprovalTests.Python/issues/41
