@@ -153,9 +153,7 @@ class FormElementKeywords(LibraryComponent):
 
         ``group_name`` is the ``name`` of the radio button group.
         """
-        self.info(
-            f"Verifying radio button '{group_name}' has selection '{value}'."
-        )
+        self.info(f"Verifying radio button '{group_name}' has selection '{value}'.")
         elements = self._get_radio_buttons(group_name)
         actual_value = self._get_value_from_radio_buttons(elements)
         if actual_value is None or actual_value != value:

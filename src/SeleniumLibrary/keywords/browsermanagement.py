@@ -50,9 +50,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def close_browser(self):
         """Closes the current browser."""
         if self.drivers.current:
-            self.debug(
-                f"Closing browser with session id {self.driver.session_id}."
-            )
+            self.debug(f"Closing browser with session id {self.driver.session_id}.")
             self.drivers.close()
 
     @keyword
@@ -284,7 +282,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         index = self.drivers.get_index(alias)
         if index:
-            self.info("Using existing browser from index %s." % index)
+            self.info(f"Using existing browser from index {index}.")
             self.switch_browser(alias)
             if is_truthy(url):
                 self.go_to(url)
@@ -315,8 +313,8 @@ class BrowserManagementKeywords(LibraryComponent):
     ):
         if is_truthy(remote_url):
             self.info(
-                "Opening browser '%s' to base url '%s' through "
-                "remote server at '%s'." % (browser, url, remote_url)
+                f"Opening browser '{browser}' to base url '{url}' through "
+                f"remote server at '{remote_url}'."
             )
         else:
             self.info(f"Opening browser '{browser}' to base url '{url}'.")
@@ -336,11 +334,10 @@ class BrowserManagementKeywords(LibraryComponent):
                 driver.get(url)
             except Exception:
                 self.debug(
-                    "Opened browser with session id %s but failed to open url '%s'."
-                    % (driver.session_id, url)
+                    f"Opened browser with session id {driver.session_id} but failed to open url '{url}'."
                 )
                 raise
-        self.debug("Opened browser with session id %s." % driver.session_id)
+        self.debug(f"Opened browser with session id {driver.session_id}.")
         return index
 
     @keyword
@@ -378,18 +375,17 @@ class BrowserManagementKeywords(LibraryComponent):
             raise RuntimeError("kwargs must be a dictionary.")
         for arg_name in kwargs:
             if arg_name in init_kwargs:
-                raise RuntimeError("Got multiple values for argument '%s'." % arg_name)
+                raise RuntimeError(f"Got multiple values for argument '{arg_name}'.")
             init_kwargs[arg_name] = kwargs[arg_name]
         driver_name = driver_name.strip()
         try:
             creation_func = getattr(webdriver, driver_name)
         except AttributeError:
-            raise RuntimeError("'%s' is not a valid WebDriver name." % driver_name)
-        self.info("Creating an instance of the %s WebDriver." % driver_name)
+            raise RuntimeError(f"'{driver_name}' is not a valid WebDriver name.")
+        self.info(f"Creating an instance of the {driver_name} WebDriver.")
         driver = creation_func(**init_kwargs)
         self.debug(
-            "Created %s WebDriver instance with session id %s."
-            % (driver_name, driver.session_id)
+            f"Created {driver_name} WebDriver instance with session id {driver.session_id}."
         )
         driver = self._wrap_event_firing_webdriver(driver)
         return self.ctx.register_driver(driver, alias)
@@ -431,10 +427,10 @@ class BrowserManagementKeywords(LibraryComponent):
             self.drivers.switch(index_or_alias)
         except RuntimeError:
             raise RuntimeError(
-                "No browser with index or alias '%s' found." % index_or_alias
+                f"No browser with index or alias '{index_or_alias}' found."
             )
         self.debug(
-            "Switched to browser with Selenium session id %s." % self.driver.session_id
+            f"Switched to browser with Selenium session id {self.driver.session_id}."
         )
 
     @keyword
@@ -512,12 +508,9 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if actual != url:
             if is_noney(message):
-                message = "Location should have been '%s' but " "was '%s'." % (
-                    url,
-                    actual,
-                )
+                message = f"Location should have been '{url}' but " f"was '{actual}'."
             raise AssertionError(message)
-        self.info("Current location is '%s'." % url)
+        self.info(f"Current location is '{url}'.")
 
     @keyword
     def location_should_contain(self, expected, message=None):
@@ -533,12 +526,12 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if expected not in actual:
             if is_noney(message):
-                message = "Location should have contained '%s' but " "it was '%s'." % (
-                    expected,
-                    actual,
+                message = (
+                    f"Location should have contained '{expected}' but "
+                    f"it was '{actual}'."
                 )
             raise AssertionError(message)
-        self.info("Current location contains '%s'." % expected)
+        self.info(f"Current location contains '{expected}'.")
 
     @keyword
     def log_location(self):
@@ -580,7 +573,7 @@ class BrowserManagementKeywords(LibraryComponent):
             if is_noney(message):
                 message = f"Title should have been '{title}' but was '{actual}'."
             raise AssertionError(message)
-        self.info("Page title is '%s'." % title)
+        self.info(f"Page title is '{title}'.")
 
     @keyword
     def go_back(self):
@@ -590,7 +583,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def go_to(self, url):
         """Navigates the current browser window to the provided ``url``."""
-        self.info("Opening url '%s'" % url)
+        self.info(f"Opening url '{url}'")
         self.driver.get(url)
 
     @keyword

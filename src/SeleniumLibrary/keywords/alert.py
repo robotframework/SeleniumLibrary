@@ -63,8 +63,7 @@ class AlertKeywords(LibraryComponent):
         message = self.handle_alert(action, timeout)
         if text and text != message:
             raise AssertionError(
-                "Alert message should have been '%s' but it "
-                "was '%s'." % (text, message)
+                f"Alert message should have been '{text}' but it " f"was '{message}'."
             )
 
     @keyword
@@ -88,7 +87,7 @@ class AlertKeywords(LibraryComponent):
         except AssertionError:
             return
         text = self._handle_alert(alert, action)
-        raise AssertionError("Alert with message '%s' present." % text)
+        raise AssertionError(f"Alert with message '{text}' present.")
 
     @keyword
     def handle_alert(self, action=ACCEPT, timeout=None):
@@ -127,7 +126,7 @@ class AlertKeywords(LibraryComponent):
         elif action == self.DISMISS:
             alert.dismiss()
         elif action != self.LEAVE:
-            raise ValueError("Invalid alert action '%s'." % action)
+            raise ValueError(f"Invalid alert action '{action}'.")
         return text
 
     def _wait_alert(self, timeout=None):
@@ -136,6 +135,6 @@ class AlertKeywords(LibraryComponent):
         try:
             return wait.until(EC.alert_is_present())
         except TimeoutException:
-            raise AssertionError("Alert not found in %s." % secs_to_timestr(timeout))
+            raise AssertionError(f"Alert not found in {secs_to_timestr(timeout)}.")
         except WebDriverException as err:
-            raise AssertionError("An exception occurred waiting for alert: %s" % err)
+            raise AssertionError(f"An exception occurred waiting for alert: {err}")

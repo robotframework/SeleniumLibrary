@@ -111,9 +111,7 @@ class ElementKeywords(LibraryComponent):
                     expected_before,
                 )
             raise AssertionError(message)
-        self.info(
-            f"Element '{locator}' does not contain text '{expected_before}'."
-        )
+        self.info(f"Element '{locator}' does not contain text '{expected_before}'.")
 
     @keyword
     def page_should_contain(self, text, loglevel="TRACE"):
@@ -339,9 +337,7 @@ class ElementKeywords(LibraryComponent):
 
         Use `Element Should Contain` if a substring match is desired.
         """
-        self.info(
-            f"Verifying element '{locator}' contains exact text '{expected}'."
-        )
+        self.info(f"Verifying element '{locator}' contains exact text '{expected}'.")
         text = before_text = self.find_element(locator).text
         if is_truthy(ignore_case):
             text = text.lower()
@@ -382,9 +378,11 @@ class ElementKeywords(LibraryComponent):
             not_expected = not_expected.lower()
         if text == not_expected:
             if is_noney(message):
-                message = "The text of element '{}' was not supposed to be '{}'.".format(
-                    locator,
-                    before_not_expected,
+                message = (
+                    "The text of element '{}' was not supposed to be '{}'.".format(
+                        locator,
+                        before_not_expected,
+                    )
                 )
             raise AssertionError(message)
 
@@ -940,7 +938,9 @@ return !element.dispatchEvent(evt);
             actions.perform()
 
     def _press_keys_normal_keys(self, actions, key):
-        self.info("Sending key{} {}".format(plural_or_not(key.converted), key.converted))
+        self.info(
+            "Sending key{} {}".format(plural_or_not(key.converted), key.converted)
+        )
         actions.send_keys(key.converted)
 
     def _press_keys_special_keys(self, actions, element, parsed_key, key):

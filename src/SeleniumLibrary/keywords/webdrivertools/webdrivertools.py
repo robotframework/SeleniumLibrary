@@ -76,7 +76,7 @@ class WebDriverCreator:
         service_log_path = self._get_log_path(service_log_path)
         options = self.selenium_options.create(self.browser_names.get(browser), options)
         if service_log_path:
-            logger.info("Browser driver log file created to: %s" % service_log_path)
+            logger.info(f"Browser driver log file created to: {service_log_path}")
             self._create_directory(service_log_path)
         if (
             creation_method == self.create_firefox
@@ -100,7 +100,7 @@ class WebDriverCreator:
 
     def _get_creator_method(self, browser):
         if browser in self.browser_names:
-            return getattr(self, "create_{}".format(self.browser_names[browser]))
+            return getattr(self, f"create_{self.browser_names[browser]}")
         raise ValueError(f"{browser} is not a supported browser.")
 
     def _parse_capabilities(self, capabilities, browser=None):
@@ -278,8 +278,8 @@ class WebDriverCreator:
         )
 
     def _has_options(self, web_driver):
-        signature = inspect.getargspec(web_driver.__init__)
-        return "options" in signature.args
+        signature = inspect.signature(web_driver.__init__)
+        return "options" in signature.parameters
 
     def create_edge(
         self,
