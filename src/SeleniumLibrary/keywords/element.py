@@ -21,7 +21,7 @@ from selenium.webdriver.common.keys import Keys
 
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_falsy, is_noney, is_truthy, plural_or_not as s
+from SeleniumLibrary.utils import is_falsy, is_noney, is_truthy
 from SeleniumLibrary.errors import ElementNotFound
 
 
@@ -76,8 +76,8 @@ class ElementKeywords(LibraryComponent):
         if expected not in actual:
             if is_noney(message):
                 message = (
-                    "Element '%s' should have contained text '%s' but "
-                    "its text was '%s'." % (locator, expected_before, actual_before)
+                    f"Element '{locator}' should have contained text '{expected_before}' but "
+                    f"its text was '{actual_before}'."
                 )
             raise AssertionError(message)
         self.info(f"Element '{locator}' contains text '{expected_before}'.")
@@ -106,9 +106,9 @@ class ElementKeywords(LibraryComponent):
             expected = expected.lower()
         if expected in actual:
             if is_noney(message):
-                message = "Element '%s' should not contain text '%s' but " "it did." % (
-                    locator,
-                    expected_before,
+                message = (
+                    f"Element '{locator}' should not contain text '{expected_before}' but "
+                    "it did."
                 )
             raise AssertionError(message)
         self.info(f"Element '{locator}' does not contain text '{expected_before}'.")
@@ -126,9 +126,9 @@ class ElementKeywords(LibraryComponent):
         if not self._page_contains(text):
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Page should have contained text '%s' " "but did not." % text
+                f"Page should have contained text '{text}' " "but did not."
             )
-        self.info("Current page contains text '%s'." % text)
+        self.info(f"Current page contains text '{text}'.")
 
     @keyword
     def page_should_contain_element(
@@ -169,8 +169,8 @@ class ElementKeywords(LibraryComponent):
         else:
             if is_noney(message):
                 message = (
-                    'Page should have contained "{}" element(s), '
-                    'but it did contain "{}" element(s).'.format(limit, count)
+                    f'Page should have contained "{limit}" element(s), '
+                    f'but it did contain "{count}" element(s).'
                 )
             self.ctx.log_source(loglevel)
             raise AssertionError(message)
@@ -183,8 +183,8 @@ class ElementKeywords(LibraryComponent):
         if count != x:
             if is_falsy(message):
                 message = (
-                    "Locator '%s' should have matched %s time%s but "
-                    "matched %s time%s." % (locator, x, s(x), count, s(count))
+                    f"Locator '{locator}' should have matched {x} time{plural_or_not(x)} but "
+                    f"matched {count} time{plural_or_not(count)}."
                 )
             self.ctx.log_source(loglevel)
             raise AssertionError(message)
@@ -199,8 +199,8 @@ class ElementKeywords(LibraryComponent):
         """
         if self._page_contains(text):
             self.ctx.log_source(loglevel)
-            raise AssertionError("Page should not have contained text '%s'." % text)
-        self.info("Current page does not contain text '%s'." % text)
+            raise AssertionError(f"Page should not have contained text '{text}'.")
+        self.info(f"Current page does not contain text '{text}'.")
 
     @keyword
     def page_should_not_contain_element(self, locator, message=None, loglevel="TRACE"):
@@ -231,7 +231,7 @@ class ElementKeywords(LibraryComponent):
         """
         self.info(f"Assigning temporary id '{id}' to element '{locator}'.")
         element = self.find_element(locator)
-        self.driver.execute_script("arguments[0].id = '%s';" % id, element)
+        self.driver.execute_script(f"arguments[0].id = '{id}';", element)
 
     @keyword
     def element_should_be_disabled(self, locator):
@@ -244,7 +244,7 @@ class ElementKeywords(LibraryComponent):
         syntax.
         """
         if self.is_element_enabled(locator):
-            raise AssertionError("Element '%s' is enabled." % locator)
+            raise AssertionError(f"Element '{locator}' is enabled.")
 
     @keyword
     def element_should_be_enabled(self, locator):
@@ -257,7 +257,7 @@ class ElementKeywords(LibraryComponent):
         syntax.
         """
         if not self.is_element_enabled(locator):
-            raise AssertionError("Element '%s' is disabled." % locator)
+            raise AssertionError(f"Element '{locator}' is disabled.")
 
     @keyword
     def element_should_be_focused(self, locator):
@@ -274,7 +274,7 @@ class ElementKeywords(LibraryComponent):
         if isinstance(focused, dict):
             focused = focused["value"]
         if element != focused:
-            raise AssertionError("Element '%s' does not have focus." % locator)
+            raise AssertionError(f"Element '{locator}' does not have focus.")
 
     @keyword
     def element_should_be_visible(self, locator, message=None):
@@ -294,10 +294,10 @@ class ElementKeywords(LibraryComponent):
         if not self.find_element(locator).is_displayed():
             if is_noney(message):
                 message = (
-                    "The element '%s' should be visible, but it " "is not." % locator
+                    f"The element '{locator}' should be visible, but it " "is not."
                 )
             raise AssertionError(message)
-        self.info("Element '%s' is displayed." % locator)
+        self.info(f"Element '{locator}' is displayed.")
 
     @keyword
     def element_should_not_be_visible(self, locator, message=None):
@@ -308,13 +308,13 @@ class ElementKeywords(LibraryComponent):
         """
         element = self.find_element(locator, required=False)
         if element is None:
-            self.info("Element '%s' did not exist." % locator)
+            self.info(f"Element '{locator}' did not exist.")
         elif not element.is_displayed():
-            self.info("Element '%s' exists but is not displayed." % locator)
+            self.info(f"Element '{locator}' exists but is not displayed.")
         else:
             if is_noney(message):
                 message = (
-                    "The element '%s' should not be visible, " "but it is." % locator
+                    f"The element '{locator}' should not be visible, " "but it is."
                 )
             raise AssertionError(message)
 
@@ -345,8 +345,8 @@ class ElementKeywords(LibraryComponent):
         if text != expected:
             if is_noney(message):
                 message = (
-                    "The text of element '%s' should have been '%s' "
-                    "but it was '%s'." % (locator, expected, before_text)
+                    f"The text of element '{locator}' should have been '{expected}' "
+                    f"but it was '{before_text}'."
                 )
             raise AssertionError(message)
 
@@ -368,8 +368,7 @@ class ElementKeywords(LibraryComponent):
         New in SeleniumLibrary 3.1.1
         """
         self.info(
-            "Verifying element '%s' does not contain exact text '%s'."
-            % (locator, not_expected)
+            f"Verifying element '{locator}' does not contain exact text '{not_expected}'."
         )
         text = self.find_element(locator).text
         before_not_expected = not_expected
@@ -378,12 +377,7 @@ class ElementKeywords(LibraryComponent):
             not_expected = not_expected.lower()
         if text == not_expected:
             if is_noney(message):
-                message = (
-                    "The text of element '{}' was not supposed to be '{}'.".format(
-                        locator,
-                        before_not_expected,
-                    )
-                )
+                message = f"The text of element '{locator}' was not supposed to be '{before_not_expected}'."
             raise AssertionError(message)
 
     @keyword
@@ -420,13 +414,12 @@ class ElementKeywords(LibraryComponent):
         if current_expected != expected:
             if is_noney(message):
                 message = (
-                    "Element '%s' attribute should have value '%s' but "
-                    "its value was '%s'." % (locator, expected, current_expected)
+                    f"Element '{locator}' attribute should have value '{expected}' but "
+                    f"its value was '{current_expected}'."
                 )
             raise AssertionError(message)
         self.info(
-            "Element '%s' attribute '%s' contains value '%s'."
-            % (locator, attribute, expected)
+            f"Element '{locator}' attribute '{attribute}' contains value '{expected}'."
         )
 
     @keyword
@@ -472,7 +465,7 @@ class ElementKeywords(LibraryComponent):
         """
         elements = self.find_elements(locator)
         if not elements:
-            raise ElementNotFound("No element with locator '%s' found." % locator)
+            raise ElementNotFound(f"No element with locator '{locator}' found.")
         for element in elements:
             script = """
 old_element = arguments[0];
@@ -545,7 +538,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
         if is_falsy(modifier):
-            self.info("Clicking button '%s'." % locator)
+            self.info(f"Clicking button '{locator}'.")
             element = self.find_element(locator, tag="input", required=False)
             if not element:
                 element = self.find_element(locator, tag="button")
@@ -567,7 +560,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
         if is_falsy(modifier):
-            self.info("Clicking image '%s'." % locator)
+            self.info(f"Clicking image '{locator}'.")
             element = self.find_element(locator, tag="image", required=False)
             if not element:
                 # A form may have an image as it's submit trigger.
@@ -590,7 +583,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
         if is_falsy(modifier):
-            self.info("Clicking link '%s'." % locator)
+            self.info(f"Clicking link '{locator}'.")
             self.find_element(locator, tag="link").click()
         else:
             self._click_with_modifier(locator, ["link", "link"], modifier)
@@ -631,11 +624,11 @@ newDiv.parentNode.style.overflow = 'hidden';
         elif is_truthy(action_chain):
             self._click_with_action_chain(locator)
         else:
-            self.info("Clicking element '%s'." % locator)
+            self.info(f"Clicking element '{locator}'.")
             self.find_element(locator).click()
 
     def _click_with_action_chain(self, locator):
-        self.info("Clicking '%s' using an action chain." % locator)
+        self.info(f"Clicking '{locator}' using an action chain.")
         action = ActionChains(self.driver)
         element = self.find_element(locator)
         action.move_to_element(element)
@@ -644,8 +637,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     def _click_with_modifier(self, locator, tag, modifier):
         self.info(
-            "Clicking %s '%s' with %s."
-            % (tag if tag[0] else "element", locator, modifier)
+            f"Clicking {tag if tag[0] else 'element'} '{locator}' with {modifier}."
         )
         modifier = self.parse_modifier(modifier)
         action = ActionChains(self.driver)
@@ -670,8 +662,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         syntax.
         """
         self.info(
-            "Clicking element '%s' at coordinates x=%s, y=%s."
-            % (locator, xoffset, yoffset)
+            f"Clicking element '{locator}' at coordinates x={xoffset}, y={yoffset}."
         )
         element = self.find_element(locator)
         action = ActionChains(self.driver)
@@ -693,7 +684,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Double clicking element '%s'." % locator)
+        self.info(f"Double clicking element '{locator}'.")
         element = self.find_element(locator)
         action = ActionChains(self.driver)
         action.double_click(element).perform()
@@ -774,7 +765,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         See also the more specific keywords `Mouse Down On Image` and
         `Mouse Down On Link`.
         """
-        self.info("Simulating Mouse Down on element '%s'." % locator)
+        self.info(f"Simulating Mouse Down on element '{locator}'.")
         element = self.find_element(locator)
         action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
@@ -786,7 +777,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Simulating Mouse Out on element '%s'." % locator)
+        self.info(f"Simulating Mouse Out on element '{locator}'.")
         element = self.find_element(locator)
         size = element.size
         offsetx = (size["width"] / 2) + 1
@@ -809,7 +800,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Simulating Mouse Over on element '%s'." % locator)
+        self.info(f"Simulating Mouse Over on element '{locator}'.")
         element = self.find_element(locator)
         action = ActionChains(self.driver)
         # Try/except can be removed when minimum required Selenium is 4.0 or greater.
@@ -827,7 +818,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Simulating Mouse Up on element '%s'." % locator)
+        self.info(f"Simulating Mouse Up on element '{locator}'.")
         element = self.find_element(locator)
         ActionChains(self.driver).release(element).perform()
 
@@ -925,7 +916,7 @@ return !element.dispatchEvent(evt);
             element = self.find_element(locator)
             ActionChains(self.driver).click(element).perform()
         else:
-            self.info("Sending key(s) %s to page." % str(keys))
+            self.info(f"Sending key(s) {keys} to page.")
             element = None
         for parsed_key in parsed_keys:
             actions = ActionChains(self.driver)
@@ -938,26 +929,24 @@ return !element.dispatchEvent(evt);
             actions.perform()
 
     def _press_keys_normal_keys(self, actions, key):
-        self.info(
-            "Sending key{} {}".format(plural_or_not(key.converted), key.converted)
-        )
+        self.info(f"Sending key{plural_or_not(key.converted)} {key.converted}")
         actions.send_keys(key.converted)
 
     def _press_keys_special_keys(self, actions, element, parsed_key, key):
         if len(parsed_key) == 1 and element:
-            self.info("Pressing special key %s to element." % key.original)
+            self.info(f"Pressing special key {key.original} to element.")
             actions.send_keys(key.converted)
         elif len(parsed_key) == 1 and not element:
-            self.info("Pressing special key %s to browser." % key.original)
+            self.info(f"Pressing special key {key.original} to browser.")
             actions.send_keys(key.converted)
         else:
-            self.info("Pressing special key %s down." % key.original)
+            self.info(f"Pressing special key {key.original} down.")
             actions.key_down(key.converted)
 
     def _special_key_up(self, actions, parsed_key):
         for key in parsed_key:
             if key.special:
-                self.info("Releasing special key %s." % key.original)
+                self.info(f"Releasing special key {key.original}.")
                 actions.key_up(key.converted)
 
     @keyword
@@ -1114,7 +1103,7 @@ return !element.dispatchEvent(evt);
         try:
             return getattr(Keys, key_name)
         except AttributeError:
-            message = "Unknown key named '%s'." % (key_name)
+            message = f"Unknown key named '{key_name}'."
             self.debug(message)
             raise ValueError(message)
 
@@ -1125,7 +1114,7 @@ return !element.dispatchEvent(evt);
             return True
 
         subframes = self.find_elements("xpath://frame|//iframe")
-        self.debug("Current frame has %d subframes." % len(subframes))
+        self.debug(f"Current frame has {len(subframes)} subframes.")
         for frame in subframes:
             self.driver.switch_to.frame(frame)
             found_text = self.is_text_present(text)
@@ -1144,7 +1133,7 @@ return !element.dispatchEvent(evt);
             if hasattr(Keys, item):
                 keys.append(getattr(Keys, item))
             else:
-                raise ValueError("'%s' modifier does not match to Selenium Keys" % item)
+                raise ValueError(f"'{item}' modifier does not match to Selenium Keys")
         return keys
 
     def _parse_keys(self, *keys):
@@ -1189,7 +1178,4 @@ return !element.dispatchEvent(evt);
         return converted_keys
 
     def _selenium_keys_has_attr(self, key):
-        try:
-            return hasattr(Keys, key)
-        except UnicodeError:  # To support Python 2 and non ascii characters.
-            return False
+        return hasattr(Keys, key)
