@@ -82,9 +82,7 @@ class ElementFinder(ContextAware):
         tag, constraints = self._get_tag_and_constraints(tag)
         elements = strategy(criteria, tag, constraints, parent=parent or self.driver)
         if required and not elements:
-            raise ElementNotFound(
-                f"{element_type} with locator '{locator}' not found."
-            )
+            raise ElementNotFound(f"{element_type} with locator '{locator}' not found.")
         if first_only:
             if not elements:
                 return None

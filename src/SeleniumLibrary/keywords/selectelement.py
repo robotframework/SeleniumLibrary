@@ -136,9 +136,7 @@ class SelectElementKeywords(LibraryComponent):
             )
 
     def _format_selection(self, labels, values):
-        return " | ".join(
-            f"{label} ({value})" for label, value in zip(labels, values)
-        )
+        return " | ".join(f"{label} ({value})" for label, value in zip(labels, values))
 
     @keyword
     def list_should_have_no_selections(self, locator):

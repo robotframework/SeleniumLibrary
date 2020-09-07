@@ -63,8 +63,7 @@ class AlertKeywords(LibraryComponent):
         message = self.handle_alert(action, timeout)
         if text and text != message:
             raise AssertionError(
-                f"Alert message should have been '{text}' but it "
-                f"was '{message}'."
+                f"Alert message should have been '{text}' but it " f"was '{message}'."
             )
 
     @keyword

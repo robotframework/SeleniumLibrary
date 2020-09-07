@@ -50,9 +50,7 @@ class BrowserManagementKeywords(LibraryComponent):
     def close_browser(self):
         """Closes the current browser."""
         if self.drivers.current:
-            self.debug(
-                f"Closing browser with session id {self.driver.session_id}."
-            )
+            self.debug(f"Closing browser with session id {self.driver.session_id}.")
             self.drivers.close()
 
     @keyword
@@ -528,7 +526,10 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if expected not in actual:
             if is_noney(message):
-                message = f"Location should have contained '{expected}' but " f"it was '{actual}'."
+                message = (
+                    f"Location should have contained '{expected}' but "
+                    f"it was '{actual}'."
+                )
             raise AssertionError(message)
         self.info(f"Current location contains '{expected}'.")
 
