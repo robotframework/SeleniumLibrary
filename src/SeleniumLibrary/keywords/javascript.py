@@ -163,7 +163,7 @@ class JavaScriptKeywords(LibraryComponent):
 
     def _read_javascript_from_file(self, path):
         self.info(
-            f'Reading JavaScript from file<a href="file://{path.replace(os.sep, "/")}">{path}</a>.',
+            f'Reading JavaScript from file <a href="file://{path.replace(os.sep, "/")}">{path}</a>.',
             html=True,
         )
         with open(path) as file:
