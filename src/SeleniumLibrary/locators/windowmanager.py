@@ -130,19 +130,19 @@ class WindowManager(ContextAware):
     def _select_by_title(self, title):
         self._select_matching(
             lambda window_info: window_info.title == title,
-            "Unable to locate window with title '%s'." % title,
+            f"Unable to locate window with title '{title}'.",
         )
 
     def _select_by_name(self, name):
         self._select_matching(
             lambda window_info: window_info.name == name,
-            "Unable to locate window with name '%s'." % name,
+            f"Unable to locate window with name '{name}'.",
         )
 
     def _select_by_url(self, url):
         self._select_matching(
             lambda window_info: window_info.url == url,
-            "Unable to locate window with URL '%s'." % url,
+            f"Unable to locate window with URL '{url}'.",
         )
 
     def _select_main_window(self):
@@ -180,7 +180,7 @@ class WindowManager(ContextAware):
             if handle not in excludes:
                 self.driver.switch_to.window(handle)
                 return
-        raise WindowNotFound("No window not matching excludes %s found." % excludes)
+        raise WindowNotFound(f"No window not matching excludes {excludes} found.")
 
     def _select_matching(self, matcher, error):
         try:
