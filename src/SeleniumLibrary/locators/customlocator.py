@@ -19,12 +19,6 @@ from robot.libraries.BuiltIn import BuiltIn
 from SeleniumLibrary.base import ContextAware
 
 
-try:
-    basestring
-except NameError:
-    basestring = str
-
-
 class CustomLocator(ContextAware):
     def __init__(self, ctx, name, finder):
         ContextAware.__init__(self, ctx)
@@ -33,7 +27,7 @@ class CustomLocator(ContextAware):
 
     def find(self, criteria, tag, constraints, parent):
         # Allow custom locators to be keywords or normal methods
-        if isinstance(self.finder, basestring):
+        if isinstance(self.finder, str):
             element = BuiltIn().run_keyword(
                 self.finder, parent, criteria, tag, constraints
             )
@@ -41,11 +35,11 @@ class CustomLocator(ContextAware):
             element = self.finder(parent, criteria, tag, constraints)
         else:
             raise AttributeError(
-                "Invalid type provided for Custom Locator %s" % self.name
+                f"Invalid type provided for Custom Locator {self.name}"
             )
 
         # Always return an array
-        if hasattr(element, "__len__") and not isinstance(element, basestring):
+        if hasattr(element, "__len__") and not isinstance(element, str):
             return element
         else:
             return [element]
