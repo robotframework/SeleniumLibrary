@@ -164,14 +164,14 @@ class WindowManager(ContextAware):
         if starting_handle:
             self.driver.switch_to.window(starting_handle)
         raise WindowNotFound(
-            "No window matching handle, name, title or URL " "'%s' found." % criteria
+            f"No window matching handle, name, title or URL '{criteria}' found."
         )
 
     def _select_by_last_index(self):
         handles = self.driver.window_handles
         if handles[-1] == self.driver.current_window_handle:
             raise WindowNotFound(
-                "Window with last index is same as " "the current window."
+                "Window with last index is same as the current window."
             )
         self.driver.switch_to.window(handles[-1])
 

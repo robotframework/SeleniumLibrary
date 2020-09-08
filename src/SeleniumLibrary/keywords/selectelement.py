@@ -17,7 +17,7 @@
 from selenium.webdriver.support.ui import Select
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_truthy, plural_or_not as s
+from SeleniumLibrary.utils import is_truthy, plural_or_not
 
 
 class SelectElementKeywords(LibraryComponent):
@@ -117,8 +117,8 @@ class SelectElementKeywords(LibraryComponent):
         | `List Selection Should Be` | interests | Test Automation | Python |
         """
         self.info(
-            "Verifying list '%s' has option%s [ %s ] selected."
-            % (locator, s(expected), " | ".join(expected))
+            f"Verifying list '{locator}' has option{plural_or_not(expected)} "
+            f"[ {' | '.join(expected)} ] selected."
         )
         self.page_should_contain_list(locator)
         options = self._get_selected_options(locator)
@@ -126,13 +126,8 @@ class SelectElementKeywords(LibraryComponent):
         values = self._get_values(options)
         if sorted(expected) not in [sorted(labels), sorted(values)]:
             raise AssertionError(
-                "List '%s' should have had selection [ %s ] "
-                "but selection was [ %s ]."
-                % (
-                    locator,
-                    " | ".join(expected),
-                    self._format_selection(labels, values),
-                )
+                f"List '{locator}' should have had selection [ {'' | ''.join(expected)} ] "
+                f"but selection was [ {self._format_selection(labels, values)} ]."
             )
 
     def _format_selection(self, labels, values):
@@ -152,8 +147,8 @@ class SelectElementKeywords(LibraryComponent):
                 self._get_labels(options), self._get_values(options)
             )
             raise AssertionError(
-                "List '%s' should have had no selection "
-                "but selection was [ %s ]." % (locator, selection)
+                f"List '{locator}' should have had no selection "
+                f"but selection was [ {selection} ]."
             )
 
     @keyword
@@ -191,7 +186,7 @@ class SelectElementKeywords(LibraryComponent):
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(
-                "'Select All From List' works only with " "multi-selection lists."
+                "'Select All From List' works only with multi-selection lists."
             )
         for i in range(len(select.options)):
             select.select_by_index(i)
@@ -212,9 +207,10 @@ class SelectElementKeywords(LibraryComponent):
         """
         if not indexes:
             raise ValueError("No indexes given.")
+        plural = "" if len(indexes) == 1 else "es"
         self.info(
-            "Selecting options from selection list '%s' by index%s %s."
-            % (locator, "" if len(indexes) == 1 else "es", ", ".join(indexes))
+            f"Selecting options from selection list '{locator}' "
+            f"by index{plural} {', '.join(indexes)}."
         )
         select = self._get_select_list(locator)
         for index in indexes:
@@ -235,8 +231,8 @@ class SelectElementKeywords(LibraryComponent):
         if not values:
             raise ValueError("No values given.")
         self.info(
-            "Selecting options from selection list '%s' by value%s %s."
-            % (locator, s(values), ", ".join(values))
+            f"Selecting options from selection list '{locator}' by "
+            f"value{plural_or_not(values)} {', '.join(values)}."
         )
         select = self._get_select_list(locator)
         for value in values:
@@ -257,8 +253,8 @@ class SelectElementKeywords(LibraryComponent):
         if not labels:
             raise ValueError("No labels given.")
         self.info(
-            "Selecting options from selection list '%s' by label%s %s."
-            % (locator, s(labels), ", ".join(labels))
+            f"Selecting options from selection list '{locator}' "
+            f"by label{plural_or_not(labels)} {', '.join(labels)}."
         )
         select = self._get_select_list(locator)
         for label in labels:
@@ -273,11 +269,11 @@ class SelectElementKeywords(LibraryComponent):
 
         New in SeleniumLibrary 3.0.
         """
-        self.info("Unselecting all options from list '%s'." % locator)
+        self.info(f"Unselecting all options from list '{locator}'." % locator)
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(
-                "Un-selecting options works only with " "multi-selection lists."
+                "Un-selecting options works only with multi-selection lists."
             )
         select.deselect_all()
 
@@ -293,14 +289,15 @@ class SelectElementKeywords(LibraryComponent):
         """
         if not indexes:
             raise ValueError("No indexes given.")
+        plurar = "" if len(indexes) == 1 else "es"
         self.info(
-            "Un-selecting options from selection list '%s' by index%s "
-            "%s." % (locator, "" if len(indexes) == 1 else "es", ", ".join(indexes))
+            f"Un-selecting options from selection list '{locator}' by index{plurar} "
+            f"{', '.join(indexes)}."
         )
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(
-                "Un-selecting options works only with " "multi-selection lists."
+                "Un-selecting options works only with multi-selection lists."
             )
         for index in indexes:
             select.deselect_by_index(int(index))
@@ -317,13 +314,13 @@ class SelectElementKeywords(LibraryComponent):
         if not values:
             raise ValueError("No values given.")
         self.info(
-            "Un-selecting options from selection list '%s' by value%s "
-            "%s." % (locator, s(values), ", ".join(values))
+            f"Un-selecting options from selection list '{locator}' by "
+            f"value{plural_or_not(values)} {', '.join(values)}."
         )
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(
-                "Un-selecting options works only with " "multi-selection lists."
+                "Un-selecting options works only with multi-selection lists."
             )
         for value in values:
             select.deselect_by_value(value)
@@ -340,13 +337,13 @@ class SelectElementKeywords(LibraryComponent):
         if not labels:
             raise ValueError("No labels given.")
         self.info(
-            "Un-selecting options from selection list '%s' by label%s "
-            "%s." % (locator, s(labels), ", ".join(labels))
+            f"Un-selecting options from selection list '{locator}' by "
+            f"label{plural_or_not(labels)} {', '.join(labels)}."
         )
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(
-                "Un-selecting options works only with " "multi-selection lists."
+                "Un-selecting options works only with multi-selection lists."
             )
         for label in labels:
             select.deselect_by_visible_text(label)

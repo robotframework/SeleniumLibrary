@@ -143,7 +143,7 @@ class TableElementKeywords(LibraryComponent):
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Table '%s' footer did not contain text " "'%s'." % (locator, expected)
+                f"Table '{locator}' footer did not contain text '{expected}'."
             )
 
     @keyword
@@ -163,7 +163,7 @@ class TableElementKeywords(LibraryComponent):
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Table '%s' header did not contain text " "'%s'." % (locator, expected)
+                f"Table '{locator}' header did not contain text '{expected}'."
             )
 
     @keyword

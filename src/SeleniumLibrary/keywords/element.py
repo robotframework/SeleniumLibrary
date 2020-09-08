@@ -126,7 +126,7 @@ class ElementKeywords(LibraryComponent):
         if not self._page_contains(text):
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                f"Page should have contained text '{text}' " "but did not."
+                f"Page should have contained text '{text}' but did not."
             )
         self.info(f"Current page contains text '{text}'.")
 
@@ -293,9 +293,7 @@ class ElementKeywords(LibraryComponent):
         """
         if not self.find_element(locator).is_displayed():
             if is_noney(message):
-                message = (
-                    f"The element '{locator}' should be visible, but it " "is not."
-                )
+                message = f"The element '{locator}' should be visible, but it is not."
             raise AssertionError(message)
         self.info(f"Element '{locator}' is displayed.")
 
@@ -313,9 +311,7 @@ class ElementKeywords(LibraryComponent):
             self.info(f"Element '{locator}' exists but is not displayed.")
         else:
             if is_noney(message):
-                message = (
-                    f"The element '{locator}' should not be visible, " "but it is."
-                )
+                message = f"The element '{locator}' should not be visible, but it is."
             raise AssertionError(message)
 
     @keyword
