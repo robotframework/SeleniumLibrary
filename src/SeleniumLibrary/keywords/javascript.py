@@ -103,13 +103,11 @@ class JavaScriptKeywords(LibraryComponent):
     def _js_logger(self, base, code, args):
         message = f"{base}:\n{code}\n"
         if args:
-            message = "{}By using argument{}:\n{}".format(
-                message,
-                plural_or_not(args),
-                seq2str(args),
+            message = (
+                f"{message}By using argument{plural_or_not(args)}:\n{seq2str(args)}"
             )
         else:
-            message = "%sWithout any arguments." % message
+            message = f"{message}Without any arguments."
         self.info(message)
 
     def _get_javascript_to_execute(self, code):
@@ -127,14 +125,14 @@ class JavaScriptKeywords(LibraryComponent):
         self._check_marker_error(code)
         index = self._get_marker_index(code)
         if self.arg_marker not in code:
-            return code[index.js + 1:], []
+            return code[index.js + 1 :], []
         if self.js_marker not in code:
-            return code[0:index.arg], code[index.arg + 1:]
+            return code[0 : index.arg], code[index.arg + 1 :]
         else:
             if index.js == 0:
-                return code[index.js + 1: index.arg], code[index.arg + 1:]
+                return code[index.js + 1 : index.arg], code[index.arg + 1 :]
             else:
-                return code[index.js + 1:], code[index.arg + 1: index.js]
+                return code[index.js + 1 :], code[index.arg + 1 : index.js]
 
     def _check_marker_error(self, code):
         if not code:
@@ -165,8 +163,7 @@ class JavaScriptKeywords(LibraryComponent):
 
     def _read_javascript_from_file(self, path):
         self.info(
-            'Reading JavaScript from file <a href="file://%s">%s</a>.'
-            % (path.replace(os.sep, "/"), path),
+            f'Reading JavaScript from file<a href="file://{path.replace(os.sep, "/")}">{path}</a>.',
             html=True,
         )
         with open(path) as file:
