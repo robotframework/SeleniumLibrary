@@ -88,7 +88,8 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             (
                 "code1",
                 "JAVASCRIPT",
-                "code1" "ARGUMENTS",
+                "code1",
+                "ARGUMENTS",
                 "arg1",
             ),
             ("ARGUMENTS", "arg1", "ARGUMENTS", "arg1", "JAVASCRIPT", "code1"),

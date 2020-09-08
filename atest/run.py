@@ -280,7 +280,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "browser",
-        help=("Any browser supported by the library " "(e.g. `chrome`or `firefox`)."),
+        help=("Any browser supported by the library (e.g. `chrome`or `firefox`)."),
     )
     parser.add_argument(
         "--nounit",
