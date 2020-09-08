@@ -217,19 +217,16 @@ class ScreenshotKeywords(LibraryComponent):
         self.info(
             '</td></tr><tr><td colspan="3">'
             '<img alt="screenshot" class="robot-seleniumlibrary-screenshot" '
-            'src="data:image/png;base64,{screenshot_data}" width="{width}px">'.format(
-                screenshot_data=screenshot_as_base64, width=width
-            ),
+            f'src="data:image/png;base64,{screenshot_as_base64}" width="{width}px">',
             html=True,
         )
 
     def _embed_to_log_as_file(self, path, width):
         # Image is shown on its own row and thus previous row is closed on
         # purpose. Depending on Robot's log structure is a bit risky.
+        src = get_link_path(path, self.log_dir)
         self.info(
             '</td></tr><tr><td colspan="3">'
-            '<a href="{src}"><img src="{src}" width="{width}px"></a>'.format(
-                src=get_link_path(path, self.log_dir), width=width
-            ),
+            f'<a href="{src}"><img src="{src}" width="{width}px"></a>',
             html=True,
         )
