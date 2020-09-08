@@ -34,7 +34,7 @@ class FrameKeywords(LibraryComponent):
         | `Unselect Frame` |           | # Back to main frame.                        |
         | `Select Frame`   | //iframe[@name='xxx'] | # Select frame using xpath       |
         """
-        self.info("Selecting frame '%s'." % locator)
+        self.info(f"Selecting frame '{locator}'.")
         element = self.find_element(locator)
         self.driver.switch_to.frame(element)
 
@@ -59,9 +59,9 @@ class FrameKeywords(LibraryComponent):
         if not self.is_text_present(text):
             self.log_source(loglevel)
             raise AssertionError(
-                "Frame should have contained text '%s' " "but did not." % text
+                f"Frame should have contained text '{text}' but did not."
             )
-        self.info("Current frame contains text '%s'." % text)
+        self.info(f"Current frame contains text '{text}'.")
 
     @keyword
     def current_frame_should_not_contain(self, text, loglevel="TRACE"):
@@ -73,9 +73,9 @@ class FrameKeywords(LibraryComponent):
         if self.is_text_present(text):
             self.log_source(loglevel)
             raise AssertionError(
-                "Frame should not have contained text '%s' " "but it did." % text
+                f"Frame should not have contained text '{text}' but it did."
             )
-        self.info("Current frame did not contain text '%s'." % text)
+        self.info(f"Current frame did not contain text '{text}'.")
 
     @keyword
     def frame_should_contain(self, locator, text, loglevel="TRACE"):
@@ -90,15 +90,14 @@ class FrameKeywords(LibraryComponent):
         if not self._frame_contains(locator, text):
             self.log_source(loglevel)
             raise AssertionError(
-                "Frame '%s' should have contained text '%s' "
-                "but did not." % (locator, text)
+                f"Frame '{locator}' should have contained text '{text}' but did not."
             )
         self.info(f"Frame '{locator}' contains text '{text}'.")
 
     def _frame_contains(self, locator, text):
         element = self.find_element(locator)
         self.driver.switch_to.frame(element)
-        self.info("Searching for text from frame '%s'." % locator)
+        self.info(f"Searching for text from frame '{locator}'.")
         found = self.is_text_present(text)
         self.driver.switch_to.default_content()
         return found
