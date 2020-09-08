@@ -239,8 +239,7 @@ class WindowKeywords(LibraryComponent):
         inner_width = int(self.driver.execute_script("return window.innerWidth;"))
         inner_height = int(self.driver.execute_script("return window.innerHeight;"))
         self.info(
-            "window.innerWidth is %s and window.innerHeight is %s"
-            % (inner_width, inner_height)
+            f"window.innerWidth is {inner_width} and window.innerHeight is {inner_height}"
         )
         width_offset = width - inner_width
         height_offset = height - inner_height
