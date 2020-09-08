@@ -505,16 +505,16 @@ class SeleniumLibrary(DynamicCore):
     def _get_intro_documentation(self):
         intro = DynamicCore.get_keyword_documentation(self, "__intro__")
         for plugin_doc in self._parse_plugin_doc():
-            intro += "\n\n"
-            intro = intro + "= Plugin: %s =" % plugin_doc.name + "\n\n"
-            intro = intro + plugin_doc.doc
+            intro = f"{intro}\n\n"
+            intro = f"{intro}= Plugin: {plugin_doc.name} =\n\n"
+            intro = f"{intro}{plugin_doc.doc}"
         return self._create_toc(intro)
 
     def _create_toc(self, intro):
         toc = ["== Table of contents ==", ""]
         all_match = re.findall(r"(^\=\s)(.+)(\s\=$)", intro, re.MULTILINE)
         for match in all_match:
-            toc.append("- `%s`" % match[1])
+            toc.append(f"- `{match[1]}`")
         toc.extend(["- `Importing`", "- `Shortcuts`", "- `Keywords`"])
         return intro.replace("%TOC%", "\n".join(toc))
 
@@ -544,8 +544,7 @@ class SeleniumLibrary(DynamicCore):
             BuiltIn().run_keyword(self.run_on_failure_keyword)
         except Exception as err:
             logger.warn(
-                "Keyword '%s' could not be run on failure: %s"
-                % (self.run_on_failure_keyword, err)
+                f"Keyword '{self.run_on_failure_keyword}' could not be run on failure: {err}"
             )
         finally:
             self._running_on_failure_keyword = False
@@ -598,7 +597,7 @@ class SeleniumLibrary(DynamicCore):
         for parsed_plugin in self._string_to_modules(plugins):
             plugin = importer.import_class_or_module(parsed_plugin.module)
             if not isclass(plugin):
-                message = "Importing test library: '%s' failed." % parsed_plugin.module
+                message = f"Importing test library: '{parsed_plugin.module}' failed."
                 raise DataError(message)
             plugin = plugin(self, *parsed_plugin.args, **parsed_plugin.kw_args)
             if not isinstance(plugin, LibraryComponent):
@@ -614,19 +613,13 @@ class SeleniumLibrary(DynamicCore):
         listener_module = self._string_to_modules(event_firing_webdriver)
         listener_count = len(listener_module)
         if listener_count > 1:
-            message = (
-                "Is is possible import only one listener but there was %s listeners."
-                % listener_count
-            )
+            message = f"Is is possible import only one listener but there was {listener_count} listeners."
             raise ValueError(message)
         listener_module = listener_module[0]
         importer = Importer("test library")
         listener = importer.import_class_or_module(listener_module.module)
         if not isclass(listener):
-            message = (
-                "Importing test Selenium lister class '%s' failed."
-                % listener_module.module
-            )
+            message = f"Importing test Selenium lister class '{listener_module.module}' failed."
             raise DataError(message)
         return listener
 

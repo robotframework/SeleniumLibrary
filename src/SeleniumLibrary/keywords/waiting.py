@@ -45,11 +45,11 @@ class WaitingKeywords(LibraryComponent):
         """
         if "return" not in condition:
             raise ValueError(
-                "Condition '%s' did not have mandatory 'return'." % condition
+                f"Condition '{condition}' did not have mandatory 'return'."
             )
         self._wait_until(
             lambda: self.driver.execute_script(condition) is True,
-            "Condition '%s' did not become true in <TIMEOUT>." % condition,
+            f"Condition '{condition}' did not become true in <TIMEOUT>.",
             timeout,
             error,
         )
@@ -73,7 +73,7 @@ class WaitingKeywords(LibraryComponent):
         expected = str(expected)
         self._wait_until(
             lambda: expected == self.driver.current_url,
-            "Location did not become '%s' in <TIMEOUT>." % expected,
+            f"Location did not become '{expected}' in <TIMEOUT>.",
             timeout,
             message,
         )
@@ -96,7 +96,7 @@ class WaitingKeywords(LibraryComponent):
         location = str(location)
         self._wait_until(
             lambda: location != self.driver.current_url,
-            "Location is '%s' in <TIMEOUT>." % location,
+            f"Location is '{location}' in <TIMEOUT>.",
             timeout,
             message,
         )
@@ -119,7 +119,7 @@ class WaitingKeywords(LibraryComponent):
         expected = str(expected)
         self._wait_until(
             lambda: expected in self.driver.current_url,
-            "Location did not contain '%s' in <TIMEOUT>." % expected,
+            f"Location did not contain '{expected}' in <TIMEOUT>.",
             timeout,
             message,
         )
@@ -144,7 +144,7 @@ class WaitingKeywords(LibraryComponent):
         location = str(location)
         self._wait_until(
             lambda: location not in self.driver.current_url,
-            "Location did contain '%s' in <TIMEOUT>." % location,
+            f"Location did contain '{location}' in <TIMEOUT>.",
             timeout,
             message,
         )
@@ -161,7 +161,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: self.is_text_present(text),
-            "Text '%s' did not appear in <TIMEOUT>." % text,
+            f"Text '{text}' did not appear in <TIMEOUT>.",
             timeout,
             error,
         )
@@ -178,7 +178,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: not self.is_text_present(text),
-            "Text '%s' did not disappear in <TIMEOUT>." % text,
+            f"Text '{text}' did not disappear in <TIMEOUT>.",
             timeout,
             error,
         )
@@ -206,15 +206,14 @@ class WaitingKeywords(LibraryComponent):
         if is_noney(limit):
             return self._wait_until(
                 lambda: self.find_element(locator, required=False) is not None,
-                "Element '%s' did not appear in <TIMEOUT>." % locator,
+                f"Element '{locator}' did not appear in <TIMEOUT>.",
                 timeout,
                 error,
             )
         limit = int(limit)
         self._wait_until(
             lambda: len(self.find_elements(locator)) == limit,
-            'Page should have contained "%s" %s element(s) within <TIMEOUT>.'
-            % (limit, locator),
+            f'Page should have contained "{limit}" {locator} element(s) within <TIMEOUT>.',
             timeout,
             error,
         )
@@ -242,15 +241,14 @@ class WaitingKeywords(LibraryComponent):
         if is_noney(limit):
             return self._wait_until(
                 lambda: self.find_element(locator, required=False) is None,
-                "Element '%s' did not disappear in <TIMEOUT>." % locator,
+                f"Element '{locator}' did not disappear in <TIMEOUT>.",
                 timeout,
                 error,
             )
         limit = int(limit)
         self._wait_until(
             lambda: len(self.find_elements(locator)) != limit,
-            'Page should have not contained "%s" %s element(s) within <TIMEOUT>.'
-            % (limit, locator),
+            f'Page should have not contained "{limit}" {locator} element(s) within <TIMEOUT>.',
             timeout,
             error,
         )
@@ -268,7 +266,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: self.is_visible(locator),
-            "Element '%s' not visible after <TIMEOUT>." % locator,
+            f"Element '{locator}' not visible after <TIMEOUT>.",
             timeout,
             error,
         )
@@ -286,7 +284,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: not self.is_visible(locator),
-            "Element '%s' still visible after <TIMEOUT>." % locator,
+            f"Element '{locator}' still visible after <TIMEOUT>.",
             timeout,
             error,
         )
@@ -309,7 +307,7 @@ class WaitingKeywords(LibraryComponent):
         """
         self._wait_until(
             lambda: self.is_element_enabled(locator),
-            "Element '%s' was not enabled in <TIMEOUT>." % locator,
+            f"Element '{locator}' was not enabled in <TIMEOUT>.",
             timeout,
             error,
         )

@@ -138,14 +138,14 @@ class JavaScriptKeywords(LibraryComponent):
         if not code:
             raise ValueError("There must be at least one argument defined.")
         message = None
-        template = "%s marker was found two times in the code."
+        template = " marker was found two times in the code."
         if code.count(self.js_marker) > 1:
-            message = template % self.js_marker
+            message = f"{self.js_marker}{template}"
         if code.count(self.arg_marker) > 1:
-            message = template % self.arg_marker
+            message = f"{self.arg_marker}{template}"
         index = self._get_marker_index(code)
         if index.js > 0 and index.arg != 0:
-            message = template % self.js_marker
+            message = f"{self.js_marker}{template}"
         if message:
             raise ValueError(message)
 
