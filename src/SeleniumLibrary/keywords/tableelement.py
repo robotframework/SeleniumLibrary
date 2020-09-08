@@ -44,7 +44,7 @@ class TableElementKeywords(LibraryComponent):
         if row == 0 or column == 0:
             raise ValueError(
                 "Both row and column must be non-zero, "
-                "got row %d and column %d." % (row, column)
+                f"got row {row} and column {column}."
             )
         try:
             cell = self._get_cell(locator, row, column)
@@ -57,16 +57,15 @@ class TableElementKeywords(LibraryComponent):
         rows = self._get_rows(locator, row)
         if len(rows) < abs(row):
             raise AssertionError(
-                "Table '%s' should have had at least %d "
-                "rows but had only %d." % (locator, abs(row), len(rows))
+                f"Table '{locator}' should have had at least {abs(row)} "
+                f"rows but had only {len(rows)}."
             )
         index = row - 1 if row > 0 else row
         cells = rows[index].find_elements(By.XPATH, "./th|./td")
         if len(cells) < abs(column):
             raise AssertionError(
-                "Table '%s' row %d should have had at "
-                "least %d columns but had only %d."
-                % (locator, row, abs(column), len(cells))
+                f"Table '{locator}' row {row} should have had at "
+                f"least {abs(column)} columns but had only {len(cells)}."
             )
         index = column - 1 if column > 0 else column
         return cells[index]
@@ -94,11 +93,10 @@ class TableElementKeywords(LibraryComponent):
         if expected not in content:
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Table '%s' cell on row %s and column %s "
-                "should have contained text '%s' but it had "
-                "'%s'." % (locator, row, column, expected, content)
+                f"Table '{locator}' cell on row {row} and column {column} "
+                f"should have contained text '{expected}' but it had '{content}'."
             )
-        self.info("Table cell contains '%s'." % content)
+        self.info(f"Table cell contains '{content}'.")
 
     @keyword
     def table_column_should_contain(self, locator, column, expected, loglevel="TRACE"):
@@ -122,8 +120,7 @@ class TableElementKeywords(LibraryComponent):
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Table '%s' column %s did not contain text "
-                "'%s'." % (locator, column, expected)
+                f"Table '{locator}' column {column} did not contain text '{expected}'."
             )
 
     @keyword
@@ -188,8 +185,7 @@ class TableElementKeywords(LibraryComponent):
         if element is None:
             self.ctx.log_source(loglevel)
             raise AssertionError(
-                "Table '%s' row %s did not contain text "
-                "'%s'." % (locator, row, expected)
+                f"Table '{locator}' row {row} did not contain text '{expected}'."
             )
 
     @keyword
@@ -236,7 +232,7 @@ class TableElementKeywords(LibraryComponent):
             return str(index)
         if index == -1:
             return "position()=last()"
-        return "position()=last()-{}".format(abs(index) - 1)
+        return f"position()=last()-{abs(index) - 1}"
 
     def _find(self, table_locator, locator, content):
         table = self.find_element(table_locator)
