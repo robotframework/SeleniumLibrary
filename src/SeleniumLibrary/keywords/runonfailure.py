@@ -55,9 +55,9 @@ class RunOnFailureKeywords(LibraryComponent):
           it could not be used to restore the original state.
         """
         old_keyword = self.ctx.run_on_failure_keyword
-        keyword = self.resolve_keyword(keyword)
-        self.ctx.run_on_failure_keyword = keyword
-        self.info("%s will be run on failure." % (keyword or "No keyword"))
+        new_keyword = self.resolve_keyword(keyword)
+        self.ctx.run_on_failure_keyword = new_keyword
+        self.info(f"{(new_keyword or 'No keyword')} will be run on failure.")
         return old_keyword
 
     @staticmethod
