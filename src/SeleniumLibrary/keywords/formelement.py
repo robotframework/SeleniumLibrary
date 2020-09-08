@@ -33,7 +33,7 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Submitting form '%s'." % locator)
+        self.info(f"Submitting form '{locator}'.")
         if is_noney(locator):
             locator = "tag:form"
         element = self.find_element(locator, tag="form")
@@ -46,11 +46,11 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Verifying checkbox '%s' is selected." % locator)
+        self.info(f"Verifying checkbox '{locator}' is selected.")
         element = self._get_checkbox(locator)
         if not element.is_selected():
             raise AssertionError(
-                "Checkbox '%s' should have been selected " "but was not." % locator
+                f"Checkbox '{locator}' should have been selected but was not."
             )
 
     @keyword
@@ -60,12 +60,10 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Verifying checkbox '%s' is not selected." % locator)
+        self.info(f"Verifying checkbox '{locator}' is not selected.")
         element = self._get_checkbox(locator)
         if element.is_selected():
-            raise AssertionError(
-                "Checkbox '%s' should not have been " "selected." % locator
-            )
+            raise AssertionError(f"Checkbox '{locator}' should not have been selected.")
 
     @keyword
     def page_should_contain_checkbox(self, locator, message=None, loglevel="TRACE"):
@@ -100,7 +98,7 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Selecting checkbox '%s'." % locator)
+        self.info(f"Selecting checkbox '{locator}'.")
         element = self._get_checkbox(locator)
         if not element.is_selected():
             element.click()
@@ -114,7 +112,7 @@ class FormElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Unselecting checkbox '%s'." % locator)
+        self.info(f"Unselecting checkbox '{locator}'.")
         element = self._get_checkbox(locator)
         if element.is_selected():
             element.click()
@@ -158,8 +156,8 @@ class FormElementKeywords(LibraryComponent):
         actual_value = self._get_value_from_radio_buttons(elements)
         if actual_value is None or actual_value != value:
             raise AssertionError(
-                "Selection of radio button '%s' should have "
-                "been '%s' but was '%s'." % (group_name, value, actual_value)
+                f"Selection of radio button '{group_name}' should have "
+                "been '{value}' but was '{actual_value}'."
             )
 
     @keyword
@@ -168,13 +166,13 @@ class FormElementKeywords(LibraryComponent):
 
         ``group_name`` is the ``name`` of the radio button group.
         """
-        self.info("Verifying radio button '%s' has no selection." % group_name)
+        self.info(f"Verifying radio button '{group_name}' has no selection.")
         elements = self._get_radio_buttons(group_name)
         actual_value = self._get_value_from_radio_buttons(elements)
         if actual_value is not None:
             raise AssertionError(
-                "Radio button group '%s' should not have "
-                "had selection, but '%s' was selected." % (group_name, actual_value)
+                f"Radio button group '{group_name}' should not have "
+                f"had selection, but '{actual_value}' was selected."
             )
 
     @keyword
@@ -216,7 +214,7 @@ class FormElementKeywords(LibraryComponent):
         """
         self.ctx._running_keyword = "choose_file"
         try:
-            self.info("Sending %s to browser." % os.path.abspath(file_path))
+            self.info(f"Sending {os.path.abspath(file_path)} to browser.")
             self.find_element(locator).send_keys(file_path)
         finally:
             self.ctx._running_keyword = None
@@ -246,7 +244,7 @@ class FormElementKeywords(LibraryComponent):
         The `clear` argument is new in SeleniumLibrary 4.0. Hiding password
         logging from Selenium logs is new in SeleniumLibrary 4.2.
         """
-        self.info("Typing password into text field '%s'." % locator)
+        self.info(f"Typing password into text field '{locator}'.")
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
@@ -314,8 +312,8 @@ class FormElementKeywords(LibraryComponent):
         if expected not in actual:
             if is_noney(message):
                 message = (
-                    "Text field '%s' should have contained text '%s' "
-                    "but it contained '%s'." % (locator, expected, actual)
+                    f"Text field '{locator}' should have contained text "
+                    f"'{expected}' but it contained '{actual}'."
                 )
             raise AssertionError(message)
         self.info(f"Text field '{locator}' contains text '{expected}'.")
@@ -333,8 +331,8 @@ class FormElementKeywords(LibraryComponent):
         if actual != expected:
             if is_noney(message):
                 message = (
-                    "Value of text field '%s' should have been '%s' "
-                    "but was '%s'." % (locator, expected, actual)
+                    f"Value of text field '{locator}' should have been "
+                    f"'{expected}' but was '{actual}'."
                 )
             raise AssertionError(message)
         self.info(f"Content of text field '{locator}' is '{expected}'.")
@@ -352,8 +350,8 @@ class FormElementKeywords(LibraryComponent):
         if expected not in actual:
             if is_noney(message):
                 message = (
-                    "Text area '%s' should have contained text '%s' "
-                    "but it had '%s'." % (locator, expected, actual)
+                    f"Text area '{locator}' should have contained text "
+                    f"'{expected}' but it had '{actual}'."
                 )
             raise AssertionError(message)
         self.info(f"Text area '{locator}' contains text '{expected}'.")
@@ -371,8 +369,8 @@ class FormElementKeywords(LibraryComponent):
         if expected != actual:
             if is_noney(message):
                 message = (
-                    "Text area '%s' should have had text '%s' "
-                    "but it had '%s'." % (locator, expected, actual)
+                    f"Text area '{locator}' should have had text "
+                    f"'{expected}' but it had '{actual}'."
                 )
             raise AssertionError(message)
         self.info(f"Content of text area '{locator}' is '{expected}'.")
@@ -414,25 +412,25 @@ class FormElementKeywords(LibraryComponent):
         return self.find_element(locator, tag="checkbox")
 
     def _get_radio_buttons(self, group_name):
-        xpath = "xpath://input[@type='radio' and @name='%s']" % group_name
-        self.debug("Radio group locator: " + xpath)
+        xpath = f"xpath://input[@type='radio' and @name='{group_name}']"
+        self.debug(f"Radio group locator: {xpath}")
         elements = self.find_elements(xpath)
         if not elements:
-            raise ElementNotFound("No radio button with name '%s' found." % group_name)
+            raise ElementNotFound(f"No radio button with name '{group_name}' found.")
         return elements
 
     def _get_radio_button_with_value(self, group_name, value):
         xpath = (
-            "xpath://input[@type='radio' and @name='%s' and "
-            "(@value='%s' or @id='%s')]" % (group_name, value, value)
+            f"xpath://input[@type='radio' and @name='{group_name}' and "
+            f"(@value='{value}' or @id='{value}')]"
         )
-        self.debug("Radio group locator: " + xpath)
+        self.debug(f"Radio group locator: {xpath}")
         try:
             return self.find_element(xpath)
         except ElementNotFound:
             raise ElementNotFound(
-                "No radio button with name '%s' and "
-                "value '%s' found." % (group_name, value)
+                f"No radio button with name '{group_name}' "
+                f"and value '{value}' found."
             )
 
     def _get_value_from_radio_buttons(self, elements):
