@@ -126,7 +126,7 @@ class SelectElementKeywords(LibraryComponent):
         values = self._get_values(options)
         if sorted(expected) not in [sorted(labels), sorted(values)]:
             raise AssertionError(
-                f"List '{locator}' should have had selection [ {'' | ''.join(expected)} ] "
+                f"List '{locator}' should have had selection [ {' | '.join(expected)} ] "
                 f"but selection was [ {self._format_selection(labels, values)} ]."
             )
 
@@ -269,7 +269,7 @@ class SelectElementKeywords(LibraryComponent):
 
         New in SeleniumLibrary 3.0.
         """
-        self.info(f"Unselecting all options from list '{locator}'." % locator)
+        self.info(f"Unselecting all options from list '{locator}'.")
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(

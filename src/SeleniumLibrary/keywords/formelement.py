@@ -157,7 +157,7 @@ class FormElementKeywords(LibraryComponent):
         if actual_value is None or actual_value != value:
             raise AssertionError(
                 f"Selection of radio button '{group_name}' should have "
-                "been '{value}' but was '{actual_value}'."
+                f"been '{value}' but was '{actual_value}'."
             )
 
     @keyword
