@@ -140,7 +140,7 @@ class SelectElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Verifying list '%s' has no selections." % locator)
+        self.info(f"Verifying list '{locator}' has no selections.")
         options = self._get_selected_options(locator)
         if options:
             selection = self._format_selection(
@@ -182,14 +182,14 @@ class SelectElementKeywords(LibraryComponent):
         See the `Locating elements` section for details about the locator
         syntax.
         """
-        self.info("Selecting all options from list '%s'." % locator)
+        self.info(f"Selecting all options from list '{locator}'.")
         select = self._get_select_list(locator)
         if not select.is_multiple:
             raise RuntimeError(
                 "'Select All From List' works only with multi-selection lists."
             )
-        for i in range(len(select.options)):
-            select.select_by_index(i)
+        for index in range(len(select.options)):
+            select.select_by_index(index)
 
     @keyword
     def select_from_list_by_index(self, locator, *indexes):
