@@ -72,8 +72,7 @@ class ElementFinder(ContextAware):
         element_type = "Element" if not tag else tag.capitalize()
         if parent and not self._is_webelement(parent):
             raise ValueError(
-                "Parent must be Selenium WebElement but it "
-                "was {}.".format(type(parent))
+                f"Parent must be Selenium WebElement but it was {type(parent)}."
             )
         if self._is_webelement(locator):
             return locator
@@ -93,8 +92,8 @@ class ElementFinder(ContextAware):
         strategy = CustomLocator(self.ctx, strategy_name, strategy_keyword)
         if strategy.name in self._strategies:
             raise RuntimeError(
-                "The custom locator '%s' cannot be registered. "
-                "A locator of that name already exists." % strategy.name
+                f"The custom locator '{strategy.name}' cannot be registered. "
+                "A locator of that name already exists."
             )
         self._strategies[strategy.name] = strategy.find
         if is_falsy(persist):
@@ -104,11 +103,11 @@ class ElementFinder(ContextAware):
     def unregister(self, strategy_name):
         if strategy_name in self._default_strategies:
             raise RuntimeError(
-                "Cannot unregister the default strategy '%s'." % strategy_name
+                f"Cannot unregister the default strategy '{strategy_name}'."
             )
         if strategy_name not in self._strategies:
             raise RuntimeError(
-                "Cannot unregister the non-registered strategy '%s'." % strategy_name
+                f"Cannot unregister the non-registered strategy '{strategy_name}'."
             )
         del self._strategies[strategy_name]
 
@@ -143,7 +142,7 @@ class ElementFinder(ContextAware):
 
     def _find_by_dom(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
-        result = self.driver.execute_script("return %s;" % criteria)
+        result = self.driver.execute_script(f"return {criteria};")
         if result is None:
             return []
         if not isinstance(result, list):
@@ -152,7 +151,8 @@ class ElementFinder(ContextAware):
 
     def _find_by_jquery_selector(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
-        js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
+        criteria = criteria.replace("'", "\\'")
+        js = f"return jQuery('{criteria}').get();"
         return self._filter_elements(self.driver.execute_script(js), tag, constraints)
 
     def _find_by_link_text(self, criteria, tag, constraints, parent):
@@ -182,7 +182,8 @@ class ElementFinder(ContextAware):
 
     def _find_by_sc_locator(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)
-        js = "return isc.AutoTest.getElement('%s')" % criteria.replace("'", "\\'")
+        criteria = criteria.replace("'", "\\'")
+        js = f"return isc.AutoTest.getElement('{criteria}')"
         return self._filter_elements([self.driver.execute_script(js)], tag, constraints)
 
     def _find_by_default(self, criteria, tag, constraints, parent):
@@ -195,11 +196,9 @@ class ElementFinder(ContextAware):
         xpath_constraints = self._get_xpath_constraints(constraints)
         xpath_searchers = [f"{attr}={xpath_criteria}" for attr in key_attrs]
         xpath_searchers.extend(self._get_attrs_with_url(key_attrs, criteria))
-        xpath = "//{}[{}{}({})]".format(
-            xpath_tag,
-            " and ".join(xpath_constraints),
-            " and " if xpath_constraints else "",
-            " or ".join(xpath_searchers),
+        xpath = (
+            f"//{xpath_tag}[{' and '.join(xpath_constraints)}"
+            f"{' and ' if xpath_constraints else ''}({' or '.join(xpath_searchers)})]"
         )
         return self._normalize(parent.find_elements(By.XPATH, xpath))
 
@@ -266,7 +265,7 @@ class ElementFinder(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index + 1:].lstrip()
+                return prefix, locator[index + 1 :].lstrip()
         return "default", locator
 
     def _get_locator_separator_index(self, locator):
@@ -320,6 +319,6 @@ class ElementFinder(ContextAware):
         # ChromeDriver has done sometimes returned None:
         # https://github.com/SeleniumHQ/selenium/issues/4555
         if not isinstance(elements, list):
-            logger.debug("WebDriver find returned %s" % elements)
+            logger.debug(f"WebDriver find returned {elements}")
             return []
         return elements
