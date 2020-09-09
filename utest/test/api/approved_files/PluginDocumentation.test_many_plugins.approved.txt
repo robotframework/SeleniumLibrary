@@ -143,6 +143,24 @@ Examples:
 
 The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
 
+=== Using multiple locators ===
+
+A combination of locator strategies can be used to find an element.
+
+Examples:
+
+| `Click Element` | css:.bar >> xpath://a[6] | # To find a link presnt in an element with class "bar" |
+| `Page Should Contain Image` | css=.bar >> xpath=//div[@id="foo"] >> tag=img | # To find an image presnt in a div with the id "foo", which is in turn present in an element with the class "bar" |
+
+Note that the strategy must be specified explicitly for each locator and a single space must be used around each ``>>`` separator.
+
+A list can also be used to speicify multiple locators.
+
+Example:
+| ${locator_list} = | `Create List` | css:div#div_id | xpath:a[6] | id:image1_id |
+| `Page Should Contain Element` | ${locator_list} |
+
+
 == Using WebElements ==
 
 In addition to specifying a locator as a string, it is possible to use
