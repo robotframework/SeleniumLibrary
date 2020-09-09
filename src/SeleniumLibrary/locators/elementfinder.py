@@ -334,9 +334,14 @@ class ElementFinder(ContextAware):
         return elements
 
     def _split_locator_if_contains_sublocators(self, locator):
-        multi_locator_pattern = '.* >> (identifier|id|name|xpath|dom|link|partial link|css|class|jquery|sizzle|tag|scLocator)(:|=).*'
+        multi_locator_pattern = ".* >> (identifier|id|name|xpath|dom|link|partial link|css|class|jquery|sizzle|tag|scLocator)(:|=).*"
 
-        if not isinstance(locator, list) and Matcher(multi_locator_pattern, regexp=True).match(locator):
-            locator = [indv_locator.strip() for indv_locator in locator.split(
-                ">>") if indv_locator.strip() != '']
+        if not isinstance(locator, list) and Matcher(
+            multi_locator_pattern, regexp=True
+        ).match(locator):
+            locator = [
+                indv_locator.strip()
+                for indv_locator in locator.split(">>")
+                if indv_locator.strip() != ""
+            ]
         return locator
