@@ -15,6 +15,7 @@
 # limitations under the License.
 
 from robot.api import logger
+from robot.utils import Matcher
 from robot.utils import NormalizedDict
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
@@ -76,6 +77,20 @@ class ElementFinder(ContextAware):
             )
         if self._is_webelement(locator):
             return locator
+
+        multi_locator_pattern = '.* >> (identifier|id|name|xpath|dom|link|partial link|css|class|jquery|sizzle|tag|scLocator)(:|=).*'
+
+        if not isinstance(locator, list) and Matcher(multi_locator_pattern, regexp=True).match(locator):
+            locator = [indv_locator.strip() for indv_locator in locator.split(
+                ">>") if indv_locator.strip() != '']
+
+        if isinstance(locator, list):
+            if len(locator) > 1:
+                parent_lct = self.find(locator.pop(0), parent=parent)
+                return self.find(locator, tag, first_only, required, parent=parent_lct)
+            else:
+                return self.find(locator.pop(), tag, first_only, required, parent)
+
         prefix, criteria = self._parse_locator(locator)
         strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
