@@ -77,13 +77,7 @@ class ElementFinder(ContextAware):
             )
         if self._is_webelement(locator):
             return locator
-
-        multi_locator_pattern = '.* >> (identifier|id|name|xpath|dom|link|partial link|css|class|jquery|sizzle|tag|scLocator)(:|=).*'
-
-        if not isinstance(locator, list) and Matcher(multi_locator_pattern, regexp=True).match(locator):
-            locator = [indv_locator.strip() for indv_locator in locator.split(
-                ">>") if indv_locator.strip() != '']
-
+        locator = self._split_locator_if_contains_sublocators(locator)
         if isinstance(locator, list):
             if len(locator) > 1:
                 parent_lct = self.find(locator.pop(0), parent=parent)
@@ -338,3 +332,11 @@ class ElementFinder(ContextAware):
             logger.debug(f"WebDriver find returned {elements}")
             return []
         return elements
+
+    def _split_locator_if_contains_sublocators(self, locator):
+        multi_locator_pattern = '.* >> (identifier|id|name|xpath|dom|link|partial link|css|class|jquery|sizzle|tag|scLocator)(:|=).*'
+
+        if not isinstance(locator, list) and Matcher(multi_locator_pattern, regexp=True).match(locator):
+            locator = [indv_locator.strip() for indv_locator in locator.split(
+                ">>") if indv_locator.strip() != '']
+        return locator
