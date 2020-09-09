@@ -613,53 +613,45 @@ def test_find_returns_bad_values(finder):
 
 def test_usage_of_multiple_locators_using_double_arrow_as_separator(finder):
     driver = _get_driver(finder)
-    div_elements = [_make_mock_element('div')]
-    a_elements = [_make_mock_element('a')]
-    img_elements = [_make_mock_element('img')]
+    div_elements = [_make_mock_element("div")]
+    a_elements = [_make_mock_element("a")]
+    img_elements = [_make_mock_element("img")]
 
-    when(driver).find_elements(By.CSS_SELECTOR,
-                               "#test1").thenReturn(div_elements)
-    when(div_elements[0]).find_elements(By.XPATH,
-                                        "//a").thenReturn(a_elements)
-    when(a_elements[0]).find_elements(By.TAG_NAME,
-                                      "img").thenReturn(img_elements)
-    when(finder)._is_webelement(
-        'css=#test1 >> xpath=//a >> tag=img').thenReturn(False)
-    when(finder)._is_webelement(['xpath=//a', 'tag=img']).thenReturn(False)
-    when(finder)._is_webelement(['tag=img']).thenReturn(False)
-    when(finder)._is_webelement('tag=img').thenReturn(False)
+    when(driver).find_elements(By.CSS_SELECTOR, "#test1").thenReturn(div_elements)
+    when(div_elements[0]).find_elements(By.XPATH, "//a").thenReturn(a_elements)
+    when(a_elements[0]).find_elements(By.TAG_NAME, "img").thenReturn(img_elements)
+    when(finder)._is_webelement("css=#test1 >> xpath=//a >> tag=img").thenReturn(False)
+    when(finder)._is_webelement(["xpath=//a", "tag=img"]).thenReturn(False)
+    when(finder)._is_webelement(["tag=img"]).thenReturn(False)
+    when(finder)._is_webelement("tag=img").thenReturn(False)
     when(finder)._is_webelement(div_elements[0]).thenReturn(True)
-    when(finder)._is_webelement('css=#test1').thenReturn(False)
+    when(finder)._is_webelement("css=#test1").thenReturn(False)
     when(finder)._is_webelement(a_elements[0]).thenReturn(True)
-    when(finder)._is_webelement('xpath=//a').thenReturn(False)
+    when(finder)._is_webelement("xpath=//a").thenReturn(False)
 
-    result = finder.find(
-        "css=#test1 >> xpath=//a >> tag=img", first_only=False)
+    result = finder.find("css=#test1 >> xpath=//a >> tag=img", first_only=False)
     assert result == img_elements
 
 
 def test_usage_of_multiple_locators_using_list(finder):
     driver = _get_driver(finder)
-    div_elements = [_make_mock_element('div')]
-    a_elements = [_make_mock_element('a')]
-    img_elements = [_make_mock_element('img')]
+    div_elements = [_make_mock_element("div")]
+    a_elements = [_make_mock_element("a")]
+    img_elements = [_make_mock_element("img")]
 
-    list_of_locators = ['css:#test1', 'xpath://a', 'tag:img']
+    list_of_locators = ["css:#test1", "xpath://a", "tag:img"]
 
-    when(driver).find_elements(By.CSS_SELECTOR,
-                               "#test1").thenReturn(div_elements)
-    when(div_elements[0]).find_elements(By.XPATH,
-                                        "//a").thenReturn(a_elements)
-    when(a_elements[0]).find_elements(By.TAG_NAME,
-                                      "img").thenReturn(img_elements)
+    when(driver).find_elements(By.CSS_SELECTOR, "#test1").thenReturn(div_elements)
+    when(div_elements[0]).find_elements(By.XPATH, "//a").thenReturn(a_elements)
+    when(a_elements[0]).find_elements(By.TAG_NAME, "img").thenReturn(img_elements)
     when(finder)._is_webelement(list_of_locators).thenReturn(False)
-    when(finder)._is_webelement(['xpath://a', 'tag:img']).thenReturn(False)
-    when(finder)._is_webelement(['tag:img']).thenReturn(False)
-    when(finder)._is_webelement('tag:img').thenReturn(False)
+    when(finder)._is_webelement(["xpath://a", "tag:img"]).thenReturn(False)
+    when(finder)._is_webelement(["tag:img"]).thenReturn(False)
+    when(finder)._is_webelement("tag:img").thenReturn(False)
     when(finder)._is_webelement(div_elements[0]).thenReturn(True)
-    when(finder)._is_webelement('css:#test1').thenReturn(False)
+    when(finder)._is_webelement("css:#test1").thenReturn(False)
     when(finder)._is_webelement(a_elements[0]).thenReturn(True)
-    when(finder)._is_webelement('xpath://a').thenReturn(False)
+    when(finder)._is_webelement("xpath://a").thenReturn(False)
 
     result = finder.find(list_of_locators, first_only=False)
     assert result == img_elements
