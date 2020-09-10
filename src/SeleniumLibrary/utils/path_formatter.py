@@ -21,4 +21,4 @@ def _format_path(file_path, index):
 
 class _SafeFormatter(dict):
     def __missing__(self, key):
-        return "{%s}" % key
+        return f"{{{key}}}"
