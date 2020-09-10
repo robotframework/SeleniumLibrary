@@ -230,7 +230,7 @@ class WebDriverCreator:
         log_file = self._get_log_path(
             os.path.join(self.log_dir, "geckodriver-{index}.log")
         )
-        logger.info("Firefox driver log is always forced to to: %s" % log_file)
+        logger.info(f"Firefox driver log is always forced to to: {log_file}")
         return log_file
 
     def create_headless_firefox(
@@ -548,7 +548,7 @@ class WebDriverCache(ConnectionCache):
         try:
             driver.quit()
         except Exception as exception:
-            logger.error("When closing browser, received exception: %s" % exception)
+            logger.error(f"When closing browser, received exception: {exception}")
             error = exception
         return error
 
@@ -598,7 +598,7 @@ class SeleniumOptions:
         if browser == "android":
             browser = "chrome"  # Android uses ChromeOptions()
         browser = browser.replace("headless_", "", 1)
-        options = importlib.import_module("selenium.webdriver.%s.options" % browser)
+        options = importlib.import_module(f"selenium.webdriver.{browser}.options")
         return options.Options
 
     def _parse(self, options):
@@ -607,7 +607,7 @@ class SeleniumOptions:
             try:
                 result.append(self._parse_to_tokens(item))
             except (ValueError, SyntaxError):
-                raise ValueError('Unable to parse option: "%s"' % item)
+                raise ValueError(f'Unable to parse option: "{item}"')
         return result
 
     def _parse_to_tokens(self, item):
