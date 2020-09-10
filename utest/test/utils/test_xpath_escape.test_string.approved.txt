@@ -1,0 +1,10 @@
+Escape xpath value
+
+0) 'tidii'
+1) '"tidii"'
+2) "'tidii'"
+3) concat('"', "'", 'tidii', "'", '')
+4) concat('"', "'", 'tidii', "'", '"')
+5) concat('"', "'", 't"id"ii', "'", '"')
+6) concat('"', "'", 'tidii', "'", '"')
+7) concat('"', "'", 'ti', "'", 'd', "'", 'ii', "'", '"')
