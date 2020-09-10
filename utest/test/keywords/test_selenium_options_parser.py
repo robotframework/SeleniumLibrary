@@ -137,15 +137,15 @@ def test_options_create(options, reporter):
     sel_options = options.create("chrome", options_str)
     results.append(sel_options.arguments)
 
-    options_str = '%s;add_argument("--headless")' % options_str
+    options_str = f'{options_str};add_argument("--headless")'
     sel_options = options.create("chrome", options_str)
     results.append(sel_options.arguments)
 
-    options_str = '%s;add_argument("--proxy-server=66.97.38.58:80")' % options_str
+    options_str = f'{options_str};add_argument("--proxy-server=66.97.38.58:80")'
     sel_options = options.create("chrome", options_str)
     results.append(sel_options.arguments)
 
-    options_str = '%s;binary_location("too", "many", "args")' % options_str
+    options_str = f'{options_str};binary_location("too", "many", "args")'
     try:
         options.create("chrome", options_str)
     except Exception as error:

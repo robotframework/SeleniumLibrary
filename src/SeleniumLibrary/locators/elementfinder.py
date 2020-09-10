@@ -211,7 +211,8 @@ class ElementFinder(ContextAware):
 
     def _get_xpath_constraint(self, name, value):
         if isinstance(value, list):
-            return "@{}[. = '{}']".format(name, "' or . = '".join(value))
+            value = "' or . = '".join(value)
+            return f"@{name}[. = '{value}']"
         else:
             return f"@{name}='{value}'"
 
