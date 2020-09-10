@@ -23,7 +23,8 @@ from .types import is_falsy, is_noney, is_string, is_truthy, WINDOWS  # noqa
 def escape_xpath_value(value):
     if '"' in value and "'" in value:
         parts_wo_apos = value.split("'")
-        return "concat('%s')" % "', \"'\", '".join(parts_wo_apos)
+        escaped = "', \"'\", '".join(parts_wo_apos)
+        return f"concat('{escaped}')"
     if "'" in value:
-        return '"%s"' % value
-    return "'%s'" % value
+        return f'"{value}"'
+    return f"'{value}'"
