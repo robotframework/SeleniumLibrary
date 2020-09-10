@@ -283,8 +283,8 @@ class WindowKeywords(LibraryComponent):
         self.driver.set_window_position(int(x), int(y))
 
     def _log_list(self, items, what="item"):
-        msg = ["Altogether {} {}{}.".format(len(items), what, plural_or_not(items))]
+        msg = [f"Altogether {len(items)} {what}{plural_or_not(items)}."]
         for index, item in enumerate(items):
-            msg.append("{}: {}".format(index + 1, item))
+            msg.append(f"{index + 1}: {item}")
         self.info("\n".join(msg))
         return items

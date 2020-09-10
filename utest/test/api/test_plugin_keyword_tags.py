@@ -37,7 +37,7 @@ class PluginKeywordTags(unittest.TestCase):
         self.assertFalse(tags)
 
     def test_tags_in_plugin_args(self):
-        sl = SeleniumLibrary(plugins="%s;foo;bar" % self.plugin_varargs)
+        sl = SeleniumLibrary(plugins=f"{self.plugin_varargs};foo;bar")
         tags = sl.get_keyword_tags("foo_1")
         self.assertEqual(tags, ["MyTag", "plugin"])
 
