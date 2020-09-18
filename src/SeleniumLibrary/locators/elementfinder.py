@@ -13,6 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
+from typing import Union
 
 from robot.api import logger
 from robot.utils import Matcher
@@ -68,8 +70,30 @@ class ElementFinder(ContextAware):
                 "normalize-space(descendant-or-self::text())",
             ],
         }
+        self._split_re = re.compile(
+            r"(?=( >> )(?:identifier|id|name|xpath|dom|link|partial link"
+            r"|css|class|jquery|sizzle|tag|scLocator)(?: ?:|= ?))",
+            re.IGNORECASE
+        )
 
-    def find(self, locator, tag=None, first_only=True, required=True, parent=None):
+    def find(self, locator: Union[str, list], tag=None, first_only=True, required=True, parent=None):
+        element = parent
+        locators = self._split_locator(locator)
+        for split_locator in locators[:-1]:
+            element = self._find(split_locator, first_only=True, required=True, parent=element)
+        return self._find(locators[-1], tag, first_only, required, element)
+
+    def _split_locator(self, locator: Union[str, list]) -> list:
+        if isinstance(locator, list):
+            return locator
+        if not isinstance(locator, str):
+            return [locator]
+        splitter = " >> "
+        parts = self._split_re.split(locator)
+        parts = list(filter((splitter).__ne__, parts))
+        return [part.lstrip(splitter) for part in parts]
+
+    def _find(self, locator, tag=None, first_only=True, required=True, parent=None):
         element_type = "Element" if not tag else tag.capitalize()
         if parent and not self._is_webelement(parent):
             raise ValueError(
@@ -77,14 +101,6 @@ class ElementFinder(ContextAware):
             )
         if self._is_webelement(locator):
             return locator
-        locator = self._split_locator_if_contains_sublocators(locator)
-        if isinstance(locator, list):
-            if len(locator) > 1:
-                parent_lct = self.find(locator.pop(0), parent=parent)
-                return self.find(locator, tag, first_only, required, parent=parent_lct)
-            else:
-                return self.find(locator.pop(), tag, first_only, required, parent)
-
         prefix, criteria = self._parse_locator(locator)
         strategy = self._strategies[prefix]
         tag, constraints = self._get_tag_and_constraints(tag)
@@ -332,16 +348,3 @@ class ElementFinder(ContextAware):
             logger.debug(f"WebDriver find returned {elements}")
             return []
         return elements
-
-    def _split_locator_if_contains_sublocators(self, locator):
-        multi_locator_pattern = ".* >> (identifier|id|name|xpath|dom|link|partial link|css|class|jquery|sizzle|tag|scLocator)(:|=).*"
-
-        if not isinstance(locator, list) and Matcher(
-            multi_locator_pattern, regexp=True
-        ).match(locator):
-            locator = [
-                indv_locator.strip()
-                for indv_locator in locator.split(">>")
-                if indv_locator.strip() != ""
-            ]
-        return locator

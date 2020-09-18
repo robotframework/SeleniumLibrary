@@ -18,10 +18,10 @@ def finder():
 
 @pytest.fixture
 def reporter():
-    cur_dir = Path("./test/").absolute()
-    reporter_json = cur_dir / "approvals_reporters.json"
+    cur_dir = Path(__file__).parent.absolute()
+    reporter_json = cur_dir / ".." / "approvals_reporters.json"
     factory = GenericDiffReporterFactory()
-    factory.load(reporter_json)
+    factory.load(reporter_json.absolute())
     return factory.get_first_working()
 
 
@@ -58,6 +58,11 @@ def test_use_first_separator_when_both_are_used():
 def test_preserve_trailing_whitespace():
     _verify_parse_locator("//foo/bar  ", "xpath", "//foo/bar  ")
     _verify_parse_locator("class=foo  ", "class", "foo  ")
+
+
+def test_strategy_case_is_not_changed():
+    _verify_parse_locator("XPATH://foo/bar  ", "XPATH", "//foo/bar  ")
+    _verify_parse_locator("XPATH=//foo/bar  ", "XPATH", "//foo/bar  ")
 
 
 def test_remove_whitespace_around_prefix_and_separator():
@@ -671,16 +676,31 @@ def test_usage_of_multiple_locators_using_list(finder):
 
 def test_localtor_split(finder: ElementFinder, reporter: GenericDiffReporterFactory):
     results = [
-        finder._split_locator_if_contains_sublocators("//div"),
-        finder._split_locator_if_contains_sublocators("xpath://div"),
-        finder._split_locator_if_contains_sublocators("xpath=//div"),
-        finder._split_locator_if_contains_sublocators('//*[text(), " >> "]'),
-        finder._split_locator_if_contains_sublocators('//*[text(), " >> "] >> css:foobar'),
-        finder._split_locator_if_contains_sublocators('//*[text(), " >> "] >> //div'),
-        finder._split_locator_if_contains_sublocators('//*[text(), " >> "] >> css:foobar >> id:tidii'),
-        finder._split_locator_if_contains_sublocators(['//*[text(), " >> "]',  'css:foobar', 'tidii']),
+        finder._split_locator("//div"),
+        finder._split_locator("xpath://div"),
+        finder._split_locator("xpath=//div"),
+        finder._split_locator('//*[text(), " >> "]'),
+        finder._split_locator('//*[text(), " >> "] >> css:foobar'),
+        finder._split_locator('//*[text(), " >> "] >> //div'),
+        finder._split_locator('//*[text(), " >> "] >> css:foobar >> id:tidii'),
+        finder._split_locator(
+            'identifier:id >> id=name >> name=id >> xpath://a >> dom=name >> link=id >> partial link=something >> '
+            'css=#name >> class:name >> jquery=dom.find("foobar") >> sizzle:query.find("tidii") >> '
+            'tag:name >> scLocator:tidii'
+        ),
+        finder._split_locator(['//*[text(), " >> "]', 'css:foobar', 'tidii']),
+        finder._split_locator('xpath://*  >>  xpath://div'),
+        finder._split_locator('xpAtH://* >> xPAth://div'),
+        finder._split_locator('xpath : //a >> xpath : //div'),
     ]
     verify_all("Split multi locator", results, reporter=reporter)
+
+
+def test_locator_split_with_non_strings(finder: ElementFinder):
+    assert finder._split_locator([]) == []
+    assert finder._split_locator(None) == [None]
+    locator = object
+    assert finder._split_locator(locator) == [locator]
 
 
 def _make_mock_elements(*tags):
