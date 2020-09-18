@@ -1,10 +1,14 @@
 Split multi locator
 
-0) //div
-1) xpath://div
-2) xpath=//div
-3) //*[text(), " >> "]
-4) ['//*[text(), "', '"]', 'css:foobar']
-5) //*[text(), " >> "] >> //div
-6) ['//*[text(), "', '"]', 'css:foobar', 'id:tidii']
-7) ['//*[text(), " >> "]', 'css:foobar', 'tidii']
+0) ['//div']
+1) ['xpath://div']
+2) ['xpath=//div']
+3) ['//*[text(), " >> "]']
+4) ['//*[text(), " >> "]', 'css:foobar']
+5) ['//*[text(), " >> "] >> //div']
+6) ['//*[text(), " >> "]', 'css:foobar', 'id:tidii']
+7) ['identifier:id', 'id=name', 'name=id', 'xpath://a', 'dom=name', 'link=id', 'partial link=something', 'css=#name', 'class:name', 'jquery=dom.find("foobar")', 'sizzle:query.find("tidii")', 'tag:name', 'scLocator:tidii']
+8) ['//*[text(), " >> "]', 'css:foobar', 'tidii']
+9) ['xpath://*  >>  xpath://div']
+10) ['xpAtH://*', 'xPAth://div']
+11) ['xpath : //a', 'xpath : //div']

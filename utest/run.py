@@ -21,7 +21,14 @@ def remove_output_dir():
 
 def run_unit_tests(reporter, reporter_args):
     sys.path.insert(0, SRC)
-    py_args = [f"--rootdir={CURDIR}", "-p", "no:cacheprovider", CURDIR]
+    py_args = [
+        "--showlocals",
+        "--tb=long",
+        f"--rootdir={CURDIR}",
+        "-p",
+        "no:cacheprovider",
+        CURDIR
+    ]
     if reporter:
         py_args.insert(0, f"--approvaltests-add-reporter={reporter}")
     if reporter_args:

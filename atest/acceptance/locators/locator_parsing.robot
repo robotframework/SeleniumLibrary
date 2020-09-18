@@ -38,12 +38,11 @@ Locator with separator and with matchign prefix cannot be used as-is
 
 Multiple Locators with double arrows as separator should work
     Page Should Contain Element    css:div#div_id >> xpath:a[6] >> id:image1_id
-    Page Should Contain Element    css=div#div_id >> xpath=a[6] >> id=image1_id
 
 Multiple Locators strategy should be case-insensitive
-    Page Should Contain Element    CSS:div#div_id >> xpath:a[6] >> iD:image1_id
-    Page Should Contain Element    cSs=div#div_id >> Xpath=a[6] >> id=image1_id
+    Page Should Contain Element    cSs=div#div_id >> XpaTh=a[6] >> iD=image1_id
 
 Multiple Locators as a List should work
-    ${locator_list} =    Create List    css:div#div_id    xpath:a[6]    id:image1_id
+    ${element} =   Get WebElement    id:foo:bar
+    ${locator_list} =    Create List    id:div_id    ${element}    id:bar=foo
     Page Should Contain Element    ${locator_list}
