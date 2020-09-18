@@ -1,4 +1,8 @@
+from pathlib import Path
+
 import pytest
+from approvaltests import verify_all
+from approvaltests.reporters import GenericDiffReporterFactory
 from mockito import any, mock, verify, when, unstub
 from selenium.webdriver.common.by import By
 
@@ -11,6 +15,14 @@ def finder():
     ctx = mock()
     ctx.driver = mock()
     return ElementFinder(ctx)
+
+@pytest.fixture
+def reporter():
+    cur_dir = Path("./test/").absolute()
+    reporter_json = cur_dir / "approvals_reporters.json"
+    factory = GenericDiffReporterFactory()
+    factory.load(reporter_json)
+    return factory.get_first_working()
 
 
 def teardown_function():
@@ -655,6 +667,20 @@ def test_usage_of_multiple_locators_using_list(finder):
 
     result = finder.find(list_of_locators, first_only=False)
     assert result == img_elements
+
+
+def test_localtor_split(finder: ElementFinder, reporter: GenericDiffReporterFactory):
+    results = [
+        finder._split_locator_if_contains_sublocators("//div"),
+        finder._split_locator_if_contains_sublocators("xpath://div"),
+        finder._split_locator_if_contains_sublocators("xpath=//div"),
+        finder._split_locator_if_contains_sublocators('//*[text(), " >> "]'),
+        finder._split_locator_if_contains_sublocators('//*[text(), " >> "] >> css:foobar'),
+        finder._split_locator_if_contains_sublocators('//*[text(), " >> "] >> //div'),
+        finder._split_locator_if_contains_sublocators('//*[text(), " >> "] >> css:foobar >> id:tidii'),
+        finder._split_locator_if_contains_sublocators(['//*[text(), " >> "]',  'css:foobar', 'tidii']),
+    ]
+    verify_all("Split multi locator", results, reporter=reporter)
 
 
 def _make_mock_elements(*tags):

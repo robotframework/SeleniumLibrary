@@ -1,0 +1,10 @@
+Split multi locator
+
+0) //div
+1) xpath://div
+2) xpath=//div
+3) //*[text(), " >> "]
+4) ['//*[text(), "', '"]', 'css:foobar']
+5) //*[text(), " >> "] >> //div
+6) ['//*[text(), "', '"]', 'css:foobar', 'id:tidii']
+7) ['//*[text(), " >> "]', 'css:foobar', 'tidii']
