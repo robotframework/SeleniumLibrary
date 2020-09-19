@@ -197,7 +197,6 @@ def execute_tests(interpreter, browser, rf_options, grid):
         runner = interpreter.split() + [
             "-m",
             "pabot.pabot",
-            "--verbose",
             "--processes",
             "2",
         ]
