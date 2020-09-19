@@ -4,11 +4,12 @@ import os
 import shutil
 import sys
 from os.path import abspath, dirname, join
+from pathlib import Path
 
 from pytest import main as py_main
 
 
-CURDIR = dirname(abspath(__file__))
+CURDIR = Path(__file__).parent
 SRC = join(CURDIR, os.pardir, "src")
 
 
@@ -19,15 +20,17 @@ def remove_output_dir():
     os.mkdir(output_dir)
 
 
-def run_unit_tests(reporter, reporter_args):
+def run_unit_tests(reporter, reporter_args, suite):
     sys.path.insert(0, SRC)
+    suite = CURDIR if not suite else CURDIR / "test" / suite
     py_args = [
         "--showlocals",
         "--tb=long",
+        "-v",
         f"--rootdir={CURDIR}",
         "-p",
         "no:cacheprovider",
-        CURDIR
+        str(suite),
     ]
     if reporter:
         py_args.insert(0, f"--approvaltests-add-reporter={reporter}")
@@ -50,6 +53,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "-A", "--approvaltests-add-reporter-args", default=None, dest="reporter_args"
     )
+    parser.add_argument(
+        "--suite",
+        "-S",
+        default="",
+        help="Select .py file which is only run. Example: locators/test_elementfinder.py or locators/",
+    )
     args = parser.parse_args()
     remove_output_dir()
-    sys.exit(run_unit_tests(args.reporter, args.reporter_args))
+    sys.exit(run_unit_tests(args.reporter, args.reporter_args, args.suite))
