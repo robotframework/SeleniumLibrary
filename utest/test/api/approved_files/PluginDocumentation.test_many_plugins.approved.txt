@@ -128,23 +128,28 @@ Examples:
 
 The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
 
-=== Using multiple locators ===
+=== Chaining locators ===
 
-A combination of locator strategies can be used to find an element.
+It is possible chain multiple locators together as single locator. Each chained locator must start with locator
+strategy. Chained locators must be separated with single space, two greater than characters and followed with
+space. It is also possible mix different locator strategies, example css or xpath. Also a list can also be
+used to specify multiple locators. This is useful, is some part of locator would match as the locator separator
+but it should not. Or if there is need to existing WebElement as locator.
+
+Although all locators support chaining, some locator strategies do not abey the chaining. This is because
+some locator strategies use JavaScript to find elements and JavaScript is executed for the whole browser context
+and not for the element found be the previous locator. Chaining is supported by locator strategies which
+are based on Selenium API, like `xpath` or `css`, but example chaining is not supported by `sizzle` or `jquery
 
 Examples:
+| `Click Element` | css:.bar >> xpath://a | # To find a link which is present after an element with class "bar" |
 
-| `Click Element` | css:.bar >> xpath://a[6] | # To find a link presnt in an element with class "bar" |
-| `Page Should Contain Image` | css=.bar >> xpath=//div[@id="foo"] >> tag=img | # To find an image presnt in a div with the id "foo", which is in turn present in an element with the class "bar" |
-
-Note that the strategy must be specified explicitly for each locator and a single space must be used around each ``>>`` separator.
-
-A list can also be used to speicify multiple locators.
-
-Example:
-| ${locator_list} = | `Create List` | css:div#div_id | xpath:a[6] | id:image1_id |
-| `Page Should Contain Element` | ${locator_list} |
-
+List examples:
+| ${locator_list} =             | `Create List`   | css:div#div_id            | xpath://*[text(), " >> "] |
+| `Page Should Contain Element` | ${locator_list} |                           |                           |
+| ${element} =                  | Get WebElement  | xpath://*[text(), " >> "] |                           |
+| ${locator_list} =             | `Create List`   | css:div#div_id            | ${element}                |
+| `Page Should Contain Element` | ${locator_list} |                           |                           |
 
 == Using WebElements ==
 
