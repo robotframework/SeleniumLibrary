@@ -11,22 +11,7 @@ about Selenium in general and SeleniumLibrary README.rst
 [https://github.com/robotframework/SeleniumLibrary#browser-drivers|Browser drivers chapter]
 for more details about WebDriver binary installation.
 
-== Table of contents ==
-
-- `Locating elements`
-- `Browser and Window`
-- `Timeouts, waits, and delays`
-- `Run-on-failure functionality`
-- `Boolean arguments`
-- `EventFiringWebDriver`
-- `Thread support`
-- `Plugins`
-- `Plugin: my_lib`
-- `my_lib Heading 1`
-- `Plugin: plugin_with_event_firing_webdriver`
-- `Importing`
-- `Shortcuts`
-- `Keywords`
+%TOC%
 
 = Locating elements =
 
@@ -397,20 +382,6 @@ This is heading 1 documentation.
 
  This is heading 2 documentation.
 
-= Plugin: plugin_with_event_firing_webdriver =
+= Plugin: my_lib_args =
 
-This is example for plugin_with_event_firing_webdriver plugin documentation.
-
-It may contains many chapters and there might be many words
-in the documentation. This is really boring example but let
-see how it looks like in the SeleniumLibrary docs.
-
-There might be reference to keywords, like `Open Browser`
-
-== plugin_with_event_firing_webdriver Heading 2 part 1 ==
-
-This is chapter in heading 2.
-
-== plugin_with_event_firing_webdriver Heading 2 part 2==
-
-This is another chapter in heading 2
+No plugin documentation found.
