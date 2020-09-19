@@ -526,15 +526,7 @@ class SeleniumLibrary(DynamicCore):
             intro = f"{intro}\n\n"
             intro = f"{intro}= Plugin: {plugin_doc.name} =\n\n"
             intro = f"{intro}{plugin_doc.doc}"
-        return self._create_toc(intro)
-
-    def _create_toc(self, intro):
-        toc = ["== Table of contents ==", ""]
-        all_match = re.findall(r"(^\=\s)(.+)(\s\=$)", intro, re.MULTILINE)
-        for match in all_match:
-            toc.append(f"- `{match[1]}`")
-        toc.extend(["- `Importing`", "- `Shortcuts`", "- `Keywords`"])
-        return intro.replace("%TOC%", "\n".join(toc))
+        return intro
 
     def register_driver(self, driver, alias):
         """Add's a `driver` to the library WebDriverCache.
