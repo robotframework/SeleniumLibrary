@@ -28,7 +28,9 @@ class PluginDocumentation(unittest.TestCase):
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_many_plugins(self):
-        sl = SeleniumLibrary(plugins=f"{self.plugin_1}, {self.plugin_3};arg1=Text1;arg2=Text2")
+        sl = SeleniumLibrary(
+            plugins=f"{self.plugin_1}, {self.plugin_3};arg1=Text1;arg2=Text2"
+        )
         verify(sl.get_keyword_documentation("__intro__"), self.reporter)
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
