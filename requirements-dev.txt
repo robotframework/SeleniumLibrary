@@ -1,6 +1,6 @@
 # Requirements needed for SeleniumLibrary development but not by end users.
 # Creating releases has its own requirements listed in requirements-build.txt.
-
+invoke >= 1.4.1
 mockito >= 1.2.1
 robotstatuschecker >= 1.4
 approvaltests >= 0.2.4
