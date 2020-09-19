@@ -46,3 +46,11 @@ Multiple Locators as a List should work
     ${element} =   Get WebElement    id:foo:bar
     ${locator_list} =    Create List    id:div_id    ${element}    id:bar=foo
     Page Should Contain Element    ${locator_list}
+
+When One Of Locator From Multiple Locators Is Not Found Keyword Fails
+    Run Keyword And Expect Error
+    ...    Element with locator 'id:not_here' not found.
+    ...    Page Should Contain Element    css=div#div_id >> id:not_here >> iD=image1_id
+
+When One Of Locator From Multiple Locators Matches Multiple Elements Keyword Should Not Fail
+    Page Should Contain Element    xpath://div >> id=image1_id
