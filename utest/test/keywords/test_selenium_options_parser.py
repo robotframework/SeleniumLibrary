@@ -360,7 +360,7 @@ def test_has_options(creator):
 
 
 @unittest.skipIf(
-    "options" not in inspect.getargspec(webdriver.Edge.__init__),
+    "options" not in inspect.signature(webdriver.Edge.__init__).parameters,
     "Requires Selenium 4.0.",
 )
 def test_create_edge_with_options(creator):
