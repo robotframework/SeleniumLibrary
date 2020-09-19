@@ -201,7 +201,7 @@ def test_create_edge_executable_path_set(creator):
 
 
 @unittest.skipIf(
-    "options" not in inspect.getargspec(webdriver.Edge.__init__),
+    "options" not in inspect.signature(webdriver.Edge.__init__).parameters,
     "Requires Selenium 4.0.",
 )
 def test_create_edge_executable_path_set_selenium_4(creator):
