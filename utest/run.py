@@ -20,18 +20,19 @@ def remove_output_dir():
     os.mkdir(output_dir)
 
 
-def run_unit_tests(reporter, reporter_args, suite):
+def run_unit_tests(reporter, reporter_args, suite, verbose):
     sys.path.insert(0, SRC)
     suite = CURDIR if not suite else CURDIR / "test" / suite
     py_args = [
         "--showlocals",
         "--tb=long",
-        "-v",
         f"--rootdir={CURDIR}",
         "-p",
         "no:cacheprovider",
         str(suite),
     ]
+    if verbose:
+        py_args.insert(0, "-v")
     if reporter:
         py_args.insert(0, f"--approvaltests-add-reporter={reporter}")
     if reporter_args:
@@ -59,6 +60,15 @@ if __name__ == "__main__":
         default="",
         help="Select .py file which is only run. Example: locators/test_elementfinder.py or locators/",
     )
+    parser.add_argument(
+        "--verbose",
+        dest="verbose",
+        action="store_true",
+        default=False,
+        help="Add verbose output for pytest.",
+    )
     args = parser.parse_args()
     remove_output_dir()
-    sys.exit(run_unit_tests(args.reporter, args.reporter_args, args.suite))
+    sys.exit(
+        run_unit_tests(args.reporter, args.reporter_args, args.suite, args.verbose)
+    )
