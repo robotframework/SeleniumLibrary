@@ -12,3 +12,4 @@ Split multi locator
 9) ['xpath://*  >>  xpath://div']
 10) ['xpAtH://*', 'xPAth://div']
 11) ['xpath : //a', 'xpath : //div']
+12) ['//*[text(), "', 'css:"]']
