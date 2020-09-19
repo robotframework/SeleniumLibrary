@@ -38,6 +38,10 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
+    - name: Generate stub file for ${{ matrix.python-version }}
+      if: matrix.python-version != 'pypy3'
+      run: |
+        invoke gen-stub
     - name: Run tests with headless Chrome and with Python != 3.8
       if: matrix.python-version != '3.8'
       run: |

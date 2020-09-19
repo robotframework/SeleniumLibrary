@@ -16,3 +16,5 @@ chromedriver.log
 dist
 build
 .pabotsuitenames
+.mypy_cache
+stub_files
