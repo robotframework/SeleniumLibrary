@@ -88,6 +88,19 @@ Preparation
 
    For example, ``VERSION=3.0.1`` or ``VERSION=3.1a2``.
 
+Generate Stub file
+------------------
+
+1. Generate new stub file in: `<src/SeleniumLibrary/__init__.pyi>`_::
+
+      invoke gen-stub
+
+2. Add, commit and push::
+
+      git add src/SeleniumLibrary/__init__.pyi
+      git commit -m "Generate stub file for $VERSION"
+      git push
+
 Release notes
 -------------
 

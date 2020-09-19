@@ -11,7 +11,7 @@ from robot.libdoc import libdoc
 
 assert Path.cwd() == Path(__file__).parent
 
-
+SRC_DIR = Path("src")
 REPOSITORY = 'robotframework/SeleniumLibrary'
 VERSION_PATH = Path('src/SeleniumLibrary/__init__.py')
 RELEASE_NOTES_PATH = Path('docs/SeleniumLibrary-{version}.rst')
@@ -151,8 +151,18 @@ def init_labels(ctx, username=None, password=None):
 
 @task
 def lint(ctx):
+    """Runs black and flake8 for project Python code."""
     ctx.run("black --config pyproject.toml src/ utest/ atest/")
     ctx.run("flake8 --config .flake8 src/ utest/ atest/")
+
+
+@task
+def gen_stub(ctx):
+    """Generate stub/.pyi file for SeleniumLibrary/__init__.py.
+
+    Stub files improves the IDE integration for Python usage.
+    """
+    ctx.run("python gen_stub.py")
 
 @task
 def clean(ctx, remove_dist=True, create_dirs=False):
