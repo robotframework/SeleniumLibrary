@@ -16,6 +16,7 @@ def finder():
     ctx.driver = mock()
     return ElementFinder(ctx)
 
+
 @pytest.fixture
 def reporter():
     cur_dir = Path(__file__).parent.absolute()
@@ -684,14 +685,14 @@ def test_localtor_split(finder: ElementFinder, reporter: GenericDiffReporterFact
         finder._split_locator('//*[text(), " >> "] >> //div'),
         finder._split_locator('//*[text(), " >> "] >> css:foobar >> id:tidii'),
         finder._split_locator(
-            'identifier:id >> id=name >> name=id >> xpath://a >> dom=name >> link=id >> partial link=something >> '
+            "identifier:id >> id=name >> name=id >> xpath://a >> dom=name >> link=id >> partial link=something >> "
             'css=#name >> class:name >> jquery=dom.find("foobar") >> sizzle:query.find("tidii") >> '
-            'tag:name >> scLocator:tidii'
+            "tag:name >> scLocator:tidii"
         ),
-        finder._split_locator(['//*[text(), " >> "]', 'css:foobar', 'tidii']),
-        finder._split_locator('xpath://*  >>  xpath://div'),
-        finder._split_locator('xpAtH://* >> xPAth://div'),
-        finder._split_locator('xpath : //a >> xpath : //div'),
+        finder._split_locator(['//*[text(), " >> "]', "css:foobar", "tidii"]),
+        finder._split_locator("xpath://*  >>  xpath://div"),
+        finder._split_locator("xpAtH://* >> xPAth://div"),
+        finder._split_locator("xpath : //a >> xpath : //div"),
     ]
     verify_all("Split multi locator", results, reporter=reporter)
 
