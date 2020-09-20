@@ -694,6 +694,7 @@ def test_localtor_split(finder: ElementFinder, reporter: GenericDiffReporterFact
         finder._split_locator("xpAtH://* >> xPAth://div"),
         finder._split_locator("xpath : //a >> xpath : //div"),
         finder._split_locator('//*[text(), " >> css:"]'),
+        finder._split_locator(['//*[text(), " >> css:"]', ]),
     ]
     verify_all("Split multi locator", results, reporter=reporter)
 
