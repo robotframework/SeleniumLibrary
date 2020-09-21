@@ -43,5 +43,9 @@ setup(
     python_requires  = '>=3.6, <4',
     install_requires = REQUIREMENTS,
     package_dir      = {'': 'src'},
-    packages         = find_packages('src')
+    packages         = find_packages('src'),
+    package_data     ={
+        'SeleniumLibrary':
+            ['*.pyi']
+    }
 )
