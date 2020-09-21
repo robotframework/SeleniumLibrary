@@ -47,7 +47,7 @@ from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, timestr_to_secs, is_truthy
 
 
-__version__ = "5.0.0.dev1"
+__version__ = "5.0.0.a1"
 
 
 class SeleniumLibrary(DynamicCore):
