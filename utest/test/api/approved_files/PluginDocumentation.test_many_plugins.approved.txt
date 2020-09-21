@@ -151,6 +151,8 @@ List examples:
 | ${locator_list} =             | `Create List`   | css:div#div_id            | ${element}                |
 | `Page Should Contain Element` | ${locator_list} |                           |                           |
 
+Chaining locators in new in SeleniumLibrary 5.0
+
 == Using WebElements ==
 
 In addition to specifying a locator as a string, it is possible to use
