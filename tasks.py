@@ -10,6 +10,7 @@ from robot.libdoc import libdoc
 
 assert Path.cwd() == Path(__file__).parent
 
+VERSION_PATTERN = '__version__ = "(.*)"'
 REPOSITORY = "robotframework/SeleniumLibrary"
 VERSION_PATH = Path("src/SeleniumLibrary/__init__.py")
 RELEASE_NOTES_PATH = Path("docs/SeleniumLibrary-{version}.rst")
@@ -96,7 +97,7 @@ def set_version(ctx, version):
     to the next suitable development version. For example, 3.0 -> 3.0.1.dev1,
     3.1.1 -> 3.1.2.dev1, 3.2a1 -> 3.2a2.dev1, 3.2.dev1 -> 3.2.dev2.
     """
-    version = Version(version, VERSION_PATH)
+    version = Version(version, VERSION_PATH, VERSION_PATTERN)
     version.write()
     print(version)
 
@@ -125,7 +126,7 @@ def release_notes(ctx, version=None, username=None, password=None, write=False):
     specified at all, communication with GitHub is anonymous and typically
     pretty slow.
     """
-    version = Version(version, VERSION_PATH)
+    version = Version(version, VERSION_PATH, VERSION_PATTERN)
     file = RELEASE_NOTES_PATH if write else sys.stdout
     generator = ReleaseNotesGenerator(
         REPOSITORY, RELEASE_NOTES_TITLE, RELEASE_NOTES_INTRO
