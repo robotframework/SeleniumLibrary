@@ -15,6 +15,7 @@
 # limitations under the License.
 from collections import namedtuple
 from inspect import getdoc, isclass
+from typing import Optional, List
 
 from robot.api import logger
 from robot.errors import DataError
@@ -23,6 +24,8 @@ from robot.utils import is_string
 from robot.utils.importer import Importer
 
 from robotlibcore import DynamicCore
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent
 from SeleniumLibrary.errors import NoOpenBrowser, PluginError
@@ -439,9 +442,9 @@ class SeleniumLibrary(DynamicCore):
         timeout=5.0,
         implicit_wait=0.0,
         run_on_failure="Capture Page Screenshot",
-        screenshot_root_directory=None,
-        plugins=None,
-        event_firing_webdriver=None,
+        screenshot_root_directory: Optional[str] = None,
+        plugins: Optional[str] = None,
+        event_firing_webdriver: Optional[str] = None,
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -500,20 +503,20 @@ class SeleniumLibrary(DynamicCore):
         self._drivers = WebDriverCache()
         DynamicCore.__init__(self, libraries)
 
-    def run_keyword(self, name, args, kwargs):
+    def run_keyword(self, name: str, args: tuple, kwargs: dict):
         try:
             return DynamicCore.run_keyword(self, name, args, kwargs)
         except Exception:
             self.failure_occurred()
             raise
 
-    def get_keyword_tags(self, name):
+    def get_keyword_tags(self, name: str):
         tags = list(DynamicCore.get_keyword_tags(self, name))
         if name in self._plugin_keywords:
             tags.append("plugin")
         return tags
 
-    def get_keyword_documentation(self, name):
+    def get_keyword_documentation(self, name: str):
         if name == "__intro__":
             return self._get_intro_documentation()
         return DynamicCore.get_keyword_documentation(self, name)
@@ -534,7 +537,7 @@ class SeleniumLibrary(DynamicCore):
             intro = f"{intro}{plugin_doc.doc}"
         return intro
 
-    def register_driver(self, driver, alias):
+    def register_driver(self, driver: WebDriver, alias: str):
         """Add's a `driver` to the library WebDriverCache.
 
         :param driver: Instance of the Selenium `WebDriver`.
@@ -576,7 +579,9 @@ class SeleniumLibrary(DynamicCore):
             raise NoOpenBrowser("No browser is open.")
         return self._drivers.current
 
-    def find_element(self, locator, parent=None):
+    def find_element(
+        self, locator: str, parent: Optional[WebElement] = None
+    ) -> WebElement:
         """Find element matching `locator`.
 
         :param locator: Locator to use when searching the element.
@@ -591,7 +596,9 @@ class SeleniumLibrary(DynamicCore):
         """
         return self._element_finder.find(locator, parent=parent)
 
-    def find_elements(self, locator, parent=None):
+    def find_elements(
+        self, locator: str, parent: WebElement = None
+    ) -> List[WebElement]:
         """Find all elements matching `locator`.
 
         :param locator: Locator to use when searching the element.
