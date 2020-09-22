@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import os
+from typing import Optional
 
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
@@ -25,23 +26,29 @@ from .context import ContextAware
 
 
 class LibraryComponent(ContextAware):
-    def info(self, msg, html=False):
+    def info(self, msg: str, html: bool = False):
         logger.info(msg, html)
 
     def debug(self, msg, html=False):
         logger.debug(msg, html)
 
-    def log(self, msg, level="INFO", html=False):
+    def log(self, msg: str, level: str = "INFO", html: bool = False):
         if not is_noney(level):
             logger.write(msg, level.upper(), html)
 
-    def warn(self, msg, html=False):
+    def warn(self, msg: str, html: bool = False):
         logger.warn(msg, html)
 
-    def log_source(self, loglevel="INFO"):
+    def log_source(self, loglevel: str = "INFO"):
         self.ctx.log_source(loglevel)
 
-    def assert_page_contains(self, locator, tag=None, message=None, loglevel="TRACE"):
+    def assert_page_contains(
+        self,
+        locator: str,
+        tag: Optional[str] = None,
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
+    ):
         tag_message = tag or "element"
         if not self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
@@ -53,7 +60,11 @@ class LibraryComponent(ContextAware):
         logger.info(f"Current page contains {tag_message} '{locator}'.")
 
     def assert_page_not_contains(
-        self, locator, tag=None, message=None, loglevel="TRACE"
+        self,
+        locator: str,
+        tag: Optional[str] = None,
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         tag_message = tag or "element"
         if self.find_element(locator, tag, required=False):
@@ -63,7 +74,7 @@ class LibraryComponent(ContextAware):
             raise AssertionError(message)
         logger.info(f"Current page does not contain {tag_message} '{locator}'.")
 
-    def get_timeout(self, timeout=None):
+    def get_timeout(self, timeout: Optional[str] = None) -> float:
         if is_noney(timeout):
             return self.ctx.timeout
         return timestr_to_secs(timeout)

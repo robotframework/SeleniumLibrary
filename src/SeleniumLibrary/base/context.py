@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Any, Optional, List
+
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.utils import escape_xpath_value
 
@@ -39,7 +42,7 @@ class ContextAware:
         return self.ctx._element_finder
 
     @element_finder.setter
-    def element_finder(self, value):
+    def element_finder(self, value: Any):
         self.ctx._element_finder = value
 
     @property
@@ -47,10 +50,16 @@ class ContextAware:
         return self.ctx.event_firing_webdriver
 
     @event_firing_webdriver.setter
-    def event_firing_webdriver(self, event_firing_webdriver):
+    def event_firing_webdriver(self, event_firing_webdriver: Any):
         self.ctx.event_firing_webdriver = event_firing_webdriver
 
-    def find_element(self, locator, tag=None, required=True, parent=None):
+    def find_element(
+        self,
+        locator: str,
+        tag: Optional[str] = None,
+        required: bool = True,
+        parent: WebElement = None,
+    ) -> WebElement:
         """Find element matching `locator`.
 
         :param locator: Locator to use when searching the element.
@@ -72,7 +81,9 @@ class ContextAware:
         """
         return self.element_finder.find(locator, tag, True, required, parent)
 
-    def find_elements(self, locator, tag=None, parent=None):
+    def find_elements(
+        self, locator: str, tag: Optional[str] = None, parent: WebElement = None
+    ) -> List[WebElement]:
         """Find all elements matching `locator`.
 
         :param locator: Locator to use when searching the element.
@@ -88,14 +99,14 @@ class ContextAware:
         """
         return self.element_finder.find(locator, tag, False, False, parent)
 
-    def is_text_present(self, text):
+    def is_text_present(self, text: str):
         locator = f"xpath://*[contains(., {escape_xpath_value(text)})]"
         return self.find_element(locator, required=False) is not None
 
-    def is_element_enabled(self, locator, tag=None):
+    def is_element_enabled(self, locator: str, tag: Optional[str] = None) -> bool:
         element = self.find_element(locator, tag)
         return element.is_enabled() and element.get_attribute("readonly") is None
 
-    def is_visible(self, locator):
+    def is_visible(self, locator: str) -> bool:
         element = self.find_element(locator, required=False)
         return element.is_displayed() if element else None
