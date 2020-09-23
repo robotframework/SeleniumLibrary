@@ -569,7 +569,7 @@ class SeleniumLibrary(DynamicCore):
             self._running_on_failure_keyword = False
 
     @property
-    def driver(self)- > WebDriver:
+    def driver(self) -> WebDriver:
         """Current active driver.
 
         :rtype: selenium.webdriver.remote.webdriver.WebDriver
