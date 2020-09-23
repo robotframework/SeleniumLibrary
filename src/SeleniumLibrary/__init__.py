@@ -510,13 +510,13 @@ class SeleniumLibrary(DynamicCore):
             self.failure_occurred()
             raise
 
-    def get_keyword_tags(self, name: str):
+    def get_keyword_tags(self, name: str) -> list:
         tags = list(DynamicCore.get_keyword_tags(self, name))
         if name in self._plugin_keywords:
             tags.append("plugin")
         return tags
 
-    def get_keyword_documentation(self, name: str):
+    def get_keyword_documentation(self, name: str) -> str:
         if name == "__intro__":
             return self._get_intro_documentation()
         return DynamicCore.get_keyword_documentation(self, name)
@@ -569,7 +569,7 @@ class SeleniumLibrary(DynamicCore):
             self._running_on_failure_keyword = False
 
     @property
-    def driver(self):
+    def driver(self) -> WebDriver:
         """Current active driver.
 
         :rtype: selenium.webdriver.remote.webdriver.WebDriver
