@@ -15,7 +15,7 @@ Browser Open With Implicit Wait And Test Wating
 Implicit Wait And New Window
     ${old_value} =     Set Selenium Implicit Wait    3
     Execute Javascript    window.open("about:blank")
-    Select Window      NEW
+    Switch Window      NEW
     ${start_time} =    Get Current Date    result_format=epoch    exclude_millis=yes
     Run Keyword And Ignore Error  Wait Until Page Contains Element       //not_here    1
     ${end_time} =      Get Current Date    result_format=epoch    exclude_millis=yes
@@ -25,8 +25,8 @@ Implicit Wait And New Window
 Implicit Wait And Back To Main Window
     ${old_value} =     Set Selenium Implicit Wait    3
     Execute Javascript    window.open("about:blank")
-    Select Window      NEW
-    Select Window      MAIN
+    Switch Window      NEW
+    Switch Window      MAIN
     ${start_time} =    Get Current Date    result_format=epoch    exclude_millis=yes
     Run Keyword And Ignore Error  Wait Until Page Contains Element       //not_here    1
     ${end_time} =      Get Current Date    result_format=epoch    exclude_millis=yes
