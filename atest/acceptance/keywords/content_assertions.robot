@@ -27,6 +27,11 @@ Page Should Contain
     Page Should Contain    This is the haystack
     Page Should Contain    non existing text
 
+Page Should Contain Numbers And String Should Be Same
+    Log Source
+    Page Should Contain    1
+    Page Should Contain    ${1}
+
 Page Should Contain With Text Having Internal Elements
     Page Should Contain    This is the haystack and somewhere on this page is a needle.
     Go to page "links.html"

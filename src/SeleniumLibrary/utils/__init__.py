@@ -20,7 +20,8 @@ from .librarylistener import LibraryListener  # noqa
 from .types import is_falsy, is_noney, is_string, is_truthy, WINDOWS  # noqa
 
 
-def escape_xpath_value(value):
+def escape_xpath_value(value: str):
+    value = str(value)
     if '"' in value and "'" in value:
         parts_wo_apos = value.split("'")
         escaped = "', \"'\", '".join(parts_wo_apos)
