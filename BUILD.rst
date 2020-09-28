@@ -38,7 +38,7 @@ utilities, but also other tools and modules are needed. A pre-condition is
 installing all these, and that's easiest done using `pip
 <http://pip-installer.org>`_ and the provided `<requirements-build.txt>`_ file::
 
-    pip install -r requirements-build.txt
+    pip install -r requirements-dev.txt
 
 Using Invoke
 ~~~~~~~~~~~~
