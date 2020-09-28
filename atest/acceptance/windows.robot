@@ -26,11 +26,11 @@ Get Window Titles With Non ASCII Title
     ${exp_titles}=    Create List    Click link to show a popup window    äää
     Click Link    my popup
     Wait Until New Window Is Open
-    ${parent} =    Select Window    Original
+    ${parent} =    Switch Window    Original
     Click Element    unicode
     ${titles} =    Get Window Titles
     Should Be Equal    ${titles}    ${exp_titles}
-    [Teardown]  Select Window    ${parent}
+    [Teardown]  Switch Window    ${parent}
 
 Get Title
     ${title} =    Get Title
@@ -126,23 +126,23 @@ Select Window By Handle
     Cannot Be Executed in IE
     Click Link    my popup
     Wait Until New Window Is Open
-    ${parent}=    Select Window    Original
+    ${parent}=    Switch Window    Original
     Title Should Be    Original
-    ${child}=    Select Window    ${parent}
+    ${child}=    Switch Window    ${parent}
     Title Should Be    Click link to show a popup window
-    Select Window    ${child}
+    Switch Window    ${child}
     Close Window
-    ${FromWindow}=    Select Window    ${parent}
+    ${FromWindow}=    Switch Window    ${parent}
     Title Should Be    Click link to show a popup window
     Should Be True    ${FromWindow} == None
 
 Select Window With Delay By Title
     [Tags]    Known Issue Internet Explorer
     Click Button     id:MyButton
-    Select Window    Original    timeout=5
+    Switch Window    Original    timeout=5
     Title Should Be    Original
     Close Window
-    Select Window    main
+    Switch Window    main
     Title Should Be    Click link to show a popup window
 
 Select Window With Delay By Title And Window Not Found
@@ -150,61 +150,61 @@ Select Window With Delay By Title And Window Not Found
     Click Button     id:MyButton
     Run Keyword And Expect Error
     ...    No window matching handle, name, title or URL 'Original' found.
-    ...    Select Window    Original    timeout=0.2
-    [Teardown]    Select Window    main
+    ...    Switch Window    Original    timeout=0.2
+    [Teardown]    Switch Window    main
 
 Select Popup Window By Excluded List
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
     @{excluded_handle_list}=    Get Window Handles
     Click Link    my popup
-    ${parent}=    Select Window    ${excluded_handle_list}    timeout=5
+    ${parent}=    Switch Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original
     Close Window
-    Select Window    ${parent}
+    Switch Window    ${parent}
     Title Should Be    Click link to show a popup window
 
 Select Popup Window With Delay By Excluded List
     [Tags]    Known Issue Internet Explorer
     @{excluded_handle_list}=    Get Window Handles
     Click Button     id:MyButton
-    Select Window    ${excluded_handle_list}    timeout=5
+    Switch Window    ${excluded_handle_list}    timeout=5
     Title Should Be    Original
     Close Window
-    Select Window    main
+    Switch Window    main
     Title Should Be    Click link to show a popup window
 
 Select Window By Special Locator
     [Tags]    Known Issue Internet Explorer
     Cannot Be Executed in IE
-    ${start}=    Select Window    current
+    ${start}=    Switch Window    current
     Click Link    my popup
-    ${parent}=    Select Window    new    timeout=5
+    ${parent}=    Switch Window    new    timeout=5
     Title Should Be    Original
     Should Be True    '${start}' == '${parent}'
     Close Window
-    Select Window    main
+    Switch Window    main
     Title Should Be    Click link to show a popup window
 
 Select Window With Delay By Special Locator
     [Tags]    Known Issue Internet Explorer
     Click Button     id:MyButton
-    Select Window    new    timeout=5
+    Switch Window    new    timeout=5
     Title Should Be    Original
     Close Window
-    Select Window    main
+    Switch Window    main
     Title Should Be    Click link to show a popup window
 
 *** Keywords ***
 Open Popup Window, Select It And Verify
     [Arguments]    ${window_id}
     Click Link    my popup
-    Select Window    ${window_id}    timeout=5
+    Switch Window    ${window_id}    timeout=5
     Title should Be    Original
 
 Select Main Window And Verify
     Close Window
-    Select Window    main    timeout=5
+    Switch Window    main    timeout=5
     Title Should Be    Click link to show a popup window
 
 Do Action In Popup Window And Verify
@@ -213,7 +213,7 @@ Do Action In Popup Window And Verify
 
 Close Popup Window And Select Main Window By Title
     Close Window
-    Select Window    title=Click link to show a popup window
+    Switch Window    title=Click link to show a popup window
 
 Wait Until New Window Is Open
     Wait Until Keyword Succeeds    5    1    New Windows Should Be Open

@@ -53,6 +53,6 @@ Initialize Page
     Element Text Should Be    output    initial output
 
 Close Popup Window
-    Select Window    myName    timeout=5s
+    Switch Window    myName    timeout=5s
     Close Window
-    Select Window    MAIN      timeout=5s
+    Switch Window    MAIN      timeout=5s
