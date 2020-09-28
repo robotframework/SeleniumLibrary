@@ -16,6 +16,7 @@
 
 import os
 from collections import namedtuple
+from typing import Any
 
 from robot.utils import plural_or_not, seq2str
 
@@ -28,7 +29,7 @@ class JavaScriptKeywords(LibraryComponent):
     arg_marker = "ARGUMENTS"
 
     @keyword
-    def execute_javascript(self, *code):
+    def execute_javascript(self, *code: str) -> Any:
         """Executes the given JavaScript code with possible arguments.
 
         ``code`` may be divided into multiple cells in the test data and
@@ -71,7 +72,7 @@ class JavaScriptKeywords(LibraryComponent):
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
-    def execute_async_javascript(self, *code):
+    def execute_async_javascript(self, *code: str) -> Any:
         """Executes asynchronous JavaScript code with possible arguments.
 
         Similar to `Execute Javascript` except that scripts executed with

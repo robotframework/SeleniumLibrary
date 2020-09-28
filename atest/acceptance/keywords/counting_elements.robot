@@ -5,24 +5,6 @@ Resource          ../resource.robot
 Library           String
 
 *** Test Cases ***
-Locator Should Match X Times
-    [Documentation]    Deprecated
-    [Setup]    Go To Page "links.html"
-    Locator Should Match X Times    link=Link    2
-    Locator Should Match X Times    link=Missing Link    0
-    Locator Should Match X Times    name:div_name    2
-    Locator Should Match X Times    xpath://*[@name="div_name"]    2
-
-Locator Should Match X Times Error
-    [Documentation]    Deprecated
-    [Setup]    Go To Page "links.html"
-    Run Keyword And Expect Error
-    ...    Locator 'name: div_name' should have matched 3 times but matched 2 times.
-    ...    Locator Should Match X Times    name: div_name    3
-    Run Keyword And Expect Error
-    ...    Custom error ÄÄÄ
-    ...    Locator Should Match X Times    name:div_name    3    Custom error ÄÄÄ
-
 Get Element Count With Xpath Locator
     [Setup]    Go To Page "links.html"
     ${count} =     Get Element Count    xpath://*[@name="div_name"]
@@ -75,7 +57,7 @@ Page Should Contain Element When Limit Is Number And Error
 Page Should Contain Element When Limit Is Not Number
     [Setup]    Go To Page "links.html"
     Run Keyword And Expect Error
-    ...    ValueError: invalid literal for int() with base 10: 'AA'
+    ...    ValueError: *Argument 'limit' got value 'AA'*
     ...    Page Should Contain Element    name: div_name    limit=AA
 
 Page Should Contain Element When Error With Limit And Different Loglevels

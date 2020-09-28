@@ -28,7 +28,7 @@ EMBED = "EMBED"
 
 class ScreenshotKeywords(LibraryComponent):
     @keyword
-    def set_screenshot_directory(self, path):
+    def set_screenshot_directory(self, path: str) -> str:
         """Sets the directory for captured screenshots.
 
         ``path`` argument specifies the absolute path to a directory where
@@ -63,7 +63,7 @@ class ScreenshotKeywords(LibraryComponent):
         return previous
 
     @keyword
-    def capture_page_screenshot(self, filename=DEFAULT_FILENAME_PAGE):
+    def capture_page_screenshot(self, filename: str = DEFAULT_FILENAME_PAGE) -> str:
         """Takes a screenshot of the current page and embeds it into a log file.
 
         ``filename`` argument specifies the name of the file to write the
@@ -125,7 +125,7 @@ class ScreenshotKeywords(LibraryComponent):
         return EMBED
 
     @keyword
-    def capture_element_screenshot(self, locator, filename=DEFAULT_FILENAME_ELEMENT):
+    def capture_element_screenshot(self, locator: str, filename: str = DEFAULT_FILENAME_ELEMENT) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 
         See `Capture Page Screenshot` for details about ``filename`` argument.

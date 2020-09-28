@@ -14,11 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from collections import namedtuple
+from typing import List, Optional
 
 from robot.utils import plural_or_not
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import is_falsy, is_noney, is_truthy
@@ -27,7 +28,7 @@ from SeleniumLibrary.errors import ElementNotFound
 
 class ElementKeywords(LibraryComponent):
     @keyword(name="Get WebElement")
-    def get_webelement(self, locator):
+    def get_webelement(self, locator: str) -> WebElement:
         """Returns the first WebElement matching the given ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -36,7 +37,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator)
 
     @keyword(name="Get WebElements")
-    def get_webelements(self, locator):
+    def get_webelements(self, locator: str) -> List[WebElement]:
         """Returns a list of WebElement objects matching the ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -50,7 +51,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_contain(
-        self, locator, expected, message=None, ignore_case=False
+        self, locator: str, expected: str, message: Optional[str] = None, ignore_case: bool = False
     ):
         """Verifies that element ``locator`` contains text ``expected``.
 
@@ -84,7 +85,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_not_contain(
-        self, locator, expected, message=None, ignore_case=False
+        self, locator: str, expected: str, message: Optional[str] = None, ignore_case: bool = False
     ):
         """Verifies that element ``locator`` does not contain text ``expected``.
 
@@ -114,7 +115,7 @@ class ElementKeywords(LibraryComponent):
         self.info(f"Element '{locator}' does not contain text '{expected_before}'.")
 
     @keyword
-    def page_should_contain(self, text, loglevel="TRACE"):
+    def page_should_contain(self, text: str, loglevel: str = "TRACE"):
         """Verifies that current page contains ``text``.
 
         If this keyword fails, it automatically logs the page source
@@ -132,7 +133,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_element(
-        self, locator, message=None, loglevel="TRACE", limit=None
+        self, locator: str, message: Optional[str] = None, loglevel: Optional[str] = "TRACE", limit: Optional[int] = None
     ):
         """Verifies that element ``locator`` is found on the current page.
 
@@ -176,22 +177,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def locator_should_match_x_times(self, locator, x, message=None, loglevel="TRACE"):
-        """*DEPRECATED in SeleniumLibrary 4.0.*, use `Page Should Contain Element` with ``limit`` argument instead."""
-        count = len(self.find_elements(locator))
-        x = int(x)
-        if count != x:
-            if is_falsy(message):
-                message = (
-                    f"Locator '{locator}' should have matched {x} time{plural_or_not(x)} but "
-                    f"matched {count} time{plural_or_not(count)}."
-                )
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
-        self.info(f"Current page contains {count} elements matching '{locator}'.")
-
-    @keyword
-    def page_should_not_contain(self, text, loglevel="TRACE"):
+    def page_should_not_contain(self, text: str, loglevel: str = "TRACE"):
         """Verifies the current page does not contain ``text``.
 
         See `Page Should Contain` for an explanation about the ``loglevel``
@@ -203,7 +189,7 @@ class ElementKeywords(LibraryComponent):
         self.info(f"Current page does not contain text '{text}'.")
 
     @keyword
-    def page_should_not_contain_element(self, locator, message=None, loglevel="TRACE"):
+    def page_should_not_contain_element(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies that element ``locator`` is not found on the current page.
 
         See the `Locating elements` section for details about the locator
@@ -215,7 +201,7 @@ class ElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, message=message, loglevel=loglevel)
 
     @keyword
-    def assign_id_to_element(self, locator, id):
+    def assign_id_to_element(self, locator: str, id: str):
         """Assigns a temporary ``id`` to the element specified by ``locator``.
 
         This is mainly useful if the locator is complicated and/or slow XPath
@@ -234,7 +220,7 @@ class ElementKeywords(LibraryComponent):
         self.driver.execute_script(f"arguments[0].id = '{id}';", element)
 
     @keyword
-    def element_should_be_disabled(self, locator):
+    def element_should_be_disabled(self, locator: str):
         """Verifies that element identified by ``locator`` is disabled.
 
         This keyword considers also elements that are read-only to be
@@ -247,7 +233,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(f"Element '{locator}' is enabled.")
 
     @keyword
-    def element_should_be_enabled(self, locator):
+    def element_should_be_enabled(self, locator: str):
         """Verifies that element identified by ``locator`` is enabled.
 
         This keyword considers also elements that are read-only to be
@@ -260,7 +246,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(f"Element '{locator}' is disabled.")
 
     @keyword
-    def element_should_be_focused(self, locator):
+    def element_should_be_focused(self, locator: str):
         """Verifies that element identified by ``locator`` is focused.
 
         See the `Locating elements` section for details about the locator
@@ -270,14 +256,14 @@ class ElementKeywords(LibraryComponent):
         """
         element = self.find_element(locator)
         focused = self.driver.switch_to.active_element
-        # Selenium 3.6.0 with Firefox return dict wich contains the selenium WebElement
+        # Selenium 3.6.0 with Firefox return dict which contains the selenium WebElement
         if isinstance(focused, dict):
             focused = focused["value"]
         if element != focused:
             raise AssertionError(f"Element '{locator}' does not have focus.")
 
     @keyword
-    def element_should_be_visible(self, locator, message=None):
+    def element_should_be_visible(self, locator: str, message: Optional[str] = None):
         """Verifies that the element identified by ``locator`` is visible.
 
         Herein, visible means that the element is logically visible, not
@@ -298,7 +284,7 @@ class ElementKeywords(LibraryComponent):
         self.info(f"Element '{locator}' is displayed.")
 
     @keyword
-    def element_should_not_be_visible(self, locator, message=None):
+    def element_should_not_be_visible(self, locator: str, message: Optional[str] = None):
         """Verifies that the element identified by ``locator`` is NOT visible.
 
         Passes if the element does not exists. See `Element Should Be Visible`
@@ -316,7 +302,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_be(
-        self, locator, expected, message=None, ignore_case=False
+        self, locator: str, expected: str, message: Optional[str] = None, ignore_case: bool = False
     ):
         """Verifies that element ``locator`` contains exact the text ``expected``.
 
@@ -348,7 +334,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_not_be(
-        self, locator, not_expected, message=None, ignore_case=False
+        self, locator: str, not_expected: str, message: Optional[str] = None, ignore_case: bool = False
     ):
         """Verifies that element ``locator`` does not contain exact the text ``not_expected``.
 
@@ -377,7 +363,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def get_element_attribute(self, locator, attribute):
+    def get_element_attribute(self, locator: str, attribute: str) -> str:
         """Returns the value of ``attribute`` from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -394,7 +380,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_attribute_value_should_be(
-        self, locator, attribute, expected, message=None
+        self, locator: str, attribute: str, expected: str, message: Optional[str] = None
     ):
         """Verifies element identified by ``locator`` contains expected attribute value.
 
@@ -419,7 +405,7 @@ class ElementKeywords(LibraryComponent):
         )
 
     @keyword
-    def get_horizontal_position(self, locator):
+    def get_horizontal_position(self, locator: str) -> int:
         """Returns the horizontal position of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -433,7 +419,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).location["x"]
 
     @keyword
-    def get_element_size(self, locator):
+    def get_element_size(self, locator: str) -> int:
         """Returns width and height of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -448,7 +434,7 @@ class ElementKeywords(LibraryComponent):
         return element.size["width"], element.size["height"]
 
     @keyword
-    def cover_element(self, locator):
+    def cover_element(self, locator: str):
         """Will cover elements identified by ``locator`` with a blue div without breaking page layout.
 
         See the `Locating elements` section for details about the locator
@@ -480,7 +466,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self.driver.execute_script(script, element)
 
     @keyword
-    def get_value(self, locator):
+    def get_value(self, locator: str) -> str:
         """Returns the value attribute of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -489,7 +475,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.get_element_attribute(locator, "value")
 
     @keyword
-    def get_text(self, locator):
+    def get_text(self, locator: str) -> str:
         """Returns the text value of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -498,7 +484,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).text
 
     @keyword
-    def clear_element_text(self, locator):
+    def clear_element_text(self, locator: str):
         """Clears the value of the text-input-element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -507,7 +493,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.find_element(locator).clear()
 
     @keyword
-    def get_vertical_position(self, locator):
+    def get_vertical_position(self, locator: str) -> int:
         """Returns the vertical position of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -521,7 +507,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).location["y"]
 
     @keyword
-    def click_button(self, locator, modifier=False):
+    def click_button(self, locator: str, modifier: Optional[str] = False):
         """Clicks the button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -543,7 +529,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["button", "input"], modifier)
 
     @keyword
-    def click_image(self, locator, modifier=False):
+    def click_image(self, locator: str, modifier: Optional[str] = False):
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -566,7 +552,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["image", "input"], modifier)
 
     @keyword
-    def click_link(self, locator, modifier=False):
+    def click_link(self, locator: str, modifier: Optional[str] = False):
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -585,7 +571,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["link", "link"], modifier)
 
     @keyword
-    def click_element(self, locator, modifier=False, action_chain=False):
+    def click_element(self, locator: str, modifier: Optional[str] = False, action_chain: bool = False):
         """Click the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -674,7 +660,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def double_click_element(self, locator):
+    def double_click_element(self, locator: str):
         """Double clicks the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -686,7 +672,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.double_click(element).perform()
 
     @keyword
-    def set_focus_to_element(self, locator):
+    def set_focus_to_element(self, locator: str):
         """Sets the focus to the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -698,7 +684,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.driver.execute_script("arguments[0].focus();", element)
 
     @keyword
-    def scroll_element_into_view(self, locator):
+    def scroll_element_into_view(self, locator: str):
         """Scrolls the element identified by ``locator`` into view.
 
         See the `Locating elements` section for details about the locator
@@ -716,7 +702,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             ActionChains(self.driver).move_to_element(element).perform()
 
     @keyword
-    def drag_and_drop(self, locator, target):
+    def drag_and_drop(self, locator: str, target: str):
         """Drags the element identified by ``locator`` into the ``target`` element.
 
         The ``locator`` argument is the locator of the dragged element
@@ -732,7 +718,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.drag_and_drop(element, target).perform()
 
     @keyword
-    def drag_and_drop_by_offset(self, locator, xoffset, yoffset):
+    def drag_and_drop_by_offset(self, locator: str, xoffset: int, yoffset: int):
         """Drags the element identified with ``locator`` by ``xoffset/yoffset``.
 
         See the `Locating elements` section for details about the locator
@@ -750,7 +736,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def mouse_down(self, locator):
+    def mouse_down(self, locator: str):
         """Simulates pressing the left mouse button on the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -767,7 +753,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.click_and_hold(element).perform()
 
     @keyword
-    def mouse_out(self, locator):
+    def mouse_out(self, locator: str):
         """Simulates moving the mouse away from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -790,7 +776,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def mouse_over(self, locator):
+    def mouse_over(self, locator: str):
         """Simulates hovering the mouse over the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -808,7 +794,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             action.move_to_element(element).perform()
 
     @keyword
-    def mouse_up(self, locator):
+    def mouse_up(self, locator: str):
         """Simulates releasing the left mouse button on the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -819,14 +805,14 @@ newDiv.parentNode.style.overflow = 'hidden';
         ActionChains(self.driver).release(element).perform()
 
     @keyword
-    def open_context_menu(self, locator):
+    def open_context_menu(self, locator: str):
         """Opens the context menu on the element identified by ``locator``."""
         element = self.find_element(locator)
         action = ActionChains(self.driver)
         action.context_click(element).perform()
 
     @keyword
-    def simulate_event(self, locator, event):
+    def simulate_event(self, locator: str, event: str):
         """Simulates ``event`` on the element identified by ``locator``.
 
         This keyword is useful if element has ``OnEvent`` handler that
@@ -851,7 +837,7 @@ return !element.dispatchEvent(evt);
         self.driver.execute_script(script, element, event)
 
     @keyword
-    def press_key(self, locator, key):
+    def press_key(self, locator: str, key: str):
         """*DEPRECATED in SeleniumLibrary 4.0.* use `Press Keys` instead."""
         if key.startswith("\\") and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
@@ -859,7 +845,7 @@ return !element.dispatchEvent(evt);
         element.send_keys(key)
 
     @keyword
-    def press_keys(self, locator=None, *keys):
+    def press_keys(self, locator: Optional[str] = None, *keys: str):
         """Simulates the user pressing key(s) to an element or on the active browser.
 
         If ``locator`` evaluates as false, see `Boolean arguments` for more
@@ -946,7 +932,7 @@ return !element.dispatchEvent(evt);
                 actions.key_up(key.converted)
 
     @keyword
-    def get_all_links(self):
+    def get_all_links(self) -> List[str]:
         """Returns a list containing ids of all links found in current page.
 
         If a link has no id, an empty string will be in the list instead.
@@ -955,7 +941,7 @@ return !element.dispatchEvent(evt);
         return [link.get_attribute("id") for link in links]
 
     @keyword
-    def mouse_down_on_link(self, locator):
+    def mouse_down_on_link(self, locator: str):
         """Simulates a mouse down event on a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -967,7 +953,7 @@ return !element.dispatchEvent(evt);
         action.click_and_hold(element).perform()
 
     @keyword
-    def page_should_contain_link(self, locator, message=None, loglevel="TRACE"):
+    def page_should_contain_link(self, locator: str, message: Optional[str] = None, loglevel: str="TRACE"):
         """Verifies link identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -980,7 +966,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_contains(locator, "link", message, loglevel)
 
     @keyword
-    def page_should_not_contain_link(self, locator, message=None, loglevel="TRACE"):
+    def page_should_not_contain_link(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies link identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -993,7 +979,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_not_contains(locator, "link", message, loglevel)
 
     @keyword
-    def mouse_down_on_image(self, locator):
+    def mouse_down_on_image(self, locator: str):
         """Simulates a mouse down event on an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -1005,7 +991,7 @@ return !element.dispatchEvent(evt);
         action.click_and_hold(element).perform()
 
     @keyword
-    def page_should_contain_image(self, locator, message=None, loglevel="TRACE"):
+    def page_should_contain_image(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -1018,7 +1004,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_contains(locator, "image", message, loglevel)
 
     @keyword
-    def page_should_not_contain_image(self, locator, message=None, loglevel="TRACE"):
+    def page_should_not_contain_image(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies image identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -1031,7 +1017,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_not_contains(locator, "image", message, loglevel)
 
     @keyword
-    def get_element_count(self, locator):
+    def get_element_count(self, locator: str) -> int:
         """Returns the number of elements matching ``locator``.
 
         If you wish to assert the number of matching elements, use
@@ -1047,7 +1033,7 @@ return !element.dispatchEvent(evt);
         return len(self.find_elements(locator))
 
     @keyword
-    def add_location_strategy(self, strategy_name, strategy_keyword, persist=False):
+    def add_location_strategy(self, strategy_name: str, strategy_keyword: str, persist: bool = False):
         """Adds a custom location strategy.
 
         See `Custom locators` for information on how to create and use
@@ -1062,7 +1048,7 @@ return !element.dispatchEvent(evt);
         self.element_finder.register(strategy_name, strategy_keyword, persist)
 
     @keyword
-    def remove_location_strategy(self, strategy_name):
+    def remove_location_strategy(self, strategy_name: str):
         """Removes a previously added custom location strategy.
 
         See `Custom locators` for information on how to create and use

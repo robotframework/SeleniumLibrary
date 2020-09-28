@@ -20,7 +20,7 @@ from SeleniumLibrary.utils import is_noney, is_string
 
 class RunOnFailureKeywords(LibraryComponent):
     @keyword
-    def register_keyword_to_run_on_failure(self, keyword):
+    def register_keyword_to_run_on_failure(self, keyword: str) -> str:
         """Sets the keyword to execute, when a SeleniumLibrary keyword fails.
 
         ``keyword`` is the name of a keyword that will be executed if a

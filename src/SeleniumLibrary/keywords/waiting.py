@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import time
+from typing import Optional, Union
 
 from selenium.common.exceptions import StaleElementReferenceException
 
@@ -25,7 +26,7 @@ from SeleniumLibrary.utils import is_noney, secs_to_timestr
 
 class WaitingKeywords(LibraryComponent):
     @keyword
-    def wait_for_condition(self, condition, timeout=None, error=None):
+    def wait_for_condition(self, condition: str, timeout: Union[str, float, None] = None, error: Optional[str] =None):
         """Waits until ``condition`` is true or ``timeout`` expires.
 
         The condition can be arbitrary JavaScript expression but it
@@ -55,7 +56,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_location_is(self, expected, timeout=None, message=None):
+    def wait_until_location_is(self, expected: str, timeout: Union[str, float, None] = None, message: Optional[str] = None):
         """Waits until the current URL is ``expected``.
 
         The ``expected`` argument is the expected value in url.
@@ -79,7 +80,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_location_is_not(self, location, timeout=None, message=None):
+    def wait_until_location_is_not(self, location: str, timeout: Union[str, float, None] = None, message: Optional[str] = None):
         """Waits until the current URL is not ``location``.
 
         The ``location`` argument is the unexpected value in url.
@@ -102,7 +103,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_location_contains(self, expected, timeout=None, message=None):
+    def wait_until_location_contains(self, expected: str, timeout: Union[str, float, None] = None, message: Optional[str] =None):
         """Waits until the current URL contains ``expected``.
 
         The ``expected`` argument contains the expected value in url.
@@ -126,7 +127,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_location_does_not_contain(
-        self, location, timeout=None, message=None
+        self, location: str, timeout: Union[str, float, None] = None, message: Optional[str] = None
     ):
         """Waits until the current URL does not contains ``location``.
 
@@ -150,7 +151,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_page_contains(self, text, timeout=None, error=None):
+    def wait_until_page_contains(self, text: str, timeout: Union[str, float, None] = None, error: Optional[str] = None):
         """Waits until ``text`` appears on the current page.
 
         Fails if ``timeout`` expires before the text appears. See
@@ -167,7 +168,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_page_does_not_contain(self, text, timeout=None, error=None):
+    def wait_until_page_does_not_contain(self, text: str, timeout: Union[str, float, None] = None, error: Optional[str] = None):
         """Waits until ``text`` disappears from the current page.
 
         Fails if ``timeout`` expires before the text disappears. See
@@ -185,7 +186,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_page_contains_element(
-        self, locator, timeout=None, error=None, limit=None
+        self, locator: str, timeout: Union[str, float, None] = None, error: Optional[str] = None, limit: Optional[int] = None
     ):
         """Waits until the element ``locator`` appears on the current page.
 
@@ -220,7 +221,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_page_does_not_contain_element(
-        self, locator, timeout=None, error=None, limit=None
+        self, locator: str, timeout: Union[str, float, None] = None, error: Optional[str] = None, limit: Optional[int] = None
     ):
         """Waits until the element ``locator`` disappears from the current page.
 
@@ -254,7 +255,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_is_visible(self, locator, timeout=None, error=None):
+    def wait_until_element_is_visible(self, locator: str, timeout: Union[str, float, None] = None, error: Optional[str] = None):
         """Waits until the element ``locator`` is visible.
 
         Fails if ``timeout`` expires before the element is visible. See
@@ -272,7 +273,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_is_not_visible(self, locator, timeout=None, error=None):
+    def wait_until_element_is_not_visible(self, locator: str, timeout: Union[str, float, None] = None, error: Optional[str] = None):
         """Waits until the element ``locator`` is not visible.
 
         Fails if ``timeout`` expires before the element is not visible. See
@@ -290,7 +291,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_is_enabled(self, locator, timeout=None, error=None):
+    def wait_until_element_is_enabled(self, locator: str, timeout: Union[str, float, None] = None, error: Optional[str] = None):
         """Waits until the element ``locator`` is enabled.
 
         Element is considered enabled if it is not disabled nor read-only.
@@ -313,7 +314,7 @@ class WaitingKeywords(LibraryComponent):
         )
 
     @keyword
-    def wait_until_element_contains(self, locator, text, timeout=None, error=None):
+    def wait_until_element_contains(self, locator: str, text: str, timeout: Union[str, float, None] = None, error: Optional[str] = None):
         """Waits until the element ``locator`` contains ``text``.
 
         Fails if ``timeout`` expires before the text appears. See
@@ -332,7 +333,7 @@ class WaitingKeywords(LibraryComponent):
 
     @keyword
     def wait_until_element_does_not_contain(
-        self, locator, text, timeout=None, error=None
+        self, locator: str, text: str, timeout: Union[str, float, None] = None, error: Optional[str] = None
     ):
         """Waits until the element ``locator`` does not contain ``text``.
 

@@ -21,7 +21,7 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 
 class TableElementKeywords(LibraryComponent):
     @keyword
-    def get_table_cell(self, locator, row, column, loglevel="TRACE"):
+    def get_table_cell(self, locator: str, row: int, column: int, loglevel: str = "TRACE") -> str:
         """Returns contents of a table cell.
 
         The table is located using the ``locator`` argument and its cell
@@ -82,7 +82,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_cell_should_contain(
-        self, locator, row, column, expected, loglevel="TRACE"
+        self, locator: str, row: int, column: int, expected: str, loglevel: str = "TRACE"
     ):
         """Verifies table cell contains text ``expected``.
 
@@ -99,7 +99,7 @@ class TableElementKeywords(LibraryComponent):
         self.info(f"Table cell contains '{content}'.")
 
     @keyword
-    def table_column_should_contain(self, locator, column, expected, loglevel="TRACE"):
+    def table_column_should_contain(self, locator: str, column: int, expected: str, loglevel: str = "TRACE"):
         """Verifies table column contains text ``expected``.
 
         The table is located using the ``locator`` argument and its column
@@ -124,7 +124,7 @@ class TableElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def table_footer_should_contain(self, locator, expected, loglevel="TRACE"):
+    def table_footer_should_contain(self, locator: str, expected: str, loglevel: str = "TRACE"):
         """Verifies table footer contains text ``expected``.
 
         Any ``<td>`` element inside ``<tfoot>`` element is considered to
@@ -144,7 +144,7 @@ class TableElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def table_header_should_contain(self, locator, expected, loglevel="TRACE"):
+    def table_header_should_contain(self, locator: str, expected: str, loglevel: str = "TRACE"):
         """Verifies table header contains text ``expected``.
 
         Any ``<th>`` element anywhere in the table is considered to be
@@ -164,7 +164,7 @@ class TableElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def table_row_should_contain(self, locator, row, expected, loglevel="TRACE"):
+    def table_row_should_contain(self, locator: str, row: int, expected: str, loglevel: str = "TRACE"):
         """Verifies that table row contains text ``expected``.
 
         The table is located using the ``locator`` argument and its column
@@ -189,7 +189,7 @@ class TableElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def table_should_contain(self, locator, expected, loglevel="TRACE"):
+    def table_should_contain(self, locator: str, expected: str, loglevel: str = "TRACE"):
         """Verifies table contains text ``expected``.
 
         The table is located using the ``locator`` argument. See the

@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import time
+from typing import Optional, List, Tuple
 
 from SeleniumLibrary.utils import is_truthy, is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
@@ -29,12 +30,7 @@ class WindowKeywords(LibraryComponent):
         self._window_manager = WindowManager(ctx)
 
     @keyword
-    def select_window(self, locator="MAIN", timeout=None):
-        """DEPRECATED in SeleniumLibrary 4.0. , use `Switch Window` instead."""
-        return self.switch_window(locator, timeout)
-
-    @keyword
-    def switch_window(self, locator="MAIN", timeout=None, browser="CURRENT"):
+    def switch_window(self, locator: str = "MAIN", timeout: Optional[str] = None, browser: str = "CURRENT"):
         """Switches to browser window matching ``locator``.
 
         If the window is found, all subsequent commands use the selected
@@ -126,7 +122,7 @@ class WindowKeywords(LibraryComponent):
         self.driver.close()
 
     @keyword
-    def get_window_handles(self, browser="CURRENT"):
+    def get_window_handles(self, browser: str ="CURRENT") -> List[str]:
         """Returns all child window handles of the selected browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
@@ -138,7 +134,7 @@ class WindowKeywords(LibraryComponent):
         return self._window_manager.get_window_handles(browser)
 
     @keyword
-    def get_window_identifiers(self, browser="CURRENT"):
+    def get_window_identifiers(self, browser: str = "CURRENT") -> List:
         """Returns and logs id attributes of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -146,7 +142,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(ids)
 
     @keyword
-    def get_window_names(self, browser="CURRENT"):
+    def get_window_names(self, browser: str ="CURRENT") -> List[str]:
         """Returns and logs names of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -154,7 +150,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(names)
 
     @keyword
-    def get_window_titles(self, browser="CURRENT"):
+    def get_window_titles(self, browser: str = "CURRENT") -> List[str]:
         """Returns and logs titles of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -162,7 +158,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(titles)
 
     @keyword
-    def get_locations(self, browser="CURRENT"):
+    def get_locations(self, browser: str = "CURRENT") -> List[str]:
         """Returns and logs URLs of all windows of the selected browser.
 
         *Browser Scope:*
@@ -186,7 +182,7 @@ class WindowKeywords(LibraryComponent):
         self.driver.maximize_window()
 
     @keyword
-    def get_window_size(self, inner=False):
+    def get_window_size(self, inner: bool = False) -> Tuple[float, float]:
         """Returns current window width and height as integers.
 
         See also `Set Window Size`.
@@ -208,7 +204,7 @@ class WindowKeywords(LibraryComponent):
         return size["width"], size["height"]
 
     @keyword
-    def set_window_size(self, width, height, inner=False):
+    def set_window_size(self, width: int, height: int, inner: bool=False):
         """Sets current windows size to given ``width`` and ``height``.
 
         Values can be given using strings containing numbers or by using
@@ -253,7 +249,7 @@ class WindowKeywords(LibraryComponent):
             raise AssertionError("Keyword failed setting correct window size.")
 
     @keyword
-    def get_window_position(self):
+    def get_window_position(self) -> Tuple[int, int]:
         """Returns current window position.
 
         The position is relative to the top left corner of the screen. Returned
@@ -266,7 +262,7 @@ class WindowKeywords(LibraryComponent):
         return position["x"], position["y"]
 
     @keyword
-    def set_window_position(self, x, y):
+    def set_window_position(self, x: int, y: int):
         """Sets window position using ``x`` and ``y`` coordinates.
 
         The position is relative to the top left corner of the screen,
