@@ -41,8 +41,6 @@ class TableElementKeywords(LibraryComponent):
         See `Page Should Contain` for an explanation about the ``loglevel``
         argument.
         """
-        row = int(row)
-        column = int(column)
         if row == 0 or column == 0:
             raise ValueError(
                 "Both row and column must be non-zero, "
@@ -242,7 +240,6 @@ class TableElementKeywords(LibraryComponent):
         return self._find(table_locator, locator, content)
 
     def _index_to_position(self, index):
-        index = int(index)
         if index == 0:
             raise ValueError("Row and column indexes must be non-zero.")
         if index > 0:

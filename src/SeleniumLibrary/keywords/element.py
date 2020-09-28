@@ -175,7 +175,6 @@ class ElementKeywords(LibraryComponent):
             return self.assert_page_contains(
                 locator, message=message, loglevel=loglevel
             )
-        limit = int(limit)
         count = len(self.find_elements(locator))
         if count == limit:
             self.info(f"Current page contains {count} element(s).")
@@ -758,7 +757,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         element = self.find_element(locator)
         action = ActionChains(self.driver)
-        action.drag_and_drop_by_offset(element, int(xoffset), int(yoffset))
+        action.drag_and_drop_by_offset(element, xoffset, yoffset)
         action.perform()
 
     @keyword

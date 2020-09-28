@@ -233,7 +233,6 @@ class WindowKeywords(LibraryComponent):
         | `Set Window Size` | 800 | 600 |      |
         | `Set Window Size` | 800 | 600 | True |
         """
-        width, height = int(width), int(height)
         if is_falsy(inner):
             return self.driver.set_window_size(width, height)
         self.driver.set_window_size(width, height)
@@ -281,7 +280,7 @@ class WindowKeywords(LibraryComponent):
         Example:
         | `Set Window Position` | 100 | 200 |
         """
-        self.driver.set_window_position(int(x), int(y))
+        self.driver.set_window_position(x, y)
 
     def _log_list(self, items, what="item"):
         msg = [f"Altogether {len(items)} {what}{plural_or_not(items)}."]
