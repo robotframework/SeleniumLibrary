@@ -102,8 +102,8 @@ class ElementFinder(ContextAware):
         parts = []
         while match:
             span = match.span()
-            parts.append(locator[:span[0]])
-            locator = locator[span[1]:]
+            parts.append(locator[: span[0]])
+            locator = locator[span[1] :]
             match = self._split_re.search(locator)
         parts.append(locator)
         return parts
@@ -306,7 +306,7 @@ class ElementFinder(ContextAware):
         if index != -1:
             prefix = locator[:index].strip()
             if prefix in self._strategies:
-                return prefix, locator[index + 1:].lstrip()
+                return prefix, locator[index + 1 :].lstrip()
         return "default", locator
 
     def _get_locator_separator_index(self, locator):

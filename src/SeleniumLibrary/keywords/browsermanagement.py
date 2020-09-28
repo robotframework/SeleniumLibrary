@@ -342,7 +342,9 @@ class BrowserManagementKeywords(LibraryComponent):
         return index
 
     @keyword
-    def create_webdriver(self, driver_name: str, alias: Optional[str] = None, kwargs={}, **init_kwargs) -> str:
+    def create_webdriver(
+        self, driver_name: str, alias: Optional[str] = None, kwargs={}, **init_kwargs
+    ) -> str:
         """Creates an instance of Selenium WebDriver.
 
         Like `Open Browser`, but allows passing arguments to the created
