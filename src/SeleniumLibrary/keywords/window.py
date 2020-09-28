@@ -30,7 +30,12 @@ class WindowKeywords(LibraryComponent):
         self._window_manager = WindowManager(ctx)
 
     @keyword
-    def switch_window(self, locator: str = "MAIN", timeout: Optional[str] = None, browser: str = "CURRENT"):
+    def switch_window(
+        self,
+        locator: str = "MAIN",
+        timeout: Optional[str] = None,
+        browser: str = "CURRENT",
+    ):
         """Switches to browser window matching ``locator``.
 
         If the window is found, all subsequent commands use the selected
@@ -122,7 +127,7 @@ class WindowKeywords(LibraryComponent):
         self.driver.close()
 
     @keyword
-    def get_window_handles(self, browser: str ="CURRENT") -> List[str]:
+    def get_window_handles(self, browser: str = "CURRENT") -> List[str]:
         """Returns all child window handles of the selected browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
@@ -142,7 +147,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(ids)
 
     @keyword
-    def get_window_names(self, browser: str ="CURRENT") -> List[str]:
+    def get_window_names(self, browser: str = "CURRENT") -> List[str]:
         """Returns and logs names of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -204,7 +209,7 @@ class WindowKeywords(LibraryComponent):
         return size["width"], size["height"]
 
     @keyword
-    def set_window_size(self, width: int, height: int, inner: bool=False):
+    def set_window_size(self, width: int, height: int, inner: bool = False):
         """Sets current windows size to given ``width`` and ``height``.
 
         Values can be given using strings containing numbers or by using

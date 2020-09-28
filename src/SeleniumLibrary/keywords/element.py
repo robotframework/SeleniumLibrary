@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from collections import namedtuple
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from robot.utils import plural_or_not
 from selenium.webdriver.common.action_chains import ActionChains
@@ -51,7 +51,11 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_contain(
-        self, locator: str, expected: str, message: Optional[str] = None, ignore_case: bool = False
+        self,
+        locator: str,
+        expected: str,
+        message: Optional[str] = None,
+        ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` contains text ``expected``.
 
@@ -85,7 +89,11 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_not_contain(
-        self, locator: str, expected: str, message: Optional[str] = None, ignore_case: bool = False
+        self,
+        locator: str,
+        expected: str,
+        message: Optional[str] = None,
+        ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` does not contain text ``expected``.
 
@@ -133,7 +141,11 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_element(
-        self, locator: str, message: Optional[str] = None, loglevel: Optional[str] = "TRACE", limit: Optional[int] = None
+        self,
+        locator: str,
+        message: Optional[str] = None,
+        loglevel: Optional[str] = "TRACE",
+        limit: Optional[int] = None,
     ):
         """Verifies that element ``locator`` is found on the current page.
 
@@ -189,7 +201,9 @@ class ElementKeywords(LibraryComponent):
         self.info(f"Current page does not contain text '{text}'.")
 
     @keyword
-    def page_should_not_contain_element(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_not_contain_element(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies that element ``locator`` is not found on the current page.
 
         See the `Locating elements` section for details about the locator
@@ -284,7 +298,9 @@ class ElementKeywords(LibraryComponent):
         self.info(f"Element '{locator}' is displayed.")
 
     @keyword
-    def element_should_not_be_visible(self, locator: str, message: Optional[str] = None):
+    def element_should_not_be_visible(
+        self, locator: str, message: Optional[str] = None
+    ):
         """Verifies that the element identified by ``locator`` is NOT visible.
 
         Passes if the element does not exists. See `Element Should Be Visible`
@@ -302,7 +318,11 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_be(
-        self, locator: str, expected: str, message: Optional[str] = None, ignore_case: bool = False
+        self,
+        locator: str,
+        expected: str,
+        message: Optional[str] = None,
+        ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` contains exact the text ``expected``.
 
@@ -334,7 +354,11 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_not_be(
-        self, locator: str, not_expected: str, message: Optional[str] = None, ignore_case: bool = False
+        self,
+        locator: str,
+        not_expected: str,
+        message: Optional[str] = None,
+        ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` does not contain exact the text ``not_expected``.
 
@@ -419,7 +443,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).location["x"]
 
     @keyword
-    def get_element_size(self, locator: str) -> int:
+    def get_element_size(self, locator: str) -> Tuple[int, int]:
         """Returns width and height of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -571,7 +595,9 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["link", "link"], modifier)
 
     @keyword
-    def click_element(self, locator: str, modifier: Optional[str] = False, action_chain: bool = False):
+    def click_element(
+        self, locator: str, modifier: Optional[str] = False, action_chain: bool = False
+    ):
         """Click the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -953,7 +979,9 @@ return !element.dispatchEvent(evt);
         action.click_and_hold(element).perform()
 
     @keyword
-    def page_should_contain_link(self, locator: str, message: Optional[str] = None, loglevel: str="TRACE"):
+    def page_should_contain_link(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies link identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -966,7 +994,9 @@ return !element.dispatchEvent(evt);
         self.assert_page_contains(locator, "link", message, loglevel)
 
     @keyword
-    def page_should_not_contain_link(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_not_contain_link(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies link identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -991,7 +1021,9 @@ return !element.dispatchEvent(evt);
         action.click_and_hold(element).perform()
 
     @keyword
-    def page_should_contain_image(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_contain_image(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies image identified by ``locator`` is found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -1004,7 +1036,9 @@ return !element.dispatchEvent(evt);
         self.assert_page_contains(locator, "image", message, loglevel)
 
     @keyword
-    def page_should_not_contain_image(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_not_contain_image(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies image identified by ``locator`` is not found from current page.
 
         See the `Locating elements` section for details about the locator
@@ -1033,7 +1067,9 @@ return !element.dispatchEvent(evt);
         return len(self.find_elements(locator))
 
     @keyword
-    def add_location_strategy(self, strategy_name: str, strategy_keyword: str, persist: bool = False):
+    def add_location_strategy(
+        self, strategy_name: str, strategy_keyword: str, persist: bool = False
+    ):
         """Adds a custom location strategy.
 
         See `Custom locators` for information on how to create and use

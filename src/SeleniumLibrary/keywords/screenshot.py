@@ -125,7 +125,9 @@ class ScreenshotKeywords(LibraryComponent):
         return EMBED
 
     @keyword
-    def capture_element_screenshot(self, locator: str, filename: str = DEFAULT_FILENAME_ELEMENT) -> str:
+    def capture_element_screenshot(
+        self, locator: str, filename: str = DEFAULT_FILENAME_ELEMENT
+    ) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 
         See `Capture Page Screenshot` for details about ``filename`` argument.

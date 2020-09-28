@@ -142,7 +142,15 @@ class CookieKeywords(LibraryComponent):
         return CookieInformation(**cookie)
 
     @keyword
-    def add_cookie(self, name: str, value: str, path: Optional[str] = None, domain: Optional[str] = None, secure: Optional[str] = None, expiry: Optional[str] = None):
+    def add_cookie(
+        self,
+        name: str,
+        value: str,
+        path: Optional[str] = None,
+        domain: Optional[str] = None,
+        secure: Optional[str] = None,
+        expiry: Optional[str] = None,
+    ):
         """Adds a cookie to your current session.
 
         ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``

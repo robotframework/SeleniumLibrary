@@ -67,7 +67,9 @@ class FormElementKeywords(LibraryComponent):
             raise AssertionError(f"Checkbox '{locator}' should not have been selected.")
 
     @keyword
-    def page_should_contain_checkbox(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_contain_checkbox(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies checkbox ``locator`` is found from the current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -79,7 +81,9 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_contains(locator, "checkbox", message, loglevel)
 
     @keyword
-    def page_should_not_contain_checkbox(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_not_contain_checkbox(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies checkbox ``locator`` is not found from the current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -119,7 +123,9 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def page_should_contain_radio_button(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_contain_radio_button(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies radio button ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -275,7 +281,9 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, text, clear)
 
     @keyword
-    def page_should_contain_textfield(self, locator: str, message: Optional[str] = None, loglevel: str="TRACE"):
+    def page_should_contain_textfield(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies text field ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -301,7 +309,9 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, "text field", message, loglevel)
 
     @keyword
-    def textfield_should_contain(self, locator: str, expected: str, message: Optional[str] = None):
+    def textfield_should_contain(
+        self, locator: str, expected: str, message: Optional[str] = None
+    ):
         """Verifies text field ``locator`` contains text ``expected``.
 
         ``message`` can be used to override the default error message.
@@ -320,7 +330,9 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Text field '{locator}' contains text '{expected}'.")
 
     @keyword
-    def textfield_value_should_be(self, locator: str, expected: str, message: Optional[str] = None):
+    def textfield_value_should_be(
+        self, locator: str, expected: str, message: Optional[str] = None
+    ):
         """Verifies text field ``locator`` has exactly text ``expected``.
 
         ``message`` can be used to override default error message.
@@ -339,7 +351,9 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Content of text field '{locator}' is '{expected}'.")
 
     @keyword
-    def textarea_should_contain(self, locator: str, expected: str, message: Optional[str] = None):
+    def textarea_should_contain(
+        self, locator: str, expected: str, message: Optional[str] = None
+    ):
         """Verifies text area ``locator`` contains text ``expected``.
 
         ``message`` can be used to override default error message.
@@ -358,7 +372,9 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Text area '{locator}' contains text '{expected}'.")
 
     @keyword
-    def textarea_value_should_be(self, locator: str, expected: str, message: Optional[str] = None):
+    def textarea_value_should_be(
+        self, locator: str, expected: str, message: Optional[str] = None
+    ):
         """Verifies text area ``locator`` has exactly text ``expected``.
 
         ``message`` can be used to override default error message.
@@ -377,7 +393,9 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Content of text area '{locator}' is '{expected}'.")
 
     @keyword
-    def page_should_contain_button(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_contain_button(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies button ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -393,7 +411,9 @@ class FormElementKeywords(LibraryComponent):
             self.assert_page_contains(locator, "button", message, loglevel)
 
     @keyword
-    def page_should_not_contain_button(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_not_contain_button(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies button ``locator`` is not found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``

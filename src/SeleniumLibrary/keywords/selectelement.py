@@ -153,7 +153,9 @@ class SelectElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def page_should_contain_list(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_contain_list(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies selection list ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -165,7 +167,9 @@ class SelectElementKeywords(LibraryComponent):
         self.assert_page_contains(locator, "list", message, loglevel)
 
     @keyword
-    def page_should_not_contain_list(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
+    def page_should_not_contain_list(
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+    ):
         """Verifies selection list ``locator`` is not found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
