@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Optional, Union
 
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
@@ -29,7 +30,7 @@ class AlertKeywords(LibraryComponent):
     _next_alert_action = ACCEPT
 
     @keyword
-    def input_text_into_alert(self, text, action=ACCEPT, timeout=None):
+    def input_text_into_alert(self, text: str, action: str = ACCEPT, timeout: Union[float, str, None] = None):
         """Types the given ``text`` into an input field in an alert.
 
         The alert is accepted by default, but that behavior can be controlled
@@ -45,7 +46,7 @@ class AlertKeywords(LibraryComponent):
         self._handle_alert(alert, action)
 
     @keyword
-    def alert_should_be_present(self, text="", action=ACCEPT, timeout=None):
+    def alert_should_be_present(self, text: str = "", action: str = ACCEPT, timeout: Union[float, str, None] = None):
         """Verifies that an alert is present and by default, accepts it.
 
         Fails if no alert is present. If ``text`` is a non-empty string,
@@ -67,7 +68,7 @@ class AlertKeywords(LibraryComponent):
             )
 
     @keyword
-    def alert_should_not_be_present(self, action=ACCEPT, timeout=0):
+    def alert_should_not_be_present(self, action: str = ACCEPT, timeout:  Union[float, str, None] = 0):
         """Verifies that no alert is present.
 
         If the alert actually exists, the ``action`` argument determines
@@ -90,7 +91,7 @@ class AlertKeywords(LibraryComponent):
         raise AssertionError(f"Alert with message '{text}' present.")
 
     @keyword
-    def handle_alert(self, action=ACCEPT, timeout=None):
+    def handle_alert(self, action: str = ACCEPT, timeout:  Union[float, str, None] = None):
         """Handles the current alert and returns its message.
 
         By default, the alert is accepted, but this can be controlled

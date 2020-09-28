@@ -16,6 +16,7 @@
 
 import time
 import types
+from typing import Optional, Union, Any, List
 
 from selenium import webdriver
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
@@ -56,16 +57,16 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(
         self,
-        url=None,
-        browser="firefox",
-        alias=None,
-        remote_url=False,
-        desired_capabilities=None,
-        ff_profile_dir=None,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
+        url: Optional[str] = None,
+        browser: str = "firefox",
+        alias: Optional[str] = None,
+        remote_url: Optional[str] = False,
+        desired_capabilities: Union[str, dict, None] = None,
+        ff_profile_dir: Optional[str] = None,
+        options: Any = None,
+        service_log_path: Optional[str] = None,
+        executable_path: Optional[str] = None,
+    ) -> str:
         """Opens a new browser instance to the optional ``url``.
 
         The ``browser`` argument specifies which browser to use. The
@@ -341,7 +342,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return index
 
     @keyword
-    def create_webdriver(self, driver_name, alias=None, kwargs={}, **init_kwargs):
+    def create_webdriver(self, driver_name: str, alias: Optional[str] = None, kwargs={}, **init_kwargs) -> str:
         """Creates an instance of Selenium WebDriver.
 
         Like `Open Browser`, but allows passing arguments to the created
@@ -397,7 +398,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return EventFiringWebDriver(driver, self.ctx.event_firing_webdriver())
 
     @keyword
-    def switch_browser(self, index_or_alias):
+    def switch_browser(self, index_or_alias: str):
         """Switches between active browsers using ``index_or_alias``.
 
         Indices are returned by the `Open Browser` keyword and aliases can
@@ -434,7 +435,7 @@ class BrowserManagementKeywords(LibraryComponent):
         )
 
     @keyword
-    def get_browser_ids(self):
+    def get_browser_ids(self) -> List[str]:
         """Returns index of all active browser as list.
 
         Example:
@@ -451,7 +452,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.drivers.active_driver_ids
 
     @keyword
-    def get_browser_aliases(self):
+    def get_browser_aliases(self) -> List[str]:
         """Returns aliases of all active browser that has an alias as NormalizedDict.
         The dictionary contains the aliases as keys and the index as value.
         This can be accessed as dictionary ``${aliases.key}`` or as list ``@{aliases}[0]``.
@@ -472,7 +473,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.drivers.active_aliases
 
     @keyword
-    def get_session_id(self):
+    def get_session_id(self) -> str:
         """Returns the currently active browser session id.
 
         New in SeleniumLibrary 3.2
@@ -480,22 +481,22 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.driver.session_id
 
     @keyword
-    def get_source(self):
+    def get_source(self) -> str:
         """Returns the entire HTML source of the current page or frame."""
         return self.driver.page_source
 
     @keyword
-    def get_title(self):
+    def get_title(self) -> str:
         """Returns the title of the current page."""
         return self.driver.title
 
     @keyword
-    def get_location(self):
+    def get_location(self) -> str:
         """Returns the current browser window URL."""
         return self.driver.current_url
 
     @keyword
-    def location_should_be(self, url, message=None):
+    def location_should_be(self, url: str, message: Optional[str] = None):
         """Verifies that the current URL is exactly ``url``.
 
         The ``url`` argument contains the exact url that should exist in browser.
@@ -513,7 +514,7 @@ class BrowserManagementKeywords(LibraryComponent):
         self.info(f"Current location is '{url}'.")
 
     @keyword
-    def location_should_contain(self, expected, message=None):
+    def location_should_contain(self, expected: str, message: Optional[str] = None):
         """Verifies that the current URL contains ``expected``.
 
         The ``expected`` argument contains the expected value in url.
@@ -534,14 +535,14 @@ class BrowserManagementKeywords(LibraryComponent):
         self.info(f"Current location contains '{expected}'.")
 
     @keyword
-    def log_location(self):
+    def log_location(self) -> str:
         """Logs and returns the current browser window URL."""
         url = self.get_location()
         self.info(url)
         return url
 
     @keyword
-    def log_source(self, loglevel="INFO"):
+    def log_source(self, loglevel: str = "INFO") -> str:
         """Logs and returns the HTML source of the current page or frame.
 
         The ``loglevel`` argument defines the used log level. Valid log
@@ -553,14 +554,14 @@ class BrowserManagementKeywords(LibraryComponent):
         return source
 
     @keyword
-    def log_title(self):
+    def log_title(self) -> str:
         """Logs and returns the title of the current page."""
         title = self.get_title()
         self.info(title)
         return title
 
     @keyword
-    def title_should_be(self, title, message=None):
+    def title_should_be(self, title: str, message: Optional[str] = None):
         """Verifies that the current page title equals ``title``.
 
         The ``message`` argument can be used to override the default error
@@ -592,7 +593,7 @@ class BrowserManagementKeywords(LibraryComponent):
         self.driver.refresh()
 
     @keyword
-    def get_selenium_speed(self):
+    def get_selenium_speed(self) -> str:
         """Gets the delay that is waited after each Selenium command.
 
         The value is returned as a human-readable string like ``1 second``.
@@ -602,7 +603,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return secs_to_timestr(self.ctx.speed)
 
     @keyword
-    def get_selenium_timeout(self):
+    def get_selenium_timeout(self) -> str:
         """Gets the timeout that is used by various keywords.
 
         The value is returned as a human-readable string like ``1 second``.
@@ -612,7 +613,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return secs_to_timestr(self.ctx.timeout)
 
     @keyword
-    def get_selenium_implicit_wait(self):
+    def get_selenium_implicit_wait(self) -> str:
         """Gets the implicit wait value used by Selenium.
 
         The value is returned as a human-readable string like ``1 second``.
@@ -622,7 +623,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return secs_to_timestr(self.ctx.implicit_wait)
 
     @keyword
-    def set_selenium_speed(self, value):
+    def set_selenium_speed(self, value: str) -> str:
         """Sets the delay that is waited after each Selenium command.
 
         The value can be given as a number that is considered to be
@@ -642,7 +643,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return old_speed
 
     @keyword
-    def set_selenium_timeout(self, value):
+    def set_selenium_timeout(self, value: str) -> str:
         """Sets the timeout that is used by various keywords.
 
         The value can be given as a number that is considered to be
@@ -664,7 +665,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return old_timeout
 
     @keyword
-    def set_selenium_implicit_wait(self, value):
+    def set_selenium_implicit_wait(self, value: str) -> str:
         """Sets the implicit wait value used by Selenium.
 
         The value can be given as a number that is considered to be
@@ -690,7 +691,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return old_wait
 
     @keyword
-    def set_browser_implicit_wait(self, value):
+    def set_browser_implicit_wait(self, value: str):
         """Sets the implicit wait value used by Selenium.
 
         Same as `Set Selenium Implicit Wait` but only affects the current

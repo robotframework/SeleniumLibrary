@@ -15,6 +15,7 @@
 # limitations under the License.
 
 from datetime import datetime
+from typing import Union, Optional
 
 from robot.libraries.DateTime import convert_date
 from robot.utils import DotDict
@@ -22,6 +23,35 @@ from robot.utils import DotDict
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import CookieNotFound
 from SeleniumLibrary.utils import is_truthy, is_noney, is_falsy
+
+
+class CookieInformation:
+    def __init__(
+        self,
+        name,
+        value,
+        path=None,
+        domain=None,
+        secure=False,
+        httpOnly=False,
+        expiry=None,
+        **extra,
+    ):
+        self.name = name
+        self.value = value
+        self.path = path
+        self.domain = domain
+        self.secure = secure
+        self.httpOnly = httpOnly
+        self.expiry = datetime.fromtimestamp(expiry) if expiry else None
+        self.extra = extra
+
+    def __str__(self):
+        items = "name value path domain secure httpOnly expiry".split()
+        string = "\n".join(f"{item}={getattr(self, item)}" for item in items)
+        if self.extra:
+            string = f"{string}\nextra={self.extra}\n"
+        return string
 
 
 class CookieKeywords(LibraryComponent):
@@ -39,7 +69,7 @@ class CookieKeywords(LibraryComponent):
         self.driver.delete_cookie(name)
 
     @keyword
-    def get_cookies(self, as_dict=False):
+    def get_cookies(self, as_dict: bool = False) -> Union[str, dict]:
         """Returns all cookies of the current page.
 
         If ``as_dict`` argument evaluates as false, see `Boolean arguments`
@@ -66,7 +96,7 @@ class CookieKeywords(LibraryComponent):
             return pairs
 
     @keyword
-    def get_cookie(self, name):
+    def get_cookie(self, name: str) -> CookieInformation:
         """Returns information of cookie with ``name`` as an object.
 
         If no cookie is found with ``name``, keyword fails. The cookie object
@@ -112,7 +142,7 @@ class CookieKeywords(LibraryComponent):
         return CookieInformation(**cookie)
 
     @keyword
-    def add_cookie(self, name, value, path=None, domain=None, secure=None, expiry=None):
+    def add_cookie(self, name: str, value: str, path: Optional[str] = None, domain: Optional[str] = None, secure: Optional[str] = None, expiry: Optional[str] = None):
         """Adds a cookie to your current session.
 
         ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``
@@ -145,32 +175,3 @@ class CookieKeywords(LibraryComponent):
             return int(expiry)
         except ValueError:
             return int(convert_date(expiry, result_format="epoch"))
-
-
-class CookieInformation:
-    def __init__(
-        self,
-        name,
-        value,
-        path=None,
-        domain=None,
-        secure=False,
-        httpOnly=False,
-        expiry=None,
-        **extra,
-    ):
-        self.name = name
-        self.value = value
-        self.path = path
-        self.domain = domain
-        self.secure = secure
-        self.httpOnly = httpOnly
-        self.expiry = datetime.fromtimestamp(expiry) if expiry else None
-        self.extra = extra
-
-    def __str__(self):
-        items = "name value path domain secure httpOnly expiry".split()
-        string = "\n".join(f"{item}={getattr(self, item)}" for item in items)
-        if self.extra:
-            string = f"{string}\nextra={self.extra}\n"
-        return string

@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import os
+from typing import Optional
 
 from robot.libraries.BuiltIn import BuiltIn
 
@@ -25,7 +26,7 @@ from SeleniumLibrary.utils import is_noney, is_truthy
 
 class FormElementKeywords(LibraryComponent):
     @keyword
-    def submit_form(self, locator=None):
+    def submit_form(self, locator: Optional[str] = None):
         """Submits a form identified by ``locator``.
 
         If ``locator`` is not given, first form on the page is submitted.
@@ -40,7 +41,7 @@ class FormElementKeywords(LibraryComponent):
         element.submit()
 
     @keyword
-    def checkbox_should_be_selected(self, locator):
+    def checkbox_should_be_selected(self, locator: str):
         """Verifies checkbox ``locator`` is selected/checked.
 
         See the `Locating elements` section for details about the locator
@@ -54,7 +55,7 @@ class FormElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def checkbox_should_not_be_selected(self, locator):
+    def checkbox_should_not_be_selected(self, locator: str):
         """Verifies checkbox ``locator`` is not selected/checked.
 
         See the `Locating elements` section for details about the locator
@@ -66,7 +67,7 @@ class FormElementKeywords(LibraryComponent):
             raise AssertionError(f"Checkbox '{locator}' should not have been selected.")
 
     @keyword
-    def page_should_contain_checkbox(self, locator, message=None, loglevel="TRACE"):
+    def page_should_contain_checkbox(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies checkbox ``locator`` is found from the current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -78,7 +79,7 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_contains(locator, "checkbox", message, loglevel)
 
     @keyword
-    def page_should_not_contain_checkbox(self, locator, message=None, loglevel="TRACE"):
+    def page_should_not_contain_checkbox(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies checkbox ``locator`` is not found from the current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -90,7 +91,7 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, "checkbox", message, loglevel)
 
     @keyword
-    def select_checkbox(self, locator):
+    def select_checkbox(self, locator: str):
         """Selects the checkbox identified by ``locator``.
 
         Does nothing if checkbox is already selected.
@@ -104,7 +105,7 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def unselect_checkbox(self, locator):
+    def unselect_checkbox(self, locator: str):
         """Removes the selection of checkbox identified by ``locator``.
 
         Does nothing if the checkbox is not selected.
@@ -118,7 +119,7 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def page_should_contain_radio_button(self, locator, message=None, loglevel="TRACE"):
+    def page_should_contain_radio_button(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies radio button ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -132,7 +133,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_radio_button(
-        self, locator, message=None, loglevel="TRACE"
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies radio button ``locator`` is not found from current page.
 
@@ -146,7 +147,7 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, "radio button", message, loglevel)
 
     @keyword
-    def radio_button_should_be_set_to(self, group_name, value):
+    def radio_button_should_be_set_to(self, group_name: str, value: str):
         """Verifies radio button group ``group_name`` is set to ``value``.
 
         ``group_name`` is the ``name`` of the radio button group.
@@ -161,7 +162,7 @@ class FormElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def radio_button_should_not_be_selected(self, group_name):
+    def radio_button_should_not_be_selected(self, group_name: str):
         """Verifies radio button group ``group_name`` has no selection.
 
         ``group_name`` is the ``name`` of the radio button group.
@@ -176,7 +177,7 @@ class FormElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def select_radio_button(self, group_name, value):
+    def select_radio_button(self, group_name: str, value: str):
         """Sets the radio button group ``group_name`` to ``value``.
 
         The radio button to be selected is located by two arguments:
@@ -194,7 +195,7 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def choose_file(self, locator, file_path):
+    def choose_file(self, locator: str, file_path: str):
         """Inputs the ``file_path`` into the file input field ``locator``.
 
         This keyword is most often used to input files into upload forms.
@@ -220,7 +221,7 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(self, locator, password, clear=True):
+    def input_password(self, locator: str, password: str, clear: bool = True):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -248,7 +249,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
-    def input_text(self, locator, text, clear=True):
+    def input_text(self, locator: str, text: str, clear: bool = True):
         """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
@@ -274,7 +275,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, text, clear)
 
     @keyword
-    def page_should_contain_textfield(self, locator, message=None, loglevel="TRACE"):
+    def page_should_contain_textfield(self, locator: str, message: Optional[str] = None, loglevel: str="TRACE"):
         """Verifies text field ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -287,7 +288,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_textfield(
-        self, locator, message=None, loglevel="TRACE"
+        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies text field ``locator`` is not found from current page.
 
@@ -300,7 +301,7 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, "text field", message, loglevel)
 
     @keyword
-    def textfield_should_contain(self, locator, expected, message=None):
+    def textfield_should_contain(self, locator: str, expected: str, message: Optional[str] = None):
         """Verifies text field ``locator`` contains text ``expected``.
 
         ``message`` can be used to override the default error message.
@@ -319,7 +320,7 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Text field '{locator}' contains text '{expected}'.")
 
     @keyword
-    def textfield_value_should_be(self, locator, expected, message=None):
+    def textfield_value_should_be(self, locator: str, expected: str, message: Optional[str] = None):
         """Verifies text field ``locator`` has exactly text ``expected``.
 
         ``message`` can be used to override default error message.
@@ -338,7 +339,7 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Content of text field '{locator}' is '{expected}'.")
 
     @keyword
-    def textarea_should_contain(self, locator, expected, message=None):
+    def textarea_should_contain(self, locator: str, expected: str, message: Optional[str] = None):
         """Verifies text area ``locator`` contains text ``expected``.
 
         ``message`` can be used to override default error message.
@@ -357,7 +358,7 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Text area '{locator}' contains text '{expected}'.")
 
     @keyword
-    def textarea_value_should_be(self, locator, expected, message=None):
+    def textarea_value_should_be(self, locator: str, expected: str, message: Optional[str] = None):
         """Verifies text area ``locator`` has exactly text ``expected``.
 
         ``message`` can be used to override default error message.
@@ -376,7 +377,7 @@ class FormElementKeywords(LibraryComponent):
         self.info(f"Content of text area '{locator}' is '{expected}'.")
 
     @keyword
-    def page_should_contain_button(self, locator, message=None, loglevel="TRACE"):
+    def page_should_contain_button(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies button ``locator`` is found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
@@ -392,7 +393,7 @@ class FormElementKeywords(LibraryComponent):
             self.assert_page_contains(locator, "button", message, loglevel)
 
     @keyword
-    def page_should_not_contain_button(self, locator, message=None, loglevel="TRACE"):
+    def page_should_not_contain_button(self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"):
         """Verifies button ``locator`` is not found from current page.
 
         See `Page Should Contain Element` for an explanation about ``message``
