@@ -60,7 +60,7 @@ Many thanks for Badari to providing PR to make the change.
 Support of list of locator-strings to use different strategies and WebElement as entry point. (`#1512`_, alpha 1)
 -----------------------------------------------------------------------------------------------------------------
 SeleniumLibrary offers support chain different types locators together. Example: Get WebElements xpath://a >> css:.foo
-is not possible.
+is now possible.
 
 There is small change the separator string is a backwards incompatible change, in that case, locator can be
 provided as a list.
