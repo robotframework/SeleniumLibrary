@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from collections import namedtuple
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 from robot.utils import plural_or_not
 from selenium.webdriver.common.action_chains import ActionChains
@@ -144,7 +144,7 @@ class ElementKeywords(LibraryComponent):
         self,
         locator: str,
         message: Optional[str] = None,
-        loglevel: Optional[str] = "TRACE",
+        loglevel: str = "TRACE",
         limit: Optional[int] = None,
     ):
         """Verifies that element ``locator`` is found on the current page.
@@ -530,7 +530,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).location["y"]
 
     @keyword
-    def click_button(self, locator: str, modifier: Optional[str] = False):
+    def click_button(self, locator: str, modifier: Union[str, bool] = False):
         """Clicks the button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -552,7 +552,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["button", "input"], modifier)
 
     @keyword
-    def click_image(self, locator: str, modifier: Optional[str] = False):
+    def click_image(self, locator: str, modifier: Union[str, bool] = False):
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -575,7 +575,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["image", "input"], modifier)
 
     @keyword
-    def click_link(self, locator: str, modifier: Optional[str] = False):
+    def click_link(self, locator: str, modifier: Union[str, bool] = False):
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -595,7 +595,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_element(
-        self, locator: str, modifier: Optional[str] = False, action_chain: bool = False
+        self, locator: str, modifier: Union[str, bool] = False, action_chain: bool = False
     ):
         """Click the element identified by ``locator``.
 
