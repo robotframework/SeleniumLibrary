@@ -60,7 +60,7 @@ class BrowserManagementKeywords(LibraryComponent):
         url: Optional[str] = None,
         browser: str = "firefox",
         alias: Optional[str] = None,
-        remote_url: Optional[str] = False,
+        remote_url: Union[str, bool] = False,
         desired_capabilities: Union[str, dict, None] = None,
         ff_profile_dir: Optional[str] = None,
         options: Any = None,
