@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import time
+from datetime import timedelta
 from typing import Optional, Union
 
 from selenium.common.exceptions import StaleElementReferenceException
@@ -29,7 +30,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_for_condition(
         self,
         condition: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until ``condition`` is true or ``timeout`` expires.
@@ -64,7 +65,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_is(
         self,
         expected: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         message: Optional[str] = None,
     ):
         """Waits until the current URL is ``expected``.
@@ -93,7 +94,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_is_not(
         self,
         location: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         message: Optional[str] = None,
     ):
         """Waits until the current URL is not ``location``.
@@ -121,7 +122,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_contains(
         self,
         expected: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         message: Optional[str] = None,
     ):
         """Waits until the current URL contains ``expected``.
@@ -149,7 +150,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_does_not_contain(
         self,
         location: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         message: Optional[str] = None,
     ):
         """Waits until the current URL does not contains ``location``.
@@ -177,7 +178,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_contains(
         self,
         text: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until ``text`` appears on the current page.
@@ -199,7 +200,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_does_not_contain(
         self,
         text: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until ``text`` disappears from the current page.
@@ -221,7 +222,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_contains_element(
         self,
         locator: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
         limit: Optional[int] = None,
     ):
@@ -259,7 +260,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_does_not_contain_element(
         self,
         locator: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
         limit: Optional[int] = None,
     ):
@@ -297,7 +298,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_visible(
         self,
         locator: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until the element ``locator`` is visible.
@@ -320,7 +321,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_not_visible(
         self,
         locator: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until the element ``locator`` is not visible.
@@ -343,7 +344,7 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_enabled(
         self,
         locator: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until the element ``locator`` is enabled.
@@ -372,7 +373,7 @@ class WaitingKeywords(LibraryComponent):
         self,
         locator: str,
         text: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until the element ``locator`` contains ``text``.
@@ -396,7 +397,7 @@ class WaitingKeywords(LibraryComponent):
         self,
         locator: str,
         text: str,
-        timeout: Union[str, float, None] = None,
+        timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
         """Waits until the element ``locator`` does not contain ``text``.
