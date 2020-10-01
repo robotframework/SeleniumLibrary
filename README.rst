@@ -31,7 +31,7 @@ different versions and the overall project history.
 .. image:: https://github.com/robotframework/SeleniumLibrary/workflows/SeleniumLibrary%20CI/badge.svg
     :target: https://github.com/robotframework/SeleniumLibrary/actions?query=workflow%3A%22SeleniumLibrary+CI%22
 
-Keyword documentation
+Keyword Documentation
 ---------------------
 See `keyword documentation`_ for available keywords and more information
 about the library in general.
@@ -124,13 +124,13 @@ by the library.
 
 When using Robot Framework, it is generally recommended to write as
 easy-to-understand tests as possible. The keywords provided by
-SeleniumLibrary are pretty low level, though, and often require
-implementation specific arguments like element locators to be passed
+SeleniumLibrary is pretty low level, though, and often require
+implementation-specific arguments like element locators to be passed
 as arguments. It is thus typically a good idea to write tests using
-Robot Framework's higher level keywords that utilize SeleniumLibrary
+Robot Framework's higher-level keywords that utilize SeleniumLibrary
 keywords internally. This is illustrated by the following example
 where SeleniumLibrary keywords like ``Input Text`` are primarily
-used by higher level keywords like ``Input Username``.
+used by higher-level keywords like ``Input Username``.
 
 .. code:: robotframework
 
@@ -185,9 +185,9 @@ usage, please create a new issue describing the enhancement request and even bet
 issue is backed up by a pull request.
 
 If the enhancement is not generally useful, example solution is domain specific, then the
-SeleniumLibrary offers a public API's which can be used to build own plugins and libraries.
-Plugin API allows to add new keywords, modify existing keywords and modify internal
-functionality of the library. Also new libraries can be build on top of the
+SeleniumLibrary offers public APIs which can be used to build its own plugins and libraries.
+Plugin API allows us to add new keywords, modify existing keywords and modify the internal
+functionality of the library. Also new libraries can be built on top of the
 SeleniumLibrary. Please see `extending documentation`_ for more details about the
 available methods and for examples how the library can be extended.
 
