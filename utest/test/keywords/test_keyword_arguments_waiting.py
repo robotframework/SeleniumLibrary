@@ -26,7 +26,7 @@ def test_wait_for_condition(waiting):
     assert "did not become true" in str(error.value)
 
     with pytest.raises(AssertionError) as error:
-        waiting.wait_for_condition(condition, "None", "foobar")
+        waiting.wait_for_condition(condition, None, "foobar")
     assert "foobar" in str(error.value)
 
 
@@ -38,5 +38,5 @@ def test_wait_until_page_contains(waiting):
     assert "Text 'text' did not" in str(error.value)
 
     with pytest.raises(AssertionError) as error:
-        waiting.wait_until_page_contains(text, "None", "error")
+        waiting.wait_until_page_contains(text, None, "error")
     assert "error" in str(error.value)

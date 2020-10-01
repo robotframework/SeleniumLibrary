@@ -15,12 +15,13 @@
 # limitations under the License.
 
 import os
-from typing import Optional
+from datetime import timedelta
+from typing import Optional, Union
 
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
-from SeleniumLibrary.utils import is_noney, timestr_to_secs
+from SeleniumLibrary.utils import is_noney
 
 from .context import ContextAware
 
@@ -74,10 +75,12 @@ class LibraryComponent(ContextAware):
             raise AssertionError(message)
         logger.info(f"Current page does not contain {tag_message} '{locator}'.")
 
-    def get_timeout(self, timeout: Optional[str] = None) -> float:
-        if is_noney(timeout):
+    def get_timeout(self, timeout: Union[str, int, timedelta, None] = None) -> float:
+        if timeout is None:
             return self.ctx.timeout
-        return timestr_to_secs(timeout)
+        if isinstance(timeout, timedelta):
+            return timeout.total_seconds()
+        return timeout
 
     @property
     def log_dir(self):
