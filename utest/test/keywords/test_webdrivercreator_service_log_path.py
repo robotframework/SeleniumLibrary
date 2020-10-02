@@ -25,7 +25,6 @@ def teardown_function():
 
 def test_no_log_file(creator):
     assert creator.creator._get_log_path(None) is None
-    assert creator.creator._get_log_path("NoNe") is None
 
 
 def test_log_file_with_rf_file_separator(creator):

@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import timedelta
-from typing import Union, Optional
+from typing import Optional
 
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
@@ -77,7 +77,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def alert_should_not_be_present(
-        self, action: str = ACCEPT, timeout: Union[timedelta] = 0
+        self, action: str = ACCEPT, timeout: Optional[timedelta] = None
     ):
         """Verifies that no alert is present.
 
