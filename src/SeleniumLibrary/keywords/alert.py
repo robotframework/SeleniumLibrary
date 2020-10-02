@@ -69,7 +69,6 @@ class AlertKeywords(LibraryComponent):
         In earlier versions, the alert was always accepted and a timeout was
         hardcoded to one second.
         """
-        self.info(f"{type(timeout)}::{timeout}")
         message = self.handle_alert(action, timeout)
         if text and text != message:
             raise AssertionError(
@@ -146,7 +145,6 @@ class AlertKeywords(LibraryComponent):
 
     def _wait_alert(self, timeout=None):
         timeout = self.get_timeout(timeout)
-        self.info(f"WAITING::{type(timeout)}::{timeout}")
         wait = WebDriverWait(self.driver, timeout)
         try:
             return wait.until(EC.alert_is_present())
