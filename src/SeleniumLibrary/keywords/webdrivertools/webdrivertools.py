@@ -473,7 +473,7 @@ class WebDriverCreator:
         return SelLibLocalFileDetector()
 
     def _get_log_path(self, log_file):
-        if is_noney(log_file):
+        if log_file is None:
             return None
         index = 1
         while True:
@@ -561,7 +561,6 @@ class WebDriverCache(ConnectionCache):
         return None if driver in self._closed else index
 
     def _get_index(self, alias_or_index):
-        alias_or_index = None if is_noney(alias_or_index) else alias_or_index
         try:
             return self.resolve_alias_or_index(alias_or_index)
         except AttributeError:

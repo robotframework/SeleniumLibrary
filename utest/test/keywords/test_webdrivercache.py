@@ -125,12 +125,6 @@ class WebDriverCacheTests(unittest.TestCase):
         index = cache.get_index(None)
         self.assertEqual(index, None)
 
-        index = cache.get_index("None")
-        self.assertEqual(index, None)
-
-        index = cache.get_index("NoNe")
-        self.assertEqual(index, None)
-
     def test_resolve_alias_or_index_error(self):
         cache = WebDriverCache()
 
