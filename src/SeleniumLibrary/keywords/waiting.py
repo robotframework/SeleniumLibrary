@@ -16,13 +16,13 @@
 
 import time
 from datetime import timedelta
-from typing import Optional, Union
+from typing import Optional
 
 from selenium.common.exceptions import StaleElementReferenceException
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils import is_noney, secs_to_timestr
+from SeleniumLibrary.utils import secs_to_timestr
 
 
 class WaitingKeywords(LibraryComponent):
@@ -242,7 +242,7 @@ class WaitingKeywords(LibraryComponent):
 
         ``limit`` is new in SeleniumLibrary 4.4
         """
-        if is_noney(limit):
+        if limit is None:
             return self._wait_until(
                 lambda: self.find_element(locator, required=False) is not None,
                 f"Element '{locator}' did not appear in <TIMEOUT>.",
@@ -280,7 +280,7 @@ class WaitingKeywords(LibraryComponent):
 
         ``limit`` is new in SeleniumLibrary 4.4
         """
-        if is_noney(limit):
+        if limit is None:
             return self._wait_until(
                 lambda: self.find_element(locator, required=False) is None,
                 f"Element '{locator}' did not disappear in <TIMEOUT>.",
@@ -418,7 +418,7 @@ class WaitingKeywords(LibraryComponent):
 
     def _wait_until(self, condition, error, timeout=None, custom_error=None):
         timeout = self.get_timeout(timeout)
-        if is_noney(custom_error):
+        if custom_error is None:
             error = error.replace("<TIMEOUT>", secs_to_timestr(timeout))
         else:
             error = custom_error

@@ -18,11 +18,10 @@ from datetime import datetime
 from typing import Union, Optional
 
 from robot.libraries.DateTime import convert_date
-from robot.utils import DotDict
+from robot.utils import DotDict, is_truthy
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import CookieNotFound
-from SeleniumLibrary.utils import is_truthy, is_noney, is_falsy
 
 
 class CookieInformation:
@@ -84,7 +83,7 @@ class CookieKeywords(LibraryComponent):
 
         The `` as_dict`` argument is new in SeleniumLibrary 3.3
         """
-        if is_falsy(as_dict):
+        if not as_dict:
             pairs = []
             for cookie in self.driver.get_cookies():
                 pairs.append(f"{cookie['name']}={cookie['value']}")
@@ -148,7 +147,7 @@ class CookieKeywords(LibraryComponent):
         value: str,
         path: Optional[str] = None,
         domain: Optional[str] = None,
-        secure: Optional[str] = None,
+        secure: Optional[bool] = None,
         expiry: Optional[str] = None,
     ):
         """Adds a cookie to your current session.
@@ -167,14 +166,14 @@ class CookieKeywords(LibraryComponent):
         Prior to SeleniumLibrary 3.0 setting expiry did not work.
         """
         new_cookie = {"name": name, "value": value}
-        if not is_noney(path):
+        if path is not None:
             new_cookie["path"] = path
-        if not is_noney(domain):
+        if domain is not None:
             new_cookie["domain"] = domain
         # Secure must be True or False
-        if not is_noney(secure):
-            new_cookie["secure"] = is_truthy(secure)
-        if not is_noney(expiry):
+        if secure is not None:
+            new_cookie["secure"] = secure
+        if expiry is not None:
             new_cookie["expiry"] = self._expiry(expiry)
         self.driver.add_cookie(new_cookie)
 

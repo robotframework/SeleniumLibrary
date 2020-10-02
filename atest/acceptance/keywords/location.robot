@@ -17,7 +17,7 @@ Location Should Be
     ...    not a url
     ...    Location Should Be    non existing  message=not a url
     Run Keyword And Expect Error
-    ...    Location should have been 'non existing' but was 'http://localhost:7000/html/'.
+    ...    None
     ...    Location Should Be    non existing  message=None
 
 Location Should Contain
@@ -33,7 +33,7 @@ Location Should Contain
     ...    did not find it
     ...    Location Should Contain    not a location  message=did not find it
     Run Keyword And Expect Error
-    ...    Location should have contained 'not a location' but it was 'http://localhost:7000/html/'.
+    ...    None
     ...    Location Should Contain    not a location  message=None
 
 Wait Until Location Contains At The End

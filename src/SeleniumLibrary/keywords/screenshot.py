@@ -18,7 +18,6 @@ import os
 from robot.utils import get_link_path
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_noney
 from SeleniumLibrary.utils.path_formatter import _format_path
 
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
@@ -51,7 +50,7 @@ class ScreenshotKeywords(LibraryComponent):
         The persist argument was removed in SeleniumLibrary 3.2 and
         EMBED is new in SeleniumLibrary 4.2.
         """
-        if is_noney(path):
+        if path is None:
             path = None
         elif path.upper() == EMBED:
             path = EMBED

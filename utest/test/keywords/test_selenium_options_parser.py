@@ -159,9 +159,6 @@ def test_options_create(options, reporter):
     sel_options = options.create("chrome", None)
     results.append(sel_options)
 
-    sel_options = options.create("chrome", "None")
-    results.append(sel_options)
-
     verify_all("Selenium options", results, reporter=reporter)
 
 
@@ -357,22 +354,6 @@ def test_has_options(creator):
     assert creator._has_options(webdriver.Edge) is False
     assert creator._has_options(webdriver.Opera)
     assert creator._has_options(webdriver.Safari) is False
-
-
-@unittest.skipIf(
-    "options" not in inspect.signature(webdriver.Edge.__init__).parameters,
-    "Requires Selenium 4.0.",
-)
-def test_create_edge_with_options(creator):
-    # TODO: This test requires Selenium 4.0 in Travis
-    options = mock()
-    expected_webdriver = mock()
-    when(creator)._has_options(ANY).thenReturn(True)
-    when(webdriver).Edge(service_log_path=None, options=options).thenReturn(
-        expected_webdriver
-    )
-    driver = creator.create_edge({}, None, options=options)
-    assert driver == expected_webdriver
 
 
 def test_create_opera_with_options(creator):

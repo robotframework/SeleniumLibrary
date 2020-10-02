@@ -6,4 +6,3 @@ Selenium options
 3) setattr
 4) ['--disable-dev-shm-usage']
 5) None
-6) None

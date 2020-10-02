@@ -23,7 +23,7 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import is_truthy, is_noney, secs_to_timestr, timestr_to_secs
+from SeleniumLibrary.utils import secs_to_timestr, timestr_to_secs
 
 from .webdrivertools import WebDriverCreator
 
@@ -285,7 +285,7 @@ class BrowserManagementKeywords(LibraryComponent):
         if index:
             self.info(f"Using existing browser from index {index}.")
             self.switch_browser(alias)
-            if is_truthy(url):
+            if url:
                 self.go_to(url)
             return index
         return self._make_new_browser(
@@ -312,7 +312,7 @@ class BrowserManagementKeywords(LibraryComponent):
         service_log_path=None,
         executable_path=None,
     ):
-        if is_truthy(remote_url):
+        if remote_url:
             self.info(
                 f"Opening browser '{browser}' to base url '{url}' through "
                 f"remote server at '{remote_url}'."
@@ -330,7 +330,7 @@ class BrowserManagementKeywords(LibraryComponent):
         )
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
-        if is_truthy(url):
+        if url:
             try:
                 driver.get(url)
             except Exception:
@@ -510,7 +510,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         actual = self.get_location()
         if actual != url:
-            if is_noney(message):
+            if message is None:
                 message = f"Location should have been '{url}' but " f"was '{actual}'."
             raise AssertionError(message)
         self.info(f"Current location is '{url}'.")
@@ -528,7 +528,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         actual = self.get_location()
         if expected not in actual:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Location should have contained '{expected}' but "
                     f"it was '{actual}'."
@@ -573,7 +573,7 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         actual = self.get_title()
         if actual != title:
-            if is_noney(message):
+            if message is None:
                 message = f"Title should have been '{title}' but was '{actual}'."
             raise AssertionError(message)
         self.info(f"Page title is '{title}'.")

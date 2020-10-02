@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_noney, is_string
 
 
 class RunOnFailureKeywords(LibraryComponent):
@@ -62,6 +61,6 @@ class RunOnFailureKeywords(LibraryComponent):
 
     @staticmethod
     def resolve_keyword(name):
-        if is_noney(name) or is_string(name) and name.upper() == "NOTHING":
+        if name is None or isinstance(name, str) and name.upper() == "NOTHING":
             return None
         return name
