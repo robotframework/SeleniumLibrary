@@ -18,10 +18,9 @@ import os
 from datetime import timedelta
 from typing import Optional, Union
 
+from SeleniumLibrary.utils import is_noney
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
-
-from SeleniumLibrary.utils import is_noney
 
 from .context import ContextAware
 
@@ -53,7 +52,7 @@ class LibraryComponent(ContextAware):
         tag_message = tag or "element"
         if not self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Page should have contained {tag_message} '{locator}' but did not."
                 )
@@ -70,7 +69,7 @@ class LibraryComponent(ContextAware):
         tag_message = tag or "element"
         if self.find_element(locator, tag, required=False):
             self.log_source(loglevel)
-            if is_noney(message):
+            if message is None:
                 message = f"Page should not have contained {tag_message} '{locator}'."
             raise AssertionError(message)
         logger.info(f"Current page does not contain {tag_message} '{locator}'.")

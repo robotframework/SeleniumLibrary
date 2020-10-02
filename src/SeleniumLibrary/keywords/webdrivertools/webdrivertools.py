@@ -26,7 +26,6 @@ from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
-from SeleniumLibrary.utils import is_falsy, is_truthy, is_noney, is_string
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import (
     SelLibLocalFileDetector,
 )
@@ -69,7 +68,6 @@ class WebDriverCreator:
         service_log_path=None,
         executable_path=None,
     ):
-        executable_path = None if is_falsy(executable_path) else executable_path
         browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
@@ -104,7 +102,7 @@ class WebDriverCreator:
         raise ValueError(f"{browser} is not a supported browser.")
 
     def _parse_capabilities(self, capabilities, browser=None):
-        if is_falsy(capabilities):
+        if not capabilities:
             return {}
         if not isinstance(capabilities, dict):
             capabilities = self._string_to_dict(capabilities)
@@ -139,13 +137,13 @@ class WebDriverCreator:
         service_log_path=None,
         executable_path="chromedriver",
     ):
-        if is_truthy(remote_url):
+        if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
             return self._remote(desired_capabilities, remote_url, options=options)
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.Chrome)
         return webdriver.Chrome(
             options=options,
@@ -187,7 +185,7 @@ class WebDriverCreator:
         executable_path="geckodriver",
     ):
         profile = self._get_ff_profile(ff_profile_dir)
-        if is_truthy(remote_url):
+        if remote_url:
             default_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, default_caps
@@ -196,7 +194,7 @@ class WebDriverCreator:
         service_log_path = (
             service_log_path if service_log_path else self._geckodriver_log
         )
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.Firefox)
         return webdriver.Firefox(
             options=options,
@@ -209,7 +207,7 @@ class WebDriverCreator:
     def _get_ff_profile(self, ff_profile_dir):
         if isinstance(ff_profile_dir, FirefoxProfile):
             return ff_profile_dir
-        if is_falsy(ff_profile_dir):
+        if not ff_profile_dir:
             return webdriver.FirefoxProfile()
         try:
             return webdriver.FirefoxProfile(ff_profile_dir)
@@ -262,13 +260,13 @@ class WebDriverCreator:
         service_log_path=None,
         executable_path="IEDriverServer.exe",
     ):
-        if is_truthy(remote_url):
+        if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
             return self._remote(desired_capabilities, remote_url, options=options)
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.Ie)
         return webdriver.Ie(
             options=options,
@@ -289,13 +287,13 @@ class WebDriverCreator:
         service_log_path=None,
         executable_path="MicrosoftWebDriver.exe",
     ):
-        if is_truthy(remote_url):
+        if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
             return self._remote(desired_capabilities, remote_url)
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.Edge)
         if self._has_options(webdriver.Edge):
             # options is supported from Selenium 4.0 onwards
@@ -320,13 +318,13 @@ class WebDriverCreator:
         service_log_path=None,
         executable_path="operadriver",
     ):
-        if is_truthy(remote_url):
+        if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.OPERA.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
             return self._remote(desired_capabilities, remote_url, options=options)
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.Opera)
         return webdriver.Opera(
             options=options,
@@ -343,7 +341,7 @@ class WebDriverCreator:
         service_log_path=None,
         executable_path="/usr/bin/safaridriver",
     ):
-        if is_truthy(remote_url):
+        if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.SAFARI.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
@@ -353,7 +351,7 @@ class WebDriverCreator:
             logger.warn(
                 "Safari browser does not support Selenium options or service_log_path."
             )
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
         return webdriver.Safari(executable_path=executable_path, **desired_capabilities)
 
@@ -369,7 +367,7 @@ class WebDriverCreator:
             "SeleniumLibrary support for PhantomJS has been deprecated, "
             "please use headlesschrome or headlessfirefox instead."
         )
-        if is_truthy(remote_url):
+        if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
@@ -377,7 +375,7 @@ class WebDriverCreator:
             return self._remote(desired_capabilities, remote_url)
         if options:
             logger.warn("PhantomJS browser does not support Selenium options.")
-        if is_falsy(executable_path):
+        if not executable_path:
             executable_path = self._get_executable_path(webdriver.PhantomJS)
         return webdriver.PhantomJS(
             service_log_path=service_log_path,
@@ -577,10 +575,10 @@ class WebDriverCache(ConnectionCache):
 
 class SeleniumOptions:
     def create(self, browser, options):
-        if is_falsy(options):
+        if not options:
             return None
         selenium_options = self._import_options(browser)
-        if not is_string(options):
+        if not isinstance(options, str):
             return options
         options = self._parse(options)
         selenium_options = selenium_options()

@@ -17,6 +17,8 @@ ALL_ARGS = {
     "expiry": 123,
 }
 
+pytestmark = pytest.mark.usefixtures('unstub')
+
 
 @pytest.fixture()
 def driver():
@@ -47,35 +49,28 @@ def test_add_cookie_default(cookie, driver, default_cookie):
 
 def test_add_cookie_secure_true(cookie, default_cookie, driver):
     default_cookie["secure"] = True
-    cookie.add_cookie("name", "value", path="None", domain="None", secure="True")
+    cookie.add_cookie("name", "value", path=None, domain=None, secure=True)
     verify(driver).add_cookie(default_cookie)
-    cookie.add_cookie("name", "value", path="None", domain="None", secure="True_text")
-    verify(driver, times=2).add_cookie(default_cookie)
-    cookie.add_cookie("name", "value", path="None", domain="None", secure=True)
-    verify(driver, times=3).add_cookie(default_cookie)
-    cookie.add_cookie("name", "value", path="None", domain="None", secure="1")
-    verify(driver, times=4).add_cookie(default_cookie)
-
 
 def test_add_cookie_secure_false(cookie, driver, default_cookie):
-    cookie.add_cookie("name", "value", path="None", domain="None", secure="None")
+    cookie.add_cookie("name", "value", path=None, domain=None, secure=None)
     verify(driver).add_cookie(default_cookie)
-    cookie.add_cookie("name", "value", path="None", domain="None", secure="False")
+    cookie.add_cookie("name", "value", path=None, domain=None, secure=False)
     default_cookie["secure"] = False
     verify(driver).add_cookie(default_cookie)
-    cookie.add_cookie("name", "value", path="None", domain="None", secure=0)
+    cookie.add_cookie("name", "value", path=None, domain=None, secure=0)
     verify(driver, times=2).add_cookie(default_cookie)
 
 
 def test_add_cookie_domain_true(cookie, default_cookie, driver):
-    cookie.add_cookie("name", "value", path="None", domain="MyDomain", secure=None)
+    cookie.add_cookie("name", "value", path=None, domain="MyDomain", secure=None)
     cookie = default_cookie
     cookie["domain"] = "MyDomain"
     verify(driver).add_cookie(cookie)
 
 
 def test_add_cookie_domain_false(cookie, driver, default_cookie):
-    cookie.add_cookie("name", "value", path="None", domain="None", secure=None)
+    cookie.add_cookie("name", "value", path=None, domain=None, secure=None)
     verify(driver).add_cookie(default_cookie)
 
 
@@ -86,7 +81,7 @@ def test_add_cookie_path_true(cookie, default_cookie, driver):
 
 
 def test_add_cookie_path_false(cookie, driver, default_cookie):
-    cookie.add_cookie("name", "value", path="None", domain=None, secure=None)
+    cookie.add_cookie("name", "value", path=None, domain=None, secure=None)
     verify(driver).add_cookie(default_cookie)
 
 

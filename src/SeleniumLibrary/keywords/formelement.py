@@ -21,7 +21,6 @@ from robot.libraries.BuiltIn import BuiltIn
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils import is_noney, is_truthy
 
 
 class FormElementKeywords(LibraryComponent):
@@ -35,7 +34,7 @@ class FormElementKeywords(LibraryComponent):
         syntax.
         """
         self.info(f"Submitting form '{locator}'.")
-        if is_noney(locator):
+        if locator is None:
             locator = "tag:form"
         element = self.find_element(locator, tag="form")
         element.submit()
@@ -321,7 +320,7 @@ class FormElementKeywords(LibraryComponent):
         """
         actual = self._get_value(locator, "text field")
         if expected not in actual:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Text field '{locator}' should have contained text "
                     f"'{expected}' but it contained '{actual}'."
@@ -342,7 +341,7 @@ class FormElementKeywords(LibraryComponent):
         """
         actual = self._get_value(locator, "text field")
         if actual != expected:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Value of text field '{locator}' should have been "
                     f"'{expected}' but was '{actual}'."
@@ -363,7 +362,7 @@ class FormElementKeywords(LibraryComponent):
         """
         actual = self._get_value(locator, "text area")
         if expected not in actual:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Text area '{locator}' should have contained text "
                     f"'{expected}' but it had '{actual}'."
@@ -384,7 +383,7 @@ class FormElementKeywords(LibraryComponent):
         """
         actual = self._get_value(locator, "text area")
         if expected != actual:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Text area '{locator}' should have had text "
                     f"'{expected}' but it had '{actual}'."
@@ -462,7 +461,7 @@ class FormElementKeywords(LibraryComponent):
 
     def _input_text_into_text_field(self, locator, text, clear=True, disable_log=False):
         element = self.find_element(locator)
-        if is_truthy(clear):
+        if clear:
             element.clear()
         if disable_log:
             self.info("Temporally setting log level to: NONE")

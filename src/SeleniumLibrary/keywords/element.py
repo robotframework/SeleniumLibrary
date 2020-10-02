@@ -16,13 +16,13 @@
 from collections import namedtuple
 from typing import List, Optional, Tuple, Union
 
-from robot.utils import plural_or_not
+from SeleniumLibrary.utils import is_noney
+from robot.utils import plural_or_not, is_truthy
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils import is_falsy, is_noney, is_truthy
 from SeleniumLibrary.errors import ElementNotFound
 
 
@@ -75,11 +75,11 @@ class ElementKeywords(LibraryComponent):
         """
         actual = actual_before = self.find_element(locator).text
         expected_before = expected
-        if is_truthy(ignore_case):
+        if ignore_case:
             actual = actual.lower()
             expected = expected.lower()
         if expected not in actual:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Element '{locator}' should have contained text '{expected_before}' but "
                     f"its text was '{actual_before}'."
@@ -110,11 +110,11 @@ class ElementKeywords(LibraryComponent):
         """
         actual = self.find_element(locator).text
         expected_before = expected
-        if is_truthy(ignore_case):
+        if ignore_case:
             actual = actual.lower()
             expected = expected.lower()
         if expected in actual:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Element '{locator}' should not contain text '{expected_before}' but "
                     "it did."
@@ -171,7 +171,7 @@ class ElementKeywords(LibraryComponent):
 
         The ``limit`` argument is new in SeleniumLibrary 3.0.
         """
-        if is_noney(limit):
+        if limit is None:
             return self.assert_page_contains(
                 locator, message=message, loglevel=loglevel
             )
@@ -179,7 +179,7 @@ class ElementKeywords(LibraryComponent):
         if count == limit:
             self.info(f"Current page contains {count} element(s).")
         else:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f'Page should have contained "{limit}" element(s), '
                     f'but it did contain "{count}" element(s).'
@@ -291,7 +291,7 @@ class ElementKeywords(LibraryComponent):
         message.
         """
         if not self.find_element(locator).is_displayed():
-            if is_noney(message):
+            if message is None:
                 message = f"The element '{locator}' should be visible, but it is not."
             raise AssertionError(message)
         self.info(f"Element '{locator}' is displayed.")
@@ -311,7 +311,7 @@ class ElementKeywords(LibraryComponent):
         elif not element.is_displayed():
             self.info(f"Element '{locator}' exists but is not displayed.")
         else:
-            if is_noney(message):
+            if message is None:
                 message = f"The element '{locator}' should not be visible, but it is."
             raise AssertionError(message)
 
@@ -340,11 +340,11 @@ class ElementKeywords(LibraryComponent):
         """
         self.info(f"Verifying element '{locator}' contains exact text '{expected}'.")
         text = before_text = self.find_element(locator).text
-        if is_truthy(ignore_case):
+        if ignore_case:
             text = text.lower()
             expected = expected.lower()
         if text != expected:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"The text of element '{locator}' should have been '{expected}' "
                     f"but it was '{before_text}'."
@@ -377,11 +377,11 @@ class ElementKeywords(LibraryComponent):
         )
         text = self.find_element(locator).text
         before_not_expected = not_expected
-        if is_truthy(ignore_case):
+        if ignore_case:
             text = text.lower()
             not_expected = not_expected.lower()
         if text == not_expected:
-            if is_noney(message):
+            if message is None:
                 message = f"The text of element '{locator}' was not supposed to be '{before_not_expected}'."
             raise AssertionError(message)
 
@@ -417,7 +417,7 @@ class ElementKeywords(LibraryComponent):
         """
         current_expected = self.find_element(locator).get_attribute(attribute)
         if current_expected != expected:
-            if is_noney(message):
+            if message is None:
                 message = (
                     f"Element '{locator}' attribute should have value '{expected}' but "
                     f"its value was '{current_expected}'."
@@ -542,7 +542,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
         The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
-        if is_falsy(modifier):
+        if not modifier:
             self.info(f"Clicking button '{locator}'.")
             element = self.find_element(locator, tag="input", required=False)
             if not element:
@@ -564,7 +564,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
         The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
-        if is_falsy(modifier):
+        if not modifier:
             self.info(f"Clicking image '{locator}'.")
             element = self.find_element(locator, tag="image", required=False)
             if not element:
@@ -587,7 +587,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
         The ``modifier`` argument is new in SeleniumLibrary 3.3
         """
-        if is_falsy(modifier):
+        if not modifier:
             self.info(f"Clicking link '{locator}'.")
             self.find_element(locator, tag="link").click()
         else:
@@ -631,7 +631,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         if is_truthy(modifier):
             self._click_with_modifier(locator, [None, None], modifier)
-        elif is_truthy(action_chain):
+        elif action_chain:
             self._click_with_action_chain(locator)
         else:
             self.info(f"Clicking element '{locator}'.")
@@ -921,7 +921,7 @@ return !element.dispatchEvent(evt);
         | `Press Keys` | button     | RETURN         |            | # Pressing "ENTER" key to element.                                                |
         """
         parsed_keys = self._parse_keys(*keys)
-        if is_truthy(locator):
+        if not is_noney(locator):
             self.info(f"Sending key(s) {keys} to {locator} element.")
             element = self.find_element(locator)
             ActionChains(self.driver).click(element).perform()
