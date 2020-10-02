@@ -595,7 +595,10 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_element(
-        self, locator: str, modifier: Union[str, bool] = False, action_chain: bool = False
+        self,
+        locator: str,
+        modifier: Union[str, bool] = False,
+        action_chain: bool = False,
     ):
         """Click the element identified by ``locator``.
 

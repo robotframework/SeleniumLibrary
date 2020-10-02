@@ -101,9 +101,7 @@ class AlertKeywords(LibraryComponent):
         raise AssertionError(f"Alert with message '{text}' present.")
 
     @keyword
-    def handle_alert(
-        self, action: str = ACCEPT, timeout: Optional[timedelta] = None
-    ):
+    def handle_alert(self, action: str = ACCEPT, timeout: Optional[timedelta] = None):
         """Handles the current alert and returns its message.
 
         By default, the alert is accepted, but this can be controlled
