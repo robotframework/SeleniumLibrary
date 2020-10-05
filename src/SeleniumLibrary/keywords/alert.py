@@ -77,7 +77,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def alert_should_not_be_present(
-        self, action: str = ACCEPT, timeout: Optional[timedelta] = None
+        self, action: str = ACCEPT, timeout: Optional[timedelta] = timedelta(seconds=0)
     ):
         """Verifies that no alert is present.
 
