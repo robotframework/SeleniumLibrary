@@ -88,19 +88,6 @@ Preparation
 
    For example, ``VERSION=3.0.1`` or ``VERSION=3.1a2``.
 
-Generate Stub file
-------------------
-
-1. Generate new stub file in: `<src/SeleniumLibrary/__init__.pyi>`_::
-
-      invoke gen-stub
-
-2. Add, commit and push::
-
-      git add src/SeleniumLibrary/__init__.pyi
-      git commit -m "Generate stub file for $VERSION"
-      git push
-
 Release notes
 -------------
 
@@ -162,17 +149,46 @@ Set version
       git commit -m "Updated version to $VERSION" src/SeleniumLibrary/__init__.py
       git push
 
+Generate Stub file
+------------------
+
+1. Generate new stub file in: `<src/SeleniumLibrary/__init__.pyi>`_::
+
+      invoke gen-stub
+
+2. Add, commit and push::
+
+      git add src/SeleniumLibrary/__init__.pyi
+      git commit -m "Generate stub file for $VERSION"
+      git push
+
 Documentation
 -------------
+If generating release candidate or final release documentation, use `invoke kw-docs`
+but if this alpha or beta release, use `invoke kw-docs $VERSION`. The `invoke kw-docs $VERSION`
+does not replace the previous final release documentation, instead it will create new file
+with docs/SeleniumLibrary-$VERSION.html. From the below, execute either 1.1 or 1.2 step. The step
+2. is done always.
 
-1. Generate keyword documentation::
+Note that this *must* be done after`setting version <Set version>`_ above
+or docs will have wrong version number.
+
+1.1. Generate pre or final release keyword documentation::
 
       invoke kw-docs
       git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary.html
       git push
 
-   Note that this *must* be done after`setting version <Set version>`_ above
-   or docs will have wrong version number.
+1.2 Generate alpha or beta release keyword documentation::
+
+      invoke kw-docs -v $VERSION
+      git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary-$VERSION.html
+      git push
+
+   Modify the README.rst and add new link after the official keywords docs.
+   Commit and push the new README.rst::
+
+      git commit -m "Add alpha/beta kw docs for version $VERSION in README.rst" README.rst
 
 2. If README.rst has changed, generate project documentation based on it::
 
