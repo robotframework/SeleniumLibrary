@@ -174,9 +174,10 @@ class SeleniumLibrary(DynamicCore):
 
     === Implicit XPath strategy ===
 
-    If the locator starts with ``//`` or ``(//``, the locator is considered
-    to be an XPath expression. In other words, using ``//div`` is equivalent
-    to using explicit ``xpath://div``.
+    If the locator starts with ``//``  or multiple opening parenthesis in front
+    of the ``//``, the locator is considered to be an XPath expression. In other
+    words, using ``//div`` is equivalent to using explicit ``xpath://div`` and
+    ``((//div))`` is equivalent to using explicit ``((xpath://div))``
 
     Examples:
 
@@ -184,6 +185,7 @@ class SeleniumLibrary(DynamicCore):
     | `Click Element` | (//div)[2]           |
 
     The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.
+    Supporting multiple opening parenthesis is new in SeleniumLibrary 5.0.
 
     === Chaining locators ===
 

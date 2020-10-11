@@ -33,6 +33,8 @@ def teardown_function():
 def test_implicit_xpath():
     _verify_parse_locator("//foo", "xpath", "//foo")
     _verify_parse_locator("(//foo)", "xpath", "(//foo)")
+    _verify_parse_locator("((//foo))", "xpath", "((//foo))")
+    _verify_parse_locator("((((//foo))", "xpath", "((((//foo))")
     _verify_parse_locator("//id=bar", "xpath", "//id=bar")
 
 
@@ -90,8 +92,9 @@ def test_registered_strategy_can_be_used_as_prefix():
 def _verify_parse_locator(locator, prefix, criteria, finder=None):
     if not finder:
         finder = ElementFinder(None)
-    parse_locator = finder._parse_locator
-    assert parse_locator(locator), (prefix, criteria)
+    get_prefix, get_criteria = finder._parse_locator(locator)
+    assert get_prefix == prefix
+    assert get_criteria == criteria
 
 
 def test_parent_is_not_webelement(finder):
