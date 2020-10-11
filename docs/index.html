@@ -15,7 +15,7 @@
 <p class="topic-title">Contents</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#introduction" id="id6">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#keyword-documentation" id="id7">Keyword documentation</a></p></li>
+<li><p><a class="reference internal" href="#keyword-documentation" id="id7">Keyword Documentation</a></p></li>
 <li><p><a class="reference internal" href="#installation" id="id8">Installation</a></p></li>
 <li><p><a class="reference internal" href="#browser-drivers" id="id9">Browser drivers</a></p></li>
 <li><p><a class="reference internal" href="#usage" id="id10">Usage</a></p></li>
@@ -43,9 +43,10 @@ different versions and the overall project history.</p>
 <a class="reference external image-reference" href="https://github.com/robotframework/SeleniumLibrary/actions?query=workflow%3A%22SeleniumLibrary+CI%22"><img alt="https://github.com/robotframework/SeleniumLibrary/workflows/SeleniumLibrary%20CI/badge.svg" src="https://github.com/robotframework/SeleniumLibrary/workflows/SeleniumLibrary%20CI/badge.svg" /></a>
 </div>
 <div class="section" id="keyword-documentation">
-<h1><a class="toc-backref" href="#id7">Keyword documentation</a></h1>
+<h1><a class="toc-backref" href="#id7">Keyword Documentation</a></h1>
 <p>See <a class="reference external" href="https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> for available keywords and more information
 about the library in general.</p>
+<p>See <a class="reference external" href="https://robotframework.org/SeleniumLibrary/SeleniumLibrary-5.0.0a3.html">release 5.0.0 Alpha keyword documentation</a>  for available keywords.</p>
 </div>
 <div class="section" id="installation">
 <h1><a class="toc-backref" href="#id8">Installation</a></h1>
@@ -108,13 +109,13 @@ in the <a class="reference external" href="https://robotframework.org/SeleniumLi
 by the library.</p>
 <p>When using Robot Framework, it is generally recommended to write as
 easy-to-understand tests as possible. The keywords provided by
-SeleniumLibrary are pretty low level, though, and often require
-implementation specific arguments like element locators to be passed
+SeleniumLibrary is pretty low level, though, and often require
+implementation-specific arguments like element locators to be passed
 as arguments. It is thus typically a good idea to write tests using
-Robot Framework's higher level keywords that utilize SeleniumLibrary
+Robot Framework's higher-level keywords that utilize SeleniumLibrary
 keywords internally. This is illustrated by the following example
 where SeleniumLibrary keywords like <span class="docutils literal">Input Text</span> are primarily
-used by higher level keywords like <span class="docutils literal">Input Username</span>.</p>
+used by higher-level keywords like <span class="docutils literal">Input Username</span>.</p>
 <pre class="code robotframework literal-block"><code><span class="generic heading">*** Settings ***</span><span class="punctuation">
 </span><span class="keyword namespace">Documentation</span><span class="punctuation">     </span><span class="literal string">Simple example using SeleniumLibrary.</span><span class="punctuation">
 </span><span class="keyword namespace">Library</span><span class="punctuation">           </span><span class="name namespace">SeleniumLibrary</span><span class="punctuation">
@@ -163,9 +164,9 @@ the extension be also useful also for general usage. If it could be useful also 
 usage, please create a new issue describing the enhancement request and even better if the
 issue is backed up by a pull request.</p>
 <p>If the enhancement is not generally useful, example solution is domain specific, then the
-SeleniumLibrary offers a public API's which can be used to build own plugins and libraries.
-Plugin API allows to add new keywords, modify existing keywords and modify internal
-functionality of the library. Also new libraries can be build on top of the
+SeleniumLibrary offers public APIs which can be used to build its own plugins and libraries.
+Plugin API allows us to add new keywords, modify existing keywords and modify the internal
+functionality of the library. Also new libraries can be built on top of the
 SeleniumLibrary. Please see <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst">extending documentation</a> for more details about the
 available methods and for examples how the library can be extended.</p>
 </div>
