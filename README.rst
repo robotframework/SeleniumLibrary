@@ -36,6 +36,10 @@ Keyword Documentation
 See `keyword documentation`_ for available keywords and more information
 about the library in general.
 
+See `release 5.0.0 Alpha keyword documentation`_  for available keywords.
+
+.. _release 5.0.0 Alpha keyword documentation: https://robotframework.org/SeleniumLibrary/SeleniumLibrary-5.0.0a3.html
+
 Installation
 ------------
 
