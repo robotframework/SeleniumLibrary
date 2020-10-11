@@ -185,10 +185,11 @@ or docs will have wrong version number.
       git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary-$VERSION.html
       git push
 
-   Modify the README.rst and add new link after the official keywords docs.
-   Commit and push the new README.rst::
+Modify the README.rst and add new link after the official keywords docs. Commit and
+push the new README.rst::
 
       git commit -m "Add alpha/beta kw docs for version $VERSION in README.rst" README.rst
+      git push
 
 2. If README.rst has changed, generate project documentation based on it::
 
