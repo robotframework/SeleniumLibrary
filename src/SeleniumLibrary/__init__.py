@@ -177,7 +177,7 @@ class SeleniumLibrary(DynamicCore):
     If the locator starts with ``//``  or multiple opening parenthesis in front
     of the ``//``, the locator is considered to be an XPath expression. In other
     words, using ``//div`` is equivalent to using explicit ``xpath://div`` and
-    ``((//div))`` is equivalent to using explicit ``((xpath://div))``
+    ``((//div))`` is equivalent to using explicit ``xpath:((//div))``
 
     Examples:
 
