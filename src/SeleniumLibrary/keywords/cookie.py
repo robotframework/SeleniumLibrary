@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from datetime import datetime
 from typing import Union, Optional
 
@@ -180,5 +179,5 @@ class CookieKeywords(LibraryComponent):
     def _expiry(self, expiry):
         try:
             return int(expiry)
-        except ValueError:
+        except (ValueError, TypeError):
             return int(convert_date(expiry, result_format="epoch"))

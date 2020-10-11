@@ -14,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+from datetime import timedelta
 
-from robot.utils import is_string
+from robot.utils import is_string, timestr_to_secs
 from robot.utils import is_truthy, is_falsy  # noqa
 
 # Need only for unit tests and can be removed when Approval tests fixes:
@@ -25,3 +26,9 @@ WINDOWS = os.name == "nt"
 
 def is_noney(item):
     return item is None or is_string(item) and item.upper() == "NONE"
+
+
+def _convert_timeout(timeout):
+    if isinstance(timeout, timedelta):
+        return timeout.total_seconds()
+    return timestr_to_secs(timeout)

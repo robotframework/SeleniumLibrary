@@ -16,6 +16,7 @@
 
 import time
 import types
+from datetime import timedelta
 from typing import Optional, Union, Any, List
 
 from selenium import webdriver
@@ -23,7 +24,7 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import secs_to_timestr, timestr_to_secs
+from SeleniumLibrary.utils import secs_to_timestr, _convert_timeout
 
 from .webdrivertools import WebDriverCreator
 
@@ -625,7 +626,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return secs_to_timestr(self.ctx.implicit_wait)
 
     @keyword
-    def set_selenium_speed(self, value: str) -> str:
+    def set_selenium_speed(self, value: timedelta) -> str:
         """Sets the delay that is waited after each Selenium command.
 
         The value can be given as a number that is considered to be
@@ -639,13 +640,13 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Set Selenium Speed` | 0.5 seconds |
         """
         old_speed = self.get_selenium_speed()
-        self.ctx.speed = timestr_to_secs(value)
+        self.ctx.speed = _convert_timeout(value)
         for driver in self.drivers.active_drivers:
             self._monkey_patch_speed(driver)
         return old_speed
 
     @keyword
-    def set_selenium_timeout(self, value: str) -> str:
+    def set_selenium_timeout(self, value: timedelta) -> str:
         """Sets the timeout that is used by various keywords.
 
         The value can be given as a number that is considered to be
@@ -661,13 +662,13 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Set Selenium Timeout` | ${orig timeout} |
         """
         old_timeout = self.get_selenium_timeout()
-        self.ctx.timeout = timestr_to_secs(value)
+        self.ctx.timeout = _convert_timeout(value)
         for driver in self.drivers.active_drivers:
             driver.set_script_timeout(self.ctx.timeout)
         return old_timeout
 
     @keyword
-    def set_selenium_implicit_wait(self, value: str) -> str:
+    def set_selenium_implicit_wait(self, value: timedelta) -> str:
         """Sets the implicit wait value used by Selenium.
 
         The value can be given as a number that is considered to be
@@ -687,19 +688,19 @@ class BrowserManagementKeywords(LibraryComponent):
         | `Set Selenium Implicit Wait` | ${orig wait} |
         """
         old_wait = self.get_selenium_implicit_wait()
-        self.ctx.implicit_wait = timestr_to_secs(value)
+        self.ctx.implicit_wait = _convert_timeout(value)
         for driver in self.drivers.active_drivers:
             driver.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
 
     @keyword
-    def set_browser_implicit_wait(self, value: str):
+    def set_browser_implicit_wait(self, value: timedelta):
         """Sets the implicit wait value used by Selenium.
 
         Same as `Set Selenium Implicit Wait` but only affects the current
         browser.
         """
-        self.driver.implicitly_wait(timestr_to_secs(value))
+        self.driver.implicitly_wait(_convert_timeout(value))
 
     def _make_driver(
         self,
