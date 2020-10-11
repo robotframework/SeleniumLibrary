@@ -197,3 +197,16 @@ def gen_stub(ctx):
     Stub files improves the IDE integration for Python usage.
     """
     ctx.run("python gen_stub.py")
+
+
+@task
+def atest(ctx, suite=None):
+    """Runs atest/run.py with headlesschrome.
+
+    Args:
+        suite: Select which suite to run.
+    """
+    commad = "python atest/run.py headlesschrome"
+    if suite:
+        commad = f"{commad} --suite {suite}"
+    ctx.run(commad)
