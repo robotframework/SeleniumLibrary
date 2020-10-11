@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from collections import namedtuple
+from datetime import timedelta
 from inspect import getdoc, isclass
 from typing import Optional, List
 
@@ -47,7 +48,7 @@ from SeleniumLibrary.keywords import (
 )
 from SeleniumLibrary.keywords.screenshot import EMBED
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import LibraryListener, timestr_to_secs, is_truthy
+from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout
 
 
 __version__ = "5.0.0a4.dev1"
@@ -439,8 +440,8 @@ class SeleniumLibrary(DynamicCore):
 
     def __init__(
         self,
-        timeout=5.0,
-        implicit_wait=0.0,
+        timeout=timedelta(seconds=5),
+        implicit_wait=timedelta(seconds=0),
         run_on_failure="Capture Page Screenshot",
         screenshot_root_directory: Optional[str] = None,
         plugins: Optional[str] = None,
@@ -464,8 +465,8 @@ class SeleniumLibrary(DynamicCore):
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
         """
-        self.timeout = timestr_to_secs(timeout)
-        self.implicit_wait = timestr_to_secs(implicit_wait)
+        self.timeout = _convert_timeout(timeout)
+        self.implicit_wait = _convert_timeout(implicit_wait)
         self.speed = 0.0
         self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(
             run_on_failure

@@ -23,6 +23,7 @@ from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
 from .context import ContextAware
+from ..utils import _convert_timeout
 
 
 class LibraryComponent(ContextAware):
@@ -77,9 +78,7 @@ class LibraryComponent(ContextAware):
     def get_timeout(self, timeout: Union[str, int, timedelta, None] = None) -> float:
         if timeout is None:
             return self.ctx.timeout
-        if isinstance(timeout, timedelta):
-            return timeout.total_seconds()
-        return timeout
+        return _convert_timeout(timeout)
 
     @property
     def log_dir(self):
