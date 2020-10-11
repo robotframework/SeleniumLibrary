@@ -182,7 +182,8 @@ or docs will have wrong version number.
 1.2 Generate alpha or beta release keyword documentation::
 
       invoke kw-docs -v $VERSION
-      git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary-$VERSION.html
+      git add docs/SeleniumLibrary-$VERSION.html
+      git commit -m "Generated docs for version $VERSION"
       git push
 
 Modify the README.rst and add new link after the official keywords docs. Commit and
