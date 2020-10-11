@@ -300,7 +300,7 @@ class ElementFinder(ContextAware):
         return tag, constraints
 
     def _parse_locator(self, locator):
-        if locator.startswith(("//", "(//")):
+        if re.match(r"\(*//", locator):
             return "xpath", locator
         index = self._get_locator_separator_index(locator)
         if index != -1:
