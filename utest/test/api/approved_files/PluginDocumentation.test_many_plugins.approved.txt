@@ -323,32 +323,13 @@ such as ``NONE``.
 
 = Boolean arguments =
 
-Some keywords accept arguments that are handled as Boolean values true or
-false. If such an argument is given as a string, it is considered false if
-it is either empty or case-insensitively equal to ``false``, ``no``, ``off``,
- ``0`` or ``none``. Other strings are considered true regardless of their value and
-other argument types are tested using the same
-[https://docs.python.org/3/library/stdtypes.html#truth-value-testing|rules as in Python].
+Starting from 5.0 SeleniumLibrary relies on Robot Framework to perform the
+boolean conversion based on keyword arguments [https://docs.python.org/3/library/typing.html|type hint].
+More details in Robot Framework
+[http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#supported-conversions|user guide]
 
-True examples:
-
-| `Set Screenshot Directory` | ${RESULTS} | persist=True    | # Strings are generally true.    |
-| `Set Screenshot Directory` | ${RESULTS} | persist=yes     | # Same as the above.             |
-| `Set Screenshot Directory` | ${RESULTS} | persist=${TRUE} | # Python True is true.           |
-| `Set Screenshot Directory` | ${RESULTS} | persist=${42}   | # Numbers other than 0 are true. |
-
-False examples:
-
-| `Set Screenshot Directory` | ${RESULTS} | persist=False    | # String false is false.        |
-| `Set Screenshot Directory` | ${RESULTS} | persist=no       | # Also string no is false.      |
-| `Set Screenshot Directory` | ${RESULTS} | persist=NONE     | # String NONE is false.         |
-| `Set Screenshot Directory` | ${RESULTS} | persist=${EMPTY} | # Empty string is false.        |
-| `Set Screenshot Directory` | ${RESULTS} | persist=${FALSE} | # Python False is false.        |
-| `Set Screenshot Directory` | ${RESULTS} | persist=${NONE}  | # Python None is false.         |
-
-Note that prior to SeleniumLibrary 3.0, all non-empty strings, including
-``false``, ``no`` and ``none``, were considered true. Starting from
-SeleniumLibrary 4.0, strings ``0`` and ``off`` are considered as false.
+Please note SeleniumLibrary 3 and 4 did have own custom methods to covert
+arguments to boolean values.
 
 = EventFiringWebDriver =
 
