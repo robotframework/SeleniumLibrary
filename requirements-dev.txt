@@ -17,6 +17,7 @@ twine >= 3.2.0
 wheel >= 0.35.1
 docutils >= 0.14
 pygments
+beautifulsoup4 >= 4.9.3
 
 # Include normal dependencies from requirements.txt. Makes it possible to use
 # requirements-dev.txt as a single requirement file in PyCharm and other IDEs.
