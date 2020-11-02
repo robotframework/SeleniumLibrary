@@ -15,9 +15,30 @@
 # limitations under the License.
 
 import abc
-
+from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 
 class Event:
     @abc.abstractmethod
     def trigger(self, *args, **kwargs):
         pass
+
+def _unwrap_eventfiring_elements(ef_driver,elements):
+    """ Workaround for Selenium 3 bug.
+
+        References:
+        https://github.com/SeleniumHQ/selenium/issues/7877
+        https://github.com/SeleniumHQ/selenium/pull/8348
+        https://github.com/SeleniumHQ/selenium/issues/7467
+        https://github.com/SeleniumHQ/selenium/issues/6604
+
+    """
+    if not isinstance(ef_driver,EventFiringWebDriver) or selenium_major_version() >= 4:
+        return elements
+    unwrapped_elements = ef_driver._unwrap_element_args(elements)
+    return unwrapped_elements
+
+def selenium_major_version():
+    import selenium
+    selenium_version = selenium.__version__
+    (major,*sub_versions)=selenium_version.split('.')
+    return int(major)
