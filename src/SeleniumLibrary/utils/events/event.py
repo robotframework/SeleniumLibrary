@@ -15,14 +15,15 @@
 # limitations under the License.
 
 import abc
-from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
+from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
+from robot.api import logger
 
 class Event:
     @abc.abstractmethod
     def trigger(self, *args, **kwargs):
         pass
 
-def _unwrap_eventfiring_elements(ef_driver,elements):
+def  _unwrap_eventfiring_element(element):
     """ Workaround for Selenium 3 bug.
 
         References:
@@ -32,11 +33,11 @@ def _unwrap_eventfiring_elements(ef_driver,elements):
         https://github.com/SeleniumHQ/selenium/issues/6604
 
     """
-    if not isinstance(ef_driver,EventFiringWebDriver) or selenium_major_version() >= 4:
-        return elements
-    unwrapped_elements = ef_driver._unwrap_element_args(elements)
-    return unwrapped_elements
-
+    logger.debug("Workaround for Selenium 3 bug.")
+    if not isinstance(element,EventFiringWebElement) or selenium_major_version() >= 4:
+        return element
+    return element.wrapped_element
+    
 def selenium_major_version():
     import selenium
     selenium_version = selenium.__version__
