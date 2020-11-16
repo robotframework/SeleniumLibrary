@@ -74,6 +74,7 @@ ZIP_DIR = os.path.join(ROOT_DIR, "zip_results")
 SRC_DIR = os.path.normpath(os.path.join(ROOT_DIR, os.pardir, "src"))
 TEST_LIBS_DIR = os.path.join(RESOURCES_DIR, "testlibs")
 HTTP_SERVER_FILE = os.path.join(RESOURCES_DIR, "testserver", "testserver.py")
+EVENT_FIRING_LISTENER = os.path.join(RESOURCES_DIR, "testlibs", "MyListener.py")
 
 ROBOT_OPTIONS = [
     "--doc",
@@ -101,14 +102,14 @@ REBOT_OPTIONS = [
 ]
 
 
-def acceptance_tests(interpreter, browser, rf_options=None, grid=None):
+def acceptance_tests(interpreter, browser, rf_options=None, grid=None, event_firing=None):
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
     os.mkdir(RESULTS_DIR)
     if grid:
         hub, node = start_grid()
     with http_server():
-        execute_tests(interpreter, browser, rf_options, grid)
+        execute_tests(interpreter, browser, rf_options, grid, event_firing)
     failures = process_output(browser)
     if failures:
         print(
@@ -191,7 +192,7 @@ def http_server():
         serverlog.close()
 
 
-def execute_tests(interpreter, browser, rf_options, grid):
+def execute_tests(interpreter, browser, rf_options, grid, event_firing):
     options = []
     if grid:
         runner = interpreter.split() + [
@@ -215,6 +216,11 @@ def execute_tests(interpreter, browser, rf_options, grid):
         ]
     else:
         command += ["--exclude", "OnlyGrid"]
+    if event_firing:
+        command += [
+            "--variable",
+            f"event_firing_or_none:{EVENT_FIRING_LISTENER}",
+        ]
     command += options + [ACCEPTANCE_TEST_DIR]
     log_start(command)
     syslog = os.path.join(RESULTS_DIR, "syslog.txt")
@@ -296,10 +302,17 @@ if __name__ == "__main__":
         default=False,
         action="store_true",
     )
+    parser.add_argument(
+        "--event-firing-webdriver",
+        help="Run tests using event firing webdriver.",
+        default=False,
+        action="store_true",
+    )
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
     selenium_grid = is_truthy(args.grid)
     interpreter = args.interpreter
+    event_firing_webdriver = args.event_firing_webdriver
     if args.nounit:
         print("Not running unit tests.")
     else:
@@ -307,7 +320,7 @@ if __name__ == "__main__":
         if rc != 0:
             print("Not running acceptance test, because unit tests failed.")
             sys.exit(rc)
-    failures = acceptance_tests(interpreter, browser, rf_options, selenium_grid)
+    failures = acceptance_tests(interpreter, browser, rf_options, selenium_grid, event_firing_webdriver)
     if args.zip:
         create_zip()
     sys.exit(failures)
