@@ -1,10 +1,14 @@
 *** Settings ***
 Documentation    Can be deleted when minimum Selenium version 4.0
-Library          SeleniumLibrary     event_firing_webdriver=${CURDIR}/MyListener.py
+Library          SeleniumLibrary     event_firing_webdriver=${event_firing_or_none}
 Resource         resource_event_firing_webdriver.robot
 Force Tags       NoGrid
 Suite Setup      Open Browser    ${FRONT PAGE}    ${BROWSER}    alias=event_firing_webdriver
 ...              remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+Suite Teardown    Close All Browsers
+
+*** Variables ***
+${event_firing_or_none}     ${NONE}
 
 *** Test Cases ***
 Selenium move_to workaround Click Element At Coordinates
@@ -16,7 +20,7 @@ Selenium move_to workaround Scroll Element Into View
     Scroll Element Into View    id:some_id
 
 Selenium move_to workaround Mouse Out
-    [Documentation]    LOG 1:8 DEBUG  Workaround for Selenium 3 bug.
+    [Documentation]    LOG 1:5 DEBUG  Workaround for Selenium 3 bug.
     Mouse Out    id:some_id
 
 Selenium move_to workaround Mouse Over
@@ -40,7 +44,7 @@ Click Element Action Chain
     [Tags]    NoGrid
     [Documentation]
     ...    LOB 1:1 INFO        Clicking 'singleClickButton' using an action chain.
-    ...    LOG 2:5 DEBUG GLOB: *actions {"actions": [{*
+    ...    LOG 2:6 DEBUG GLOB: *actions {"actions": [{*
     [Setup]    Initialize Page For Click Element
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
