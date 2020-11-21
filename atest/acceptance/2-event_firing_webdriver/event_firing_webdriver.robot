@@ -1,5 +1,5 @@
 *** Settings ***
-Library           SeleniumLibrary    event_firing_webdriver=${CURDIR}/MyListener.py
+Library           SeleniumLibrary    event_firing_webdriver=${event_firing_or_none}
 Resource          resource_event_firing_webdriver.robot
 Suite Setup       Open Browser    ${FRONT PAGE}    ${BROWSER}    alias=event_firing_webdriver
 ...                   remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
