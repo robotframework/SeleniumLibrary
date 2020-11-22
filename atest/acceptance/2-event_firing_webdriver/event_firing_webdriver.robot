@@ -5,6 +5,9 @@ Suite Setup       Open Browser    ${FRONT PAGE}    ${BROWSER}    alias=event_fir
 ...                   remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
 Suite Teardown    Close All Browsers
 
+*** Variables ***
+${event_firing_or_none}     ${NONE}
+
 *** Test Cases ***
 Open Browser To Start Page
     [Tags]    NoGrid
