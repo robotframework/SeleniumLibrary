@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation    Can be deleted when minimum Selenium version 4.0
-Library          SeleniumLibrary     event_firing_webdriver=${event_firing_or_none}
+Library          SeleniumLibrary     event_firing_webdriver=${CURDIR}/../../resources/testlibs/MyListener.py
 Library           ../../resources/testlibs/ctrl_or_command.py
 Resource         resource_event_firing_webdriver.robot
 Force Tags       NoGrid
