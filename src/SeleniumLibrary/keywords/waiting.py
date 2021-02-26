@@ -16,9 +16,10 @@
 
 import time
 from datetime import timedelta
-from typing import Optional
+from typing import Optional, Union
 
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
@@ -221,7 +222,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_page_contains_element(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
         limit: Optional[int] = None,
@@ -259,7 +260,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_page_does_not_contain_element(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
         limit: Optional[int] = None,
@@ -297,7 +298,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_is_visible(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
@@ -320,7 +321,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_is_not_visible(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
@@ -343,7 +344,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_is_enabled(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
@@ -371,7 +372,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_contains(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         text: str,
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
@@ -395,7 +396,7 @@ class WaitingKeywords(LibraryComponent):
     @keyword
     def wait_until_element_does_not_contain(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         text: str,
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,

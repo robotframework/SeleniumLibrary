@@ -13,8 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Union
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 
@@ -22,7 +24,7 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 class TableElementKeywords(LibraryComponent):
     @keyword
     def get_table_cell(
-        self, locator: str, row: int, column: int, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, None, str], row: int, column: int, loglevel: str = "TRACE"
     ) -> str:
         """Returns contents of a table cell.
 
@@ -83,7 +85,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_cell_should_contain(
         self,
-        locator: str,
+        locator: Union[WebElement, None, str],
         row: int,
         column: int,
         expected: str,
@@ -105,7 +107,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_column_should_contain(
-        self, locator: str, column: int, expected: str, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, None, str], column: int, expected: str, loglevel: str = "TRACE"
     ):
         """Verifies table column contains text ``expected``.
 
@@ -132,7 +134,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_footer_should_contain(
-        self, locator: str, expected: str, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, None, str], expected: str, loglevel: str = "TRACE"
     ):
         """Verifies table footer contains text ``expected``.
 
@@ -154,7 +156,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_header_should_contain(
-        self, locator: str, expected: str, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, None, str], expected: str, loglevel: str = "TRACE"
     ):
         """Verifies table header contains text ``expected``.
 
@@ -176,7 +178,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_row_should_contain(
-        self, locator: str, row: int, expected: str, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, None, str], row: int, expected: str, loglevel: str = "TRACE"
     ):
         """Verifies that table row contains text ``expected``.
 
@@ -203,7 +205,7 @@ class TableElementKeywords(LibraryComponent):
 
     @keyword
     def table_should_contain(
-        self, locator: str, expected: str, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, None, str], expected: str, loglevel: str = "TRACE"
     ):
         """Verifies table contains text ``expected``.
 

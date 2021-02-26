@@ -8,7 +8,8 @@ ${CTRL_OR_COMMAND}    ${EMPTY}
 
 *** Test Cases ***
 Press Keys Normal Keys
-    Press Keys    text_field    AAAAA
+    ${element} =    Get WebElement    text_field
+    Press Keys    ${element}    AAAAA
     Click Button    OK
     Wait Until Page Contains    AAAAA
 

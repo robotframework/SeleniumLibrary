@@ -14,8 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+from typing import Union, Optional
 
 from robot.utils import get_link_path
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
@@ -27,7 +29,7 @@ EMBED = "EMBED"
 
 class ScreenshotKeywords(LibraryComponent):
     @keyword
-    def set_screenshot_directory(self, path: str) -> str:
+    def set_screenshot_directory(self, path: Union[None, str]) -> str:
         """Sets the directory for captured screenshots.
 
         ``path`` argument specifies the absolute path to a directory where
@@ -125,7 +127,7 @@ class ScreenshotKeywords(LibraryComponent):
 
     @keyword
     def capture_element_screenshot(
-        self, locator: str, filename: str = DEFAULT_FILENAME_ELEMENT
+        self, locator: Union[WebElement, None, str], filename: str = DEFAULT_FILENAME_ELEMENT
     ) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 

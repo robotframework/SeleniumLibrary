@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import time
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Union
 
 from SeleniumLibrary.utils import is_truthy, is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
@@ -32,7 +32,7 @@ class WindowKeywords(LibraryComponent):
     @keyword
     def switch_window(
         self,
-        locator: str = "MAIN",
+        locator: Union[list, str] = "MAIN",
         timeout: Optional[str] = None,
         browser: str = "CURRENT",
     ):

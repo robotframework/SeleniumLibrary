@@ -15,9 +15,10 @@
 # limitations under the License.
 
 import os
-from typing import Optional
+from typing import Optional, Union
 
 from robot.libraries.BuiltIn import BuiltIn
+from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
@@ -25,7 +26,7 @@ from SeleniumLibrary.errors import ElementNotFound
 
 class FormElementKeywords(LibraryComponent):
     @keyword
-    def submit_form(self, locator: Optional[str] = None):
+    def submit_form(self, locator: Union[WebElement, None, str] = None):
         """Submits a form identified by ``locator``.
 
         If ``locator`` is not given, first form on the page is submitted.
@@ -40,7 +41,7 @@ class FormElementKeywords(LibraryComponent):
         element.submit()
 
     @keyword
-    def checkbox_should_be_selected(self, locator: str):
+    def checkbox_should_be_selected(self, locator: Union[WebElement, str]):
         """Verifies checkbox ``locator`` is selected/checked.
 
         See the `Locating elements` section for details about the locator
@@ -54,7 +55,7 @@ class FormElementKeywords(LibraryComponent):
             )
 
     @keyword
-    def checkbox_should_not_be_selected(self, locator: str):
+    def checkbox_should_not_be_selected(self, locator: Union[WebElement, str]):
         """Verifies checkbox ``locator`` is not selected/checked.
 
         See the `Locating elements` section for details about the locator
@@ -67,7 +68,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_checkbox(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies checkbox ``locator`` is found from the current page.
 
@@ -81,7 +82,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_checkbox(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies checkbox ``locator`` is not found from the current page.
 
@@ -94,7 +95,7 @@ class FormElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, "checkbox", message, loglevel)
 
     @keyword
-    def select_checkbox(self, locator: str):
+    def select_checkbox(self, locator: Union[WebElement, str]):
         """Selects the checkbox identified by ``locator``.
 
         Does nothing if checkbox is already selected.
@@ -108,7 +109,7 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def unselect_checkbox(self, locator: str):
+    def unselect_checkbox(self, locator: Union[WebElement, str]):
         """Removes the selection of checkbox identified by ``locator``.
 
         Does nothing if the checkbox is not selected.
@@ -123,7 +124,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_radio_button(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies radio button ``locator`` is found from current page.
 
@@ -138,7 +139,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_radio_button(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies radio button ``locator`` is not found from current page.
 
@@ -200,7 +201,7 @@ class FormElementKeywords(LibraryComponent):
             element.click()
 
     @keyword
-    def choose_file(self, locator: str, file_path: str):
+    def choose_file(self, locator: Union[WebElement, str], file_path: str):
         """Inputs the ``file_path`` into the file input field ``locator``.
 
         This keyword is most often used to input files into upload forms.
@@ -226,7 +227,7 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(self, locator: str, password: str, clear: bool = True):
+    def input_password(self, locator: Union[WebElement, str], password: str, clear: bool = True):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -254,7 +255,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
-    def input_text(self, locator: str, text: str, clear: bool = True):
+    def input_text(self, locator: Union[WebElement, str], text: str, clear: bool = True):
         """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
@@ -281,7 +282,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_textfield(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies text field ``locator`` is found from current page.
 
@@ -295,7 +296,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_textfield(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies text field ``locator`` is not found from current page.
 
@@ -309,7 +310,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textfield_should_contain(
-        self, locator: str, expected: str, message: Optional[str] = None
+        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
     ):
         """Verifies text field ``locator`` contains text ``expected``.
 
@@ -330,7 +331,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textfield_value_should_be(
-        self, locator: str, expected: str, message: Optional[str] = None
+        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
     ):
         """Verifies text field ``locator`` has exactly text ``expected``.
 
@@ -351,7 +352,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textarea_should_contain(
-        self, locator: str, expected: str, message: Optional[str] = None
+        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
     ):
         """Verifies text area ``locator`` contains text ``expected``.
 
@@ -372,7 +373,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textarea_value_should_be(
-        self, locator: str, expected: str, message: Optional[str] = None
+        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
     ):
         """Verifies text area ``locator`` has exactly text ``expected``.
 
@@ -393,7 +394,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_button(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies button ``locator`` is found from current page.
 
@@ -411,7 +412,7 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_button(
-        self, locator: str, message: Optional[str] = None, loglevel: str = "TRACE"
+        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
     ):
         """Verifies button ``locator`` is not found from current page.
 
@@ -428,7 +429,7 @@ class FormElementKeywords(LibraryComponent):
     def _get_value(self, locator, tag):
         return self.find_element(locator, tag).get_attribute("value")
 
-    def _get_checkbox(self, locator):
+    def _get_checkbox(self, locator: Union[WebElement, str]):
         return self.find_element(locator, tag="checkbox")
 
     def _get_radio_buttons(self, group_name):
