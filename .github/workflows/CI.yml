@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.8, pypy3]
-        rf-version: [3.1.2, 3.2.2]
+        rf-version: [3.2.2, 4.0b3]
 
     steps:
     - uses: actions/checkout@v2
@@ -47,11 +47,11 @@ jobs:
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
     - name: Run tests normal Chrome with Python 3.8
-      if: matrix.python-version == '3.8' && matrix.rf-version != '3.1.2'
+      if: matrix.python-version == '3.8' && matrix.rf-version != '3.2.2'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip chrome
     - name: Run tests with Selenium Grid
-      if: matrix.python-version == '3.8' && matrix.rf-version == '3.1.2'
+      if: matrix.python-version == '3.8' && matrix.rf-version == '3.2.2'
       run: |
         wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
         sudo chmod u+x ./selenium-server-standalone.jar
