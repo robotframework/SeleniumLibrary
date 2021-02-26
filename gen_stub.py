@@ -13,6 +13,7 @@
 # limitations under the License.
 # Copied from: https://github.com/MarketSquare/robotframework-browser/blob/master/Browser/gen_stub.py
 import sys
+from datetime import timedelta
 from pathlib import Path
 from typing import Any
 
@@ -82,7 +83,9 @@ def keyword_line(keyword_arguments, keyword_types, method_name):
                 arg_str = arg_str + f": {arg_type_str}"
             elif isinstance(default_value, str):
                 default_value = f"'{default_value}'"
-            arg_str = arg_str + f" = {default_value}"
+            elif isinstance(default_value, timedelta):
+                default_value = f"timedelta(seconds={default_value.total_seconds()})"
+            arg_str = f"{arg_str} = {default_value}"
         else:
             arg_str = argument
             arg_type_str = get_type_sting_from_argument(arg_str, keyword_types)
@@ -99,7 +102,11 @@ SL: Any = SeleniumLibrary.SeleniumLibrary()
 FUNCTION_LIST = get_function_list_from_keywords(SL.get_keyword_names())
 
 
-pyi_boilerplate = """
+pyi_boilerplate = """\
+from datetime import timedelta
+from typing import Any, Optional, Union
+
+
 class SeleniumLibrary:
 """
 pyi_boilerplate_append = """
