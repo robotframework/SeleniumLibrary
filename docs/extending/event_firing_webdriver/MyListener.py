@@ -3,7 +3,6 @@ from selenium.webdriver.support.events import AbstractEventListener
 
 
 class MyListener(AbstractEventListener):
-
     def before_navigate_to(self, url, driver):
         logger.info("Before navigate to %s" % url)
 

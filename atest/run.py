@@ -102,7 +102,9 @@ REBOT_OPTIONS = [
 ]
 
 
-def acceptance_tests(interpreter, browser, rf_options=None, grid=None, event_firing=None):
+def acceptance_tests(
+    interpreter, browser, rf_options=None, grid=None, event_firing=None
+):
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
     os.mkdir(RESULTS_DIR)
@@ -320,7 +322,9 @@ if __name__ == "__main__":
         if rc != 0:
             print("Not running acceptance test, because unit tests failed.")
             sys.exit(rc)
-    failures = acceptance_tests(interpreter, browser, rf_options, selenium_grid, event_firing_webdriver)
+    failures = acceptance_tests(
+        interpreter, browser, rf_options, selenium_grid, event_firing_webdriver
+    )
     if args.zip:
         create_zip()
     sys.exit(failures)

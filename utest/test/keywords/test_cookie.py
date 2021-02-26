@@ -17,7 +17,7 @@ ALL_ARGS = {
     "expiry": 123,
 }
 
-pytestmark = pytest.mark.usefixtures('unstub')
+pytestmark = pytest.mark.usefixtures("unstub")
 
 
 @pytest.fixture()
@@ -51,6 +51,7 @@ def test_add_cookie_secure_true(cookie, default_cookie, driver):
     default_cookie["secure"] = True
     cookie.add_cookie("name", "value", path=None, domain=None, secure=True)
     verify(driver).add_cookie(default_cookie)
+
 
 def test_add_cookie_secure_false(cookie, driver, default_cookie):
     cookie.add_cookie("name", "value", path=None, domain=None, secure=None)

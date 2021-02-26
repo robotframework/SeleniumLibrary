@@ -126,14 +126,14 @@ class JavaScriptKeywords(LibraryComponent):
         self._check_marker_error(code)
         index = self._get_marker_index(code)
         if self.arg_marker not in code:
-            return code[index.js + 1:], []
+            return code[index.js + 1 :], []
         if self.js_marker not in code:
-            return code[0: index.arg], code[index.arg + 1:]
+            return code[0 : index.arg], code[index.arg + 1 :]
         else:
             if index.js == 0:
-                return code[index.js + 1: index.arg], code[index.arg + 1:]
+                return code[index.js + 1 : index.arg], code[index.arg + 1 :]
             else:
-                return code[index.js + 1:], code[index.arg + 1: index.js]
+                return code[index.js + 1 :], code[index.arg + 1 : index.js]
 
     def _check_marker_error(self, code):
         if not code:
