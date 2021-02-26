@@ -28,7 +28,7 @@ to install the latest available release or use
 to install exactly this version. Alternatively you can download the source
 distribution from PyPI_ and install it manually.
 
-SeleniumLibrary 5.0.1 was released on Friday February 26, 2021. SSeleniumLibrary supports
+SeleniumLibrary 5.0.1 was released on Friday February 26, 2021. SeleniumLibrary supports
 Python 3.6+, Selenium 3.141.0+ and Robot Framework 3.1.2+.
 
 .. _Robot Framework: http://robotframework.org
