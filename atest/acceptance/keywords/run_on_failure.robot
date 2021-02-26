@@ -26,17 +26,29 @@ Log Title On Failure
     ...    ${FAILURE MESSAGE}
     ...    Page Should Not Contain    needle    loglevel=None
 
-Disable Run on Failure
+Disable Run on Failure With Nothing
     [Documentation]
     ...    LOG 1 No keyword will be run on failure.
     ...    LOG 2.1:2 NONE
-    ...    LOG 3 No keyword will be run on failure.
-    ...    LOG 4.1:2 NONE
-    Register Keyword to Run On Failure    Nothing
+    SeleniumLibrary.Register Keyword to Run On Failure    Nothing
     Run Keyword And Expect Error
     ...    ${FAILURE MESSAGE}
     ...    Page Should Not Contain    needle    loglevel=None
-    Register Keyword to Run On Failure    ${NONE}
+
+Disable Run on Failure With Python None
+    [Documentation]
+    ...    LOG 1 No keyword will be run on failure.
+    ...    LOG 2.1:2 NONE
+    SeleniumLibrary.Register Keyword to Run On Failure    ${NONE}
+    Run Keyword And Expect Error
+    ...    ${FAILURE MESSAGE}
+    ...    Page Should Not Contain    needle    loglevel=None
+
+Disable Run on Failure With String NONE
+    [Documentation]
+    ...    LOG 1 No keyword will be run on failure.
+    ...    LOG 2.1:2 NONE
+    SeleniumLibrary.Register Keyword to Run On Failure    NONE
     Run Keyword And Expect Error
     ...    ${FAILURE MESSAGE}
     ...    Page Should Not Contain    needle    loglevel=None
