@@ -202,7 +202,10 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_element(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies that element ``locator`` is not found on the current page.
 
@@ -277,7 +280,9 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(f"Element '{locator}' does not have focus.")
 
     @keyword
-    def element_should_be_visible(self, locator: Union[WebElement, str], message: Optional[str] = None):
+    def element_should_be_visible(
+        self, locator: Union[WebElement, str], message: Optional[str] = None
+    ):
         """Verifies that the element identified by ``locator`` is visible.
 
         Herein, visible means that the element is logically visible, not
@@ -387,7 +392,9 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def get_element_attribute(self, locator: Union[WebElement, str], attribute: str) -> str:
+    def get_element_attribute(
+        self, locator: Union[WebElement, str], attribute: str
+    ) -> str:
         """Returns the value of ``attribute`` from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -404,7 +411,11 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_attribute_value_should_be(
-        self, locator: Union[WebElement, str], attribute: str, expected: str, message: Optional[str] = None
+        self,
+        locator: Union[WebElement, str],
+        attribute: str,
+        expected: str,
+        message: Optional[str] = None,
     ):
         """Verifies element identified by ``locator`` contains expected attribute value.
 
@@ -531,7 +542,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).location["y"]
 
     @keyword
-    def click_button(self, locator: Union[WebElement, str], modifier: Union[bool, str] = False):
+    def click_button(
+        self, locator: Union[WebElement, str], modifier: Union[bool, str] = False
+    ):
         """Clicks the button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -553,7 +566,9 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["button", "input"], modifier)
 
     @keyword
-    def click_image(self, locator: Union[WebElement, str], modifier: Union[bool, str] = False):
+    def click_image(
+        self, locator: Union[WebElement, str], modifier: Union[bool, str] = False
+    ):
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -576,7 +591,9 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["image", "input"], modifier)
 
     @keyword
-    def click_link(self, locator: Union[WebElement, str], modifier: Union[bool, str] = False):
+    def click_link(
+        self, locator: Union[WebElement, str], modifier: Union[bool, str] = False
+    ):
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -667,7 +684,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def click_element_at_coordinates(self, locator: Union[WebElement, str], xoffset: int, yoffset: int):
+    def click_element_at_coordinates(
+        self, locator: Union[WebElement, str], xoffset: int, yoffset: int
+    ):
         """Click the element ``locator`` at ``xoffset/yoffset``.
 
         The Cursor is moved and the center of the element and x/y coordinates are
@@ -729,7 +748,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         ActionChains(self.driver).move_to_element(element).perform()
 
     @keyword
-    def drag_and_drop(self, locator: Union[WebElement, str], target: Union[WebElement, str]):
+    def drag_and_drop(
+        self, locator: Union[WebElement, str], target: Union[WebElement, str]
+    ):
         """Drags the element identified by ``locator`` into the ``target`` element.
 
         The ``locator`` argument is the locator of the dragged element
@@ -749,7 +770,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.drag_and_drop(element, target).perform()
 
     @keyword
-    def drag_and_drop_by_offset(self, locator: Union[WebElement, str], xoffset: int, yoffset: int):
+    def drag_and_drop_by_offset(
+        self, locator: Union[WebElement, str], xoffset: int, yoffset: int
+    ):
         """Drags the element identified with ``locator`` by ``xoffset/yoffset``.
 
         See the `Locating elements` section for details about the locator
@@ -989,7 +1012,10 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def page_should_contain_link(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies link identified by ``locator`` is found from current page.
 
@@ -1004,7 +1030,10 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def page_should_not_contain_link(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies link identified by ``locator`` is not found from current page.
 
@@ -1033,7 +1062,10 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def page_should_contain_image(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies image identified by ``locator`` is found from current page.
 
@@ -1048,7 +1080,10 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def page_should_not_contain_image(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies image identified by ``locator`` is not found from current page.
 

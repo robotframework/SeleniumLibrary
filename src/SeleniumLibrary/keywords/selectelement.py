@@ -24,7 +24,9 @@ from SeleniumLibrary.utils import is_truthy, plural_or_not
 
 class SelectElementKeywords(LibraryComponent):
     @keyword
-    def get_list_items(self, locator: Union[WebElement, str], values: bool = False) -> List[str]:
+    def get_list_items(
+        self, locator: Union[WebElement, str], values: bool = False
+    ) -> List[str]:
         """Returns all labels or values of selection list ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -155,7 +157,10 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_list(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies selection list ``locator`` is found from current page.
 
@@ -169,7 +174,10 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_list(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies selection list ``locator`` is not found from current page.
 
@@ -284,7 +292,9 @@ class SelectElementKeywords(LibraryComponent):
         select.deselect_all()
 
     @keyword
-    def unselect_from_list_by_index(self, locator: Union[WebElement, str], *indexes: str):
+    def unselect_from_list_by_index(
+        self, locator: Union[WebElement, str], *indexes: str
+    ):
         """Unselects options from selection list ``locator`` by ``indexes``.
 
         Indexes of list options start from 0. This keyword works only with
@@ -309,7 +319,9 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_by_index(int(index))
 
     @keyword
-    def unselect_from_list_by_value(self, locator: Union[WebElement, str], *values: str):
+    def unselect_from_list_by_value(
+        self, locator: Union[WebElement, str], *values: str
+    ):
         """Unselects options from selection list ``locator`` by ``values``.
 
         This keyword works only with multi-selection lists.
@@ -332,7 +344,9 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_by_value(value)
 
     @keyword
-    def unselect_from_list_by_label(self, locator: Union[WebElement, str], *labels: str):
+    def unselect_from_list_by_label(
+        self, locator: Union[WebElement, str], *labels: str
+    ):
         """Unselects options from selection list ``locator`` by ``labels``.
 
         This keyword works only with multi-selection lists.

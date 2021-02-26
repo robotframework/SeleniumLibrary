@@ -81,7 +81,9 @@ class FrameKeywords(LibraryComponent):
         self.info(f"Current frame did not contain text '{text}'.")
 
     @keyword
-    def frame_should_contain(self, locator: Union[WebElement, str], text: str, loglevel: str = "TRACE"):
+    def frame_should_contain(
+        self, locator: Union[WebElement, str], text: str, loglevel: str = "TRACE"
+    ):
         """Verifies that frame identified by ``locator`` contains ``text``.
 
         See the `Locating elements` section for details about the locator

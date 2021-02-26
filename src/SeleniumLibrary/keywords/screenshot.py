@@ -127,7 +127,9 @@ class ScreenshotKeywords(LibraryComponent):
 
     @keyword
     def capture_element_screenshot(
-        self, locator: Union[WebElement, None, str], filename: str = DEFAULT_FILENAME_ELEMENT
+        self,
+        locator: Union[WebElement, None, str],
+        filename: str = DEFAULT_FILENAME_ELEMENT,
     ) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 

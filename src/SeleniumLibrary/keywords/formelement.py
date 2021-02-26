@@ -68,7 +68,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_checkbox(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies checkbox ``locator`` is found from the current page.
 
@@ -82,7 +85,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_checkbox(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies checkbox ``locator`` is not found from the current page.
 
@@ -124,7 +130,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_radio_button(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies radio button ``locator`` is found from current page.
 
@@ -139,7 +148,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_radio_button(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies radio button ``locator`` is not found from current page.
 
@@ -227,7 +239,9 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(self, locator: Union[WebElement, str], password: str, clear: bool = True):
+    def input_password(
+        self, locator: Union[WebElement, str], password: str, clear: bool = True
+    ):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -255,7 +269,9 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
-    def input_text(self, locator: Union[WebElement, str], text: str, clear: bool = True):
+    def input_text(
+        self, locator: Union[WebElement, str], text: str, clear: bool = True
+    ):
         """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
@@ -282,7 +298,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_textfield(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies text field ``locator`` is found from current page.
 
@@ -296,7 +315,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_textfield(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies text field ``locator`` is not found from current page.
 
@@ -310,7 +332,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textfield_should_contain(
-        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
+        self,
+        locator: Union[WebElement, str],
+        expected: str,
+        message: Optional[str] = None,
     ):
         """Verifies text field ``locator`` contains text ``expected``.
 
@@ -331,7 +356,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textfield_value_should_be(
-        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
+        self,
+        locator: Union[WebElement, str],
+        expected: str,
+        message: Optional[str] = None,
     ):
         """Verifies text field ``locator`` has exactly text ``expected``.
 
@@ -352,7 +380,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textarea_should_contain(
-        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
+        self,
+        locator: Union[WebElement, str],
+        expected: str,
+        message: Optional[str] = None,
     ):
         """Verifies text area ``locator`` contains text ``expected``.
 
@@ -373,7 +404,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def textarea_value_should_be(
-        self, locator: Union[WebElement, str], expected: str, message: Optional[str] = None
+        self,
+        locator: Union[WebElement, str],
+        expected: str,
+        message: Optional[str] = None,
     ):
         """Verifies text area ``locator`` has exactly text ``expected``.
 
@@ -394,7 +428,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_contain_button(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies button ``locator`` is found from current page.
 
@@ -412,7 +449,10 @@ class FormElementKeywords(LibraryComponent):
 
     @keyword
     def page_should_not_contain_button(
-        self, locator: Union[WebElement, str], message: Optional[str] = None, loglevel: str = "TRACE"
+        self,
+        locator: Union[WebElement, str],
+        message: Optional[str] = None,
+        loglevel: str = "TRACE",
     ):
         """Verifies button ``locator`` is not found from current page.
 
