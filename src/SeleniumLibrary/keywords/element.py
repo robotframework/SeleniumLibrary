@@ -531,7 +531,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).location["y"]
 
     @keyword
-    def click_button(self, locator: str, modifier: Union[str, bool] = False):
+    def click_button(self, locator: str, modifier: Union[bool, str] = False):
         """Clicks the button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -553,7 +553,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["button", "input"], modifier)
 
     @keyword
-    def click_image(self, locator: str, modifier: Union[str, bool] = False):
+    def click_image(self, locator: str, modifier: Union[bool, str] = False):
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -576,7 +576,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["image", "input"], modifier)
 
     @keyword
-    def click_link(self, locator: str, modifier: Union[str, bool] = False):
+    def click_link(self, locator: str, modifier: Union[bool, str] = False):
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -598,7 +598,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     def click_element(
         self,
         locator: str,
-        modifier: Union[str, bool] = False,
+        modifier: Union[bool, str] = False,
         action_chain: bool = False,
     ):
         """Click the element identified by ``locator``.
