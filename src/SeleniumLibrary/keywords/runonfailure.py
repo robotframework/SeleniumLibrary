@@ -13,13 +13,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Optional
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class RunOnFailureKeywords(LibraryComponent):
     @keyword
-    def register_keyword_to_run_on_failure(self, keyword: str) -> str:
+    def register_keyword_to_run_on_failure(self, keyword: Optional[str]) -> str:
         """Sets the keyword to execute, when a SeleniumLibrary keyword fails.
 
         ``keyword`` is the name of a keyword that will be executed if a
@@ -61,6 +62,8 @@ class RunOnFailureKeywords(LibraryComponent):
 
     @staticmethod
     def resolve_keyword(name):
-        if name is None or isinstance(name, str) and name.upper() == "NOTHING":
+        if name is None:
+            return None
+        if isinstance(name, str) and name.upper() == "NOTHING" or name.upper() == "NONE":
             return None
         return name
