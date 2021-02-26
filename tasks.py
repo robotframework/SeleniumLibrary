@@ -72,8 +72,10 @@ def kw_docs(ctx, version=None):
     with out.open("r") as file:
         data = file.read()
     soup = bs4.BeautifulSoup(data, "html.parser")
-    script_async = soup.new_tag("script", src="https://www.googletagmanager.com/gtag/js?id=UA-106835747-4")
-    script_async.attrs['async'] = None
+    script_async = soup.new_tag(
+        "script", src="https://www.googletagmanager.com/gtag/js?id=UA-106835747-4"
+    )
+    script_async.attrs["async"] = None
     soup.head.append(script_async)
     script_data = soup.new_tag("script")
     script_data.string = """

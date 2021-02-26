@@ -614,14 +614,14 @@ class SeleniumOptions:
             result[item] = []
             return result
         if method:
-            args_as_string = item[index + 1:-1].strip()
+            args_as_string = item[index + 1 : -1].strip()
             if args_as_string:
                 args = ast.literal_eval(args_as_string)
             else:
                 args = args_as_string
             is_tuple = args_as_string.startswith("(")
         else:
-            args_as_string = item[index + 1:].strip()
+            args_as_string = item[index + 1 :].strip()
             args = ast.literal_eval(args_as_string)
             is_tuple = args_as_string.startswith("(")
         method_or_attribute = item[:index].strip()
@@ -651,7 +651,7 @@ class SeleniumOptions:
         tokens = generate_tokens(StringIO(options).readline)
         for toknum, tokval, tokpos, _, _ in tokens:
             if toknum == token.OP and tokval == ";":
-                split_options.append(options[start_position:tokpos[1]].strip())
+                split_options.append(options[start_position : tokpos[1]].strip())
                 start_position = tokpos[1] + 1
         split_options.append(options[start_position:])
         return split_options
