@@ -226,6 +226,7 @@ SeleniumLibrary 4.1                 Selenium 3                  Python 2.7 and 3
 SeleniumLibrary 4.2                 Selenium 3                  Python 2.7 and 3.5+         Supports only Selenium 3.141.0 or newer.
 SeleniumLibrary 4.4                 Selenium 3 and 4            Python 2.7 and 3.6+         New PythonLibCore and dropped Python 3.5 support.
 SeleniumLibrary 5.0                 Selenium 3 and 4            Python 3.6+                 Python 2 and Jython support is dropped.
+SeleniumLibrary 5.1                 Selenium 3 and 4            Python 3.6+                 Robot Framework 3.1 support is dropped.
 Selenium2Library 3.0                Depends on SeleniumLibrary  Depends on SeleniumLibrary  Thin wrapper for SeleniumLibrary 3.0 to ease transition.
 ==================================  ==========================  ==========================  ===============
 
