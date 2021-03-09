@@ -284,7 +284,7 @@ class WebDriverCreator:
         remote_url,
         options=None,
         service_log_path=None,
-        executable_path="MicrosoftWebDriver.exe",
+        executable_path="msedgedriver",
     ):
         if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
