@@ -106,8 +106,7 @@ pyi_boilerplate = """\
 from datetime import timedelta
 from typing import Any, Optional, Union
 
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
+import selenium
 
 class SeleniumLibrary:
 """

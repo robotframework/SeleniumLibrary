@@ -1,8 +1,7 @@
 from datetime import timedelta
 from typing import Any, Optional, Union
 
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
+import selenium
 
 class SeleniumLibrary:
     def __init__(
@@ -309,7 +308,9 @@ class SeleniumLibrary:
         alias: Optional[str] = None,
         remote_url: Union[bool, str] = False,
         desired_capabilities: Optional[Union[dict, None, str]] = None,
-        ff_profile_dir: Optional[str] = None,
+        ff_profile_dir: Optional[
+            Union[selenium.webdriver.firefox.firefox_profile.FirefoxProfile, str, None]
+        ] = None,
         options: Optional[Any] = None,
         service_log_path: Optional[str] = None,
         executable_path: Optional[str] = None,
