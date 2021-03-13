@@ -20,6 +20,7 @@ from datetime import timedelta
 from typing import Optional, Union, Any, List
 
 from selenium import webdriver
+from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 
 from SeleniumLibrary.base import keyword, LibraryComponent
@@ -63,7 +64,7 @@ class BrowserManagementKeywords(LibraryComponent):
         alias: Optional[str] = None,
         remote_url: Union[bool, str] = False,
         desired_capabilities: Union[dict, None, str] = None,
-        ff_profile_dir: Optional[str] = None,
+        ff_profile_dir: Union[FirefoxProfile, str, None] = None,
         options: Any = None,
         service_log_path: Optional[str] = None,
         executable_path: Optional[str] = None,
