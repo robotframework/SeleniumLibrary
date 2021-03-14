@@ -49,7 +49,7 @@ Most important enhancements
 Open Browser Firefox profile path argument types are not correct (`#1703`_)
 ---------------------------------------------------------------------------
 Open Browser keyword ff_profile_dir argument did convert argument incorrectly
-if the argument value was Python FirefoxProfile instance. This is not fixed
+if the argument value was Python FirefoxProfile instance. This is now fixed
 in this release.
 
 Full list of fixes and enhancements
