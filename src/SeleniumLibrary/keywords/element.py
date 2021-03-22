@@ -55,7 +55,7 @@ class ElementKeywords(LibraryComponent):
     def element_should_contain(
         self,
         locator: Union[WebElement, str],
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ):
@@ -93,7 +93,7 @@ class ElementKeywords(LibraryComponent):
     def element_should_not_contain(
         self,
         locator: Union[WebElement, str],
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ):
@@ -326,7 +326,7 @@ class ElementKeywords(LibraryComponent):
     def element_text_should_be(
         self,
         locator: Union[WebElement, str],
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ):
@@ -362,7 +362,7 @@ class ElementKeywords(LibraryComponent):
     def element_text_should_not_be(
         self,
         locator: Union[WebElement, str],
-        not_expected: str,
+        not_expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ):
