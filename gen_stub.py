@@ -107,6 +107,8 @@ from datetime import timedelta
 from typing import Any, Optional, Union
 
 import selenium
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 
 class SeleniumLibrary:
 """

@@ -2,6 +2,8 @@ from datetime import timedelta
 from typing import Any, Optional, Union
 
 import selenium
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 
 class SeleniumLibrary:
     def __init__(
@@ -119,7 +121,7 @@ class SeleniumLibrary:
         self,
         locator: Union[selenium.webdriver.remote.webelement.WebElement, str],
         attribute: str,
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
     ): ...
     def element_should_be_disabled(
@@ -139,7 +141,7 @@ class SeleniumLibrary:
     def element_should_contain(
         self,
         locator: Union[selenium.webdriver.remote.webelement.WebElement, str],
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ): ...
@@ -151,21 +153,21 @@ class SeleniumLibrary:
     def element_should_not_contain(
         self,
         locator: Union[selenium.webdriver.remote.webelement.WebElement, str],
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ): ...
     def element_text_should_be(
         self,
         locator: Union[selenium.webdriver.remote.webelement.WebElement, str],
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ): ...
     def element_text_should_not_be(
         self,
         locator: Union[selenium.webdriver.remote.webelement.WebElement, str],
-        not_expected: str,
+        not_expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
     ): ...
