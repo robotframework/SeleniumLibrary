@@ -62,6 +62,8 @@ Get Element Attribute
 
 Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
+    Element Attribute Value Should Be  link=Absolute external link  nothere  None
+
 
 Get Element Attribute And Element Attribute Value Should Be Should have same results
     ${attribute_value}=  Get Element Attribute  css=#second_div  class
@@ -70,12 +72,12 @@ Get Element Attribute And Element Attribute Value Should Be Should have same res
 Get Element Attribute Value Should Be Should Be Succesfull with non-ascii characters
     Element Attribute Value Should Be  link=Link with Unicode äöüÄÖÜß  href  http://localhost:7000/html/index.html
 
-Get Element Attribute Value Should Be Should Be Succesfull error and errors messages
+Get Element Attribute Value Should Be Should Be Succesfull error and error messages
     Run Keyword And Expect Error
     ...    Test Fail Custom Message
     ...    Element Attribute Value Should Be  id=image_id  href  http://non_existing.com  message=Test Fail Custom Message
     Run Keyword And Expect Error
-    ...    Element 'id=image_id' attribute should have value 'http://non_existing.com' but its value was 'None'.
+    ...    Element 'id=image_id' attribute should have value 'http://non_existing.com (str)' but its value was 'None' (nonetype).
     ...    Element Attribute Value Should Be  id=image_id  href  http://non_existing.com
     Run Keyword And Expect Error
     ...    Element with locator 'id=non_existing' not found.
