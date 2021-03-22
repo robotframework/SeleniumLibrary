@@ -25,6 +25,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
+from SeleniumLibrary.utils.types import type_converter
 
 
 class ElementKeywords(LibraryComponent):
@@ -414,7 +415,7 @@ class ElementKeywords(LibraryComponent):
         self,
         locator: Union[WebElement, str],
         attribute: str,
-        expected: str,
+        expected: Union[None, str],
         message: Optional[str] = None,
     ):
         """Verifies element identified by ``locator`` contains expected attribute value.
@@ -431,8 +432,9 @@ class ElementKeywords(LibraryComponent):
         if current_expected != expected:
             if message is None:
                 message = (
-                    f"Element '{locator}' attribute should have value '{expected}' but "
-                    f"its value was '{current_expected}'."
+                    f"Element '{locator}' attribute should have value '{expected} "
+                    f"({type_converter(expected)})' but its value was '{current_expected}' "
+                    f"({type_converter(current_expected)})."
                 )
             raise AssertionError(message)
         self.info(
