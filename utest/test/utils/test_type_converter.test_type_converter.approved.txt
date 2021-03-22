@@ -1,0 +1,5 @@
+Type converter
+
+0) str
+1) int
+2) dict
