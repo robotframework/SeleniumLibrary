@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-from typing import Union, Optional
+from typing import Union
 
 from robot.utils import get_link_path
 from selenium.webdriver.remote.webelement import WebElement

@@ -34,7 +34,7 @@ Examples:
 
     run.py chrome
     run.py headlesschrome
-    run.py --interpreter c:\Python38\python.exe firefox --suite javascript
+    run.py --interpreter c:\\Python38\\python.exe firefox --suite javascript
     run.py headlesschrome --nounit --grid true
 """
 

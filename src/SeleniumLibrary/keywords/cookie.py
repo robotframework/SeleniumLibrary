@@ -17,7 +17,7 @@ from datetime import datetime
 from typing import Union, Optional
 
 from robot.libraries.DateTime import convert_date
-from robot.utils import DotDict, is_truthy
+from robot.utils import DotDict
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import CookieNotFound

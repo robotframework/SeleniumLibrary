@@ -3,7 +3,7 @@ import argparse
 import os
 import shutil
 import sys
-from os.path import abspath, dirname, join
+from os.path import join
 from pathlib import Path
 
 from pytest import main as py_main
