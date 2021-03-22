@@ -15,6 +15,7 @@
 # limitations under the License.
 import os
 from datetime import timedelta
+from typing import Any
 
 from robot.utils import is_string, timestr_to_secs
 from robot.utils import is_truthy, is_falsy  # noqa
@@ -32,3 +33,7 @@ def _convert_timeout(timeout):
     if isinstance(timeout, timedelta):
         return timeout.total_seconds()
     return timestr_to_secs(timeout)
+
+
+def type_converter(argument: Any) -> str:
+    return type(argument).__name__.lower()
