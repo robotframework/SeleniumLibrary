@@ -62,7 +62,7 @@ Get Element Attribute
 
 Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
-    Element Attribute Value Should Be  link=Absolute external link  nothere  None
+    Element Attribute Value Should Be  link=Absolute external link  nothere  ${None}
 
 
 Get Element Attribute And Element Attribute Value Should Be Should have same results
@@ -77,13 +77,13 @@ Get Element Attribute Value Should Be Should Be Succesfull error and error messa
     ...    Test Fail Custom Message
     ...    Element Attribute Value Should Be  id=image_id  href  http://non_existing.com  message=Test Fail Custom Message
     Run Keyword And Expect Error
-    ...    Element 'id=image_id' attribute should have value 'http://non_existing.com (str)' but its value was 'None' (nonetype).
+    ...    Element 'id=image_id' attribute should have value 'http://non_existing.com' (str) but its value was 'None' (nonetype).
     ...    Element Attribute Value Should Be  id=image_id  href  http://non_existing.com
     Run Keyword And Expect Error
     ...    Element with locator 'id=non_existing' not found.
     ...    Element Attribute Value Should Be  id=non_existing  href  http://non_existing.com
     Run Keyword And Expect Error
-    ...    http://localhost:7000/html/index.html'.' but got 'Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html (str)' but its value was 'http://localhost:7000/html/index.html' (str).
+    ...    Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html' (str) but its value was 'http://localhost:7000/html/index.html' (str).
     ...    Element Attribute Value Should Be  link=Target opens in new window  href  http://localhost:7000/html/indéx.html
 
 Get Horizontal Position
