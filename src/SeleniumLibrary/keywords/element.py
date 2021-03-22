@@ -432,8 +432,8 @@ class ElementKeywords(LibraryComponent):
         if current_expected != expected:
             if message is None:
                 message = (
-                    f"Element '{locator}' attribute should have value '{expected} "
-                    f"({type_converter(expected)})' but its value was '{current_expected}' "
+                    f"Element '{locator}' attribute should have value '{expected}' "
+                    f"({type_converter(expected)}) but its value was '{current_expected}' "
                     f"({type_converter(current_expected)})."
                 )
             raise AssertionError(message)
