@@ -83,7 +83,7 @@ Get Element Attribute Value Should Be Should Be Succesfull error and error messa
     ...    Element with locator 'id=non_existing' not found.
     ...    Element Attribute Value Should Be  id=non_existing  href  http://non_existing.com
     Run Keyword And Expect Error
-    ...    Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html' but its value was 'http://localhost:7000/html/index.html'.
+    ...    http://localhost:7000/html/index.html'.' but got 'Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html (str)' but its value was 'http://localhost:7000/html/index.html' (str).
     ...    Element Attribute Value Should Be  link=Target opens in new window  href  http://localhost:7000/html/indéx.html
 
 Get Horizontal Position
