@@ -62,12 +62,8 @@ Execute Javascript With ARGUMENTS Marker Only
     Alert Should Be Present    123    timeout=10 s
 
 Execute Javascript With ARGUMENTS Marker And WebElement
-    [Documentation]
-    ...    Checks if the body (WebElement)
-    ...    is parsed correctly as script argument
-    ...    then compare its tagName to 'body'
-    ${body_webelement}  Get WebElement  css:body
-    ${tag_name}  Execute Javascript
+    ${body_webelement} =    Get WebElement  css:body
+    ${tag_name} =    Execute Javascript
     ...  return arguments[0].tagName;
     ...  ARGUMENTS
     ...  ${body_webelement}
