@@ -16,10 +16,11 @@
 
 import os
 from collections import namedtuple
-from typing import Any
+from typing import Any, Union
 
 from robot.utils import plural_or_not, seq2str
 
+from selenium.webdriver.remote.webelement import WebElement
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
@@ -29,7 +30,7 @@ class JavaScriptKeywords(LibraryComponent):
     arg_marker = "ARGUMENTS"
 
     @keyword
-    def execute_javascript(self, *code: str) -> Any:
+    def execute_javascript(self, *code:  Union[WebElement, str]) -> Any:
         """Executes the given JavaScript code with possible arguments.
 
         ``code`` may be divided into multiple cells in the test data and
