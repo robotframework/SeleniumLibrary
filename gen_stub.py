@@ -58,6 +58,8 @@ def get_type_sting_from_argument(argument_string: str, argument_types: dict) -> 
 def get_function_list_from_keywords(keywords):
     functions = list()
     for keyword in keywords:
+        if keyword == "switch_window":
+            print(keyword)
         method_name = get_method_name_for_keyword(keyword)
         keyword_arguments = SL.get_keyword_arguments(keyword)
         keyword_types = SL.get_keyword_types(keyword)
@@ -78,7 +80,7 @@ def keyword_line(keyword_arguments, keyword_types, method_name):
             if arg_type_str:
                 if default_value is None:
                     arg_type_str = f"Optional[{arg_type_str}]"
-                if arg_type_str == "str":
+                if arg_type_str == "str" or arg_type_str == "Union[list, str]":
                     default_value = f"'{default_value}'"
                 arg_str = arg_str + f": {arg_type_str}"
             elif isinstance(default_value, str):

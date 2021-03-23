@@ -171,8 +171,12 @@ class SeleniumLibrary:
         message: Optional[str] = None,
         ignore_case: bool = False,
     ): ...
-    def execute_async_javascript(self, *code: str): ...
-    def execute_javascript(self, *code: str): ...
+    def execute_async_javascript(
+        self, *code: Union[selenium.webdriver.remote.webelement.WebElement, str]
+    ): ...
+    def execute_javascript(
+        self, *code: Union[selenium.webdriver.remote.webelement.WebElement, str]
+    ): ...
     def frame_should_contain(
         self,
         locator: Union[selenium.webdriver.remote.webelement.WebElement, str],
@@ -488,7 +492,7 @@ class SeleniumLibrary:
     def switch_browser(self, index_or_alias: str): ...
     def switch_window(
         self,
-        locator: Union[list, str] = MAIN,
+        locator: Union[list, str] = "MAIN",
         timeout: Optional[str] = None,
         browser: str = "CURRENT",
     ): ...
