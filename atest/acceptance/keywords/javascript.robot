@@ -61,6 +61,18 @@ Execute Javascript With ARGUMENTS Marker Only
     ...  0987
     Alert Should Be Present    123    timeout=10 s
 
+Execute Javascript With ARGUMENTS Marker And WebElement
+    [Documentation]
+    ...    Checks if the body (WebElement)
+    ...    is parsed correctly as script argument
+    ...    then compare its tagName to 'body'
+    ${body_webelement}  Get WebElement  css:body
+    ${tag_name}  Execute Javascript
+    ...  return arguments[0].tagName;
+    ...  ARGUMENTS
+    ...  ${body_webelement}
+    Should Be Equal As Strings  ${tag_name}  body  ignore_case=True
+
 Execute Javascript from File
     [Documentation]
     ...    LOG 2:1 REGEXP: Reading JavaScript from file .*executed_by_execute_javascript.*
