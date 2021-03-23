@@ -73,7 +73,7 @@ class JavaScriptKeywords(LibraryComponent):
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
-    def execute_async_javascript(self, *code: str) -> Any:
+    def execute_async_javascript(self, *code:  Union[WebElement, str]) -> Any:
         """Executes asynchronous JavaScript code with possible arguments.
 
         Similar to `Execute Javascript` except that scripts executed with
