@@ -26,6 +26,9 @@ from robot.utils import ConnectionCache, StringIO
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
+from msedge.selenium_tools import EdgeOptions
+from msedge.selenium_tools import Edge
+
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import (
     SelLibLocalFileDetector,
 )
@@ -45,6 +48,7 @@ class WebDriverCreator:
         "ie": "ie",
         "internetexplorer": "ie",
         "edge": "edge",
+        'headlessedge': 'headless_edge',
         "opera": "opera",
         "safari": "safari",
         "phantomjs": "phantomjs",
@@ -295,10 +299,10 @@ class WebDriverCreator:
             return self._remote(desired_capabilities, remote_url)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Edge)
-        if self._has_options(webdriver.Edge):
+        if options:
             # options is supported from Selenium 4.0 onwards
             # If can be removed when minimum Selenium version is 4.0 or greater
-            return webdriver.Edge(
+            return Edge(
                 options=options,
                 service_log_path=service_log_path,
                 executable_path=executable_path,
@@ -308,6 +312,27 @@ class WebDriverCreator:
             service_log_path=service_log_path,
             executable_path=executable_path,
             **desired_capabilities,
+        )
+    
+    def create_headless_edge(
+        self,
+        desired_capabilities,
+        remote_url,
+        options=None,
+        service_log_path=None,
+        executable_path="MicrosoftWebDriver.exe",
+    ):
+        if not options:
+            options = EdgeOptions()
+        options.use_chromium = True
+        options.add_argument("headless")
+        options.add_argument("disable-gpu")
+        return self.create_edge(
+            desired_capabilities,
+            remote_url,
+            options,
+            service_log_path,
+            executable_path,
         )
 
     def create_opera(
