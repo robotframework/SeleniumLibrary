@@ -327,6 +327,7 @@ class WebDriverCreator:
         options.use_chromium = True
         options.add_argument("headless")
         options.add_argument("disable-gpu")
+        options.add_argument("no-sandbox")
         return self.create_edge(
             desired_capabilities,
             remote_url,
