@@ -73,6 +73,13 @@ Run On Failure also fails
     ...    ${FAILURE MESSAGE}
     ...    Page Should Not Contain    needle    loglevel=None
 
+Run On Failure With Default Keyword And Conflight With Keyword Names
+    [Documentation]    LOG 2.1    INFO REGEXP:  .*<a href=\\"selenium-screenshot.*\\.png\\"><img src=\\"selenium-screenshot.*\\.png\\" width=\\"800px\\"></a>.*
+    Register Keyword To Run On Failure     Capture Page Screenshot
+    Run Keyword And Expect Error
+    ...    ${FAILURE MESSAGE}
+    ...    Page Should Not Contain    needle    loglevel=None
+
 *** Keywords ***
 On Fail
     ${count}=    Evaluate    ${ON FAIL COUNT} + 1
@@ -87,3 +94,6 @@ Open Browser To Front Page
 
 Failure During Run On failure
     Fail    Expected error.
+
+Capture Page Screenshot
+    Fail    This should not be never run

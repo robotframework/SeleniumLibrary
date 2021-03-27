@@ -544,7 +544,10 @@ class SeleniumLibrary(DynamicCore):
             return
         try:
             self._running_on_failure_keyword = True
-            BuiltIn().run_keyword(self.run_on_failure_keyword)
+            if self.run_on_failure_keyword.lower() == "capture page screenshot":
+                self.capture_page_screenshot()
+            else:
+                BuiltIn().run_keyword(self.run_on_failure_keyword)
         except Exception as err:
             logger.warn(
                 f"Keyword '{self.run_on_failure_keyword}' could not be run on failure: {err}"
