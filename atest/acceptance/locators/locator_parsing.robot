@@ -14,6 +14,11 @@ xpath with // and without prefix should work
 xpath with (// and without prefix should work
     Page Should Contain Element    (//div[@id="div_id"]/a)[1]
 
+Locator with with data prefix
+    Page Should Contain Element       data:id:my_id
+    Page Should Contain Element       data:automation:my_automation_id
+    Page Should Not Contain Element   data:non_existent:some_random_id
+
 Locator without prefix
     Page Should Contain Element    div_id
 
