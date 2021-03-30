@@ -85,12 +85,12 @@ gtag('js', new Date());
 gtag('config', 'UA-106835747-4', {
     'anonymize_ip': true,
     'page_path': location.pathname+location.search+location.hash });
-window.onhashchange = function() { 
+window.onhashchange = function() {
     gtag('event', 'HashChange', {
     'event_category': 'Subsection',
     'event_label': window.location.hash
      });
-}    
+}
 """
     soup.head.append(script_data)
     with out.open("w") as file:
@@ -188,8 +188,8 @@ def init_labels(ctx, username=None, password=None):
 @task
 def lint(ctx):
     """Runs black and flake8 for project Python code."""
-    ctx.run("black --config pyproject.toml src/ utest/ atest/")
-    ctx.run("flake8 --config .flake8 src/ utest/ atest/")
+    ctx.run("black --config pyproject.toml tasks.py src/ utest/ atest/")
+    ctx.run("flake8 --config .flake8 tasks.py src/ utest/ atest/")
 
 
 @task
@@ -208,7 +208,20 @@ def atest(ctx, suite=None):
     Args:
         suite: Select which suite to run.
     """
-    commad = "python atest/run.py headlesschrome"
+    command = "python atest/run.py headlesschrome"
     if suite:
-        commad = f"{commad} --suite {suite}"
-    ctx.run(commad)
+        command = f"{command} --suite {suite}"
+    ctx.run(command)
+
+
+@task
+def utest(ctx, suite=None):
+    """Runs utest/run.py
+
+    Args:
+        suite: Select which suite to run.
+    """
+    command = "python utest/run.py"
+    if suite:
+        command = f"{command} --suite {suite}"
+    ctx.run(command)

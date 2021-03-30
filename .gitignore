@@ -18,3 +18,4 @@ build
 .pabotsuitenames
 .mypy_cache
 stub_files
+venv/
