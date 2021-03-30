@@ -678,7 +678,7 @@ def test_usage_of_multiple_locators_using_list(finder):
     assert result == img_elements
 
 
-def test_localtor_split(finder: ElementFinder, reporter: GenericDiffReporterFactory):
+def test_locator_split(finder: ElementFinder, reporter: GenericDiffReporterFactory):
     results = [
         finder._split_locator("//div"),
         finder._split_locator("xpath://div"),

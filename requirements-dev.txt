@@ -10,6 +10,7 @@ pytest-approvaltests >= 0.1.0
 requests >= 2.24.0
 robotframework-pabot >= 1.10.0
 black >= 20.8b1
+flake8 >= 3.9.0
 
 # Requirements needed when generating releases. See BUILD.rst for details.
 rellu >= 0.6
