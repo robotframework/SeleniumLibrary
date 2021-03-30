@@ -79,6 +79,7 @@ below. In addition to them, it is possible to register `custom locators`.
 | link         | Exact text a link has.              | ``link:The example``           |
 | partial link | Partial link text.                  | ``partial link:he ex``         |
 | sizzle       | Sizzle selector deprecated.         | ``sizzle:div.example``         |
+| data         | Element ``data-*`` attribute        | ``data:id:my_id``              |
 | jquery       | jQuery expression.                  | ``jquery:div.example``         |
 | default      | Keyword specific default behavior.  | ``default:example``            |
 
@@ -114,6 +115,9 @@ Examples:
   the system under test contains the jQuery library.
 - Prior to SeleniumLibrary 3.0, table related keywords only supported
   ``xpath``, ``css`` and ``sizzle/jquery`` strategies.
+- ``data`` strategy is conveniance locator that will construct xpath from the parameters.
+  If you have element like `<div data-automation="automation-id-2">`, you locate the element via
+  ``data:automation:automation-id-2``. This feature was added in SeleniumLibrary 5.2.0
 
 === Implicit XPath strategy ===
 

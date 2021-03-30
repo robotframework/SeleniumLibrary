@@ -46,6 +46,7 @@ class ElementFinder(ContextAware):
             "sizzle": self._find_by_jquery_selector,
             "tag": self._find_by_tag_name,
             "scLocator": self._find_by_sc_locator,
+            "data": self._find_by_data_locator,
             "default": self._find_by_default,
         }
         self._strategies = NormalizedDict(
@@ -219,6 +220,19 @@ class ElementFinder(ContextAware):
         return self._filter_elements(
             parent.find_elements(By.TAG_NAME, criteria), tag, constraints
         )
+
+    def _find_by_data_locator(self, criteria, tag, constraints, parent):
+        try:
+            name, value = criteria.split(":", 2)
+            if "" in [name, value]:
+                raise ValueError
+        except ValueError:
+            raise ValueError(
+                f"Provided selector ({criteria}) is malformed. Correct format: name:value."
+            )
+
+        local_criteria = f'//*[@data-{name}="{value}"]'
+        return self._find_by_xpath(local_criteria, tag, constraints, parent)
 
     def _find_by_sc_locator(self, criteria, tag, constraints, parent):
         self._disallow_webelement_parent(parent)

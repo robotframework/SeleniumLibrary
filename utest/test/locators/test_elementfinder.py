@@ -68,6 +68,13 @@ def test_strategy_case_is_not_changed():
     _verify_parse_locator("XPATH=//foo/bar  ", "XPATH", "//foo/bar  ")
 
 
+def test_data_locator_parsing():
+    _verify_parse_locator("data:id:my_id", "data", "id:my_id")
+    _verify_parse_locator(
+        "data:automation:my_automation_id", "data", "automation:my_automation_id"
+    )
+
+
 def test_remove_whitespace_around_prefix_and_separator():
     _verify_parse_locator("class = foo", "class", "foo")
     _verify_parse_locator("class : foo", "class", "foo")
@@ -269,6 +276,26 @@ def test_find_with_tag(finder):
     driver = _get_driver(finder)
     finder.find("test1", tag="div", required=False)
     verify(driver).find_elements(By.XPATH, "//div[(@id='test1' or @name='test1')]")
+
+
+def test_find_with_data(finder):
+    driver = _get_driver(finder)
+    finder.find("data:id:my_id", tag="div", required=False)
+    verify(driver).find_elements(By.XPATH, '//*[@data-id="my_id"]')
+
+
+def test_find_with_invalid_data(finder):
+    with pytest.raises(
+        ValueError,
+        match=r"^Provided selector \(id:\) is malformed\. Correct format: name:value\.",
+    ):
+        finder.find("data:id:", tag="div", required=False)
+
+    with pytest.raises(
+        ValueError,
+        match=r"^Provided selector \(\) is malformed\. Correct format: name:value\.",
+    ):
+        finder.find("data:", tag="div", required=False)
 
 
 def test_find_with_locator_with_apos(finder):
