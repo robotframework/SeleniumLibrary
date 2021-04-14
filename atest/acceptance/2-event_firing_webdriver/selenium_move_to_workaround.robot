@@ -30,13 +30,13 @@ Selenium move_to workaround Mouse Over
     Mouse Over    id:some_id
 
 Click Element
-    [Documentation]    LOG 2 Clicking element 'singleClickButton'.
+    [Documentation]    LOG 1 Clicking element 'singleClickButton'.
     [Setup]    Initialize Page For Click Element
     Click Element    singleClickButton
     Element Text Should Be    output    single clicked
 
 Double Click Element
-    [Documentation]    LOG 2 Double clicking element 'doubleClickButton'.
+    [Documentation]    LOG 1 Double clicking element 'doubleClickButton'.
     [Setup]    Initialize Page For Click Element
     [Tags]    Known Issue Safari    Known Issue Firefox
     Double Click Element    doubleClickButton
@@ -45,8 +45,8 @@ Double Click Element
 Click Element Action Chain
     [Tags]    NoGrid
     [Documentation]
-    ...    LOB 1:1 INFO        Clicking 'singleClickButton' using an action chain.
-    ...    LOG 2:6 DEBUG GLOB: *actions {"actions": [{*
+    ...    LOB SETUP:1 INFO        Clicking 'singleClickButton' using an action chain.
+    ...    LOG 1:6 DEBUG GLOB: *actions {"actions": [{*
     [Setup]    Initialize Page For Click Element
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
@@ -252,7 +252,7 @@ Click Element Wrong Modifier
     ...    Click Element    Button    Foobar
 
 Click Element Action Chain and modifier
-    [Documentation]     LOG 2:1 INFO Clicking element 'Button' with CTRL.
+    [Documentation]     LOG 1:1 INFO Clicking element 'Button' with CTRL.
     [Setup]    Initialize Page For Click Element With Modifier
     Click Element    Button    modifier=CTRL    action_chain=True
     Element Text Should Be    output    CTRL click

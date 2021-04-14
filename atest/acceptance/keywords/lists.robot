@@ -44,8 +44,8 @@ Get Selected List Labels
 
 List Selection Should Be
     [Documentation]
-    ...    LOG 2 Verifying list 'interests' has options [${SPACE*2}] selected.
-    ...    LOG 5 Verifying list 'possible_channels' has options [ Email | Telephone ] selected.
+    ...    LOG 1 Verifying list 'interests' has options [${SPACE*2}] selected.
+    ...    LOG 4 Verifying list 'possible_channels' has options [ Email | Telephone ] selected.
     List Selection Should Be    interests
     List Selection Should Be    preferred_channel    Telephone
     List Selection Should Be    preferred_channel    phone
@@ -89,7 +89,7 @@ Unselect works only for multiselect lists
     ...    Unselect From List By Value     preferred_channel    Email
 
 Unselect All From List
-    [Documentation]    LOG 2 Unselecting all options from list 'possible_channels'.
+    [Documentation]    LOG 1 Unselecting all options from list 'possible_channels'.
     Unselect All From List    possible_channels
     List Should Have No Selections    possible_channels
     Unselect All From List    interests
@@ -143,7 +143,7 @@ Select From Multiselect List
     List Selection Should Be                possible_channels    Telephone    Direct mail
 
 Select All From List
-    [Documentation]    LOG 2 Selecting all options from list 'interests'.
+    [Documentation]    LOG 1 Selecting all options from list 'interests'.
     Select All From List    interests
     List Selection Should Be    interests    Males    Females    Others
     Run Keyword And Expect Error
@@ -151,7 +151,7 @@ Select All From List
     ...    Select All From List    preferred_channel
 
 List Should Have No Selections
-    [Documentation]    LOG 2 Verifying list 'interests' has no selections.
+    [Documentation]    LOG 1 Verifying list 'interests' has no selections.
     List Should Have No Selections    interests
     Select All From List    interests
     Run Keyword And Expect Error

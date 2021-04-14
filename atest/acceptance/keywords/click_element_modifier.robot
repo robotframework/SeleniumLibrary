@@ -43,7 +43,7 @@ Click Element Wrong Modifier
     ...    Click Element    Button    Foobar
 
 Click Element Action Chain and modifier
-    [Documentation]     LOG 2:1 INFO Clicking element 'Button' with CTRL.
+    [Documentation]     LOG 1:1 INFO Clicking element 'Button' with CTRL.
     Click Element    Button    modifier=CTRL    action_chain=True
     Element Text Should Be    output    CTRL click
     

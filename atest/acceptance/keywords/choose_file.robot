@@ -24,7 +24,7 @@ Choose File And Folder
 
 Choose File With Grid
     [Documentation]
-    ...    LOG 2:6 DEBUG GLOB:    POST*/session/*/file*"file": "*
+    ...    LOG 1:6 DEBUG GLOB:    POST*/session/*/file*"file": "*
     [Tags]    OnlyGrid
     [Setup]    Touch    ${CURDIR}${/}temp2.txt
     Choose File    file_to_upload    ${CURDIR}${/}temp2.txt
@@ -33,7 +33,7 @@ Choose File With Grid
 
 Choose File With Grid From Library Using SL choose_file method
     [Documentation]
-    ...    LOG 4:6 DEBUG GLOB:    POST*/session/*/file*"file": "*
+    ...    LOG 3:6 DEBUG GLOB:    POST*/session/*/file*"file": "*
     [Tags]    OnlyGrid
     [Setup]    Go To Page "forms/file_upload_form.html"
     Touch    ${CURDIR}${/}temp42.txt
@@ -44,11 +44,11 @@ Choose File With Grid From Library Using SL choose_file method
 
 Input Text Should Work Same Way When Not Using Grid
     [Documentation]
-    ...    LOG 2:5 DEBUG GLOB:    POST*/session/*/clear {"*
-    ...    LOG 2:7 DEBUG          Finished Request
-    ...    LOG 2:8 DEBUG GLOB:    POST*/session/*/value*"text": "*
-    ...    LOG 2:10 DEBUG         Finished Request
-    ...    LOG 2:11 DEBUG         NONE
+    ...    LOG 1:5 DEBUG GLOB:    POST*/session/*/clear {"*
+    ...    LOG 1:7 DEBUG          Finished Request
+    ...    LOG 1:8 DEBUG GLOB:    POST*/session/*/value*"text": "*
+    ...    LOG 1:10 DEBUG         Finished Request
+    ...    LOG 1:11 DEBUG         NONE
     [Tags]    NoGrid
     [Setup]    Touch    ${CURDIR}${/}temp.txt
     Input Text    file_to_upload    ${CURDIR}${/}temp.txt

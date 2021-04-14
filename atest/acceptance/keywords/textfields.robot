@@ -13,8 +13,8 @@ Get Value From Text Field
 
 Input Text and Input Password
     [Documentation]
-    ...    LOG 2 Typing text 'username' into text field 'username_field'.
-    ...    LOG 3 Typing password into text field 'password_field'.
+    ...    LOG 1 Typing text 'username' into text field 'username_field'.
+    ...    LOG 2 Typing password into text field 'password_field'.
     [Setup]    Go To Page "forms/login.html"
     Input Text        username_field    username
     Input Password    password_field    password
@@ -29,17 +29,17 @@ Input Password Should Not Log Password String
     [Tags]     NoGrid
     [Setup]    Go To Page "forms/login.html"
     [Documentation]
-    ...    LOG 2:1  INFO          Typing password into text field 'password_field'.
-    ...    LOG 2:2  DEBUG STARTS: POST http
-    ...    LOG 2:3  DEBUG STARTS: http
-    ...    LOG 2:4  DEBUG         Finished Request
-    ...    LOG 2:5  DEBUG STARTS: POST http
-    ...    LOG 2:6  DEBUG STARTS: http
-    ...    LOG 2:7  DEBUG         Finished Request
-    ...    LOG 2:8  INFO          Temporally setting log level to: NONE
-    ...    LOG 2:9  INFO          Log level changed from NONE to DEBUG.
-    ...    LOG 2:10 NONE
-    ...    LOG 3:1  INFO          Typing text 'username' into text field 'username_field'.
+    ...    LOG 1:1  INFO          Typing password into text field 'password_field'.
+    ...    LOG 1:2  DEBUG STARTS: POST http
+    ...    LOG 1:3  DEBUG STARTS: http
+    ...    LOG 1:4  DEBUG         Finished Request
+    ...    LOG 1:5  DEBUG STARTS: POST http
+    ...    LOG 1:6  DEBUG STARTS: http
+    ...    LOG 1:7  DEBUG         Finished Request
+    ...    LOG 1:8  INFO          Temporally setting log level to: NONE
+    ...    LOG 1:9  INFO          Log level changed from NONE to DEBUG.
+    ...    LOG 1:10 NONE
+    ...    LOG 2:1  INFO          Typing text 'username' into text field 'username_field'.
     Input Password    password_field    password
     Input Text        username_field    username
 
@@ -56,7 +56,7 @@ Input Text and Input Password No Clear
 
 Input Non-ASCII Text
     [Documentation]
-    ...    LOG 2 Typing text 'Yrjö Ärje' into text field 'name'.
+    ...    LOG 1 Typing text 'Yrjö Ärje' into text field 'name'.
     Input Text    name    Yrjö Ärje
     ${text} =    Get Value    name
     Should Be Equal    ${text}    Yrjö Ärje
@@ -72,5 +72,4 @@ Press Key
   Verify Location Is "forms/submit.html"
 
 Attempt Clear Element Text On Non-Editable Field
-    [Documentation]    Attempt Clear Element Text On Non-Editable Field
     Run Keyword And Expect Error    *    Clear Element Text    can_send_email
