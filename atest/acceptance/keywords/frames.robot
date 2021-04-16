@@ -33,7 +33,7 @@ Page Should Contain Text Within Frames should also work with iframes
     Page Should Contain    Links
 
 Select And Unselect Frame
-    [Documentation]    LOG 2 Selecting frame 'left'.
+    [Documentation]    LOG 1 Selecting frame 'left'.
     Select Frame    left
     Click Link    foo
     Unselect Frame

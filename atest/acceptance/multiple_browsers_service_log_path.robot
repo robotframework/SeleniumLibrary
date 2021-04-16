@@ -5,7 +5,7 @@ Resource          resource.robot
 *** Test Cases ***
 First Browser With Service Log Path
     [Documentation]
-    ...    LOG 2:2 INFO STARTS: Browser driver log file created to:
+    ...    LOG 1:2 INFO STARTS: Browser driver log file created to:
     [Setup]    OperatingSystem.Remove Files    ${OUTPUT DIR}/${BROWSER}.log
     Open Browser    ${FRONT PAGE}  ${BROWSER}    service_log_path=${BROWSER}.log
     OperatingSystem.File Should Not Be Empty     ${OUTPUT DIR}/${BROWSER}.log

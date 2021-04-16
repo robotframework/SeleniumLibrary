@@ -2,7 +2,7 @@
 # Creating releases has its own requirements listed in requirements-build.txt.
 invoke >= 1.4.1
 mockito >= 1.2.2
-robotstatuschecker >= 1.4
+robotstatuschecker >= 2.0.3
 approvaltests >= 0.2.4
 pytest >= 6.0.2
 pytest-mockito >= 0.0.4

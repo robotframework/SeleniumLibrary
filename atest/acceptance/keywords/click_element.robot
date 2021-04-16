@@ -6,12 +6,12 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Click Element
-    [Documentation]    LOG 2 Clicking element 'singleClickButton'.
+    [Documentation]    LOG 1 Clicking element 'singleClickButton'.
     Click Element    singleClickButton
     Element Text Should Be    output    single clicked
 
 Double Click Element
-    [Documentation]    LOG 2 Double clicking element 'doubleClickButton'.
+    [Documentation]    LOG 1 Double clicking element 'doubleClickButton'.
     [Tags]    Known Issue Safari    Known Issue Firefox
     Double Click Element    doubleClickButton
     Element Text Should Be    output    double clicked
@@ -40,7 +40,7 @@ Click Element Action Chain
     [Tags]    NoGrid
     [Documentation]
     ...    LOB 1:1 INFO        Clicking 'singleClickButton' using an action chain.
-    ...    LOG 2:6 DEBUG GLOB: *actions {"actions": [{*
+    ...    LOG 1:6 DEBUG GLOB: *actions {"actions": [{*
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
 

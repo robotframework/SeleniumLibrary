@@ -106,7 +106,7 @@ Test Get Cookie Object Value
 Test Get Cookie Keyword Logging
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 2:4 ${cookie} = name=another
+    ...    LOG 1:4 ${cookie} = name=another
     ...    value=value
     ...    path=/
     ...    domain=localhost

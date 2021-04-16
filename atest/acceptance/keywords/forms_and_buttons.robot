@@ -7,7 +7,7 @@ ${FORM SUBMITTED}    forms/submit.html
 
 *** Test Cases ***
 Submit Form
-    [Documentation]    LOG 2 Submitting form 'form_name'.
+    [Documentation]    LOG 1 Submitting form 'form_name'.
     Submit Form    form_name
     Verify Location Is "${FORM SUBMITTED}"
 
@@ -17,7 +17,7 @@ Submit Form Without Args
     Verify Location Is "target/first.html"
 
 Click Ok Button By Name
-    [Documentation]    LOG 2 Clicking button 'ok_button'.
+    [Documentation]    LOG 1 Clicking button 'ok_button'.
     Click Button    ok_button
     Verify Location Is "${FORM SUBMITTED}"
 
