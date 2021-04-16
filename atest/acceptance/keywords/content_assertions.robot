@@ -56,7 +56,7 @@ Page Should Contain With Custom Log Level TRACE
     [Teardown]    Set Log Level    DEBUG
 
 Page Should Contain With Disabling Source Logging
-    [Documentation]    LOG 3:2 NONE
+    [Documentation]    LOG TEARDOWN:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error
     ...    Page should have contained text 'non existing text' but did not.
@@ -84,7 +84,7 @@ Page Should Not Contain With Custom Log Level
     ...    Page Should Not Contain    needle    DEBUG
 
 Page Should Not Contain With Disabling Source Logging
-    [Documentation]    LOG 3:2 NONE
+    [Documentation]    LOG TEARDOWN:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
@@ -103,7 +103,7 @@ Page Should Contain Element With Custom Message
     ...    Page Should Contain Element    invalid    Custom error message
 
 Page Should Contain Element With Disabling Source Logging
-    [Documentation]    LOG 3:2 NONE
+    [Documentation]    LOG TEARDOWN:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error
     ...    Page should have contained element 'non-existent' but did not.
@@ -117,7 +117,7 @@ Page Should Not Contain Element
     ...    Page Should Not Contain Element    some_id
 
 Page Should Not Contain Element With Disabling Source Logging
-    [Documentation]    LOG 3:2 NONE
+    [Documentation]    LOG TEARDOWN:2 NONE
     Set Log Level    INFO
     Run Keyword And Expect Error
     ...    Page should not have contained element 'some_id'.
