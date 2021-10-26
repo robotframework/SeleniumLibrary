@@ -34,6 +34,16 @@ def test_element_text_should_be(element):
         element.element_text_should_be(locator, "text", strip_spaces=False)
     assert "should have been" in str(error.value)
 
+    with pytest.raises(AssertionError) as error:
+        element.element_text_should_be(locator, "text", strip_spaces="LEADING")
+    assert "should have been" in str(error.value)
+
+    webelement.text = " text"
+    when(element).find_element(locator).thenReturn(webelement)
+    with pytest.raises(AssertionError) as error:
+        element.element_text_should_be(locator, "text", strip_spaces="TRAILING")
+    assert "should have been" in str(error.value)
+
     webelement.text = "testing  is cool"
     when(element).find_element(locator).thenReturn(webelement)
     with pytest.raises(AssertionError) as error:

@@ -163,6 +163,8 @@ Element Text Should Be
     Element Text Should Be    some_id    This text is inside an identified element
     Element Text Should Be    some_id    This TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
     Element Text Should Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=True
+    Element Text Should Be    some_id    ${SPACE}This text is inside an identified element  strip_spaces=LEADING
+    Element Text Should Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=TRAILING
     Element Text Should Be    some_id    This${SPACE}${SPACE} text is inside an identified element  collapse_spaces=True
     Run Keyword And Expect Error
     ...    The text of element 'some_id' should have been 'inside' but it was 'This text is inside an identified element'.

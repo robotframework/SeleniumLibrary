@@ -331,7 +331,7 @@ class ElementKeywords(LibraryComponent):
         expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
-        strip_spaces: bool = False,
+        strip_spaces: Union[bool, str] = False,
         collapse_spaces: bool = False,
     ):
         """Verifies that element ``locator`` contains exact the text ``expected``.
@@ -387,7 +387,7 @@ class ElementKeywords(LibraryComponent):
         not_expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
-        strip_spaces: bool = False,
+        strip_spaces: Union[bool, str] = False,
         collapse_spaces: bool = False,
     ):
         """Verifies that element ``locator`` does not contain exact the text ``not_expected``.
