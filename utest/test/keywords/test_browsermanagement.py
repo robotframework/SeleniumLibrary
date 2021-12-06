@@ -54,6 +54,34 @@ def test_selenium_implicit_wait_get():
     assert org_value == "3 seconds"
 
 
+def test_selenium_page_load_timeout_with_default():
+    sl = SeleniumLibrary()
+    assert sl.page_load_timeout == 10.0, "Page load timeout should be 10.0"
+
+
+def test_set_selenium_page_load_timeout():
+    sl = SeleniumLibrary()
+    sl.set_selenium_page_load_timeout("5.0")
+    assert sl.page_load_timeout == 5.0
+
+    sl.set_selenium_page_load_timeout("1 min")
+    assert sl.page_load_timeout == 60.0
+
+
+def test_set_selenium_page_load_timeout_returns_orig_page_load_timeout():
+    sl = SeleniumLibrary(page_load_timeout="20")
+    orig_page_load_timeout = sl.set_selenium_page_load_timeout("1 second")
+
+    assert orig_page_load_timeout == "20 seconds"
+    assert sl.page_load_timeout == 1.0
+
+
+def test_get_selenium_page_load_timeout():
+    sl = SeleniumLibrary(page_load_timeout="15 seconds")
+
+    assert sl.get_selenium_page_load_timeout() == "15 seconds"
+
+
 def test_bad_browser_name():
     ctx = mock()
     bm = BrowserManagementKeywords(ctx)

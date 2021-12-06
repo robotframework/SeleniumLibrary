@@ -625,6 +625,19 @@ class BrowserManagementKeywords(LibraryComponent):
         return secs_to_timestr(self.ctx.implicit_wait)
 
     @keyword
+    def get_selenium_page_load_timeout(self) -> str:
+        """Gets the timeout to wait for a page load to complete
+        before throwing an error.
+
+        The value is returned as a human-readable string like ``1 second``.
+
+        See the `Page load` section above for more information.
+
+        New in SeleniumLibrary 6.1
+        """
+        return secs_to_timestr(self.ctx.page_load_timeout)
+
+    @keyword
     def set_selenium_speed(self, value: timedelta) -> str:
         """Sets the delay that is waited after each Selenium command.
 
@@ -701,6 +714,34 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         self.driver.implicitly_wait(_convert_timeout(value))
 
+    @keyword
+    def set_selenium_page_load_timeout(self, value: timedelta) -> str:
+        """Sets the page load timeout value used by Selenium.
+
+        The value can be given as a number that is considered to be
+        seconds or as a human-readable string like ``1 second``.
+        The previous value is returned and can be used to restore
+        the original value later if needed.
+
+        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`
+        this keywords sets the time for Webdriver to wait until page
+        is loaded before throwing an error.
+
+        See the `Page load` section above for more information.
+
+        Example:
+        | ${orig pl timeout} = | `Set Selenium Page Load Timeout` | 30 seconds |
+        | `Open page that loads slowly` |
+        | `Set Selenium Page Load Timeout` | ${orig pl timeout} |
+
+        New in SeleniumLibrary 6.1
+        """
+        old_page_load_timeout = self.get_selenium_page_load_timeout()
+        self.ctx.page_load_timeout = _convert_timeout(value)
+        for driver in self.drivers.active_drivers:
+            driver.set_page_load_timeout(self.ctx.page_load_timeout)
+        return old_page_load_timeout
+
     def _make_driver(
         self,
         browser,
@@ -722,6 +763,7 @@ class BrowserManagementKeywords(LibraryComponent):
         )
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
+        driver.set_page_load_timeout(self.ctx.page_load_timeout)
         if self.ctx.speed:
             self._monkey_patch_speed(driver)
         return driver

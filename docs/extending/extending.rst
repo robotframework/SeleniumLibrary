@@ -73,16 +73,17 @@ failure_occurred  Method that is executed when a SeleniumLibrary keyword fails.
 
 Also there are the following public attributes available:
 
-=========================  ================================================================
+=========================  ======================================================================
    Attribute                         Description
-=========================  ================================================================
+=========================  ======================================================================
 driver                     Current active driver.
 event_firing_webdriver     Reference to a class implementing event firing selenium support.
 timeout                    Default value for ``timeouts`` used with ``Wait ...`` keywords.
+page_load_timeout          Default value to wait for page load to complete until error is raised.
 implicit_wait              Default value for ``implicit wait`` used when locating elements.
 run_on_failure_keyword     Default action for the `run-on-failure functionality`.
 screenshot_root_directory  Location where possible screenshots are created
-=========================  ================================================================
+=========================  ======================================================================
 
 For more details about the methods, please read the individual method documentation and many
 of the attributes are explained in the library `keyword documentation`_. please note that

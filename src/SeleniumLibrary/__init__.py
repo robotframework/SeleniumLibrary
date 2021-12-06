@@ -355,6 +355,17 @@ class SeleniumLibrary(DynamicCore):
 
     See `time format` below for supported syntax.
 
+    == Page load ==
+    Page load timeout is the amount of time to wait for page load to complete until error is raised.
+
+    The default page load timeout can be set globally
+    when `importing` the library with the ``page_load_timeout`` argument
+    or by using the `Set Selenium Page Load Timeout` keyword.
+
+    See `time format` below for supported timeout syntax.
+
+    Support for page load is new in SeleniumLibrary 6.1
+
     == Selenium speed ==
 
     Selenium execution speed can be slowed down globally by using `Set
@@ -431,6 +442,7 @@ class SeleniumLibrary(DynamicCore):
         self,
         timeout=timedelta(seconds=5),
         implicit_wait=timedelta(seconds=0),
+        page_load_timeout=timedelta(seconds=10),
         run_on_failure="Capture Page Screenshot",
         screenshot_root_directory: Optional[str] = None,
         plugins: Optional[str] = None,
@@ -442,6 +454,8 @@ class SeleniumLibrary(DynamicCore):
           Default value for `timeouts` used with ``Wait ...`` keywords.
         - ``implicit_wait``:
           Default value for `implicit wait` used when locating elements.
+        - ``page_load_timeout``:
+          Default value to wait for page load to complete until error is raised.
         - ``run_on_failure``:
           Default action for the `run-on-failure functionality`.
         - ``screenshot_root_directory``:
@@ -456,6 +470,7 @@ class SeleniumLibrary(DynamicCore):
         """
         self.timeout = _convert_timeout(timeout)
         self.implicit_wait = _convert_timeout(implicit_wait)
+        self.page_load_timeout = _convert_timeout(page_load_timeout)
         self.speed = 0.0
         self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(
             run_on_failure
