@@ -47,9 +47,6 @@ def test_get_executable_path(creator):
     executable_path = creator._get_executable_path(webdriver.Firefox)
     assert executable_path == "geckodriver"
 
-    executable_path = creator._get_executable_path(webdriver.Android)
-    assert executable_path is None
-
     executable_path = creator._get_executable_path(webdriver.Ie)
     assert executable_path == "IEDriverServer.exe"
 
@@ -281,22 +278,6 @@ def test_create_htmlunit_with_js_executable_path_set(creator):
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_htmlunit_with_js({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_android_executable_path_set(creator):
-    executable_path = "path/to/bin"
-    caps = webdriver.DesiredCapabilities.ANDROID.copy()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None, executable_path=executable_path)
     assert driver == expected_webdriver
 
 

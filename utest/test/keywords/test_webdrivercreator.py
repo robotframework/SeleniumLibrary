@@ -723,36 +723,6 @@ def test_htmlunit_with_js_no_browser_name(creator):
     assert driver == expected_webdriver
 
 
-def test_android(creator):
-    caps = webdriver.DesiredCapabilities.ANDROID
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None)
-    assert driver == expected_webdriver
-
-
-def test_android_no_browser_name(creator):
-    capabilities = {"browserName": "android", "key": "value"}
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=capabilities,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({"desired_capabilities": {"key": "value"}}, None)
-    assert driver == expected_webdriver
-
-
 def test_iphone(creator):
     caps = webdriver.DesiredCapabilities.IPHONE
     expected_webdriver = mock()

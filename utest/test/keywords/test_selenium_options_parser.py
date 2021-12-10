@@ -192,7 +192,6 @@ def test_importer(options, reporter):
     results.append(error_formatter(options._import_options, "safari"))
     results.append(error_formatter(options._import_options, "htmlunit"))
     results.append(error_formatter(options._import_options, "htmlunit_with_js"))
-    results.append(options._import_options("android"))
     results.append(error_formatter(options._import_options, "iphone"))
     verify_all("Selenium options import", results, reporter=reporter)
 
@@ -424,22 +423,6 @@ def test_create_htmlunit_with_js_no_options_support(creator):
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_htmlunit_with_js({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_android_options_support(creator):
-    caps = webdriver.DesiredCapabilities.ANDROID.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None, options=options)
     assert driver == expected_webdriver
 
 
