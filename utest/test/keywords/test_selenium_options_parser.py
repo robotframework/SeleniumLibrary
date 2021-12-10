@@ -189,7 +189,6 @@ def test_importer(options, reporter):
     results.append(options._import_options("ie"))
     results.append(options._import_options("opera"))
     results.append(options._import_options("edge"))
-    results.append(error_formatter(options._import_options, "phantomjs"))
     results.append(error_formatter(options._import_options, "safari"))
     results.append(error_formatter(options._import_options, "htmlunit"))
     results.append(error_formatter(options._import_options, "htmlunit_with_js"))
@@ -391,17 +390,6 @@ def test_create_safari_no_options_support(creator):
         expected_webdriver
     )
     driver = creator.create_safari({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_create_phantomjs_no_options_support(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "phantomjs"
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, options=options)
     assert driver == expected_webdriver
 
 

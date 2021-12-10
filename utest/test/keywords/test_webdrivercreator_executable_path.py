@@ -252,27 +252,6 @@ def test_create_safari_executable_path_not_set(creator):
     assert driver == expected_webdriver
 
 
-def test_create_phantomjs_executable_path_set(creator):
-    executable_path = "/path/to/phantomjs"
-    expected_webdriver = mock()
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_phantomjs_executable_path_not_set(creator):
-    executable_path = "phantomjs"
-    expected_webdriver = mock()
-    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, executable_path=None)
-    assert driver == expected_webdriver
-
-
 def test_create_htmlunit_executable_path_set(creator):
     executable_path = "path/to/bin"
     caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
