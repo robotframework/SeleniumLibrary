@@ -189,11 +189,9 @@ def test_importer(options, reporter):
     results.append(options._import_options("ie"))
     results.append(options._import_options("opera"))
     results.append(options._import_options("edge"))
-    results.append(error_formatter(options._import_options, "phantomjs"))
     results.append(error_formatter(options._import_options, "safari"))
     results.append(error_formatter(options._import_options, "htmlunit"))
     results.append(error_formatter(options._import_options, "htmlunit_with_js"))
-    results.append(options._import_options("android"))
     results.append(error_formatter(options._import_options, "iphone"))
     verify_all("Selenium options import", results, reporter=reporter)
 
@@ -350,9 +348,9 @@ def test_has_options(creator):
     assert creator._has_options(webdriver.Chrome)
     assert creator._has_options(webdriver.Firefox)
     assert creator._has_options(webdriver.Ie)
-    assert creator._has_options(webdriver.Edge) is False
+    assert creator._has_options(webdriver.Edge)
     assert creator._has_options(webdriver.Opera)
-    assert creator._has_options(webdriver.Safari) is False
+    assert creator._has_options(webdriver.Safari)
 
 
 def test_create_opera_with_options(creator):
@@ -394,17 +392,6 @@ def test_create_safari_no_options_support(creator):
     assert driver == expected_webdriver
 
 
-def test_create_phantomjs_no_options_support(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "phantomjs"
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, options=options)
-    assert driver == expected_webdriver
-
-
 def test_create_htmlunit_no_options_support(creator):
     caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
     options = mock()
@@ -436,22 +423,6 @@ def test_create_htmlunit_with_js_no_options_support(creator):
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_htmlunit_with_js({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_android_options_support(creator):
-    caps = webdriver.DesiredCapabilities.ANDROID.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None, options=options)
     assert driver == expected_webdriver
 
 

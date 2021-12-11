@@ -195,14 +195,3 @@ def test_create_safari_no_support_for_service_log_path(creator):
     )
     driver = creator.creator.create_safari({}, None, service_log_path=log_file)
     assert driver == expected_webdriver
-
-
-def test_create_phantomjs_with_service_log_path_real_path(creator):
-    log_file = os.path.join(creator.output_dir, "ie-1.log")
-    expected_webdriver = mock()
-    executable_path = "phantomjs"
-    when(webdriver).PhantomJS(
-        service_log_path=log_file, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.creator.create_phantomjs({}, None, service_log_path=log_file)
-    assert driver == expected_webdriver

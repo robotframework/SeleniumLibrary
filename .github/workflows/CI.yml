@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.9, pypy3]
+        python-version: [3.7, 3.9, pypy3]
         rf-version: [3.2.2, 4.0.1]
 
     steps:
@@ -42,6 +42,10 @@ jobs:
       if: matrix.python-version != 'pypy3'
       run: |
         invoke gen-stub
+    - name: Debugging
+      if: matrix.python-version != 'pypy3'
+      run: |
+        which python
     - name: Run tests with headless Chrome and with Python != 3.8
       if: matrix.python-version != '3.8'
       run: |
@@ -56,6 +60,11 @@ jobs:
         wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
         sudo chmod u+x ./selenium-server-standalone.jar
         xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
+    - uses: actions/upload-artifact@v1
+      if: success() || failure()
+      with:
+        name: Unit Test results
+        path: utest/output_dir
     - uses: actions/upload-artifact@v1
       if: success() || failure()
       with:
