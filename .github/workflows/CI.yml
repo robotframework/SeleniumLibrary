@@ -47,7 +47,7 @@ jobs:
     - name: Run tests with headless Chrome and with PyPy
       if: matrix.python-version == 'pypy3'
       run: |
-        xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschromePyPy
+        xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschrome
     - name: Run tests with headless Chrome and with Python != 3.8
       if: matrix.python-version != '3.8' && matrix.python-version != 'pypy3'
       run: |
