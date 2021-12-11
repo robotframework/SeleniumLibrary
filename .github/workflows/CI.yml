@@ -45,7 +45,7 @@ jobs:
     - name: Run unit tests with ${{ matrix.python-version }}
       if: matrix.python-version != 'pypy3'
       run: |
-        invoke utest
+        python utest/run.py
     - name: Run tests with headless Chrome and with Python != 3.8
       if: matrix.python-version != '3.8'
       run: |
