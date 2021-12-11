@@ -31,10 +31,8 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install mockito>=1.0.0
         pip install robotstatuschecker>=1.4
-        pip install approvaltests>=0.2.4
-        pip install pytest pytest-mockito pytest-approvaltests requests robotframework-pabot
+        pip install requests robotframework-pabot
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
@@ -46,16 +44,20 @@ jobs:
       if: matrix.python-version != 'pypy3'
       run: |
         which python
+    - name: Run tests with headless Chrome and with PyPy
+      if: matrix.python-version == 'pypy3'
+      run: |
+        xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschrome
     - name: Run tests with headless Chrome and with Python != 3.8
-      if: matrix.python-version != '3.8'
+      if: matrix.python-version != '3.8' && matrix.python-version != 'pypy3'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
     - name: Run tests normal Chrome with Python 3.8
-      if: matrix.python-version == '3.8' && matrix.rf-version != '3.2.2'
+      if: matrix.python-version == '3.8' && matrix.rf-version != '3.2.2' && matrix.python-version != 'pypy3'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip chrome
     - name: Run tests with Selenium Grid
-      if: matrix.python-version == '3.8' && matrix.rf-version == '3.2.2'
+      if: matrix.python-version == '3.8' && matrix.rf-version == '3.2.2' && matrix.python-version != 'pypy3'
       run: |
         wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
         sudo chmod u+x ./selenium-server-standalone.jar
