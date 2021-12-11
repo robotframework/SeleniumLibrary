@@ -348,7 +348,7 @@ def test_has_options(creator):
     assert creator._has_options(webdriver.Chrome)
     assert creator._has_options(webdriver.Firefox)
     assert creator._has_options(webdriver.Ie)
-    assert creator._has_options(webdriver.Edge) is False
+    assert creator._has_options(webdriver.Edge)
     assert creator._has_options(webdriver.Opera)
     assert creator._has_options(webdriver.Safari) is False
 

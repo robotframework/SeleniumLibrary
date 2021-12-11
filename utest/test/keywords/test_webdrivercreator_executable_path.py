@@ -54,7 +54,7 @@ def test_get_executable_path(creator):
     assert executable_path is None
 
     executable_path = creator._get_executable_path(webdriver.Edge)
-    assert executable_path == "MicrosoftWebDriver.exe"
+    assert executable_path == "msedgedriver"
 
 
 def test_create_chrome_executable_path_and_remote(creator):
