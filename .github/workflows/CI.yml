@@ -33,7 +33,8 @@ jobs:
         pip install -r requirements.txt
         pip install mockito>=1.0.0
         pip install robotstatuschecker>=1.4
-        pip install approvaltests>=0.2.4
+        pip install approvaltests==3.1.0
+        pip install empty_files >= 0.0.3
         pip install pytest pytest-mockito pytest-approvaltests requests robotframework-pabot
     - name: Install RF ${{ matrix.rf-version }}
       run: |
