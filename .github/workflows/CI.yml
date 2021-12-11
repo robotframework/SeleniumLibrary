@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.9, pypy3]
+        python-version: [3.7, 3.9, pypy-3.9.9]
         rf-version: [3.2.2, 4.0.1]
 
     steps:
