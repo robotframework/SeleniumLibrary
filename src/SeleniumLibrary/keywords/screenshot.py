@@ -64,7 +64,7 @@ class ScreenshotKeywords(LibraryComponent):
         return previous
 
     @keyword
-    def capture_page_screenshot(self, filename: str = DEFAULT_FILENAME_PAGE) -> str:
+    def capture_page_screenshot(self, filename: str = DEFAULT_FILENAME_PAGE, full_screen: bool = False) -> str:
         """Takes a screenshot of the current page and embeds it into a log file.
 
         ``filename`` argument specifies the name of the file to write the
@@ -78,6 +78,10 @@ class ScreenshotKeywords(LibraryComponent):
         is embedded as Base64 image to the log.html. In this case file is not
         created in the filesystem.
 
+        If ``full_screen`` is True, then a full page screenshot will be taken.
+        Only firefox driver support this. On other drivers, this option has
+        no effect.
+
         Starting from SeleniumLibrary 1.8, if ``filename`` contains marker
         ``{index}``, it will be automatically replaced with an unique running
         index, preventing files to be overwritten. Indices start from 1,
@@ -90,38 +94,49 @@ class ScreenshotKeywords(LibraryComponent):
 
         Support for EMBED is new in SeleniumLibrary 4.2
 
+        Support for full_screen is new in SeleniumLibrary 5.2.0
+
         Examples:
-        | `Capture Page Screenshot` |                                        |
-        | `File Should Exist`       | ${OUTPUTDIR}/selenium-screenshot-1.png |
-        | ${path} =                 | `Capture Page Screenshot`              |
-        | `File Should Exist`       | ${OUTPUTDIR}/selenium-screenshot-2.png |
-        | `File Should Exist`       | ${path}                                |
-        | `Capture Page Screenshot` | custom_name.png                        |
-        | `File Should Exist`       | ${OUTPUTDIR}/custom_name.png           |
-        | `Capture Page Screenshot` | custom_with_index_{index}.png          |
-        | `File Should Exist`       | ${OUTPUTDIR}/custom_with_index_1.png   |
-        | `Capture Page Screenshot` | formatted_index_{index:03}.png         |
-        | `File Should Exist`       | ${OUTPUTDIR}/formatted_index_001.png   |
-        | `Capture Page Screenshot` | EMBED                                  |
-        | `File Should Not Exist`   | EMBED                                  |
+        | `Capture Page Screenshot`      |                                        |                    |
+        | `File Should Exist`            | ${OUTPUTDIR}/selenium-screenshot-1.png |                    |
+        | ${path} =                      | `Capture Page Screenshot`              |                    |
+        | `File Should Exist`            | ${OUTPUTDIR}/selenium-screenshot-2.png |                    |
+        | `File Should Exist`            | ${path}                                |                    |
+        | `Capture Page Screenshot`      | custom_name.png                        |                    |
+        | `File Should Exist`            | ${OUTPUTDIR}/custom_name.png           |                    |
+        | `Capture Page Screenshot`      | custom_with_index_{index}.png          |                    |
+        | `File Should Exist`            | ${OUTPUTDIR}/custom_with_index_1.png   |                    |
+        | `Capture Page Screenshot`      | formatted_index_{index:03}.png         |                    |
+        | `File Should Exist`            | ${OUTPUTDIR}/formatted_index_001.png   |                    |
+        | `Capture Page Screenshot`      | EMBED                                  |                    |
+        | `File Should Not Exist`        | EMBED                                  |                    |
+        | `Capture Full Page Screenshot` | EMBED                                  | full_screen = True |
+        | `File Should Not Exist`        | EMBED                                  |                    |
         """
         if not self.drivers.current:
             self.info("Cannot capture screenshot because no browser is open.")
             return
         if self._decide_embedded(filename):
-            return self._capture_page_screen_to_log()
-        return self._capture_page_screenshot_to_file(filename)
+            return self._capture_page_screen_to_log(full_screen)
+        return self._capture_page_screenshot_to_file(filename, full_screen)
 
-    def _capture_page_screenshot_to_file(self, filename):
+    def _capture_page_screenshot_to_file(self, filename, full_screen = False):
         path = self._get_screenshot_path(filename)
         self._create_directory(path)
-        if not self.driver.save_screenshot(path):
-            raise RuntimeError(f"Failed to save screenshot '{path}'.")
+        if full_screen and hasattr(self.driver, 'save_full_page_screenshot'):
+            if not self.driver.save_full_page_screenshot(path):
+                raise RuntimeError(f"Failed to save full page screenshot '{path}'.")
+        else:
+            if not self.driver.save_screenshot(path):
+                raise RuntimeError(f"Failed to save screenshot '{path}'.")
         self._embed_to_log_as_file(path, 800)
         return path
 
-    def _capture_page_screen_to_log(self):
-        screenshot_as_base64 = self.driver.get_screenshot_as_base64()
+    def _capture_page_screen_to_log(self, full_screen = False):
+        if full_screen and hasattr(self.driver, 'get_full_page_screenshot_as_base64'):
+            screenshot_as_base64 = self.driver.get_full_page_screenshot_as_base64()
+        else:
+            screenshot_as_base64 = self.driver.get_screenshot_as_base64()
         self._embed_to_log_as_base64(screenshot_as_base64, 800)
         return EMBED
 
