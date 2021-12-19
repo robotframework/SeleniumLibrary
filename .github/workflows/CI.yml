@@ -65,10 +65,5 @@ jobs:
     - uses: actions/upload-artifact@v1
       if: success() || failure()
       with:
-        name: Unit Test results
-        path: utest/output_dir
-    - uses: actions/upload-artifact@v1
-      if: success() || failure()
-      with:
         name: Failed Test results
         path: atest/zip_results
