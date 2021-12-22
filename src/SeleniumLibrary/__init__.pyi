@@ -163,6 +163,8 @@ class SeleniumLibrary:
         expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
+        strip_spaces: Union[bool, str] = False,
+        collapse_spaces: bool = False,
     ): ...
     def element_text_should_not_be(
         self,
@@ -170,6 +172,8 @@ class SeleniumLibrary:
         not_expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
+        strip_spaces: Union[bool, str] = False,
+        collapse_spaces: bool = False,
     ): ...
     def execute_async_javascript(
         self, *code: Union[selenium.webdriver.remote.webelement.WebElement, str]

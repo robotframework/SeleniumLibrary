@@ -13,12 +13,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
+
 from collections import namedtuple
 from typing import List, Optional, Tuple, Union
 
 from SeleniumLibrary.utils import is_noney
 from SeleniumLibrary.utils.events.event import _unwrap_eventfiring_element
-from robot.utils import plural_or_not, is_truthy
+from robot.utils import plural_or_not, is_truthy, is_string
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
@@ -329,6 +331,8 @@ class ElementKeywords(LibraryComponent):
         expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
+        strip_spaces: Union[bool, str] = False,
+        collapse_spaces: bool = False,
     ):
         """Verifies that element ``locator`` contains exact the text ``expected``.
 
@@ -341,7 +345,19 @@ class ElementKeywords(LibraryComponent):
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
 
+        If ``strip_spaces`` is given a true value (see `Boolean arguments`)
+        and both arguments are strings, the comparison is done without leading
+        and trailing spaces. If ``strip_spaces`` is given a string value
+        ``LEADING`` or ``TRAILING`` (case-insensitive), the comparison is done
+        without leading or trailing spaces, respectively.
+
+        If ``collapse_spaces`` is given a true value (see `Boolean arguments`) and both
+        arguments are strings, the comparison is done with all white spaces replaced by
+        a single space character.
+
         ``ignore_case`` argument is new in SeleniumLibrary 3.1.
+        ``strip_spaces`` is new in SeleniumLibrary 5.x.x and
+        ``collapse_spaces`` is new in SeleniumLibrary 5.x.x.
 
         Use `Element Should Contain` if a substring match is desired.
         """
@@ -350,6 +366,12 @@ class ElementKeywords(LibraryComponent):
         if ignore_case:
             text = text.lower()
             expected = expected.lower()
+        if strip_spaces:
+            text = self._strip_spaces(text, strip_spaces)
+            expected = self._strip_spaces(expected, strip_spaces)
+        if collapse_spaces:
+            text = self._collapse_spaces(text)
+            expected = self._collapse_spaces(expected)
         if text != expected:
             if message is None:
                 message = (
@@ -365,6 +387,8 @@ class ElementKeywords(LibraryComponent):
         not_expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
+        strip_spaces: Union[bool, str] = False,
+        collapse_spaces: bool = False,
     ):
         """Verifies that element ``locator`` does not contain exact the text ``not_expected``.
 
@@ -377,7 +401,19 @@ class ElementKeywords(LibraryComponent):
         The ``ignore_case`` argument can be set to True to compare case
         insensitive, default is False.
 
-        New in SeleniumLibrary 3.1.1
+        If ``strip_spaces`` is given a true value (see `Boolean arguments`)
+        and both arguments are strings, the comparison is done without leading
+        and trailing spaces. If ``strip_spaces`` is given a string value
+        ``LEADING`` or ``TRAILING`` (case-insensitive), the comparison is done
+        without leading or trailing spaces, respectively.
+
+        If ``collapse_spaces`` is given a true value (see `Boolean arguments`) and both
+        arguments are strings, the comparison is done with all white spaces replaced by
+        a single space character.
+
+        ``ignore_case`` is new in SeleniumLibrary 3.1.1
+        ``strip_spaces`` is new in SeleniumLibrary 5.x.x and
+        ``collapse_spaces`` is new in SeleniumLibrary 5.x.x.
         """
         self.info(
             f"Verifying element '{locator}' does not contain exact text '{not_expected}'."
@@ -387,10 +423,30 @@ class ElementKeywords(LibraryComponent):
         if ignore_case:
             text = text.lower()
             not_expected = not_expected.lower()
+        if strip_spaces:
+            text = self._strip_spaces(text, strip_spaces)
+            not_expected = self._strip_spaces(not_expected, strip_spaces)
+        if collapse_spaces:
+            text = self._collapse_spaces(text)
+            not_expected = self._collapse_spaces(not_expected)
         if text == not_expected:
             if message is None:
                 message = f"The text of element '{locator}' was not supposed to be '{before_not_expected}'."
             raise AssertionError(message)
+
+    def _strip_spaces(self, value, strip_spaces):
+        if not is_string(value):
+            return value
+        if not is_string(strip_spaces):
+            return value.strip() if strip_spaces else value
+        if strip_spaces.upper() == 'LEADING':
+            return value.lstrip()
+        if strip_spaces.upper() == 'TRAILING':
+            return value.rstrip()
+        return value.strip() if is_truthy(strip_spaces) else value
+
+    def _collapse_spaces(self, value):
+        return re.sub(r'\s+', ' ', value) if is_string(value) else value
 
     @keyword
     def get_element_attribute(

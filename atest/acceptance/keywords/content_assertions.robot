@@ -162,14 +162,26 @@ Element Should Not Contain
 Element Text Should Be
     Element Text Should Be    some_id    This text is inside an identified element
     Element Text Should Be    some_id    This TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=True
+    Element Text Should Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=True
+    Element Text Should Be    some_id    ${SPACE}This text is inside an identified element  strip_spaces=LEADING
+    Element Text Should Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=TRAILING
+    Element Text Should Be    some_id    This${SPACE}${SPACE} text is inside an identified element  collapse_spaces=True
     Run Keyword And Expect Error
     ...    The text of element 'some_id' should have been 'inside' but it was 'This text is inside an identified element'.
     ...    Element Text Should Be    some_id    inside
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' should have been 'This text is inside an identified element ' but it was 'This text is inside an identified element'.
+    ...    Element Text Should Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=False
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' should have been 'This${SPACE}${SPACE} text is inside an identified element' but it was 'This text is inside an identified element'.
+    ...    Element Text Should Be    some_id    This${SPACE}${SPACE} text is inside an identified element  collapse_spaces=False
 
 Element Text Should Not Be
     Element Text Should Not Be    some_id    Foo This text is inside an identified element
     Element Text Should Not Be    some_id    This TEXT IS INSIDE AN IDENTIFIED ELEMENT  ignore_case=False
     Element Text Should Not Be    some_id    FOO This text is inside an identified element  ignore_case=True
+    Element Text Should Not Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=False
+    Element Text Should Not Be    some_id    This text${SPACE}${SPACE} is inside an identified element  collapse_spaces=False
     Run Keyword And Expect Error
     ...    The text of element 'some_id' was not supposed to be 'This text is inside an identified element'.
     ...    Element Text Should Not Be    some_id    This text is inside an identified element
@@ -179,6 +191,12 @@ Element Text Should Not Be
     Run Keyword And Expect Error
     ...    The text of element 'some_id' was not supposed to be 'THIS TEXT is inside an identified element'.
     ...    Element Text Should Not Be    some_id    THIS TEXT is inside an identified element  ignore_case=True
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' was not supposed to be 'This text is inside an identified element '.
+    ...    Element Text Should Not Be    some_id    This text is inside an identified element${SPACE}  strip_spaces=True
+    Run Keyword And Expect Error
+    ...    The text of element 'some_id' was not supposed to be 'This text${SPACE}${SPACE} is inside an identified element'.
+    ...    Element Text Should Not Be    some_id    This text${SPACE}${SPACE} is inside an identified element  collapse_spaces=True
 
 Get Text
     ${str} =    Get Text    some_id
