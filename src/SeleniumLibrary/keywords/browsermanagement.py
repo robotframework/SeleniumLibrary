@@ -430,6 +430,11 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         try:
             self.drivers.switch(index_or_alias)
+            handle_of_the_window = self.driver.current_window_handle
+            self.driver.switch_to.window(handle_of_the_window)
+            self.driver.minimize_window()
+            self.driver.set_window_rect(0, 0)
+            self.driver.maximize_window()
         except RuntimeError:
             raise RuntimeError(
                 f"No browser with index or alias '{index_or_alias}' found."
