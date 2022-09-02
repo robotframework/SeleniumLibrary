@@ -530,64 +530,6 @@ def test_edge_no_browser_name(creator):
     assert driver == expected_webdriver
 
 
-def test_opera(creator):
-    expected_webdriver = mock()
-    executable_path = "operadriver"
-    when(webdriver).Opera(
-        options=None, service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, None)
-    assert driver == expected_webdriver
-
-
-def test_opera_remote_no_caps(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = webdriver.DesiredCapabilities.OPERA.copy()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, url)
-    assert driver == expected_webdriver
-
-
-def test_opera_remote_caps(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = {"browserName": "opera"}
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({"desired_capabilities": capabilities}, url)
-    assert driver == expected_webdriver
-
-
-def test_opera_no_browser_name(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = {"browserName": "opera", "key": "value"}
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({"desired_capabilities": {"key": "value"}}, url)
-    assert driver == expected_webdriver
-
-
 def test_safari(creator):
     expected_webdriver = mock()
     executable_path = "/usr/bin/safaridriver"
