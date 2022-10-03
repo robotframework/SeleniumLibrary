@@ -187,7 +187,6 @@ def test_importer(options, reporter):
     results.append(options._import_options("chrome"))
     results.append(options._import_options("headless_chrome"))
     results.append(options._import_options("ie"))
-    results.append(options._import_options("opera"))
     results.append(options._import_options("edge"))
     results.append(error_formatter(options._import_options, "safari"))
     results.append(error_formatter(options._import_options, "htmlunit"))
@@ -349,36 +348,7 @@ def test_has_options(creator):
     assert creator._has_options(webdriver.Firefox)
     assert creator._has_options(webdriver.Ie)
     assert creator._has_options(webdriver.Edge)
-    assert creator._has_options(webdriver.Opera)
     assert creator._has_options(webdriver.Safari)
-
-
-def test_create_opera_with_options(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "operadriver"
-    when(webdriver).Opera(
-        options=options, service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_create_opera_with_options_and_remote_url(creator):
-    url = "http://localhost:4444/wd/hub"
-    caps = webdriver.DesiredCapabilities.OPERA.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, url, options=options)
-    assert driver == expected_webdriver
 
 
 def test_create_safari_no_options_support(creator):

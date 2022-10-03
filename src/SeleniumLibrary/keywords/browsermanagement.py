@@ -83,8 +83,6 @@ class BrowserManagementKeywords(LibraryComponent):
         | Internet Explorer | internetexplorer, ie     |
         | Edge              | edge                     |
         | Safari            | safari                   |
-        | Opera             | opera                    |
-        | Android           | android                  |
         | Iphone            | iphone                   |
         | PhantomJS         | phantomjs                |
         | HTMLUnit          | htmlunit                 |
@@ -354,7 +352,7 @@ class BrowserManagementKeywords(LibraryComponent):
         the functionality provided by `Open Browser` is not adequate.
 
         ``driver_name`` must be a WebDriver implementation name like Firefox,
-        Chrome, Ie, Opera, Safari, PhantomJS, or Remote.
+        Chrome, Ie, Edge, Safari, or Remote.
 
         The initialized WebDriver can be configured either with a Python
         dictionary ``kwargs`` or by using keyword arguments ``**init_kwargs``.

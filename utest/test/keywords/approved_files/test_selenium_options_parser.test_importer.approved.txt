@@ -5,9 +5,8 @@ Selenium options import
 2) <class 'selenium.webdriver.chrome.options.Options'>
 3) <class 'selenium.webdriver.chrome.options.Options'>
 4) <class 'selenium.webdriver.ie.options.Options'>
-5) <class 'selenium.webdriver.opera.options.Options'>
-6) <class 'selenium.webdriver.edge.options.Options'>
-7) <class 'selenium.webdriver.safari.options.Options'>
-8) htmlunit No module named
-9) htmlunit_with_js No module named
-10) iphone No module named
+5) <class 'selenium.webdriver.edge.options.Options'>
+6) <class 'selenium.webdriver.safari.options.Options'>
+7) htmlunit No module named
+8) htmlunit_with_js No module named
+9) iphone No module named
