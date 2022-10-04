@@ -20,9 +20,9 @@ Page Should Contain
     [Tags]    NoGrid
     [Documentation]    The last step fails and doesn't contain the html content.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 1:7 Current page contains text 'needle'.
-    ...    LOG 2:7 INFO Current page contains text 'This is the haystack'.
-    ...    LOG 3:14 FAIL Page should have contained text 'non existing text' but did not.
+    ...    LOG 1:9 Current page contains text 'needle'.
+    ...    LOG 2:9 INFO Current page contains text 'This is the haystack'.
+    ...    LOG 3:18 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    needle
     Page Should Contain    This is the haystack
     Page Should Contain    non existing text
