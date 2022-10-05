@@ -32,7 +32,7 @@ Input Password Should Not Log Password String
     ...    LOG 1:1  INFO          Typing password into text field 'password_field'.
     ...    LOG 1:2  DEBUG STARTS: POST http
     ...    LOG 1:3  DEBUG STARTS: http
-    ...    LOG 1:3  DEBUG STARTS: Remote response
+    ...    LOG 1:4  DEBUG STARTS: Remote response
     ...    LOG 1:5  DEBUG         Finished Request
     ...    LOG 1:6  DEBUG STARTS: POST http
     ...    LOG 1:7  DEBUG STARTS: http
