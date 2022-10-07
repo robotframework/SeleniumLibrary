@@ -97,8 +97,6 @@ ROBOT_OPTIONS = [
 REBOT_OPTIONS = [
     "--outputdir",
     RESULTS_DIR,
-    "--noncritical",
-    "known issue {browser}",
 ]
 
 
@@ -208,6 +206,7 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing):
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
+    options += ["--exclude", f"known issue {browser.replace('headless', '')}"]
     command = runner
     if grid:
         command += [
