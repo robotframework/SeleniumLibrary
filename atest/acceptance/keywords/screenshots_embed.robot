@@ -5,7 +5,7 @@ Resource          ../resource.robot
 Capture Page Screenshot Embedded By Screenshot Root Directory
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 2:4 INFO STARTS: </td></tr><tr><td colspan="3"><img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,
+    ...    LOG 2:5 INFO STARTS: </td></tr><tr><td colspan="3"><img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,
     [Setup]    Remove .png Files
     Set Screenshot Directory    Embed
     ${file} =    Capture Page Screenshot
@@ -15,7 +15,7 @@ Capture Page Screenshot Embedded By Screenshot Root Directory
 Capture Page Screenshot EMBED As File Name
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 2:4 INFO STARTS: </td></tr><tr><td colspan="3"><img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,
+    ...    LOG 2:5 INFO STARTS: </td></tr><tr><td colspan="3"><img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,
     [Setup]    Remove .png Files
     Set Screenshot Directory                None
     ${file} =    Capture Page Screenshot    EMBED
@@ -25,7 +25,7 @@ Capture Page Screenshot EMBED As File Name
 Capture Element Screenshot EMBED As File Name
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 3:7 INFO STARTS: </td></tr><tr><td colspan="3"><img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,
+    ...    LOG 3:9 INFO STARTS: </td></tr><tr><td colspan="3"><img alt="screenshot" class="robot-seleniumlibrary-screenshot" src="data:image/png;base64,
     [Setup]    Remove .png Files
     Go To Page "links.html"
     Set Screenshot Directory                   None

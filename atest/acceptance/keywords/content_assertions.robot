@@ -7,7 +7,7 @@ Resource          ../resource.robot
 *** Test Cases ***
 Title Should Be
     [Tags]    NoGrid
-    [Documentation]    LOG 1:4 Page title is '(root)/index.html'.
+    [Documentation]    LOG 1:5 Page title is '(root)/index.html'.
     Title Should Be    (root)/index.html
     Run Keyword And Expect Error
     ...    Title should have been 'not a title' but was '(root)/index.html'.
@@ -20,9 +20,9 @@ Page Should Contain
     [Tags]    NoGrid
     [Documentation]    The last step fails and doesn't contain the html content.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 1:7 Current page contains text 'needle'.
-    ...    LOG 2:7 INFO Current page contains text 'This is the haystack'.
-    ...    LOG 3:14 FAIL Page should have contained text 'non existing text' but did not.
+    ...    LOG 1:9 Current page contains text 'needle'.
+    ...    LOG 2:9 INFO Current page contains text 'This is the haystack'.
+    ...    LOG 3:18 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    needle
     Page Should Contain    This is the haystack
     Page Should Contain    non existing text
@@ -41,16 +41,16 @@ Page Should Contain With Custom Log Level DEBUG
     [Tags]    NoGrid
     [Documentation]    Html content is shown at DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 1:14 DEBUG REGEXP: (?i)<html.*</html>
-    ...    LOG 1:15 FAIL Page should have contained text 'non existing text' but did not.
+    ...    LOG 1:18 DEBUG REGEXP: (?i)<html.*</html>
+    ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    non existing text    DEBUG
 
 Page Should Contain With Custom Log Level TRACE
     [Tags]    NoGrid
     [Documentation]    Html content is shown at DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 2:15 TRACE REGEXP: (?i)<html.*</html>
-    ...    LOG 2:16 FAIL Page should have contained text 'non existing text' but did not.
+    ...    LOG 2:19 TRACE REGEXP: (?i)<html.*</html>
+    ...    LOG 2:20 FAIL Page should have contained text 'non existing text' but did not.
     Set Log Level    TRACE
     Page Should Contain    non existing text    TRACE
     [Teardown]    Set Log Level    DEBUG
@@ -71,14 +71,14 @@ Page Should Not Contain
     [Tags]    NoGrid
     [Documentation]    Default log level does not have html output.
     ...    FAIL Page should not have contained text 'needle'.
-    ...    LOG 1:11 Current page does not contain text 'non existing text'.
-    ...    LOG 2:10 FAIL Page should not have contained text 'needle'.
+    ...    LOG 1:14 Current page does not contain text 'non existing text'.
+    ...    LOG 2:13 FAIL Page should not have contained text 'needle'.
     Page Should Not Contain    non existing text
     Page Should Not Contain    needle
 
 Page Should Not Contain With Custom Log Level
     [Tags]    NoGrid
-    [Documentation]    LOG 1.1:10 DEBUG REGEXP: (?i)<html.*</html>
+    [Documentation]    LOG 1.1:13 DEBUG REGEXP: (?i)<html.*</html>
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
     ...    Page Should Not Contain    needle    DEBUG
@@ -189,7 +189,7 @@ Get Text
 
 Page Should Contain Checkbox
     [Tags]    NoGrid
-    [Documentation]    LOG 1:7 Current page contains checkbox 'can_send_email'.
+    [Documentation]    LOG 1:9 Current page contains checkbox 'can_send_email'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Contain Checkbox    can_send_email
     Page Should Contain Checkbox    xpath=//input[@type='checkbox' and @name='can_send_sms']
@@ -199,7 +199,7 @@ Page Should Contain Checkbox
 
 Page Should Not Contain Checkbox
     [Tags]    NoGrid
-    [Documentation]    LOG 1:7 Current page does not contain checkbox 'non-existing'.
+    [Documentation]    LOG 1:9 Current page does not contain checkbox 'non-existing'.
     [Setup]    Go To Page "forms/prefilled_email_form.html"
     Page Should Not Contain Checkbox    non-existing
     Run Keyword And Expect Error
@@ -290,7 +290,7 @@ Page Should Not Contain Text Field
 
 TextField Should Contain
     [Tags]    NoGrid
-    [Documentation]    LOG 1:10 Text field 'name' contains text ''.
+    [Documentation]    LOG 1:13 Text field 'name' contains text ''.
     [Setup]    Go To Page "forms/email_form.html"
     TextField Should contain    name    ${EMPTY}
     TextField Should contain    website    ${EMPTY}
@@ -307,7 +307,7 @@ TextField Should Contain
 
 TextField Value Should Be
     [Tags]    NoGrid
-    [Documentation]    LOG 1:10 Content of text field 'name' is ''.
+    [Documentation]    LOG 1:13 Content of text field 'name' is ''.
     [Setup]    Go To Page "forms/email_form.html"
     textfield Value Should Be    name    ${EMPTY}
     Input Text    name    my name

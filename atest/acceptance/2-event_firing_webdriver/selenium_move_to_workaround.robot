@@ -14,19 +14,19 @@ ${CTRL_OR_COMMAND}    ${EMPTY}
 
 *** Test Cases ***
 Selenium move_to workaround Click Element At Coordinates
-    [Documentation]    LOG 1:5 DEBUG  Workaround for Selenium 3 bug.
+    [Documentation]    LOG 1:6 DEBUG  Workaround for Selenium 3 bug.
     Click Element At Coordinates    id:some_id    4    4
 
 Selenium move_to workaround Scroll Element Into View
-    [Documentation]    LOG 1:4 DEBUG  Workaround for Selenium 3 bug.
+    [Documentation]    LOG 1:5 DEBUG  Workaround for Selenium 3 bug.
     Scroll Element Into View    id:some_id
 
 Selenium move_to workaround Mouse Out
-    [Documentation]    LOG 1:5 DEBUG  Workaround for Selenium 3 bug.
+    [Documentation]    LOG 1:6 DEBUG  Workaround for Selenium 3 bug.
     Mouse Out    id:some_id
 
 Selenium move_to workaround Mouse Over
-    [Documentation]    LOG 1:5 DEBUG  Workaround for Selenium 3 bug.
+    [Documentation]    LOG 1:6 DEBUG  Workaround for Selenium 3 bug.
     Mouse Over    id:some_id
 
 Click Element
@@ -46,7 +46,7 @@ Click Element Action Chain
     [Tags]    NoGrid
     [Documentation]
     ...    LOB SETUP:1 INFO        Clicking 'singleClickButton' using an action chain.
-    ...    LOG 1:6 DEBUG GLOB: *actions {"actions": [{*
+    ...    LOG 1:7 DEBUG GLOB: *actions {"actions": [{*
     [Setup]    Initialize Page For Click Element
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
