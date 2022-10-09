@@ -47,17 +47,11 @@ def test_get_executable_path(creator):
     executable_path = creator._get_executable_path(webdriver.Firefox)
     assert executable_path == "geckodriver"
 
-    executable_path = creator._get_executable_path(webdriver.Android)
-    assert executable_path is None
-
     executable_path = creator._get_executable_path(webdriver.Ie)
     assert executable_path == "IEDriverServer.exe"
 
-    executable_path = creator._get_executable_path(webdriver.Opera)
-    assert executable_path is None
-
     executable_path = creator._get_executable_path(webdriver.Edge)
-    assert executable_path == "MicrosoftWebDriver.exe"
+    assert executable_path == "msedgedriver"
 
 
 def test_create_chrome_executable_path_and_remote(creator):
@@ -210,27 +204,6 @@ def test_create_edge_executable_path_not_set(creator):
     assert driver == expected_webdriver
 
 
-def test_create_opera_executable_path_set(creator):
-    executable_path = "/path/to/operadriver"
-    expected_webdriver = mock()
-    when(webdriver).Opera(
-        service_log_path=None, options=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_opera_executable_path_not_set(creator):
-    executable_path = "operadriver"
-    expected_webdriver = mock()
-    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
-    when(webdriver).Opera(
-        service_log_path=None, options=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, None, executable_path=None)
-    assert driver == expected_webdriver
-
-
 def test_create_safari_executable_path_set(creator):
     executable_path = "/path/to/safaridriver"
     expected_webdriver = mock()
@@ -249,27 +222,6 @@ def test_create_safari_executable_path_not_set(creator):
         expected_webdriver
     )
     driver = creator.create_safari({}, None, executable_path=None)
-    assert driver == expected_webdriver
-
-
-def test_create_phantomjs_executable_path_set(creator):
-    executable_path = "/path/to/phantomjs"
-    expected_webdriver = mock()
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_phantomjs_executable_path_not_set(creator):
-    executable_path = "phantomjs"
-    expected_webdriver = mock()
-    when(creator)._get_executable_path(ANY).thenReturn(executable_path)
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, executable_path=None)
     assert driver == expected_webdriver
 
 
@@ -302,22 +254,6 @@ def test_create_htmlunit_with_js_executable_path_set(creator):
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_htmlunit_with_js({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_android_executable_path_set(creator):
-    executable_path = "path/to/bin"
-    caps = webdriver.DesiredCapabilities.ANDROID.copy()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None, executable_path=executable_path)
     assert driver == expected_webdriver
 
 
