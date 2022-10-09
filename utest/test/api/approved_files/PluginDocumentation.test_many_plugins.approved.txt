@@ -283,7 +283,9 @@ can run.
 
 The default timeout these keywords use can be set globally either by
 using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
-when `importing` the library. See `time format` below for supported
+when `importing` the library. If no default timeout is set globally, the
+default is 5 seconds. If None is specified for the timeout argument in the
+keywords, the default is used. See `time format` below for supported
 timeout syntax.
 
 == Implicit wait ==
