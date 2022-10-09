@@ -169,7 +169,7 @@ Select Popup Window With Delay By Excluded List
     @{excluded_handle_list}=    Get Window Handles
     Click Button     id:MyButton
     Switch Window    ${excluded_handle_list}    timeout=5
-    Title Should Be    Original
+    Wait Until Keyword Succeeds    5s    200ms    Title Should Be    Original
     Close Window
     Switch Window    main
     Title Should Be    Click link to show a popup window
@@ -190,7 +190,7 @@ Select Window With Delay By Special Locator
     [Tags]    Known Issue Internet Explorer
     Click Button     id:MyButton
     Switch Window    new    timeout=5
-    Title Should Be    Original
+    Wait Until Keyword Succeeds    5s    200ms    Title Should Be    Original
     Close Window
     Switch Window    main
     Title Should Be    Click link to show a popup window
