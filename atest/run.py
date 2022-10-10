@@ -277,7 +277,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--interpreter",
         "-I",
-        default="python",
+        default=sys.executable,
         help=textwrap.dedent(
             """\
                             Any Python interpreter supported by the library.
@@ -313,7 +313,7 @@ if __name__ == "__main__":
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
     selenium_grid = is_truthy(args.grid)
-    interpreter = args.interpreter
+    interpreter = "python" if not args.interpreter else args.interpreter
     event_firing_webdriver = args.event_firing_webdriver
     if args.nounit:
         print("Not running unit tests.")
