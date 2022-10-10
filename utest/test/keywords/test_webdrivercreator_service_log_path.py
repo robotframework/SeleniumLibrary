@@ -164,8 +164,8 @@ def test_create_ie_with_service_log_path_real_path(creator):
 
 
 def test_create_edge_with_service_log_path_real_path(creator):
-    executable_path = "MicrosoftWebDriver.exe"
-    log_file = os.path.join(creator.output_dir, "ie-1.log")
+    executable_path = "msedgedriver"
+    log_file = os.path.join(creator.output_dir, "edge-1.log")
     expected_webdriver = mock()
     when(creator.creator)._has_options(ANY).thenReturn(False)
     when(webdriver).Edge(
@@ -176,7 +176,7 @@ def test_create_edge_with_service_log_path_real_path(creator):
 
 
 def test_create_safari_no_support_for_service_log_path(creator):
-    log_file = os.path.join(creator.output_dir, "ie-1.log")
+    log_file = os.path.join(creator.output_dir, "safari-1.log")
     expected_webdriver = mock()
     executable_path = "/usr/bin/safaridriver"
     when(webdriver).Safari(executable_path=executable_path).thenReturn(

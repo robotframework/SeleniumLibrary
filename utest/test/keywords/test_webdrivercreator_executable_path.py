@@ -182,7 +182,7 @@ def test_create_ie_executable_path_not_set(creator):
 
 
 def test_create_edge_executable_path_set(creator):
-    executable_path = "/path/to/MicrosoftWebDriver.exe"
+    executable_path = "/path/to/msedgedriver"
     expected_webdriver = mock()
     when(creator)._has_options(ANY).thenReturn(False)
     when(webdriver).Edge(
@@ -193,7 +193,7 @@ def test_create_edge_executable_path_set(creator):
 
 
 def test_create_edge_executable_path_not_set(creator):
-    executable_path = "MicrosoftWebDriver.exe"
+    executable_path = "msedgedriver"
     expected_webdriver = mock()
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(creator)._has_options(ANY).thenReturn(False)
