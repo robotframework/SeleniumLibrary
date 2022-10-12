@@ -206,7 +206,7 @@ class SelectElementKeywords(LibraryComponent):
             select.select_by_index(index)
 
     @keyword
-    def select_from_list_by_index(self, locator: Union[WebElement, str], *indexes: str):
+    def select_from_list_by_index(self, locator: Union[WebElement, str], *indexes: int):
         """Selects options from selection list ``locator`` by ``indexes``.
 
         Indexes of list options start from 0.
@@ -228,7 +228,7 @@ class SelectElementKeywords(LibraryComponent):
         )
         select = self._get_select_list(locator)
         for index in indexes:
-            select.select_by_index(int(index))
+            select.select_by_index(index)
 
     @keyword
     def select_from_list_by_value(self, locator: Union[WebElement, str], *values: str):
@@ -293,7 +293,7 @@ class SelectElementKeywords(LibraryComponent):
 
     @keyword
     def unselect_from_list_by_index(
-        self, locator: Union[WebElement, str], *indexes: str
+        self, locator: Union[WebElement, str], *indexes: int
     ):
         """Unselects options from selection list ``locator`` by ``indexes``.
 
@@ -316,7 +316,7 @@ class SelectElementKeywords(LibraryComponent):
                 "Un-selecting options works only with multi-selection lists."
             )
         for index in indexes:
-            select.deselect_by_index(int(index))
+            select.deselect_by_index(index)
 
     @keyword
     def unselect_from_list_by_value(

@@ -344,7 +344,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def create_webdriver(
         self, driver_name: str, alias: Optional[str] = None, kwargs={}, **init_kwargs
-    ) -> str:
+    ) -> int:
         """Creates an instance of Selenium WebDriver.
 
         Like `Open Browser`, but allows passing arguments to the created
@@ -400,7 +400,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return EventFiringWebDriver(driver, self.ctx.event_firing_webdriver())
 
     @keyword
-    def switch_browser(self, index_or_alias: str):
+    def switch_browser(self, index_or_alias: Union[str, int]):
         """Switches between active browsers using ``index_or_alias``.
 
         Indices are returned by the `Open Browser` keyword and aliases can
