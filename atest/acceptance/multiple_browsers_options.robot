@@ -47,7 +47,7 @@ Chrome Browser With Selenium Options Invalid Method
 
 Chrome Browser With Selenium Options Argument With Semicolon
     [Documentation]
-    ...    LOG 1:2 DEBUG GLOB: *"goog:chromeOptions"*
-    ...    LOG 1:2 DEBUG GLOB: *["has;semicolon"*
+    ...    LOG 1:3 DEBUG GLOB: *"goog:chromeOptions"*
+    ...    LOG 1:3 DEBUG GLOB: *["has;semicolon"*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("has;semicolon")
