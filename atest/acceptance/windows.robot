@@ -95,14 +95,14 @@ Get and Set Inner Window Size with Frames
     ...    Set Window Size         ${400}    ${300}    ${True}
 
 Get and Set Window Position
-    [Tags]  Known Issue Chrome    Known Issue Safari
+    [Tags]    Known Issue Safari
     Set Window Position    ${300}    ${200}
     ${x}    ${y}=    Get Window Position
     Should Be Equal    ${x}    ${300}
     Should Be Equal    ${y}    ${200}
 
 Set Window Position using strings
-    [Tags]  Known Issue Chrome    Known Issue Safari
+    [Tags]    Known Issue Safari
     Set Window Position    200    100
     ${x}    ${y}=    Get Window Position
     Should Be Equal    ${x}    ${200}
