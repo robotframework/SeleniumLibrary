@@ -2,7 +2,7 @@ import unittest
 
 from mockito import mock, verify, when, unstub
 from robot.utils.connectioncache import NoConnection
-from selenium.common.exceptions import TimeoutException, RemoteDriverServerException
+from selenium.common.exceptions import TimeoutException, WebDriverException
 
 from SeleniumLibrary.keywords import WebDriverCache
 
@@ -180,8 +180,8 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_close_all_cache_all_quite_fails(self):
         cache = WebDriverCache()
         driver0, driver1, driver2 = mock(), mock(), mock()
-        when(driver0).quit().thenRaise(RemoteDriverServerException("stuff."))
-        when(driver1).quit().thenRaise(RemoteDriverServerException("stuff."))
+        when(driver0).quit().thenRaise(WebDriverException("stuff."))
+        when(driver1).quit().thenRaise(WebDriverException("stuff."))
         when(driver2).quit().thenRaise(TimeoutException("timeout."))
         cache.register(driver0, "bar0")
         cache.register(driver1, "bar1")
@@ -193,7 +193,7 @@ class WebDriverCacheTests(unittest.TestCase):
     def test_close_all_cache_not_selenium_error(self):
         cache = WebDriverCache()
         driver0, driver1, driver2 = mock(), mock(), mock()
-        when(driver0).quit().thenRaise(RemoteDriverServerException("stuff."))
+        when(driver0).quit().thenRaise(WebDriverException("stuff."))
         when(driver1).quit().thenRaise(ValueError("stuff."))
         when(driver2).quit().thenRaise(TimeoutException("timeout."))
         cache.register(driver0, "bar0")
