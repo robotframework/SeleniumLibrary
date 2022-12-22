@@ -11,6 +11,6 @@ Documentation     Creating test which would work on all browser is not possible.
 Chrome Browser With executable_path Argument
     [Tags]    NoGrid    Known Issue Firefox    Known Issue Safari    Known Issue Internet Explorer
     Run Keyword And Expect Error
-    ...    WebDriverException: Message: 'exist' executable needs to be in PATH.*
+    ...    STARTS: WebDriverException: Message: unknown error: DevToolsActivePort file doesn't exist
     ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    executable_path=/does/not/exist
