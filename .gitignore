@@ -1,6 +1,7 @@
 .project
 .pydevproject
 .idea
+.vscode
 atest/results
 atest/zip_results
 utest/output_dir
@@ -10,7 +11,7 @@ utest/output_dir
 MANIFEST
 *.egg-info
 *.egg
-chromedriver.log
+*driver.log
 .pytest_cache
 
 dist
