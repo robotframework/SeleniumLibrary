@@ -2,9 +2,9 @@
 Suite Teardown    Close All Browsers
 Library           ../resources/testlibs/get_selenium_options.py
 Resource          resource.robot
-Documentation     Creating test which would work on all browser is not possible. When testing with other
-...    browser than Chrome it is OK that these test will fail. SeleniumLibrary CI is run with Chrome only
-...    and therefore there is tests for Chrome only.
+Force Tags        Known Issue Firefox    Known Issue Safari    Known Issue Internet Explorer
+Documentation     Creating test which would work on all browser is not possible.
+...    These tests are for Chrome only.
 
 *** Test Cases ***
 Chrome Browser With Selenium Options As String
