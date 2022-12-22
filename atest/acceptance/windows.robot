@@ -88,13 +88,17 @@ Set Inner Window Size using strings
     Should Be Equal    ${height}    ${600}
 
 Get and Set Inner Window Size with Frames
+    [Documentation]    This seems to be fine in the CI but almost always fails locally without the sleep
     Go To Page "frames/frameset.html"
     Select Frame            left
+    Sleep    500ms
     Run Keyword And Expect Error
     ...    Keyword failed setting correct window size.
     ...    Set Window Size         ${400}    ${300}    ${True}
 
 Get and Set Window Position
+    [Documentation]    Headed chrome sometimes has off-by-one errors in this test, depending on the
+    ...    desktop environment. Headless browsers and virtual displays like xvfb are fine.
     [Tags]    Known Issue Safari
     Set Window Position    ${300}    ${200}
     ${x}    ${y}=    Get Window Position
@@ -102,6 +106,8 @@ Get and Set Window Position
     Should Be Equal    ${y}    ${200}
 
 Set Window Position using strings
+    [Documentation]    Again, headless browsers and virtual displays work fine but the x coordinate is sometimes
+    ...    off by one and y coordinate is often broken with headed chrome, depending on desktop environment.
     [Tags]    Known Issue Safari
     Set Window Position    200    100
     ${x}    ${y}=    Get Window Position

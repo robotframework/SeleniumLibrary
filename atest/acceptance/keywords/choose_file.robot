@@ -18,6 +18,7 @@ Choose File And File Does Not Exist
     ...    Choose File    file_to_upload    ${CURDIR}${/}NotHere.txt
 
 Choose File And Folder
+    [Tags]    Known Issue Firefox
     [Setup]    Go To Page "forms/file_upload_form.html"
     Choose File    file_to_upload    ${CURDIR}
     Textfield Value Should Be    file_to_upload    C:\\fakepath\\keywords
