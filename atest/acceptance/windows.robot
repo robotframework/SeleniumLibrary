@@ -98,8 +98,8 @@ Get and Set Inner Window Size with Frames
 
 Get and Set Window Position
     [Documentation]    Headed chrome sometimes has off-by-one errors in this test, depending on the
-    ...    desktop environment. Headless browsers and virtual displays like xvfb are fine.
-    [Tags]    Known Issue Safari
+    ...    desktop environment. Headless browsers are mostly fine.
+    [Tags]    Known Issue Safari    Known Issue Firefox
     Set Window Position    ${300}    ${200}
     ${x}    ${y}=    Get Window Position
     Should Be Equal    ${x}    ${300}
@@ -108,7 +108,7 @@ Get and Set Window Position
 Set Window Position using strings
     [Documentation]    Again, headless browsers and virtual displays work fine but the x coordinate is sometimes
     ...    off by one and y coordinate is often broken with headed chrome, depending on desktop environment.
-    [Tags]    Known Issue Safari
+    [Tags]    Known Issue Safari    Known Issue Firefox
     Set Window Position    200    100
     ${x}    ${y}=    Get Window Position
     Should Be Equal    ${x}    ${200}
