@@ -206,7 +206,7 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing):
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
-    options += ["--exclude", f"known issue {browser.replace('headless', '')}"]
+    options += ["--exclude", f"known issue {browser.replace('headless', '')}", "--exclude", "triage"]
     command = runner
     if grid:
         command += [
