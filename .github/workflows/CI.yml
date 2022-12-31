@@ -53,7 +53,7 @@ jobs:
     - name: Run tests with normal Chrome and with Python 3.7
       if: matrix.python-version == '3.7'
       run: |
-        xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
+        xvfb-run --auto-servernum python atest/run.py --zip chrome
 
     - name: Run tests with headless Firefox with Python 3.9 and RF 4.1.3
       if: matrix.python-version == '3.9' && matrix.rf-version == '4.1.3'
