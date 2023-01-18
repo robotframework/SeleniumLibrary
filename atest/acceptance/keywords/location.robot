@@ -106,8 +106,8 @@ Wait Until Location Is Not Fails With Timeout
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Click Element   button
     Run Keyword And Expect Error
-    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 1 second.
-    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=1 s
+    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 750 milliseconds.
+    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=750ms
     Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Is Not Fails With Message

@@ -38,7 +38,7 @@ Click Element
 Double Click Element
     [Documentation]    LOG 1 Double clicking element 'doubleClickButton'.
     [Setup]    Initialize Page For Click Element
-    [Tags]    Known Issue Safari    Known Issue Firefox
+    [Tags]    Known Issue Safari
     Double Click Element    doubleClickButton
     Element Text Should Be    output    double clicked
 
@@ -82,7 +82,7 @@ Drag and Drop
     Element Text Should Be    id=droppable    Dropped!
 
 Drag and Drop by Offset
-    [Tags]    Known Issue Firefox    Known Issue Internet Explorer    Known Issue Safari
+    [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${1}    ${1}
@@ -256,7 +256,7 @@ Click Element Action Chain and modifier
     [Setup]    Initialize Page For Click Element With Modifier
     Click Element    Button    modifier=CTRL    action_chain=True
     Element Text Should Be    output    CTRL click
-    
+
 *** Keywords ***
 Initialize Page For Click Element
     [Documentation]    Initialize Page

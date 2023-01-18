@@ -98,7 +98,7 @@ Drag and Drop
     Element Text Should Be    id=droppable    Dropped!
 
 Drag and Drop by Offset
-    [Tags]    Known Issue Firefox    Known Issue Internet Explorer    Known Issue Safari
+    [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${1}    ${1}

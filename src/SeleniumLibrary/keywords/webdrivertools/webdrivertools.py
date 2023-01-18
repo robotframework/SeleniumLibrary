@@ -228,7 +228,7 @@ class WebDriverCreator:
         log_file = self._get_log_path(
             os.path.join(self.log_dir, "geckodriver-{index}.log")
         )
-        logger.info(f"Firefox driver log is always forced to to: {log_file}")
+        logger.trace(f"Firefox driver log is always forced to to: {log_file}")
         return log_file
 
     def create_headless_firefox(
