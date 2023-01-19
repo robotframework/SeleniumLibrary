@@ -24,6 +24,7 @@ from .types import (
     is_truthy,
     WINDOWS,
     _convert_timeout,
+    _convert_delay,
 )  # noqa
 
 

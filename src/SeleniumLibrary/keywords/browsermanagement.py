@@ -25,7 +25,7 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import secs_to_timestr, _convert_timeout
+from SeleniumLibrary.utils import timestr_to_secs, secs_to_timestr, _convert_timeout, _convert_delay
 
 from .webdrivertools import WebDriverCreator
 
@@ -691,6 +691,28 @@ class BrowserManagementKeywords(LibraryComponent):
         for driver in self.drivers.active_drivers:
             driver.implicitly_wait(self.ctx.implicit_wait)
         return old_wait
+
+    @keyword
+    def set_action_chain_delay(self, value: timedelta) -> str:
+        """Sets the duration of delay in ActionChains() used by SeleniumLibrary.
+
+        The value can be given as a number that is considered to be
+        seconds or as a human-readable string like ``1 second``.
+
+        Value is always stored as milliseconds internally.
+
+        The previous value is returned and can be used to restore
+        the original value later if needed.
+        """
+        old_action_chain_delay = self.ctx.action_chain_delay
+        self.ctx.action_chain_delay = _convert_delay(value)
+        return timestr_to_secs(f"{old_action_chain_delay} milliseconds")
+
+    @keyword
+    def get_action_chain_delay(self):
+        """Gets the currently stored value for chain_delay_value in timestr format.
+        """
+        return timestr_to_secs(f"{self.ctx.action_chain_delay} milliseconds")
 
     @keyword
     def set_browser_implicit_wait(self, value: timedelta):

@@ -659,7 +659,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     def _click_with_action_chain(self, locator: Union[WebElement, str]):
         self.info(f"Clicking '{locator}' using an action chain.")
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
@@ -672,7 +672,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             f"Clicking {tag if tag[0] else 'element'} '{locator}' with {modifier}."
         )
         modifier = self.parse_modifier(modifier)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         for item in modifier:
             action.key_down(item)
         element = self.find_element(locator, tag=tag[0], required=False)
@@ -703,7 +703,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
@@ -720,7 +720,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.double_click(element).perform()
 
     @keyword
@@ -747,7 +747,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        ActionChains(self.driver).move_to_element(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).move_to_element(element).perform()
 
     @keyword
     def drag_and_drop(
@@ -768,7 +768,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         target = self.find_element(target)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         target = _unwrap_eventfiring_element(target)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.drag_and_drop(element, target).perform()
 
     @keyword
@@ -789,7 +789,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.drag_and_drop_by_offset(element, xoffset, yoffset)
         action.perform()
 
@@ -809,7 +809,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -826,7 +826,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         size = element.size
         offsetx = (size["width"] / 2) + 1
         offsety = (size["height"] / 2) + 1
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.move_to_element(element)
         action.move_by_offset(offsetx, offsety)
         action.perform()
@@ -842,7 +842,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.move_to_element(element).perform()
 
     @keyword
@@ -856,7 +856,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        ActionChains(self.driver).release(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(element).perform()
 
     @keyword
     def open_context_menu(self, locator: Union[WebElement, str]):
@@ -864,7 +864,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator)
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.context_click(element).perform()
 
     @keyword
@@ -954,12 +954,12 @@ return !element.dispatchEvent(evt);
             element = self.find_element(locator)
             # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
             element = _unwrap_eventfiring_element(element)
-            ActionChains(self.driver).click(element).perform()
+            ActionChains(self.driver, duration=self.ctx.action_chain_delay).click(element).perform()
         else:
             self.info(f"Sending key(s) {keys} to page.")
             element = None
         for parsed_key in parsed_keys:
-            actions = ActionChains(self.driver)
+            actions = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
             for key in parsed_key:
                 if key.special:
                     self._press_keys_special_keys(actions, element, parsed_key, key)
@@ -1009,7 +1009,7 @@ return !element.dispatchEvent(evt);
         element = self.find_element(locator, tag="link")
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -1059,7 +1059,7 @@ return !element.dispatchEvent(evt);
         element = self.find_element(locator, tag="image")
         # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
         element = _unwrap_eventfiring_element(element)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.click_and_hold(element).perform()
 
     @keyword

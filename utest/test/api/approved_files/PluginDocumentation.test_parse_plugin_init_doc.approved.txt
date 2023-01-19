@@ -4,6 +4,8 @@ SeleniumLibrary can be imported with several optional arguments.
   Default value for `timeouts` used with ``Wait ...`` keywords.
 - ``implicit_wait``:
   Default value for `implicit wait` used when locating elements.
+- ``action_chain_delay``:
+  Default value for `ActionChains` delay to wait in between actions.
 - ``run_on_failure``:
   Default action for the `run-on-failure functionality`.
 - ``screenshot_root_directory``:
