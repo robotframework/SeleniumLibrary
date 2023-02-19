@@ -27,6 +27,16 @@ Page Should Contain
     Page Should Contain    This is the haystack
     Page Should Contain    non existing text
 
+Page Should Contain Using Default Custom Log Level
+    [Tags]    NoGrid
+    [Documentation]    The Page Should Contains using default custom log level fails and the log contains the html content.
+    ...    FAIL Page should have contained text 'non existing text' but did not.
+    ...    LOG 2:19 TRACE REGEXP: (?i)<html.*</html>
+    ...    LOG 2:20 FAIL Page should have contained text 'non existing text' but did not.
+    ${old_level}=  Set Log Level    TRACE
+    Page Should Contain    non existing text
+    [Teardown]    Set Log Level    ${old_level}
+
 Page Should Contain Numbers And String Should Be Same
     Log Source
     Page Should Contain    1
