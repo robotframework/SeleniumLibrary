@@ -113,6 +113,7 @@ Test Get Cookie Keyword Logging
     ...    secure=False
     ...    httpOnly=False
     ...    expiry=2023-10-29 19:36:51
+    ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     another
 
 *** Keyword ***
