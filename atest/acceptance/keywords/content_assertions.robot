@@ -29,7 +29,9 @@ Page Should Contain
 
 Page Should Contain Using Default Custom Log Level
     [Tags]    NoGrid
-    [Documentation]    The Page Should Contains using default custom log level fails and the log contains the html content.
+    [Documentation]    The Page Should Contains using default custom log level (that being
+    ...    'TRACE' - noting the excluded second argument for the `Page Should Contain`
+    ...    keyword) fails and the log contains the html content.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 2:19 TRACE REGEXP: (?i)<html.*</html>
     ...    LOG 2:20 FAIL Page should have contained text 'non existing text' but did not.
@@ -49,7 +51,7 @@ Page Should Contain With Text Having Internal Elements
 
 Page Should Contain With Custom Log Level INFO
     [Tags]    NoGrid
-    [Documentation]    Html content is shown at INFO level.
+    [Documentation]    Html content is shown at the explicitly specified INFO level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 1:18 INFO REGEXP: (?i)<html.*</html>
     ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
@@ -57,7 +59,7 @@ Page Should Contain With Custom Log Level INFO
 
 Page Should Contain With Custom Log Level WARN
     [Tags]    NoGrid
-    [Documentation]    Html content is shown at WARN level.
+    [Documentation]    Html content is shown at the explicitly specified WARN level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 1:18 WARN REGEXP: (?i)<html.*</html>
     ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
@@ -65,7 +67,7 @@ Page Should Contain With Custom Log Level WARN
 
 Page Should Contain With Custom Log Level DEBUG
     [Tags]    NoGrid
-    [Documentation]    Html content is shown at DEBUG level.
+    [Documentation]    Html content is shown at the explicitly specified DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 1:18 DEBUG REGEXP: (?i)<html.*</html>
     ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
@@ -73,7 +75,7 @@ Page Should Contain With Custom Log Level DEBUG
 
 Page Should Contain With Custom Log Level TRACE
     [Tags]    NoGrid
-    [Documentation]    Html content is shown at TRACE level.
+    [Documentation]    Html content is shown at the explicitly specified TRACE level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 2:19 TRACE REGEXP: (?i)<html.*</html>
     ...    LOG 2:20 FAIL Page should have contained text 'non existing text' but did not.
@@ -83,7 +85,7 @@ Page Should Contain With Custom Log Level TRACE
 
 Page Should Contain With Custom Log Level NONE
     [Tags]    NoGrid
-    [Documentation]    Html content is not shown at NONE level.
+    [Documentation]    Html content is not shown because the loglevel is set to NONE.
     ...    FAIL Page should have contained text 'non existing text' but did not.
     ...    LOG 1:18 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    non existing text    NONE
