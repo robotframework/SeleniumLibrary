@@ -17,7 +17,6 @@ from collections import namedtuple
 from typing import List, Optional, Tuple, Union
 
 from SeleniumLibrary.utils import is_noney
-from SeleniumLibrary.utils.events.event import _unwrap_eventfiring_element
 from robot.utils import plural_or_not, is_truthy
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -661,8 +660,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.info(f"Clicking '{locator}' using an action chain.")
         action = ActionChains(self.driver)
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action.move_to_element(element)
         action.click()
         action.perform()
@@ -678,8 +675,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         element = self.find_element(locator, tag=tag[0], required=False)
         if not element:
             element = self.find_element(locator, tag=tag[1])
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action.click(element)
         for item in modifier:
             action.key_up(item)
@@ -701,8 +696,6 @@ newDiv.parentNode.style.overflow = 'hidden';
             f"Clicking element '{locator}' at coordinates x={xoffset}, y={yoffset}."
         )
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
@@ -718,8 +711,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Double clicking element '{locator}'.")
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.double_click(element).perform()
 
@@ -745,8 +736,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         New in SeleniumLibrary 3.2.0
         """
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         ActionChains(self.driver).move_to_element(element).perform()
 
     @keyword
@@ -763,11 +752,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         | `Drag And Drop` | css:div#element | css:div.target |
         """
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         target = self.find_element(target)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        target = _unwrap_eventfiring_element(target)
         action = ActionChains(self.driver)
         action.drag_and_drop(element, target).perform()
 
@@ -787,8 +772,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         | `Drag And Drop By Offset` | myElem | 50 | -35 | # Move myElem 50px right and 35px down |
         """
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.drag_and_drop_by_offset(element, xoffset, yoffset)
         action.perform()
@@ -807,8 +790,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Down on element '{locator}'.")
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
@@ -821,8 +802,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Out on element '{locator}'.")
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         size = element.size
         offsetx = (size["width"] / 2) + 1
         offsety = (size["height"] / 2) + 1
@@ -840,8 +819,6 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Over on element '{locator}'.")
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.move_to_element(element).perform()
 
@@ -854,16 +831,12 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Up on element '{locator}'.")
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         ActionChains(self.driver).release(element).perform()
 
     @keyword
     def open_context_menu(self, locator: Union[WebElement, str]):
         """Opens the context menu on the element identified by ``locator``."""
         element = self.find_element(locator)
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.context_click(element).perform()
 
@@ -952,8 +925,6 @@ return !element.dispatchEvent(evt);
         if not is_noney(locator):
             self.info(f"Sending key(s) {keys} to {locator} element.")
             element = self.find_element(locator)
-            # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-            element = _unwrap_eventfiring_element(element)
             ActionChains(self.driver).click(element).perform()
         else:
             self.info(f"Sending key(s) {keys} to page.")
@@ -1007,8 +978,6 @@ return !element.dispatchEvent(evt);
         using ``id``, ``name``, ``href`` and the link text.
         """
         element = self.find_element(locator, tag="link")
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
@@ -1057,8 +1026,6 @@ return !element.dispatchEvent(evt);
         using ``id``, ``name``, ``src`` and ``alt``.
         """
         element = self.find_element(locator, tag="image")
-        # _unwrap_eventfiring_element can be removed when minimum required Selenium is 4.0 or greater.
-        element = _unwrap_eventfiring_element(element)
         action = ActionChains(self.driver)
         action.click_and_hold(element).perform()
 
