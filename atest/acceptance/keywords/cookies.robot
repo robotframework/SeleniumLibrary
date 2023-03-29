@@ -104,7 +104,7 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
-    [Tags]    NoGrid
+    [Tags]    NoGrid    Known Issue Firefox
     [Documentation]
     ...    LOG 1:5 ${cookie} = name=another
     ...    value=value
@@ -113,6 +113,7 @@ Test Get Cookie Keyword Logging
     ...    secure=False
     ...    httpOnly=False
     ...    expiry=2023-10-29 19:36:51
+    ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     another
 
 *** Keyword ***
