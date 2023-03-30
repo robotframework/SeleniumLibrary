@@ -129,9 +129,9 @@ class ElementKeywords(LibraryComponent):
 
         If this keyword fails, it automatically logs the page source
         using the log level specified with the optional ``loglevel``
-        argument. Valid log levels are ``DEBUG``, ``INFO`` (default),
-        ``WARN``, and ``NONE``. If the log level is ``NONE`` or below
-        the current active log level the source will not be logged.
+        argument. Valid log levels are ``TRACE`` (default), ``DEBUG``,
+        ``INFO``, ``WARN``, and ``NONE``. If the log level is ``NONE``
+        or below the current active log level the source will not be logged.
         """
         if not self._page_contains(text):
             self.ctx.log_source(loglevel)
