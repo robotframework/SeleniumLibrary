@@ -1,6 +1,7 @@
 *** Settings ***
 Resource          ../resource.robot
 
+Suite Teardown    Switch Back To Suite Browser
 Test Teardown     Close Browser And Reset Page Load Timeout
 
 *** Test Cases ***
@@ -28,3 +29,6 @@ Should Set Page Load Timeout For All Opened Browsers
 Close Browser And Reset Page Load Timeout
     Close Browser
     Set Selenium Page Load Timeout    10 s
+
+Switch Back To Suite Browser
+    Switch Browser    keywords
