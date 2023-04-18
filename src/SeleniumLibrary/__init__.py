@@ -442,11 +442,11 @@ class SeleniumLibrary(DynamicCore):
         self,
         timeout=timedelta(seconds=5),
         implicit_wait=timedelta(seconds=0),
-        page_load_timeout=timedelta(seconds=10),
         run_on_failure="Capture Page Screenshot",
         screenshot_root_directory: Optional[str] = None,
         plugins: Optional[str] = None,
         event_firing_webdriver: Optional[str] = None,
+        page_load_timeout=timedelta(minutes=5),
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -454,8 +454,6 @@ class SeleniumLibrary(DynamicCore):
           Default value for `timeouts` used with ``Wait ...`` keywords.
         - ``implicit_wait``:
           Default value for `implicit wait` used when locating elements.
-        - ``page_load_timeout``:
-          Default value to wait for page load to complete until error is raised.
         - ``run_on_failure``:
           Default action for the `run-on-failure functionality`.
         - ``screenshot_root_directory``:
@@ -467,6 +465,8 @@ class SeleniumLibrary(DynamicCore):
         - ``event_firing_webdriver``:
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
+        - ``page_load_timeout``:
+          Default value to wait for page load to complete until error is raised.
         """
         self.timeout = _convert_timeout(timeout)
         self.implicit_wait = _convert_timeout(implicit_wait)

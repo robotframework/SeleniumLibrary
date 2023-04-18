@@ -730,9 +730,9 @@ class BrowserManagementKeywords(LibraryComponent):
         See the `Page load` section above for more information.
 
         Example:
-        | ${orig pl timeout} = | `Set Selenium Page Load Timeout` | 30 seconds |
+        | ${orig page load timeout} = | `Set Selenium Page Load Timeout` | 30 seconds |
         | `Open page that loads slowly` |
-        | `Set Selenium Page Load Timeout` | ${orig pl timeout} |
+        | `Set Selenium Page Load Timeout` | ${orig page load timeout} |
 
         New in SeleniumLibrary 6.1
         """

@@ -56,7 +56,7 @@ def test_selenium_implicit_wait_get():
 
 def test_selenium_page_load_timeout_with_default():
     sl = SeleniumLibrary()
-    assert sl.page_load_timeout == 10.0, "Page load timeout should be 10.0"
+    assert sl.page_load_timeout == 300.0, "Default page load timeout should be 5 minutes"
 
 
 def test_set_selenium_page_load_timeout():
