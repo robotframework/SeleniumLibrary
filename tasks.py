@@ -221,7 +221,7 @@ def utest(ctx, suite=None):
     Args:
         suite: Select which suite to run.
     """
-    command = "python utest/run.py"
+    command = f"{sys.executable} utest/run.py"
     if suite:
         command = f"{command} --suite {suite}"
     ctx.run(command)

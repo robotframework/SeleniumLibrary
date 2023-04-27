@@ -355,6 +355,17 @@ class SeleniumLibrary(DynamicCore):
 
     See `time format` below for supported syntax.
 
+    == Page load ==
+    Page load timeout is the amount of time to wait for page load to complete until error is raised.
+
+    The default page load timeout can be set globally
+    when `importing` the library with the ``page_load_timeout`` argument
+    or by using the `Set Selenium Page Load Timeout` keyword.
+
+    See `time format` below for supported timeout syntax.
+
+    Support for page load is new in SeleniumLibrary 6.1
+
     == Selenium speed ==
 
     Selenium execution speed can be slowed down globally by using `Set
@@ -436,6 +447,7 @@ class SeleniumLibrary(DynamicCore):
         screenshot_root_directory: Optional[str] = None,
         plugins: Optional[str] = None,
         event_firing_webdriver: Optional[str] = None,
+        page_load_timeout=timedelta(minutes=5),
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -456,10 +468,13 @@ class SeleniumLibrary(DynamicCore):
         - ``event_firing_webdriver``:
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
+        - ``page_load_timeout``:
+          Default value to wait for page load to complete until error is raised.
         """
         self.timeout = _convert_timeout(timeout)
         self.implicit_wait = _convert_timeout(implicit_wait)
         self.action_chain_delay = _convert_delay(action_chain_delay)
+        self.page_load_timeout = _convert_timeout(page_load_timeout)
         self.speed = 0.0
         self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(
             run_on_failure
