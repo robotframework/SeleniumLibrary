@@ -658,7 +658,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     def _click_with_action_chain(self, locator: Union[WebElement, str]):
         self.info(f"Clicking '{locator}' using an action chain.")
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         element = self.find_element(locator)
         action.move_to_element(element)
         action.click()
@@ -669,7 +669,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             f"Clicking {tag if tag[0] else 'element'} '{locator}' with {modifier}."
         )
         modifier = self.parse_modifier(modifier)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         for item in modifier:
             action.key_down(item)
         element = self.find_element(locator, tag=tag[0], required=False)
@@ -696,7 +696,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             f"Clicking element '{locator}' at coordinates x={xoffset}, y={yoffset}."
         )
         element = self.find_element(locator)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.move_to_element(element)
         action.move_by_offset(xoffset, yoffset)
         action.click()
@@ -711,7 +711,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Double clicking element '{locator}'.")
         element = self.find_element(locator)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.double_click(element).perform()
 
     @keyword
@@ -736,7 +736,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         New in SeleniumLibrary 3.2.0
         """
         element = self.find_element(locator)
-        ActionChains(self.driver).move_to_element(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).move_to_element(element).perform()
 
     @keyword
     def drag_and_drop(
@@ -753,7 +753,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         element = self.find_element(locator)
         target = self.find_element(target)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.drag_and_drop(element, target).perform()
 
     @keyword
@@ -772,7 +772,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         | `Drag And Drop By Offset` | myElem | 50 | -35 | # Move myElem 50px right and 35px down |
         """
         element = self.find_element(locator)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.drag_and_drop_by_offset(element, xoffset, yoffset)
         action.perform()
 
@@ -790,7 +790,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Down on element '{locator}'.")
         element = self.find_element(locator)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -805,7 +805,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         size = element.size
         offsetx = (size["width"] / 2) + 1
         offsety = (size["height"] / 2) + 1
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.move_to_element(element)
         action.move_by_offset(offsetx, offsety)
         action.perform()
@@ -819,7 +819,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Over on element '{locator}'.")
         element = self.find_element(locator)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.move_to_element(element).perform()
 
     @keyword
@@ -831,13 +831,13 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Up on element '{locator}'.")
         element = self.find_element(locator)
-        ActionChains(self.driver).release(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(element).perform()
 
     @keyword
     def open_context_menu(self, locator: Union[WebElement, str]):
         """Opens the context menu on the element identified by ``locator``."""
         element = self.find_element(locator)
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.context_click(element).perform()
 
     @keyword
@@ -925,12 +925,12 @@ return !element.dispatchEvent(evt);
         if not is_noney(locator):
             self.info(f"Sending key(s) {keys} to {locator} element.")
             element = self.find_element(locator)
-            ActionChains(self.driver).click(element).perform()
+            ActionChains(self.driver, duration=self.ctx.action_chain_delay).click(element).perform()
         else:
             self.info(f"Sending key(s) {keys} to page.")
             element = None
         for parsed_key in parsed_keys:
-            actions = ActionChains(self.driver)
+            actions = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
             for key in parsed_key:
                 if key.special:
                     self._press_keys_special_keys(actions, element, parsed_key, key)
@@ -978,7 +978,7 @@ return !element.dispatchEvent(evt);
         using ``id``, ``name``, ``href`` and the link text.
         """
         element = self.find_element(locator, tag="link")
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.click_and_hold(element).perform()
 
     @keyword
@@ -1026,7 +1026,7 @@ return !element.dispatchEvent(evt);
         using ``id``, ``name``, ``src`` and ``alt``.
         """
         element = self.find_element(locator, tag="image")
-        action = ActionChains(self.driver)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.click_and_hold(element).perform()
 
     @keyword

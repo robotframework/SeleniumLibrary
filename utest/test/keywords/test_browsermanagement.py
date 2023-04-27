@@ -23,6 +23,25 @@ def test_set_selenium_timeout_only_affects_open_browsers():
     verifyNoMoreInteractions(second_browser)
 
 
+def test_action_chain_delay_default():
+    sl = SeleniumLibrary()
+    assert sl.action_chain_delay == 250, f"Delay should have 250"
+
+
+def test_set_action_chain_delay_default():
+    sl = SeleniumLibrary()
+    sl.set_action_chain_delay("3.0")
+    assert sl.action_chain_delay == 3000, f"Delay should have 3000"
+
+    sl.set_action_chain_delay("258 milliseconds")
+    assert sl.action_chain_delay == 258, f"Delay should have 258"
+
+
+def test_get_action_chain_delay_default():
+    sl = SeleniumLibrary()
+    sl.set_action_chain_delay("300 milliseconds")
+    assert sl.get_action_chain_delay() == 0.3
+
 def test_selenium_implicit_wait_default():
     sl = SeleniumLibrary()
     assert sl.implicit_wait == 0.0, "Wait should have 0.0"
