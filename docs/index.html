@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="generator" content="Docutils 0.16: http://docutils.sourceforge.net/" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <title>SeleniumLibrary</title>
 <link rel="stylesheet" href="style.css" type="text/css" />
 <link rel="stylesheet" href="extra.css" type="text/css" />
 </head>
-<body>
-<div class="document" id="seleniumlibrary">
+<body class="with-toc">
+<main id="seleniumlibrary">
 <h1 class="title">SeleniumLibrary</h1>
 
-<div class="contents topic" id="contents">
+<nav class="contents" id="contents" role="doc-toc">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#introduction" id="id6">Introduction</a></p></li>
-<li><p><a class="reference internal" href="#keyword-documentation" id="id7">Keyword Documentation</a></p></li>
-<li><p><a class="reference internal" href="#installation" id="id8">Installation</a></p></li>
-<li><p><a class="reference internal" href="#browser-drivers" id="id9">Browser drivers</a></p></li>
-<li><p><a class="reference internal" href="#usage" id="id10">Usage</a></p></li>
-<li><p><a class="reference internal" href="#extending-seleniumlibrary" id="id11">Extending SeleniumLibrary</a></p></li>
-<li><p><a class="reference internal" href="#community" id="id12">Community</a></p></li>
-<li><p><a class="reference internal" href="#versions" id="id13">Versions</a></p></li>
-<li><p><a class="reference internal" href="#history" id="id14">History</a></p></li>
+<li><p><a class="reference internal" href="#introduction" id="toc-entry-1">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#keyword-documentation" id="toc-entry-2">Keyword Documentation</a></p></li>
+<li><p><a class="reference internal" href="#installation" id="toc-entry-3">Installation</a></p></li>
+<li><p><a class="reference internal" href="#browser-drivers" id="toc-entry-4">Browser drivers</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="toc-entry-5">Usage</a></p></li>
+<li><p><a class="reference internal" href="#extending-seleniumlibrary" id="toc-entry-6">Extending SeleniumLibrary</a></p></li>
+<li><p><a class="reference internal" href="#community" id="toc-entry-7">Community</a></p></li>
+<li><p><a class="reference internal" href="#versions" id="toc-entry-8">Versions</a></p></li>
+<li><p><a class="reference internal" href="#history" id="toc-entry-9">History</a></p></li>
 </ul>
-</div>
-<div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id6">Introduction</a></h1>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#toc-entry-1" role="doc-backlink">Introduction</a></h2>
 <p><a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> is a web testing library for <a class="reference external" href="https://robotframework.org">Robot Framework</a> that
 utilizes the <a class="reference external" href="https://www.seleniumhq.org/">Selenium</a> tool internally. The project is hosted on <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a>
 and downloads can be found from <a class="reference external" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">PyPI</a>.</p>
@@ -41,14 +42,14 @@ different versions and the overall project history.</p>
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary"><img alt="https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg" /></a>
 <a class="reference external image-reference" href="https://www.apache.org/licenses/LICENSE-2.0"><img alt="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/robotframework/SeleniumLibrary/actions?query=workflow%3A%22SeleniumLibrary+CI%22"><img alt="https://github.com/robotframework/SeleniumLibrary/workflows/SeleniumLibrary%20CI/badge.svg" src="https://github.com/robotframework/SeleniumLibrary/workflows/SeleniumLibrary%20CI/badge.svg" /></a>
-</div>
-<div class="section" id="keyword-documentation">
-<h1><a class="toc-backref" href="#id7">Keyword Documentation</a></h1>
+</section>
+<section id="keyword-documentation">
+<h2><a class="toc-backref" href="#toc-entry-2" role="doc-backlink">Keyword Documentation</a></h2>
 <p>See <a class="reference external" href="https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html">keyword documentation</a> for available keywords and more information
 about the library in general.</p>
-</div>
-<div class="section" id="installation">
-<h1><a class="toc-backref" href="#id8">Installation</a></h1>
+</section>
+<section id="installation">
+<h2><a class="toc-backref" href="#toc-entry-3" role="doc-backlink">Installation</a></h2>
 <p>The recommended installation method is using <a class="reference external" href="http://pip-installer.org">pip</a>:</p>
 <pre class="literal-block">pip install --upgrade robotframework-seleniumlibrary</pre>
 <p>Running this command installs also the latest Selenium and Robot Framework
@@ -64,7 +65,7 @@ That allows importing Selenium2Library in tests while migrating to
 SeleniumLibrary.</p>
 <p>To install the last legacy <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> version, use this command instead:</p>
 <pre class="literal-block">pip install robotframework-selenium2library==1.8.0</pre>
-<p>With resent versions of <span class="docutils literal">pip</span> it is possible to install directly from the
+<p>With recent versions of <span class="docutils literal">pip</span> it is possible to install directly from the
 <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a> repository. To install latest source from the master branch, use
 this command:</p>
 <pre class="literal-block">pip install git+https://github.com/robotframework/SeleniumLibrary.git</pre>
@@ -74,9 +75,9 @@ perform the installation.</p>
 <p>See <a class="reference external" href="https://github.com/robotframework/robotframework/blob/master/INSTALL.rst">Robot Framework installation instructions</a> for detailed information
 about installing Python and Robot Framework itself. For more details about
 using <span class="docutils literal">pip</span> see <a class="reference external" href="http://pip-installer.org">its own documentation</a>.</p>
-</div>
-<div class="section" id="browser-drivers">
-<h1><a class="toc-backref" href="#id9">Browser drivers</a></h1>
+</section>
+<section id="browser-drivers">
+<h2><a class="toc-backref" href="#toc-entry-4" role="doc-backlink">Browser drivers</a></h2>
 <p>After installing the library, you still need to install browser and
 operating system specific browser drivers for all those browsers you
 want to use in tests. These are the exact same drivers you need to use with
@@ -98,9 +99,9 @@ downloading of Chrome, Firefox, Opera &amp; Edge webdrivers.</p>
 <p>Here's an example:</p>
 <pre class="code bash literal-block"><code>pip install webdrivermanager
 webdrivermanager firefox chrome --linkpath /usr/local/bin</code></pre>
-</div>
-<div class="section" id="usage">
-<h1><a class="toc-backref" href="#id10">Usage</a></h1>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#toc-entry-5" role="doc-backlink">Usage</a></h2>
 <p>To use SeleniumLibrary in Robot Framework tests, the library needs to
 first be imported using the <span class="docutils literal">Library</span> setting as any other library.
 The library accepts some import time arguments, which are documented
@@ -155,9 +156,9 @@ ${</span><span class="name variable">BROWSER</span><span class="punctuation">}  
 See the demo for more examples that you can also execute on your own
 machine. For more information about Robot Framework test data syntax in
 general see the <a class="reference external" href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html">Robot Framework User Guide</a>.</p>
-</div>
-<div class="section" id="extending-seleniumlibrary">
-<h1><a class="toc-backref" href="#id11">Extending SeleniumLibrary</a></h1>
+</section>
+<section id="extending-seleniumlibrary">
+<h2><a class="toc-backref" href="#toc-entry-6" role="doc-backlink">Extending SeleniumLibrary</a></h2>
 <p>Before creating your own library which extends the <span class="docutils literal">SeleniumLibrary</span>, please consider would
 the extension be also useful also for general usage. If it could be useful also for general
 usage, please create a new issue describing the enhancement request and even better if the
@@ -168,9 +169,9 @@ Plugin API allows us to add new keywords, modify existing keywords and modify th
 functionality of the library. Also new libraries can be built on top of the
 SeleniumLibrary. Please see <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst">extending documentation</a> for more details about the
 available methods and for examples how the library can be extended.</p>
-</div>
-<div class="section" id="community">
-<h1><a class="toc-backref" href="#id12">Community</a></h1>
+</section>
+<section id="community">
+<h2><a class="toc-backref" href="#toc-entry-7" role="doc-backlink">Community</a></h2>
 <p>If the provided documentation is not enough, there are various community channels
 available:</p>
 <ul class="simple">
@@ -182,21 +183,15 @@ Robot Framework <a class="reference external" href="https://robotframework-slack
 requests</p></li>
 <li><p><a class="reference external" href="https://robotframework.org/#community">Other community channels</a> including paid support</p></li>
 </ul>
-</div>
-<div class="section" id="versions">
-<h1><a class="toc-backref" href="#id13">Versions</a></h1>
+</section>
+<section id="versions">
+<h2><a class="toc-backref" href="#toc-entry-8" role="doc-backlink">Versions</a></h2>
 <p>SeleniumLibrary has over the years lived under SeleniumLibrary and
 Selenium2Library names and different library versions have supported
 different Selenium and Python versions. This is summarized in the table
 below and the <a class="reference internal" href="#history">History</a> section afterwards explains the project history
 a bit more.</p>
 <table>
-<colgroup>
-<col style="width: 22%" />
-<col style="width: 16%" />
-<col style="width: 16%" />
-<col style="width: 46%" />
-</colgroup>
 <thead>
 <tr><th class="head"><p>Project</p></th>
 <th class="head"><p>Selenium Version</p></th>
@@ -262,9 +257,9 @@ a bit more.</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="history">
-<h1><a class="toc-backref" href="#id14">History</a></h1>
+</section>
+<section id="history">
+<h2><a class="toc-backref" href="#toc-entry-9" role="doc-backlink">History</a></h2>
 <p>SeleniumLibrary originally used the Selenium Remote Controller (RC) API.
 When Selenium 2 was introduced with the new but backwards incompatible
 WebDriver API, SeleniumLibrary kept using Selenium RC and separate
@@ -298,7 +293,7 @@ to SeleniumLibrary.</p></li>
 </ul>
 <p>Going forward, all new development will happen in the new SeleniumLibrary
 project.</p>
-</div>
-</div>
+</section>
+</main>
 </body>
 </html>
