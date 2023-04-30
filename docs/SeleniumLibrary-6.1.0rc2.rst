@@ -48,10 +48,11 @@ Most important enhancements
 
 **EXPLAIN** or remove these.
 
--  Add API to set page load timeout (`#1535`_)  (`#1754`_)
+- The Wait Until * keywords don't support a None value for the error parameter (`#1733`_)
+- Add API to set page load timeout (`#1535`_)
 - Update webdrivertools.py (`#1698`_)
-- Added clarifying information about timeouts (`#1740`_)
-- Users can now modify ActionChains() duration. (`#1812`_)
+- Suggestion for clarifying documentation around Timeouts (`#1738`_)
+- Keywords which uses action chains are having a default 250ms timeout which cannot be overriden. (`#1768`_)
 - Remove deprecated opera support (`#1786`_)
 
 Deprecated features
@@ -68,14 +69,19 @@ Acknowledgements
 
 **EXPLAIN** or remove these.
 
--  Add API to set page load timeout (`#1535`_)  (`#1754`_)
+- The Wait Until * keywords don't support a None value for the error parameter (`#1733`_)
+- Add API to set page load timeout (`#1535`_)
 - Update webdrivertools.py (`#1698`_)
-- Added clarifying information about timeouts (`#1740`_)
-- Users can now modify ActionChains() duration. (`#1812`_)
+- Suggestion for clarifying documentation around Timeouts (`#1738`_)
+- Keywords which uses action chains are having a default 250ms timeout which cannot be overriden. (`#1768`_)
 - Remove deprecated opera support (`#1786`_)
+- Acceptance tests: rebot option `--noncritical` is deprecated since RF 4 (`#1788`_)
 - Microsoft edge webdriver (`#1795`_)
+- Fix tests on firefox (`#1808`_)
 - RemoteDriverServerException was removed from Selenium (`#1804`_)
-- Review workaround for slenium3 bug tests (`#1789`_)
+- Rf v5 v6 (`#1807`_)
+- fix `StringIO` import as it was removed in robot 5.0 (`#1753`_)
+- Remove deprecated rebot option (`#1793`_)
 
 Full list of fixes and enhancements
 ===================================
@@ -87,38 +93,54 @@ Full list of fixes and enhancements
       - Type
       - Priority
       - Summary
-    * - `#1754`_
+    * - `#1733`_
+      - bug
+      - high
+      - The Wait Until * keywords don't support a None value for the error parameter
+    * - `#1535`_
       - enhancement
-      - critical
-      -  Add API to set page load timeout (`#1535`_) 
+      - high
+      - Add API to set page load timeout
     * - `#1698`_
       - enhancement
       - high
       - Update webdrivertools.py
-    * - `#1740`_
+    * - `#1738`_
       - enhancement
       - high
-      - Added clarifying information about timeouts
-    * - `#1812`_
+      - Suggestion for clarifying documentation around Timeouts
+    * - `#1768`_
       - enhancement
       - high
-      - Users can now modify ActionChains() duration.
+      - Keywords which uses action chains are having a default 250ms timeout which cannot be overriden.
     * - `#1786`_
       - ---
       - high
       - Remove deprecated opera support
-    * - `#1797`_
+    * - `#1785`_
       - bug
       - medium
-      - Fix windowns utest running
-    * - `#1798`_
+      - Review Page Should Contain documentation
+    * - `#1796`_
       - bug
       - medium
-      - Use python interpreter that executed atest/run.py instead of python
+      - atest task loses python interpreter when running with virtualenv under Windows
+    * - `#1788`_
+      - enhancement
+      - medium
+      - Acceptance tests: rebot option `--noncritical` is deprecated since RF 4
     * - `#1795`_
       - enhancement
       - medium
       - Microsoft edge webdriver
+    * - `#1808`_
+      - enhancement
+      - medium
+      - Fix tests on firefox
+    * - `#1789`_
+      - ---
+      - medium
+      - Review workaround for selenium3 bug tests
     * - `#1804`_
       - ---
       - medium
@@ -147,37 +169,21 @@ Full list of fixes and enhancements
       - ---
       - low
       - Remove deprecated rebot option
-    * - `#1734`_
-      - ---
-      - ---
-      - Update PLC to 3.0.0
-    * - `#1785`_
-      - ---
-      - ---
-      - Review Page Should Contain documentation
-    * - `#1788`_
-      - ---
-      - ---
-      - Acceptance tests: rebot option `--noncritical` is deprecated since RF 4
-    * - `#1789`_
-      - ---
-      - ---
-      - Review workaround for slenium3 bug tests
-    * - `#1808`_
-      - ---
-      - ---
-      - Fix tests on firefox
 
-Altogether 20 issues. View on the `issue tracker <https://github.com/robotframework/SeleniumLibrary/issues?q=milestone%3Av6.1.0>`__.
+Altogether 19 issues. View on the `issue tracker <https://github.com/robotframework/SeleniumLibrary/issues?q=milestone%3Av6.1.0>`__.
 
-.. _#1754: https://github.com/robotframework/SeleniumLibrary/issues/1754
+.. _#1733: https://github.com/robotframework/SeleniumLibrary/issues/1733
+.. _#1535: https://github.com/robotframework/SeleniumLibrary/issues/1535
 .. _#1698: https://github.com/robotframework/SeleniumLibrary/issues/1698
-.. _#1740: https://github.com/robotframework/SeleniumLibrary/issues/1740
-.. _#1812: https://github.com/robotframework/SeleniumLibrary/issues/1812
+.. _#1738: https://github.com/robotframework/SeleniumLibrary/issues/1738
+.. _#1768: https://github.com/robotframework/SeleniumLibrary/issues/1768
 .. _#1786: https://github.com/robotframework/SeleniumLibrary/issues/1786
-.. _#1797: https://github.com/robotframework/SeleniumLibrary/issues/1797
-.. _#1798: https://github.com/robotframework/SeleniumLibrary/issues/1798
+.. _#1785: https://github.com/robotframework/SeleniumLibrary/issues/1785
+.. _#1796: https://github.com/robotframework/SeleniumLibrary/issues/1796
+.. _#1788: https://github.com/robotframework/SeleniumLibrary/issues/1788
 .. _#1795: https://github.com/robotframework/SeleniumLibrary/issues/1795
+.. _#1808: https://github.com/robotframework/SeleniumLibrary/issues/1808
+.. _#1789: https://github.com/robotframework/SeleniumLibrary/issues/1789
 .. _#1804: https://github.com/robotframework/SeleniumLibrary/issues/1804
 .. _#1794: https://github.com/robotframework/SeleniumLibrary/issues/1794
 .. _#1806: https://github.com/robotframework/SeleniumLibrary/issues/1806
@@ -185,8 +191,3 @@ Altogether 20 issues. View on the `issue tracker <https://github.com/robotframew
 .. _#1815: https://github.com/robotframework/SeleniumLibrary/issues/1815
 .. _#1753: https://github.com/robotframework/SeleniumLibrary/issues/1753
 .. _#1793: https://github.com/robotframework/SeleniumLibrary/issues/1793
-.. _#1734: https://github.com/robotframework/SeleniumLibrary/issues/1734
-.. _#1785: https://github.com/robotframework/SeleniumLibrary/issues/1785
-.. _#1788: https://github.com/robotframework/SeleniumLibrary/issues/1788
-.. _#1789: https://github.com/robotframework/SeleniumLibrary/issues/1789
-.. _#1808: https://github.com/robotframework/SeleniumLibrary/issues/1808
