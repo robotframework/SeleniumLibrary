@@ -47,26 +47,57 @@ Python 3.7+, Selenium 4.0+ and Robot Framework 4.1.3 or higher.
 Most important enhancements
 ===========================
 
-**EXPLAIN** or remove these.
 Set Page Load Timeout
 ---------------------
-- Add API to set page load timeout (`#1535`_)
+The ability to set the page load timeout value was added (`#1535`_). This can be done on the Library import.
+For example, one could set it to ten seconds, as in ..
 
-Action Chain ???????
---------------------
-- Keywords which uses action chains are having a default 250ms timeout which cannot be overriden. (`#1768`_)
+.. sourcecode:: robotframework
+
+   *** Setting ***
+   Library           SeleniumLibrary    page_load_timeout=10 seconds
+
+In addition there are two addition keywords (``Set Selenium Page Load Timeout`` and ``Get Selenium Page Load Timeout``)
+which allow for changing the page load timeout within a script. See the keyword documentation for more information.
+
+Duration of mouse movements within Action Chains
+------------------------------------------------
+Actions chains allow for building up a series of interactions including mouse movements. As to simulate an acutal
+user moving the mouse a default duration (250ms) for pointer movements is set. This change (`#1768`_) allows for
+the action chain duration to be modified. This can be done on the Library import, as in,
+
+.. sourcecode:: robotframework
+
+   *** Setting ***
+   Library           SeleniumLibrary    action_chain_delay=100 milliseconds
+
+or with the setter keyword ``Set Action Chain Delay``. In addition one can get the current duretion with the
+new keyword ``Get Action Chain Delay``. See the keyword documentation for more information.
 
 Timeout documentation updated
 -----------------------------
-- Suggestion for clarifying documentation around Timeouts (`#1738`_)
+The keyword documentation around timeouts was enhanced (`#1738`_) to clarrify what the default timeout is
+and that the default is used is ``None`` is specified. The changes are, as shown in **bold**,
+
+    The default timeout these keywords use can be set globally either by using the Set Selenium Timeout
+    keyword or with the timeout argument when importing the library. **If no default timeout is set
+    globally, the default is 5 seconds. If None is specified for the timeout argument in the keywords,
+    the default is used.** See time format below for supported timeout syntax.
 
 Edge webdriver under Linux
 --------------------------
-- Update webdrivertools.py (`#1698`_)
+The executable path to the edge browser has been changed (`#1698`_) so as to support both Windows and
+Linux/Unix/MacOSes. One should not notice any difference under Windows but under Linux/*nix one will
+no longer get an error message saying the Windows executable is missing.
 
 Bug fixes
 =========
-- The Wait Until * keywords don't support a None value for the error parameter (`#1733`_)
+
+``None`` argument not correctly converted
+-----------------------------------------
+There were some issues when using ``None`` as a parameter under certain arguments within the
+SeleniumLibrary(`#1733`_). This was due to the type hinting and argument conversions. The underlying
+issue was resolved within the PythonLibCore to which we have upgraded to PythonLibCore v3.0.0.
 
 Deprecated features
 ===================
@@ -81,11 +112,12 @@ Deprecated features
 Acknowledgements
 ================
 
-- `@0xLeon <https://github.com/0xLeon>`_  for suggesting and `@robinmatz <https://github.com/robinmatz>`_  enhancing the page
+- `@0xLeon <https://github.com/0xLeon>`_  for suggesting and
+  `@robinmatz <https://github.com/robinmatz>`_  enhancing the page
    load timout adding an API to set page load timeout (`#1535`_)
-- `@ johnpp143<https://github.com/johnpp143>`_  for reporting the action chains timeout
+- `@johnpp143 <https://github.com/johnpp143>`_  for reporting the action chains timeout
    was fixed and unchangble. `@ rasjani<https://github.com/rasjani>`_  for enhancing
-   the libraruy import and adding keywords allowing for user to set the Action Chain's
+   the library import and adding keywords allowing for user to set the Action Chain's
    duration. (`#1768`_)
 - `Dave Martin <https://github.com/sparkymartin>`_ for enhancing the documentation
   around Timeouts. (`#1738`_)
@@ -94,15 +126,16 @@ Acknowledgements
   for enhancing the core and PLC resolving an issue with types. (`#1733`_)
 - `@remontees <https://github.com/remontees>`_ for adding support for Edge webdriver under Linux. (`#1698`_)
 - `Lassi Heikkinen <https://github.com/Brownies>`_ for assisting in removing deprecated
-  opera support (`#1786`_), for enhancing the acceptance tests (`#1788`_), and for
-  fixing the tests on firefox (`#1808`_).
+  opera support (`#1786`_), for enhancing the acceptance tests (`#1788`_), for
+  fixing the tests on firefox (`#1808`_), and for removing the deprecated rebot option (`#1793`_).
 - `@dotlambda <https://github.com/dotlambda>`_ for pointing out that the
   RemoteDriverServerException was removed from Selenium (`#1804`_)
 - `@DetachHead <https://github.com/DetachHead>`_ for fixing `StringIO` import as it was
   removed in robot 5.0 (`#1753`_)
-- Remove deprecated rebot option (`#1793`_)
+
 
 **ACKNOWLEDGE TEAM MEMBERS**
+
 
 Full list of fixes and enhancements
 ===================================
