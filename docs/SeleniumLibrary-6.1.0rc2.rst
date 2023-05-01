@@ -50,7 +50,7 @@ Most important enhancements
 Set Page Load Timeout
 ---------------------
 The ability to set the page load timeout value was added (`#1535`_). This can be done on the Library import.
-For example, one could set it to ten seconds, as in ..
+For example, one could set it to ten seconds, as in,
 
 .. sourcecode:: robotframework
 
@@ -76,8 +76,8 @@ new keyword ``Get Action Chain Delay``. See the keyword documentation for more i
 
 Timeout documentation updated
 -----------------------------
-The keyword documentation around timeouts was enhanced (`#1738`_) to clarrify what the default timeout is
-and that the default is used is ``None`` is specified. The changes are, as shown in **bold**,
+The keyword documentation around timeouts was enhanced (`#1738`_) to clarify what the default timeout is
+and that the default is used if ``None`` is specified. The changes are, as shown in **bold**,
 
     The default timeout these keywords use can be set globally either by using the Set Selenium Timeout
     keyword or with the timeout argument when importing the library. **If no default timeout is set
@@ -87,7 +87,7 @@ and that the default is used is ``None`` is specified. The changes are, as shown
 Edge webdriver under Linux
 --------------------------
 The executable path to the edge browser has been changed (`#1698`_) so as to support both Windows and
-Linux/Unix/MacOSes. One should not notice any difference under Windows but under Linux/*nix one will
+Linux/Unix/MacOS OSes. One should not notice any difference under Windows but under Linux/*nix one will
 no longer get an error message saying the Windows executable is missing.
 
 Bug fixes
@@ -107,16 +107,28 @@ Deprecated features
 - *Internal Only:* The library's acceptance tests removed a deprecated rebot
   option. (`#1793`_)
 
-**NOTE DEPRECIATING SELENIUM2LIBRARY**
+Upcoming Depreciation of Selenium2Library
+=========================================
+
+*Please Take Note* - The SeleniumLibrary Team will be depreciating and removing the Selenium2Library
+package in an upcoming release. When the underlying Selenium project transitioned, over six years ago,
+from distinguishing between the "old" selenium (Selenium 1) and the "new" WebDriver Selenium 2 into
+a numerically increasing versioning, this project decided to use the original SeleniumLibrary package
+name. As a convenience the Selenium2Library packge was made a wrapper around the SeleniumLibrary
+package. Due to the issues around upgrading packages and the simple passage of time, it is time to 
+depreciate and remove the Selenium2Library package.
+
+*If you are still installing the Selenium2Libary package please transition over, as soon as possible,
+to installing the SeleniumLibrary package instead.*
 
 Acknowledgements
 ================
 
-- `@0xLeon <https://github.com/0xLeon>`_  for suggesting and
-  `@robinmatz <https://github.com/robinmatz>`_  enhancing the page
-   load timout adding an API to set page load timeout (`#1535`_)
-- `@johnpp143 <https://github.com/johnpp143>`_  for reporting the action chains timeout
-   was fixed and unchangble. `@ rasjani<https://github.com/rasjani>`_  for enhancing
+- `@0xLeon <https://github.com/0xLeon>`_ for suggesting and
+  `@robinmatz <https://github.com/robinmatz>`_ enhancing the page
+  load timout adding an API to set page load timeout (`#1535`_)
+- `@johnpp143 <https://github.com/johnpp143>`_ for reporting the action chains timeout
+   was fixed and unchangble. `@rasjani <https://github.com/rasjani>`_ for enhancing
    the library import and adding keywords allowing for user to set the Action Chain's
    duration. (`#1768`_)
 - `Dave Martin <https://github.com/sparkymartin>`_ for enhancing the documentation
