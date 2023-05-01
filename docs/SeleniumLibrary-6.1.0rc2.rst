@@ -8,7 +8,8 @@ SeleniumLibrary 6.1.0rc2
 
 SeleniumLibrary_ is a web testing library for `Robot Framework`_ that utilizes
 the Selenium_ tool internally. SeleniumLibrary 6.1.0rc2 is a new release with
-**UPDATE** enhancements and bug fixes. **ADD more intro stuff...**
+some enhancements around timeouts, broadening edge support and removing
+deprecated Opera support, and bug fixes.
 
 All issues targeted for SeleniumLibrary v6.1.0 can be found
 from the `issue tracker`_.
@@ -47,41 +48,61 @@ Most important enhancements
 ===========================
 
 **EXPLAIN** or remove these.
-
-- The Wait Until * keywords don't support a None value for the error parameter (`#1733`_)
+Set Page Load Timeout
+---------------------
 - Add API to set page load timeout (`#1535`_)
-- Update webdrivertools.py (`#1698`_)
-- Suggestion for clarifying documentation around Timeouts (`#1738`_)
+
+Action Chain ???????
+--------------------
 - Keywords which uses action chains are having a default 250ms timeout which cannot be overriden. (`#1768`_)
-- Remove deprecated opera support (`#1786`_)
+
+Timeout documentation updated
+-----------------------------
+- Suggestion for clarifying documentation around Timeouts (`#1738`_)
+
+Edge webdriver under Linux
+--------------------------
+- Update webdrivertools.py (`#1698`_)
+
+Bug fixes
+=========
+- The Wait Until * keywords don't support a None value for the error parameter (`#1733`_)
 
 Deprecated features
 ===================
 
-**EXPLAIN** or remove these.
+- Support for the Opera browser was removed from the underlying Selenium Python
+  bindings and thus we have removed the deprecated opera support. (`#1786`_)
+- *Internal Only:* The library's acceptance tests removed a deprecated rebot
+  option. (`#1793`_)
 
-- Remove deprecated opera support (`#1786`_)
-- fix `StringIO` import as it was removed in robot 5.0 (`#1753`_)
-- Remove deprecated rebot option (`#1793`_)
+**NOTE DEPRECIATING SELENIUM2LIBRARY**
 
 Acknowledgements
 ================
 
-**EXPLAIN** or remove these.
-
-- The Wait Until * keywords don't support a None value for the error parameter (`#1733`_)
-- Add API to set page load timeout (`#1535`_)
-- Update webdrivertools.py (`#1698`_)
-- Suggestion for clarifying documentation around Timeouts (`#1738`_)
-- Keywords which uses action chains are having a default 250ms timeout which cannot be overriden. (`#1768`_)
-- Remove deprecated opera support (`#1786`_)
-- Acceptance tests: rebot option `--noncritical` is deprecated since RF 4 (`#1788`_)
-- Microsoft edge webdriver (`#1795`_)
-- Fix tests on firefox (`#1808`_)
-- RemoteDriverServerException was removed from Selenium (`#1804`_)
-- Rf v5 v6 (`#1807`_)
-- fix `StringIO` import as it was removed in robot 5.0 (`#1753`_)
+- `@0xLeon <https://github.com/0xLeon>`_  for suggesting and `@robinmatz <https://github.com/robinmatz>`_  enhancing the page
+   load timout adding an API to set page load timeout (`#1535`_)
+- `@ johnpp143<https://github.com/johnpp143>`_  for reporting the action chains timeout
+   was fixed and unchangble. `@ rasjani<https://github.com/rasjani>`_  for enhancing
+   the libraruy import and adding keywords allowing for user to set the Action Chain's
+   duration. (`#1768`_)
+- `Dave Martin <https://github.com/sparkymartin>`_ for enhancing the documentation
+  around Timeouts. (`#1738`_)
+- `@tminakov <https://github.com/tminakov>`_ for pointing out the issue around the
+  None type and `Tato Aalto <https://github.com/aaltat>`_  and `Pekka Klärck <https://github.com/pekkaklarck>`_
+  for enhancing the core and PLC resolving an issue with types. (`#1733`_)
+- `@remontees <https://github.com/remontees>`_ for adding support for Edge webdriver under Linux. (`#1698`_)
+- `Lassi Heikkinen <https://github.com/Brownies>`_ for assisting in removing deprecated
+  opera support (`#1786`_), for enhancing the acceptance tests (`#1788`_), and for
+  fixing the tests on firefox (`#1808`_).
+- `@dotlambda <https://github.com/dotlambda>`_ for pointing out that the
+  RemoteDriverServerException was removed from Selenium (`#1804`_)
+- `@DetachHead <https://github.com/DetachHead>`_ for fixing `StringIO` import as it was
+  removed in robot 5.0 (`#1753`_)
 - Remove deprecated rebot option (`#1793`_)
+
+**ACKNOWLEDGE TEAM MEMBERS**
 
 Full list of fixes and enhancements
 ===================================
