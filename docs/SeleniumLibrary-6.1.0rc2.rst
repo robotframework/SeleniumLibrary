@@ -110,7 +110,7 @@ Deprecated features
 Upcoming Depreciation of Selenium2Library
 =========================================
 
-*Please Take Note* - The SeleniumLibrary Team will be depreciating and removing the Selenium2Library
+**Please Take Note** - The SeleniumLibrary Team will be depreciating and removing the Selenium2Library
 package in an upcoming release. When the underlying Selenium project transitioned, over six years ago,
 from distinguishing between the "old" selenium (Selenium 1) and the "new" WebDriver Selenium 2 into
 a numerically increasing versioning, this project decided to use the original SeleniumLibrary package
@@ -128,9 +128,9 @@ Acknowledgements
   `@robinmatz <https://github.com/robinmatz>`_ enhancing the page
   load timout adding an API to set page load timeout (`#1535`_)
 - `@johnpp143 <https://github.com/johnpp143>`_ for reporting the action chains timeout
-   was fixed and unchangble. `@rasjani <https://github.com/rasjani>`_ for enhancing
-   the library import and adding keywords allowing for user to set the Action Chain's
-   duration. (`#1768`_)
+  as fixed and unchangable. `@rasjani <https://github.com/rasjani>`_ for enhancing
+  the library import and adding keywords allowing for user to set the Action Chain's
+  duration. (`#1768`_)
 - `Dave Martin <https://github.com/sparkymartin>`_ for enhancing the documentation
   around Timeouts. (`#1738`_)
 - `@tminakov <https://github.com/tminakov>`_ for pointing out the issue around the
@@ -145,9 +145,18 @@ Acknowledgements
 - `@DetachHead <https://github.com/DetachHead>`_ for fixing `StringIO` import as it was
   removed in robot 5.0 (`#1753`_)
 
+In addition to the acknowledgements above I want to personally thank **Jani Mikkonen** as a co-maintainer of
+the SeleniumLibrary and all the support he has given over the years. I also want to thank **Tatu Aalto** for
+his continued support and guidance of and advice concerning the SeleniumLibrary. Despite "leaving" the
+project, he still is actively helping me to which I again say Kiitos! As I talked about in our Keynote
+talk at RoboCon 2023 I have been working on building up the SeleniumLibrary team. I want to acknowledge
+the following people who have stepped up and have been starting to take a larger development and
+leadership role with the SeleniumLibrary,
 
-**ACKNOWLEDGE TEAM MEMBERS**
+**Lassi Heikkinen, Lisa Crispin, Yuri Verweij, and Robin Matz**
 
+Their active participation has made this library significantly better and I appreciate their contributions
+and participation.  -- `Ed Manlove <https://github.com/emanlove>`_
 
 Full list of fixes and enhancements
 ===================================
