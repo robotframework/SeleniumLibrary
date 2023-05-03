@@ -114,7 +114,7 @@ Upcoming Depreciation of Selenium2Library
 package in an upcoming release. When the underlying Selenium project transitioned, over six years ago,
 from distinguishing between the "old" selenium (Selenium 1) and the "new" WebDriver Selenium 2 into
 a numerically increasing versioning, this project decided to use the original SeleniumLibrary package
-name. As a convenience the Selenium2Library packge was made a wrapper around the SeleniumLibrary
+name. As a convenience the Selenium2Library package was made a wrapper around the SeleniumLibrary
 package. Due to the issues around upgrading packages and the simple passage of time, it is time to 
 depreciate and remove the Selenium2Library package.
 
@@ -125,10 +125,10 @@ Acknowledgements
 ================
 
 - `@0xLeon <https://github.com/0xLeon>`_ for suggesting and
-  `@robinmatz <https://github.com/robinmatz>`_ enhancing the page
-  load timout adding an API to set page load timeout (`#1535`_)
+  `@robinmatz <https://github.com/robinmatz>`_ for enhancing the page
+  load timeout; adding an API to set page load timeout. (`#1535`_)
 - `@johnpp143 <https://github.com/johnpp143>`_ for reporting the action chains timeout
-  as fixed and unchangable. `@rasjani <https://github.com/rasjani>`_ for enhancing
+  as fixed and unchangeable. `@rasjani <https://github.com/rasjani>`_ for enhancing
   the library import and adding keywords allowing for user to set the Action Chain's
   duration. (`#1768`_)
 - `Dave Martin <https://github.com/sparkymartin>`_ for enhancing the documentation
