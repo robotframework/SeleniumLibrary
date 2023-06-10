@@ -142,7 +142,7 @@ def test_open_browser_speed():
     browser = mock()
     executable_path = "chromedriver"
     when(webdriver).Chrome(
-        options=None, service_log_path=None, executable_path=executable_path
+        options=None,  service=ANY,
     ).thenReturn(browser)
     bm = BrowserManagementKeywords(ctx)
     when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
@@ -192,14 +192,59 @@ def test_create_webdriver_speed():
     # E           Chrome(options=None, service=None)
 
     #Tried:
-    service = mock()
-    when(webdriver.chrome.service).Service(
-        executable_path="chromedriver", log_path=None,
-    ).thenReturn(service)
+    # service = mock()
+    # when(webdriver.chrome.service).Service(
+    #     executable_path="chromedriver", log_path=None,
+    # ).thenReturn(service)
+    # when(webdriver).Chrome(
+    #     options=None, service=service,
+    # ).thenReturn(browser)
+    #Results in ..
+    # ...
+
+    #Tried:
+    # service = ChromeService(executable_path="chromedriver", log_path=None)
+    # when(webdriver.chrome.service).Service(
+    #     executable_path="chromedriver", log_path=None,
+    # ).thenReturn(service)
+    # when(webdriver).Chrome(
+    #     options=None, service=service,
+    # ).thenReturn(browser)
+    #Results in ..
+    # E       mockito.invocation.InvocationError:
+    # E       Called but not expected:
+    # E
+    # E           Chrome(options=None, service=<selenium.webdriver.chrome.service.Service object at 0x000001A7EE7E8C40>)
+    # E
+    # E       Stubbed invocations are:
+    # E
+    # E           Chrome(options=None, service=<selenium.webdriver.chrome.service.Service object at 0x000001A7EE7E8730>)
+    #which does seem closer ..
+    
+    #Tried:
+    # service = Service(executable_path="chromedriver", log_path=None)
+    # when(webdriver).Chrome(
+    #     options=None, service=service,
+    # ).thenReturn(browser)
+    #Results in ..
+
+    #Tried:
+    # service = mock()
+    # ## when(Service).__init__(
+    # when(Chrome).Service(
+    #     executable_path="chromedriver", log_path=None,
+    # ).thenReturn(service)
+    # when(webdriver).Chrome(
+    #     options=None, service=service,
+    # ).thenReturn(browser)
+    #Results in ..
+
+    #Tried:
     when(webdriver).Chrome(
-        options=None, service=service,
+        options=None, service=ANY,
     ).thenReturn(browser)
     #Results in ..
+    # .. passed ?? Is this truely correct?
 
     #Also tried:
     # service_log_path = None
