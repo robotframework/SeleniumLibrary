@@ -27,6 +27,11 @@ from robot.utils import ConnectionCache
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.ie.service import Service as IeService
+
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import (
     SelLibLocalFileDetector,
 )
@@ -144,12 +149,11 @@ class WebDriverCreator:
             )
             return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Chrome)
+            executable_path = self._get_executable_path(webdriver.chrome.service.Service)
+        service = ChromeService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Chrome(
             options=options,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            service=service,
         )
 
     def create_headless_chrome(
@@ -195,13 +199,13 @@ class WebDriverCreator:
             service_log_path if service_log_path else self._geckodriver_log
         )
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Firefox)
+            executable_path = self._get_executable_path(webdriver.firefox.service.Service)
+        service = FirefoxService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Firefox(
             options=options,
-            firefox_profile=profile,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            #firefox_profile=profile,  # need to move
+            service=service,
+            #**desired_capabilities,
         )
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -267,12 +271,12 @@ class WebDriverCreator:
             )
             return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Ie)
+            executable_path = self._get_executable_path(webdriver.ie.service.Service)
+        service = IeService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Ie(
             options=options,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            service=service,
+            #**desired_capabilities,
         )
 
     def _has_options(self, web_driver):
@@ -294,20 +298,12 @@ class WebDriverCreator:
             )
             return self._remote(desired_capabilities, remote_url)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Edge)
-        if self._has_options(webdriver.Edge):
-            # options is supported from Selenium 4.0 onwards
-            # If can be removed when minimum Selenium version is 4.0 or greater
-            return webdriver.Edge(
-                options=options,
-                service_log_path=service_log_path,
-                executable_path=executable_path,
-                **desired_capabilities,
-            )
+            executable_path = self._get_executable_path(webdriver.edge.service.Service)
+        service = EdgeService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Edge(
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            options=options,
+            service=service,
+            #**desired_capabilities,
         )
 
     def create_safari(
