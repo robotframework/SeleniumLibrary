@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+import datetime
 from typing import Union
 
 from robot.utils import get_link_path
@@ -22,7 +23,8 @@ from selenium.webdriver.remote.webelement import WebElement
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
 
-DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
+#DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
+DEFAULT_FILENAME_PAGE = "selenium-screenshot-{YY_MM_DD_HH_MM_SS}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
 EMBED = "EMBED"
 
@@ -202,10 +204,10 @@ class ScreenshotKeywords(LibraryComponent):
         else:
             directory = self.log_dir
         filename = filename.replace("/", os.sep)
-        index = 0
+        YY_MM_DD_HH_MM_SS = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         while True:
-            index += 1
-            formatted = _format_path(filename, index)
+            YY_MM_DD_HH_MM_SS = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+            formatted = _format_path(filename, YY_MM_DD_HH_MM_SS)
             path = os.path.join(directory, formatted)
             # filename didn't contain {index} or unique path was found
             if formatted == filename or not os.path.exists(path):
