@@ -14,7 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import datetime
+from datetime import datetime
+import random
+
 from typing import Union
 
 from robot.utils import get_link_path
@@ -23,10 +25,10 @@ from selenium.webdriver.remote.webelement import WebElement
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
 
-#DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
-DEFAULT_FILENAME_PAGE = "selenium-screenshot-{YY_MM_DD_HH_MM_SS}.png"
+DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
 EMBED = "EMBED"
+
 
 
 class ScreenshotKeywords(LibraryComponent):
@@ -204,10 +206,14 @@ class ScreenshotKeywords(LibraryComponent):
         else:
             directory = self.log_dir
         filename = filename.replace("/", os.sep)
-        YY_MM_DD_HH_MM_SS = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        lower_limit = 10**4  
+        upper_limit = 10**6  
+        random_long = random.randint(lower_limit, upper_limit)
+        index = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "-"+ str(random_long)
         while True:
-            YY_MM_DD_HH_MM_SS = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-            formatted = _format_path(filename, YY_MM_DD_HH_MM_SS)
+            random_long = random.randint(lower_limit, upper_limit)
+            index = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "-"+ str(random_long)
+            formatted = _format_path(filename, index)
             path = os.path.join(directory, formatted)
             # filename didn't contain {index} or unique path was found
             if formatted == filename or not os.path.exists(path):
