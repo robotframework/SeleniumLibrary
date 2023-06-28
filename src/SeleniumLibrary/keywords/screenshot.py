@@ -14,24 +14,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-from datetime import datetime
+from datetime   import datetime
 import random
-
 from typing import Union
 
 from robot.utils import get_link_path
 from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils.path_formatter import _format_path
+from SeleniumLibrary.utils.path_formatter import _format_pathr
+from SeleniumLibrary.utils.path_formatter import _format_patht
 
-DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
+DEFAULT_FILENAME_PAGE = "selenium-screenshot-{random}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
 EMBED = "EMBED"
+
+TIMESTAMP = "timestamp"
+RAND    = "random"
+LOW_LIMIT_RANDOM = 10**4
+UPPER_LIMIT_RANDOM = 10**8
+
+
+
 
 
 
 class ScreenshotKeywords(LibraryComponent):
+
     @keyword
     def set_screenshot_directory(self, path: Union[None, str]) -> str:
         """Sets the directory for captured screenshots.
@@ -205,19 +214,22 @@ class ScreenshotKeywords(LibraryComponent):
             directory = self._screenshot_root_directory or self.log_dir
         else:
             directory = self.log_dir
-        filename = filename.replace("/", os.sep)
-        lower_limit = 10**4  
-        upper_limit = 10**6  
-        random_long = random.randint(lower_limit, upper_limit)
-        index = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "-"+ str(random_long)
+        filename = filename.replace("/", os.sep) 
+
         while True:
-            random_long = random.randint(lower_limit, upper_limit)
-            index = datetime.now().strftime("%Y-%m-%d-%H-%M-%S") + "-"+ str(random_long)
-            formatted = _format_path(filename, index)
-            path = os.path.join(directory, formatted)
-            # filename didn't contain {index} or unique path was found
-            if formatted == filename or not os.path.exists(path):
-                return path
+            if  RAND in filename:
+                indexation = str(random.randint(LOW_LIMIT_RANDOM, UPPER_LIMIT_RANDOM))
+                formatted = _format_pathr(filename, indexation)
+                path = os.path.join(directory, formatted)
+                if formatted == filename or not os.path.exists(path):
+                    return path
+            elif  TIMESTAMP in filename:
+                indexation = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+                formatted = _format_patht(filename, indexation)
+                path = os.path.join(directory, formatted)
+                # filename didn't contain {index} or unique path was found
+                if formatted == filename or not os.path.exists(path):
+                    return path       
 
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
@@ -243,3 +255,4 @@ class ScreenshotKeywords(LibraryComponent):
             f'<a href="{src}"><img src="{src}" width="{width}px"></a>',
             html=True,
         )
+

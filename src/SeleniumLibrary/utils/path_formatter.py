@@ -15,9 +15,20 @@
 # limitations under the License.
 
 
+
 def _format_path(file_path, index):
     return file_path.format_map(_SafeFormatter(index=index))
 
+
+def _format_pathr(file_path, random):
+    return file_path.format_map(_SafeFormatter(random=random))
+
+def _format_patht(file_path, timestamp):
+    return file_path.format_map(_SafeFormatter(timestamp=timestamp))
+
+
+
+    
 
 class _SafeFormatter(dict):
     def __missing__(self, key):
