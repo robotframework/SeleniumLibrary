@@ -17,7 +17,9 @@ from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCr
 def options():
     return SeleniumOptions()
 
-
+@pytest.fixture(scope="module")
+def service():
+    return 
 @pytest.fixture(scope="module")
 def reporter():
     path = os.path.dirname(__file__)
@@ -217,12 +219,18 @@ def output_dir():
     output_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
     return output_dir
 
+from selenium.webdriver.chrome.service import Service as ChromeService
+
 
 def test_create_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
+    # service = mock()
+    # when(webdriver.chrome.service).Service(
+    #     executable_path=ANY, log_path=ANY,
+    # ).thenReturn(service)
     when(webdriver).Chrome(
-        service_log_path=None, options=options, executable_path="chromedriver"
+        options=options, service=ANY   # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None, options=options)
     assert driver == expected_webdriver
@@ -249,7 +257,7 @@ def test_create_headless_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        service_log_path=None, options=options, executable_path="chromedriver"
+        options=options, service=ANY # service_log_path=None, options=options, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None, options=options)
     assert driver == expected_webdriver
@@ -263,9 +271,10 @@ def test_create_firefox_with_options(creator, output_dir):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     when(webdriver).Firefox(
         options=options,
-        firefox_profile=profile,
-        executable_path="geckodriver",
-        service_log_path=log_file,
+        service=ANY
+        # firefox_profile=profile,
+        # executable_path="geckodriver",
+        # service_log_path=log_file,
     ).thenReturn(expected_webdriver)
     driver = creator.create_firefox({}, None, None, options=options)
     assert driver == expected_webdriver
@@ -298,9 +307,10 @@ def test_create_headless_firefox_with_options(creator, output_dir):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     when(webdriver).Firefox(
         options=options,
-        firefox_profile=profile,
-        executable_path="geckodriver",
-        service_log_path=log_file,
+        service=ANY
+        # firefox_profile=profile,
+        # executable_path="geckodriver",
+        # service_log_path=log_file,
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_firefox({}, None, None, options=options)
     assert driver == expected_webdriver
@@ -310,7 +320,7 @@ def test_create_ie_with_options(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Ie(
-        service_log_path=None, options=options, executable_path="IEDriverServer.exe"
+        options=options, service=ANY # service_log_path=None, options=options, executable_path="IEDriverServer.exe"
     ).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
@@ -337,7 +347,7 @@ def test_create_ie_with_options_and_log_path(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Ie(
-        options=options, service_log_path=None, executable_path="IEDriverServer.exe"
+        options=options, service=ANY  # service_log_path=None, executable_path="IEDriverServer.exe"
     ).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
@@ -355,7 +365,7 @@ def test_create_safari_no_options_support(creator):
     options = mock()
     expected_webdriver = mock()
     executable_path = "/usr/bin/safaridriver"
-    when(webdriver).Safari(executable_path=executable_path).thenReturn(
+    when(webdriver).Safari(options=options).thenReturn(
         expected_webdriver
     )
     driver = creator.create_safari({}, None, options=options)
@@ -420,7 +430,7 @@ def test_create_driver_chrome(creator):
     executable_path = "chromedriver"
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Chrome(
-        service_log_path=None, options=options, executable_path=executable_path
+        options=options, service=ANY  # service_log_path=None, options=options, executable_path=executable_path
     ).thenReturn(expected_webdriver)
     driver = creator.create_driver(
         "Chrome", desired_capabilities={}, remote_url=None, options=str_options
@@ -440,9 +450,10 @@ def test_create_driver_firefox(creator, output_dir):
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Firefox(
         options=options,
-        firefox_profile=profile,
-        executable_path=executable_path,
-        service_log_path=log_file,
+        service=ANY
+        # firefox_profile=profile,
+        # executable_path=executable_path,
+        # service_log_path=log_file,
     ).thenReturn(expected_webdriver)
     driver = creator.create_driver(
         "FireFox", desired_capabilities={}, remote_url=None, options=str_options
