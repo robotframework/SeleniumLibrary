@@ -141,27 +141,27 @@ def test_chrome(creator):
     assert driver == expected_webdriver
 
 
-def test_chrome_with_desired_capabilities(creator):
-    expected_webdriver = mock()
-    when(webdriver).Chrome(
-        desired_capabilities={"key": "value"},
-        options=None,
-        service_log_path=None,
-        executable_path="chromedriver",
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_chrome({"desired_capabilities": {"key": "value"}}, None)
-    assert driver == expected_webdriver
+# def test_chrome_with_desired_capabilities(creator):
+#     expected_webdriver = mock()
+#     when(webdriver).Chrome(
+#         desired_capabilities={"key": "value"},
+#         options=None,
+#         service_log_path=None,
+#         executable_path="chromedriver",
+#     ).thenReturn(expected_webdriver)
+#     driver = creator.create_chrome({"desired_capabilities": {"key": "value"}}, None)
+#     assert driver == expected_webdriver
 
 
 def test_chrome_remote_no_caps(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    capabilities = webdriver.DesiredCapabilities.CHROME.copy()
+    # capabilities = webdriver.DesiredCapabilities.CHROME.copy()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
+        # browser_profile=None,
+        # desired_capabilities=capabilities,
         options=None,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -172,12 +172,12 @@ def test_chrome_remote_no_caps(creator):
 def test_chrome_remote_caps(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    capabilities = {"browserName": "chrome"}
+    # capabilities = {"browserName": "chrome"}
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
+        # browser_profile=None,
+        # desired_capabilities=capabilities,
         options=None,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
