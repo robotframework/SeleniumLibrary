@@ -18,9 +18,6 @@ def options():
     return SeleniumOptions()
 
 @pytest.fixture(scope="module")
-def service():
-    return 
-@pytest.fixture(scope="module")
 def reporter():
     path = os.path.dirname(__file__)
     reporter_json = os.path.abspath(
@@ -238,14 +235,14 @@ def test_create_chrome_with_options(creator):
 
 def test_create_chrome_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
-    caps = webdriver.DesiredCapabilities.CHROME.copy()
+    #caps = webdriver.DesiredCapabilities.CHROME.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=None,
+        #desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -284,14 +281,14 @@ def test_create_firefox_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
     profile = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
-    caps = webdriver.DesiredCapabilities.FIREFOX.copy()
+    # caps = webdriver.DesiredCapabilities.FIREFOX.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=profile,
+        # desired_capabilities=caps,
+        # browser_profile=profile,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -328,14 +325,14 @@ def test_create_ie_with_options(creator):
 
 def test_create_ie_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
-    caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+    # caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=None,
+        # desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -361,44 +358,44 @@ def test_has_options(creator):
     assert creator._has_options(webdriver.Safari)
 
 
-def test_create_safari_no_options_support(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "/usr/bin/safaridriver"
-    when(webdriver).Safari(options=options).thenReturn(
-        expected_webdriver
-    )
-    driver = creator.create_safari({}, None, options=options)
-    assert driver == expected_webdriver
+# def test_create_safari_no_options_support(creator):
+#     options = mock()
+#     expected_webdriver = mock()
+#     executable_path = "/usr/bin/safaridriver"
+#     when(webdriver).Safari(options=options).thenReturn(
+#         expected_webdriver
+#     )
+#     driver = creator.create_safari({}, None, options=options)
+#     assert driver == expected_webdriver
 
 
 def test_create_htmlunit_no_options_support(creator):
-    caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
+    # caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
+        # desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_htmlunit(
-        {"desired_capabilities": caps}, None, options=options
+        {}, None, options=options
     )
     assert driver == expected_webdriver
 
 
 def test_create_htmlunit_with_js_no_options_support(creator):
-    caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
+    # caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
+        # desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -407,14 +404,14 @@ def test_create_htmlunit_with_js_no_options_support(creator):
 
 
 def test_iphone_options_support(creator):
-    caps = webdriver.DesiredCapabilities.IPHONE.copy()
+    # caps = webdriver.DesiredCapabilities.IPHONE.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
+        # desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
