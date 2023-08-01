@@ -128,10 +128,10 @@ Select Non-Existing Item From Multi-Selection List
 
 Unselect Non-Existing Item From List
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Could not locate element with value: Tin Can Phone?
+    ...    NoSuchElementException: Message: Could not locate element with value: Tin Can Phone*
     ...    Unselect From List By Value    possible_channels    Tin Can Phone    Smoke Signals
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone?
+    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone*
     ...    Unselect From List By Label    possible_channels    Tin Can Phone    Smoke Signals    Email
 
 Select From Multiselect List
