@@ -13,7 +13,7 @@ Should Open Browser With Default Page Load Timeout
 
 Should Run Into Timeout Exception
     [Documentation]
-    ...    FAIL REGEXP: TimeoutException: Message: (timeout: Timed out receiving message from renderer|TimedPromise timed out).*
+    ...    FAIL REGEXP: TimeoutException: Message: (timeout: Timed out receiving message from renderer|TimedPromise timed out|Navigation timed out after).*
     Open Browser To Start Page
     Set Selenium Page Load Timeout    1 ms
     Reload Page
