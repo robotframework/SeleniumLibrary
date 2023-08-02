@@ -114,14 +114,9 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``remote_url`` is the URL for a
         [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid].
 
-        Optional ``desired_capabilities`` can be used to configure, for example,
-        logging preferences for a browser or a browser and operating system
-        when using [http://saucelabs.com|Sauce Labs]. Desired capabilities can
-        be given either as a Python dictionary or as a string in the format
-        ``key1:value1,key2:value2``.
-        [https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities|
-        Selenium documentation] lists possible capabilities that can be
-        enabled.
+        Optional ``desired_capabilities`` is deprecated and will be ignored. Capabilities of each
+        individual browser is now done through options or services. Please refer to those arguments
+        for configuring specific browsers.
 
         Optional ``ff_profile_dir`` is the path to the Firefox profile
         directory if you wish to overwrite the default profile Selenium
@@ -288,6 +283,8 @@ class BrowserManagementKeywords(LibraryComponent):
             if url:
                 self.go_to(url)
             return index
+        if desired_capabilities:
+            self.warn("desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation.")
         return self._make_new_browser(
             url,
             browser,

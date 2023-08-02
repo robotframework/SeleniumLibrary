@@ -112,26 +112,26 @@ Select From Single Selection List
 
 Select Non-Existing Item From Single Selection List
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Cannot locate option with value: not_there?
+    ...    NoSuchElementException: Message: Cannot locate option with value: not_there*
     ...    Select From List By Value    preferred_channel    not_there    no_way_there
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone?
+    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone*
     ...    Select From List By Label    preferred_channel    Tin Can Phone
 
 Select Non-Existing Item From Multi-Selection List
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Cannot locate option with value: TinCanPhone?
+    ...    NoSuchElementException: Message: Cannot locate option with value: TinCanPhone*
     ...    Select From List By value    possible_channels    TinCanPhone    SmokeSignals
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone?
+    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone*
     ...    Select From List By Label    possible_channels    Tin Can Phone    Email    Smoke Signals
 
 Unselect Non-Existing Item From List
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Could not locate element with value: Tin Can Phone?
+    ...    NoSuchElementException: Message: Could not locate element with value: Tin Can Phone*
     ...    Unselect From List By Value    possible_channels    Tin Can Phone    Smoke Signals
     Run Keyword And Expect Error
-    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone?
+    ...    NoSuchElementException: Message: Could not locate element with visible text: Tin Can Phone*
     ...    Unselect From List By Label    possible_channels    Tin Can Phone    Smoke Signals    Email
 
 Select From Multiselect List

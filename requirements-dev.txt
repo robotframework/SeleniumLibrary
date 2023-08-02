@@ -3,11 +3,11 @@
 invoke >= 1.4.1
 mockito >= 1.2.2
 robotstatuschecker >= 2.0.3
-approvaltests == 3.1.0
+approvaltests == 8.4.1
 empty_files >= 0.0.3
 pytest >= 6.0.2
 pytest-mockito >= 0.0.4
-pytest-approvaltests >= 0.1.0
+pytest-approvaltests >= 0.2.0
 requests >= 2.24.0
 robotframework-pabot >= 1.10.0
 black >= 20.8b1

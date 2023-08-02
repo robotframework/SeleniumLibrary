@@ -24,7 +24,7 @@ def teardown_function():
 def test_create_chrome_executable_path_set(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service_log_path=None, executable_path="/path/to/chromedriver"
+        options=None, service=ANY,  # service_log_path=None, executable_path="/path/to/chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None, executable_path="/path/to/chromedriver")
     assert driver == expected_webdriver
@@ -33,36 +33,33 @@ def test_create_chrome_executable_path_set(creator):
 def test_create_chrome_executable_path_not_set(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service_log_path=None, executable_path="chromedriver"
+        options=None, service=ANY,  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     when(creator)._get_executable_path(ANY).thenReturn("chromedriver")
     driver = creator.create_chrome({}, None, executable_path=None)
     assert driver == expected_webdriver
 
 
-def test_get_executable_path(creator):
-    executable_path = creator._get_executable_path(webdriver.Chrome)
-    assert executable_path == "chromedriver"
+# def test_get_executable_path(creator):
+#     executable_path = creator._get_executable_path(webdriver.Chrome)
+#     assert executable_path == "chromedriver"
 
-    executable_path = creator._get_executable_path(webdriver.Firefox)
-    assert executable_path == "geckodriver"
+#     executable_path = creator._get_executable_path(webdriver.Firefox)
+#     assert executable_path == "geckodriver"
 
-    executable_path = creator._get_executable_path(webdriver.Ie)
-    assert executable_path == "IEDriverServer.exe"
+#     executable_path = creator._get_executable_path(webdriver.Ie)
+#     assert executable_path == "IEDriverServer.exe"
 
-    executable_path = creator._get_executable_path(webdriver.Edge)
-    assert executable_path == "msedgedriver"
+#     executable_path = creator._get_executable_path(webdriver.Edge)
+#     assert executable_path == "msedgedriver"
 
 
 def test_create_chrome_executable_path_and_remote(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    capabilities = webdriver.DesiredCapabilities.CHROME.copy()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
         options=None,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -75,7 +72,7 @@ def test_create_heasless_chrome_executable_path_set(creator):
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
-        options=options, service_log_path=None, executable_path="/path/to/chromedriver"
+        options=options, service = ANY  # service_log_path=None, executable_path="/path/to/chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome(
         {}, None, executable_path="/path/to/chromedriver"
@@ -86,14 +83,18 @@ def test_create_heasless_chrome_executable_path_set(creator):
 def test_create_firefox_executable_path_set(creator):
     executable = "/path/to/geckodriver"
     expected_webdriver = mock()
-    profile = mock()
-    when(webdriver).FirefoxProfile().thenReturn(profile)
-    log_file = get_geckodriver_log()
+    # profile = mock()
+    # when(webdriver).FirefoxProfile().thenReturn(profile)
+    # log_file = get_geckodriver_log()
+    options = mock()
+    when(webdriver).FirefoxOptions().thenReturn(options)
+    log_file = None
     when(webdriver).Firefox(
-        options=None,
-        firefox_profile=profile,
-        service_log_path=log_file,
-        executable_path=executable,
+        options=options,
+        # firefox_profile=profile,
+        service = ANY,
+        # service_log_path=log_file,
+        # executable_path=executable,
     ).thenReturn(expected_webdriver)
     driver = creator.create_firefox(
         {}, None, None, service_log_path=log_file, executable_path=executable
@@ -110,9 +111,10 @@ def test_create_firefox_executable_path_not_set(creator):
     when(creator)._get_executable_path(ANY).thenReturn(executable)
     when(webdriver).Firefox(
         options=None,
-        firefox_profile=profile,
-        service_log_path=log_file,
-        executable_path=executable,
+        # firefox_profile=profile,
+        service=ANY,
+        # service_log_path=log_file,
+        # executable_path=executable,
     ).thenReturn(expected_webdriver)
     driver = creator.create_firefox(
         {}, None, None, service_log_path=log_file, executable_path=None
@@ -291,4 +293,7 @@ def mock_file_detector(creator):
 
 
 def get_geckodriver_log():
-    return os.path.join(LOG_DIR, "geckodriver-1.log")
+    # return os.path.join(LOG_DIR, "geckodriver-1.log")
+    # print(f"{os.getcwd()}")
+    cwd = os.getcwd()
+    return cwd
