@@ -19,12 +19,19 @@ import inspect
 import os
 import token
 import warnings
+from io import StringIO
 from tokenize import generate_tokens
 
 from robot.api import logger
-from robot.utils import ConnectionCache, StringIO
+from robot.utils import ConnectionCache
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
+
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.ie.service import Service as IeService
+from selenium.webdriver.safari.service import Service as SafariService
 
 from SeleniumLibrary.keywords.webdrivertools.sl_file_detector import (
     SelLibLocalFileDetector,
@@ -45,7 +52,6 @@ class WebDriverCreator:
         "ie": "ie",
         "internetexplorer": "ie",
         "edge": "edge",
-        "opera": "opera",
         "safari": "safari",
         "phantomjs": "phantomjs",
         "htmlunit": "htmlunit",
@@ -57,6 +63,7 @@ class WebDriverCreator:
     def __init__(self, log_dir):
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
+        #self.selenium_service = SeleniumService()
 
     def create_driver(
         self,
@@ -144,12 +151,11 @@ class WebDriverCreator:
             )
             return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Chrome)
+            executable_path = self._get_executable_path(webdriver.chrome.service.Service)
+        service = ChromeService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Chrome(
             options=options,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            service=service,
         )
 
     def create_headless_chrome(
@@ -185,6 +191,15 @@ class WebDriverCreator:
         executable_path="geckodriver",
     ):
         profile = self._get_ff_profile(ff_profile_dir)
+        if not options:
+            options = webdriver.FirefoxOptions()
+        options.profile = profile  # <- moved to here :)
+
+        # Something I question here is/was whether or not we should create the option, not
+        # only on whether it exists, but if there is a profile provided. That is previously we just pass
+        # None along as options if there were none. But now no matter what we create an Options class so
+        # as to attach the profile to it. If there a scenario in which we don't want to do this???
+
         if remote_url:
             default_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
             desired_capabilities = self._remote_capabilities_resolver(
@@ -195,13 +210,13 @@ class WebDriverCreator:
             service_log_path if service_log_path else self._geckodriver_log
         )
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Firefox)
+            executable_path = self._get_executable_path(webdriver.firefox.service.Service)
+        service = FirefoxService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Firefox(
             options=options,
-            firefox_profile=profile,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            #firefox_profile=profile,  # need to move
+            service=service,
+            #**desired_capabilities,
         )
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -222,13 +237,13 @@ class WebDriverCreator:
                     else:
                         setattr(ff_profile, key, *option[key])
             return ff_profile
-
+    
     @property
     def _geckodriver_log(self):
         log_file = self._get_log_path(
             os.path.join(self.log_dir, "geckodriver-{index}.log")
         )
-        logger.info(f"Firefox driver log is always forced to to: {log_file}")
+        logger.trace(f"Firefox driver log is always forced to to: {log_file}")
         return log_file
 
     def create_headless_firefox(
@@ -267,12 +282,12 @@ class WebDriverCreator:
             )
             return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Ie)
+            executable_path = self._get_executable_path(webdriver.ie.service.Service)
+        service = IeService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Ie(
             options=options,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            service=service,
+            #**desired_capabilities,
         )
 
     def _has_options(self, web_driver):
@@ -285,7 +300,7 @@ class WebDriverCreator:
         remote_url,
         options=None,
         service_log_path=None,
-        executable_path="MicrosoftWebDriver.exe",
+        executable_path="msedgedriver",
     ):
         if remote_url:
             defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
@@ -294,43 +309,12 @@ class WebDriverCreator:
             )
             return self._remote(desired_capabilities, remote_url)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Edge)
-        if self._has_options(webdriver.Edge):
-            # options is supported from Selenium 4.0 onwards
-            # If can be removed when minimum Selenium version is 4.0 or greater
-            return webdriver.Edge(
-                options=options,
-                service_log_path=service_log_path,
-                executable_path=executable_path,
-                **desired_capabilities,
-            )
+            executable_path = self._get_executable_path(webdriver.edge.service.Service)
+        service = EdgeService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Edge(
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
-        )
-
-    def create_opera(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path="operadriver",
-    ):
-        if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.OPERA.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
-        if not executable_path:
-            executable_path = self._get_executable_path(webdriver.Opera)
-        return webdriver.Opera(
             options=options,
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
+            service=service,
+            #**desired_capabilities,
         )
 
     def create_safari(
@@ -347,13 +331,10 @@ class WebDriverCreator:
                 desired_capabilities, defaul_caps
             )
             return self._remote(desired_capabilities, remote_url)
-        if options or service_log_path:
-            logger.warn(
-                "Safari browser does not support Selenium options or service_log_path."
-            )
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
-        return webdriver.Safari(executable_path=executable_path, **desired_capabilities)
+        service = SafariService(executable_path=executable_path, log_path=service_log_path)
+        return webdriver.Safari(options=options, service=service)
 
     def create_phantomjs(
         self,
@@ -460,10 +441,10 @@ class WebDriverCreator:
         file_detector = self._get_sl_file_detector()
         return webdriver.Remote(
             command_executor=remote_url,
-            browser_profile=profile_dir,
+            # browser_profile=profile_dir,
             options=options,
             file_detector=file_detector,
-            **desired_capabilities,
+            # **desired_capabilities,
         )
 
     def _get_sl_file_detector(self):
@@ -572,6 +553,53 @@ class WebDriverCache(ConnectionCache):
         except ValueError:
             return None
 
+# Temporarily removing as not going to use with initial 4.10.0 hotfixq
+# class SeleniumService:
+#     """        executable_path: str = DEFAULT_EXECUTABLE_PATH,
+#         port: int = 0,
+#         log_path: typing.Optional[str] = None,
+#         service_args: typing.Optional[typing.List[str]] = None,
+#         env: typing.Optional[typing.Mapping[str, str]] = None,
+#         **kwargs,
+
+#         executable_path = None, port, service_log_path, service_args, env
+#     """
+#     def create(self, browser,
+#         executable_path=None,
+#         port=0,
+#         service_log_path=None,
+#         service_args=None,
+#         env=None,
+#         start_error_message=None,    # chromium, chrome, edge
+#         quiet=False, reuse_service=False,   # safari
+#     ):
+#         selenium_service = self._import_service(browser)
+#         # chrome, chromium, firefox, edge
+#         if any(chromium_based in browser.lower() for chromium_based in ('chromium', 'chrome', 'edge')):
+#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
+#                                        service_args=service_args,env=env,start_error_message=start_error_message
+#             )
+#             return service
+#         elif 'safari' in browser.lower():
+#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
+#                                        service_args=service_args,env=env,quiet=quiet,reuse_service=reuse_service
+#             )
+#             return service
+#         elif 'firefox' in browser.lower():
+#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
+#                                        service_args=service_args,env=env
+#             )
+#             return service
+#         else:
+#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
+#                                        service_args=service_args,env=env
+#             )
+#             return service
+
+#     def _import_service(self, browser):
+#         browser = browser.replace("headless_", "", 1)
+#         service = importlib.import_module(f"selenium.webdriver.{browser}.service")
+#         return service.Service
 
 class SeleniumOptions:
     def create(self, browser, options):

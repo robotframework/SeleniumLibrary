@@ -97,8 +97,6 @@ ROBOT_OPTIONS = [
 REBOT_OPTIONS = [
     "--outputdir",
     RESULTS_DIR,
-    "--noncritical",
-    "known issue {browser}",
 ]
 
 
@@ -110,7 +108,7 @@ def acceptance_tests(
     os.mkdir(RESULTS_DIR)
     if grid:
         hub, node = start_grid()
-    with http_server():
+    with http_server(interpreter):
         execute_tests(interpreter, browser, rf_options, grid, event_firing)
     failures = process_output(browser)
     if failures:
@@ -179,17 +177,18 @@ def _grid_status(status=False, role="hub"):
 
 
 @contextmanager
-def http_server():
+def http_server(interpreter):
     serverlog = open(os.path.join(RESULTS_DIR, "serverlog.txt"), "w")
+    interpreter = "python" if not interpreter else interpreter
     process = subprocess.Popen(
-        ["python", HTTP_SERVER_FILE, "start"],
+        [interpreter, HTTP_SERVER_FILE, "start"],
         stdout=serverlog,
         stderr=subprocess.STDOUT,
     )
     try:
         yield
     finally:
-        subprocess.call(["python", HTTP_SERVER_FILE, "stop"])
+        subprocess.call([interpreter, HTTP_SERVER_FILE, "stop"])
         process.wait()
         serverlog.close()
 
@@ -208,6 +207,7 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing):
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
+    options += ["--exclude", f"known issue {browser.replace('headless', '')}", "--exclude", "triage"]
     command = runner
     if grid:
         command += [
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--interpreter",
         "-I",
-        default="python",
+        default=sys.executable,
         help=textwrap.dedent(
             """\
                             Any Python interpreter supported by the library.
@@ -313,7 +313,7 @@ if __name__ == "__main__":
     args, rf_options = parser.parse_known_args()
     browser = args.browser.lower().strip()
     selenium_grid = is_truthy(args.grid)
-    interpreter = args.interpreter
+    interpreter = "python" if not args.interpreter else args.interpreter
     event_firing_webdriver = args.event_firing_webdriver
     if args.nounit:
         print("Not running unit tests.")

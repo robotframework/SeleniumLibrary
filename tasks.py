@@ -207,6 +207,10 @@ def atest(ctx, suite=None):
 
     Args:
         suite: Select which suite to run.
+    
+    Example:
+        inv utest --suite keywords/test_browsermanagement.py
+        inv utest --suite keywords/test_selenium_options_parser.py::test_create_chrome_with_options
     """
     command = "python atest/run.py headlesschrome"
     if suite:
@@ -221,7 +225,7 @@ def utest(ctx, suite=None):
     Args:
         suite: Select which suite to run.
     """
-    command = "python utest/run.py"
+    command = f"{sys.executable} utest/run.py"
     if suite:
         command = f"{command} --suite {suite}"
     ctx.run(command)

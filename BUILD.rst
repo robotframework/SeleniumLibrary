@@ -164,22 +164,25 @@ Generate Stub file
 
 Documentation
 -------------
-If generating release candidate or final release documentation, use `invoke kw-docs`
-but if this alpha or beta release, use `invoke kw-docs $VERSION`. The `invoke kw-docs $VERSION`
+If generating release candidate or final release documentation, use ``invoke kw-docs```
+but if this alpha or beta release, use ``invoke kw-docs $VERSION``. The ``invoke kw-docs $VERSION``
 does not replace the previous final release documentation, instead it will create new file
-with docs/SeleniumLibrary-$VERSION.html. From the below, execute either 1.1 or 1.2 step. The step
+with docs/SeleniumLibrary-$VERSION.html. From the below, execute either 1.A or 1.B step. The step
 2. is done always.
 
-Note that this *must* be done after`setting version <Set version>`_ above
+Note that this *must* be done after `setting version <Set version>`_ above
 or docs will have wrong version number.
 
-1.1. Generate pre or final release keyword documentation::
+1. 
+  A. Generate *pre or final release* keyword documentation::
 
       invoke kw-docs
       git commit -m "Generated docs for version $VERSION" docs/SeleniumLibrary.html
       git push
 
-1.2 Generate alpha or beta release keyword documentation::
+  **OR**
+
+  B. Generate *alpha or beta release* keyword documentation::
 
       invoke kw-docs -v $VERSION
       git add docs/SeleniumLibrary-$VERSION.html
@@ -192,7 +195,8 @@ push the new README.rst::
       git commit -m "Add alpha/beta kw docs for version $VERSION in README.rst" README.rst
       git push
 
-2. If README.rst has changed, generate project documentation based on it::
+2. If README.rst has changed, generate project documentation based on it. One can check with
+   the command ``git log <previousversiontag>..HEAD --oneline README.rst``::
 
       invoke project-docs
       git commit -m "Regenerated project docs" docs/index.html

@@ -283,7 +283,9 @@ can run.
 
 The default timeout these keywords use can be set globally either by
 using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
-when `importing` the library. See `time format` below for supported
+when `importing` the library. If no default timeout is set globally, the
+default is 5 seconds. If None is specified for the timeout argument in the
+keywords, the default is used. See `time format` below for supported
 timeout syntax.
 
 == Implicit wait ==
@@ -295,6 +297,17 @@ the library. See [https://www.seleniumhq.org/docs/04_webdriver_advanced.jsp|
 Selenium documentation] for more information about this functionality.
 
 See `time format` below for supported syntax.
+
+== Page load ==
+Page load timeout is the amount of time to wait for page load to complete until error is raised.
+
+The default page load timeout can be set globally
+when `importing` the library with the ``page_load_timeout`` argument
+or by using the `Set Selenium Page Load Timeout` keyword.
+
+See `time format` below for supported timeout syntax.
+
+Support for page load is new in SeleniumLibrary 6.1
 
 == Selenium speed ==
 

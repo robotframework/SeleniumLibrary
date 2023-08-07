@@ -9,12 +9,12 @@ jobs:
     strategy:
       matrix:
         python-version: [3.7, 3.9, pypy-3.7]
-        rf-version: [3.2.2, 4.1.3]
+        rf-version: [4.1.3, 5.0.1, 6.0.1]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }} with Robot Framework ${{ matrix.rf-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Start xvfb
@@ -44,24 +44,34 @@ jobs:
       if: matrix.python-version != 'pypy-3.7'
       run: |
         which python
+
     - name: Run tests with headless Chrome and with PyPy
       if: matrix.python-version == 'pypy-3.7'
       run: |
         xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschrome
-    - name: Run tests with headless Chrome and with Python != 3.8
-      if: matrix.python-version != '3.8' && matrix.python-version != 'pypy-3.7'
-      run: |
-        xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
-    - name: Run tests normal Chrome with Python 3.8
-      if: matrix.python-version == '3.8' && matrix.rf-version != '3.2.2' && matrix.python-version != 'pypy-3.7'
+
+    - name: Run tests with normal Chrome and with Python 3.7
+      if: matrix.python-version == '3.7'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip chrome
+
+    - name: Run tests with headless Firefox with Python 3.9 and RF 4.1.3
+      if: matrix.python-version == '3.9' && matrix.rf-version == '4.1.3'
+      run: |
+        xvfb-run --auto-servernum python atest/run.py --zip headlessfirefox
+
+    - name: Run tests with normal Firefox with Python 3.9 and RF != 4.1.3
+      if: matrix.python-version == '3.9' && matrix.rf-version != '4.1.3'
+      run: |
+        xvfb-run --auto-servernum python atest/run.py --zip firefox
+
     - name: Run tests with Selenium Grid
       if: matrix.python-version == '3.8' && matrix.rf-version == '3.2.2' && matrix.python-version != 'pypy-3.7'
       run: |
         wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
         sudo chmod u+x ./selenium-server-standalone.jar
         xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
+
     - uses: actions/upload-artifact@v1
       if: success() || failure()
       with:

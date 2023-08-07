@@ -35,15 +35,15 @@ Add Cookie When Secure Is False
     Should Be Equal    ${cookie.secure}       ${False}
 
 Add Cookie When Expiry Is Epoch
-    Add Cookie    Cookie1    value1    expiry=1822137695
+    Add Cookie    Cookie1    value1    expiry=1698601011
     ${cookie} =    Get Cookie    Cookie1
-    ${expiry} =    Convert Date    ${1822137695}    exclude_millis=True
+    ${expiry} =    Convert Date    ${1698601011}    exclude_millis=True
     Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
-    Add Cookie    Cookie12    value12    expiry=2027-09-28 16:21:35
+    Add Cookie    Cookie12    value12    expiry=2023-10-29 19:36:51
     ${cookie} =    Get Cookie    Cookie12
-    Should Be Equal As Strings    ${cookie.expiry}    2027-09-28 16:21:35
+    Should Be Equal As Strings    ${cookie.expiry}    2023-10-29 19:36:51
 
 Delete Cookie
     [Tags]    Known Issue Safari
@@ -71,12 +71,12 @@ Get Cookies As Dict When There Are None
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie      another
-    Should Be Equal As Integers    ${cookie.expiry.year}           2027
-    Should Be Equal As Integers    ${cookie.expiry.month}          09
-    Should Be Equal As Integers    ${cookie.expiry.day}            28
-    Should Be Equal As Integers    ${cookie.expiry.hour}           16
-    Should Be Equal As Integers    ${cookie.expiry.minute}         21
-    Should Be Equal As Integers    ${cookie.expiry.second}         35
+    Should Be Equal As Integers    ${cookie.expiry.year}           2023
+    Should Be Equal As Integers    ${cookie.expiry.month}          10
+    Should Be Equal As Integers    ${cookie.expiry.day}            29
+    Should Be Equal As Integers    ${cookie.expiry.hour}           19
+    Should Be Equal As Integers    ${cookie.expiry.minute}         36
+    Should Be Equal As Integers    ${cookie.expiry.second}         51
     Should Be Equal As Integers    ${cookie.expiry.microsecond}    0
 
 Test Get Cookie Object Domain
@@ -104,19 +104,20 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
-    [Tags]    NoGrid
+    [Tags]    NoGrid    Known Issue Firefox
     [Documentation]
-    ...    LOG 1:4 ${cookie} = name=another
+    ...    LOG 1:5 ${cookie} = name=another
     ...    value=value
     ...    path=/
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2027-09-28 16:21:35
+    ...    expiry=2023-10-29 19:36:51
+    ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     another
 
 *** Keyword ***
 Add Cookies
     Delete All Cookies
     Add Cookie    test       seleniumlibrary
-    Add Cookie    another    value   expiry=2027-09-28 16:21:35
+    Add Cookie    another    value   expiry=2023-10-29 19:36:51

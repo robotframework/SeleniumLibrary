@@ -48,10 +48,10 @@ from SeleniumLibrary.keywords import (
 )
 from SeleniumLibrary.keywords.screenshot import EMBED
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout
+from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
 
-__version__ = "6.1.0.dev1"
+__version__ = "6.2.0.dev1"
 
 
 class SeleniumLibrary(DynamicCore):
@@ -340,7 +340,9 @@ class SeleniumLibrary(DynamicCore):
 
     The default timeout these keywords use can be set globally either by
     using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
-    when `importing` the library. See `time format` below for supported
+    when `importing` the library. If no default timeout is set globally, the
+    default is 5 seconds. If None is specified for the timeout argument in the
+    keywords, the default is used. See `time format` below for supported
     timeout syntax.
 
     == Implicit wait ==
@@ -352,6 +354,17 @@ class SeleniumLibrary(DynamicCore):
     Selenium documentation] for more information about this functionality.
 
     See `time format` below for supported syntax.
+
+    == Page load ==
+    Page load timeout is the amount of time to wait for page load to complete until error is raised.
+
+    The default page load timeout can be set globally
+    when `importing` the library with the ``page_load_timeout`` argument
+    or by using the `Set Selenium Page Load Timeout` keyword.
+
+    See `time format` below for supported timeout syntax.
+
+    Support for page load is new in SeleniumLibrary 6.1
 
     == Selenium speed ==
 
@@ -433,6 +446,8 @@ class SeleniumLibrary(DynamicCore):
         screenshot_root_directory: Optional[str] = None,
         plugins: Optional[str] = None,
         event_firing_webdriver: Optional[str] = None,
+        page_load_timeout=timedelta(minutes=5),
+        action_chain_delay=timedelta(seconds=0.25),
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -451,9 +466,15 @@ class SeleniumLibrary(DynamicCore):
         - ``event_firing_webdriver``:
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
+        - ``page_load_timeout``:
+          Default value to wait for page load to complete until error is raised.
+        - ``action_chain_delay``:
+          Default value for `ActionChains` delay to wait in between actions.
         """
         self.timeout = _convert_timeout(timeout)
         self.implicit_wait = _convert_timeout(implicit_wait)
+        self.action_chain_delay = _convert_delay(action_chain_delay)
+        self.page_load_timeout = _convert_timeout(page_load_timeout)
         self.speed = 0.0
         self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(
             run_on_failure

@@ -6,7 +6,7 @@ Resource          ../resource.robot
 *** Test Cases ***
 Location Should Be
     [Tags]    NoGrid
-    [Documentation]    LOG 1:4 Current location is '${FRONT PAGE}'.
+    [Documentation]    LOG 1:5 Current location is '${FRONT PAGE}'.
     Location Should Be    ${FRONT PAGE}
     Location Should Be    ${FRONT PAGE}  message=taco
     Location Should Be    ${FRONT PAGE}  message=None
@@ -22,7 +22,7 @@ Location Should Be
 
 Location Should Contain
     [Tags]    NoGrid
-    [Documentation]    LOG 1:4 Current location contains 'html'.
+    [Documentation]    LOG 1:5 Current location contains 'html'.
     Location Should Contain    html
     Location Should Contain    html  message=foobar
     Location Should Contain    html  message=None
@@ -106,8 +106,8 @@ Wait Until Location Is Not Fails With Timeout
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Click Element   button
     Run Keyword And Expect Error
-    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 1 second.
-    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=1 s
+    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 750 milliseconds.
+    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=750ms
     Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Is Not Fails With Message

@@ -7,7 +7,7 @@ Library           Collections
 Create Webdriver Creates Functioning WebDriver
     [Documentation]
     ...    LOG 1:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver.
-    ...    LOG 1:6 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
+    ...    LOG 1:25 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
     [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
@@ -36,15 +36,13 @@ Create Webdriver With Bad Keyword Argument Dictionary
 Set Driver Variables
     [Documentation]    Selects proper driver
     ${drivers}=    Create Dictionary    ff=Firefox    firefox=Firefox    ie=Ie
-    ...    internetexplorer=Ie    googlechrome=Chrome    gc=Chrome
-    ...    chrome=Chrome    opera=Opera    phantomjs=PhantomJS    safari=Safari
-    ...    headlesschrome=Chrome    headlessfirefox=Firefox
+    ...    internetexplorer=Ie    googlechrome=Chrome    gc=Chrome    chrome=Chrome
+    ...    safari=Safari    headlesschrome=Chrome    headlessfirefox=Firefox
     ${name}=    Evaluate    "Remote" if "${REMOTE_URL}"!="None" else $drivers["${BROWSER}"]
     Set Test Variable    ${DRIVER_NAME}    ${name}
     ${dc names}=    Create Dictionary    ff=FIREFOX    firefox=FIREFOX    ie=INTERNETEXPLORER
     ...    internetexplorer=INTERNETEXPLORER    googlechrome=CHROME    gc=CHROME
-    ...    chrome=CHROME    opera=OPERA    phantomjs=PHANTOMJS    htmlunit=HTMLUNIT
-    ...    htmlunitwithjs=HTMLUNITWITHJS    android=ANDROID    iphone=IPHONE
+    ...    chrome=CHROME    htmlunit=HTMLUNIT    htmlunitwithjs=HTMLUNITWITHJS
     ...    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
     ${dc name}=    Get From Dictionary    ${dc names}    ${BROWSER.lower().replace(' ', '')}
     ${caps}=    Evaluate    selenium.webdriver.DesiredCapabilities.${dc name}

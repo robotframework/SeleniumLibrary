@@ -25,7 +25,7 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import secs_to_timestr, _convert_timeout
+from SeleniumLibrary.utils import timestr_to_secs, secs_to_timestr, _convert_timeout, _convert_delay
 
 from .webdrivertools import WebDriverCreator
 
@@ -83,8 +83,6 @@ class BrowserManagementKeywords(LibraryComponent):
         | Internet Explorer | internetexplorer, ie     |
         | Edge              | edge                     |
         | Safari            | safari                   |
-        | Opera             | opera                    |
-        | Android           | android                  |
         | Iphone            | iphone                   |
         | PhantomJS         | phantomjs                |
         | HTMLUnit          | htmlunit                 |
@@ -116,14 +114,9 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``remote_url`` is the URL for a
         [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid].
 
-        Optional ``desired_capabilities`` can be used to configure, for example,
-        logging preferences for a browser or a browser and operating system
-        when using [http://saucelabs.com|Sauce Labs]. Desired capabilities can
-        be given either as a Python dictionary or as a string in the format
-        ``key1:value1,key2:value2``.
-        [https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities|
-        Selenium documentation] lists possible capabilities that can be
-        enabled.
+        Optional ``desired_capabilities`` is deprecated and will be ignored. Capabilities of each
+        individual browser is now done through options or services. Please refer to those arguments
+        for configuring specific browsers.
 
         Optional ``ff_profile_dir`` is the path to the Firefox profile
         directory if you wish to overwrite the default profile Selenium
@@ -290,6 +283,8 @@ class BrowserManagementKeywords(LibraryComponent):
             if url:
                 self.go_to(url)
             return index
+        if desired_capabilities:
+            self.warn("desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation.")
         return self._make_new_browser(
             url,
             browser,
@@ -354,7 +349,7 @@ class BrowserManagementKeywords(LibraryComponent):
         the functionality provided by `Open Browser` is not adequate.
 
         ``driver_name`` must be a WebDriver implementation name like Firefox,
-        Chrome, Ie, Opera, Safari, PhantomJS, or Remote.
+        Chrome, Ie, Edge, Safari, or Remote.
 
         The initialized WebDriver can be configured either with a Python
         dictionary ``kwargs`` or by using keyword arguments ``**init_kwargs``.
@@ -627,6 +622,19 @@ class BrowserManagementKeywords(LibraryComponent):
         return secs_to_timestr(self.ctx.implicit_wait)
 
     @keyword
+    def get_selenium_page_load_timeout(self) -> str:
+        """Gets the timeout to wait for a page load to complete
+        before throwing an error.
+
+        The value is returned as a human-readable string like ``1 second``.
+
+        See the `Page load` section above for more information.
+
+        New in SeleniumLibrary 6.1
+        """
+        return secs_to_timestr(self.ctx.page_load_timeout)
+
+    @keyword
     def set_selenium_speed(self, value: timedelta) -> str:
         """Sets the delay that is waited after each Selenium command.
 
@@ -695,6 +703,28 @@ class BrowserManagementKeywords(LibraryComponent):
         return old_wait
 
     @keyword
+    def set_action_chain_delay(self, value: timedelta) -> str:
+        """Sets the duration of delay in ActionChains() used by SeleniumLibrary.
+
+        The value can be given as a number that is considered to be
+        seconds or as a human-readable string like ``1 second``.
+
+        Value is always stored as milliseconds internally.
+
+        The previous value is returned and can be used to restore
+        the original value later if needed.
+        """
+        old_action_chain_delay = self.ctx.action_chain_delay
+        self.ctx.action_chain_delay = _convert_delay(value)
+        return timestr_to_secs(f"{old_action_chain_delay} milliseconds")
+
+    @keyword
+    def get_action_chain_delay(self):
+        """Gets the currently stored value for chain_delay_value in timestr format.
+        """
+        return timestr_to_secs(f"{self.ctx.action_chain_delay} milliseconds")
+
+    @keyword
     def set_browser_implicit_wait(self, value: timedelta):
         """Sets the implicit wait value used by Selenium.
 
@@ -702,6 +732,34 @@ class BrowserManagementKeywords(LibraryComponent):
         browser.
         """
         self.driver.implicitly_wait(_convert_timeout(value))
+
+    @keyword
+    def set_selenium_page_load_timeout(self, value: timedelta) -> str:
+        """Sets the page load timeout value used by Selenium.
+
+        The value can be given as a number that is considered to be
+        seconds or as a human-readable string like ``1 second``.
+        The previous value is returned and can be used to restore
+        the original value later if needed.
+
+        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`
+        this keywords sets the time for Webdriver to wait until page
+        is loaded before throwing an error.
+
+        See the `Page load` section above for more information.
+
+        Example:
+        | ${orig page load timeout} = | `Set Selenium Page Load Timeout` | 30 seconds |
+        | `Open page that loads slowly` |
+        | `Set Selenium Page Load Timeout` | ${orig page load timeout} |
+
+        New in SeleniumLibrary 6.1
+        """
+        old_page_load_timeout = self.get_selenium_page_load_timeout()
+        self.ctx.page_load_timeout = _convert_timeout(value)
+        for driver in self.drivers.active_drivers:
+            driver.set_page_load_timeout(self.ctx.page_load_timeout)
+        return old_page_load_timeout
 
     def _make_driver(
         self,
@@ -724,6 +782,7 @@ class BrowserManagementKeywords(LibraryComponent):
         )
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
+        driver.set_page_load_timeout(self.ctx.page_load_timeout)
         if self.ctx.speed:
             self._monkey_patch_speed(driver)
         return driver

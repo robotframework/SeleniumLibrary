@@ -28,6 +28,13 @@ WINDOWS = os.name == "nt"
 def is_noney(item):
     return item is None or is_string(item) and item.upper() == "NONE"
 
+def _convert_delay(delay):
+    if isinstance(delay, timedelta):
+        return delay.microseconds // 1000
+    else:
+        x =  timestr_to_secs(delay)
+        return int( x * 1000)
+
 
 def _convert_timeout(timeout):
     if isinstance(timeout, timedelta):

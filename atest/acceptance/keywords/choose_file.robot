@@ -18,6 +18,7 @@ Choose File And File Does Not Exist
     ...    Choose File    file_to_upload    ${CURDIR}${/}NotHere.txt
 
 Choose File And Folder
+    [Tags]    Known Issue Firefox
     [Setup]    Go To Page "forms/file_upload_form.html"
     Choose File    file_to_upload    ${CURDIR}
     Textfield Value Should Be    file_to_upload    C:\\fakepath\\keywords
@@ -44,11 +45,11 @@ Choose File With Grid From Library Using SL choose_file method
 
 Input Text Should Work Same Way When Not Using Grid
     [Documentation]
-    ...    LOG 1:5 DEBUG GLOB:    POST*/session/*/clear {"*
-    ...    LOG 1:7 DEBUG          Finished Request
-    ...    LOG 1:8 DEBUG GLOB:    POST*/session/*/value*"text": "*
-    ...    LOG 1:10 DEBUG         Finished Request
-    ...    LOG 1:11 DEBUG         NONE
+    ...    LOG 1:6 DEBUG GLOB:    POST*/session/*/clear {"*
+    ...    LOG 1:9 DEBUG          Finished Request
+    ...    LOG 1:10 DEBUG GLOB:    POST*/session/*/value*"text": "*
+    ...    LOG 1:13 DEBUG         Finished Request
+    ...    LOG 1:14 DEBUG         NONE
     [Tags]    NoGrid
     [Setup]    Touch    ${CURDIR}${/}temp.txt
     Input Text    file_to_upload    ${CURDIR}${/}temp.txt

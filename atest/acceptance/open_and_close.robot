@@ -16,10 +16,10 @@ Close Browser Does Nothing When No Browser Is Opened
 
 Browser Open With Not Well-Formed URL Should Close
     [Documentation]    Verify after incomplete 'Open Browser' browser closes
-    ...    LOG 1.1:15 DEBUG STARTS: Opened browser with session id
-    ...    LOG 1.1:15 DEBUG REGEXP: .*but failed to open url.*
+    ...    LOG 1.1:41 DEBUG STARTS: Opened browser with session id
+    ...    LOG 1.1:41 DEBUG REGEXP: .*but failed to open url.*
     ...    LOG 2:2 DEBUG STARTS: DELETE
-    ...    LOG 2:4 DEBUG STARTS: Finished Request
+    ...    LOG 2:5 DEBUG STARTS: Finished Request
     Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}
     Close All Browsers
 
@@ -82,8 +82,8 @@ When Closing Browsers Causes An Error
     [Tags]    NoGrid
     [Documentation]
     ...    FAIL       AttributeError: 'NoneType' object has no attribute 'quit'
-    ...    LOG 3:8    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'
-    ...    LOG 3:9    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'
+    ...    LOG 3:10    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'
+    ...    LOG 3:11    ERROR When closing browser, received exception: 'NoneType' object has no attribute 'quit'
     Open Browser    ${ROOT}/forms/prefilled_email_form.html    ${BROWSER}    Browser 1
     ...    remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
     Invalidate Driver

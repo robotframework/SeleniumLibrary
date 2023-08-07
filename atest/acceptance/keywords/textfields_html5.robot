@@ -12,7 +12,7 @@ Input field type date
     [Documentation]    Date and time formats are difficult test because format
     ...    depends on the users machine where the test is run. Therefore only
     ...    checking that value is not empty and it should work in most locales.
-    Input Text    id:date         11-22-2019
+    Input Text    id:date    2019-11-22
     ${value} =    Get Value       id:date
     Should Not Be Empty           ${value}
 
@@ -47,6 +47,7 @@ Input field type tel
     Should Be Equal As Strings    ${value}    123 456 567
 
 Input field type time
+    [Tags]    Known Issue Firefox
     [Documentation]    Date and time formats are difficult test because format
     ...    depends on the users machine where the test is run. Therefore only
     ...    checking that value is not empty and it should work in most locales.
@@ -60,6 +61,7 @@ Input field type url
     Should Be Equal As Strings    ${value}    https://github.com/robotframework/SeleniumLibrary
 
 Input field type week
+    [Tags]    Known Issue Firefox
     Input Text    id:week         452019
     ${value} =    Get Value       id:week
     Should Be Equal As Strings    ${value}    2019-W45
