@@ -60,6 +60,47 @@ Get Element Attribute
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
+Get DOM Attribute
+    ${id}=    Get DOM Attribute    link:Link with id    id
+    Should Be Equal    ${id}    some_id
+    # Test custom attribute
+    ${existing_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-id
+    Should Be Equal    ${existing_custom_attr}    my_id
+    ${doesnotexist_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-doesnotexist
+    Should Be Equal    ${doesnotexist_custom_attr}    ${None}
+    # ToDo: 
+    # Ref: https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+
+Get non existing DOM Attribute
+    ${class}=    Get DOM Attribute    link:Link with id    class
+    Should Be Equal    ${class}    ${NONE}
+
+More DOM Attributes
+    [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
+    # Test get empty attribute
+    ${disabled}=    Get DOM Attribute    css:input[name="disabled_input"]    disabled
+    Should Be Equal    ${disabled}    true   # ${True}
+    ${disabled}=    Get DOM Attribute    css:input[name="disabled_password"]    disabled
+    Should Be Equal    ${disabled}    true   # disabled
+    # Test empty string as the value for the attribute
+    ${empty_value}=    Get DOM Attribute    css:input[name="disabled_password"]    value
+    Should Be Equal    ${empty_value}    ${EMPTY}
+    ${disabled}=    Get DOM Attribute    css:input[name="enabled_password"]    disabled
+    Should Be Equal    ${disabled}    ${NONE}   # false
+
+Get Property
+    [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
+    # ${attributes}=   Get Property  css:input[name="readonly_empty"]     attributes
+    ${tagName_prop}=   Get Property  css:input[name="readonly_empty"]    tagName
+    Should Be Equal    ${tagName_prop}    INPUT
+    # Get a boolean property
+    ${isConnected}=   Get Property  css:input[name="readonly_empty"]     isConnected
+    Should Be Equal    ${isConnected}    ${True}
+
+    # ToDo: nned to test own versus inherited property
+    # ToDo: Test enumerated property
+    ${children}=    Get Property    id:table1    children
+
 Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
     Element Attribute Value Should Be  link=Absolute external link  nothere  ${None}
