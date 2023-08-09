@@ -99,7 +99,15 @@ Get Property
 
     # ToDo: nned to test own versus inherited property
     # ToDo: Test enumerated property
+    # Test proprty which returns webelement
     ${children}=    Get Property    id:table1    children
+
+
+Get "Attribute" That Is Both An DOM Attribute and Property
+    [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
+    ${value_property}=    Get Property  css:input[name="readonly_empty"]   value
+    ${value_attribute}=    Get DOM Attribute  css:input[name="readonly_empty"]   value
+    Should Be Equal    ${value_property}    ${value_attribute}
 
 Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
