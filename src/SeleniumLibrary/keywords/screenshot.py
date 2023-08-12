@@ -14,10 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-from typing import Union
+from typing import Optional, Union
+from base64 import b64decode
 
 from robot.utils import get_link_path
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.common.print_page_options import PrintOptions
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
@@ -235,3 +237,20 @@ class ScreenshotKeywords(LibraryComponent):
             f'<a href="{src}"><img src="{src}" width="{width}px"></a>',
             html=True,
         )
+    
+    @keyword
+    # def print_page_as_pdf(self, print_options: Optional[PrintOptions]=None,):
+    # def print_page_as_pdf(self, print_options: Optional[Union[PrintOptions, dict]]=None):
+    def print_page_as_pdf(self, print_options: Union[PrintOptions, dict, None]=None):
+        """ Print the current page as a PDF
+
+        """
+        if not print_options:
+            print_options = PrintOptions()
+            print_options.page_ranges = ['-']
+
+        base64code  = self.driver.print_page(print_options)
+        pdfdata = b64decode(base64code)
+        with open('test.pdf', mode='wb') as pdf:
+            pdf.write(pdfdata)
+        #self.debug(pdf_str)
