@@ -112,6 +112,7 @@ Wait Until Location Is Not Fails With Timeout
 
 Wait Until Location Is Not Fails With Message
     [Setup]    Go To Page "javascript/wait_location.html"
+    Sleep  1s    # Make sure you don't check too soon
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Run Keyword And Expect Error
     ...     my_message
