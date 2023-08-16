@@ -302,7 +302,7 @@ class WebDriverCreator:
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
-            return self._remote(desired_capabilities, remote_url)
+            return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
         service = EdgeService(executable_path=executable_path, log_path=service_log_path)
@@ -325,7 +325,7 @@ class WebDriverCreator:
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
-            return self._remote(desired_capabilities, remote_url)
+            return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
         service = SafariService(executable_path=executable_path, log_path=service_log_path)
