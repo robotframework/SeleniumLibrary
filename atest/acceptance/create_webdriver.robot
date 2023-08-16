@@ -42,8 +42,7 @@ Set Driver Variables
     Set Test Variable    ${DRIVER_NAME}    ${name}
     ${dc names}=    Create Dictionary    ff=FIREFOX    firefox=FIREFOX    ie=INTERNETEXPLORER
     ...    internetexplorer=INTERNETEXPLORER    googlechrome=CHROME    gc=CHROME
-    ...    chrome=CHROME    htmlunit=HTMLUNIT    htmlunitwithjs=HTMLUNITWITHJS
-    ...    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
+    ...    chrome=CHROME    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
     ${dc name}=    Get From Dictionary    ${dc names}    ${BROWSER.lower().replace(' ', '')}
     ${caps}=    Evaluate    selenium.webdriver.DesiredCapabilities.${dc name}
     ...                     modules=selenium, selenium.webdriver
