@@ -53,11 +53,6 @@ class WebDriverCreator:
         "internetexplorer": "ie",
         "edge": "edge",
         "safari": "safari",
-        "phantomjs": "phantomjs",
-        "htmlunit": "htmlunit",
-        "htmlunitwithjs": "htmlunit_with_js",
-        "android": "android",
-        "iphone": "iphone",
     }
 
     def __init__(self, log_dir):
@@ -307,7 +302,7 @@ class WebDriverCreator:
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
-            return self._remote(desired_capabilities, remote_url)
+            return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
         service = EdgeService(executable_path=executable_path, log_path=service_log_path)
@@ -330,111 +325,11 @@ class WebDriverCreator:
             desired_capabilities = self._remote_capabilities_resolver(
                 desired_capabilities, defaul_caps
             )
-            return self._remote(desired_capabilities, remote_url)
+            return self._remote(desired_capabilities, remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
         service = SafariService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Safari(options=options, service=service)
-
-    def create_phantomjs(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path="phantomjs",
-    ):
-        warnings.warn(
-            "SeleniumLibrary support for PhantomJS has been deprecated, "
-            "please use headlesschrome or headlessfirefox instead."
-        )
-        if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url)
-        if options:
-            logger.warn("PhantomJS browser does not support Selenium options.")
-        if not executable_path:
-            executable_path = self._get_executable_path(webdriver.PhantomJS)
-        return webdriver.PhantomJS(
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
-        )
-
-    def create_htmlunit(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or options or executable_path:
-            logger.warn(
-                "Htmlunit does not support Selenium options, service_log_path or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def create_htmlunit_with_js(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or options or executable_path:
-            logger.warn(
-                "Htmlunit with JS does not support Selenium options, service_log_path or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def create_android(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or executable_path:
-            logger.warn(
-                "Android does not support Selenium options or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def create_iphone(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or executable_path:
-            logger.warn(
-                "iPhone does not support service_log_path or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
 
     def _remote(self, desired_capabilities, remote_url, profile_dir=None, options=None):
         remote_url = str(remote_url)
@@ -620,8 +515,6 @@ class SeleniumOptions:
         return selenium_options
 
     def _import_options(self, browser):
-        if browser == "android":
-            browser = "chrome"  # Android uses ChromeOptions()
         browser = browser.replace("headless_", "", 1)
         options = importlib.import_module(f"selenium.webdriver.{browser}.options")
         return options.Options

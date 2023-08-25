@@ -7,7 +7,7 @@ Library           Collections
 Create Webdriver Creates Functioning WebDriver
     [Documentation]
     ...    LOG 1:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver.
-    ...    LOG 1:25 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
+    ...    LOG 1:8 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
     [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
@@ -42,8 +42,7 @@ Set Driver Variables
     Set Test Variable    ${DRIVER_NAME}    ${name}
     ${dc names}=    Create Dictionary    ff=FIREFOX    firefox=FIREFOX    ie=INTERNETEXPLORER
     ...    internetexplorer=INTERNETEXPLORER    googlechrome=CHROME    gc=CHROME
-    ...    chrome=CHROME    htmlunit=HTMLUNIT    htmlunitwithjs=HTMLUNITWITHJS
-    ...    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
+    ...    chrome=CHROME    safari=SAFARI    headlessfirefox=FIREFOX    headlesschrome=CHROME
     ${dc name}=    Get From Dictionary    ${dc names}    ${BROWSER.lower().replace(' ', '')}
     ${caps}=    Evaluate    selenium.webdriver.DesiredCapabilities.${dc name}
     ...                     modules=selenium, selenium.webdriver

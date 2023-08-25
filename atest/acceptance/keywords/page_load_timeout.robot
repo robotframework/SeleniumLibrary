@@ -7,8 +7,8 @@ Test Teardown     Close Browser And Reset Page Load Timeout
 *** Test Cases ***
 Should Open Browser With Default Page Load Timeout
     [Documentation]    Verify that 'Open Browser' changes the page load timeout.
-    ...    LOG 1.1.1:33 DEBUG REGEXP: POST http://localhost:\\d{2,5}/session/[a-f0-9-]+/timeouts {"pageLoad": 300000}
-    ...    LOG 1.1.1:35 DEBUG STARTS: Remote response: status=200
+    ...    LOG 1.1.1:16 DEBUG REGEXP: POST http://localhost:\\d{2,5}/session/[a-f0-9-]+/timeouts {"pageLoad": 300000}
+    ...    LOG 1.1.1:18 DEBUG STARTS: Remote response: status=200
     Open Browser To Start Page
 
 Should Run Into Timeout Exception
