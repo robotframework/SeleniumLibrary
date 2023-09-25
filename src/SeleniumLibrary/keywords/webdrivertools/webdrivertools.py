@@ -140,11 +140,9 @@ class WebDriverCreator:
         executable_path="chromedriver",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
+            if not options:
+                options = webdriver.ChromeOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.chrome.service.Service)
         service = ChromeService(executable_path=executable_path, log_path=service_log_path)
@@ -196,11 +194,7 @@ class WebDriverCreator:
         # as to attach the profile to it. If there a scenario in which we don't want to do this???
 
         if remote_url:
-            default_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, default_caps
-            )
-            return self._remote(desired_capabilities, remote_url, profile, options)
+            return self._remote(remote_url, options)
         service_log_path = (
             service_log_path if service_log_path else self._geckodriver_log
         )
@@ -209,9 +203,7 @@ class WebDriverCreator:
         service = FirefoxService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Firefox(
             options=options,
-            #firefox_profile=profile,  # need to move
             service=service,
-            #**desired_capabilities,
         )
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -271,11 +263,9 @@ class WebDriverCreator:
         executable_path="IEDriverServer.exe",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
+            if not options:
+                options = webdriver.IeOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.ie.service.Service)
         service = IeService(executable_path=executable_path, log_path=service_log_path)
@@ -298,11 +288,9 @@ class WebDriverCreator:
         executable_path="msedgedriver",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
+            if not options:
+                options = webdriver.EdgeOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
         service = EdgeService(executable_path=executable_path, log_path=service_log_path)
@@ -321,25 +309,21 @@ class WebDriverCreator:
         executable_path="/usr/bin/safaridriver",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.SAFARI.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
+            if not options:
+                options = webdriver.SafariOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
         service = SafariService(executable_path=executable_path, log_path=service_log_path)
         return webdriver.Safari(options=options, service=service)
 
-    def _remote(self, desired_capabilities, remote_url, profile_dir=None, options=None):
+    def _remote(self, remote_url, options):
         remote_url = str(remote_url)
         file_detector = self._get_sl_file_detector()
         return webdriver.Remote(
             command_executor=remote_url,
-            # browser_profile=profile_dir,
             options=options,
             file_detector=file_detector,
-            # **desired_capabilities,
         )
 
     def _get_sl_file_detector(self):
