@@ -371,7 +371,7 @@ class BrowserManagementKeywords(LibraryComponent):
         `Close All Browsers` keyword is used. See `Switch Browser` for an
         example.
         """
-        if not kwargs:
+        if kwargs is None:
             kwargs = {}
         if not isinstance(kwargs, dict):
             raise RuntimeError("kwargs must be a dictionary.")
