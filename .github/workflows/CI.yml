@@ -25,10 +25,6 @@ jobs:
     - run: |
         echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
-    - run: |
-        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
-        echo "$SELENIUM_MANAGER_EXE"
-        $SELENIUM_MANAGER_EXE --browser chrome --debug
     - name: Start xvfb
       run: |
         export DISPLAY=:99.0
@@ -48,6 +44,11 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
+    - name: Install drivers via selenium-manager
+      run: |
+        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
+        echo "$SELENIUM_MANAGER_EXE"
+        $SELENIUM_MANAGER_EXE --browser chrome --debug
     - name: Generate stub file for ${{ matrix.python-version }}
       if: matrix.python-version != 'pypy-3.7'
       run: |
