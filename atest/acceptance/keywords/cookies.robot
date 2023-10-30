@@ -107,13 +107,13 @@ Test Get Cookie Object Value
 Test Get Cookie Keyword Logging
     [Tags]    NoGrid    Known Issue Firefox
     [Documentation]
-    ...    LOG 1:5 ${cookie} = name=another
-    ...    value=value
+    ...    LOG 1:5 ${cookie} = name=far_future
+    ...    value=timemachine
     ...    path=/
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2026-9-15 11:22:33
+    ...    expiry=2024-09-15 11:22:33
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     far_future
 
@@ -126,4 +126,4 @@ Add Cookies
     ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
     Set Suite Variable    ${tomorrow_thistime_datetime}
     Add Cookie    another    value   expiry=${tomorrow_thistime}
-    Add Cookie    far_future    timemachine    expiry=1789485753    # 2026-09-15 11:22:33
+    Add Cookie    far_future    timemachine    expiry=1726413753    # 2024-09-15 11:22:33
