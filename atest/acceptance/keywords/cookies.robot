@@ -36,15 +36,15 @@ Add Cookie When Secure Is False
     Should Be Equal    ${cookie.secure}       ${False}
 
 Add Cookie When Expiry Is Epoch
-    Add Cookie    Cookie1    value1    expiry=1698601011
+    Add Cookie    Cookie1    value1    expiry=1730205247
     ${cookie} =    Get Cookie    Cookie1
-    ${expiry} =    Convert Date    ${1698601011}    exclude_millis=True
+    ${expiry} =    Convert Date    ${1730205247}    exclude_millis=True
     Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
-    Add Cookie    Cookie12    value12    expiry=2023-10-29 19:36:51
+    Add Cookie    Cookie12    value12    expiry=2024-10-29 19:36:51
     ${cookie} =    Get Cookie    Cookie12
-    Should Be Equal As Strings    ${cookie.expiry}    2023-10-29 19:36:51
+    Should Be Equal As Strings    ${cookie.expiry}    2024-10-29 19:36:51
 
 Delete Cookie
     [Tags]    Known Issue Safari
@@ -72,7 +72,7 @@ Get Cookies As Dict When There Are None
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie      another
-    Should Be Equal As Integers    ${cookie.expiry.year}           2023
+    Should Be Equal As Integers    ${cookie.expiry.year}           2024
     Should Be Equal As Integers    ${cookie.expiry.month}          10
     Should Be Equal As Integers    ${cookie.expiry.day}            29
     Should Be Equal As Integers    ${cookie.expiry.hour}           19
@@ -113,7 +113,7 @@ Test Get Cookie Keyword Logging
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2023-10-29 19:36:51
+    ...    expiry=2024-10-29 19:36:51
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     another
 
