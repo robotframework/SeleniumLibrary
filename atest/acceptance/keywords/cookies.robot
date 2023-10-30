@@ -4,6 +4,7 @@ Suite Setup       Go To Page "cookies.html"
 Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
 Resource          ../resource.robot
+Library           DateTime
 
 *** Test Cases ***
 Get Cookies
@@ -120,4 +121,6 @@ Test Get Cookie Keyword Logging
 Add Cookies
     Delete All Cookies
     Add Cookie    test       seleniumlibrary
-    Add Cookie    another    value   expiry=2023-10-29 19:36:51
+    ${now} =    Get Current Date
+    ${tomorrow_thistime} =    Add Time To Date    ${now}    1 day
+    Add Cookie    another    value   expiry=${tomorrow_thistime}
