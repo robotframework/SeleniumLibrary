@@ -126,4 +126,4 @@ Add Cookies
     ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
     Set Suite Variable    ${tomorrow_thistime_datetime}
     Add Cookie    another    value   expiry=${tomorrow_thistime}
-    Add Cookie    far_future    timemachine    expiry=1726413753    # 2024-09-15 11:22:33
+    Add Cookie    far_future    timemachine    expiry=1726399353    # 2024-09-15 11:22:33
