@@ -14,7 +14,7 @@ Get Cookies
 
 Get Cookies As Dict
     ${cookies}=    Get Cookies        as_dict=True
-    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value
+    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value    far_future=timemachine
     Dictionaries Should Be Equal  ${expected_cookies}   ${cookies}
 
 App Sees Cookie Set By Selenium
@@ -50,7 +50,7 @@ Delete Cookie
     [Tags]    Known Issue Safari
     Delete Cookie    test
     ${cookies} =    Get Cookies
-    Should Be Equal    ${cookies}    another=value
+    Should Be Equal    ${cookies}    far_future=timemachine; another=value
 
 Non-existent Cookie
     Run Keyword And Expect Error
@@ -72,12 +72,12 @@ Get Cookies As Dict When There Are None
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie      another
-    Should Be Equal As Integers    ${cookie.expiry.year}           2024
-    Should Be Equal As Integers    ${cookie.expiry.month}          10
-    Should Be Equal As Integers    ${cookie.expiry.day}            29
-    Should Be Equal As Integers    ${cookie.expiry.hour}           19
-    Should Be Equal As Integers    ${cookie.expiry.minute}         36
-    Should Be Equal As Integers    ${cookie.expiry.second}         51
+    Should Be Equal As Integers    ${cookie.expiry.year}           ${tomorrow_thistime_datetime.year}
+    Should Be Equal As Integers    ${cookie.expiry.month}          ${tomorrow_thistime_datetime.month}
+    Should Be Equal As Integers    ${cookie.expiry.day}            ${tomorrow_thistime_datetime.day}
+    Should Be Equal As Integers    ${cookie.expiry.hour}           ${tomorrow_thistime_datetime.hour}
+    Should Be Equal As Integers    ${cookie.expiry.minute}         ${tomorrow_thistime_datetime.minute}
+    Should Be Equal As Integers    ${cookie.expiry.second}         ${tomorrow_thistime_datetime.second}
     Should Be Equal As Integers    ${cookie.expiry.microsecond}    0
 
 Test Get Cookie Object Domain
@@ -113,9 +113,9 @@ Test Get Cookie Keyword Logging
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2024-10-29 19:36:51
+    ...    expiry=2026-9-15 11:22:33
     ...    extra={'sameSite': 'Lax'}
-    ${cookie} =    Get Cookie     another
+    ${cookie} =    Get Cookie     far_future
 
 *** Keyword ***
 Add Cookies
@@ -123,4 +123,7 @@ Add Cookies
     Add Cookie    test       seleniumlibrary
     ${now} =    Get Current Date
     ${tomorrow_thistime} =    Add Time To Date    ${now}    1 day
+    ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
+    Set Suite Variable    ${tomorrow_thistime_datetime}
     Add Cookie    another    value   expiry=${tomorrow_thistime}
+    Add Cookie    far_future    timemachine    expiry=1789485753    # 2026-09-15 11:22:33
