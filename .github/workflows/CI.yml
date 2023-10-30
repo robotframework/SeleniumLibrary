@@ -48,7 +48,7 @@ jobs:
       run: |
         SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
         echo "$SELENIUM_MANAGER_EXE"
-        WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')
+        source WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')
         echo "$WEBDRIVERPATH"
     - name: Generate stub file for ${{ matrix.python-version }}
       if: matrix.python-version != 'pypy-3.7'
