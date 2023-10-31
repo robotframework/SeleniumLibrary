@@ -15,13 +15,13 @@ Chrome Browser With Selenium Options As String
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("--disable-dev-shm-usage")
     ...    executable_path=%{WEBDRIVERPATH}
 
-Chrome Browser With Selenium Options As String With Attirbute As True
+Chrome Browser With Selenium Options As String With Attribute As True
     [Documentation]
     ...    LOG 1:3 DEBUG GLOB: *"goog:chromeOptions"*
     ...    LOG 1:3 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
-    ...    LOG 1:3 DEBUG GLOB: *"--headless"*
+    ...    LOG 1:3 DEBUG GLOB: *"--headless=new"*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; headless = True
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; add_argument ( "--headless=new" )
     ...    executable_path=%{WEBDRIVERPATH}
 
 Chrome Browser With Selenium Options With Complex Object
