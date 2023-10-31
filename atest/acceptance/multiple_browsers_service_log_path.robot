@@ -8,6 +8,8 @@ First Browser With Service Log Path
     ...    LOG 1:2 INFO STARTS: Browser driver log file created to:
     [Setup]    OperatingSystem.Remove Files    ${OUTPUT DIR}/${BROWSER}.log
     Open Browser    ${FRONT PAGE}  ${BROWSER}    service_log_path=${OUTPUT DIR}/${BROWSER}.log
+    OperatingSystem.List Directories In Directory    ${OUTPUT DIR}/
+    ${output}=    OperatingSystem.Run    ls -lh
     OperatingSystem.File Should Not Be Empty     ${OUTPUT DIR}/${BROWSER}.log
 
 Second Browser With Service Log Path And Index
