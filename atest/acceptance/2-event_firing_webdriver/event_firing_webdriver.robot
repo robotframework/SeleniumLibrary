@@ -15,7 +15,7 @@ Open Browser To Start Page
     ...    LOG 1:20 DEBUG  Wrapping driver to event_firing_webdriver.
     ...    LOG 1:22 INFO  Got driver also from SeleniumLibrary.
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}
+    ...    executable_path=%{WEBDRIVERPATH}
 
 Event Firing Webdriver Go To (WebDriver)
     [Tags]    NoGrid
