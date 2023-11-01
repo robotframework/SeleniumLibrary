@@ -414,7 +414,8 @@ class ElementKeywords(LibraryComponent):
         self, locator: Union[WebElement, str], attribute: str
     ) -> str:
         """Returns the value of ``attribute`` from the element ``locator``. `Get DOM Attribute` keyword
-        only returns attributes declared within the element's HTML markup.
+        only returns attributes declared within the element's HTML markup.  If the requested attribute
+        is not there, the keyword returns ${None}.
 
         See the `Locating elements` section for details about the locator
         syntax.
