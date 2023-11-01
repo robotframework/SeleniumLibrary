@@ -356,7 +356,8 @@ class SeleniumLibrary(DynamicCore):
     See `time format` below for supported syntax.
 
     == Page load ==
-    Page load timeout is the amount of time to wait for page load to complete until error is raised.
+    Page load timeout is the amount of time to wait for page load to complete
+    until a timeout exception is raised.
 
     The default page load timeout can be set globally
     when `importing` the library with the ``page_load_timeout`` argument
@@ -467,7 +468,7 @@ class SeleniumLibrary(DynamicCore):
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
         - ``page_load_timeout``:
-          Default value to wait for page load to complete until error is raised.
+          Default value to wait for page load to complete until a timeout exception is raised.
         - ``action_chain_delay``:
           Default value for `ActionChains` delay to wait in between actions.
         """
