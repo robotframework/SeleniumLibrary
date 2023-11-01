@@ -4,6 +4,7 @@ Suite Setup       Go To Page "cookies.html"
 Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
 Resource          ../resource.robot
+Library           DateTime
 
 *** Test Cases ***
 Get Cookies
@@ -13,7 +14,7 @@ Get Cookies
 
 Get Cookies As Dict
     ${cookies}=    Get Cookies        as_dict=True
-    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value
+    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value    far_future=timemachine
     Dictionaries Should Be Equal  ${expected_cookies}   ${cookies}
 
 App Sees Cookie Set By Selenium
@@ -35,21 +36,21 @@ Add Cookie When Secure Is False
     Should Be Equal    ${cookie.secure}       ${False}
 
 Add Cookie When Expiry Is Epoch
-    Add Cookie    Cookie1    value1    expiry=1698601011
+    Add Cookie    Cookie1    value1    expiry=1730205247
     ${cookie} =    Get Cookie    Cookie1
-    ${expiry} =    Convert Date    ${1698601011}    exclude_millis=True
+    ${expiry} =    Convert Date    ${1730205247}    exclude_millis=True
     Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
-    Add Cookie    Cookie12    value12    expiry=2023-10-29 19:36:51
+    Add Cookie    Cookie12    value12    expiry=2024-10-29 19:36:51
     ${cookie} =    Get Cookie    Cookie12
-    Should Be Equal As Strings    ${cookie.expiry}    2023-10-29 19:36:51
+    Should Be Equal As Strings    ${cookie.expiry}    2024-10-29 19:36:51
 
 Delete Cookie
     [Tags]    Known Issue Safari
     Delete Cookie    test
     ${cookies} =    Get Cookies
-    Should Be Equal    ${cookies}    another=value
+    Should Be Equal    ${cookies}    far_future=timemachine; another=value
 
 Non-existent Cookie
     Run Keyword And Expect Error
@@ -71,12 +72,12 @@ Get Cookies As Dict When There Are None
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie      another
-    Should Be Equal As Integers    ${cookie.expiry.year}           2023
-    Should Be Equal As Integers    ${cookie.expiry.month}          10
-    Should Be Equal As Integers    ${cookie.expiry.day}            29
-    Should Be Equal As Integers    ${cookie.expiry.hour}           19
-    Should Be Equal As Integers    ${cookie.expiry.minute}         36
-    Should Be Equal As Integers    ${cookie.expiry.second}         51
+    Should Be Equal As Integers    ${cookie.expiry.year}           ${tomorrow_thistime_datetime.year}
+    Should Be Equal As Integers    ${cookie.expiry.month}          ${tomorrow_thistime_datetime.month}
+    Should Be Equal As Integers    ${cookie.expiry.day}            ${tomorrow_thistime_datetime.day}
+    Should Be Equal As Integers    ${cookie.expiry.hour}           ${tomorrow_thistime_datetime.hour}
+    Should Be Equal As Integers    ${cookie.expiry.minute}         ${tomorrow_thistime_datetime.minute}
+    Should Be Equal As Integers    ${cookie.expiry.second}         ${tomorrow_thistime_datetime.second}
     Should Be Equal As Integers    ${cookie.expiry.microsecond}    0
 
 Test Get Cookie Object Domain
@@ -106,18 +107,23 @@ Test Get Cookie Object Value
 Test Get Cookie Keyword Logging
     [Tags]    NoGrid    Known Issue Firefox
     [Documentation]
-    ...    LOG 1:5 ${cookie} = name=another
-    ...    value=value
+    ...    LOG 1:5 ${cookie} = name=far_future
+    ...    value=timemachine
     ...    path=/
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2023-10-29 19:36:51
+    ...    expiry=2024-09-15 11:22:33
     ...    extra={'sameSite': 'Lax'}
-    ${cookie} =    Get Cookie     another
+    ${cookie} =    Get Cookie     far_future
 
 *** Keyword ***
 Add Cookies
     Delete All Cookies
     Add Cookie    test       seleniumlibrary
-    Add Cookie    another    value   expiry=2023-10-29 19:36:51
+    ${now} =    Get Current Date
+    ${tomorrow_thistime} =    Add Time To Date    ${now}    1 day
+    ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
+    Set Suite Variable    ${tomorrow_thistime_datetime}
+    Add Cookie    another    value   expiry=${tomorrow_thistime}
+    Add Cookie    far_future    timemachine    expiry=1726399353    # 2024-09-15 11:22:33

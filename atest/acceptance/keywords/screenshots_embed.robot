@@ -38,10 +38,10 @@ Capture Page Screenshot Override EMBED
     [Setup]    Remove .png Files
     Set Screenshot Directory    EMBED
     ${file}=    Capture Page Screenshot    override-embed-screenshot.png
-    Should Be Equal    ${file}    ${OUTPUTDIR}/override-embed-screenshot.png
-    File Should Exist    ${OUTPUTDIR}/override-embed-screenshot.png
-    File Should Not Exist    ${EXECDIR}/*.png
-    File Should Not Exist    ${EXECDIR}/EMBED/*.png
+    Should Be Equal    ${file}    ${OUTPUTDIR}${/}override-embed-screenshot.png
+    File Should Exist    ${OUTPUTDIR}${/}override-embed-screenshot.png
+    File Should Not Exist    ${EXECDIR}${/}*.png
+    File Should Not Exist    ${EXECDIR}${/}EMBED${/}*.png
 
 *** Keywords ***
 Remove .png Files

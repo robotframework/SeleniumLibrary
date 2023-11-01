@@ -1,3 +1,0 @@
-Selenium options with android
-
-0) [[], {'androidPackage': 'com.android.chrome'}]
