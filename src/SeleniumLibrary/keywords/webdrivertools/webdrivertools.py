@@ -169,7 +169,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.ChromeOptions()
-        options.headless = True
+        options.add_argument('--headless=new')
         return self.create_chrome(
             desired_capabilities, remote_url, options, service_log_path, executable_path
         )
@@ -232,7 +232,7 @@ class WebDriverCreator:
                     else:
                         setattr(ff_profile, key, *option[key])
             return ff_profile
-    
+
     @property
     def _geckodriver_log(self):
         log_file = self._get_log_path(
@@ -252,7 +252,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.FirefoxOptions()
-        options.headless = True
+        options.add_argument('-headless')
         return self.create_firefox(
             desired_capabilities,
             remote_url,
