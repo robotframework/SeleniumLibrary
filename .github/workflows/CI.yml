@@ -17,6 +17,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@latest
+      with:
+        chrome-version: latest
+      id: setup-chrome
+    - run: |
+        echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+        ${{ steps.setup-chrome.outputs.chrome-path }} --version
     - name: Start xvfb
       run: |
         export DISPLAY=:99.0
@@ -36,6 +44,12 @@ jobs:
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
+    - name: Install drivers via selenium-manager
+      run: |
+        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
+        echo "$SELENIUM_MANAGER_EXE"
+        echo "WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')" >> "$GITHUB_ENV"
+        echo "$WEBDRIVERPATH"
     - name: Generate stub file for ${{ matrix.python-version }}
       if: matrix.python-version != 'pypy-3.7'
       run: |
