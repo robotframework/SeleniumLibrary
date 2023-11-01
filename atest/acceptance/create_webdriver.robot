@@ -7,7 +7,7 @@ Library           Collections
 Create Webdriver Creates Functioning WebDriver
     [Documentation]
     ...    LOG 1:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver.
-    ...    LOG 1:25 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
+    ...    LOG 1:19 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
     [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
@@ -30,7 +30,7 @@ Create Webdriver With Bad Keyword Argument Dictionary
     [Documentation]    Invalid arguments types
     ${status}    ${error} =    Run Keyword And Ignore Error    Create Webdriver    Firefox    kwargs={'spam': 'eggs'}
     Should Be Equal    ${status}    FAIL
-    Should Match Regexp    ${error}    (TypeError: __init__\\(\\) got an unexpected keyword argument 'spam'|kwargs must be a dictionary\.)
+    Should Match Regexp    ${error}    (TypeError: (?:WebDriver.)?__init__\\(\\) got an unexpected keyword argument 'spam'|kwargs must be a dictionary\.)
 
 *** Keywords ***
 Set Driver Variables
