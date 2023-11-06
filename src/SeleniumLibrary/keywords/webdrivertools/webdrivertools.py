@@ -277,7 +277,8 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.ie.service.Service)
-        service = IeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(IeService, service_log_path)
+        service = IeService(executable_path=executable_path, **log_method)
         return webdriver.Ie(
             options=options,
             service=service,
