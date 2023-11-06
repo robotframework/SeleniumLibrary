@@ -302,7 +302,8 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
-        service = EdgeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(EdgeService, service_log_path)
+        service = EdgeService(executable_path=executable_path, **log_method)
         return webdriver.Edge(
             options=options,
             service=service,
@@ -323,7 +324,8 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
-        service = SafariService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(SafariService, service_log_path)
+        service = SafariService(executable_path=executable_path, **log_method)
         return webdriver.Safari(options=options, service=service)
 
     def _remote(self, remote_url, options):
