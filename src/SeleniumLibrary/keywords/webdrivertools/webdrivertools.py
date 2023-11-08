@@ -131,7 +131,7 @@ class WebDriverCreator:
             caps["browserName"] = default_capabilities["browserName"]
         return {"desired_capabilities": caps}
 
-    def _get_log_method(service_cls, service_log_path):
+    def _get_log_method(self, service_cls, service_log_path):
         # -- temporary fix to transition selenium to v4.13 from v4.11 and prior
         from inspect import signature
         sig = signature(service_cls)
