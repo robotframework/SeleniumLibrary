@@ -50,6 +50,7 @@ jobs:
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Install drivers via selenium-manager
+      if: matrix.selenium-version != '4.3.0'
       run: |
         SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
         echo "$SELENIUM_MANAGER_EXE"
