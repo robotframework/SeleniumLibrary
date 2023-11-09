@@ -11,7 +11,7 @@ jobs:
       matrix:
         python-version: [3.8, 3.11]  # 3.12, pypy-3.9
         rf-version: [4.1.3, 5.0.1, 6.0.1]
-        selenium-version: [4.3.0, 4.12.0, 4.13.0, 4.14.0, 4.15.2]
+        selenium-version: [4.13.0, 4.14.0, 4.15.2]
 
     steps:
     - uses: actions/checkout@v3
@@ -50,7 +50,6 @@ jobs:
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Install drivers via selenium-manager
-      if: matrix.selenium-version != '4.3.0'
       run: |
         SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
         echo "$SELENIUM_MANAGER_EXE"
