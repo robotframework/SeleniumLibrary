@@ -3,6 +3,7 @@ Documentation     Tests elements
 Test Setup        Go To Page "links.html"
 Resource          ../resource.robot
 Library           String
+Library           DebugLibrary
 
 *** Test Cases ***
 Get Many Elements
@@ -60,48 +61,72 @@ Get Element Attribute
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
+# About DOM Attributes and Properties
+# -----------------------------------
+# When implementing the new `Get DOM Attirbute` and `Get Property` keywords (#1822), several
+# questions were raised. Fundamentally what is the difference between a DOM attribute and
+# a Property. As [1] explains "Attributes are defined by HTML. Properties are defined by the
+# DOM (Document Object Model)."
+#
+# Below are some references which talk to some descriptions and oddities of DOM attributes
+# and properties.
+#
+# References:
+#    [1] HTML attributes and DOM properties:
+#      https://angular.io/guide/binding-syntax#html-attribute-vs-dom-property
+#    [2] W3C HTML Specification - Section 13.1.2.3 Attributes:
+#      https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+#    [3] JavaScript.Info - Attributes and properties:
+#      https://javascript.info/dom-attributes-and-properties
+#    [4] "Which CSS properties are inherited?" - StackOverflow
+#      https://stackoverflow.com/questions/5612302/which-css-properties-are-inherited
+#    [5] MDN Web Docs: Attribute
+#      https://developer.mozilla.org/en-US/docs/Glossary/Attribute
+#    [6] MDN Web Docs: HTML attribute reference
+#      https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+
 Get DOM Attribute
+    # Test get DOM attribute
     ${id}=    Get DOM Attribute    link:Link with id    id
     Should Be Equal    ${id}    some_id
     # Test custom attribute
     ${existing_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-id
-    Should Be Equal    ${existing_custom_attr}    my_id
+    Should Be Equal    ${existing_custom_attr}    my_id    
     ${doesnotexist_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-doesnotexist
     Should Be Equal    ${doesnotexist_custom_attr}    ${None}
-    # ToDo: 
-    # Ref: https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
-
-Get non existing DOM Attribute
+    # Get non existing DOM Attribute
     ${class}=    Get DOM Attribute    link:Link with id    class
     Should Be Equal    ${class}    ${NONE}
 
 More DOM Attributes
     [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
-    # Test get empty attribute
+    # Test get empty boolean attribute
     ${disabled}=    Get DOM Attribute    css:input[name="disabled_input"]    disabled
-    Should Be Equal    ${disabled}    true   # ${True}
+    Should Be Equal    ${disabled}    true
+    # Test boolean attribute whose value is a string
     ${disabled}=    Get DOM Attribute    css:input[name="disabled_password"]    disabled
-    Should Be Equal    ${disabled}    true   # disabled
+    Should Be Equal    ${disabled}    true
     # Test empty string as the value for the attribute
     ${empty_value}=    Get DOM Attribute    css:input[name="disabled_password"]    value
     Should Be Equal    ${empty_value}    ${EMPTY}
+    # Test non-existing attribute
     ${disabled}=    Get DOM Attribute    css:input[name="enabled_password"]    disabled
-    Should Be Equal    ${disabled}    ${NONE}   # false
+    Should Be Equal    ${disabled}    ${NONE}
 
 Get Property
     [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
-    # ${attributes}=   Get Property  css:input[name="readonly_empty"]     attributes
     ${tagName_prop}=   Get Property  css:input[name="readonly_empty"]    tagName
     Should Be Equal    ${tagName_prop}    INPUT
     # Get a boolean property
     ${isConnected}=   Get Property  css:input[name="readonly_empty"]     isConnected
     Should Be Equal    ${isConnected}    ${True}
-
-    # ToDo: nned to test own versus inherited property
+    # Test property which returns webelement
+    ${children_prop}=    Get Property    id:table1    children
+    Length Should Be    ${children_prop}    ${1}
+    ${isWebElement}=  Evaluate  isinstance($children_prop[0], selenium.webdriver.remote.webelement.WebElement)  modules=selenium
+    Should Be Equal    ${isWebElement}    ${True}
+    # ToDo: need to test own versus inherited property
     # ToDo: Test enumerated property
-    # Test proprty which returns webelement
-    ${children}=    Get Property    id:table1    children
-
 
 Get "Attribute" That Is Both An DOM Attribute and Property
     [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
