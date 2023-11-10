@@ -134,6 +134,19 @@ Get "Attribute" That Is Both An DOM Attribute and Property
     ${value_attribute}=    Get DOM Attribute  css:input[name="readonly_empty"]   value
     Should Be Equal    ${value_property}    ${value_attribute}
 
+Modify "Attribute" That Is Both An DOM Attribute and Property
+    [Setup]    Go To Page "forms/prefilled_email_form.html"
+    ${initial_value_property}=    Get Property  css:input[name="email"]   value
+    ${initial_value_attribute}=    Get DOM Attribute  css:input[name="email"]   value
+    Should Be Equal    ${initial_value_property}    ${initial_value_attribute}
+    Should Be Equal    ${initial_value_attribute}    Prefilled Email
+    Input Text    css:input[name="email"]    robot@robotframework.org
+    ${changed_value_property}=    Get Property  css:input[name="email"]   value
+    ${changed_value_attribute}=    Get DOM Attribute  css:input[name="email"]   value
+    Should Not Be Equal    ${changed_value_property}    ${changed_value_attribute}
+    Should Be Equal    ${changed_value_attribute}    Prefilled Email
+    Should Be Equal    ${changed_value_property}    robot@robotframework.org
+
 Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
     Element Attribute Value Should Be  link=Absolute external link  nothere  ${None}
