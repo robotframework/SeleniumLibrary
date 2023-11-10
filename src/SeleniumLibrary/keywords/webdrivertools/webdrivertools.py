@@ -131,6 +131,16 @@ class WebDriverCreator:
             caps["browserName"] = default_capabilities["browserName"]
         return {"desired_capabilities": caps}
 
+    def _get_log_method(self, service_cls, service_log_path):
+        # -- temporary fix to transition selenium to v4.13 from v4.11 and prior
+        from inspect import signature
+        sig = signature(service_cls)
+        if 'log_output' in str(sig):
+            return {'log_output': service_log_path}
+        else:
+            return {'log_path': service_log_path}
+        # --
+
     def create_chrome(
         self,
         desired_capabilities,
@@ -145,14 +155,7 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.chrome.service.Service)
-        # -- temporary fix to transition selenium to v4.13 from v4.11 and prior
-        from inspect import signature
-        sig = signature(ChromeService)
-        if 'log_output' in str(sig):
-            log_method = {'log_output': service_log_path}
-        else:
-            log_method = {'log_path': service_log_path}
-        # --
+        log_method = self._get_log_method(ChromeService, service_log_path)
         service = ChromeService(executable_path=executable_path, **log_method)
         return webdriver.Chrome(
             options=options,
@@ -169,7 +172,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.ChromeOptions()
-        options.headless = True
+        options.add_argument('--headless=new')
         return self.create_chrome(
             desired_capabilities, remote_url, options, service_log_path, executable_path
         )
@@ -203,12 +206,10 @@ class WebDriverCreator:
 
         if remote_url:
             return self._remote(remote_url, options)
-        service_log_path = (
-            service_log_path if service_log_path else self._geckodriver_log
-        )
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.firefox.service.Service)
-        service = FirefoxService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(FirefoxService, service_log_path or self._geckodriver_log)
+        service = FirefoxService(executable_path=executable_path, **log_method)
         return webdriver.Firefox(
             options=options,
             service=service,
@@ -232,7 +233,7 @@ class WebDriverCreator:
                     else:
                         setattr(ff_profile, key, *option[key])
             return ff_profile
-    
+
     @property
     def _geckodriver_log(self):
         log_file = self._get_log_path(
@@ -252,7 +253,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.FirefoxOptions()
-        options.headless = True
+        options.add_argument('-headless')
         return self.create_firefox(
             desired_capabilities,
             remote_url,
@@ -276,7 +277,8 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.ie.service.Service)
-        service = IeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(IeService, service_log_path)
+        service = IeService(executable_path=executable_path, **log_method)
         return webdriver.Ie(
             options=options,
             service=service,
@@ -301,7 +303,8 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
-        service = EdgeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(EdgeService, service_log_path)
+        service = EdgeService(executable_path=executable_path, **log_method)
         return webdriver.Edge(
             options=options,
             service=service,
@@ -322,7 +325,8 @@ class WebDriverCreator:
             return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
-        service = SafariService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(SafariService, service_log_path)
+        service = SafariService(executable_path=executable_path, **log_method)
         return webdriver.Safari(options=options, service=service)
 
     def _remote(self, remote_url, options):

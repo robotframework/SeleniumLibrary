@@ -614,8 +614,8 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_selenium_page_load_timeout(self) -> str:
-        """Gets the timeout to wait for a page load to complete
-        before throwing an error.
+        """Gets the time to wait for a page load to complete
+        before raising a timeout exception.
 
         The value is returned as a human-readable string like ``1 second``.
 
@@ -733,9 +733,9 @@ class BrowserManagementKeywords(LibraryComponent):
         The previous value is returned and can be used to restore
         the original value later if needed.
 
-        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`
-        this keywords sets the time for Webdriver to wait until page
-        is loaded before throwing an error.
+        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`,
+        this keywords sets the time for the Webdriver to wait until the page
+        is loaded before raising a timeout exception.
 
         See the `Page load` section above for more information.
 
