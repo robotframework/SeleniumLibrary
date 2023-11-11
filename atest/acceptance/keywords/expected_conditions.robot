@@ -9,6 +9,12 @@ Wait For Expected Conditions One Argument
     Wait For Expected Condition    title_is    Delayed
     Title Should Be    Delayed
 
+Wait For Expected Condition Times out
+    Title Should Be    Original
+    Click Element    link=delayed change title
+    Wait For Expected Condition    title_is    Foo
+    # Verify failure
+
 Wait For Expected Conditions using WebElement as locator
     Click Button    Change the button state
     ${dynamic_btn}=  Get WebElement  id:enabledDisabledBtn
