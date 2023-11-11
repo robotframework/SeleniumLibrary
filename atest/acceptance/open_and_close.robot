@@ -20,7 +20,7 @@ Browser Open With Not Well-Formed URL Should Close
     ...    LOG 1.1:24 DEBUG REGEXP: .*but failed to open url.*
     ...    LOG 2:2 DEBUG STARTS: DELETE
     ...    LOG 2:5 DEBUG STARTS: Finished Request
-    Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}
+    Run Keyword And Expect Error    *    Open Browser    bad.url.bad    ${BROWSER}    executable_path=%{WEBDRIVERPATH}
     Close All Browsers
 
 Switch to closed browser is possible
