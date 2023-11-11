@@ -19,7 +19,7 @@ from selenium.webdriver.support import expected_conditions as EC
 class ExpectedConditionKeywords(LibraryComponent):
     @keyword
     def wait_for_expected_condition(self, condition, *args):
-        wait = WebDriverWait(self.driver, 10)
+        wait = WebDriverWait(self.driver, 10, 0.1)
         # import sys,pdb;pdb.Pdb(stdout=sys.__stdout__).set_trace()
         c = getattr(EC, condition)
         wait.until(c(*args))

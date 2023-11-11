@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Original</title>
+		<script type="text/javascript">
+		function add_content(target_container, content) {
+			p = document.createElement('p');
+			p.appendChild(document.createTextNode(content));
+			container = document.getElementById(target_container);
+			container.appendChild(p);
+		}
+
+		function delayed_button_state() {
+			setTimeout(function() {
+				state_btn = document.getElementById('enabledDisabledBtn')
+				if (state_btn.hasAttribute("disabled")) {
+					state_btn.removeAttribute("disabled")
+					state_btn.value = "Enabled"
+				} else {
+					state_btn.setAttribute("disabled", "")
+					state_btn.value = "Disabled"
+				}
+			},900)
+		}
+		function delayed_title_change() {
+			setTimeout(function(){
+				document.title='Delayed';
+			},600);
+		}
+		</script>
+	</head>
+	<body>
+		<a href="javascript:return false;" onclick="document.title='Changed'; return false;">change title</a><br/>
+		<a href="javascript:return false;" onclick="delayed_title_change(); return false;">delayed change title</a><br/>
+		<a href="javascript:return false;" onclick="add_content('target', 'added content'); return false;">add content</a><br/>
+		<a id="unicode" href="javascript:return false;" onclick="document.title='äää'; return false;">title to ääää</a><br/>
+		<p>
+			<input type="radio" name="group" value="title" 
+			onclick="document.title='Changed by Button';" />Change Title<br/>
+			<input type="radio" name="group" value="content" 
+			onclick="add_content('button_target', 'added by button');"/>Add Content<br/>
+        </p>
+        <div id="target">
+		</div>
+		<div id="button_target">
+        </div>
+        <form name=myform>
+            <input type=button value="Change the title" 
+            onClick="if(confirm('Really change the title?'))
+            document.title += ' Changed!';" >
+		</form>
+		<p>
+			<input type=button id=stateChangeBtn value="Change the button state"
+			onClick="delayed_button_state()" />
+			<input type=button id=enabledDisabledBtn value="Disabled"
+			disabled />
+		</p>
+		<p>
+			<form name=titleChanger>
+				<td>
+					<input type=text id=titleChangeTxt value="Enter Title here">
+				</td>
+				<td>
+					<input type=button id=titleChangeBtn value="Set Title" 
+					onClick="document.title = document.getElementById('titleChangeTxt').value;" >
+				</td>
+			</form>
+		</p>
+	</body>
+</html>
+
