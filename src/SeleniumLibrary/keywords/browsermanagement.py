@@ -83,10 +83,6 @@ class BrowserManagementKeywords(LibraryComponent):
         | Internet Explorer | internetexplorer, ie     |
         | Edge              | edge                     |
         | Safari            | safari                   |
-        | Iphone            | iphone                   |
-        | PhantomJS         | phantomjs                |
-        | HTMLUnit          | htmlunit                 |
-        | HTMLUnit with Javascript | htmlunitwithjs    |
 
         To be able to actually use one of these browsers, you need to have
         a matching Selenium browser driver available. See the
@@ -140,9 +136,7 @@ class BrowserManagementKeywords(LibraryComponent):
         are available. Please note that not all browsers, supported by the
         SeleniumLibrary, have Selenium options available. Therefore please
         consult the Selenium documentation which browsers do support
-        the Selenium options. If ``browser`` argument is `android` then
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
-        is used. Selenium options are also supported, when ``remote_url``
+        the Selenium options. Selenium options are also supported, when ``remote_url``
         argument is used.
 
         The SeleniumLibrary ``options`` argument accepts Selenium
@@ -362,9 +356,6 @@ class BrowserManagementKeywords(LibraryComponent):
         | ${proxy}=                  | `Evaluate`     | selenium.webdriver.Proxy()   | modules=selenium, selenium.webdriver |
         | ${proxy.http_proxy}=       | `Set Variable` | localhost:8888               |                                      |
         | `Create Webdriver`         | Firefox        | proxy=${proxy}               |                                      |
-        | # Use proxy with PhantomJS |                |                              |                                      |
-        | ${service args}=           | `Create List`  | --proxy=192.168.132.104:8888 |                                      |
-        | `Create Webdriver`         | PhantomJS      | service_args=${service args} |                                      |
 
         Returns the index of this browser instance which can be used later to
         switch back to it. Index starts from 1 and is reset back to it when
@@ -625,8 +616,8 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_selenium_page_load_timeout(self) -> str:
-        """Gets the timeout to wait for a page load to complete
-        before throwing an error.
+        """Gets the time to wait for a page load to complete
+        before raising a timeout exception.
 
         The value is returned as a human-readable string like ``1 second``.
 
@@ -744,9 +735,9 @@ class BrowserManagementKeywords(LibraryComponent):
         The previous value is returned and can be used to restore
         the original value later if needed.
 
-        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`
-        this keywords sets the time for Webdriver to wait until page
-        is loaded before throwing an error.
+        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`,
+        this keywords sets the time for the Webdriver to wait until the page
+        is loaded before raising a timeout exception.
 
         See the `Page load` section above for more information.
 
