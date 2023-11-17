@@ -334,7 +334,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def create_webdriver(
-        self, driver_name: str, alias: Optional[str] = None, kwargs=None, **init_kwargs
+        self, driver_name: str, alias: Optional[str] = None, kwargs: Optional[dict] = None, **init_kwargs
     ) -> str:
         """Creates an instance of Selenium WebDriver.
 
