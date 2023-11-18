@@ -3,7 +3,6 @@ import os
 import pytest
 from approvaltests import verify_all
 from approvaltests.reporters import GenericDiffReporterFactory
-
 from SeleniumLibrary.utils.types import type_converter
 
 

@@ -15,8 +15,6 @@
 # limitations under the License.
 
 import abc
-from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
-from robot.api import logger
 
 
 class Event:

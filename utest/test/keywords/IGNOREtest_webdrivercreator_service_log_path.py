@@ -2,15 +2,11 @@ import os
 from collections import namedtuple
 
 import pytest
-
-from mockito import mock, when, unstub, ANY
+from mockito import ANY, mock, unstub, when
 from selenium import webdriver
-from selenium.webdriver import chrome
 
 # from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome import service as chromeservice
-
 from SeleniumLibrary.keywords import WebDriverCreator
 from SeleniumLibrary.utils import WINDOWS
 
@@ -101,7 +97,6 @@ def test_create_headlesschrome_with_service_log_path_real_path(creator):
 
 
 def test_create_firefox_with_service_log_path_none(creator):
-    log_file = os.path.join(creator.output_dir, "geckodriver-1.log")
     expected_webdriver = mock()
     options = mock()
     when(webdriver).FirefoxOptions().thenReturn(options)
@@ -176,7 +171,6 @@ def test_create_ie_with_service_log_path_real_path(creator):
 
 
 def test_create_edge_with_service_log_path_real_path(creator):
-    executable_path = "msedgedriver"
     log_file = os.path.join(creator.output_dir, "edge-1.log")
     expected_webdriver = mock()
     when(webdriver).Edge(

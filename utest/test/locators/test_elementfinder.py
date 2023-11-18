@@ -3,21 +3,20 @@ from pathlib import Path
 import pytest
 from approvaltests import verify_all
 from approvaltests.reporters import GenericDiffReporterFactory
-from mockito import any, mock, verify, when, unstub
+from mockito import any, mock, unstub, verify, when
 from selenium.webdriver.common.by import By
-
 from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 def finder():
     ctx = mock()
     ctx.driver = mock()
     return ElementFinder(ctx)
 
 
-@pytest.fixture
+@pytest.fixture()
 def reporter():
     cur_dir = Path(__file__).parent.absolute()
     reporter_json = cur_dir / ".." / "approvals_reporters.json"
@@ -250,13 +249,13 @@ def test_non_existing_prefix(finder):
 def test_find_with_no_tag(finder):
     driver = _get_driver(finder)
     finder.find("test1", required=False)
-    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or " "@name='test1')]")
+    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_explicit_default_strategy(finder):
     driver = _get_driver(finder)
     finder.find("default=test1", required=False)
-    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or " "@name='test1')]")
+    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_explicit_default_strategy_and_equals(finder):

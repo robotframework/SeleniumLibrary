@@ -256,6 +256,7 @@ class WaitingKeywords(LibraryComponent):
             timeout,
             error,
         )
+        return None
 
     @keyword
     def wait_until_page_does_not_contain_element(
@@ -294,6 +295,7 @@ class WaitingKeywords(LibraryComponent):
             timeout,
             error,
         )
+        return None
 
     @keyword
     def wait_until_element_is_visible(

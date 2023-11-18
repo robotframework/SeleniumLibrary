@@ -13,17 +13,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from collections import namedtuple
 from datetime import timedelta
 from inspect import getdoc, isclass
-from typing import Optional, List
+from typing import List, NamedTuple, Optional
 
 from robot.api import logger
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
 from robot.utils import is_string
 from robot.utils.importer import Importer
-
 from robotlibcore import DynamicCore
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -50,11 +48,10 @@ from SeleniumLibrary.keywords.screenshot import EMBED
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import (
     LibraryListener,
-    is_truthy,
-    _convert_timeout,
     _convert_delay,
+    _convert_timeout,
+    is_truthy,
 )
-
 
 __version__ = "6.1.3"
 
@@ -537,7 +534,7 @@ class SeleniumLibrary(DynamicCore):
         return DynamicCore.get_keyword_documentation(self, name)
 
     def _parse_plugin_doc(self):
-        Doc = namedtuple("Doc", "doc, name")
+        Doc = NamedTuple("Doc", "doc, name")
         for plugin in self._plugins:
             yield Doc(
                 doc=getdoc(plugin) or "No plugin documentation found.",
@@ -665,11 +662,10 @@ class SeleniumLibrary(DynamicCore):
         return listener
 
     def _string_to_modules(self, modules):
-        Module = namedtuple("Module", "module, args, kw_args")
+        Module = NamedTuple("Module", "module, args, kw_args")
         parsed_modules = []
         for module in modules.split(","):
-            module = module.strip()
-            module_and_args = module.split(";")
+            module_and_args = module.strip().split(";")
             module_name = module_and_args.pop(0)
             kw_args = {}
             args = []
@@ -679,8 +675,9 @@ class SeleniumLibrary(DynamicCore):
                     kw_args[key] = value
                 else:
                     args.append(argument)
-            module = Module(module=module_name, args=args, kw_args=kw_args)
-            parsed_modules.append(module)
+            parsed_modules.append(
+                Module(module=module_name, args=args, kw_args=kw_args)
+            )
         return parsed_modules
 
     def _store_plugin_keywords(self, plugin):
@@ -689,6 +686,8 @@ class SeleniumLibrary(DynamicCore):
 
     def _resolve_screenshot_root_directory(self):
         screenshot_root_directory = self.screenshot_root_directory
-        if is_string(screenshot_root_directory):
-            if screenshot_root_directory.upper() == EMBED:
-                self.screenshot_root_directory = EMBED
+        if (
+            is_string(screenshot_root_directory)
+            and screenshot_root_directory.upper() == EMBED
+        ):
+            self.screenshot_root_directory = EMBED

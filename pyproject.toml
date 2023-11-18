@@ -11,7 +11,45 @@ exclude = '''
 )/
 '''
 
-[tool.isort]
-profile = "black"
-src_paths="."
-skip_glob = ["src/SeleniumLibrary/__init__.pyi"]
+[tool.ruff]
+unfixable = []
+exclude = [
+  "src/SeleniumLibrary/__init__.pyi",
+]
+ignore = [
+  "E501",  # line too long
+  "N803",  # argument name should be lowercase
+  "N812",  # lowercase imported as non lowercase
+  "N999",  # Invalid module name: 'SeleniumLibrary'
+  "PLR0913",  # too many arguments
+  "DTZ006",  # No timezone specified
+  "PTH",  # Use Path instead of os.path -> maybe soon
+  "N818",  # exception naming convention
+]
+target-version = "py38"
+select = [
+  "E",
+  "F",
+  "W",
+  "C90",
+  "I",
+  "N",
+  "B",
+  "PYI",
+  "PL",
+  "UP",
+  "A",
+  "C4",
+  "DTZ",
+  "ISC",
+  "ICN",
+  "INP",
+  "PIE",
+  "T20",
+  "PYI",
+  "PT",
+  "RSE",
+  "RET",
+  "SIM",
+  "RUF"
+]

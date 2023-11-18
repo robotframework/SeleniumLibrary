@@ -17,8 +17,7 @@ import os
 from datetime import timedelta
 from typing import Any
 
-from robot.utils import is_string, timestr_to_secs
-from robot.utils import is_truthy, is_falsy  # noqa
+from robot.utils import is_falsy, is_string, is_truthy, timestr_to_secs  # noqa
 
 # Need only for unit tests and can be removed when Approval tests fixes:
 # https://github.com/approvals/ApprovalTests.Python/issues/41
@@ -32,9 +31,8 @@ def is_noney(item):
 def _convert_delay(delay):
     if isinstance(delay, timedelta):
         return delay.microseconds // 1000
-    else:
-        x = timestr_to_secs(delay)
-        return int(x * 1000)
+    x = timestr_to_secs(delay)
+    return int(x * 1000)
 
 
 def _convert_timeout(timeout):

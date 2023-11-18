@@ -15,12 +15,11 @@
 # limitations under the License.
 
 import os
-from collections import namedtuple
-from typing import Any, Union
+from typing import Any, NamedTuple, Union
 
 from robot.utils import plural_or_not, seq2str
-
 from selenium.webdriver.remote.webelement import WebElement
+
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
@@ -129,11 +128,9 @@ class JavaScriptKeywords(LibraryComponent):
             return code[index.js + 1 :], []
         if self.js_marker not in code:
             return code[0 : index.arg], code[index.arg + 1 :]
-        else:
-            if index.js == 0:
-                return code[index.js + 1 : index.arg], code[index.arg + 1 :]
-            else:
-                return code[index.js + 1 :], code[index.arg + 1 : index.js]
+        if index.js == 0:
+            return code[index.js + 1 : index.arg], code[index.arg + 1 :]
+        return code[index.js + 1 :], code[index.arg + 1 : index.js]
 
     def _check_marker_error(self, code):
         if not code:
@@ -151,15 +148,9 @@ class JavaScriptKeywords(LibraryComponent):
             raise ValueError(message)
 
     def _get_marker_index(self, code):
-        Index = namedtuple("Index", "js arg")
-        if self.js_marker in code:
-            js = code.index(self.js_marker)
-        else:
-            js = -1
-        if self.arg_marker in code:
-            arg = code.index(self.arg_marker)
-        else:
-            arg = -1
+        Index = NamedTuple("Index", "js arg")
+        js = code.index(self.js_marker) if self.js_marker in code else -1
+        arg = code.index(self.arg_marker) if self.arg_marker in code else -1
         return Index(js=js, arg=arg)
 
     def _read_javascript_from_file(self, path):

@@ -38,20 +38,20 @@ Examples:
     run.py headlesschrome --nounit --grid true
 """
 
+import argparse
+import os
 import platform
+import shutil
+import subprocess
+import sys
+import tempfile
+import textwrap
 import time
 import zipfile
 from contextlib import contextmanager
-import os
-import sys
-import argparse
-import textwrap
-import shutil
-import subprocess
-import tempfile
 
-from robot import rebot_cli
 from robot import __version__ as robot_version
+from robot import rebot_cli
 from robot.utils import is_truthy
 
 try:
@@ -62,7 +62,6 @@ except ImportError:
         "Install it with `pip install robotstatuschecker`."
     )
 import requests
-
 
 # Folder settings
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -179,7 +178,7 @@ def _grid_status(status=False, role="hub"):
 @contextmanager
 def http_server(interpreter):
     serverlog = open(os.path.join(RESULTS_DIR, "serverlog.txt"), "w")
-    interpreter = "python" if not interpreter else interpreter
+    interpreter = interpreter if interpreter else "python"
     process = subprocess.Popen(
         [interpreter, HTTP_SERVER_FILE, "start"],
         stdout=serverlog,
@@ -196,14 +195,9 @@ def http_server(interpreter):
 def execute_tests(interpreter, browser, rf_options, grid, event_firing):
     options = []
     if grid:
-        runner = interpreter.split() + [
-            "-m",
-            "pabot.pabot",
-            "--processes",
-            "2",
-        ]
+        runner = [*interpreter.split(), "-m", "pabot.pabot", "--processes", "2"]
     else:
-        runner = interpreter.split() + ["-m", "robot.run"]
+        runner = [*interpreter.split(), "-m", "robot.run"]
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
@@ -228,7 +222,7 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing):
             "--variable",
             f"event_firing_or_none:{EVENT_FIRING_LISTENER}",
         ]
-    command += options + [ACCEPTANCE_TEST_DIR]
+    command += [*options, ACCEPTANCE_TEST_DIR]
     log_start(command)
     syslog = os.path.join(RESULTS_DIR, "syslog.txt")
     subprocess.call(command, env=dict(os.environ, ROBOT_SYSLOG_FILE=syslog))
@@ -251,7 +245,7 @@ def process_output(browser):
     robotstatuschecker.process_output(output, verbose=False)
     options.extend([opt.format(browser=browser) for opt in REBOT_OPTIONS])
     try:
-        rebot_cli(options + [output])
+        rebot_cli([*options, output])
     except SystemExit as exit:
         return exit.code
 
@@ -265,7 +259,7 @@ def create_zip():
     zip_path = os.path.join(ZIP_DIR, zip_name)
     print("Zip created in: %s" % zip_path)
     zip_file = zipfile.ZipFile(zip_path, "w")
-    for root, dirs, files in os.walk(RESULTS_DIR):
+    for root, _dirs, files in os.walk(RESULTS_DIR):
         for file in files:
             file_path = os.path.join(root, file)
             arcname = os.path.join("SeleniumLibrary/atest/result", file)

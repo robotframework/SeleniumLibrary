@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from typing import Union, Optional
+from typing import Optional, Union
 
 from robot.libraries.DateTime import convert_date
 from robot.utils import DotDict
@@ -87,11 +87,10 @@ class CookieKeywords(LibraryComponent):
             for cookie in self.driver.get_cookies():
                 pairs.append(f"{cookie['name']}={cookie['value']}")
             return "; ".join(pairs)
-        else:
-            pairs = DotDict()
-            for cookie in self.driver.get_cookies():
-                pairs[cookie["name"]] = cookie["value"]
-            return pairs
+        pairs = DotDict()
+        for cookie in self.driver.get_cookies():
+            pairs[cookie["name"]] = cookie["value"]
+        return pairs
 
     @keyword
     def get_cookie(self, name: str) -> CookieInformation:

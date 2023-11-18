@@ -7,7 +7,6 @@ from approvaltests.reporters.generic_diff_reporter_factory import (
 )
 from robot.utils import WINDOWS
 from selenium import webdriver
-
 from SeleniumLibrary.keywords import WebDriverCreator
 
 

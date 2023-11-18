@@ -1,9 +1,8 @@
 import unittest
 
-from mockito import mock, when, unstub
-
-from SeleniumLibrary.locators.windowmanager import WindowManager
+from mockito import mock, unstub, when
 from selenium.common.exceptions import WebDriverException
+from SeleniumLibrary.locators.windowmanager import WindowManager
 
 SCRIPT = "return [ window.id, window.name ];"
 HANDLE = "17c3dc18-0443-478b-aec6-ed7e2a5da7e1"
@@ -28,50 +27,48 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
     def test_window_info_values_are_strings(self):
         self.mock_window_info("id", "name", "title", "url")
         info = self.manager._get_current_window_info()
-        self.assertEqual(info, (HANDLE, "id", "name", "title", "url"))
+        assert info == (HANDLE, "id", "name", "title", "url")
 
     def test_window_info_values_are_none(self):
         self.mock_window_info(None, None, None, None)
         info = self.manager._get_current_window_info()
-        self.assertEqual(
-            info, (HANDLE, "undefined", "undefined", "undefined", "undefined")
-        )
+        assert info == (HANDLE, "undefined", "undefined", "undefined", "undefined")
 
     def test_window_info_values_are_empty_strings(self):
         self.mock_window_info("", "", "", "")
         info = self.manager._get_current_window_info()
-        self.assertEqual(info, (HANDLE, "", "undefined", "undefined", "undefined"))
+        assert info == (HANDLE, "", "undefined", "undefined", "undefined")
 
     def test_window_id_is_bool(self):
         self.mock_window_info(True, "", "", "")
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], True)
+        assert info[1] is True
         self.mock_window_info(False, "", "", "")
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], False)
+        assert info[1] is False
 
     def test_window_id_is_web_element(self):
         elem = mock()
         self.mock_window_info(*[elem, "", "", ""])
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], elem)
+        assert info[1] == elem
 
     def test_window_id_is_container(self):
         self.mock_window_info(*[["1"], "", "", ""])
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], ["1"])
+        assert info[1] == ["1"]
 
         self.mock_window_info(*[{"a": 2}, "", "", ""])
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], {"a": 2})
+        assert info[1] == {"a": 2}
 
     def test_window_id_is_empty_container(self):
         self.mock_window_info(*[[], "", "", ""])
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], [])
+        assert info[1] == []
         self.mock_window_info(*[{}, "", "", ""])
         info = self.manager._get_current_window_info()
-        self.assertEqual(info[1], {})
+        assert info[1] == {}
 
     def test_no_javascript_support(self):
         when(self.driver).execute_script(SCRIPT).thenRaise(WebDriverException)
@@ -79,4 +76,4 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
         self.driver.current_url = "url"
         self.driver.current_window_handle = HANDLE
         info = self.manager._get_current_window_info()
-        self.assertEqual(info, (HANDLE, "undefined", "undefined", "title", "url"))
+        assert info == (HANDLE, "undefined", "undefined", "title", "url")

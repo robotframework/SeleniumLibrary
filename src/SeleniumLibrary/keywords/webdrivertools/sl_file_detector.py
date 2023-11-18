@@ -42,3 +42,4 @@ class SelLibLocalFileDetector(FileDetector):
         for library in libraries:
             if isinstance(libraries[library], SeleniumLibrary.SeleniumLibrary):
                 return libraries[library]
+        return None

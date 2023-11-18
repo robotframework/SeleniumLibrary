@@ -1,5 +1,4 @@
 from robot.api import logger
-
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators import ElementFinder
 

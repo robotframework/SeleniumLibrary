@@ -8,7 +8,6 @@ from pathlib import Path
 
 from pytest import main as py_main
 
-
 CURDIR = Path(__file__).parent
 SRC = join(CURDIR, os.pardir, "src")
 

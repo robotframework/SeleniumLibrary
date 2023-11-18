@@ -1,7 +1,6 @@
 import unittest
 
-from mockito import when, unstub, verify
-
+from mockito import unstub, verify, when
 from SeleniumLibrary import SeleniumLibrary
 
 

@@ -3,9 +3,8 @@
 
 import os
 import sys
-
 from http.client import HTTPConnection
-from http.server import SimpleHTTPRequestHandler, HTTPServer
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 from socketserver import ThreadingMixIn
 
 

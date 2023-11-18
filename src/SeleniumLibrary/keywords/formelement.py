@@ -488,11 +488,11 @@ class FormElementKeywords(LibraryComponent):
         self.debug(f"Radio group locator: {xpath}")
         try:
             return self.find_element(xpath)
-        except ElementNotFound:
+        except ElementNotFound as original_error:
             raise ElementNotFound(
                 f"No radio button with name '{group_name}' "
                 f"and value '{value}' found."
-            )
+            ) from original_error
 
     def _get_value_from_radio_buttons(self, elements):
         for element in elements:

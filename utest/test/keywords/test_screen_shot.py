@@ -1,8 +1,7 @@
-from os.path import dirname, abspath, join
+from os.path import abspath, dirname, join
 
 import pytest
 from mockito import mock, unstub
-
 from SeleniumLibrary import ScreenshotKeywords, SeleniumLibrary
 
 SCREENSHOT_FILE_NAME = "selenium-screenshot-{index}.png"

@@ -186,10 +186,14 @@ def init_labels(ctx, username=None, password=None):
 
 
 @task
-def lint(ctx):
+def lint(ctx, fix=False):
     """Runs black and flake8 for project Python code."""
     ctx.run("black --config pyproject.toml tasks.py src/ utest/ atest/")
-    ctx.run("flake8 --config .flake8 tasks.py src/ utest/ atest/")
+    # ctx.run("flake8 --config .flake8 tasks.py src/ utest/ atest/")
+    ruff_cmd = "ruff check --config pyproject.toml src/"  # utest/ atest/"
+    if fix:
+        ruff_cmd = f"{ruff_cmd} --fix"
+    ctx.run(ruff_cmd)
 
 
 @task

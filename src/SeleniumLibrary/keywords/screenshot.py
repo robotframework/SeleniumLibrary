@@ -107,7 +107,7 @@ class ScreenshotKeywords(LibraryComponent):
         """
         if not self.drivers.current:
             self.info("Cannot capture screenshot because no browser is open.")
-            return
+            return None
         if self._decide_embedded(filename):
             return self._capture_page_screen_to_log()
         return self._capture_page_screenshot_to_file(filename)
@@ -154,7 +154,7 @@ class ScreenshotKeywords(LibraryComponent):
             self.info(
                 "Cannot capture screenshot from element because no browser is open."
             )
-            return
+            return None
         element = self.find_element(locator, required=True)
         if self._decide_embedded(filename):
             return self._capture_element_screen_to_log(element)

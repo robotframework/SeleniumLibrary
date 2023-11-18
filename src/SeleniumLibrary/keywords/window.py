@@ -14,14 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import time
-from typing import Optional, List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
-from SeleniumLibrary.utils import is_truthy, is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
 
-from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import plural_or_not, is_string
+from SeleniumLibrary.utils import (
+    is_falsy,
+    is_string,
+    is_truthy,
+    plural_or_not,
+    timestr_to_secs,
+)
 
 
 class WindowKeywords(LibraryComponent):
@@ -117,7 +122,7 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            if not is_string(browser) or not browser.upper() == "CURRENT":
+            if not is_string(browser) or browser.upper() != "CURRENT":
                 self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
@@ -251,6 +256,7 @@ class WindowKeywords(LibraryComponent):
         result_height = int(self.driver.execute_script("return window.innerHeight;"))
         if result_width != width or result_height != height:
             raise AssertionError("Keyword failed setting correct window size.")
+        return None
 
     @keyword
     def get_window_position(self) -> Tuple[int, int]:

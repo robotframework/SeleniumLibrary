@@ -1,12 +1,11 @@
-import unittest
 import os
+import unittest
 
 from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
 from robot.utils import WINDOWS
-
 from SeleniumLibrary.keywords import ElementKeywords
 
 

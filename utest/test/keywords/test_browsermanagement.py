@@ -1,11 +1,8 @@
 import pytest
-from mockito import when, mock, verify, verifyNoMoreInteractions, ANY
+from mockito import ANY, mock, verify, verifyNoMoreInteractions, when
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.service import Service
-
-from SeleniumLibrary.keywords import BrowserManagementKeywords
 from SeleniumLibrary import SeleniumLibrary
+from SeleniumLibrary.keywords import BrowserManagementKeywords
 
 
 def test_set_selenium_timeout_only_affects_open_browsers():
@@ -27,16 +24,16 @@ def test_set_selenium_timeout_only_affects_open_browsers():
 
 def test_action_chain_delay_default():
     sl = SeleniumLibrary()
-    assert sl.action_chain_delay == 250, f"Delay should have 250"
+    assert sl.action_chain_delay == 250, "Delay should have 250"
 
 
 def test_set_action_chain_delay_default():
     sl = SeleniumLibrary()
     sl.set_action_chain_delay("3.0")
-    assert sl.action_chain_delay == 3000, f"Delay should have 3000"
+    assert sl.action_chain_delay == 3000, "Delay should have 3000"
 
     sl.set_action_chain_delay("258 milliseconds")
-    assert sl.action_chain_delay == 258, f"Delay should have 258"
+    assert sl.action_chain_delay == 258, "Delay should have 258"
 
 
 def test_get_action_chain_delay_default():

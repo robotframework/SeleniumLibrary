@@ -1,9 +1,8 @@
 import unittest
 
-from mockito import mock, verify, when, unstub
+from mockito import mock, unstub, verify, when
 from robot.utils.connectioncache import NoConnection
 from selenium.common.exceptions import TimeoutException, WebDriverException
-
 from SeleniumLibrary.keywords import WebDriverCache
 
 
@@ -16,7 +15,7 @@ class WebDriverCacheTests(unittest.TestCase):
         try:
             self.assertRaises(RuntimeError, cache.current.anyMember())
         except RuntimeError as e:
-            self.assertEqual(str(e), "No current browser")
+            assert str(e) == "No current browser"
 
     def test_browsers_property(self):
         cache = WebDriverCache()
@@ -29,13 +28,13 @@ class WebDriverCacheTests(unittest.TestCase):
         index2 = cache.register(driver2)
         index3 = cache.register(driver3)
 
-        self.assertEqual(len(cache.drivers), 3)
-        self.assertEqual(cache.drivers[0], driver1)
-        self.assertEqual(cache.drivers[1], driver2)
-        self.assertEqual(cache.drivers[2], driver3)
-        self.assertEqual(index1, 1)
-        self.assertEqual(index2, 2)
-        self.assertEqual(index3, 3)
+        assert len(cache.drivers) == 3
+        assert cache.drivers[0] == driver1
+        assert cache.drivers[1] == driver2
+        assert cache.drivers[2] == driver3
+        assert index1 == 1
+        assert index2 == 2
+        assert index3 == 3
 
     def test_get_open_browsers(self):
         cache = WebDriverCache()
@@ -49,16 +48,16 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(driver3)
 
         drivers = cache.active_drivers
-        self.assertEqual(len(drivers), 3)
-        self.assertEqual(drivers[0], driver1)
-        self.assertEqual(drivers[1], driver2)
-        self.assertEqual(drivers[2], driver3)
+        assert len(drivers) == 3
+        assert drivers[0] == driver1
+        assert drivers[1] == driver2
+        assert drivers[2] == driver3
 
         cache.close()
         drivers = cache.active_drivers
-        self.assertEqual(len(drivers), 2)
-        self.assertEqual(drivers[0], driver1)
-        self.assertEqual(drivers[1], driver2)
+        assert len(drivers) == 2
+        assert drivers[0] == driver1
+        assert drivers[1] == driver2
 
     def test_close(self):
         cache = WebDriverCache()
@@ -96,19 +95,19 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock())
 
         index = cache.get_index("foo")
-        self.assertEqual(index, 1)
+        assert index == 1
 
         index = cache.get_index(1)
-        self.assertEqual(index, 1)
+        assert index == 1
 
         index = cache.get_index(3)
-        self.assertEqual(index, 3)
+        assert index == 3
 
         index = cache.get_index(None)
-        self.assertEqual(index, None)
+        assert index is None
 
         index = cache.get_index("None")
-        self.assertEqual(index, None)
+        assert index is None
 
     def test_resolve_alias_or_index_with_none(self):
         cache = WebDriverCache()
@@ -117,13 +116,13 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock(), "None")
 
         index = cache.get_index("foo")
-        self.assertEqual(index, 1)
+        assert index == 1
 
         index = cache.get_index(1)
-        self.assertEqual(index, 1)
+        assert index == 1
 
         index = cache.get_index(None)
-        self.assertEqual(index, None)
+        assert index is None
 
     def test_resolve_alias_or_index_error(self):
         cache = WebDriverCache()
@@ -132,13 +131,13 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock())
 
         index = cache.get_index("bar")
-        self.assertEqual(index, None)
+        assert index is None
 
         index = cache.get_index(12)
-        self.assertEqual(index, None)
+        assert index is None
 
         index = cache.get_index(-1)
-        self.assertEqual(index, None)
+        assert index is None
 
     def test_close_and_same_alias(self):
         cache = WebDriverCache()
@@ -147,13 +146,13 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock(), "bar")
         cache.close()
         index = cache.get_index("bar")
-        self.assertEqual(index, None)
+        assert index is None
 
     def test_same_alias_new_browser(self):
         cache = WebDriverCache()
         cache.close()
         index = cache.get_index("bar")
-        self.assertEqual(index, None)
+        assert index is None
 
     def test_close_all_cache_first_quite_fails(self):
         cache = WebDriverCache()
@@ -219,8 +218,8 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(driver, "bar")
         with self.assertRaises(TimeoutException):
             cache.close()
-        self.assertTrue(isinstance(cache.current, NoConnection))
-        self.assertTrue(driver in cache._closed)
+        assert isinstance(cache.current, NoConnection)
+        assert driver in cache._closed
 
     def test_close_no_error(self):
         cache = WebDriverCache()
@@ -228,10 +227,10 @@ class WebDriverCacheTests(unittest.TestCase):
         when(driver).quit().thenReturn(None)
         cache.register(driver, "bar")
         cache.close()
-        self.assertTrue(isinstance(cache.current, NoConnection))
-        self.assertTrue(driver in cache._closed)
+        assert isinstance(cache.current, NoConnection)
+        assert driver in cache._closed
 
     def verify_cache(self, cache):
-        self.assertEqual(cache._connections, [])
-        self.assertEqual(cache._aliases, {})
-        self.assertTrue(isinstance(cache.current, NoConnection))
+        assert cache._connections == []
+        assert cache._aliases == {}
+        assert isinstance(cache.current, NoConnection)

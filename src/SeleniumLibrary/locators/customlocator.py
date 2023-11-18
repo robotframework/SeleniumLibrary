@@ -31,7 +31,7 @@ class CustomLocator(ContextAware):
             element = BuiltIn().run_keyword(
                 self.finder, parent, criteria, tag, constraints
             )
-        elif hasattr(self.finder, "__call__"):
+        elif callable(self.finder):
             element = self.finder(parent, criteria, tag, constraints)
         else:
             raise AttributeError(
@@ -41,5 +41,4 @@ class CustomLocator(ContextAware):
         # Always return an array
         if hasattr(element, "__len__") and not isinstance(element, str):
             return element
-        else:
-            return [element]
+        return [element]

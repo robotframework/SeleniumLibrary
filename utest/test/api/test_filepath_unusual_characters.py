@@ -6,7 +6,6 @@ from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
 from robot.utils import WINDOWS
-
 from SeleniumLibrary.utils.path_formatter import _format_path
 
 

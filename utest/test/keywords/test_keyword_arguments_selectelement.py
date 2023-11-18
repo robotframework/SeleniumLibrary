@@ -1,8 +1,6 @@
 import unittest
 
 from mockito import mock, unstub, when
-
-
 from SeleniumLibrary.keywords import SelectElementKeywords
 
 

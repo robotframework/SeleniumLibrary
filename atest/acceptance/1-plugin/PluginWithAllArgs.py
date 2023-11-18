@@ -17,5 +17,5 @@ class PluginWithAllArgs(LibraryComponent):
             joined_str = f"{joined_str} {arg},"
         kwargs = OrderedDict(sorted(self.kwargs.items()))
         for key in kwargs:
-            joined_str = "{} {}={},".format(joined_str, key, kwargs[key])
+            joined_str = f"{joined_str} {key}={kwargs[key]},"
         return joined_str[:-1]

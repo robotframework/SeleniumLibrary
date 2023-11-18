@@ -1,7 +1,6 @@
 import unittest
 
-from mockito import mock, when, unstub
-
+from mockito import mock, unstub, when
 from SeleniumLibrary.keywords import TableElementKeywords
 
 

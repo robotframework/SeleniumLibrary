@@ -3,7 +3,6 @@ import unittest
 
 from robot.errors import DataError
 from selenium.webdriver.support.events import AbstractEventListener
-
 from SeleniumLibrary import SeleniumLibrary
 
 
@@ -19,7 +18,7 @@ class EventFiringWebDriverSeleniumLibrary(unittest.TestCase):
 
     def test_no_event_firing_webdriver(self):
         sl = SeleniumLibrary()
-        self.assertIsNone(sl.event_firing_webdriver)
+        assert sl.event_firing_webdriver is None
 
     def test_import_event_firing_webdriver_error_module(self):
         listener = os.path.join(self.root_dir, "MyListenerWrongName.py")

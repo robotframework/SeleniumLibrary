@@ -45,8 +45,7 @@ class SelectElementKeywords(LibraryComponent):
         options = self._get_options(locator)
         if is_truthy(values):
             return self._get_values(options)
-        else:
-            return self._get_labels(options)
+        return self._get_labels(options)
 
     @keyword
     def get_selected_list_label(self, locator: Union[WebElement, str]) -> str:

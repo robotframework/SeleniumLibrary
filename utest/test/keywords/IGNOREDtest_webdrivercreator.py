@@ -1,9 +1,8 @@
 import os
 
 import pytest
-from mockito import mock, verify, when, unstub, ANY
+from mockito import ANY, mock, unstub, verify, when
 from selenium import webdriver
-
 from SeleniumLibrary.keywords import WebDriverCreator
 
 LOG_DIR = "/log/dir"
@@ -173,7 +172,7 @@ def test_chrome_remote_no_caps(creator):
 def test_chrome_remote_caps(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    # capabilities = {"browserName": "chrome"}
+    capabilities = {"browserName": "chrome"}
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
@@ -206,7 +205,6 @@ def test_chrome_headless(creator):
     expected_webdriver = mock()
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
-    service = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
         options=options,

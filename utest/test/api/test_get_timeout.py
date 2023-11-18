@@ -2,11 +2,10 @@ from datetime import timedelta
 
 import pytest
 from mockito import mock, unstub
-
 from SeleniumLibrary.base import LibraryComponent
 
 
-@pytest.fixture
+@pytest.fixture()
 def lib():
     ctx = mock()
     ctx.timeout = 5.0

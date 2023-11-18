@@ -17,19 +17,19 @@
 import time
 import types
 from datetime import timedelta
-from typing import Optional, Union, Any, List
+from typing import Any, List, Optional, Union
 
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 
-from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators import WindowManager
 from SeleniumLibrary.utils import (
-    timestr_to_secs,
-    secs_to_timestr,
-    _convert_timeout,
     _convert_delay,
+    _convert_timeout,
+    secs_to_timestr,
+    timestr_to_secs,
 )
 
 from .webdrivertools import WebDriverCreator
@@ -384,8 +384,10 @@ class BrowserManagementKeywords(LibraryComponent):
         driver_name = driver_name.strip()
         try:
             creation_func = getattr(webdriver, driver_name)
-        except AttributeError:
-            raise RuntimeError(f"'{driver_name}' is not a valid WebDriver name.")
+        except AttributeError as original_error:
+            raise RuntimeError(
+                f"'{driver_name}' is not a valid WebDriver name."
+            ) from original_error
         self.info(f"Creating an instance of the {driver_name} WebDriver.")
         driver = creation_func(**init_kwargs)
         self.debug(
@@ -429,10 +431,10 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         try:
             self.drivers.switch(index_or_alias)
-        except RuntimeError:
+        except RuntimeError as original_error:
             raise RuntimeError(
                 f"No browser with index or alias '{index_or_alias}' found."
-            )
+            ) from original_error
         self.debug(
             f"Switched to browser with Selenium session id {self.driver.session_id}."
         )
@@ -512,7 +514,7 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if actual != url:
             if message is None:
-                message = f"Location should have been '{url}' but " f"was '{actual}'."
+                message = f"Location should have been '{url}' but was '{actual}'."
             raise AssertionError(message)
         self.info(f"Current location is '{url}'.")
 

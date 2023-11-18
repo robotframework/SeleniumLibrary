@@ -1,6 +1,5 @@
 from robot.api import logger
 from selenium import webdriver
-
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.keywords import BrowserManagementKeywords
 from SeleniumLibrary.keywords.webdrivertools import WebDriverCreator

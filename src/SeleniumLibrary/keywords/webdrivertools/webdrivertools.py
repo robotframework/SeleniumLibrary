@@ -18,7 +18,6 @@ import importlib
 import inspect
 import os
 import token
-import warnings
 from io import StringIO
 from tokenize import generate_tokens
 
@@ -26,7 +25,6 @@ from robot.api import logger
 from robot.utils import ConnectionCache
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
-
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -40,21 +38,20 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 
 
 class WebDriverCreator:
-    browser_names = {
-        "googlechrome": "chrome",
-        "gc": "chrome",
-        "chrome": "chrome",
-        "headlesschrome": "headless_chrome",
-        "ff": "firefox",
-        "firefox": "firefox",
-        "headlessfirefox": "headless_firefox",
-        "ie": "ie",
-        "internetexplorer": "ie",
-        "edge": "edge",
-        "safari": "safari",
-    }
-
     def __init__(self, log_dir):
+        self.browser_names = {
+            "googlechrome": "chrome",
+            "gc": "chrome",
+            "chrome": "chrome",
+            "headlesschrome": "headless_chrome",
+            "ff": "firefox",
+            "firefox": "firefox",
+            "headlessfirefox": "headless_firefox",
+            "ie": "ie",
+            "internetexplorer": "ie",
+            "edge": "edge",
+            "safari": "safari",
+        }
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
         # self.selenium_service = SeleniumService()
@@ -77,10 +74,7 @@ class WebDriverCreator:
         if service_log_path:
             logger.info(f"Browser driver log file created to: {service_log_path}")
             self._create_directory(service_log_path)
-        if (
-            creation_method == self.create_firefox
-            or creation_method == self.create_headless_firefox
-        ):
+        if creation_method in [self.create_firefox, self.create_headless_firefox]:
             return creation_method(
                 desired_capabilities,
                 remote_url,
@@ -137,8 +131,7 @@ class WebDriverCreator:
         sig = signature(service_cls)
         if "log_output" in str(sig):
             return {"log_output": service_log_path}
-        else:
-            return {"log_path": service_log_path}
+        return {"log_path": service_log_path}
         # --
 
     def create_chrome(
@@ -528,8 +521,10 @@ class SeleniumOptions:
         for item in self._split(options):
             try:
                 result.append(self._parse_to_tokens(item))
-            except (ValueError, SyntaxError):
-                raise ValueError(f'Unable to parse option: "{item}"')
+            except (ValueError, SyntaxError) as original_error:
+                raise ValueError(
+                    f'Unable to parse option: "{item}"'
+                ) from original_error
         return result
 
     def _parse_to_tokens(self, item):

@@ -18,12 +18,13 @@ import os
 from datetime import timedelta
 from typing import Optional, Union
 
-from SeleniumLibrary.utils import is_noney
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
-from .context import ContextAware
+from SeleniumLibrary.utils import is_noney
+
 from ..utils import _convert_timeout
+from .context import ContextAware
 
 
 class LibraryComponent(ContextAware):

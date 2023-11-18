@@ -6,10 +6,9 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from mockito import mock, when, unstub, ANY
+from mockito import ANY, mock, unstub, when
 from robot.utils import WINDOWS
 from selenium import webdriver
-
 from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
 
 
@@ -188,7 +187,7 @@ def error_formatter(method, arg, full=False):
     except Exception as error:
         if full:
             return f"{arg} {error}"
-        return "{} {}".format(arg, error.__str__()[:15])
+        return f"{arg} {error.__str__()[:15]}"
 
 
 @pytest.fixture(scope="module")
@@ -201,11 +200,7 @@ def creator():
 @pytest.fixture(scope="module")
 def output_dir():
     curr_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
-    return output_dir
-
-
-from selenium.webdriver.chrome.service import Service as ChromeService
+    return os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
 
 
 def test_create_chrome_with_options(creator):
@@ -252,7 +247,6 @@ def test_create_headless_chrome_with_options(creator):
 
 
 def test_create_firefox_with_options(creator, output_dir):
-    log_file = os.path.join(output_dir, "geckodriver-1.log")
     options = mock()
     profile = mock()
     expected_webdriver = mock()
@@ -288,7 +282,6 @@ def test_create_firefox_with_options_and_remote_url(creator):
 
 
 def test_create_headless_firefox_with_options(creator, output_dir):
-    log_file = os.path.join(output_dir, "geckodriver-1.log")
     options = mock()
     profile = mock()
     expected_webdriver = mock()
@@ -380,7 +373,6 @@ def test_create_driver_chrome(creator):
 
 
 def test_create_driver_firefox(creator, output_dir):
-    log_file = os.path.join(output_dir, "geckodriver-1.log")
     str_options = "add_argument:--disable-dev-shm-usage"
     options = mock()
     profile = mock()

@@ -18,9 +18,9 @@ from typing import Union
 
 from robot.api import logger
 from robot.utils import NormalizedDict
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
-from selenium.webdriver.common.by import By
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import ElementNotFound
@@ -226,10 +226,10 @@ class ElementFinder(ContextAware):
             name, value = criteria.split(":", 2)
             if "" in [name, value]:
                 raise ValueError
-        except ValueError:
+        except ValueError as original_error:
             raise ValueError(
                 f"Provided selector ({criteria}) is malformed. Correct format: name:value."
-            )
+            ) from original_error
 
         local_criteria = f'//*[@data-{name}="{value}"]'
         return self._find_by_xpath(local_criteria, tag, constraints, parent)
@@ -257,61 +257,54 @@ class ElementFinder(ContextAware):
         return self._normalize(parent.find_elements(By.XPATH, xpath))
 
     def _get_xpath_constraints(self, constraints):
-        xpath_constraints = [
+        return [
             self._get_xpath_constraint(name, value)
             for name, value in constraints.items()
         ]
-        return xpath_constraints
 
     def _get_xpath_constraint(self, name, value):
         if isinstance(value, list):
             value = "' or . = '".join(value)
             return f"@{name}[. = '{value}']"
-        else:
-            return f"@{name}='{value}'"
+        return f"@{name}='{value}'"
 
-    def _get_tag_and_constraints(self, tag):
+    def _get_tag_and_constraints(self, tag):  # noqa: PLR0911
         if tag is None:
             return None, {}
         tag = tag.lower()
-        constraints = {}
-        if tag == "link":
-            tag = "a"
-        if tag == "partial link":
-            tag = "a"
-        elif tag == "image":
-            tag = "img"
-        elif tag == "list":
-            tag = "select"
-        elif tag == "radio button":
-            tag = "input"
-            constraints["type"] = "radio"
-        elif tag == "checkbox":
-            tag = "input"
-            constraints["type"] = "checkbox"
-        elif tag == "text field":
-            tag = "input"
-            constraints["type"] = [
-                "date",
-                "datetime-local",
-                "email",
-                "month",
-                "number",
-                "password",
-                "search",
-                "tel",
-                "text",
-                "time",
-                "url",
-                "week",
-                "file",
-            ]
-        elif tag == "file upload":
-            tag = "input"
-            constraints["type"] = "file"
-        elif tag == "text area":
-            tag = "textarea"
-        return tag, constraints
+        if tag in ["link", "partial link"]:
+            return "a", {}
+        if tag == "image":
+            return "img", {}
+        if tag == "list":
+            return "select", {}
+        if tag == "radio button":
+            return "input", {"type": "radio"}
+        if tag == "checkbox":
+            return "input", {"type": "checkbox"}
+        if tag == "text field":
+            return "input", {
+                "type": [
+                    "date",
+                    "datetime-local",
+                    "email",
+                    "month",
+                    "number",
+                    "password",
+                    "search",
+                    "tel",
+                    "text",
+                    "time",
+                    "url",
+                    "week",
+                    "file",
+                ]
+            }
+        if tag == "file upload":
+            return "input", {"type": "file"}
+        if tag == "text area":
+            return "textarea", {}
+        return tag, {}
 
     def _parse_locator(self, locator):
         if re.match(r"\(*//", locator):
@@ -331,7 +324,7 @@ class ElementFinder(ContextAware):
         return min(locator.find("="), locator.find(":"))
 
     def _element_matches(self, element, tag, constraints):
-        if not element.tag_name.lower() == tag:
+        if element.tag_name.lower() != tag:
             return False
         for name in constraints:
             if isinstance(constraints[name], list):

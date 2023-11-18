@@ -20,7 +20,7 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import secs_to_timestr
 
 
@@ -72,7 +72,7 @@ class AlertKeywords(LibraryComponent):
         message = self.handle_alert(action, timeout)
         if text and text != message:
             raise AssertionError(
-                f"Alert message should have been '{text}' but it " f"was '{message}'."
+                f"Alert message should have been '{text}' but it was '{message}'."
             )
 
     @keyword
@@ -146,7 +146,11 @@ class AlertKeywords(LibraryComponent):
         wait = WebDriverWait(self.driver, timeout)
         try:
             return wait.until(EC.alert_is_present())
-        except TimeoutException:
-            raise AssertionError(f"Alert not found in {secs_to_timestr(timeout)}.")
+        except TimeoutException as original_error:
+            raise AssertionError(
+                f"Alert not found in {secs_to_timestr(timeout)}."
+            ) from original_error
         except WebDriverException as err:
-            raise AssertionError(f"An exception occurred waiting for alert: {err}")
+            raise AssertionError(
+                f"An exception occurred waiting for alert: {err}"
+            ) from err

@@ -1,7 +1,6 @@
 import unittest
 
-from mockito import mock, unstub, when, verify, ANY
-
+from mockito import ANY, mock, unstub, verify, when
 from SeleniumLibrary.keywords import BrowserManagementKeywords
 
 
@@ -25,13 +24,13 @@ class KeywordArgumentsElementTest(unittest.TestCase):
             "firefox", None, None, False, None, None, None
         ).thenReturn(browser)
         alias = self.brorser.open_browser(url)
-        self.assertEqual(alias, None)
+        assert alias is None
 
         when(self.brorser)._make_driver(
             "firefox", None, None, remote_url, None, None, None
         ).thenReturn(browser)
         alias = self.brorser.open_browser(url, alias="None", remote_url=remote_url)
-        self.assertEqual(alias, None)
+        assert alias is None
 
     def test_same_alias(self):
         url = "https://github.com/robotframework"

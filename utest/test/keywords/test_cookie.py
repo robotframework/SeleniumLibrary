@@ -2,10 +2,8 @@ from datetime import datetime
 
 import pytest
 from mockito import mock, verify
-
 from SeleniumLibrary.keywords import CookieKeywords
 from SeleniumLibrary.keywords.cookie import CookieInformation
-
 
 ALL_ARGS = {
     "name": "foo",

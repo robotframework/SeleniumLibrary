@@ -13,17 +13,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from collections import namedtuple
-from typing import List, Optional, Tuple, Union
+from typing import List, NamedTuple, Optional, Tuple, Union
 
-from SeleniumLibrary.utils import is_noney
-from robot.utils import plural_or_not, is_truthy
+from robot.utils import is_truthy, plural_or_not
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
+from SeleniumLibrary.utils import is_noney
 from SeleniumLibrary.utils.types import type_converter
 
 
@@ -179,14 +178,14 @@ class ElementKeywords(LibraryComponent):
         count = len(self.find_elements(locator))
         if count == limit:
             self.info(f"Current page contains {count} element(s).")
-        else:
-            if message is None:
-                message = (
-                    f'Page should have contained "{limit}" element(s), '
-                    f'but it did contain "{count}" element(s).'
-                )
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
+            return None
+        if message is None:
+            message = (
+                f'Page should have contained "{limit}" element(s), '
+                f'but it did contain "{count}" element(s).'
+            )
+        self.ctx.log_source(loglevel)
+        raise AssertionError(message)
 
     @keyword
     def page_should_not_contain(self, text: str, loglevel: str = "TRACE"):
@@ -218,7 +217,9 @@ class ElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, message=message, loglevel=loglevel)
 
     @keyword
-    def assign_id_to_element(self, locator: Union[WebElement, str], id: str):
+    def assign_id_to_element(
+        self, locator: Union[WebElement, str], id: str  # noqa: A002
+    ):
         """Assigns a temporary ``id`` to the element specified by ``locator``.
 
         This is mainly useful if the locator is complicated and/or slow XPath
@@ -1114,7 +1115,7 @@ return !element.dispatchEvent(evt);
         self.element_finder.unregister(strategy_name)
 
     def _map_ascii_key_code_to_key(self, key_code):
-        map = {
+        key_map = {
             0: Keys.NULL,
             8: Keys.BACK_SPACE,
             9: Keys.TAB,
@@ -1133,7 +1134,7 @@ return !element.dispatchEvent(evt);
             61: Keys.EQUALS,
             127: Keys.DELETE,
         }
-        key = map.get(key_code)
+        key = key_map.get(key_code)
         if key is None:
             key = chr(key_code)
         return key
@@ -1141,10 +1142,10 @@ return !element.dispatchEvent(evt);
     def _map_named_key_code_to_special_key(self, key_name):
         try:
             return getattr(Keys, key_name)
-        except AttributeError:
+        except AttributeError as original_error:
             message = f"Unknown key named '{key_name}'."
             self.debug(message)
-            raise ValueError(message)
+            raise ValueError(message) from original_error
 
     def _page_contains(self, text):
         self.driver.switch_to.default_content()
@@ -1167,12 +1168,13 @@ return !element.dispatchEvent(evt);
         modifiers = modifier.split("+")
         keys = []
         for item in modifiers:
-            item = item.strip()
-            item = self._parse_aliases(item)
-            if hasattr(Keys, item):
-                keys.append(getattr(Keys, item))
+            modifier = self._parse_aliases(item.strip())
+            if hasattr(Keys, modifier):
+                keys.append(getattr(Keys, modifier))
             else:
-                raise ValueError(f"'{item}' modifier does not match to Selenium Keys")
+                raise ValueError(
+                    f"'{modifier}' modifier does not match to Selenium Keys"
+                )
         return keys
 
     def _parse_keys(self, *keys):
@@ -1206,14 +1208,16 @@ return !element.dispatchEvent(evt);
         return list_keys
 
     def _convert_special_keys(self, keys):
-        KeysRecord = namedtuple("KeysRecord", "converted, original special")
+        KeysRecord = NamedTuple("KeysRecord", "converted, original special")
         converted_keys = []
         for key in keys:
-            key = self._parse_aliases(key)
-            if self._selenium_keys_has_attr(key):
-                converted_keys.append(KeysRecord(getattr(Keys, key), key, True))
+            resolved_key = self._parse_aliases(key)
+            if self._selenium_keys_has_attr(resolved_key):
+                converted_keys.append(
+                    KeysRecord(getattr(Keys, resolved_key), resolved_key, True)
+                )
             else:
-                converted_keys.append(KeysRecord(key, key, False))
+                converted_keys.append(KeysRecord(resolved_key, resolved_key, False))
         return converted_keys
 
     def _selenium_keys_has_attr(self, key):
