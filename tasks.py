@@ -207,7 +207,7 @@ def atest(ctx, suite=None):
 
     Args:
         suite: Select which suite to run.
-    
+
     Example:
         inv utest --suite keywords/test_browsermanagement.py
         inv utest --suite keywords/test_selenium_options_parser.py::test_create_chrome_with_options

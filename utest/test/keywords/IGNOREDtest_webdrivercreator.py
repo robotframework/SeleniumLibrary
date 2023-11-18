@@ -135,7 +135,8 @@ def test_capabilities_resolver_chrome(creator):
 def test_chrome(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service=None  # service=ANY  # service_log_path=None, executable_path="chromedriver"
+        options=None,
+        service=None,  # service=ANY  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None)
     assert driver == expected_webdriver
@@ -208,7 +209,8 @@ def test_chrome_headless(creator):
     service = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
-        options=options, service=ANY  # service=None  # service_log_path=None, executable_path="chromedriver"
+        options=options,
+        service=ANY,  # service=None  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None)
     assert options.headless is True

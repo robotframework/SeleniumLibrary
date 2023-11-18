@@ -736,7 +736,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         New in SeleniumLibrary 3.2.0
         """
         element = self.find_element(locator)
-        ActionChains(self.driver, duration=self.ctx.action_chain_delay).move_to_element(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).move_to_element(
+            element
+        ).perform()
 
     @keyword
     def drag_and_drop(
@@ -831,7 +833,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Up on element '{locator}'.")
         element = self.find_element(locator)
-        ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(
+            element
+        ).perform()
 
     @keyword
     def open_context_menu(self, locator: Union[WebElement, str]):
@@ -925,7 +929,9 @@ return !element.dispatchEvent(evt);
         if not is_noney(locator):
             self.info(f"Sending key(s) {keys} to {locator} element.")
             element = self.find_element(locator)
-            ActionChains(self.driver, duration=self.ctx.action_chain_delay).click(element).perform()
+            ActionChains(self.driver, duration=self.ctx.action_chain_delay).click(
+                element
+            ).perform()
         else:
             self.info(f"Sending key(s) {keys} to page.")
             element = None

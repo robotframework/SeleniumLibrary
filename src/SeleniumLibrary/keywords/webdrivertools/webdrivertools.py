@@ -40,7 +40,6 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 
 
 class WebDriverCreator:
-
     browser_names = {
         "googlechrome": "chrome",
         "gc": "chrome",
@@ -58,7 +57,7 @@ class WebDriverCreator:
     def __init__(self, log_dir):
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
-        #self.selenium_service = SeleniumService()
+        # self.selenium_service = SeleniumService()
 
     def create_driver(
         self,
@@ -134,11 +133,12 @@ class WebDriverCreator:
     def _get_log_method(self, service_cls, service_log_path):
         # -- temporary fix to transition selenium to v4.13 from v4.11 and prior
         from inspect import signature
+
         sig = signature(service_cls)
-        if 'log_output' in str(sig):
-            return {'log_output': service_log_path}
+        if "log_output" in str(sig):
+            return {"log_output": service_log_path}
         else:
-            return {'log_path': service_log_path}
+            return {"log_path": service_log_path}
         # --
 
     def create_chrome(
@@ -154,7 +154,9 @@ class WebDriverCreator:
                 options = webdriver.ChromeOptions()
             return self._remote(remote_url, options=options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.chrome.service.Service)
+            executable_path = self._get_executable_path(
+                webdriver.chrome.service.Service
+            )
         log_method = self._get_log_method(ChromeService, service_log_path)
         service = ChromeService(executable_path=executable_path, **log_method)
         return webdriver.Chrome(
@@ -172,7 +174,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.ChromeOptions()
-        options.add_argument('--headless=new')
+        options.add_argument("--headless=new")
         return self.create_chrome(
             desired_capabilities, remote_url, options, service_log_path, executable_path
         )
@@ -207,8 +209,12 @@ class WebDriverCreator:
         if remote_url:
             return self._remote(remote_url, options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.firefox.service.Service)
-        log_method = self._get_log_method(FirefoxService, service_log_path or self._geckodriver_log)
+            executable_path = self._get_executable_path(
+                webdriver.firefox.service.Service
+            )
+        log_method = self._get_log_method(
+            FirefoxService, service_log_path or self._geckodriver_log
+        )
         service = FirefoxService(executable_path=executable_path, **log_method)
         return webdriver.Firefox(
             options=options,
@@ -253,7 +259,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.FirefoxOptions()
-        options.add_argument('-headless')
+        options.add_argument("-headless")
         return self.create_firefox(
             desired_capabilities,
             remote_url,
@@ -282,7 +288,7 @@ class WebDriverCreator:
         return webdriver.Ie(
             options=options,
             service=service,
-            #**desired_capabilities,
+            # **desired_capabilities,
         )
 
     def _has_options(self, web_driver):
@@ -308,7 +314,7 @@ class WebDriverCreator:
         return webdriver.Edge(
             options=options,
             service=service,
-            #**desired_capabilities,
+            # **desired_capabilities,
         )
 
     def create_safari(
@@ -444,6 +450,7 @@ class WebDriverCache(ConnectionCache):
         except ValueError:
             return None
 
+
 # Temporarily removing as not going to use with initial 4.10.0 hotfixq
 # class SeleniumService:
 #     """        executable_path: str = DEFAULT_EXECUTABLE_PATH,
@@ -491,6 +498,7 @@ class WebDriverCache(ConnectionCache):
 #         browser = browser.replace("headless_", "", 1)
 #         service = importlib.import_module(f"selenium.webdriver.{browser}.service")
 #         return service.Service
+
 
 class SeleniumOptions:
     def create(self, browser, options):

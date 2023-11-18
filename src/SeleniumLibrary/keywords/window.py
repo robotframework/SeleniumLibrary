@@ -123,7 +123,7 @@ class WindowKeywords(LibraryComponent):
 
     @keyword
     def close_window(self):
-        """Closes currently opened and selected browser window/tab. """
+        """Closes currently opened and selected browser window/tab."""
         self.driver.close()
 
     @keyword

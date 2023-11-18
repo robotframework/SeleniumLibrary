@@ -25,7 +25,12 @@ from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriv
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import timestr_to_secs, secs_to_timestr, _convert_timeout, _convert_delay
+from SeleniumLibrary.utils import (
+    timestr_to_secs,
+    secs_to_timestr,
+    _convert_timeout,
+    _convert_delay,
+)
 
 from .webdrivertools import WebDriverCreator
 
@@ -278,7 +283,9 @@ class BrowserManagementKeywords(LibraryComponent):
                 self.go_to(url)
             return index
         if desired_capabilities:
-            self.warn("desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation.")
+            self.warn(
+                "desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation."
+            )
         return self._make_new_browser(
             url,
             browser,
@@ -334,7 +341,11 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def create_webdriver(
-        self, driver_name: str, alias: Optional[str] = None, kwargs: Optional[dict] = None, **init_kwargs
+        self,
+        driver_name: str,
+        alias: Optional[str] = None,
+        kwargs: Optional[dict] = None,
+        **init_kwargs,
     ) -> str:
         """Creates an instance of Selenium WebDriver.
 
@@ -713,8 +724,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_action_chain_delay(self):
-        """Gets the currently stored value for chain_delay_value in timestr format.
-        """
+        """Gets the currently stored value for chain_delay_value in timestr format."""
         return timestr_to_secs(f"{self.ctx.action_chain_delay} milliseconds")
 
     @keyword

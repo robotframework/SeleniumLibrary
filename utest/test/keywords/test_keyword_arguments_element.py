@@ -30,7 +30,6 @@ def test_element_text_should_be(element):
     assert "foobar" in str(error.value)
 
 
-
 def test_action_chain_delay_in_elements(element):
     locator = "//div"
     webelement = mock()
@@ -40,8 +39,7 @@ def test_action_chain_delay_in_elements(element):
     expected_delay_in_ms = 1000
     element.ctx.action_chain_delay = expected_delay_in_ms
     when(chain_mock).move_to_element(matchers.ANY).thenReturn(mock())
-    when(SUT).ActionChains(matchers.ANY, duration=expected_delay_in_ms).thenReturn(chain_mock)
+    when(SUT).ActionChains(matchers.ANY, duration=expected_delay_in_ms).thenReturn(
+        chain_mock
+    )
     element.scroll_element_into_view(locator)
-
-
-

@@ -6,7 +6,8 @@ import pytest
 from mockito import mock, when, unstub, ANY
 from selenium import webdriver
 from selenium.webdriver import chrome
-#from selenium.webdriver.chrome.service import Service as ChromeService
+
+# from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome import service as chromeservice
 
@@ -57,7 +58,9 @@ def test_log_file_with_index_exist(creator):
 def test_create_chrome_with_service_log_path_none(creator):
     expected_webdriver = mock()
     service = mock()
-    when(chromeservice).Service(log_path=None, executable_path="chromedriver").thenReturn(service)
+    when(chromeservice).Service(
+        log_path=None, executable_path="chromedriver"
+    ).thenReturn(service)
     # when(chrome).service(log_path=None, executable_path="chromedriver").thenReturn(service)
     # service = ChromeService(log_path=None, executable_path="chromedriver")
     # service = Service(log_path=None, executable_path="chromedriver")
@@ -65,7 +68,8 @@ def test_create_chrome_with_service_log_path_none(creator):
     # when(webdriver).chrome.service().thenReturn(service)
     when(webdriver).Chrome(
         # options=None, service_log_path=None, executable_path="chromedriver"
-        options=None, service=ANY,
+        options=None,
+        service=ANY,
         # options=None, service=service,
     ).thenReturn(expected_webdriver)
     driver = creator.creator.create_chrome({}, None, service_log_path=None)
@@ -76,7 +80,8 @@ def test_create_chrome_with_service_log_path_real_path(creator):
     log_file = os.path.join(creator.output_dir, "firefox-{index}.log")
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service=ANY,
+        options=None,
+        service=ANY,
     ).thenReturn(expected_webdriver)
     driver = creator.creator.create_chrome({}, None, service_log_path=log_file)
     assert driver == expected_webdriver
@@ -88,7 +93,8 @@ def test_create_headlesschrome_with_service_log_path_real_path(creator):
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
-        options=options, service=ANY,
+        options=options,
+        service=ANY,
     ).thenReturn(expected_webdriver)
     driver = creator.creator.create_headless_chrome({}, None, service_log_path=log_file)
     assert driver == expected_webdriver
@@ -162,7 +168,8 @@ def test_create_ie_with_service_log_path_real_path(creator):
     log_file = os.path.join(creator.output_dir, "ie-1.log")
     expected_webdriver = mock()
     when(webdriver).Ie(
-        options=None, service=ANY,
+        options=None,
+        service=ANY,
     ).thenReturn(expected_webdriver)
     driver = creator.creator.create_ie({}, None, service_log_path=log_file)
     assert driver == expected_webdriver
@@ -173,7 +180,8 @@ def test_create_edge_with_service_log_path_real_path(creator):
     log_file = os.path.join(creator.output_dir, "edge-1.log")
     expected_webdriver = mock()
     when(webdriver).Edge(
-        options=None, service=ANY,
+        options=None,
+        service=ANY,
     ).thenReturn(expected_webdriver)
     driver = creator.creator.create_edge({}, None, service_log_path=log_file)
     assert driver == expected_webdriver

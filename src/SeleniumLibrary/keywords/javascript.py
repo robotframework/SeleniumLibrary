@@ -25,7 +25,6 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class JavaScriptKeywords(LibraryComponent):
-
     js_marker = "JAVASCRIPT"
     arg_marker = "ARGUMENTS"
 
