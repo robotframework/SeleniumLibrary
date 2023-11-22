@@ -26,3 +26,7 @@ class ExpectedConditionKeywords(LibraryComponent):
         c = getattr(EC, condition)
         result = wait.until(c(*args), message="Expected Condition not met within set timeout of " + str(timeout))
         return result
+
+    def _parse_condition(self, condition: string):
+        parsed = condition.replace(' ','_').lower()
+        return parsed
