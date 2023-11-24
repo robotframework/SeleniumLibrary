@@ -28,8 +28,8 @@ different versions and the overall project history.
 .. image:: https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg
    :target: https://www.apache.org/licenses/LICENSE-2.0
 
-.. image:: https://github.com/robotframework/SeleniumLibrary/workflows/SeleniumLibrary%20CI/badge.svg
-    :target: https://github.com/robotframework/SeleniumLibrary/actions?query=workflow%3A%22SeleniumLibrary+CI%22
+.. image:: https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml/badge.svg?branch=master
+    :target: https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml
 
 Keyword Documentation
 ---------------------
