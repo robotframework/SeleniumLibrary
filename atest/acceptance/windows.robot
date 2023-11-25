@@ -114,6 +114,30 @@ Set Window Position using strings
     Should Be Equal    ${x}    ${200}
     Should Be Equal    ${y}    ${100}
 
+Test Minimize and Maximize Will Actually Move and Resize Window
+    Set Window Position    300    200
+    Set Window Size    400    300
+    ${isHidden}=    Execute Javascript   return document.hidden;
+    Should Not Be True  ${isHidden}
+
+    Minimize Browser Window
+
+    ${isHidden}=    Execute Javascript   return document.hidden;
+    Should Be True  ${isHidden}
+
+    Maximize Browser Window
+
+    ${isHidden}=    Execute Javascript   return document.hidden;
+    Should Not Be True  ${isHidden}
+
+    ${x}    ${y}=    Get Window Position
+    ${width}    ${height}=    Get Window Size
+    # Windows: Can't test for zero in multi-monitor setups
+    Should Not Be Equal    ${x}    ${300}
+    Should Not Be Equal    ${y}    ${200}
+    Should Be True   ${width} > 400
+    Should Be True   ${height} > 300
+
 Select Window By Title After Close Window
     [Tags]    Known Issue Internet Explorer    Known Issue Safari
     Cannot Be Executed in IE
