@@ -52,6 +52,10 @@ Multiple Locators as a List should work
     ${locator_list} =    Create List    id:div_id    ${element}    id:bar=foo
     Page Should Contain Element    ${locator_list}
 
+WebElement as locator should work
+    ${element} =   Get WebElement    id:foo:bar
+    Page Should Contain Element    ${element}
+
 When One Of Locator From Multiple Locators Is Not Found Keyword Fails
     Run Keyword And Expect Error
     ...    Element with locator 'id:not_here' not found.
