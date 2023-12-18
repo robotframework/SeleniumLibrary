@@ -107,13 +107,13 @@ Test Get Cookie Object Value
 Test Get Cookie Keyword Logging
     [Tags]    NoGrid    Known Issue Firefox
     [Documentation]
-    ...    LOG 1:5 ${cookie} = name=far_future
+    ...    LOG 1:5 GLOB: ${cookie} = name=far_future
     ...    value=timemachine
     ...    path=/
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2024-09-15 11:22:33
+    ...    expiry=2024-09-15 *:22:33
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     far_future
 
