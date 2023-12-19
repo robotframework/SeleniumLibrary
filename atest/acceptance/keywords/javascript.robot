@@ -85,6 +85,14 @@ Execute Javascript from File With ARGUMENTS Marker
     ...    123
     Alert Should Be Present    123    timeout=10 s
 
+Execute Javascript with dictionary object
+    &{ARGS}=            Create Dictionary     key=value    number=${1}    boolean=${TRUE}
+    ${returned}    Execute JavaScript      return arguments[0]    ARGUMENTS    ${ARGS}
+    Should Be True    type($returned) == dict
+    Should Be Equal    ${returned}[key]    value
+    Should Be Equal    ${returned}[number]    ${1}
+    Should Be Equal    ${returned}[boolean]    ${TRUE}
+
 Open Context Menu
     [Tags]    Known Issue Safari
     Go To Page "javascript/context_menu.html"

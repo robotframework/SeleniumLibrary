@@ -30,7 +30,7 @@ class JavaScriptKeywords(LibraryComponent):
     arg_marker = "ARGUMENTS"
 
     @keyword
-    def execute_javascript(self, *code: Union[WebElement, str]) -> Any:
+    def execute_javascript(self, *code: Any) -> Any:
         """Executes the given JavaScript code with possible arguments.
 
         ``code`` may be divided into multiple cells in the test data and
@@ -73,7 +73,7 @@ class JavaScriptKeywords(LibraryComponent):
         return self.driver.execute_script(js_code, *js_args)
 
     @keyword
-    def execute_async_javascript(self, *code: Union[WebElement, str]) -> Any:
+    def execute_async_javascript(self, *code: Any) -> Any:
         """Executes asynchronous JavaScript code with possible arguments.
 
         Similar to `Execute Javascript` except that scripts executed with

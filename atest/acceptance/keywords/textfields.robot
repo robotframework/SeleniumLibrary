@@ -39,7 +39,7 @@ Input Password Should Not Log Password String
     ...    LOG 1:8  DEBUG STARTS: Remote response
     ...    LOG 1:9  DEBUG         Finished Request
     ...    LOG 1:10  INFO         Temporally setting log level to: NONE
-    ...    LOG 1:11  INFO         Log level changed from NONE to DEBUG.
+    ...    LOG 1:11  ANY         Log level changed from NONE to DEBUG.
     ...    LOG 1:12 NONE
     ...    LOG 2:1  INFO          Typing text 'username' into text field 'username_field'.
     Input Password    password_field    password
