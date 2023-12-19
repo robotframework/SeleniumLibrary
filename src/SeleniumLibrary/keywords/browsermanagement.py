@@ -334,7 +334,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def create_webdriver(
-        self, driver_name: str, alias: Optional[str] = None, kwargs={}, **init_kwargs
+        self, driver_name: str, alias: Optional[str] = None, kwargs: Optional[dict] = None, **init_kwargs
     ) -> str:
         """Creates an instance of Selenium WebDriver.
 
@@ -362,6 +362,8 @@ class BrowserManagementKeywords(LibraryComponent):
         `Close All Browsers` keyword is used. See `Switch Browser` for an
         example.
         """
+        if kwargs is None:
+            kwargs = {}
         if not isinstance(kwargs, dict):
             raise RuntimeError("kwargs must be a dictionary.")
         for arg_name in kwargs:
