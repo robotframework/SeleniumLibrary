@@ -10,7 +10,8 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8, 3.11]  # 3.12, pypy-3.9
-        rf-version: [4.1.3, 5.0.1, 6.0.1, 6.1.1]
+        rf-version: [5.0.1, 6.1.1, 7.0b1]
+        selenium-version: [4.14.0, 4.15.2, 4.16.0]
 
     steps:
     - uses: actions/checkout@v3
@@ -42,6 +43,9 @@ jobs:
         pip install -r requirements.txt
         pip install robotstatuschecker>=1.4
         pip install requests robotframework-pabot
+    - name: Install Seleninum v${{ matrix.selenium-version }}
+      run: |
+        pip install --upgrade selenium==${{ matrix.selenium-version }}
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
@@ -56,6 +60,7 @@ jobs:
       run: |
         invoke gen-stub
 
+    # Temporarily ignoring pypy execution
     - name: Run tests with headless Chrome and with PyPy
       if: matrix.python-version == 'pypy-3.9'
       run: |
@@ -78,7 +83,7 @@ jobs:
         xvfb-run --auto-servernum python atest/run.py --zip firefox
 
     # - name: Run tests with Selenium Grid
-    #   if: matrix.python-version == '3.11' && matrix.rf-version == '3.2.2' && matrix.python-version != 'pypy-3.7'
+    #   if: matrix.python-version == '3.11' && matrix.rf-version == '3.2.2' && matrix.python-version != 'pypy-3.9'
     #   run: |
     #     wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
     #     sudo chmod u+x ./selenium-server-standalone.jar
@@ -87,5 +92,5 @@ jobs:
     - uses: actions/upload-artifact@v1
       if: success() || failure()
       with:
-        name: Failed Test results
+        name: SeleniumLibrary Test results
         path: atest/zip_results

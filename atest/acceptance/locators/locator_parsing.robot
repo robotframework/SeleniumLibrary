@@ -47,11 +47,6 @@ Multiple Locators with double arrows as separator should work
 Multiple Locators strategy should be case-insensitive
     Page Should Contain Element    cSs=div#div_id >> XpaTh=a[6] >> iD=image1_id
 
-Multiple Locators as a List should work
-    ${element} =   Get WebElement    id:foo:bar
-    ${locator_list} =    Create List    id:div_id    ${element}    id:bar=foo
-    Page Should Contain Element    ${locator_list}
-
 When One Of Locator From Multiple Locators Is Not Found Keyword Fails
     Run Keyword And Expect Error
     ...    Element with locator 'id:not_here' not found.

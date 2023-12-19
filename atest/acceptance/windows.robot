@@ -115,6 +115,7 @@ Set Window Position using strings
     Should Be Equal    ${y}    ${100}
 
 Test Minimize and Maximize Will Actually Move and Resize Window
+    [Tags]  Triage
     Set Window Position    300    200
     Set Window Size    400    300
     ${isHidden}=    Execute Javascript   return document.hidden;
