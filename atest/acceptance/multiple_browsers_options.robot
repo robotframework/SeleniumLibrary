@@ -51,3 +51,7 @@ Chrome Browser With Selenium Options Argument With Semicolon
     ...    LOG 1:14 DEBUG GLOB: *["has;semicolon"*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("has;semicolon")
+
+Chrome Browser with Selenium Options Argument Ending With Semicolon
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("--disable-dev-shm-usage") ;
