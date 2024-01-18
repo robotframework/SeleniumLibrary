@@ -15,15 +15,20 @@ import string
 from typing import Optional
 
 from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.errors import UnkownExpectedCondition
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class ExpectedConditionKeywords(LibraryComponent):
     @keyword
     def wait_for_expected_condition(self, condition: string, *args, timeout: Optional[float]=10):
+        condition = self._parse_condition(condition)
         wait = WebDriverWait(self.driver, timeout, 0.1)
-        # import sys,pdb;pdb.Pdb(stdout=sys.__stdout__).set_trace()
-        c = getattr(EC, condition)
+        try:
+            c = getattr(EC, condition)
+        except:
+            # ToDo: provide hints as to what is avaialbel or find closet match
+            raise UnkownExpectedCondition(f"{condition} is an unknown expected condition")
         result = wait.until(c(*args), message="Expected Condition not met within set timeout of " + str(timeout))
         return result
 
