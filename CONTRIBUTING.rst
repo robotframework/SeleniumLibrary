@@ -154,7 +154,7 @@ individual keywords.
 
 -  All new enhancements or changes should have a note telling when the
    change was introduced. Often adding something like
-   ``New in SeleniumLibray 1.8.`` is enough.
+   ``New in SeleniumLibrary 1.8.`` is enough.
 
 Keyword documentation can be easily created using `invoke`_ task::
 
@@ -168,8 +168,8 @@ Tests
 When submitting a pull request with a new feature or a fix, you should
 always include tests for your changes. These tests prove that your
 changes work, help prevent bugs in the future, and help document what
-your changes do. Depending an the change, you may need
-``acceptance tests``\ *, ``unit tests`` or both.
+your changes do. Depending an the change, you may need ``acceptance tests``,
+``unit tests`` or both.
 
 Make sure to run all of the tests before submitting a pull request to be
 sure that your changes do not break anything. If you can, test in
@@ -182,21 +182,24 @@ Acceptance tests
 Most of SeleniumLibrary's testing is done using acceptance tests that
 naturally use Robot Framework itself for testing. Every new
 functionality or fix should generally get one or more acceptance tests.
-For more details on acceptance tests see `atest/README.rst`_.
+For more details on acceptance tests and how to run the acceptance tests,
+see `atest/README.rst`_.
 
 Unit tests
 ~~~~~~~~~~
 
 Unit tests are great for testing internal logic and should be added when
-appropriate. For more details on unit tests see `utest/README.rst`_.
-
+appropriate. For more details on unit tests and running them, see
+`utest/README.rst`_.
+q
 Continuous integration
 ----------------------
 
-SeleniumLibrary use GitHub Actions as it's continuous integration (CI) server.
-For more details about how to run the tests and how `GitHub Actions`_
-integration is implemented can be found with the `atest/README.rst`_ for
-acceptance tests and `utest/README.rst`_ for unit tests.
+SeleniumLibrary uses GitHub Actions as it's continuous integration (CI) server.
+
+.. ToDo: re-add when explanation of GitHUb Actions is written
+   More details about how `GitHub Actions`_ integration is implemented can be
+   found within `<.github/CI/README.rst>.
 
 Finalizing pull requests
 ------------------------
