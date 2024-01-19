@@ -191,7 +191,7 @@ Unit tests
 Unit tests are great for testing internal logic and should be added when
 appropriate. For more details on unit tests and running them, see
 `utest/README.rst`_.
-q
+
 Continuous integration
 ----------------------
 
