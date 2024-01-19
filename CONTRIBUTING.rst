@@ -3,16 +3,17 @@ Contribution guidelines
 
 These guidelines instruct how to submit issues and contribute code to
 the `SeleniumLibrary project`_. Other great ways to contribute include
-answering questions and participating discussion on `robotframework-users`_
-mailing list and other forums as well as spreading the word about the
-framework one way or the other.
+answering questions and participating discussion on #seleniumlibrary channel
+within the community `Robot Framework Slack`_, the `Robot Framework Forum`_
+and other forums as well as spreading the word about the framework one way
+or the other.
 
 Submitting issues
 =================
 
 Bugs and enhancements are tracked in the `issue tracker`_.
 If you are unsure if something is a bug or is a feature worth
-implementing, you can first ask on `robotframework-users`_ list. This and
+implementing, you can first ask with the `Robot Framework Slack`_. This and
 other similar forums, not the issue tracker, are also places where to ask
 general questions.
 
@@ -88,14 +89,22 @@ We do, however, recommend to create dedicated branches for pull requests
 instead of creating them based on the master branch. This is especially
 important if you plan to work on multiple pull requests at the same time.
 
-This project requires that pull request contains linear history of commits and
-we do not allow that pull request contains merge commits or other noise. This helps
-the review process and makes the maintenance easier for the project administrators.
-Generally it is recommended to do `git pull --rebase`  instead of the `git pull --merge`
-when there is need pull changes from upstream.
+This project asks that prior to making an enhancement pull request that you
+discuss the enhancement with the team. We wish to avoid having you spend effort on an
+ehancement that won't match with the project. We require that a pull request contains
+linear history of commits and we do not allow that pull request contains merge commits
+or other noise. This helps the review process and makes the maintenance easier for the
+project administrators. Generally it is recommended to do `git pull --rebase`  instead
+of the `git pull --merge` when there is need pull changes from upstream.
 
 Coding conventions
 ------------------
+
+The SeleniumLibrary team is currently reviewing, revising, and updating
+the coding conventions during Q1 2024. Knowing these coding conventions
+are seen as a good practice, we are leaving these here as recommendations
+in the mean time but are not forcing this as a requirement for accepting
+pull requests.
 
 SeleniumLibrary uses the general Python code conventions defined in
 `PEP-8`_. In addition to that, we try to write `idiomatic Python`_
@@ -184,9 +193,10 @@ tests <https://github.com/robotframework/SeleniumLibrary/blob/master/BUILD.rst#u
 Continuous integration
 ----------------------
 
-SeleniumLibrary's continuous integration (CI) servers are visible through
-`Travis CI`_. For more details about how to run test and how `Travis CI`_
-integration is implemented can be found from the `test/README.rst`_.
+SeleniumLibrary use GitHub Actions as it's continuous integration (CI) server.
+For more details about how to run the tests and how `GitHub Actions`_
+integration is implemented can be found with the `atest/README.rst`_ for
+acceptance tests and `utest/README.rst`_ for unit tests.
 
 Finalizing pull requests
 ------------------------
@@ -209,7 +219,8 @@ the same code as your changes. In that case you should
 `sync your fork`_ and `resolve conflicts`_ to allow for an easy merge.
 
 .. _SeleniumLibrary project: https://github.com/robotframework/SeleniumLibrary
-.. _robotframework-users: http://groups.google.com/group/robotframework-users
+.. _Robot Framework Slack: https://rf-invite.herokuapp.com/
+.. _Robot Framework Forum: https://forum.robotframework.org/c/libraries/lib-seleniumlibrary/11
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
 .. _(SSCCE): http://sscce.org
 .. _GitHub account: https://github.com/
@@ -222,8 +233,9 @@ the same code as your changes. In that case you should
 .. _SOLID principles: https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
 .. _PEP-257: https://www.python.org/dev/peps/pep-0257/
 .. _invoke: http://www.pyinvoke.org/
-.. _Travis CI: https://travis-ci.org/robotframework/SeleniumLibrary
-.. _test/README.rst`: https://github.com/robotframework/SeleniumLibrary/blob/master/test/README.rst
+.. _GitHub Actions: https://github.com/robotframework/SeleniumLibrary/actions
+.. _atest/README.rst: https://github.com/robotframework/SeleniumLibrary/tree/master/atest/README.rst
+.. _utest/README.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/utest/README.rst
 .. _sync your fork: https://help.github.com/articles/syncing-a-fork/
 .. _resolve conflicts: https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line
 .. _Black: https://github.com/psf/black
