@@ -3,10 +3,10 @@ Contribution guidelines
 
 These guidelines instruct how to submit issues and contribute code to
 the `SeleniumLibrary project`_. Other great ways to contribute include
-answering questions and participating discussion on #seleniumlibrary channel
-within the community `Robot Framework Slack`_, the `Robot Framework Forum`_
-and other forums as well as spreading the word about the framework one way
-or the other.
+answering questions and participating in discussions within the
+#seleniumlibrary channel on the community `Robot Framework Slack`_, the
+`Robot Framework Forum`_ and other channels as well as spreading the word
+about the framework one way or the other.
 
 Submitting issues
 =================
@@ -107,7 +107,7 @@ in the mean time but are not forcing this as a requirement for accepting
 pull requests.
 
 SeleniumLibrary uses the general Python code conventions defined in
-`PEP-8`_. In addition to that, we try to write `idiomatic Python`_
+`PEP-8`_. In addition to that, we try to write `idiomatic Python`_ or `"Pythonic" code`_
 and follow the `SOLID principles`_. with all new code. An important guideline
 is that the code should be clear enough that comments are generally not needed.
 
@@ -169,12 +169,12 @@ When submitting a pull request with a new feature or a fix, you should
 always include tests for your changes. These tests prove that your
 changes work, help prevent bugs in the future, and help document what
 your changes do. Depending an the change, you may need
-``acceptance tests``\ *, ``unit tests``* or both.
+``acceptance tests``\ *, ``unit tests`` or both.
 
 Make sure to run all of the tests before submitting a pull request to be
 sure that your changes do not break anything. If you can, test in
 multiple browsers and versions (Firefox, Chrome, IE, Edge etc). Pull requests
-are also automatically tested on `Travis CI`_.
+are also automatically tested on `GitHub Actions`_.
 
 Acceptance tests
 ~~~~~~~~~~~~~~~~
@@ -182,13 +182,13 @@ Acceptance tests
 Most of SeleniumLibrary's testing is done using acceptance tests that
 naturally use Robot Framework itself for testing. Every new
 functionality or fix should generally get one or more acceptance tests.
+For more details on acceptance tests see `atest/README.rst`_.
 
 Unit tests
 ~~~~~~~~~~
 
 Unit tests are great for testing internal logic and should be added when
-appropriate. For more details see `Unit and acceptance
-tests <https://github.com/robotframework/SeleniumLibrary/blob/master/BUILD.rst#unit-and-acceptance-tests%3E>`__.
+appropriate. For more details on unit tests see `utest/README.rst`_.
 
 Continuous integration
 ----------------------
@@ -208,7 +208,7 @@ Acknowledgments
 ~~~~~~~~~~~~~~~
 
 If you have done any non-trivial change and would like to be credited,
-remind us to add `acknowledge` tag to the issue. This way we will add
+remind us to add ``acknowledge`` tag to the issue. This way we will add
 your name to the release notes, when next release is made.
 
 Resolving conflicts
@@ -229,7 +229,8 @@ the same code as your changes. In that case you should
 .. _fork a repository: https://help.github.com/articles/fork-a-repo/
 .. _use pull requests: https://help.github.com/articles/using-pull-requests
 .. _PEP-8: https://www.python.org/dev/peps/pep-0008/
-.. _idiomatic Python: http://python.net/~goodger/projects/pycon/2007/idiomatic/handout.html
+.. _idiomatic Python: https://en.wikibooks.org/wiki/Python_Programming/Idioms
+.. _"Pythonic" code: https://docs.python-guide.org/writing/style/
 .. _SOLID principles: https://en.wikipedia.org/wiki/SOLID_(object-oriented_design)
 .. _PEP-257: https://www.python.org/dev/peps/pep-0257/
 .. _invoke: http://www.pyinvoke.org/
@@ -239,4 +240,4 @@ the same code as your changes. In that case you should
 .. _sync your fork: https://help.github.com/articles/syncing-a-fork/
 .. _resolve conflicts: https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line
 .. _Black: https://github.com/psf/black
-.. _flake8: https://gitlab.com/pycqa/flake8
+.. _flake8: https://github.com/PyCQA/flake8
