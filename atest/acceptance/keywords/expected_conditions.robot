@@ -33,6 +33,11 @@ Wait For Expected Conditions Where Condition Is Variable
     Wait For Expected Condition    ${condition}    Delayed
     Title Should Be    Delayed
 
+Wait For Expected Conditions Where Condition Is Strange Case
+    Click Button    Change the button state
+    ${dynamic_btn}=  Get WebElement  id:enabledDisabledBtn
+    Wait For Expected Condition  EleMENT tO BE cLiCkAbLe  ${dynamic_btn}
+
 Wait For Non Existing Expected Conditions
     Click Button    Change the button state
     ${dynamic_btn}=  Get WebElement  id:enabledDisabledBtn
