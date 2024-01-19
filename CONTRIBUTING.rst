@@ -13,12 +13,12 @@ Submitting issues
 
 Bugs and enhancements are tracked in the `issue tracker`_.
 If you are unsure if something is a bug or is a feature worth
-implementing, you can first ask with the `Robot Framework Slack`_. This and
+implementing, you can first ask within the `Robot Framework Slack`_. This and
 other similar forums, not the issue tracker, are also places where to ask
 general questions.
 
-Before submitting a new issue, it is always a good idea to check is the
-same bug or enhancement already reported. If it is, please add your
+Before submitting a new issue, it is always a good idea to check if the
+same bug or enhancement is already reported. If it is, please add your
 comments to the existing issue instead of creating a new one.
 
 Reporting bugs
@@ -44,9 +44,11 @@ Enhancement requests
 
 Describe the new feature and use cases for it in as much detail as
 possible in an issue. Especially with larger enhancements, be prepared to
-contribute the code in form of a pull request as explained below or to
+contribute the code in the form of a pull request as explained below or to
 pay someone for the work. Consider also would it be better to implement this
-functionality as a separate library outside the SeleniumLibrary.
+functionality as a separate library outside the SeleniumLibrary. One option
+here is to extend SeleniumLibrary using the public API or plug-in api. Please
+see `extending documentation`_ for more details.
 
 Code contributions
 ==================
@@ -226,6 +228,7 @@ the same code as your changes. In that case you should
 .. _Robot Framework Forum: https://forum.robotframework.org/c/libraries/lib-seleniumlibrary/11
 .. _issue tracker: https://github.com/robotframework/SeleniumLibrary/issues
 .. _(SSCCE): http://sscce.org
+.. _extending documentation: https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst
 .. _GitHub account: https://github.com/
 .. _Git: https://git-scm.com
 .. _set up Git: https://help.github.com/articles/set-up-git/
