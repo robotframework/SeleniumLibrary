@@ -51,3 +51,20 @@ Chrome Browser With Selenium Options Argument With Semicolon
     ...    LOG 1:14 DEBUG GLOB: *["has;semicolon"*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("has;semicolon")
+
+Chrome Browser with Selenium Options Ending With Semicolon
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("--disable-dev-shm-usage") ;
+
+Chrome Browser with Selenium Options Ending With A Few Semicolons
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("--disable-dev-shm-usage") ; ; ;
+
+Chrome Browser with Selenium Options Containing Empty Option
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; ; add_argument ( "--headless=new" )
+
+Chrome Browser with Selenium Options With A Missing Semicolon
+    Run Keyword And Expect Error    ValueError: Unable to parse option: "add_argument ( "--disable-dev-shm-usage" ) add_argument ( "--headless=new" )"
+    ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) add_argument ( "--headless=new" )

@@ -503,6 +503,9 @@ class SeleniumOptions:
         selenium_options = selenium_options()
         for option in options:
             for key in option:
+                if key == '' and option[key]==[]:
+                    logger.warn('Empty selenium option found and ignored. Suggested you review options passed to `Open Browser` keyword')
+                    continue
                 attr = getattr(selenium_options, key)
                 if callable(attr):
                     attr(*option[key])
@@ -566,9 +569,12 @@ class SeleniumOptions:
         split_options = []
         start_position = 0
         tokens = generate_tokens(StringIO(options).readline)
-        for toknum, tokval, tokpos, _, _ in tokens:
-            if toknum == token.OP and tokval == ";":
+        for toktype, tokval, tokpos, _, _ in tokens:
+            if toktype == token.OP and tokval == ";":
                 split_options.append(options[start_position : tokpos[1]].strip())
                 start_position = tokpos[1] + 1
-        split_options.append(options[start_position:])
+            # Handles trailing semicolon
+            # !! Note: If multiline options allowed this splitter might fail !!
+            if toktype == token.NEWLINE and start_position != tokpos[1]:
+                split_options.append(options[start_position : tokpos[1]].strip())
         return split_options

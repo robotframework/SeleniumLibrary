@@ -3,7 +3,6 @@ Documentation     Tests elements
 Test Setup        Go To Page "links.html"
 Resource          ../resource.robot
 Library           String
-Library           DebugLibrary
 
 *** Test Cases ***
 Get Many Elements
