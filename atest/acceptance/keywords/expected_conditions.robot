@@ -44,4 +44,9 @@ Wait For Non Existing Expected Conditions
     Run Keyword And Expect Error   this_is_not_an_expected_con_dition is an unknown expected condition
     ...  Wait For Expected Condition  this_is not an expected con dition  ${dynamic_btn}
 
-
+Wait For Expected Conditions When Condition Includes Locator
+    Title Should Be    Original
+    ${byElem}=  Evaluate  ("id","added_btn")
+    Click Element    link:delayed add element
+    Wait For Expected Condition    Presence Of Element Located    ${byElem}
+    Click Element    id:added_btn

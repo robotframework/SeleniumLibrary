@@ -3,6 +3,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title>Original</title>
+		<!-- Note the timeouts in the functions are chosen such they constitute
+		     a set with distinct subset sums. That is is a combination of any two
+		     or more were to be executed the total time for that distinct combination
+		     would be unique. This was done so we could do a ALL/AND/OR type of test
+		     and know that with the combination of expected conditions the execution
+		     was successful as the unique time took place. -->
+		<!-- The set we are using is {6,9,11,12,13} -->
+		<!-- (could also use {3,5,6,7} which would reduce total time)-->
 		<script type="text/javascript">
 		function add_content(target_container, content) {
 			p = document.createElement('p');
@@ -28,11 +36,23 @@
 				document.title='Delayed';
 			},600);
 		}
+
+		function delayed_add_element() {
+		    setTimeout(function(){
+		        const newElem = document.createElement("input");
+		        newElem.setAttribute("type", "button");
+		        newElem.setAttribute("id", "added_btn");
+		        newElem.setAttribute("value", "Added Button");
+		        const container = document.getElementById("container");
+		        document.body.insertBefore(newElem, container);
+		    },1100);
+		}
 		</script>
 	</head>
 	<body>
 		<a href="javascript:return false;" onclick="document.title='Changed'; return false;">change title</a><br/>
 		<a href="javascript:return false;" onclick="delayed_title_change(); return false;">delayed change title</a><br/>
+		<a href="javascript:return false;" onclick="delayed_add_element(); return fales;">delayed add element</a><br/>
 		<a href="javascript:return false;" onclick="add_content('target', 'added content'); return false;">add content</a><br/>
 		<a id="unicode" href="javascript:return false;" onclick="document.title='äää'; return false;">title to ääää</a><br/>
 		<p>
@@ -55,6 +75,9 @@
 			onClick="delayed_button_state()" />
 			<input type=button id=enabledDisabledBtn value="Disabled"
 			disabled />
+		</p>
+		<p>
+			<div id="container"></div>
 		</p>
 		<p>
 			<form name=titleChanger>
