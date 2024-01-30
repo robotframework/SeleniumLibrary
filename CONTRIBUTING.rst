@@ -159,7 +159,7 @@ Tests
 When submitting a pull request with a new feature or a fix, you should
 always include tests for your changes. These tests prove that your
 changes work, help prevent bugs in the future, and help document what
-your changes do. Depending an the change, you may need
+your changes do. Depending on the change, you may need
 ``acceptance tests``\ *, ``unit tests``* or both.
 
 Make sure to run all of the tests before submitting a pull request to be
