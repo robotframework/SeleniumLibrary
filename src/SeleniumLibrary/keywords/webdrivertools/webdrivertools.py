@@ -69,6 +69,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path=None,
+        service=None,
     ):
         browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
@@ -89,6 +90,7 @@ class WebDriverCreator:
                 options=options,
                 service_log_path=service_log_path,
                 executable_path=executable_path,
+                service=service,
             )
         return creation_method(
             desired_capabilities,
@@ -96,6 +98,7 @@ class WebDriverCreator:
             options=options,
             service_log_path=service_log_path,
             executable_path=executable_path,
+            service=service,
         )
 
     def _get_creator_method(self, browser):
@@ -148,6 +151,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="chromedriver",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -169,6 +173,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="chromedriver",
+        service=None,
     ):
         if not options:
             options = webdriver.ChromeOptions()

@@ -68,6 +68,7 @@ class BrowserManagementKeywords(LibraryComponent):
         options: Any = None,
         service_log_path: Optional[str] = None,
         executable_path: Optional[str] = None,
+        service: Any = None,
     ) -> str:
         """Opens a new browser instance to the optional ``url``.
 
@@ -279,6 +280,10 @@ class BrowserManagementKeywords(LibraryComponent):
             return index
         if desired_capabilities:
             self.warn("desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation.")
+        if service_log_path:
+            self.warn("service_log_path is being deprecated. Please use service to configure log_output or equivalent service attribute.")
+        if executable_path:
+            self.warn("exexcutable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation.")
         return self._make_new_browser(
             url,
             browser,
@@ -289,6 +294,7 @@ class BrowserManagementKeywords(LibraryComponent):
             options,
             service_log_path,
             executable_path,
+            service,
         )
 
     def _make_new_browser(
@@ -302,6 +308,7 @@ class BrowserManagementKeywords(LibraryComponent):
         options=None,
         service_log_path=None,
         executable_path=None,
+        service=None,
     ):
         if remote_url:
             self.info(
@@ -318,6 +325,7 @@ class BrowserManagementKeywords(LibraryComponent):
             options,
             service_log_path,
             executable_path,
+            service,
         )
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
@@ -763,6 +771,7 @@ class BrowserManagementKeywords(LibraryComponent):
         options=None,
         service_log_path=None,
         executable_path=None,
+        service=None,
     ):
         driver = self._webdriver_creator.create_driver(
             browser=browser,
@@ -772,6 +781,7 @@ class BrowserManagementKeywords(LibraryComponent):
             options=options,
             service_log_path=service_log_path,
             executable_path=executable_path,
+            service=service,
         )
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
