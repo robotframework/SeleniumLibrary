@@ -58,7 +58,7 @@ class WebDriverCreator:
     def __init__(self, log_dir):
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
-        #self.selenium_service = SeleniumService()
+        self.selenium_service = SeleniumService()
 
     def create_driver(
         self,
@@ -76,6 +76,7 @@ class WebDriverCreator:
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
         service_log_path = self._get_log_path(service_log_path)
         options = self.selenium_options.create(self.browser_names.get(browser), options)
+        service = self.selenium_service.create(self.browser_names.get(browser), service)
         if service_log_path:
             logger.info(f"Browser driver log file created to: {service_log_path}")
             self._create_directory(service_log_path)
@@ -160,7 +161,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.chrome.service.Service)
         log_method = self._get_log_method(ChromeService, service_log_path)
-        service = ChromeService(executable_path=executable_path, **log_method)
+        if not service:
+            service = ChromeService(executable_path=executable_path, **log_method)
         return webdriver.Chrome(
             options=options,
             service=service,
@@ -573,7 +575,7 @@ class SeleniumService:
             if toknum == token.OP and tokval == ";":
                 split_service.append(service[start_position : tokpos[1]].strip())
                 start_position = tokpos[1] + 1
-        split_service.append(options[start_position:])
+        split_service.append(service[start_position:])
         return split_service
 
 class SeleniumOptions:
