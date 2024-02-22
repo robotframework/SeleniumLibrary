@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Test Setup        Go To Page "forms/html5_input_types.html"
 Resource          ../resource.robot
 

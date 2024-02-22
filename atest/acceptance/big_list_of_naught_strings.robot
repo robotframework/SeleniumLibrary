@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Resource          resource.robot
 Library           BigListOfNaughtyStrings.BigListOfNaughtyStrings    WITH NAME    blns
 
