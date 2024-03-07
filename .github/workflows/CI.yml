@@ -99,5 +99,5 @@ jobs:
     - uses: actions/upload-artifact@v1
       if: success() || failure()
       with:
-        name: SeleniumLibrary Test results ${{ matrix.python-version }} ${{ matrix.rf-version}} ${{ matrix.selenium-version}}
+        name: SeleniumLibrary Test results
         path: atest/zip_results
