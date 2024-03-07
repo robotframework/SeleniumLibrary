@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Documentation     Tests cookies
 Suite Setup       Go To Page "cookies.html"
 Suite Teardown    Delete All Cookies
@@ -117,7 +117,7 @@ Test Get Cookie Keyword Logging
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     far_future
 
-*** Keyword ***
+*** Keywords ***
 Add Cookies
     Delete All Cookies
     Add Cookie    test       seleniumlibrary

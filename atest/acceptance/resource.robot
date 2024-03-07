@@ -1,10 +1,10 @@
-*** Setting ***
+*** Settings ***
 Library           SeleniumLibrary    run_on_failure=Nothing    implicit_wait=0.2 seconds
 Library           Collections
 Library           OperatingSystem
 Library           DateTime
 
-*** Variable ***
+*** Variables ***
 ${SERVER}=         localhost:7000
 ${BROWSER}=        firefox
 ${REMOTE_URL}=     ${NONE}
@@ -13,7 +13,7 @@ ${ROOT}=           http://${SERVER}/html
 ${FRONT_PAGE}=     ${ROOT}/
 ${SPEED}=          0
 
-*** Keyword ***
+*** Keywords ***
 Open Browser To Start Page
     [Documentation]    This keyword also tests 'Set Selenium Speed' and 'Set Selenium Timeout'
     ...    against all reason.

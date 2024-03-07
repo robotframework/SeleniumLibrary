@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Resource          resource.robot
 Force Tags        Regression
 

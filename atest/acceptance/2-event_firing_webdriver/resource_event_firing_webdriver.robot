@@ -6,7 +6,7 @@ ${DESIRED_CAPABILITIES}=    ${NONE}
 ${ROOT}=                    http://${SERVER}/html
 ${FRONT_PAGE}=              ${ROOT}/
 
-*** Keyword ***
+*** Keywords ***
 
 Go To Page "${relative url}"
     [Documentation]    Goes to page
