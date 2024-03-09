@@ -10,13 +10,14 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8, 3.11]  # 3.12, pypy-3.9
-        rf-version: [5.0.1, 6.1.1, 7.0b1]
-        selenium-version: [4.14.0, 4.15.2, 4.16.0]
+        rf-version: [5.0.1, 6.1.1, 7.0]
+        selenium-version: [4.14.0, 4.15.2, 4.16.0]  #4.17.0, 4.18.0
+        browser: [firefox, chrome, headlesschrome]  #edge
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }} with Robot Framework ${{ matrix.rf-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Setup Chrome
@@ -27,6 +28,14 @@ jobs:
     - run: |
         echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
         ${{ steps.setup-chrome.outputs.chrome-path }} --version
+    - name: Setup firefox
+      id: setup-firefox
+      uses: browser-actions/setup-firefox@v1
+      with:
+        firefox-version: latest
+    - run: |
+        echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
+        ${{ steps.setup-firefox.outputs.firefox-path }} --version
     - name: Start xvfb
       run: |
         export DISPLAY=:99.0
@@ -62,25 +71,14 @@ jobs:
 
     # Temporarily ignoring pypy execution
     - name: Run tests with headless Chrome and with PyPy
-      if: matrix.python-version == 'pypy-3.9'
+      if: startsWith( matrix.python-version, 'pypy') == true
       run: |
         xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschrome
 
-    - name: Run tests with normal Chrome if CPython
-      if: matrix.python-version != 'pypy-3.9'
+    - name: Run tests with ${{ matrix.browser }} if CPython
+      if: startsWith( matrix.python-version, 'pypy') == false
       run: |
-        xvfb-run --auto-servernum python atest/run.py --zip chrome
-
-    # Recognize for the moment this will NOT run as we aren't using Python 3.9
-    - name: Run tests with headless Firefox with Python 3.9 and RF 4.1.3
-      if: matrix.python-version == '3.9' && matrix.rf-version == '4.1.3'
-      run: |
-        xvfb-run --auto-servernum python atest/run.py --zip headlessfirefox
-
-    - name: Run tests with normal Firefox with Python 3.9 and RF != 4.1.3
-      if: matrix.python-version == '3.9' && matrix.rf-version != '4.1.3'
-      run: |
-        xvfb-run --auto-servernum python atest/run.py --zip firefox
+        xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
 
     # - name: Run tests with Selenium Grid
     #   if: matrix.python-version == '3.11' && matrix.rf-version == '3.2.2' && matrix.python-version != 'pypy-3.9'
