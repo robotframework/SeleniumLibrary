@@ -33,7 +33,7 @@ setup(
     version          = VERSION,
     description      = 'Web testing library for Robot Framework',
     long_description = DESCRIPTION,
-    author           = 'Ed Manlove',
+    author           = 'Ed Manlove, Yuri Verweij, Lisa Crispin',
     author_email     = 'emanlove@verizon.net',
     url              = 'https://github.com/robotframework/SeleniumLibrary',
     license          = 'Apache License 2.0',

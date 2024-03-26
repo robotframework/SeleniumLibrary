@@ -410,6 +410,38 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).get_attribute(attribute)
 
     @keyword
+    def get_dom_attribute(
+        self, locator: Union[WebElement, str], attribute: str
+    ) -> str:
+        """Returns the value of ``attribute`` from the element ``locator``. `Get DOM Attribute` keyword
+        only returns attributes declared within the element's HTML markup.  If the requested attribute
+        is not there, the keyword returns ${None}.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        Example:
+        | ${id}= | `Get DOM Attribute` | css:h1 | id |
+
+        """
+        return self.find_element(locator).get_dom_attribute(attribute)
+
+    @keyword
+    def get_property(
+        self, locator: Union[WebElement, str], property: str
+    ) -> str:
+        """Returns the value of ``property`` from the element ``locator``.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        Example:
+        | ${text_length}= | `Get Property` | css:h1 | text_length |
+
+        """
+        return self.find_element(locator).get_property(property)
+
+    @keyword
     def element_attribute_value_should_be(
         self,
         locator: Union[WebElement, str],

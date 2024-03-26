@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Documentation     Tests Webdriver
 Resource          resource.robot
 Library           Collections
