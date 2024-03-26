@@ -22,6 +22,32 @@ from selenium.webdriver.support import expected_conditions as EC
 class ExpectedConditionKeywords(LibraryComponent):
     @keyword
     def wait_for_expected_condition(self, condition: string, *args, timeout: Optional[float]=10):
+        """Waits until ``condition`` is true or ``timeout`` expires.
+
+        The condition must be one of selenium's expected condition which
+        can be found within the selenium
+        [https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html#module-selenium.webdriver.support.expected_conditions Python API]
+        documentation. The expected condition can written as snake_case
+        (ex title_is) or it can be space delimited (ex Title Is). Some
+        conditions require additional arguments or ``args`` which should
+        be passed along after the expected condition.
+
+        Fails if the timeout expires before the condition becomes true.
+        The default value is 10 seconds.
+
+        Examples:
+        | `Wait For Expected Condition` | alert_is_present |
+        | `Wait For Expected Condition` |  Title Is  | New Title |
+
+        If the expected condition expects a locator then one can pass
+        as arguments a tuple containing the selenium locator strategies
+        and the locator.
+
+        Example of expected condition expecting locator:
+        | ${byElem}= |  Evaluate  ("id","added_btn")
+        | `Wait For Expected Condition` | Presence Of Element Located | ${byElem}
+        """
+
         condition = self._parse_condition(condition)
         wait = WebDriverWait(self.driver, timeout, 0.1)
         try:
