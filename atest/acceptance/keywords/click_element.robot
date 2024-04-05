@@ -40,7 +40,7 @@ Click Element Action Chain
     [Tags]    NoGrid
     [Documentation]
     ...    LOB 1:1 INFO        Clicking 'singleClickButton' using an action chain.
-    ...    LOG 1:6 DEBUG GLOB: *actions {"actions": [{*
+    ...    LOG 1:6 DEBUG REGEXP: .*actions {['\\\"]actions['\\\"]: \\\[\\\{.*
     Click Element    singleClickButton      action_chain=True
     Element Text Should Be    output    single clicked
 
