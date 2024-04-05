@@ -259,7 +259,7 @@ def create_zip():
     zip_name = f"rf-{robot_version}-python-{python_version}.zip"
     zip_path = os.path.join(ZIP_DIR, zip_name)
     print("Zip created in: %s" % zip_path)
-    zip_file = zipfile.ZipFile(zip_path, "w")
+    zip_file = zipfile.ZipFile(zip_path, "a")
     for root, dirs, files in os.walk(RESULTS_DIR):
         for file in files:
             file_path = os.path.join(root, file)
