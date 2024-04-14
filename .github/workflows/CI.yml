@@ -88,7 +88,7 @@ jobs:
     #     xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
 
     - uses: actions/upload-artifact@v1
-      if: success() || failure()
+      if: failure()
       with:
         name: SeleniumLibrary Test results
         path: atest/zip_results
