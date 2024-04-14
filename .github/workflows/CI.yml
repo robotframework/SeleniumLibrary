@@ -11,7 +11,7 @@ jobs:
       matrix:
         python-version: [3.8, 3.11]  # 3.12, pypy-3.9
         rf-version: [5.0.1, 6.1.1, 7.0]
-        selenium-version: [4.14.0, 4.15.2, 4.16.0]  #4.17.0, 4.18.0
+        selenium-version: [4.14.0, 4.15.2, 4.16.0, 4.17.2, 4.18.1, 4.19.0]
         browser: [firefox, chrome, headlesschrome]  #edge
 
     steps:
@@ -88,7 +88,7 @@ jobs:
     #     xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
 
     - uses: actions/upload-artifact@v1
-      if: success() || failure()
+      if: failure()
       with:
         name: SeleniumLibrary Test results
         path: atest/zip_results
