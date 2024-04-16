@@ -899,7 +899,26 @@ return !element.dispatchEvent(evt);
 
     @keyword
     def press_key(self, locator: Union[WebElement, str], key: str):
-        """*DEPRECATED in SeleniumLibrary 4.0.* use `Press Keys` instead."""
+        """Simulates user pressing key on element identified by ``locator``.
+
+        See the `Locating elements` section for details about the locator
+        syntax.
+
+        ``key`` is either a single character, a string, or a numerical ASCII
+        code of the key lead by '\\'.
+
+        Examples:
+        | `Press Key` | text_field   | q     |
+        | `Press Key` | text_field   | abcde |
+        | `Press Key` | login_button | \\13  | # ASCII code for enter key |
+
+        `Press Key` and `Press Keys` differ in the methods to simulate key
+        presses. `Press Key` uses the WebDriver `SEND_KEYS_TO_ELEMENT` command
+        using the selenium send_keys method. Although one is not recommended
+        over the other if `Press Key` does not work we recommend trying
+        `Press Keys`.
+        send_
+        """
         if key.startswith("\\") and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
         element = self.find_element(locator)
@@ -952,6 +971,13 @@ return !element.dispatchEvent(evt);
         | `Press Keys` | text_field | ALT            | ARROW_DOWN | # Pressing "ALT" key and then pressing ARROW_DOWN.                                |
         | `Press Keys` | text_field | CTRL+c         |            | # Pressing CTRL key down, sends string "c" and then releases CTRL key.            |
         | `Press Keys` | button     | RETURN         |            | # Pressing "ENTER" key to element.                                                |
+
+        `Press Key` and `Press Keys` differ in the methods to simulate key
+        presses. `Press Keys` uses the Selenium/WebDriver Actions.
+        `Press Keys` also has a more extensive syntax for describing keys,
+        key combinations, and key actions. Although one is not recommended
+        over the other if `Press Keys` does not work we recommend trying
+        `Press Key`.
         """
         parsed_keys = self._parse_keys(*keys)
         if not is_noney(locator):
