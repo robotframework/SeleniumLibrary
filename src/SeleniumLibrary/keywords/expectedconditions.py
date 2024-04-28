@@ -26,7 +26,7 @@ class ExpectedConditionKeywords(LibraryComponent):
 
         The condition must be one of selenium's expected condition which
         can be found within the selenium
-        [https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html#module-selenium.webdriver.support.expected_conditions Python API]
+        [https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html#module-selenium.webdriver.support.expected_conditions|Python API]
         documentation. The expected condition can written as snake_case
         (ex title_is) or it can be space delimited (ex Title Is). Some
         conditions require additional arguments or ``args`` which should
