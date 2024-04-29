@@ -241,16 +241,64 @@ class ScreenshotKeywords(LibraryComponent):
     @keyword
     # def print_page_as_pdf(self, print_options: Optional[PrintOptions]=None,):
     # def print_page_as_pdf(self, print_options: Optional[Union[PrintOptions, dict]]=None):
-    def print_page_as_pdf(self, print_options: Union[PrintOptions, dict, None]=None):
+    # def print_page_as_pdf(self, print_options: Union[PrintOptions, dict, None]=None):
+    #     """ Print the current page as a PDF
+    #
+    #     """
+    #     if not print_options:
+    #         print_options = PrintOptions()
+    #         print_options.page_ranges = ['-']
+    def print_page_as_pdf(self,
+                            background=None,
+                            margin_bottom=None,
+                            margin_left=None,
+                            margin_right=None,
+                            margin_top=None,
+                            orientation=None,
+	                        page_height=None,
+                            page_ranges=['-'],
+                            page_width=None,
+                            scale=None,
+	                        shrink_to_fit=None,
+                            path_to_file=None,
+                         ):
         """ Print the current page as a PDF
 
+        ``page_ranges`` defaults to `['-']` or "all" pages. ``page_ranges`` takes a list of
+        strings indicating the ranges.
+
+        The page size defaults to 21.59 for ``page_width`` and 27.94 for ``page_height``.
+        This is the equivalent size of US-Letter. The assumed units on these parameters
+        is centimeters.
+
+        The default margin for top, left, bottom, right is `1`. The assumed units on
+        these parameters is centimeters.
+
+        The default ``orientation`` is `portrait`. ``orientation`` can be either `portrait`
+        or `landscape`.
+
+        The default ``scale`` is `1`. ``scale`` must be greater than or equal to `0.1` and
+        less than or equal to `2`.
+
+        ``background`` and ``scale_to_fite`` can be either `${True}` or `${False}`..
+
+        If all print options are None then a pdf will failed to print silently.s
         """
-        if not print_options:
-            print_options = PrintOptions()
-            print_options.page_ranges = ['-']
+
+        print_options = PrintOptions()
+        print_options.background = background
+        print_options.margin_bottom = margin_bottom
+        print_options.margin_left = margin_left
+        print_options.margin_right = margin_right
+        print_options.margin_top = margin_top
+        print_options.orientation = orientation
+        print_options.page_height = page_height
+        print_options.page_ranges = page_ranges
+        print_options.page_width = page_width
+        print_options.scale = scale
+        print_options.shrink_to_fit = shrink_to_fit
 
         base64code  = self.driver.print_page(print_options)
         pdfdata = b64decode(base64code)
         with open('test.pdf', mode='wb') as pdf:
             pdf.write(pdfdata)
-        #self.debug(pdf_str)
