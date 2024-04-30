@@ -132,6 +132,12 @@ class ElementKeywords(LibraryComponent):
         argument. Valid log levels are ``TRACE`` (default), ``DEBUG``,
         ``INFO``, ``WARN``, and ``NONE``. If the log level is ``NONE``
         or below the current active log level the source will not be logged.
+
+        !! WARNING !! If you have an iframe selected, `Page Should Contain`
+        will reset the frame reference back to the main frame. This is due
+        to the fact that is searches for the ``text`` in all frames. To locate
+        an element in an iframe after calling `Page Should Contian` one needs
+        to (re)select the frame.
         """
         if not self._page_contains(text):
             self.ctx.log_source(loglevel)
