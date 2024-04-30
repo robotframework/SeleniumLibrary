@@ -578,6 +578,17 @@ class SeleniumService:
         split_service.append(service[start_position:])
         return split_service
 
+    def _dualsplit(self, service_or_attr, splittok):
+        split_string = []
+        start_position = 0
+        tokens = generate_tokens(StringIO(service_or_attr).readline)
+        for toknum, tokval, tokpos, _, _ in tokens:
+            if toknum == token.OP and tokval == splittok:
+                split_string.append(service_or_attr[start_position : tokpos[1]].strip())
+                start_position = tokpos[1] + 1
+        split_string.append(service_or_attr[start_position:])
+        return split_string
+
 class SeleniumOptions:
     def create(self, browser, options):
         if not options:
