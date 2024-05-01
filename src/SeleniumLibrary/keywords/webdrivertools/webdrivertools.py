@@ -482,43 +482,26 @@ class SeleniumService:
 
         # Throw error is used with remote .. "They cannot be used with a Remote WebDriver session." [ref doc]
         attrs = self._parse(service)
-        selenium_service_inst = selenium_service()
-        for attr in attrs:
-            for key in attr:
-                ser_attr = getattr(selenium_service_inst, key)
-                if callable(ser_attr):
-                    ser_attr(*attr[key])
-                else:
-                    setattr(selenium_service_inst, key, *attr[key])
+        # verify attribute a member of service class parameters
+        service_parameters = inspect.signature(selenium_service).parameters
+        for key in attrs:
+            if key not in service_parameters:
+                service_module = '.'.join((selenium_service.__module__, selenium_service.__qualname__))
+                raise ValueError(f"{key} is not a member of {service_module} Service class")
+        selenium_service_inst = selenium_service(**attrs)
         return selenium_service_inst
 
-        # # chrome, chromium, firefox, edge
-        # if any(chromium_based in browser.lower() for chromium_based in ('chromium', 'chrome', 'edge')):
-        #     service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-        #                                service_args=service_args,env=env,start_error_message=start_error_message
-        #     )
-        #     return service
-        # elif 'safari' in browser.lower():
-        #     service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-        #                                service_args=service_args,env=env,quiet=quiet,reuse_service=reuse_service
-        #     )
-        #     return service
-        # elif 'firefox' in browser.lower():
-        #     service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-        #                                service_args=service_args,env=env
-        #     )
-        #     return service
-        # else:
-        #     service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-        #                                service_args=service_args,env=env
-        #     )
-        #     return service
-
     def _parse(self, service):
-        result = []
-        for item in self._split(service):
+        """The service argument parses slightly different than the options argument. As of
+        Selenium v4.20.0, all the service items are arguments applied to the service class
+        instantiation. Thus each item is split instead parsed as done with options.
+        """
+        result = {}
+        for item in self._split(service,';'):
             try:
-                result.append(self._parse_to_tokens(item))
+                attr, val = self._split(item, '=')
+                result[attr]=val
+                # result.append(self._parse_to_tokens(item))
             except (ValueError, SyntaxError):
                 raise ValueError(f'Unable to parse service: "{item}"')
         return result
@@ -530,6 +513,27 @@ class SeleniumService:
         return service.Service
 
     def _parse_to_tokens(self, item):
+        result = {}
+        index, method = self._get_arument_index(item)
+        if index == -1:
+            result[item] = []
+            return result
+        if method:
+            args_as_string = item[index + 1 : -1].strip()
+            if args_as_string:
+                args = ast.literal_eval(args_as_string)
+            else:
+                args = args_as_string
+            is_tuple = args_as_string.startswith("(")
+        else:
+            args_as_string = item[index + 1 :].strip()
+            args = ast.literal_eval(args_as_string)
+            is_tuple = args_as_string.startswith("(")
+        method_or_attribute = item[:index].strip()
+        result[method_or_attribute] = self._parse_arguments(args, is_tuple)
+        return result
+
+    def _old_parse_to_tokens(self, item):
         result = {}
         index, method = self._get_arument_index(item)
         if index == -1:
@@ -567,7 +571,7 @@ class SeleniumService:
         index = min(item.find("("), item.find("="))
         return index, item.find("(") == index
 
-    def _split(self, service):
+    def _oldsplit(self, service):
         split_service = []
         start_position = 0
         tokens = generate_tokens(StringIO(service).readline)
@@ -578,7 +582,7 @@ class SeleniumService:
         split_service.append(service[start_position:])
         return split_service
 
-    def _dualsplit(self, service_or_attr, splittok):
+    def _split(self, service_or_attr, splittok):
         split_string = []
         start_position = 0
         tokens = generate_tokens(StringIO(service_or_attr).readline)

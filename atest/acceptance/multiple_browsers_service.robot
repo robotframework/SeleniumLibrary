@@ -20,7 +20,7 @@ Chrome Browser With Chrome Service As String With service_args As List
     ...    LOG 1:14 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
     ...    LOG 1:14 DEBUG GLOB: *"--headless=new"*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    service=service_args=['--append-log', '--readable-timestamp'], log_output=log_path)
+    ...    service=service_args=['--append-log', '--readable-timestamp']; log_output='.'
 
 Chrome Browser With Selenium Options With Complex Object
     [Tags]    NoGrid
