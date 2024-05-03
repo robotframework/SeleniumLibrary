@@ -149,7 +149,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def page_should_contain_element(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         message: Optional[str] = None,
         loglevel: str = "TRACE",
         limit: Optional[int] = None,
