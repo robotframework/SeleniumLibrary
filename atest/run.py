@@ -52,6 +52,7 @@ import tempfile
 
 from robot import rebot_cli
 from robot import __version__ as robot_version
+from selenium import __version__ as selenium_version
 from robot.utils import is_truthy
 
 try:
@@ -251,15 +252,15 @@ def process_output(browser):
         return exit.code
 
 
-def create_zip():
+def create_zip(browser = None):
     if os.path.exists(ZIP_DIR):
         shutil.rmtree(ZIP_DIR)
     os.mkdir(ZIP_DIR)
     python_version = platform.python_version()
-    zip_name = f"rf-{robot_version}-python-{python_version}.zip"
+    zip_name = f"rf-{robot_version}-python-{python_version}-selenium-{selenium_version}-{browser}.zip"
     zip_path = os.path.join(ZIP_DIR, zip_name)
     print("Zip created in: %s" % zip_path)
-    zip_file = zipfile.ZipFile(zip_path, "w")
+    zip_file = zipfile.ZipFile(zip_path, "a")
     for root, dirs, files in os.walk(RESULTS_DIR):
         for file in files:
             file_path = os.path.join(root, file)
@@ -326,5 +327,5 @@ if __name__ == "__main__":
         interpreter, browser, rf_options, selenium_grid, event_firing_webdriver
     )
     if args.zip:
-        create_zip()
+        create_zip(browser)
     sys.exit(failures)

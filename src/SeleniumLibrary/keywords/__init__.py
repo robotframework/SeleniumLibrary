@@ -18,6 +18,7 @@ from .alert import AlertKeywords  # noqa
 from .browsermanagement import BrowserManagementKeywords  # noqa
 from .cookie import CookieKeywords  # noqa
 from .element import ElementKeywords  # noqa
+from .expectedconditions import ExpectedConditionKeywords  # noqa
 from .formelement import FormElementKeywords  # noqa
 from .frames import FrameKeywords  # noqa
 from .javascript import JavaScriptKeywords  # noqa

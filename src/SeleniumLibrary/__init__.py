@@ -35,6 +35,7 @@ from SeleniumLibrary.keywords import (
     BrowserManagementKeywords,
     CookieKeywords,
     ElementKeywords,
+    ExpectedConditionKeywords,
     FormElementKeywords,
     FrameKeywords,
     JavaScriptKeywords,
@@ -51,7 +52,7 @@ from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
 
-__version__ = "6.1.3"
+__version__ = "6.4.0.dev1"
 
 
 class SeleniumLibrary(DynamicCore):
@@ -490,6 +491,7 @@ class SeleniumLibrary(DynamicCore):
             BrowserManagementKeywords(self),
             CookieKeywords(self),
             ElementKeywords(self),
+            ExpectedConditionKeywords(self),
             FormElementKeywords(self),
             FrameKeywords(self),
             JavaScriptKeywords(self),

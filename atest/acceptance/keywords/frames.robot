@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Documentation     Tests frames
 Test Setup        Go To Page "frames/frameset.html"
 Test Teardown     UnSelect Frame
