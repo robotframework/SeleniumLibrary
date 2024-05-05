@@ -1,6 +1,6 @@
 *** Settings ***
 Suite Teardown    Close All Browsers
-# Library           ../resources/testlibs/get_selenium_options.py
+Library           ../resources/testlibs/get_driver_path.py
 Resource          resource.robot
 # Force Tags        Known Issue Firefox    Known Issue Safari    Known Issue Internet Explorer
 Documentation     Creating test which would work on all browser is not possible.
@@ -9,45 +9,36 @@ Documentation     Creating test which would work on all browser is not possible.
 *** Test Cases ***
 Chrome Browser With Chrome Service As String
     [Documentation]
-    ...    LOG 1:14 DEBUG GLOB: *"goog:chromeOptions"*
-    # ...    LOG 1:14 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    service=executable_path=/usr/local/bin; port=9999
+    ...    LOG 2:2 DEBUG STARTS: Started executable:
+    ...    LOG 2:3 DEBUG GLOB:    POST*/session*
+    ${driver_path}=  Get Driver Path    Chrome
+    Open Browser    ${FRONT PAGE}    Chrome    remote_url=${REMOTE_URL}
+    ...    service=executable_path='${driver_path}'
  
 Chrome Browser With Chrome Service As String With service_args As List
-    [Documentation]
-    ...    LOG 1:14 DEBUG GLOB: *"goog:chromeOptions"*
-    ...    LOG 1:14 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
-    ...    LOG 1:14 DEBUG GLOB: *"--headless=new"*
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    service=service_args=['--append-log', '--readable-timestamp']; log_output='.'
+    Open Browser    ${FRONT PAGE}    Chrome    remote_url=${REMOTE_URL}
+    ...    service=service_args=['--append-log', '--readable-timestamp']; log_output='${OUTPUT_DIR}/chromedriverlog.txt'
+    File Should Exist    ${OUTPUT_DIR}/chromedriverlog.txt
+    # ...    service=service_args=['--append-log', '--readable-timestamp']; log_output='./'
+    # ...    service=service_args=['--append-log', '--readable-timestamp']
 
-Chrome Browser With Selenium Options With Complex Object
-    [Tags]    NoGrid
+Firefox Browser With Firefox Service As String
     [Documentation]
-    ...    LOG 1:14 DEBUG GLOB: *"goog:chromeOptions"*
-    ...    LOG 1:14 DEBUG GLOB: *"mobileEmulation": {"deviceName": "Galaxy S5"*
-    ...    LOG 1:14 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    options=add_argument ( "--disable-dev-shm-usage" ) ; add_experimental_option( "mobileEmulation" , { 'deviceName' : 'Galaxy S5'})
- 
-Chrome Browser With Selenium Options Object
-    [Documentation]
-    ...    LOG 2:14 DEBUG GLOB: *"goog:chromeOptions"*
-    ...    LOG 2:14 DEBUG GLOB: *args": ["--disable-dev-shm-usage"?*
-    ${options} =    Get Chrome Options
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=${options}
- 
-Chrome Browser With Selenium Options Invalid Method
-    Run Keyword And Expect Error     AttributeError: 'Options' object has no attribute 'not_here_method'
-    ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=not_here_method("arg1")
+    ...    LOG 2:2 DEBUG STARTS: Started executable:
+    ...    LOG 2:3 DEBUG GLOB:    POST*/session*
+    ${driver_path}=  Get Driver Path    Firefox
+    Open Browser    ${FRONT PAGE}    Firefox    remote_url=${REMOTE_URL}
+    ...    service=executable_path='${driver_path}'
 
-
-Chrome Browser With Selenium Options Argument With Semicolon
-    [Documentation]
-    ...    LOG 1:14 DEBUG GLOB: *"goog:chromeOptions"*
-    ...    LOG 1:14 DEBUG GLOB: *["has;semicolon"*
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("has;semicolon")
+#Chrome Browser With Selenium Options Invalid Method
+#    Run Keyword And Expect Error     AttributeError: 'Options' object has no attribute 'not_here_method'
+#    ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+#    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=not_here_method("arg1")
+#
+#
+#Chrome Browser With Selenium Options Argument With Semicolon
+#    [Documentation]
+#    ...    LOG 1:14 DEBUG GLOB: *"goog:chromeOptions"*
+#    ...    LOG 1:14 DEBUG GLOB: *["has;semicolon"*
+#    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+#    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("has;semicolon")

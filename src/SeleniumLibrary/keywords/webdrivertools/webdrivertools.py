@@ -455,24 +455,6 @@ class SeleniumService:
     """
 
     """
-    # """        executable_path: str = DEFAULT_EXECUTABLE_PATH,
-    #     port: int = 0,
-    #     log_path: typing.Optional[str] = None,
-    #     service_args: typing.Optional[typing.List[str]] = None,
-    #     env: typing.Optional[typing.Mapping[str, str]] = None,
-    #     **kwargs,
-    #
-    #     executable_path = None, port, service_log_path, service_args, env
-#     """
-#     def create(self, browser,
-#         executable_path=None,
-#         port=0,
-#         service_log_path=None,
-#         service_args=None,
-#         env=None,
-#         start_error_message=None,    # chromium, chrome, edge
-#         quiet=False, reuse_service=False,   # safari
-#     ):
     def create(self, browser, service):
         if not service:
             return None
@@ -500,8 +482,7 @@ class SeleniumService:
         for item in self._split(service,';'):
             try:
                 attr, val = self._split(item, '=')
-                result[attr]=val
-                # result.append(self._parse_to_tokens(item))
+                result[attr]=ast.literal_eval(val)
             except (ValueError, SyntaxError):
                 raise ValueError(f'Unable to parse service: "{item}"')
         return result
@@ -511,76 +492,6 @@ class SeleniumService:
         # Throw error is used with remote .. "They cannot be used with a Remote WebDriver session." [ref doc]
         service = importlib.import_module(f"selenium.webdriver.{browser}.service")
         return service.Service
-
-    def _parse_to_tokens(self, item):
-        result = {}
-        index, method = self._get_arument_index(item)
-        if index == -1:
-            result[item] = []
-            return result
-        if method:
-            args_as_string = item[index + 1 : -1].strip()
-            if args_as_string:
-                args = ast.literal_eval(args_as_string)
-            else:
-                args = args_as_string
-            is_tuple = args_as_string.startswith("(")
-        else:
-            args_as_string = item[index + 1 :].strip()
-            args = ast.literal_eval(args_as_string)
-            is_tuple = args_as_string.startswith("(")
-        method_or_attribute = item[:index].strip()
-        result[method_or_attribute] = self._parse_arguments(args, is_tuple)
-        return result
-
-    def _old_parse_to_tokens(self, item):
-        result = {}
-        index, method = self._get_arument_index(item)
-        if index == -1:
-            result[item] = []
-            return result
-        if method:
-            args_as_string = item[index + 1 : -1].strip()
-            if args_as_string:
-                args = ast.literal_eval(args_as_string)
-            else:
-                args = args_as_string
-            is_tuple = args_as_string.startswith("(")
-        else:
-            args_as_string = item[index + 1 :].strip()
-            args = ast.literal_eval(args_as_string)
-            is_tuple = args_as_string.startswith("(")
-        method_or_attribute = item[:index].strip()
-        result[method_or_attribute] = self._parse_arguments(args, is_tuple)
-        return result
-
-    def _parse_arguments(self, argument, is_tuple=False):
-        if argument == "":
-            return []
-        if is_tuple:
-            return [argument]
-        if not is_tuple and isinstance(argument, tuple):
-            return list(argument)
-        return [argument]
-
-    def _get_arument_index(self, item):
-        if "=" not in item:
-            return item.find("("), True
-        if "(" not in item:
-            return item.find("="), False
-        index = min(item.find("("), item.find("="))
-        return index, item.find("(") == index
-
-    def _oldsplit(self, service):
-        split_service = []
-        start_position = 0
-        tokens = generate_tokens(StringIO(service).readline)
-        for toknum, tokval, tokpos, _, _ in tokens:
-            if toknum == token.OP and tokval == ";":
-                split_service.append(service[start_position : tokpos[1]].strip())
-                start_position = tokpos[1] + 1
-        split_service.append(service[start_position:])
-        return split_service
 
     def _split(self, service_or_attr, splittok):
         split_string = []
