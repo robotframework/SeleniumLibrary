@@ -64,7 +64,8 @@ Testing
 -------
 
 Make sure that adequate tests are executed before releases are created.
-See `<test/README.rst>`_ for details.
+For more information about unit tests see `<utest/README.rst>`_ or for
+acceptance tests see `<atest/README.rst>`_.
 
 Preparation
 -----------
