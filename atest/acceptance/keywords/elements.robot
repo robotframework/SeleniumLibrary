@@ -90,7 +90,7 @@ Get DOM Attribute
     Should Be Equal    ${id}    some_id
     # Test custom attribute
     ${existing_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-id
-    Should Be Equal    ${existing_custom_attr}    my_id    
+    Should Be Equal    ${existing_custom_attr}    my_id
     ${doesnotexist_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-doesnotexist
     Should Be Equal    ${doesnotexist_custom_attr}    ${None}
     # Get non existing DOM Attribute
@@ -156,7 +156,7 @@ Get Element Attribute And Element Attribute Value Should Be Should have same res
     Element Attribute Value Should Be  css=#second_div  class  ${attribute_value}
 
 Get Element Attribute Value Should Be Should Be Succesfull with non-ascii characters
-    Element Attribute Value Should Be  link=Link with Unicode äöüÄÖÜß  href  http://localhost:7000/html/index.html
+    Element Attribute Value Should Be  link=Link with Unicode äöüÄÖÜß  href  ${FRONT_PAGE}index.html
 
 Get Element Attribute Value Should Be Should Be Succesfull error and error messages
     Run Keyword And Expect Error
@@ -169,8 +169,8 @@ Get Element Attribute Value Should Be Should Be Succesfull error and error messa
     ...    Element with locator 'id=non_existing' not found.
     ...    Element Attribute Value Should Be  id=non_existing  href  http://non_existing.com
     Run Keyword And Expect Error
-    ...    Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html' (str) but its value was 'http://localhost:7000/html/index.html' (str).
-    ...    Element Attribute Value Should Be  link=Target opens in new window  href  http://localhost:7000/html/indéx.html
+    ...    Element 'link=Target opens in new window' attribute should have value '${FRONT_PAGE}indéx.html' (str) but its value was '${FRONT_PAGE}index.html' (str).
+    ...    Element Attribute Value Should Be  link=Target opens in new window  href  ${FRONT_PAGE}indéx.html
 
 Get Horizontal Position
     ${pos}=    Get Horizontal Position    link=Link
