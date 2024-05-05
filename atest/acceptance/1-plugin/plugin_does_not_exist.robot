@@ -1,5 +1,5 @@
 *** Variables ***
-${SERVER}=         localhost:7000
+${SERVER}=         localhost:${PORT}
 ${BROWSER}=        firefox
 ${REMOTE_URL}=     ${NONE}
 ${ROOT}=           http://${SERVER}/html
