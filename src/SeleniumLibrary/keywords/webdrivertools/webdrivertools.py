@@ -181,7 +181,7 @@ class WebDriverCreator:
             options = webdriver.ChromeOptions()
         options.add_argument('--headless=new')
         return self.create_chrome(
-            desired_capabilities, remote_url, options, service_log_path, executable_path
+            desired_capabilities, remote_url, options, service_log_path, executable_path, service
         )
 
     def _get_executable_path(self, webdriver):
@@ -200,6 +200,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="geckodriver",
+        service=None,
     ):
         profile = self._get_ff_profile(ff_profile_dir)
         if not options:
@@ -216,7 +217,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.firefox.service.Service)
         log_method = self._get_log_method(FirefoxService, service_log_path or self._geckodriver_log)
-        service = FirefoxService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = FirefoxService(executable_path=executable_path, **log_method)
         return webdriver.Firefox(
             options=options,
             service=service,
@@ -257,6 +259,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="geckodriver",
+        service=None,
     ):
         if not options:
             options = webdriver.FirefoxOptions()
@@ -268,6 +271,7 @@ class WebDriverCreator:
             options,
             service_log_path,
             executable_path,
+            service,
         )
 
     def create_ie(
@@ -277,6 +281,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="IEDriverServer.exe",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -285,7 +290,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.ie.service.Service)
         log_method = self._get_log_method(IeService, service_log_path)
-        service = IeService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = IeService(executable_path=executable_path, **log_method)
         return webdriver.Ie(
             options=options,
             service=service,
@@ -303,6 +309,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="msedgedriver",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -311,7 +318,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
         log_method = self._get_log_method(EdgeService, service_log_path)
-        service = EdgeService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = EdgeService(executable_path=executable_path, **log_method)
         return webdriver.Edge(
             options=options,
             service=service,
@@ -325,6 +333,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="/usr/bin/safaridriver",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -333,7 +342,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
         log_method = self._get_log_method(SafariService, service_log_path)
-        service = SafariService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = SafariService(executable_path=executable_path, **log_method)
         return webdriver.Safari(options=options, service=service)
 
     def _remote(self, remote_url, options):
