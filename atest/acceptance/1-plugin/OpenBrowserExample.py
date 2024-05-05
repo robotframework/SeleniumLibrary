@@ -24,6 +24,7 @@ class OpenBrowserExample(LibraryComponent):
         service_log_path=None,
         extra_dictionary=None,
         executable_path=None,
+        service=None,
     ):
         self._new_creator.extra_dictionary = extra_dictionary
         browser_manager = BrowserManagementKeywords(self.ctx)
@@ -37,7 +38,8 @@ class OpenBrowserExample(LibraryComponent):
             ff_profile_dir=ff_profile_dir,
             options=options,
             service_log_path=service_log_path,
-            executable_path=None,
+            executable_path=executable_path,
+            service=service,
         )
 
     def _make_driver(
@@ -49,6 +51,7 @@ class OpenBrowserExample(LibraryComponent):
         options=None,
         service_log_path=None,
         executable_path=None,
+        service=None,
     ):
         driver = self._new_creator.create_driver(
             browser=browser,
@@ -58,6 +61,7 @@ class OpenBrowserExample(LibraryComponent):
             options=options,
             service_log_path=service_log_path,
             executable_path=executable_path,
+            service=None,
         )
         driver.set_script_timeout(self.ctx.timeout)
         driver.implicitly_wait(self.ctx.implicit_wait)
@@ -76,6 +80,7 @@ class NewWebDriverCreator(WebDriverCreator):
         options=None,
         service_log_path=None,
         executable_path=None,
+        service=None,
     ):
         self.browser_names["seleniumwire"] = "seleniumwire"
         browser = self._normalise_browser_name(browser)
@@ -83,6 +88,7 @@ class NewWebDriverCreator(WebDriverCreator):
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
         service_log_path = self._get_log_path(service_log_path)
         options = self.selenium_options.create(self.browser_names.get(browser), options)
+        service = self.selenium_service.create(self.browser_names.get(browser), service)
         if service_log_path:
             logger.info("Browser driver log file created to: %s" % service_log_path)
             self._create_directory(service_log_path)
@@ -96,6 +102,7 @@ class NewWebDriverCreator(WebDriverCreator):
                 profile_dir,
                 options=options,
                 service_log_path=service_log_path,
+                service=service,
             )
         if creation_method == self.create_seleniumwire:
             return creation_method(
@@ -103,16 +110,18 @@ class NewWebDriverCreator(WebDriverCreator):
                 remote_url,
                 options=options,
                 service_log_path=service_log_path,
+                service=service,
             )
         return creation_method(
             desired_capabilities,
             remote_url,
             options=options,
             service_log_path=service_log_path,
+            service=service,
         )
 
     def create_seleniumwire(
-        self, desired_capabilities, remote_url, options=None, service_log_path=None
+        self, desired_capabilities, remote_url, options=None, service_log_path=None, service=None,
     ):
         logger.info(self.extra_dictionary)
         return webdriver.Chrome()
