@@ -1,3 +1,4 @@
 selenium >= 4.3.0
 robotframework >= 4.1.3
-robotframework-pythonlibcore >= 3.0.0
+robotframework-pythonlibcore >= 4.4.1
+click >= 8.1.7
