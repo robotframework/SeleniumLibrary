@@ -1,0 +1,6 @@
+Selenium service string splitting
+
+0) ["attribute='arg1'"]
+1) ["attribute='arg1'", "attribute='arg2'"]
+2) ["attribute=['arg1','arg2']", "attribute='arg3'"]
+3) ["attribute = 'arg1'", " attribute = 'arg2' "]
