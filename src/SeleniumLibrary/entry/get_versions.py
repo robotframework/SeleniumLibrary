@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from pathlib import Path
 import re
 import subprocess
@@ -37,12 +38,17 @@ def get_library_version() -> str:
     return re.search('\n__version__ = "(.*)"', data).group(1)
 
 
-def print_version(ctx, param, value):
+def get_version():
     """Display Python, Robot Framework, SeleniumLibrary and selenium versions"""
     python_version = (
         f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
     )
-    print(f"Used Python is: {sys.executable}\nVersion: {python_version}")
-    print(f'Robot Framework version: "{get_rf_version()}"')
-    print(f"Installed SeleniumLibrary version is: {get_library_version()}")
-    print(f"Installed selenium version is: {__version__}")
+    #print(f"Used Python is: {sys.executable}\nVersion: {python_version}")
+    #print(f'Robot Framework version: "{get_rf_version()}"')
+
+    return (
+        f"\nUsed Python is: {sys.executable}\n\tVersion: {python_version}\n"
+        f'Robot Framework version: "{get_rf_version()}\n"'
+        f"Installed SeleniumLibrary version is: {get_library_version()}\n"
+        f"Installed selenium version is: {__version__}\n"
+    )
