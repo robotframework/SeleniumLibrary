@@ -159,37 +159,44 @@ class BrowserManagementKeywords(LibraryComponent):
         options in two different formats: as a string and as Python object
         which is an instance of the Selenium options class.
 
-        The string format ...
+        The string format uses a Python like syntax to define Selenium options
+        methods or attributes.
+
+        Example when using
+        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
+        method:
+        | `Open Browser` | http://example.com | Chrome | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format.                    |
+        | `Open Browser` | None               | Chrome | options=binary_location="/path/to/binary";add_argument("remote-debugging-port=port")          | # Start Chomium-based application. |
+        | `Open Browser` | None               | Chrome | options=binary_location=r"C:\\\\path\\\\to\\\\binary"                                         | # Windows OS path escaping.        |
 
         ``options`` argument also supports receiving the Selenium
-        options as Python class instance. ...
+        options as Python class instance.
 
-        Optional ``service_log_path`` argument defines the name of the
-        file where to write the browser driver logs. If the
-        ``service_log_path``  argument contain a  marker ``{index}``, it
+        See the `Browser and Driver options` section for more details on how to use
+        the either the string format or Python object syntax with the ``options`` argument.
+
+        Optional ``service_log_path`` will be deprecated in the next release. Please
+        use the browser specific ``service`` attribute instead. The ``service_log_path``
+        argument defines the name of the file where to write the browser driver logs.
+        If the ``service_log_path``  argument contains a marker ``{index}``, it
         will be automatically replaced with unique running
         index preventing files to be overwritten. Indices start's from 1,
         and how they are represented can be customized using Python's
         [https://docs.python.org/3/library/string.html#format-string-syntax|
         format string syntax].
 
-        Optional ``executable_path`` argument defines the path to the driver
+        Optional ``executable_path``  will be deprecated in the next release. Please
+        use the `executable_path` and, if needed, `port` attribute on the ``service``
+        argument instead. The ``executable_path`` argument defines the path to the driver
         executable, example to a chromedriver or a geckodriver. If not defined
         it is assumed the executable is in the
         [https://en.wikipedia.org/wiki/PATH_(variable)|$PATH].
 
-        Example when using
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
-        method:
-        | `Open Browser` | http://example.com | Chrome | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format.                    |
-        |  ${options} =  |     Get Options    |        |                                                                                               | # Selenium options instance.       |
-        | `Open Browser` | http://example.com | Chrome | options=${options}                                                                            |                                    |
-        | `Open Browser` | None               | Chrome | options=binary_location="/path/to/binary";add_argument("remote-debugging-port=port")          | # Start Chomium-based application. |
-        | `Open Browser` | None               | Chrome | options=binary_location=r"C:\\\\path\\\\to\\\\binary"                                         | # Windows OS path escaping.        |
-
         Optional ``service`` argument allows for managing the local drivers
         as well as setting some browser specific settings like logging. Service
-        classes are not supported when ``remote_url`` argument is used.
+        classes are not supported when ``remote_url`` argument is used. See the
+        `Browser and Driver options` section for more details on how to use
+        the ``service`` argument.
 
         If the provided configuration options are not enough, it is possible
         to use `Create Webdriver` to customize browser initialization even

@@ -398,7 +398,7 @@ class SeleniumLibrary(DynamicCore):
     Example the ``options`` argument can be used to launch Chomium-based
     applications which utilize the
     [https://bitbucket.org/chromiumembedded/cef/wiki/UsingChromeDriver|Chromium Embedded Framework]
-    . To lauch Chomium-based application, use ``options`` to define
+    . To launch Chromium-based application, use ``options`` to define
     `binary_location` attribute and use `add_argument` method to define
     `remote-debugging-port` port for the application. Once the browser
     is opened, the test can interact with the embedded web-content of
