@@ -15,8 +15,10 @@
 # limitations under the License.
 from collections import namedtuple
 from datetime import timedelta
+import importlib
 from inspect import getdoc, isclass
-from typing import Optional, List
+from pathlib import Path
+from typing import Optional, List, Union
 
 from robot.api import logger
 from robot.errors import DataError
@@ -544,6 +546,46 @@ class SeleniumLibrary(DynamicCore):
     documentation for further details.
 
     Plugin API is new SeleniumLibrary 4.0
+
+    = Language =
+
+    SeleniumLibrary offers possibility to translte keyword names and documentation to new language. If language
+    is defined, SeleniumLibrary will search from
+    [https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path | module search path]
+    Python packages starting with `robotframework_seleniumlibrary_translation` by using
+    [https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/ | Python pluging API]. Library
+    is using naming convention to find Python plugins.
+
+    The package must implement single API call, ``get_language`` without any arguments. Method must return a
+    dictionary containing two keys: ``language`` and ``path``. The language key value defines which language
+    the package contains. Also value should match (case insentive) the library ``language`` import parameter.
+    The path parameter value should be full path to the translation file.
+
+    == Translation file ==
+
+    The file name or extension is not important, but data must be in [https://www.json.org/json-en.html | json]
+    format. The keys of json are the methods names, not the keyword names, which implements keywords. Value of
+    key is json object which contains two keys: ``name`` and ``doc``. The ``name`` key contains the keyword
+    translated name and `doc` contains translated documentation. Providing doc and name are optional, example
+    translation json file can only provide translations to keyword names or only to documentatin. But it is
+    always recomended to provide translation to both name and doc. Special key ``__intro__`` is for class level
+    documentation and ``__init__`` is for init level documentation. These special values ``name`` can not be
+    translated, instead ``name`` should be kept the same.
+
+    == Generating template translation file ==
+
+    Template translation file, with English language can be created by running:
+    `rfselib translation /path/to/translation.json` command. Command does not provide translations to other
+    languages, it only provides easy way to create full list keywords and their documentation in correct
+    format. It is also possible to add keywords from library plugins by providing `--plugings` arguments
+    to command. Example: `rfselib translation --plugings myplugin.SomePlugin /path/to/translation.json` The
+    genered json file contains `sha256` key, which constains the sha256 sum of the library documentation,
+    the sha256 sum is used by `rfselib translation --compare /path/to/translation.json` command, which compares
+    transation to to library and prints outs a table which tell if there are changes needed for translation file.
+
+    Example project for translation can be found from
+    [https://github.com/MarketSquare/robotframework-seleniumlibrary-translation-fi | robotframework-seleniumlibrary-translation-fi]
+    repository.
     """
 
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
@@ -559,6 +601,7 @@ class SeleniumLibrary(DynamicCore):
         event_firing_webdriver: Optional[str] = None,
         page_load_timeout=timedelta(minutes=5),
         action_chain_delay=timedelta(seconds=0.25),
+        language: Optional[str] = None,
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -581,6 +624,8 @@ class SeleniumLibrary(DynamicCore):
           Default value to wait for page load to complete until a timeout exception is raised.
         - ``action_chain_delay``:
           Default value for `ActionChains` delay to wait in between actions.
+        - ``language``:
+          Defines language which is used to translate keyword names and documentation.
         """
         self.timeout = _convert_timeout(timeout)
         self.implicit_wait = _convert_timeout(implicit_wait)
@@ -622,7 +667,8 @@ class SeleniumLibrary(DynamicCore):
             self._plugins = plugin_libs
             libraries = libraries + plugin_libs
         self._drivers = WebDriverCache()
-        DynamicCore.__init__(self, libraries)
+        translation_file = self._get_translation(language)
+        DynamicCore.__init__(self, libraries, translation_file)
 
     def run_keyword(self, name: str, args: tuple, kwargs: dict):
         try:
@@ -798,3 +844,23 @@ class SeleniumLibrary(DynamicCore):
         if is_string(screenshot_root_directory):
             if screenshot_root_directory.upper() == EMBED:
                 self.screenshot_root_directory = EMBED
+
+    @staticmethod
+    def _get_translation(language: Union[str, None]) -> Union[Path, None]:
+        if not language:
+            return None
+        discovered_plugins = {
+            name: importlib.import_module(name)
+            for _, name, _ in pkgutil.iter_modules()
+            if name.startswith("robotframework_seleniumlibrary_translation")
+        }
+        for plugin in discovered_plugins.values():
+            try:
+                data = plugin.get_language()
+            except AttributeError:
+                continue
+            if data.get("language", "").lower() == language.lower() and data.get(
+                "path"
+            ):
+                return Path(data.get("path")).absolute()
+        return None
