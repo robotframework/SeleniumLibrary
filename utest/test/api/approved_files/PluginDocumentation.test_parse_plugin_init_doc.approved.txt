@@ -19,3 +19,5 @@ SeleniumLibrary can be imported with several optional arguments.
   Default value to wait for page load to complete until a timeout exception is raised.
 - ``action_chain_delay``:
   Default value for `ActionChains` delay to wait in between actions.
+- ``language``:
+  Defines language which is used to translate keyword names and documentation.
