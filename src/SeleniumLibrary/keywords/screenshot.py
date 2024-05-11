@@ -27,6 +27,7 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
 EMBED = "EMBED"
+DEFAULT_FILENAME_PDF = "selenium-page-{index}.pdf"
 
 
 class ScreenshotKeywords(LibraryComponent):
@@ -249,6 +250,7 @@ class ScreenshotKeywords(LibraryComponent):
     #         print_options = PrintOptions()
     #         print_options.page_ranges = ['-']
     def print_page_as_pdf(self,
+                            filename :str = DEFAULT_FILENAME_PDF,
                             background=None,
                             margin_bottom=None,
                             margin_left=None,
@@ -260,7 +262,7 @@ class ScreenshotKeywords(LibraryComponent):
                             page_width=None,
                             scale=None,
 	                        shrink_to_fit=None,
-                            path_to_file=None,
+                            # path_to_file=None,
                          ):
         """ Print the current page as a PDF
 
@@ -280,25 +282,67 @@ class ScreenshotKeywords(LibraryComponent):
         The default ``scale`` is `1`. ``scale`` must be greater than or equal to `0.1` and
         less than or equal to `2`.
 
-        ``background`` and ``scale_to_fite`` can be either `${True}` or `${False}`..
+        ``background`` and ``scale_to_fit`` can be either `${True}` or `${False}`..
 
-        If all print options are None then a pdf will failed to print silently.s
+        If all print options are None then a pdf will fail to print silently.
         """
 
         print_options = PrintOptions()
-        print_options.background = background
-        print_options.margin_bottom = margin_bottom
-        print_options.margin_left = margin_left
-        print_options.margin_right = margin_right
-        print_options.margin_top = margin_top
-        print_options.orientation = orientation
-        print_options.page_height = page_height
-        print_options.page_ranges = page_ranges
-        print_options.page_width = page_width
-        print_options.scale = scale
-        print_options.shrink_to_fit = shrink_to_fit
+        if background is not None:
+            print_options.background =  background
+        if margin_bottom is not None:
+            print_options.margin_bottom = margin_bottom
+        if margin_left is not None:
+            print_options.margin_left = margin_left
+        if margin_right is not None:
+            print_options.margin_right = margin_right
+        if margin_top is not None:
+            print_options.margin_top = margin_top
+        if orientation is not None:
+            print_options.orientation = orientation
+        if page_height is not None:
+            print_options.page_height = page_height
+        if page_ranges is not None:
+            print_options.page_ranges = page_ranges
+        if page_width is not None:
+            print_options.page_width = page_width
+        if scale is not None:
+            print_options.scale = scale
+        if shrink_to_fit is not None:
+            print_options.shrink_to_fit = shrink_to_fit
 
-        base64code  = self.driver.print_page(print_options)
-        pdfdata = b64decode(base64code)
-        with open('test.pdf', mode='wb') as pdf:
+        # base64code  = self.driver.print_page(print_options)
+        # pdfdata = b64decode(base64code)
+        # with open('test.pdf', mode='wb') as pdf:
+        #     pdf.write(pdfdata)
+
+        if not self.drivers.current:
+            self.info("Cannot print page to pdf because no browser is open.")
+            return
+        return self._print_page_as_pdf_to_file(filename, print_options)
+
+    def _print_page_as_pdf_to_file(self, filename, options):
+        path = self._get_screenshot_path(filename)
+        self._create_directory(path)
+        pdfdata = self.driver.print_page(options)
+        if not pdfdata:
+            raise RuntimeError(f"Failed to print page.")
+        self._save_pdf_to_file(pdfdata, path)
+        return path
+
+    def _save_pdf_to_file(self, pdfbase64, path):
+        pdfdata = b64decode(pdfbase64)
+        with open(path, mode='wb') as pdf:
             pdf.write(pdfdata)
+
+    def _get_pdf_path(self, filename):
+        directory = self.log_dir
+        filename = filename.replace("/", os.sep)
+        index = 0
+        while True:
+            index += 1
+            formatted = _format_path(filename, index)
+            path = os.path.join(directory, formatted)
+            # filename didn't contain {index} or unique path was found
+            if formatted == filename or not os.path.exists(path):
+                return path
