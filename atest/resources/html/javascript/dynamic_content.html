@@ -10,10 +10,17 @@
 			container = document.getElementById(target_container);
 			container.appendChild(p);
 		}
+
+		function delayed_title_change() {
+			setTimeout(function(){
+				document.title='Delayed';
+			},600);
+		}
 		</script>
 	</head>
 	<body>
 		<a href="javascript:return false;" onclick="document.title='Changed'; return false;">change title</a><br/>
+		<a href="javascript:return false;" onclick="delayed_title_change(); return false;">delayed change title</a><br/>
 		<a href="javascript:return false;" onclick="add_content('target', 'added content'); return false;">add content</a><br/>
 		<a id="unicode" href="javascript:return false;" onclick="document.title='äää'; return false;">title to ääää</a><br/>
 		<p>

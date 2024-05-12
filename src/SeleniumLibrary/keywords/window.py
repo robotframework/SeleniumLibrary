@@ -187,6 +187,11 @@ class WindowKeywords(LibraryComponent):
         self.driver.maximize_window()
 
     @keyword
+    def minimize_browser_window(self):
+        """Minimizes current browser window."""
+        self.driver.minimize_window()
+
+    @keyword
     def get_window_size(self, inner: bool = False) -> Tuple[float, float]:
         """Returns current window width and height as integers.
 

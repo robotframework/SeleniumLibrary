@@ -52,6 +52,8 @@ import tempfile
 
 from robot import rebot_cli
 from robot import __version__ as robot_version
+from selenium import __version__ as selenium_version
+from selenium.webdriver.common.utils import free_port
 from robot.utils import is_truthy
 
 try:
@@ -106,10 +108,12 @@ def acceptance_tests(
     if os.path.exists(RESULTS_DIR):
         shutil.rmtree(RESULTS_DIR)
     os.mkdir(RESULTS_DIR)
+    port = free_port()
+    print(f"Using port: {port}")
     if grid:
         hub, node = start_grid()
-    with http_server(interpreter):
-        execute_tests(interpreter, browser, rf_options, grid, event_firing)
+    with http_server(interpreter, port):
+        execute_tests(interpreter, browser, rf_options, grid, event_firing, port)
     failures = process_output(browser)
     if failures:
         print(
@@ -177,23 +181,23 @@ def _grid_status(status=False, role="hub"):
 
 
 @contextmanager
-def http_server(interpreter):
+def http_server(interpreter, port:int):
     serverlog = open(os.path.join(RESULTS_DIR, "serverlog.txt"), "w")
     interpreter = "python" if not interpreter else interpreter
     process = subprocess.Popen(
-        [interpreter, HTTP_SERVER_FILE, "start"],
+        [interpreter, HTTP_SERVER_FILE, "start", "--port", str(port)],
         stdout=serverlog,
         stderr=subprocess.STDOUT,
     )
     try:
         yield
     finally:
-        subprocess.call([interpreter, HTTP_SERVER_FILE, "stop"])
+        subprocess.call([interpreter, HTTP_SERVER_FILE, "stop", "--port", str(port)])
         process.wait()
         serverlog.close()
 
 
-def execute_tests(interpreter, browser, rf_options, grid, event_firing):
+def execute_tests(interpreter, browser, rf_options, grid, event_firing, port):
     options = []
     if grid:
         runner = interpreter.split() + [
@@ -203,7 +207,11 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing):
             "2",
         ]
     else:
-        runner = interpreter.split() + ["-m", "robot.run"]
+        runner = interpreter.split() + ["-m", "robot.run", "--variable", f"PORT:{port}"]
+    if platform.system() == "Darwin":
+        runner.append("--exclude")
+        runner.append("SKIP_ON_MAC")
+
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
@@ -251,15 +259,15 @@ def process_output(browser):
         return exit.code
 
 
-def create_zip():
+def create_zip(browser = None):
     if os.path.exists(ZIP_DIR):
         shutil.rmtree(ZIP_DIR)
     os.mkdir(ZIP_DIR)
     python_version = platform.python_version()
-    zip_name = f"rf-{robot_version}-python-{python_version}.zip"
+    zip_name = f"rf-{robot_version}-python-{python_version}-selenium-{selenium_version}-{browser}.zip"
     zip_path = os.path.join(ZIP_DIR, zip_name)
     print("Zip created in: %s" % zip_path)
-    zip_file = zipfile.ZipFile(zip_path, "w")
+    zip_file = zipfile.ZipFile(zip_path, "a")
     for root, dirs, files in os.walk(RESULTS_DIR):
         for file in files:
             file_path = os.path.join(root, file)
@@ -326,5 +334,5 @@ if __name__ == "__main__":
         interpreter, browser, rf_options, selenium_grid, event_firing_webdriver
     )
     if args.zip:
-        create_zip()
+        create_zip(browser)
     sys.exit(failures)

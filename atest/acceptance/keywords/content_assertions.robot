@@ -33,7 +33,7 @@ Page Should Contain Using Default Custom Log Level
     ...    'TRACE' - noting the excluded second argument for the `Page Should Contain`
     ...    keyword) fails and the log contains the html content.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 2:19 TRACE REGEXP: (?i)<html.*</html>
+    ...    LOG 2:19 TRACE REGEXP: <html.*</html>
     ...    LOG 2:20 FAIL Page should have contained text 'non existing text' but did not.
     ${old_level}=  Set Log Level    TRACE
     Page Should Contain    non existing text
@@ -53,7 +53,7 @@ Page Should Contain With Custom Log Level INFO
     [Tags]    NoGrid
     [Documentation]    Html content is shown at the explicitly specified INFO level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 1:18 INFO REGEXP: (?i)<html.*</html>
+    ...    LOG 1:18 INFO REGEXP: <html.*</html>
     ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    non existing text    INFO
 
@@ -61,7 +61,7 @@ Page Should Contain With Custom Log Level WARN
     [Tags]    NoGrid
     [Documentation]    Html content is shown at the explicitly specified WARN level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 1:18 WARN REGEXP: (?i)<html.*</html>
+    ...    LOG 1:18 WARN REGEXP: <html.*</html>
     ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    non existing text    WARN
 
@@ -69,7 +69,7 @@ Page Should Contain With Custom Log Level DEBUG
     [Tags]    NoGrid
     [Documentation]    Html content is shown at the explicitly specified DEBUG level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 1:18 DEBUG REGEXP: (?i)<html.*</html>
+    ...    LOG 1:18 DEBUG REGEXP: <html.*</html>
     ...    LOG 1:19 FAIL Page should have contained text 'non existing text' but did not.
     Page Should Contain    non existing text    DEBUG
 
@@ -77,7 +77,7 @@ Page Should Contain With Custom Log Level TRACE
     [Tags]    NoGrid
     [Documentation]    Html content is shown at the explicitly specified TRACE level.
     ...    FAIL Page should have contained text 'non existing text' but did not.
-    ...    LOG 2:19 TRACE REGEXP: (?i)<html.*</html>
+    ...    LOG 2:19 TRACE REGEXP: <html.*</html>
     ...    LOG 2:20 FAIL Page should have contained text 'non existing text' but did not.
     Set Log Level    TRACE
     Page Should Contain    non existing text    TRACE
@@ -122,7 +122,7 @@ Page Should Not Contain
 
 Page Should Not Contain With Custom Log Level
     [Tags]    NoGrid
-    [Documentation]    LOG 1.1:13 DEBUG REGEXP: (?i)<html.*</html>
+    [Documentation]    LOG 1.1:13 DEBUG REGEXP: <html.*</html>
     Run Keyword And Expect Error
     ...    Page should not have contained text 'needle'.
     ...    Page Should Not Contain    needle    DEBUG

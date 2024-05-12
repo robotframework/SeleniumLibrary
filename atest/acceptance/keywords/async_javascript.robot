@@ -19,6 +19,14 @@ Execute Async Javascript With ARGUMENTS and JAVASCRIPT Marker
     ...  alert(arguments[0]);
     Alert Should Be Present    123    timeout=10 s
 
+Execute Javascript with dictionary object
+    &{ARGS}=            Create Dictionary     key=value    number=${1}    boolean=${TRUE}
+    ${returned}    Execute Async Javascript      arguments[1](arguments[0]);    ARGUMENTS    ${ARGS}
+    Should Be True    type($returned) == dict
+    Should Be Equal    ${returned}[key]    value
+    Should Be Equal    ${returned}[number]    ${1}
+    Should Be Equal    ${returned}[boolean]    ${TRUE}
+
 Should Be Able To Return Javascript Primitives From Async Scripts Neither None Nor Undefined
     ${result} =    Execute Async Javascript    arguments[arguments.length - 1](123);
     Should Be Equal    ${result}    ${123}

@@ -227,54 +227,6 @@ def test_create_safari_executable_path_not_set(creator):
     assert driver == expected_webdriver
 
 
-def test_create_htmlunit_executable_path_set(creator):
-    executable_path = "path/to/bin"
-    caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_htmlunit_with_js_executable_path_set(creator):
-    executable_path = "path/to/bin"
-    caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit_with_js({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
-def test_create_iphone_executable_path_set(creator):
-    executable_path = "path/to/bin"
-    caps = webdriver.DesiredCapabilities.IPHONE.copy()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_iphone({}, None, executable_path=executable_path)
-    assert driver == expected_webdriver
-
-
 def test_open_browser_executable_path_set(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(

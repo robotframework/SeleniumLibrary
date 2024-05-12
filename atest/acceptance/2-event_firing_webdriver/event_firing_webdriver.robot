@@ -1,8 +1,8 @@
 *** Settings ***
 Library           SeleniumLibrary    event_firing_webdriver=${CURDIR}/../../resources/testlibs/MyListener.py
 Resource          resource_event_firing_webdriver.robot
-Suite Setup       Open Browser    ${FRONT PAGE}    ${BROWSER}    alias=event_firing_webdriver
-...                   remote_url=${REMOTE_URL}    desired_capabilities=${DESIRED_CAPABILITIES}
+Suite Setup       Open Browser    ${FRONT_PAGE}    ${BROWSER}    alias=event_firing_webdriver
+...                   remote_url=${REMOTE_URL}
 Suite Teardown    Close All Browsers
 
 *** Variables ***
@@ -12,10 +12,9 @@ ${event_firing_or_none}     ${NONE}
 Open Browser To Start Page
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 1:37 DEBUG  Wrapping driver to event_firing_webdriver.
-    ...    LOG 1:39 INFO  Got driver also from SeleniumLibrary.
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}
+    ...    LOG 1:31 DEBUG  Wrapping driver to event_firing_webdriver.
+    ...    LOG 1:33 INFO  Got driver also from SeleniumLibrary.
+    Open Browser    ${FRONT_PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
 
 Event Firing Webdriver Go To (WebDriver)
     [Tags]    NoGrid

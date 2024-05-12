@@ -35,6 +35,7 @@ from SeleniumLibrary.keywords import (
     BrowserManagementKeywords,
     CookieKeywords,
     ElementKeywords,
+    ExpectedConditionKeywords,
     FormElementKeywords,
     FrameKeywords,
     JavaScriptKeywords,
@@ -51,7 +52,7 @@ from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
 
-__version__ = "6.2.0.dev1"
+__version__ = "6.4.0.dev1"
 
 
 class SeleniumLibrary(DynamicCore):
@@ -356,7 +357,8 @@ class SeleniumLibrary(DynamicCore):
     See `time format` below for supported syntax.
 
     == Page load ==
-    Page load timeout is the amount of time to wait for page load to complete until error is raised.
+    Page load timeout is the amount of time to wait for page load to complete
+    until a timeout exception is raised.
 
     The default page load timeout can be set globally
     when `importing` the library with the ``page_load_timeout`` argument
@@ -467,7 +469,7 @@ class SeleniumLibrary(DynamicCore):
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
         - ``page_load_timeout``:
-          Default value to wait for page load to complete until error is raised.
+          Default value to wait for page load to complete until a timeout exception is raised.
         - ``action_chain_delay``:
           Default value for `ActionChains` delay to wait in between actions.
         """
@@ -489,6 +491,7 @@ class SeleniumLibrary(DynamicCore):
             BrowserManagementKeywords(self),
             CookieKeywords(self),
             ElementKeywords(self),
+            ExpectedConditionKeywords(self),
             FormElementKeywords(self),
             FrameKeywords(self),
             JavaScriptKeywords(self),

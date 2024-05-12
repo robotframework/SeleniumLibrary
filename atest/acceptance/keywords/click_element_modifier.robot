@@ -5,19 +5,23 @@ Resource          ../resource.robot
 
 *** Test Cases ***
 Click Element Modifier CTRL
+    [Tags]   SKIP_ON_MAC
     Click Element    Button    modifier=CTRL
     Element Text Should Be    output    CTRL click
 
 Click Link Modifier CTRL
+    [Tags]   SKIP_ON_MAC
     Click Link    link text    modifier=CTRL
     Element Text Should Be    output    CTRL click
     [Teardown]    Close Popup Window
 
 Click Button Modifier CTRL
+    [Tags]   SKIP_ON_MAC
     Click Button    Click me!    modifier=CTRL
     Element Text Should Be    output    CTRL click
 
 Click Image Modifier CTRL
+    [Tags]   SKIP_ON_MAC
     Click Image    robot    modifier=CTRL
     Element Text Should Be    output    CTRL click
 
@@ -46,7 +50,7 @@ Click Element Action Chain and modifier
     [Documentation]     LOG 1:1 INFO Clicking element 'Button' with CTRL.
     Click Element    Button    modifier=CTRL    action_chain=True
     Element Text Should Be    output    CTRL click
-    
+
 *** Keywords ***
 Initialize Page
     Reload Page

@@ -2,7 +2,7 @@
 Library    SeleniumLibrary    plugins=${CURDIR}/OpenBrowserExample.py
 
 *** Variables ***
-${SERVER}=         localhost:7000
+${SERVER}=         localhost:${PORT}
 ${ROOT}=           http://${SERVER}/html
 &{EXTRA DICTIONARY}    extra=dictionary    key=value
 

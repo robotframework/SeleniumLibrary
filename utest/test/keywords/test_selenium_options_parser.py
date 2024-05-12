@@ -161,16 +161,6 @@ def test_options_create(options, reporter):
 
 
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
-def test_create_with_android(options, reporter):
-    results = []
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_experimental_option("androidPackage", "com.android.chrome")
-    sel_options = options.create("android", chrome_options)
-    results.append([sel_options.arguments, sel_options.experimental_options])
-    verify_all("Selenium options with android", results, reporter=reporter)
-
-
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_get_options(options, reporter):
     options_str = 'add_argument("--proxy-server=66.97.38.58:80")'
     sel_options = options.create("chrome", options_str)
@@ -188,9 +178,6 @@ def test_importer(options, reporter):
     results.append(options._import_options("ie"))
     results.append(options._import_options("edge"))
     results.append(error_formatter(options._import_options, "safari"))
-    results.append(error_formatter(options._import_options, "htmlunit"))
-    results.append(error_formatter(options._import_options, "htmlunit_with_js"))
-    results.append(error_formatter(options._import_options, "iphone"))
     verify_all("Selenium options import", results, reporter=reporter)
 
 
@@ -367,56 +354,6 @@ def test_has_options(creator):
 #     )
 #     driver = creator.create_safari({}, None, options=options)
 #     assert driver == expected_webdriver
-
-
-def test_create_htmlunit_no_options_support(creator):
-    # caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        # desired_capabilities=caps,
-        # browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit(
-        {}, None, options=options
-    )
-    assert driver == expected_webdriver
-
-
-def test_create_htmlunit_with_js_no_options_support(creator):
-    # caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        # desired_capabilities=caps,
-        # browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit_with_js({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_iphone_options_support(creator):
-    # caps = webdriver.DesiredCapabilities.IPHONE.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        # desired_capabilities=caps,
-        # browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_iphone({}, None, options=options)
-    assert driver == expected_webdriver
 
 
 def test_create_driver_chrome(creator):

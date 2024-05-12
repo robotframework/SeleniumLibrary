@@ -53,11 +53,6 @@ class WebDriverCreator:
         "internetexplorer": "ie",
         "edge": "edge",
         "safari": "safari",
-        "phantomjs": "phantomjs",
-        "htmlunit": "htmlunit",
-        "htmlunitwithjs": "htmlunit_with_js",
-        "android": "android",
-        "iphone": "iphone",
     }
 
     def __init__(self, log_dir):
@@ -136,6 +131,16 @@ class WebDriverCreator:
             caps["browserName"] = default_capabilities["browserName"]
         return {"desired_capabilities": caps}
 
+    def _get_log_method(self, service_cls, service_log_path):
+        # -- temporary fix to transition selenium to v4.13 from v4.11 and prior
+        from inspect import signature
+        sig = signature(service_cls)
+        if 'log_output' in str(sig):
+            return {'log_output': service_log_path}
+        else:
+            return {'log_path': service_log_path}
+        # --
+
     def create_chrome(
         self,
         desired_capabilities,
@@ -145,14 +150,13 @@ class WebDriverCreator:
         executable_path="chromedriver",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.CHROME.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
+            if not options:
+                options = webdriver.ChromeOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.chrome.service.Service)
-        service = ChromeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(ChromeService, service_log_path)
+        service = ChromeService(executable_path=executable_path, **log_method)
         return webdriver.Chrome(
             options=options,
             service=service,
@@ -168,7 +172,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.ChromeOptions()
-        options.headless = True
+        options.add_argument('--headless=new')
         return self.create_chrome(
             desired_capabilities, remote_url, options, service_log_path, executable_path
         )
@@ -201,22 +205,14 @@ class WebDriverCreator:
         # as to attach the profile to it. If there a scenario in which we don't want to do this???
 
         if remote_url:
-            default_caps = webdriver.DesiredCapabilities.FIREFOX.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, default_caps
-            )
-            return self._remote(desired_capabilities, remote_url, profile, options)
-        service_log_path = (
-            service_log_path if service_log_path else self._geckodriver_log
-        )
+            return self._remote(remote_url, options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.firefox.service.Service)
-        service = FirefoxService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(FirefoxService, service_log_path or self._geckodriver_log)
+        service = FirefoxService(executable_path=executable_path, **log_method)
         return webdriver.Firefox(
             options=options,
-            #firefox_profile=profile,  # need to move
             service=service,
-            #**desired_capabilities,
         )
 
     def _get_ff_profile(self, ff_profile_dir):
@@ -237,7 +233,7 @@ class WebDriverCreator:
                     else:
                         setattr(ff_profile, key, *option[key])
             return ff_profile
-    
+
     @property
     def _geckodriver_log(self):
         log_file = self._get_log_path(
@@ -257,7 +253,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.FirefoxOptions()
-        options.headless = True
+        options.add_argument('-headless')
         return self.create_firefox(
             desired_capabilities,
             remote_url,
@@ -276,14 +272,13 @@ class WebDriverCreator:
         executable_path="IEDriverServer.exe",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url, options=options)
+            if not options:
+                options = webdriver.IeOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.ie.service.Service)
-        service = IeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(IeService, service_log_path)
+        service = IeService(executable_path=executable_path, **log_method)
         return webdriver.Ie(
             options=options,
             service=service,
@@ -303,14 +298,13 @@ class WebDriverCreator:
         executable_path="msedgedriver",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.EDGE.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url)
+            if not options:
+                options = webdriver.EdgeOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
-        service = EdgeService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(EdgeService, service_log_path)
+        service = EdgeService(executable_path=executable_path, **log_method)
         return webdriver.Edge(
             options=options,
             service=service,
@@ -326,125 +320,22 @@ class WebDriverCreator:
         executable_path="/usr/bin/safaridriver",
     ):
         if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.SAFARI.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url)
+            if not options:
+                options = webdriver.SafariOptions()
+            return self._remote(remote_url, options=options)
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
-        service = SafariService(executable_path=executable_path, log_path=service_log_path)
+        log_method = self._get_log_method(SafariService, service_log_path)
+        service = SafariService(executable_path=executable_path, **log_method)
         return webdriver.Safari(options=options, service=service)
 
-    def create_phantomjs(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path="phantomjs",
-    ):
-        warnings.warn(
-            "SeleniumLibrary support for PhantomJS has been deprecated, "
-            "please use headlesschrome or headlessfirefox instead."
-        )
-        if remote_url:
-            defaul_caps = webdriver.DesiredCapabilities.PHANTOMJS.copy()
-            desired_capabilities = self._remote_capabilities_resolver(
-                desired_capabilities, defaul_caps
-            )
-            return self._remote(desired_capabilities, remote_url)
-        if options:
-            logger.warn("PhantomJS browser does not support Selenium options.")
-        if not executable_path:
-            executable_path = self._get_executable_path(webdriver.PhantomJS)
-        return webdriver.PhantomJS(
-            service_log_path=service_log_path,
-            executable_path=executable_path,
-            **desired_capabilities,
-        )
-
-    def create_htmlunit(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or options or executable_path:
-            logger.warn(
-                "Htmlunit does not support Selenium options, service_log_path or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def create_htmlunit_with_js(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or options or executable_path:
-            logger.warn(
-                "Htmlunit with JS does not support Selenium options, service_log_path or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def create_android(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or executable_path:
-            logger.warn(
-                "Android does not support Selenium options or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.ANDROID.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def create_iphone(
-        self,
-        desired_capabilities,
-        remote_url,
-        options=None,
-        service_log_path=None,
-        executable_path=None,
-    ):
-        if service_log_path or executable_path:
-            logger.warn(
-                "iPhone does not support service_log_path or executable_path argument."
-            )
-        defaul_caps = webdriver.DesiredCapabilities.IPHONE.copy()
-        desired_capabilities = self._remote_capabilities_resolver(
-            desired_capabilities, defaul_caps
-        )
-        return self._remote(desired_capabilities, remote_url, options=options)
-
-    def _remote(self, desired_capabilities, remote_url, profile_dir=None, options=None):
+    def _remote(self, remote_url, options):
         remote_url = str(remote_url)
         file_detector = self._get_sl_file_detector()
         return webdriver.Remote(
             command_executor=remote_url,
-            # browser_profile=profile_dir,
             options=options,
             file_detector=file_detector,
-            # **desired_capabilities,
         )
 
     def _get_sl_file_detector(self):
@@ -612,6 +503,9 @@ class SeleniumOptions:
         selenium_options = selenium_options()
         for option in options:
             for key in option:
+                if key == '' and option[key]==[]:
+                    logger.warn('Empty selenium option found and ignored. Suggested you review options passed to `Open Browser` keyword')
+                    continue
                 attr = getattr(selenium_options, key)
                 if callable(attr):
                     attr(*option[key])
@@ -620,8 +514,6 @@ class SeleniumOptions:
         return selenium_options
 
     def _import_options(self, browser):
-        if browser == "android":
-            browser = "chrome"  # Android uses ChromeOptions()
         browser = browser.replace("headless_", "", 1)
         options = importlib.import_module(f"selenium.webdriver.{browser}.options")
         return options.Options
@@ -677,9 +569,12 @@ class SeleniumOptions:
         split_options = []
         start_position = 0
         tokens = generate_tokens(StringIO(options).readline)
-        for toknum, tokval, tokpos, _, _ in tokens:
-            if toknum == token.OP and tokval == ";":
+        for toktype, tokval, tokpos, _, _ in tokens:
+            if toktype == token.OP and tokval == ";":
                 split_options.append(options[start_position : tokpos[1]].strip())
                 start_position = tokpos[1] + 1
-        split_options.append(options[start_position:])
+            # Handles trailing semicolon
+            # !! Note: If multiline options allowed this splitter might fail !!
+            if toktype == token.NEWLINE and start_position != tokpos[1]:
+                split_options.append(options[start_position : tokpos[1]].strip())
         return split_options
