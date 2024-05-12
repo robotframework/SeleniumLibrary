@@ -240,15 +240,6 @@ class ScreenshotKeywords(LibraryComponent):
         )
     
     @keyword
-    # def print_page_as_pdf(self, print_options: Optional[PrintOptions]=None,):
-    # def print_page_as_pdf(self, print_options: Optional[Union[PrintOptions, dict]]=None):
-    # def print_page_as_pdf(self, print_options: Union[PrintOptions, dict, None]=None):
-    #     """ Print the current page as a PDF
-    #
-    #     """
-    #     if not print_options:
-    #         print_options = PrintOptions()
-    #         print_options.page_ranges = ['-']
     def print_page_as_pdf(self,
                             filename: str = DEFAULT_FILENAME_PDF,
                             background: Optional[bool]  = None,
@@ -313,11 +304,6 @@ class ScreenshotKeywords(LibraryComponent):
             print_options.scale = scale
         if shrink_to_fit is not None:
             print_options.shrink_to_fit = shrink_to_fit
-
-        # base64code  = self.driver.print_page(print_options)
-        # pdfdata = b64decode(base64code)
-        # with open('test.pdf', mode='wb') as pdf:
-        #     pdf.write(pdfdata)
 
         if not self.drivers.current:
             self.info("Cannot print page to pdf because no browser is open.")
