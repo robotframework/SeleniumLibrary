@@ -19,7 +19,7 @@ from base64 import b64decode
 
 from robot.utils import get_link_path
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.common.print_page_options import PrintOptions
+from selenium.webdriver.common.print_page_options import PrintOptions, Orientation
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
@@ -250,18 +250,18 @@ class ScreenshotKeywords(LibraryComponent):
     #         print_options = PrintOptions()
     #         print_options.page_ranges = ['-']
     def print_page_as_pdf(self,
-                            filename :str = DEFAULT_FILENAME_PDF,
-                            background=None,
-                            margin_bottom=None,
-                            margin_left=None,
-                            margin_right=None,
-                            margin_top=None,
-                            orientation=None,
-	                        page_height=None,
-                            page_ranges=['-'],
-                            page_width=None,
-                            scale=None,
-	                        shrink_to_fit=None,
+                            filename: str = DEFAULT_FILENAME_PDF,
+                            background: Optional[bool]  = None,
+                            margin_bottom: Optional[float] = None,
+                            margin_left: Optional[float] = None,
+                            margin_right: Optional[float] = None,
+                            margin_top: Optional[float] = None,
+                            orientation: Optional[Orientation] = None,
+	                        page_height: Optional[float] = None,
+                            page_ranges: Optional[list]  = None,
+                            page_width: Optional[float] = None,
+                            scale: Optional[float] = None,
+	                        shrink_to_fit: Optional[bool]  = None,
                             # path_to_file=None,
                          ):
         """ Print the current page as a PDF
@@ -286,6 +286,9 @@ class ScreenshotKeywords(LibraryComponent):
 
         If all print options are None then a pdf will fail to print silently.
         """
+
+        if page_ranges is None:
+            page_ranges = ['-']
 
         print_options = PrintOptions()
         if background is not None:
@@ -322,7 +325,7 @@ class ScreenshotKeywords(LibraryComponent):
         return self._print_page_as_pdf_to_file(filename, print_options)
 
     def _print_page_as_pdf_to_file(self, filename, options):
-        path = self._get_screenshot_path(filename)
+        path = self._get_pdf_path(filename)
         self._create_directory(path)
         pdfdata = self.driver.print_page(options)
         if not pdfdata:
