@@ -264,10 +264,10 @@ contains the following items: https://robotframework.org/,
 https://robocon.io/, https://github.com/robotframework/'
 and 'https://github.com/.
 
-= Browser and Driver options =
+= Browser and Driver options and service class =
 
 This section talks about how to configure either the browser or
-the driver using the options ans service arguments of the `Open
+the driver using the options and service arguments of the `Open
 Browser` keyword.
 
 == Configuring the browser using the Selenium Options ==
@@ -345,6 +345,33 @@ applications which utilize the
 `remote-debugging-port` port for the application. Once the browser
 is opened, the test can interact with the embedded web-content of
 the system under test.
+
+== Configuring the driver using the Service class ==
+
+With the ``service`` argument, one can setup and configure the driver. For example
+one can set the driver location and/port or specify the command line arguments. There
+are several browser specific attributes related to logging as well. For the various
+Service Class attributes refer to
+[https://www.selenium.dev/documentation/webdriver/drivers/service/|the Selenium documentation]
+. Currently the ``service`` argument only accepts Selenium service in the string format.
+
+=== Service string format ===
+
+The string format allows for defining Selenium service attributes
+and their values in the `Open Browser` keyword. The attributes names
+are case and space sensitive and must match to the Selenium attributes
+names. Attributes are defined in a similar way as in Python: attribute
+name, equal sign, and attribute value. Example, `port=1234`. Multiple
+attributes must be separated by a semicolon. Example:
+`executable_path='/path/to/driver';port=1234`. Don't have duplicate
+attributes, like `service_args=['--append-log', '--readable-timestamp'];
+service_args=['--log-level=DEBUG']` as the second will override the first.
+Instead combine them as in
+`service_args=['--append-log', '--readable-timestamp', '--log-level=DEBUG']`
+
+Arguments allow defining Python data types and arguments are
+evaluated by using Python. Strings must be quoted with single
+or double quotes, example "value" or 'value'
 
 = Timeouts, waits, and delays =
 
