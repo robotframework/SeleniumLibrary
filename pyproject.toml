@@ -15,3 +15,9 @@ exclude = '''
 profile = "black"
 src_paths="."
 skip_glob = ["src/SeleniumLibrary/__init__.pyi"]
+
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
