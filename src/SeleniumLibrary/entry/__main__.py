@@ -41,6 +41,7 @@ def cli():
     """
     pass
 
+
 @cli.command()
 @click.argument(
     "filename",

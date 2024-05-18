@@ -33,9 +33,7 @@ MAX_REASON_LEN = max(
 )
 
 
-def get_library_translaton(
-    plugings: Optional[str] = None
-) -> dict:
+def get_library_translaton(plugings: Optional[str] = None) -> dict:
     from SeleniumLibrary import SeleniumLibrary
 
     selib = SeleniumLibrary(plugins=plugings)
