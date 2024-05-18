@@ -1,0 +1,5 @@
+Selenium service
+
+0) ['--log-level=DEBUG']
+1) ['--append-log', '--readable-timestamp']
+2) ['--disable-build-check']

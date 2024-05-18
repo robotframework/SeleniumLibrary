@@ -58,7 +58,7 @@ class WebDriverCreator:
     def __init__(self, log_dir):
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
-        #self.selenium_service = SeleniumService()
+        self.selenium_service = SeleniumService()
 
     def create_driver(
         self,
@@ -69,12 +69,14 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path=None,
+        service=None,
     ):
         browser = self._normalise_browser_name(browser)
         creation_method = self._get_creator_method(browser)
         desired_capabilities = self._parse_capabilities(desired_capabilities, browser)
         service_log_path = self._get_log_path(service_log_path)
         options = self.selenium_options.create(self.browser_names.get(browser), options)
+        service = self.selenium_service.create(self.browser_names.get(browser), service)
         if service_log_path:
             logger.info(f"Browser driver log file created to: {service_log_path}")
             self._create_directory(service_log_path)
@@ -89,6 +91,7 @@ class WebDriverCreator:
                 options=options,
                 service_log_path=service_log_path,
                 executable_path=executable_path,
+                service=service,
             )
         return creation_method(
             desired_capabilities,
@@ -96,6 +99,7 @@ class WebDriverCreator:
             options=options,
             service_log_path=service_log_path,
             executable_path=executable_path,
+            service=service,
         )
 
     def _get_creator_method(self, browser):
@@ -148,6 +152,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="chromedriver",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -156,7 +161,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.chrome.service.Service)
         log_method = self._get_log_method(ChromeService, service_log_path)
-        service = ChromeService(executable_path=executable_path, **log_method)
+        if not service:
+            service = ChromeService(executable_path=executable_path, **log_method)
         return webdriver.Chrome(
             options=options,
             service=service,
@@ -169,12 +175,13 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="chromedriver",
+        service=None,
     ):
         if not options:
             options = webdriver.ChromeOptions()
         options.add_argument('--headless=new')
         return self.create_chrome(
-            desired_capabilities, remote_url, options, service_log_path, executable_path
+            desired_capabilities, remote_url, options, service_log_path, executable_path, service
         )
 
     def _get_executable_path(self, webdriver):
@@ -193,6 +200,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="geckodriver",
+        service=None,
     ):
         profile = self._get_ff_profile(ff_profile_dir)
         if not options:
@@ -209,7 +217,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.firefox.service.Service)
         log_method = self._get_log_method(FirefoxService, service_log_path or self._geckodriver_log)
-        service = FirefoxService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = FirefoxService(executable_path=executable_path, **log_method)
         return webdriver.Firefox(
             options=options,
             service=service,
@@ -250,6 +259,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="geckodriver",
+        service=None,
     ):
         if not options:
             options = webdriver.FirefoxOptions()
@@ -261,6 +271,7 @@ class WebDriverCreator:
             options,
             service_log_path,
             executable_path,
+            service,
         )
 
     def create_ie(
@@ -270,6 +281,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="IEDriverServer.exe",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -278,7 +290,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.ie.service.Service)
         log_method = self._get_log_method(IeService, service_log_path)
-        service = IeService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = IeService(executable_path=executable_path, **log_method)
         return webdriver.Ie(
             options=options,
             service=service,
@@ -296,6 +309,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="msedgedriver",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -304,7 +318,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.edge.service.Service)
         log_method = self._get_log_method(EdgeService, service_log_path)
-        service = EdgeService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = EdgeService(executable_path=executable_path, **log_method)
         return webdriver.Edge(
             options=options,
             service=service,
@@ -318,6 +333,7 @@ class WebDriverCreator:
         options=None,
         service_log_path=None,
         executable_path="/usr/bin/safaridriver",
+        service=None,
     ):
         if remote_url:
             if not options:
@@ -326,7 +342,8 @@ class WebDriverCreator:
         if not executable_path:
             executable_path = self._get_executable_path(webdriver.Safari)
         log_method = self._get_log_method(SafariService, service_log_path)
-        service = SafariService(executable_path=executable_path, **log_method)
+        if service is None:
+            service = SafariService(executable_path=executable_path, **log_method)
         return webdriver.Safari(options=options, service=service)
 
     def _remote(self, remote_url, options):
@@ -444,53 +461,58 @@ class WebDriverCache(ConnectionCache):
         except ValueError:
             return None
 
-# Temporarily removing as not going to use with initial 4.10.0 hotfixq
-# class SeleniumService:
-#     """        executable_path: str = DEFAULT_EXECUTABLE_PATH,
-#         port: int = 0,
-#         log_path: typing.Optional[str] = None,
-#         service_args: typing.Optional[typing.List[str]] = None,
-#         env: typing.Optional[typing.Mapping[str, str]] = None,
-#         **kwargs,
+class SeleniumService:
+    """
 
-#         executable_path = None, port, service_log_path, service_args, env
-#     """
-#     def create(self, browser,
-#         executable_path=None,
-#         port=0,
-#         service_log_path=None,
-#         service_args=None,
-#         env=None,
-#         start_error_message=None,    # chromium, chrome, edge
-#         quiet=False, reuse_service=False,   # safari
-#     ):
-#         selenium_service = self._import_service(browser)
-#         # chrome, chromium, firefox, edge
-#         if any(chromium_based in browser.lower() for chromium_based in ('chromium', 'chrome', 'edge')):
-#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-#                                        service_args=service_args,env=env,start_error_message=start_error_message
-#             )
-#             return service
-#         elif 'safari' in browser.lower():
-#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-#                                        service_args=service_args,env=env,quiet=quiet,reuse_service=reuse_service
-#             )
-#             return service
-#         elif 'firefox' in browser.lower():
-#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-#                                        service_args=service_args,env=env
-#             )
-#             return service
-#         else:
-#             service = selenium_service(executable_path=executable_path, port=port,log_path=service_log_path,
-#                                        service_args=service_args,env=env
-#             )
-#             return service
+    """
+    def create(self, browser, service):
+        if not service:
+            return None
+        selenium_service = self._import_service(browser)
+        if not isinstance(service, str):
+            return service
 
-#     def _import_service(self, browser):
-#         browser = browser.replace("headless_", "", 1)
-#         service = importlib.import_module(f"selenium.webdriver.{browser}.service")
-#         return service.Service
+        # Throw error is used with remote .. "They cannot be used with a Remote WebDriver session." [ref doc]
+        attrs = self._parse(service)
+        # verify attribute a member of service class parameters
+        service_parameters = inspect.signature(selenium_service).parameters
+        for key in attrs:
+            if key not in service_parameters:
+                service_module = '.'.join((selenium_service.__module__, selenium_service.__qualname__))
+                raise ValueError(f"{key} is not a member of {service_module} Service class")
+        selenium_service_inst = selenium_service(**attrs)
+        return selenium_service_inst
+
+    def _parse(self, service):
+        """The service argument parses slightly different than the options argument. As of
+        Selenium v4.20.0, all the service items are arguments applied to the service class
+        instantiation. Thus each item is split instead parsed as done with options.
+        """
+        result = {}
+        for item in self._split(service,';'):
+            try:
+                attr, val = self._split(item, '=')
+                result[attr]=ast.literal_eval(val)
+            except (ValueError, SyntaxError):
+                raise ValueError(f'Unable to parse service: "{item}"')
+        return result
+
+    def _import_service(self, browser):
+        browser = browser.replace("headless_", "", 1)
+        # Throw error is used with remote .. "They cannot be used with a Remote WebDriver session." [ref doc]
+        service = importlib.import_module(f"selenium.webdriver.{browser}.service")
+        return service.Service
+
+    def _split(self, service_or_attr, splittok):
+        split_string = []
+        start_position = 0
+        tokens = generate_tokens(StringIO(service_or_attr).readline)
+        for toknum, tokval, tokpos, _, _ in tokens:
+            if toknum == token.OP and tokval == splittok:
+                split_string.append(service_or_attr[start_position : tokpos[1]].strip())
+                start_position = tokpos[1] + 1
+        split_string.append(service_or_attr[start_position:])
+        return split_string
 
 class SeleniumOptions:
     def create(self, browser, options):
@@ -517,6 +539,36 @@ class SeleniumOptions:
         browser = browser.replace("headless_", "", 1)
         options = importlib.import_module(f"selenium.webdriver.{browser}.options")
         return options.Options
+
+    def _parse_to_tokens(self, item):
+        result = {}
+        index, method = self._get_arument_index(item)
+        if index == -1:
+            result[item] = []
+            return result
+        if method:
+            args_as_string = item[index + 1 : -1].strip()
+            if args_as_string:
+                args = ast.literal_eval(args_as_string)
+            else:
+                args = args_as_string
+            is_tuple = args_as_string.startswith("(")
+        else:
+            args_as_string = item[index + 1 :].strip()
+            args = ast.literal_eval(args_as_string)
+            is_tuple = args_as_string.startswith("(")
+        method_or_attribute = item[:index].strip()
+        result[method_or_attribute] = self._parse_arguments(args, is_tuple)
+        return result
+
+    def _parse_arguments(self, argument, is_tuple=False):
+        if argument == "":
+            return []
+        if is_tuple:
+            return [argument]
+        if not is_tuple and isinstance(argument, tuple):
+            return list(argument)
+        return [argument]
 
     def _parse(self, options):
         result = []

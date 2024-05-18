@@ -22,13 +22,13 @@ class KeywordArgumentsElementTest(unittest.TestCase):
         remote_url = '"http://localhost:4444/wd/hub"'
         browser = mock()
         when(self.brorser)._make_driver(
-            "firefox", None, None, False, None, None, None
+            "firefox", None, None, False, None, None, None, None
         ).thenReturn(browser)
         alias = self.brorser.open_browser(url)
         self.assertEqual(alias, None)
 
         when(self.brorser)._make_driver(
-            "firefox", None, None, remote_url, None, None, None
+            "firefox", None, None, remote_url, None, None, None, None
         ).thenReturn(browser)
         alias = self.brorser.open_browser(url, alias="None", remote_url=remote_url)
         self.assertEqual(alias, None)
@@ -47,7 +47,7 @@ class KeywordArgumentsElementTest(unittest.TestCase):
     def test_open_browser_no_get(self):
         browser = mock()
         when(self.brorser)._make_driver(
-            "firefox", None, None, False, None, None, None
+            "firefox", None, None, False, None, None, None, None
         ).thenReturn(browser)
         self.brorser.open_browser()
         verify(browser, times=0).get(ANY)

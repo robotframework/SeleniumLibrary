@@ -264,6 +264,115 @@ contains the following items: https://robotframework.org/,
 https://robocon.io/, https://github.com/robotframework/'
 and 'https://github.com/.
 
+= Browser and Driver options and service class =
+
+This section talks about how to configure either the browser or
+the driver using the options and service arguments of the `Open
+Browser` keyword.
+
+== Configuring the browser using the Selenium Options ==
+
+As noted within the keyword documentation for `Open Browser`, its
+``options`` argument accepts Selenium options in two different
+formats: as a string and as Python object which is an instance of
+the Selenium options class.
+
+=== Options string format ===
+
+The string format allows defining Selenium options methods
+or attributes and their arguments in Robot Framework test data.
+The method and attributes names are case and space sensitive and
+must match to the Selenium options methods and attributes names.
+When defining a method, it must be defined in a similar way as in
+python: method name, opening parenthesis, zero to many arguments
+and closing parenthesis. If there is a need to define multiple
+arguments for a single method, arguments must be separated with
+comma, just like in Python. Example: `add_argument("--headless")`
+or `add_experimental_option("key", "value")`. Attributes are
+defined in a similar way as in Python: attribute name, equal sign,
+and attribute value. Example, `headless=True`. Multiple methods
+and attributes must be separated by a semicolon. Example:
+`add_argument("--headless");add_argument("--start-maximized")`.
+
+Arguments allow defining Python data types and arguments are
+evaluated by using Python
+[https://docs.python.org/3/library/ast.html#ast.literal_eval|ast.literal_eval].
+Strings must be quoted with single or double quotes, example "value"
+or 'value'. It is also possible to define other Python builtin
+data types, example `True` or `None`, by not using quotes
+around the arguments.
+
+The string format is space friendly. Usually, spaces do not alter
+the defining methods or attributes. There are two exceptions.
+In some Robot Framework test data formats, two or more spaces are
+considered as cell separator and instead of defining a single
+argument, two or more arguments may be defined. Spaces in string
+arguments are not removed and are left as is. Example
+`add_argument ( "--headless" )` is same as
+`add_argument("--headless")`. But `add_argument(" --headless ")` is
+not same same as `add_argument ( "--headless" )`, because
+spaces inside of quotes are not removed. Please note that if
+options string contains backslash, example a Windows OS path,
+the backslash needs escaping both in Robot Framework data and
+in Python side. This means single backslash must be writen using
+four backslash characters. Example, Windows path:
+"C:\path\to\profile" must be written as
+"C:\\\\path\\\to\\\\profile". Another way to write
+backslash is use Python
+[https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals|raw strings]
+and example write: r"C:\\path\\to\\profile".
+
+=== Selenium Options as Python class ===
+
+As last format, ``options`` argument also supports receiving
+the Selenium options as Python class instance. In this case, the
+instance is used as-is and the SeleniumLibrary will not convert
+the instance to other formats.
+For example, if the following code return value is saved to
+`${options}` variable in the Robot Framework data:
+| options = webdriver.ChromeOptions()
+| options.add_argument('--disable-dev-shm-usage')
+| return options
+
+Then the `${options}` variable can be used as an argument to
+``options``.
+
+Example the ``options`` argument can be used to launch Chomium-based
+applications which utilize the
+[https://bitbucket.org/chromiumembedded/cef/wiki/UsingChromeDriver|Chromium Embedded Framework]
+. To launch Chromium-based application, use ``options`` to define
+`binary_location` attribute and use `add_argument` method to define
+`remote-debugging-port` port for the application. Once the browser
+is opened, the test can interact with the embedded web-content of
+the system under test.
+
+== Configuring the driver using the Service class ==
+
+With the ``service`` argument, one can setup and configure the driver. For example
+one can set the driver location and/port or specify the command line arguments. There
+are several browser specific attributes related to logging as well. For the various
+Service Class attributes refer to
+[https://www.selenium.dev/documentation/webdriver/drivers/service/|the Selenium documentation]
+. Currently the ``service`` argument only accepts Selenium service in the string format.
+
+=== Service string format ===
+
+The string format allows for defining Selenium service attributes
+and their values in the `Open Browser` keyword. The attributes names
+are case and space sensitive and must match to the Selenium attributes
+names. Attributes are defined in a similar way as in Python: attribute
+name, equal sign, and attribute value. Example, `port=1234`. Multiple
+attributes must be separated by a semicolon. Example:
+`executable_path='/path/to/driver';port=1234`. Don't have duplicate
+attributes, like `service_args=['--append-log', '--readable-timestamp'];
+service_args=['--log-level=DEBUG']` as the second will override the first.
+Instead combine them as in
+`service_args=['--append-log', '--readable-timestamp', '--log-level=DEBUG']`
+
+Arguments allow defining Python data types and arguments are
+evaluated by using Python. Strings must be quoted with single
+or double quotes, example "value" or 'value'
+
 = Timeouts, waits, and delays =
 
 This section discusses different ways how to wait for elements to

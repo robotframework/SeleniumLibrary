@@ -17,4 +17,5 @@
 from .webdrivertools import WebDriverCreator  # noqa
 from .webdrivertools import WebDriverCache  # noqa
 from .webdrivertools import SeleniumOptions  # noqa
+from .webdrivertools import SeleniumService  # noqa
 from .sl_file_detector import SelLibLocalFileDetector  # noqa

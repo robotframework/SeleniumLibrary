@@ -1,0 +1,9 @@
+Selenium service import
+
+0) <class 'selenium.webdriver.firefox.service.Service'>
+1) <class 'selenium.webdriver.firefox.service.Service'>
+2) <class 'selenium.webdriver.chrome.service.Service'>
+3) <class 'selenium.webdriver.chrome.service.Service'>
+4) <class 'selenium.webdriver.ie.service.Service'>
+5) <class 'selenium.webdriver.edge.service.Service'>
+6) <class 'selenium.webdriver.safari.service.Service'>
