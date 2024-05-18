@@ -1,0 +1,917 @@
+{
+    "alert_should_be_present": {
+        "name": "alert_should_be_present",
+        "doc": "Verifies that an alert is present and by default, accepts it.\n\n        Fails if no alert is present. If ``text`` is a non-empty string,\n        then it is used to verify alert's message. The alert is accepted\n        by default, but that behavior can be controlled by using the\n        ``action`` argument same way as with `Handle Alert`.\n\n        ``timeout`` specifies how long to wait for the alert to appear.\n        If it is not given, the global default `timeout` is used instead.\n\n        ``action`` and ``timeout`` arguments are new in SeleniumLibrary 3.0.\n        In earlier versions, the alert was always accepted and a timeout was\n        hardcoded to one second.\n        ",
+        "sha256": "c2389ab996f30509c4a5951f32dcfe2c8630040e00cedba19e19faa76a15299d"
+    },
+    "alert_should_not_be_present": {
+        "name": "alert_should_not_be_present",
+        "doc": "Verifies that no alert is present.\n\n        If the alert actually exists, the ``action`` argument determines\n        how it should be handled. By default, the alert is accepted, but\n        it can be also dismissed or left open the same way as with the\n        `Handle Alert` keyword.\n\n        ``timeout`` specifies how long to wait for the alert to appear.\n        By default, is not waited for the alert at all, but a custom time can\n        be given if alert may be delayed. See the `time format` section\n        for information about the syntax.\n\n        New in SeleniumLibrary 3.0.\n        ",
+        "sha256": "75343dfda0a68c40607e961ead1e104553ba074110f33627131125e8c11ecef0"
+    },
+    "handle_alert": {
+        "name": "hallinnoi_Hälytys",
+        "doc": "Hallinnoi hälytyksen uusi dokkari\n\nToinen rivi",
+        "sha256": "7620b9059b37d2cb1d5823256d0f71d32d3f66af153d6be8ff5100219d4270d6"
+    },
+    "input_text_into_alert": {
+        "name": "input_text_into_alert",
+        "doc": "Types the given ``text`` into an input field in an alert.\n\n        The alert is accepted by default, but that behavior can be controlled\n        by using the ``action`` argument same way as with `Handle Alert`.\n\n        ``timeout`` specifies how long to wait for the alert to appear.\n        If it is not given, the global default `timeout` is used instead.\n\n        New in SeleniumLibrary 3.0.\n        ",
+        "sha256": "77f522107ebbde4fbcca0e9d1f1e31911dad7f3256ea39d078ed3365cfefbc46"
+    },
+    "close_all_browsers": {
+        "name": "close_all_browsers",
+        "doc": "Closes all open browsers and resets the browser cache.\n\n        After this keyword, new indexes returned from `Open Browser` keyword\n        are reset to 1.\n\n        This keyword should be used in test or suite teardown to make sure\n        all browsers are closed.\n        ",
+        "sha256": "34bfcab8a0c99c9fc0ebeeaec4432664ab8fbcc99673bd4bb3f9be2e897dbb5b"
+    },
+    "close_browser": {
+        "name": "close_browser",
+        "doc": "Closes the current browser.",
+        "sha256": "a13d34e21bad1e0a76dab6f27c3f8b803825b8996c989f5b106918e27f0d0eb1"
+    },
+    "create_webdriver": {
+        "name": "create_webdriver",
+        "doc": "Creates an instance of Selenium WebDriver.\n\n        Like `Open Browser`, but allows passing arguments to the created\n        WebDriver instance directly. This keyword should only be used if\n        the functionality provided by `Open Browser` is not adequate.\n\n        ``driver_name`` must be a WebDriver implementation name like Firefox,\n        Chrome, Ie, Edge, Safari, or Remote.\n\n        The initialized WebDriver can be configured either with a Python\n        dictionary ``kwargs`` or by using keyword arguments ``**init_kwargs``.\n        These arguments are passed directly to WebDriver without any\n        processing. See [https://seleniumhq.github.io/selenium/docs/api/py/api.html|\n        Selenium API documentation] for details about the supported arguments.\n\n        Examples:\n        | # Use proxy with Firefox   |                |                              |                                      |\n        | ${proxy}=                  | `Evaluate`     | selenium.webdriver.Proxy()   | modules=selenium, selenium.webdriver |\n        | ${proxy.http_proxy}=       | `Set Variable` | localhost:8888               |                                      |\n        | `Create Webdriver`         | Firefox        | proxy=${proxy}               |                                      |\n\n        Returns the index of this browser instance which can be used later to\n        switch back to it. Index starts from 1 and is reset back to it when\n        `Close All Browsers` keyword is used. See `Switch Browser` for an\n        example.\n        ",
+        "sha256": "c7efa8a6295acc8336de8f8fdccec61b8a19cfc1b091382753929f9d86d2e292"
+    },
+    "get_action_chain_delay": {
+        "name": "get_action_chain_delay",
+        "doc": "Gets the currently stored value for chain_delay_value in timestr format.\n        ",
+        "sha256": "167a6689441f92c4099130c03e41a6c1595bcc1a37a207ac0f970b08b1591fdf"
+    },
+    "get_browser_aliases": {
+        "name": "get_browser_aliases",
+        "doc": "Returns aliases of all active browser that has an alias as NormalizedDict.\n        The dictionary contains the aliases as keys and the index as value.\n        This can be accessed as dictionary ``${aliases.key}`` or as list ``@{aliases}[0]``.\n\n        Example:\n        | `Open Browser` | https://example.com   | alias=BrowserA | |\n        | `Open Browser` | https://example.com   | alias=BrowserB | |\n        | &{aliases}     | `Get Browser Aliases` |                | # &{aliases} = { BrowserA=1|BrowserB=2 } |\n        | `Log`          | ${aliases.BrowserA}   |                | # logs ``1`` |\n        | FOR            | ${alias}              | IN             | @{aliases} |\n        |                | `Log`                 | ${alias}       | # logs ``BrowserA`` and ``BrowserB`` |\n        | END            |                       |                | |\n\n        See `Switch Browser` for more information and examples.\n\n        New in SeleniumLibrary 4.0\n        ",
+        "sha256": "defef82080de396568467a48c850a3db67484a7b786d8ebd76a3f3ba02c71dff"
+    },
+    "get_browser_ids": {
+        "name": "get_browser_ids",
+        "doc": "Returns index of all active browser as list.\n\n        Example:\n        | @{browser_ids}= | Get Browser Ids   |                   |                |\n        | FOR             | ${id}             | IN                | @{browser_ids} |\n        |                 | @{window_titles}= | Get Window Titles | browser=${id}  |\n        |                 | Log               | Browser ${id} has these windows: ${window_titles} | |\n        | END             |                   |                   |                |\n\n        See `Switch Browser` for more information and examples.\n\n        New in SeleniumLibrary 4.0\n        ",
+        "sha256": "c320152b2a66ba066b100fb8c729f3d36c04a5b72ed753b09d29b6e13613a004"
+    },
+    "get_location": {
+        "name": "get_location",
+        "doc": "Returns the current browser window URL.",
+        "sha256": "3dda250c7af426a85b6ec9c6be5ec5b4a4df41d4b2c72f0fa53b905384c29fc1"
+    },
+    "get_selenium_implicit_wait": {
+        "name": "get_selenium_implicit_wait",
+        "doc": "Gets the implicit wait value used by Selenium.\n\n        The value is returned as a human-readable string like ``1 second``.\n\n        See the `Implicit wait` section above for more information.\n        ",
+        "sha256": "f506381005ec3abf34b359df073e602f6589fac8d030a5369156016bbfacfde2"
+    },
+    "get_selenium_page_load_timeout": {
+        "name": "get_selenium_page_load_timeout",
+        "doc": "Gets the time to wait for a page load to complete\n        before raising a timeout exception.\n\n        The value is returned as a human-readable string like ``1 second``.\n\n        See the `Page load` section above for more information.\n\n        New in SeleniumLibrary 6.1\n        ",
+        "sha256": "18d82c9e55e7d06156a7fcccd2f96ddd6185a4c3625c344073a3f3e33d6e1e72"
+    },
+    "get_selenium_speed": {
+        "name": "get_selenium_speed",
+        "doc": "Gets the delay that is waited after each Selenium command.\n\n        The value is returned as a human-readable string like ``1 second``.\n\n        See the `Selenium Speed` section above for more information.\n        ",
+        "sha256": "e310cfaddced1d3088b673df4c7c469f10d3992116e2fabe048be986462febc5"
+    },
+    "get_selenium_timeout": {
+        "name": "get_selenium_timeout",
+        "doc": "Gets the timeout that is used by various keywords.\n\n        The value is returned as a human-readable string like ``1 second``.\n\n        See the `Timeout` section above for more information.\n        ",
+        "sha256": "9ebe70c2d1751c70d0f646c8c0e91e3c924ae6062c4c961432405b1fa2e0efe3"
+    },
+    "get_session_id": {
+        "name": "get_session_id",
+        "doc": "Returns the currently active browser session id.\n\n        New in SeleniumLibrary 3.2\n        ",
+        "sha256": "26f4581c49c3930c0bbc7ff188330eff3bdb9822556ed029c8b47e5cb75949d2"
+    },
+    "get_source": {
+        "name": "get_source",
+        "doc": "Returns the entire HTML source of the current page or frame.",
+        "sha256": "186bf0854602fddcbf9400b50a6db19549cfa23171c01e4708702cbfeaf4a921"
+    },
+    "get_title": {
+        "name": "get_title",
+        "doc": "Returns the title of the current page.",
+        "sha256": "15ca2c42f74a7447ac29d6431219afa7b827245f9bd45e8d220c597c8c76ea72"
+    },
+    "go_back": {
+        "name": "go_back",
+        "doc": "Simulates the user clicking the back button on their browser.",
+        "sha256": "c1ad3668ded03441f5e9019fe3e6417d6c0786fad522ef2d126b233112436ae7"
+    },
+    "go_to": {
+        "name": "go_to",
+        "doc": "Navigates the current browser window to the provided ``url``.",
+        "sha256": "c7db5e459ba7a16a1e895bd0a948765b75bfc536284a2a50ac02e7153ccb0450"
+    },
+    "location_should_be": {
+        "name": "location_should_be",
+        "doc": "Verifies that the current URL is exactly ``url``.\n\n        The ``url`` argument contains the exact url that should exist in browser.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        ``message`` argument is new in SeleniumLibrary 3.2.0.\n        ",
+        "sha256": "ea4b77e8386a52d7881a76cc42cf6c7754da4c44f1b54aa8d71467770a919839"
+    },
+    "location_should_contain": {
+        "name": "location_should_contain",
+        "doc": "Verifies that the current URL contains ``expected``.\n\n        The ``expected`` argument contains the expected value in url.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        ``message`` argument is new in SeleniumLibrary 3.2.0.\n        ",
+        "sha256": "be7e648ca2a1f5a7d83f5fe99d0e9aef696f0c645b57985059179476c4d1d0ed"
+    },
+    "log_location": {
+        "name": "log_location",
+        "doc": "Logs and returns the current browser window URL.",
+        "sha256": "ecdeee422f6587f42650730b5d1510d9f207cda56a2346fa3f6245ad62f4bac5"
+    },
+    "log_source": {
+        "name": "log_source",
+        "doc": "Logs and returns the HTML source of the current page or frame.\n\n        The ``loglevel`` argument defines the used log level. Valid log\n        levels are ``WARN``, ``INFO`` (default), ``DEBUG``, ``TRACE``\n        and ``NONE`` (no logging).\n        ",
+        "sha256": "ccfb24c918224eb021f3f020cd9dd1375b128835d8295fc0a40d7f76c628d0b7"
+    },
+    "log_title": {
+        "name": "log_title",
+        "doc": "Logs and returns the title of the current page.",
+        "sha256": "3722f0e150770d3b876af7a430c3a0e22f09a3b847c61b467cce146ed64ceea5"
+    },
+    "open_browser": {
+        "name": "open_browser",
+        "doc": "Opens a new browser instance to the optional ``url``.\n\n        The ``browser`` argument specifies which browser to use. The\n        supported browsers are listed in the table below. The browser names\n        are case-insensitive and some browsers have multiple supported names.\n\n        |    = Browser =    |        = Name(s) =       |\n        | Firefox           | firefox, ff              |\n        | Google Chrome     | googlechrome, chrome, gc |\n        | Headless Firefox  | headlessfirefox          |\n        | Headless Chrome   | headlesschrome           |\n        | Internet Explorer | internetexplorer, ie     |\n        | Edge              | edge                     |\n        | Safari            | safari                   |\n\n        To be able to actually use one of these browsers, you need to have\n        a matching Selenium browser driver available. See the\n        [https://github.com/robotframework/SeleniumLibrary#browser-drivers|\n        project documentation] for more details. Headless Firefox and\n        Headless Chrome are new additions in SeleniumLibrary 3.1.0\n        and require Selenium 3.8.0 or newer.\n\n        After opening the browser, it is possible to use optional\n        ``url`` to navigate the browser to the desired address.\n\n        Optional ``alias`` is an alias given for this browser instance and\n        it can be used for switching between browsers. When same ``alias``\n        is given with two `Open Browser` keywords, the first keyword will\n        open a new browser, but the second one will switch to the already\n        opened browser and will not open a new browser. The ``alias``\n        definition overrules ``browser`` definition. When same ``alias``\n        is used but a different ``browser`` is defined, then switch to\n        a browser with same alias is done and new browser is not opened.\n        An alternative approach for switching is using an index returned\n        by this keyword. These indices start from 1, are incremented when new\n        browsers are opened, and reset back to 1 when `Close All Browsers`\n        is called. See `Switch Browser` for more information and examples.\n\n        Optional ``remote_url`` is the URL for a\n        [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid].\n\n        Optional ``desired_capabilities`` is deprecated and will be ignored. Capabilities of each\n        individual browser is now done through options or services. Please refer to those arguments\n        for configuring specific browsers.\n\n        Optional ``ff_profile_dir`` is the path to the Firefox profile\n        directory if you wish to overwrite the default profile Selenium\n        uses. Notice that prior to SeleniumLibrary 3.0, the library\n        contained its own profile that was used by default. The\n        ``ff_profile_dir`` can also be an instance of the\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|selenium.webdriver.FirefoxProfile]\n        . As a third option, it is possible to use `FirefoxProfile` methods\n        and attributes to define the profile using methods and attributes\n        in the same way as with ``options`` argument. Example: It is possible\n        to use FirefoxProfile `set_preference` to define different\n        profile settings. See ``options`` argument documentation in below\n        how to handle backslash escaping.\n\n        Optional ``options`` argument allows defining browser specific\n        Selenium options. Example for Chrome, the ``options`` argument\n        allows defining the following\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|methods and attributes]\n        and for Firefox these\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]\n        are available. Please note that not all browsers, supported by the\n        SeleniumLibrary, have Selenium options available. Therefore please\n        consult the Selenium documentation which browsers do support\n        the Selenium options. Selenium options are also supported, when ``remote_url``\n        argument is used.\n\n        The SeleniumLibrary ``options`` argument accepts Selenium\n        options in two different formats: as a string and as Python object\n        which is an instance of the Selenium options class.\n\n        The string format allows defining Selenium options methods\n        or attributes and their arguments in Robot Framework test data.\n        The method and attributes names are case and space sensitive and\n        must match to the Selenium options methods and attributes names.\n        When defining a method, it must be defined in a similar way as in\n        python: method name, opening parenthesis, zero to many arguments\n        and closing parenthesis. If there is a need to define multiple\n        arguments for a single method, arguments must be separated with\n        comma, just like in Python. Example: `add_argument(\"--headless\")`\n        or `add_experimental_option(\"key\", \"value\")`. Attributes are\n        defined in a similar way as in Python: attribute name, equal sign,\n        and attribute value. Example, `headless=True`. Multiple methods\n        and attributes must be separated by a semicolon. Example:\n        `add_argument(\"--headless\");add_argument(\"--start-maximized\")`.\n\n        Arguments allow defining Python data types and arguments are\n        evaluated by using Python\n        [https://docs.python.org/3/library/ast.html#ast.literal_eval|ast.literal_eval].\n        Strings must be quoted with single or double quotes, example \"value\"\n        or 'value'. It is also possible to define other Python builtin\n        data types, example `True` or `None`, by not using quotes\n        around the arguments.\n\n        The string format is space friendly. Usually, spaces do not alter\n        the defining methods or attributes. There are two exceptions.\n        In some Robot Framework test data formats, two or more spaces are\n        considered as cell separator and instead of defining a single\n        argument, two or more arguments may be defined. Spaces in string\n        arguments are not removed and are left as is. Example\n        `add_argument ( \"--headless\" )` is same as\n        `add_argument(\"--headless\")`. But `add_argument(\" --headless \")` is\n        not same same as `add_argument ( \"--headless\" )`, because\n        spaces inside of quotes are not removed. Please note that if\n        options string contains backslash, example a Windows OS path,\n        the backslash needs escaping both in Robot Framework data and\n        in Python side. This means single backslash must be writen using\n        four backslash characters. Example, Windows path:\n        \"C:\\path\\to\\profile\" must be written as\n        \"C:\\\\\\\\path\\\\\\to\\\\\\\\profile\". Another way to write\n        backslash is use Python\n        [https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals|raw strings]\n        and example write: r\"C:\\\\path\\\\to\\\\profile\".\n\n        As last format, ``options`` argument also supports receiving\n        the Selenium options as Python class instance. In this case, the\n        instance is used as-is and the SeleniumLibrary will not convert\n        the instance to other formats.\n        For example, if the following code return value is saved to\n        `${options}` variable in the Robot Framework data:\n        | options = webdriver.ChromeOptions()\n        | options.add_argument('--disable-dev-shm-usage')\n        | return options\n\n        Then the `${options}` variable can be used as an argument to\n        ``options``.\n\n        Example the ``options`` argument can be used to launch Chomium-based\n        applications which utilize the\n        [https://bitbucket.org/chromiumembedded/cef/wiki/UsingChromeDriver|Chromium Embedded Framework]\n        . To lauch Chomium-based application, use ``options`` to define\n        `binary_location` attribute and use `add_argument` method to define\n        `remote-debugging-port` port for the application. Once the browser\n        is opened, the test can interact with the embedded web-content of\n        the system under test.\n\n        Optional ``service_log_path`` argument defines the name of the\n        file where to write the browser driver logs. If the\n        ``service_log_path``  argument contain a  marker ``{index}``, it\n        will be automatically replaced with unique running\n        index preventing files to be overwritten. Indices start's from 1,\n        and how they are represented can be customized using Python's\n        [https://docs.python.org/3/library/string.html#format-string-syntax|\n        format string syntax].\n\n        Optional ``executable_path`` argument defines the path to the driver\n        executable, example to a chromedriver or a geckodriver. If not defined\n        it is assumed the executable is in the\n        [https://en.wikipedia.org/wiki/PATH_(variable)|$PATH].\n\n        Examples:\n        | `Open Browser` | http://example.com | Chrome  |                                         |\n        | `Open Browser` | http://example.com | Firefox | alias=Firefox                           |\n        | `Open Browser` | http://example.com | Edge    | remote_url=http://127.0.0.1:4444/wd/hub |\n        | `Open Browser` | about:blank        |         |                                         |\n        | `Open Browser` | browser=Chrome     |         |                                         |\n\n        Alias examples:\n        | ${1_index} =    | `Open Browser` | http://example.com | Chrome  | alias=Chrome     | # Opens new browser because alias is new.         |\n        | ${2_index} =    | `Open Browser` | http://example.com | Firefox |                  | # Opens new browser because alias is not defined. |\n        | ${3_index} =    | `Open Browser` | http://example.com | Chrome  | alias=Chrome     | # Switches to the browser with Chrome alias.      |\n        | ${4_index} =    | `Open Browser` | http://example.com | Chrome  | alias=${1_index} | # Switches to the browser with Chrome alias.      |\n        | Should Be Equal | ${1_index}     | ${3_index}         |         |                  |                                                   |\n        | Should Be Equal | ${1_index}     | ${4_index}         |         |                  |                                                   |\n        | Should Be Equal | ${2_index}     | ${2}               |         |                  |                                                   |\n\n        Example when using\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]\n        method:\n        | `Open Browser` | http://example.com | Chrome | options=add_argument(\"--disable-popup-blocking\"); add_argument(\"--ignore-certificate-errors\") | # Sting format.                    |\n        |  ${options} =  |     Get Options    |        |                                                                                               | # Selenium options instance.       |\n        | `Open Browser` | http://example.com | Chrome | options=${options}                                                                            |                                    |\n        | `Open Browser` | None               | Chrome | options=binary_location=\"/path/to/binary\";add_argument(\"remote-debugging-port=port\")          | # Start Chomium-based application. |\n        | `Open Browser` | None               | Chrome | options=binary_location=r\"C:\\\\path\\\\to\\\\binary\"                                         | # Windows OS path escaping.        |\n\n        Example for FirefoxProfile\n        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=/path/to/profile                                                  | # Using profile from disk.                       |\n        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=${FirefoxProfile_instance}                                        | # Using instance of FirefoxProfile.              |\n        | `Open Browser` | http://example.com | Firefox | ff_profile_dir=set_preference(\"key\", \"value\");set_preference(\"other\", \"setting\") | # Defining profile using FirefoxProfile mehtods. |\n\n        If the provided configuration options are not enough, it is possible\n        to use `Create Webdriver` to customize browser initialization even\n        more.\n\n        Applying ``desired_capabilities`` argument also for local browser is\n        new in SeleniumLibrary 3.1.\n\n        Using ``alias`` to decide, is the new browser opened is new\n        in SeleniumLibrary 4.0. The ``options`` and ``service_log_path``\n        are new in SeleniumLibrary 4.0. Support for ``ff_profile_dir``\n        accepting an instance of the `selenium.webdriver.FirefoxProfile`\n        and support defining FirefoxProfile with methods and\n        attributes are new in SeleniumLibrary 4.0.\n\n        Making ``url`` optional is new in SeleniumLibrary 4.1.\n\n        The ``executable_path`` argument is new in SeleniumLibrary 4.2.\n        ",
+        "sha256": "0c3f6191eb0bb2f557a3f93ab0c99c6137361091c73d09186c3846208a9ad7ff"
+    },
+    "reload_page": {
+        "name": "reload_page",
+        "doc": "Simulates user reloading page.",
+        "sha256": "29308a1588c11a36ee1e46274959c9fb83b01fa628d38f7d1e60615cfa3c1d54"
+    },
+    "set_action_chain_delay": {
+        "name": "set_action_chain_delay",
+        "doc": "Sets the duration of delay in ActionChains() used by SeleniumLibrary.\n\n        The value can be given as a number that is considered to be\n        seconds or as a human-readable string like ``1 second``.\n\n        Value is always stored as milliseconds internally.\n\n        The previous value is returned and can be used to restore\n        the original value later if needed.\n        ",
+        "sha256": "30a861e88589e077326d025611cd558432a5426b6b002aface8b8367286eca24"
+    },
+    "set_browser_implicit_wait": {
+        "name": "set_browser_implicit_wait",
+        "doc": "Sets the implicit wait value used by Selenium.\n\n        Same as `Set Selenium Implicit Wait` but only affects the current\n        browser.\n        ",
+        "sha256": "a5097a7357967bebd69e46c700917daaa41994d0235b77da90ce0b88d1bd3518"
+    },
+    "set_selenium_implicit_wait": {
+        "name": "set_selenium_implicit_wait",
+        "doc": "Sets the implicit wait value used by Selenium.\n\n        The value can be given as a number that is considered to be\n        seconds or as a human-readable string like ``1 second``.\n        The previous value is returned and can be used to restore\n        the original value later if needed.\n\n        This keyword sets the implicit wait for all opened browsers.\n        Use `Set Browser Implicit Wait` to set it only to the current\n        browser.\n\n        See the `Implicit wait` section above for more information.\n\n        Example:\n        | ${orig wait} = | `Set Selenium Implicit Wait` | 10 seconds |\n        | `Perform AJAX call that is slow` |\n        | `Set Selenium Implicit Wait` | ${orig wait} |\n        ",
+        "sha256": "1df9421daaba885bd06552d7b62030b285ac8472b98e09e0719554fd2448547c"
+    },
+    "set_selenium_page_load_timeout": {
+        "name": "set_selenium_page_load_timeout",
+        "doc": "Sets the page load timeout value used by Selenium.\n\n        The value can be given as a number that is considered to be\n        seconds or as a human-readable string like ``1 second``.\n        The previous value is returned and can be used to restore\n        the original value later if needed.\n\n        In contrast to `Set Selenium Timeout` and `Set Selenium Implicit Wait`,\n        this keywords sets the time for the Webdriver to wait until the page\n        is loaded before raising a timeout exception.\n\n        See the `Page load` section above for more information.\n\n        Example:\n        | ${orig page load timeout} = | `Set Selenium Page Load Timeout` | 30 seconds |\n        | `Open page that loads slowly` |\n        | `Set Selenium Page Load Timeout` | ${orig page load timeout} |\n\n        New in SeleniumLibrary 6.1\n        ",
+        "sha256": "37e2b5f6af58ce3b2e1d520c0c2d56b99cadf175dd31f1ccfb05de36c8cfdab0"
+    },
+    "set_selenium_speed": {
+        "name": "set_selenium_speed",
+        "doc": "Sets the delay that is waited after each Selenium command.\n\n        The value can be given as a number that is considered to be\n        seconds or as a human-readable string like ``1 second``.\n        The previous value is returned and can be used to restore\n        the original value later if needed.\n\n        See the `Selenium Speed` section above for more information.\n\n        Example:\n        | `Set Selenium Speed` | 0.5 seconds |\n        ",
+        "sha256": "143bd7c58689c676a711dcf2571cfdd8ee609325264bd632db2945dce3300ae5"
+    },
+    "set_selenium_timeout": {
+        "name": "set_selenium_timeout",
+        "doc": "Sets the timeout that is used by various keywords.\n\n        The value can be given as a number that is considered to be\n        seconds or as a human-readable string like ``1 second``.\n        The previous value is returned and can be used to restore\n        the original value later if needed.\n\n        See the `Timeout` section above for more information.\n\n        Example:\n        | ${orig timeout} = | `Set Selenium Timeout` | 15 seconds |\n        | `Open page that loads slowly` |\n        | `Set Selenium Timeout` | ${orig timeout} |\n        ",
+        "sha256": "6e78114e0e60f0148629589b897d6a67b1c492317eb883b2ca4f3c6457a5d01b"
+    },
+    "switch_browser": {
+        "name": "switch_browser",
+        "doc": "Switches between active browsers using ``index_or_alias``.\n\n        Indices are returned by the `Open Browser` keyword and aliases can\n        be given to it explicitly. Indices start from 1.\n\n        Example:\n        | `Open Browser`        | http://google.com | ff       |\n        | `Location Should Be`  | http://google.com |          |\n        | `Open Browser`        | http://yahoo.com  | ie       | alias=second |\n        | `Location Should Be`  | http://yahoo.com  |          |\n        | `Switch Browser`      | 1                 | # index  |\n        | `Page Should Contain` | I'm feeling lucky |          |\n        | `Switch Browser`      | second            | # alias  |\n        | `Page Should Contain` | More Yahoo!       |          |\n        | `Close All Browsers`  |                   |          |\n\n        Above example expects that there was no other open browsers when\n        opening the first one because it used index ``1`` when switching to\n        it later. If you are not sure about that, you can store the index\n        into a variable as below.\n\n        | ${index} =         | `Open Browser` | http://google.com |\n        | # Do something ... |                |                   |\n        | `Switch Browser`   | ${index}       |                   |\n        ",
+        "sha256": "de918f9e83ebecafb37ba3704649efb39dfbf405960597e1e99dddffdf69c1fb"
+    },
+    "title_should_be": {
+        "name": "title_should_be",
+        "doc": "Verifies that the current page title equals ``title``.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        ``message`` argument is new in SeleniumLibrary 3.1.\n        ",
+        "sha256": "f3ed755ed3bdbb8e7b334bce951620ceb83c3aca1cad51a31b2eea42260e1199"
+    },
+    "add_cookie": {
+        "name": "add_cookie",
+        "doc": "Adds a cookie to your current session.\n\n        ``name`` and ``value`` are required, ``path``, ``domain``, ``secure``\n        and ``expiry`` are optional.  Expiry supports the same formats as\n        the [http://robotframework.org/robotframework/latest/libraries/DateTime.html|DateTime]\n        library or an epoch timestamp.\n\n        Example:\n        | `Add Cookie` | foo | bar |                            |\n        | `Add Cookie` | foo | bar | domain=example.com         |\n        | `Add Cookie` | foo | bar | expiry=2027-09-28 16:21:35 | # Expiry as timestamp.     |\n        | `Add Cookie` | foo | bar | expiry=1822137695          | # Expiry as epoch seconds. |\n\n        Prior to SeleniumLibrary 3.0 setting expiry did not work.\n        ",
+        "sha256": "4824fdf8e69148f3f74ed2a177fc4417caa1b7d24b5fd55378e8cdbd3ace04a5"
+    },
+    "delete_all_cookies": {
+        "name": "delete_all_cookies",
+        "doc": "Deletes all cookies.",
+        "sha256": "3300bc6758bd113107fb425664eacbda4143514393c4d4197ac28626592b77c5"
+    },
+    "delete_cookie": {
+        "name": "delete_cookie",
+        "doc": "Deletes the cookie matching ``name``.\n\n        If the cookie is not found, nothing happens.\n        ",
+        "sha256": "9f69becc9575a4dc10a09bebdcb7405fbfba883c8268c889baca4659ba549d04"
+    },
+    "get_cookie": {
+        "name": "get_cookie",
+        "doc": "Returns information of cookie with ``name`` as an object.\n\n        If no cookie is found with ``name``, keyword fails. The cookie object\n        contains details about the cookie. Attributes available in the object\n        are documented in the table below.\n\n        | = Attribute = |             = Explanation =                                |\n        | name          | The name of a cookie.                                      |\n        | value         | Value of the cookie.                                       |\n        | path          | Indicates a URL path, for example ``/``.                   |\n        | domain        | The domain, the cookie is visible to.                      |\n        | secure        | When true, the cookie is only used with HTTPS connections. |\n        | httpOnly      | When true, the cookie is not accessible via JavaScript.    |\n        | expiry        | Python datetime object indicating when the cookie expires. |\n        | extra         | Possible attributes outside of the WebDriver specification |\n\n        See the\n        [https://w3c.github.io/webdriver/#cookies|WebDriver specification]\n        for details about the cookie information.\n        Notice that ``expiry`` is specified as a\n        [https://docs.python.org/3/library/datetime.html#datetime.datetime|datetime object],\n        not as seconds since Unix Epoch like WebDriver natively does.\n\n        In some cases, example when running a browser in the cloud, it is possible that\n        the cookie contains other attributes than is defined in the\n        [https://w3c.github.io/webdriver/#cookies|WebDriver specification].\n        These other attributes are available in an ``extra`` attribute in the cookie\n        object and it contains a dictionary of the other attributes. The ``extra``\n        attribute is new in SeleniumLibrary 4.0.\n\n        Example:\n        | `Add Cookie`      | foo             | bar |\n        | ${cookie} =       | `Get Cookie`    | foo |\n        | `Should Be Equal` | ${cookie.name}  | foo |\n        | `Should Be Equal` | ${cookie.value} | bar |\n        | `Should Be True`  | ${cookie.expiry.year} > 2017 |\n\n        New in SeleniumLibrary 3.0.\n        ",
+        "sha256": "747951f772be34600739a36f99d276499abc5137ddb8994e1773b68cc7c2e05b"
+    },
+    "get_cookies": {
+        "name": "get_cookies",
+        "doc": "Returns all cookies of the current page.\n\n        If ``as_dict`` argument evaluates as false, see `Boolean arguments`\n        for more details, then cookie information is returned as\n        a single string in format ``name1=value1; name2=value2; name3=value3``.\n        When ``as_dict`` argument evaluates as true, cookie information\n        is returned as Robot Framework dictionary format. The string format\n        can be used, for example, for logging purposes or in headers when\n        sending HTTP requests. The dictionary format is helpful when\n        the result can be passed to requests library's Create Session\n        keyword's optional cookies parameter.\n\n        The `` as_dict`` argument is new in SeleniumLibrary 3.3\n        ",
+        "sha256": "7a9bda6590cdb1aa8825e385ffefc087a7ca087936dd11350d6234e6e2c05e6c"
+    },
+    "add_location_strategy": {
+        "name": "add_location_strategy",
+        "doc": "Adds a custom location strategy.\n\n        See `Custom locators` for information on how to create and use\n        custom strategies. `Remove Location Strategy` can be used to\n        remove a registered strategy.\n\n        Location strategies are automatically removed after leaving the\n        current scope by default. Setting ``persist`` to a true value (see\n        `Boolean arguments`) will cause the location strategy to stay\n        registered throughout the life of the test.\n        ",
+        "sha256": "046e816fd4d028592aaa9146fd815aec20809f88d4160fdf166fb19d5fdcfa0c"
+    },
+    "assign_id_to_element": {
+        "name": "assign_id_to_element",
+        "doc": "Assigns a temporary ``id`` to the element specified by ``locator``.\n\n        This is mainly useful if the locator is complicated and/or slow XPath\n        expression and it is needed multiple times. Identifier expires when\n        the page is reloaded.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Example:\n        | `Assign ID to Element` | //ul[@class='example' and ./li[contains(., 'Stuff')]] | my id |\n        | `Page Should Contain Element` | my id |\n        ",
+        "sha256": "2ce9ab7a44154be53f32d6d6e8b1b6e9dd8bbff880048c99ed4b62763a0b522c"
+    },
+    "clear_element_text": {
+        "name": "clear_element_text",
+        "doc": "Clears the value of the text-input-element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "31d7803b76e63ff90ff333f06e323aba4f820632b8795d51d24242fb65f4e7d2"
+    },
+    "click_button": {
+        "name": "click_button",
+        "doc": "Clicks the button identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, buttons are\n        searched using ``id``, ``name``, and ``value``.\n\n        See the `Click Element` keyword for details about the\n        ``modifier`` argument.\n\n        The ``modifier`` argument is new in SeleniumLibrary 3.3\n        ",
+        "sha256": "72dcaeaa3bc1a4e14c596d72a19cbd82e0881732440153cbfb27272b2066dd77"
+    },
+    "click_element": {
+        "name": "click_element",
+        "doc": "Click the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``modifier`` argument can be used to pass\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys|Selenium Keys]\n        when clicking the element. The `+` can be used as a separator\n        for different Selenium Keys. The `CTRL` is internally translated to\n        the `CONTROL` key. The ``modifier`` is space and case insensitive, example\n        \"alt\" and \" aLt \" are supported formats to\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]\n        . If ``modifier`` does not match to Selenium Keys, keyword fails.\n\n        If ``action_chain`` argument is true, see `Boolean arguments` for more\n        details on how to set boolean argument, then keyword uses ActionChain\n        based click instead of the <web_element>.click() function. If both\n        ``action_chain`` and ``modifier`` are defined, the click will be\n        performed using ``modifier`` and ``action_chain`` will be ignored.\n\n        Example:\n        | Click Element | id:button |                   | # Would click element without any modifiers.               |\n        | Click Element | id:button | CTRL              | # Would click element with CTLR key pressed down.          |\n        | Click Element | id:button | CTRL+ALT          | # Would click element with CTLR and ALT keys pressed down. |\n        | Click Element | id:button | action_chain=True | # Clicks the button using an Selenium  ActionChains        |\n\n        The ``modifier`` argument is new in SeleniumLibrary 3.2\n        The ``action_chain`` argument is new in SeleniumLibrary 4.1\n        ",
+        "sha256": "5099da1ff98ae3351fb740f301498066e1f86b8f9a6ef7f178e2b29d5d5afb35"
+    },
+    "click_element_at_coordinates": {
+        "name": "click_element_at_coordinates",
+        "doc": "Click the element ``locator`` at ``xoffset/yoffset``.\n\n        The Cursor is moved and the center of the element and x/y coordinates are\n        calculated from that point.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "6c9be5ef41acf068a8ecf3972fe88f5f9c5257cf843d014dd9a76f7b4a3719c7"
+    },
+    "click_image": {
+        "name": "click_image",
+        "doc": "Clicks an image identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, images are searched\n        using ``id``, ``name``, ``src`` and ``alt``.\n\n        See the `Click Element` keyword for details about the\n        ``modifier`` argument.\n\n        The ``modifier`` argument is new in SeleniumLibrary 3.3\n        ",
+        "sha256": "a83623f5affb23d6a089b6cab14e9983dd55eba3b11deedf672c6d2c3d387cf4"
+    },
+    "click_link": {
+        "name": "click_link",
+        "doc": "Clicks a link identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, links are searched\n        using ``id``, ``name``, ``href`` and the link text.\n\n        See the `Click Element` keyword for details about the\n        ``modifier`` argument.\n\n        The ``modifier`` argument is new in SeleniumLibrary 3.3\n        ",
+        "sha256": "d8c5ec4c5359fed7c6a5094f5d18e8766b4dfb6f4e4d5ea1d61d50b7b09e7c31"
+    },
+    "cover_element": {
+        "name": "cover_element",
+        "doc": "Will cover elements identified by ``locator`` with a blue div without breaking page layout.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        New in SeleniumLibrary 3.3.0\n\n        Example:\n        |`Cover Element` | css:div#container |\n        ",
+        "sha256": "0dd30bea744e70b71f3e5fc5358833c291d404cdfa23970d09ece25f2380fb28"
+    },
+    "double_click_element": {
+        "name": "double_click_element",
+        "doc": "Double clicks the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "c7b11722014178d683d80e276fcea367307d1d4cbe3b93b17cbbbe30b35b7174"
+    },
+    "drag_and_drop": {
+        "name": "drag_and_drop",
+        "doc": "Drags the element identified by ``locator`` into the ``target`` element.\n\n        The ``locator`` argument is the locator of the dragged element\n        and the ``target`` is the locator of the target. See the\n        `Locating elements` section for details about the locator syntax.\n\n        Example:\n        | `Drag And Drop` | css:div#element | css:div.target |\n        ",
+        "sha256": "af13a511a462a2540dc93baf3bc42d05143aaf0de6ce9771029044a25b40bd64"
+    },
+    "drag_and_drop_by_offset": {
+        "name": "drag_and_drop_by_offset",
+        "doc": "Drags the element identified with ``locator`` by ``xoffset/yoffset``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The element will be moved by ``xoffset`` and ``yoffset``, each of which\n        is a negative or positive number specifying the offset.\n\n        Example:\n        | `Drag And Drop By Offset` | myElem | 50 | -35 | # Move myElem 50px right and 35px down |\n        ",
+        "sha256": "89750f538dc14ca0c04fbe1a3aba732352f9723d658bbd971905003ee9c351f6"
+    },
+    "element_attribute_value_should_be": {
+        "name": "element_attribute_value_should_be",
+        "doc": "Verifies element identified by ``locator`` contains expected attribute value.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Example:\n        `Element Attribute Value Should Be` | css:img | href | value\n\n        New in SeleniumLibrary 3.2.\n        ",
+        "sha256": "330701ee8d3307c6543bdfeafa649d14689f639f2e139e499aae8ec495d7d015"
+    },
+    "element_should_be_disabled": {
+        "name": "element_should_be_disabled",
+        "doc": "Verifies that element identified by ``locator`` is disabled.\n\n        This keyword considers also elements that are read-only to be\n        disabled.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "6f34019f6e68805c2b73ef5207b424743c9461dfd30061f163d21948304bb012"
+    },
+    "element_should_be_enabled": {
+        "name": "element_should_be_enabled",
+        "doc": "Verifies that element identified by ``locator`` is enabled.\n\n        This keyword considers also elements that are read-only to be\n        disabled.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "014f8538093bdcef0ed8c7a13020ae513a4a14bd2d0b71f1843de951f5c7b5d3"
+    },
+    "element_should_be_focused": {
+        "name": "element_should_be_focused",
+        "doc": "Verifies that element identified by ``locator`` is focused.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        New in SeleniumLibrary 3.0.\n        ",
+        "sha256": "f327420520f06421e0a11062af115eaa7bb3eaf97a0ae4b6f02c0c82c9fa1f73"
+    },
+    "element_should_be_visible": {
+        "name": "element_should_be_visible",
+        "doc": "Verifies that the element identified by ``locator`` is visible.\n\n        Herein, visible means that the element is logically visible, not\n        optically visible in the current browser viewport. For example,\n        an element that carries ``display:none`` is not logically visible,\n        so using this keyword on that element would fail.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``message`` argument can be used to override the default error\n        message.\n        ",
+        "sha256": "98c4fb9d0b90e73c3d702b553aa6a30f027320463eb18e298cd5b9133f1cc36a"
+    },
+    "element_should_contain": {
+        "name": "element_should_contain",
+        "doc": "Verifies that element ``locator`` contains text ``expected``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        The ``ignore_case`` argument can be set to True to compare case\n        insensitive, default is False. New in SeleniumLibrary 3.1.\n\n        ``ignore_case`` argument is new in SeleniumLibrary 3.1.\n\n        Use `Element Text Should Be` if you want to match the exact text,\n        not a substring.\n        ",
+        "sha256": "998a924785fef84597b5e5fc866f4c5d7e4b0a753cba68d15be0f3b44588c06d"
+    },
+    "element_should_not_be_visible": {
+        "name": "element_should_not_be_visible",
+        "doc": "Verifies that the element identified by ``locator`` is NOT visible.\n\n        Passes if the element does not exists. See `Element Should Be Visible`\n        for more information about visibility and supported arguments.\n        ",
+        "sha256": "811779774da3cf876101661d4c15a6e89ea0568493be61b19fded7a0bd40f0c4"
+    },
+    "element_should_not_contain": {
+        "name": "element_should_not_contain",
+        "doc": "Verifies that element ``locator`` does not contain text ``expected``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        The ``ignore_case`` argument can be set to True to compare case\n        insensitive, default is False.\n\n        ``ignore_case`` argument new in SeleniumLibrary 3.1.\n        ",
+        "sha256": "ef9492bae813b1597fabc9d6f02a21c05ff736a18fb6eb20fb81e6ca40011437"
+    },
+    "element_text_should_be": {
+        "name": "element_text_should_be",
+        "doc": "Verifies that element ``locator`` contains exact the text ``expected``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        The ``ignore_case`` argument can be set to True to compare case\n        insensitive, default is False.\n\n        ``ignore_case`` argument is new in SeleniumLibrary 3.1.\n\n        Use `Element Should Contain` if a substring match is desired.\n        ",
+        "sha256": "4036c0bb4fe36085fcab4421f3ffb65265d70d8cb852106ea13a983438a77723"
+    },
+    "element_text_should_not_be": {
+        "name": "element_text_should_not_be",
+        "doc": "Verifies that element ``locator`` does not contain exact the text ``not_expected``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        The ``ignore_case`` argument can be set to True to compare case\n        insensitive, default is False.\n\n        New in SeleniumLibrary 3.1.1\n        ",
+        "sha256": "67821af845f34ba19ebffb38fa558c375f7261e3d9c9f04cb653bad828e99cf4"
+    },
+    "get_all_links": {
+        "name": "get_all_links",
+        "doc": "Returns a list containing ids of all links found in current page.\n\n        If a link has no id, an empty string will be in the list instead.\n        ",
+        "sha256": "f17319af1acc205f3ee5fe01b5e8960bba45ff05629b4b1d2e4fdec770163c1a"
+    },
+    "get_dom_attribute": {
+        "name": "get_dom_attribute",
+        "doc": "Returns the value of ``attribute`` from the element ``locator``. `Get DOM Attribute` keyword\n        only returns attributes declared within the element's HTML markup.  If the requested attribute\n        is not there, the keyword returns ${None}.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Example:\n        | ${id}= | `Get DOM Attribute` | css:h1 | id |\n\n        ",
+        "sha256": "1337e3b21fae3759b85da9dba5fda08378fd8ea4ff16b9d9a03fa54f1d75853f"
+    },
+    "get_element_attribute": {
+        "name": "get_element_attribute",
+        "doc": "Returns the value of ``attribute`` from the element ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Example:\n        | ${id}= | `Get Element Attribute` | css:h1 | id |\n\n        Passing attribute name as part of the ``locator`` was removed\n        in SeleniumLibrary 3.2. The explicit ``attribute`` argument\n        should be used instead.\n        ",
+        "sha256": "3325a9affcfb67bbb11b250a7479d125f3a7c0ca3e6b4772b35f873c6942a300"
+    },
+    "get_element_count": {
+        "name": "get_element_count",
+        "doc": "Returns the number of elements matching ``locator``.\n\n        If you wish to assert the number of matching elements, use\n        `Page Should Contain Element` with ``limit`` argument. Keyword will\n        always return an integer.\n\n        Example:\n        | ${count} =       | `Get Element Count` | name:div_name  |\n        | `Should Be True` | ${count} > 2        |                |\n\n        New in SeleniumLibrary 3.0.\n        ",
+        "sha256": "edc00542de29af7b4b11d459c21c6a8f87fd21233f49c1b9a5b4d8e06d0128f8"
+    },
+    "get_element_size": {
+        "name": "get_element_size",
+        "doc": "Returns width and height of the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Both width and height are returned as integers.\n\n        Example:\n        | ${width} | ${height} = | `Get Element Size` | css:div#container |\n        ",
+        "sha256": "d1dc235938760fc871c68838032587be56a8ebb13dc295f68e9df6a03c72d266"
+    },
+    "get_horizontal_position": {
+        "name": "get_horizontal_position",
+        "doc": "Returns the horizontal position of the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The position is returned in pixels off the left side of the page,\n        as an integer.\n\n        See also `Get Vertical Position`.\n        ",
+        "sha256": "7b81ffe406d7708e72861971ec879a7cdb3adff3cf3a6ad4c816c0b36de84a79"
+    },
+    "get_property": {
+        "name": "get_property",
+        "doc": "Returns the value of ``property`` from the element ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Example:\n        | ${text_length}= | `Get Property` | css:h1 | text_length |\n\n        ",
+        "sha256": "6335a05f73d42212f78d4285872595fec96dbb4e669b8026b2e9bdab4f3284eb"
+    },
+    "get_text": {
+        "name": "get_text",
+        "doc": "Returns the text value of the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "c5df21cb13fca76338626c63ce4e0e83be2e5563eb296833f55678c3424ad333"
+    },
+    "get_value": {
+        "name": "get_value",
+        "doc": "Returns the value attribute of the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "5856fe53c0581268a5a395418f08aedb118762d5ec8fbd553cf2d44b82aa27c6"
+    },
+    "get_vertical_position": {
+        "name": "get_vertical_position",
+        "doc": "Returns the vertical position of the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The position is returned in pixels off the top of the page,\n        as an integer.\n\n        See also `Get Horizontal Position`.\n        ",
+        "sha256": "a1f1cc8075b6323bf4b900ea52357586f28721239e45ec11fb1a130faa9246c0"
+    },
+    "get_webelement": {
+        "name": "get_webelement",
+        "doc": "Returns the first WebElement matching the given ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "5deaaabc9162680121dbe744d4e476e40c7eacba17922459c209f211ba74b5cd"
+    },
+    "get_webelements": {
+        "name": "get_webelements",
+        "doc": "Returns a list of WebElement objects matching the ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Starting from SeleniumLibrary 3.0, the keyword returns an empty\n        list if there are no matching elements. In previous releases, the\n        keyword failed in this case.\n        ",
+        "sha256": "ab7b4634b7c54b2b17daf4c290704fe45af948eeff41f9dbc1c01fab33273496"
+    },
+    "mouse_down": {
+        "name": "mouse_down",
+        "doc": "Simulates pressing the left mouse button on the element ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The element is pressed without releasing the mouse button.\n\n        See also the more specific keywords `Mouse Down On Image` and\n        `Mouse Down On Link`.\n        ",
+        "sha256": "c0e5431b9b9eb6875830eadccc1ed0f9a9d34781ecef40ab059194054eeae9e4"
+    },
+    "mouse_down_on_image": {
+        "name": "mouse_down_on_image",
+        "doc": "Simulates a mouse down event on an image identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, images are searched\n        using ``id``, ``name``, ``src`` and ``alt``.\n        ",
+        "sha256": "3b7c0b9a83908e60012f095acc71305c853dd07864497077420f1a3930ea144c"
+    },
+    "mouse_down_on_link": {
+        "name": "mouse_down_on_link",
+        "doc": "Simulates a mouse down event on a link identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, links are searched\n        using ``id``, ``name``, ``href`` and the link text.\n        ",
+        "sha256": "8ef3134ef374ebc89f76985b09abd2caac10f603e8db38cf78dcbac9c826cc3e"
+    },
+    "mouse_out": {
+        "name": "mouse_out",
+        "doc": "Simulates moving the mouse away from the element ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "835368b635d5d1c5c50250595a8e7cb2feb9eb4af4fa14753c561a9c35894db1"
+    },
+    "mouse_over": {
+        "name": "mouse_over",
+        "doc": "Simulates hovering the mouse over the element ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "b4c14a2a10cfddb07d7748630ba6546991d3da2311a20aa146685a0f78e41241"
+    },
+    "mouse_up": {
+        "name": "mouse_up",
+        "doc": "Simulates releasing the left mouse button on the element ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "47c3666126bc84aa9104f6137fd51817efcd1804aaf7c965df143a6aad71895a"
+    },
+    "open_context_menu": {
+        "name": "open_context_menu",
+        "doc": "Opens the context menu on the element identified by ``locator``.",
+        "sha256": "8cb9023a05753eb5cc230116dec98188b5bdfac0b94955b69957726131189493"
+    },
+    "page_should_contain": {
+        "name": "page_should_contain",
+        "doc": "Verifies that current page contains ``text``.\n\n        If this keyword fails, it automatically logs the page source\n        using the log level specified with the optional ``loglevel``\n        argument. Valid log levels are ``TRACE`` (default), ``DEBUG``,\n        ``INFO``, ``WARN``, and ``NONE``. If the log level is ``NONE``\n        or below the current active log level the source will not be logged.\n\n        !! WARNING !! If you have an iframe selected, `Page Should Contain`\n        will reset the frame reference back to the main frame. This is due\n        to the fact that is searches for the ``text`` in all frames. To locate\n        an element in an iframe after calling `Page Should Contian` one needs\n        to (re)select the frame.\n        ",
+        "sha256": "bb1186dbfae09e52cad4cad8def5bf2980085e48f75b6af2330bcd4da67477af"
+    },
+    "page_should_contain_element": {
+        "name": "page_should_contain_element",
+        "doc": "Verifies that element ``locator`` is found on the current page.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        The ``limit`` argument can used to define how many elements the\n        page should contain. When ``limit`` is ``None`` (default) page can\n        contain one or more elements. When limit is a number, page must\n        contain same number of elements.\n\n        See `Page Should Contain` for an explanation about the ``loglevel``\n        argument.\n\n        Examples assumes that locator matches to two elements.\n        | `Page Should Contain Element` | div_name | limit=1    | # Keyword fails.                  |\n        | `Page Should Contain Element` | div_name | limit=2    | # Keyword passes.                 |\n        | `Page Should Contain Element` | div_name | limit=none | # None is considered one or more. |\n        | `Page Should Contain Element` | div_name |            | # Same as above.                  |\n\n        The ``limit`` argument is new in SeleniumLibrary 3.0.\n        ",
+        "sha256": "d2c24d9ce997c94b3cd391306893b9d864c389a047c274ca1ab323e51f960f8e"
+    },
+    "page_should_contain_image": {
+        "name": "page_should_contain_image",
+        "doc": "Verifies image identified by ``locator`` is found from current page.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, images are searched\n        using ``id``, ``name``, ``src`` and ``alt``.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n        ",
+        "sha256": "84ab3a648d3b18c5e266ba075408f3cb2ac3b736e1e2009a6cca125de5d07a50"
+    },
+    "page_should_contain_link": {
+        "name": "page_should_contain_link",
+        "doc": "Verifies link identified by ``locator`` is found from current page.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, links are searched\n        using ``id``, ``name``, ``href`` and the link text.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n        ",
+        "sha256": "005f6565f4fcd9b91f87a2274c32fae7545619549be26f23b2cc06856e44ecba"
+    },
+    "page_should_not_contain": {
+        "name": "page_should_not_contain",
+        "doc": "Verifies the current page does not contain ``text``.\n\n        See `Page Should Contain` for an explanation about the ``loglevel``\n        argument.\n        ",
+        "sha256": "72389be32f084ed5a3716a32e833e117c419bc2c6ebfa525a79e69054bb2a8cc"
+    },
+    "page_should_not_contain_element": {
+        "name": "page_should_not_contain_element",
+        "doc": "Verifies that element ``locator`` is not found on the current page.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        See `Page Should Contain` for an explanation about ``message`` and\n        ``loglevel`` arguments.\n        ",
+        "sha256": "3939f5d1fce87d85f013ae3e4327b50404cf832231d4ca2e677013808ee8ff92"
+    },
+    "page_should_not_contain_image": {
+        "name": "page_should_not_contain_image",
+        "doc": "Verifies image identified by ``locator`` is not found from current page.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, images are searched\n        using ``id``, ``name``, ``src`` and ``alt``.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n        ",
+        "sha256": "7367c4581992c47a2fbd74fd0beccc254e883879f6b93f206242d0ecb6397448"
+    },
+    "page_should_not_contain_link": {
+        "name": "page_should_not_contain_link",
+        "doc": "Verifies link identified by ``locator`` is not found from current page.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, links are searched\n        using ``id``, ``name``, ``href`` and the link text.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n        ",
+        "sha256": "61fca3076c7b671f21528f5d141ee7b43ecc1acada608b4157d08ecb38fae0e1"
+    },
+    "press_key": {
+        "name": "press_key",
+        "doc": "Simulates user pressing key on element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        ``key`` is either a single character, a string, or a numerical ASCII\n        code of the key lead by '\\'.\n\n        Examples:\n        | `Press Key` | text_field   | q     |\n        | `Press Key` | text_field   | abcde |\n        | `Press Key` | login_button | \\13  | # ASCII code for enter key |\n\n        `Press Key` and `Press Keys` differ in the methods to simulate key\n        presses. `Press Key` uses the WebDriver `SEND_KEYS_TO_ELEMENT` command\n        using the selenium send_keys method. Although one is not recommended\n        over the other if `Press Key` does not work we recommend trying\n        `Press Keys`.\n        send_\n        ",
+        "sha256": "fd4035762f6f532aed3cd2b93ad24002a51503e8a86cd7da956a3e2cf8a1038d"
+    },
+    "press_keys": {
+        "name": "press_keys",
+        "doc": "Simulates the user pressing key(s) to an element or on the active browser.\n\n        If ``locator`` evaluates as false, see `Boolean arguments` for more\n        details, then the ``keys`` are sent to the currently active browser.\n        Otherwise element is searched and ``keys`` are send to the element\n        identified by the ``locator``. In later case, keyword fails if element\n        is not found. See the `Locating elements` section for details about\n        the locator syntax.\n\n        ``keys`` arguments can contain one or many strings, but it can not\n        be empty. ``keys`` can also be a combination of\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]\n        and strings or a single Selenium Key. If Selenium Key is combined\n        with strings, Selenium key and strings must be separated by the\n        `+` character, like in `CONTROL+c`. Selenium Keys\n        are space and case sensitive and Selenium Keys are not parsed\n        inside of the string. Example AALTO, would send string `AALTO`\n        and `ALT` not parsed inside of the string. But `A+ALT+O` would\n        found Selenium ALT key from the ``keys`` argument. It also possible\n        to press many Selenium Keys down at the same time, example\n        'ALT+ARROW_DOWN`.\n\n        If Selenium Keys are detected in the ``keys`` argument, keyword\n        will press the Selenium Key down, send the strings and\n         then release the Selenium Key. If keyword needs to send a Selenium\n        Key as a string, then each character must be separated with\n        `+` character, example `E+N+D`.\n\n        `CTRL` is alias for\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]\n        and ESC is alias for\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]\n\n        New in SeleniumLibrary 3.3\n\n        Examples:\n        | `Press Keys` | text_field | AAAAA          |            | # Sends string \"AAAAA\" to element.                                                |\n        | `Press Keys` | None       | BBBBB          |            | # Sends string \"BBBBB\" to currently active browser.                               |\n        | `Press Keys` | text_field | E+N+D          |            | # Sends string \"END\" to element.                                                  |\n        | `Press Keys` | text_field | XXX            | YY         | # Sends strings \"XXX\" and \"YY\" to element.                                        |\n        | `Press Keys` | text_field | XXX+YY         |            | # Same as above.                                                                  |\n        | `Press Keys` | text_field | ALT+ARROW_DOWN |            | # Pressing \"ALT\" key down, then pressing ARROW_DOWN and then releasing both keys. |\n        | `Press Keys` | text_field | ALT            | ARROW_DOWN | # Pressing \"ALT\" key and then pressing ARROW_DOWN.                                |\n        | `Press Keys` | text_field | CTRL+c         |            | # Pressing CTRL key down, sends string \"c\" and then releases CTRL key.            |\n        | `Press Keys` | button     | RETURN         |            | # Pressing \"ENTER\" key to element.                                                |\n\n        `Press Key` and `Press Keys` differ in the methods to simulate key\n        presses. `Press Keys` uses the Selenium/WebDriver Actions.\n        `Press Keys` also has a more extensive syntax for describing keys,\n        key combinations, and key actions. Although one is not recommended\n        over the other if `Press Keys` does not work we recommend trying\n        `Press Key`.\n        ",
+        "sha256": "549b119394b8f48407c11208e1f38c3f2c753e9a40b5c6f1f47b3320df3f3612"
+    },
+    "remove_location_strategy": {
+        "name": "remove_location_strategy",
+        "doc": "Removes a previously added custom location strategy.\n\n        See `Custom locators` for information on how to create and use\n        custom strategies.\n        ",
+        "sha256": "827184ef194cec97d793297edbc6544d2e6774a80a14136ccfa0d5cc04fbc09e"
+    },
+    "scroll_element_into_view": {
+        "name": "scroll_element_into_view",
+        "doc": "Scrolls the element identified by ``locator`` into view.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        New in SeleniumLibrary 3.2.0\n        ",
+        "sha256": "0d567a31d5b64fcfb38b47c2f5f452de4fbe3d08aa0c0547644d4c59b243ef60"
+    },
+    "set_focus_to_element": {
+        "name": "set_focus_to_element",
+        "doc": "Sets the focus to the element identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Prior to SeleniumLibrary 3.0 this keyword was named `Focus`.\n        ",
+        "sha256": "0b02399995113cd6ac38557106b4697e4d86f9874173ed593a8853e63362c74f"
+    },
+    "simulate_event": {
+        "name": "simulate_event",
+        "doc": "Simulates ``event`` on the element identified by ``locator``.\n\n        This keyword is useful if element has ``OnEvent`` handler that\n        needs to be explicitly invoked.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Prior to SeleniumLibrary 3.0 this keyword was named `Simulate`.\n        ",
+        "sha256": "49cd268150ae4f3170f13d6b5a25809f41080efa3f3b5ca0fa2e2d8cd3ea7795"
+    },
+    "wait_for_expected_condition": {
+        "name": "wait_for_expected_condition",
+        "doc": "Waits until ``condition`` is true or ``timeout`` expires.\n\n        The condition must be one of selenium's expected condition which\n        can be found within the selenium\n        [https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html#module-selenium.webdriver.support.expected_conditions|Python API]\n        documentation. The expected condition can written as snake_case\n        (ex title_is) or it can be space delimited (ex Title Is). Some\n        conditions require additional arguments or ``args`` which should\n        be passed along after the expected condition.\n\n        Fails if the timeout expires before the condition becomes true.\n        The default value is 10 seconds.\n\n        Examples:\n        | `Wait For Expected Condition` | alert_is_present |\n        | `Wait For Expected Condition` |  Title Is  | New Title |\n\n        If the expected condition expects a locator then one can pass\n        as arguments a tuple containing the selenium locator strategies\n        and the locator.\n\n        Example of expected condition expecting locator:\n        | ${byElem}= |  Evaluate  (\"id\",\"added_btn\")\n        | `Wait For Expected Condition` | Presence Of Element Located | ${byElem}\n        ",
+        "sha256": "7e512f1e3c97525aa828d624627aaf3f8b76ac0ec1aaa507b36ff9c8fff34d5a"
+    },
+    "checkbox_should_be_selected": {
+        "name": "checkbox_should_be_selected",
+        "doc": "Verifies checkbox ``locator`` is selected/checked.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "e50bf6856c0f0c3f373adb3bcc3b7d677738088632055f507797887c9f822136"
+    },
+    "checkbox_should_not_be_selected": {
+        "name": "checkbox_should_not_be_selected",
+        "doc": "Verifies checkbox ``locator`` is not selected/checked.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "8488752a0365d5c94b3a7885d53b67f99d92ccc5687fdc59411b42a40fa95443"
+    },
+    "choose_file": {
+        "name": "choose_file",
+        "doc": "Inputs the ``file_path`` into the file input field ``locator``.\n\n        This keyword is most often used to input files into upload forms.\n        The keyword does not check ``file_path`` is the file or folder\n        available on the machine where tests are executed. If the ``file_path``\n        points at a file and when using Selenium Grid, Selenium will\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.command.html?highlight=upload#selenium.webdriver.remote.command.Command.UPLOAD_FILE|magically],\n        transfer the file from the machine where the tests are executed\n        to the Selenium Grid node where the browser is running.\n        Then Selenium will send the file path, from the nodes file\n        system, to the browser.\n\n        That ``file_path`` is not checked, is new in SeleniumLibrary 4.0.\n\n        Example:\n        | `Choose File` | my_upload_field | ${CURDIR}/trades.csv |\n        ",
+        "sha256": "244543282ef6c62ec448fb42ed37706978ecf84aec27a9c7774fdd39bc84697c"
+    },
+    "input_password": {
+        "name": "input_password",
+        "doc": "Types the given password into the text field identified by ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax. See `Input Text` for ``clear`` argument details.\n\n        Difference compared to `Input Text` is that this keyword does not\n        log the given password on the INFO level. Notice that if you use\n        the keyword like\n\n        | Input Password | password_field | password |\n\n        the password is shown as a normal keyword argument. A way to avoid\n        that is using variables like\n\n        | Input Password | password_field | ${PASSWORD} |\n\n        Please notice that Robot Framework logs all arguments using\n        the TRACE level and tests must not be executed using level below\n        DEBUG if the password should not be logged in any format.\n\n        The `clear` argument is new in SeleniumLibrary 4.0. Hiding password\n        logging from Selenium logs is new in SeleniumLibrary 4.2.\n        ",
+        "sha256": "2471a62ea46d3d4815fe3700c92b61bd4abee39926bc4dadeb072bb88ba69fd5"
+    },
+    "input_text": {
+        "name": "input_text",
+        "doc": "Types the given ``text`` into the text field identified by ``locator``.\n\n        When ``clear`` is true, the input element is cleared before\n        the text is typed into the element. When false, the previous text\n        is not cleared from the element. Use `Input Password` if you\n        do not want the given ``text`` to be logged.\n\n        If [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid]\n        is used and the ``text`` argument points to a file in the file system,\n        then this keyword prevents the Selenium to transfer the file to the\n        Selenium Grid hub. Instead, this keyword will send the ``text`` string\n        as is to the element. If a file should be transferred to the hub and\n        upload should be performed, please use `Choose File` keyword.\n\n        See the `Locating elements` section for details about the locator\n        syntax. See the `Boolean arguments` section how Boolean values are\n        handled.\n\n        Disabling the file upload the Selenium Grid node and the `clear`\n        argument are new in SeleniumLibrary 4.0\n        ",
+        "sha256": "77be02dfff6bb6cc9d97af190e48a4c333913ca5058e67c85a4055bb84a9f494"
+    },
+    "page_should_contain_button": {
+        "name": "page_should_contain_button",
+        "doc": "Verifies button ``locator`` is found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, buttons are\n        searched using ``id``, ``name``, and ``value``.\n        ",
+        "sha256": "f5fdc2763607b8a19e0dcbc2c8bc0512959193b4312232d89bdf5e3c1287ee25"
+    },
+    "page_should_contain_checkbox": {
+        "name": "page_should_contain_checkbox",
+        "doc": "Verifies checkbox ``locator`` is found from the current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "827b0517772c7f3d0a8c9c41a1557892b98f0c9ee7228aa80a17df7d1766b338"
+    },
+    "page_should_contain_radio_button": {
+        "name": "page_should_contain_radio_button",
+        "doc": "Verifies radio button ``locator`` is found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, radio buttons are\n        searched using ``id``, ``name`` and ``value``.\n        ",
+        "sha256": "a1bd5c4a731ebb21b599006d59a7c7d163da5fb64ca87ac20d853559ff948a95"
+    },
+    "page_should_contain_textfield": {
+        "name": "page_should_contain_textfield",
+        "doc": "Verifies text field ``locator`` is found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "7b7414371c1321271f8616d6668e9b94001ab4443df27f26fe10c5e968be00c5"
+    },
+    "page_should_not_contain_button": {
+        "name": "page_should_not_contain_button",
+        "doc": "Verifies button ``locator`` is not found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, buttons are\n        searched using ``id``, ``name``, and ``value``.\n        ",
+        "sha256": "c8b007d236e708e3d637b414d88b333f31bc64f396fe9034bc79be14288666ed"
+    },
+    "page_should_not_contain_checkbox": {
+        "name": "page_should_not_contain_checkbox",
+        "doc": "Verifies checkbox ``locator`` is not found from the current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "88204d5dcc80e3fed6bfc74f5b2e02a3507d9ac290faf29c5818f54fc7c7109d"
+    },
+    "page_should_not_contain_radio_button": {
+        "name": "page_should_not_contain_radio_button",
+        "doc": "Verifies radio button ``locator`` is not found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax. When using the default locator strategy, radio buttons are\n        searched using ``id``, ``name`` and ``value``.\n        ",
+        "sha256": "f2310d4b57e4303ef5f38cc2cdc705ca95582a56ced04899d806beab1a63cef0"
+    },
+    "page_should_not_contain_textfield": {
+        "name": "page_should_not_contain_textfield",
+        "doc": "Verifies text field ``locator`` is not found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "2d91d04a7f6bb6ffd6fb86459718e337880326ddbba3a1631de12737ecab5339"
+    },
+    "radio_button_should_be_set_to": {
+        "name": "radio_button_should_be_set_to",
+        "doc": "Verifies radio button group ``group_name`` is set to ``value``.\n\n        ``group_name`` is the ``name`` of the radio button group.\n        ",
+        "sha256": "baedeb274f24cfa1951591b65fd654551c128c26db397414fce039f3c2ef68cc"
+    },
+    "radio_button_should_not_be_selected": {
+        "name": "radio_button_should_not_be_selected",
+        "doc": "Verifies radio button group ``group_name`` has no selection.\n\n        ``group_name`` is the ``name`` of the radio button group.\n        ",
+        "sha256": "552945bd4776a7545990b26941784cf5a8bd5d1725fb1ccd6241d7f4404dea0e"
+    },
+    "select_checkbox": {
+        "name": "select_checkbox",
+        "doc": "Selects the checkbox identified by ``locator``.\n\n        Does nothing if checkbox is already selected.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "a864b4289721b7356ee6cc8f51612cdb5b91f5e439a264380665dd3c359cf09a"
+    },
+    "select_radio_button": {
+        "name": "select_radio_button",
+        "doc": "Sets the radio button group ``group_name`` to ``value``.\n\n        The radio button to be selected is located by two arguments:\n        - ``group_name`` is the name of the radio button group.\n        - ``value`` is the ``id`` or ``value`` attribute of the actual\n          radio button.\n\n        Examples:\n        | `Select Radio Button` | size    | XL    |\n        | `Select Radio Button` | contact | email |\n        ",
+        "sha256": "ffbddc133ea67fa89fc81c47e311a5c1c0d17de62b307fb25cb0811ebf995909"
+    },
+    "submit_form": {
+        "name": "submit_form",
+        "doc": "Submits a form identified by ``locator``.\n\n        If ``locator`` is not given, first form on the page is submitted.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "19787cfd196cb398177f114d219b7047839b1b875ad44e4741c02be1f2219fb7"
+    },
+    "textarea_should_contain": {
+        "name": "textarea_should_contain",
+        "doc": "Verifies text area ``locator`` contains text ``expected``.\n\n        ``message`` can be used to override default error message.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "1f0212530a7318d4b84aab2f76e6a786698c18553eb45f6d7b5ce1526aa8806a"
+    },
+    "textarea_value_should_be": {
+        "name": "textarea_value_should_be",
+        "doc": "Verifies text area ``locator`` has exactly text ``expected``.\n\n        ``message`` can be used to override default error message.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "351e1fbde625caa68c16d8203c380853b86f12203e2a58fe32fed5154779df55"
+    },
+    "textfield_should_contain": {
+        "name": "textfield_should_contain",
+        "doc": "Verifies text field ``locator`` contains text ``expected``.\n\n        ``message`` can be used to override the default error message.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "8d542b446cce4ae3a59f57d2492144fa0264dc10bcc29a7a75e210368e7b24a9"
+    },
+    "textfield_value_should_be": {
+        "name": "textfield_value_should_be",
+        "doc": "Verifies text field ``locator`` has exactly text ``expected``.\n\n        ``message`` can be used to override default error message.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "bf88210c7d1673f6f28e6a5af94ecca2f23d655f0da09f31557b5d619ca4bb83"
+    },
+    "unselect_checkbox": {
+        "name": "unselect_checkbox",
+        "doc": "Removes the selection of checkbox identified by ``locator``.\n\n        Does nothing if the checkbox is not selected.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "73e850a91f88669d5f169f1da487263b966b34b9d5979fa7eacc353b9af6d3ad"
+    },
+    "current_frame_should_contain": {
+        "name": "current_frame_should_contain",
+        "doc": "Verifies that the current frame contains ``text``.\n\n        See `Page Should Contain` for an explanation about the ``loglevel``\n        argument.\n\n        Prior to SeleniumLibrary 3.0 this keyword was named\n        `Current Frame Contains`.\n        ",
+        "sha256": "d42932ad52a7f5a80466c5fc70cde1994b5dc91e42d5a92d5a4c84c5952106bc"
+    },
+    "current_frame_should_not_contain": {
+        "name": "current_frame_should_not_contain",
+        "doc": "Verifies that the current frame does not contain ``text``.\n\n        See `Page Should Contain` for an explanation about the ``loglevel``\n        argument.\n        ",
+        "sha256": "39c919106caf859d8c436e8334ba7dbfbaaadc761810034f9c24433ef930029d"
+    },
+    "frame_should_contain": {
+        "name": "frame_should_contain",
+        "doc": "Verifies that frame identified by ``locator`` contains ``text``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        See `Page Should Contain` for an explanation about the ``loglevel``\n        argument.\n        ",
+        "sha256": "e7cf02e4cd77e7196d87f875db7285146a629fe895b3576c9dbd33ae4ab362fd"
+    },
+    "select_frame": {
+        "name": "select_frame",
+        "doc": "Sets frame identified by ``locator`` as the current frame.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Works both with frames and iframes. Use `Unselect Frame` to cancel\n        the frame selection and return to the main frame.\n\n        Example:\n        | `Select Frame`   | top-frame | # Select frame with id or name 'top-frame'   |\n        | `Click Link`     | example   | # Click link 'example' in the selected frame |\n        | `Unselect Frame` |           | # Back to main frame.                        |\n        | `Select Frame`   | //iframe[@name='xxx'] | # Select frame using xpath       |\n        ",
+        "sha256": "c2c67edf46d18644488c6395a750e293ab150011cdcdfe0741481328e01163f6"
+    },
+    "unselect_frame": {
+        "name": "unselect_frame",
+        "doc": "Sets the main frame as the current frame.\n\n        In practice cancels the previous `Select Frame` call.\n        ",
+        "sha256": "9fc68af60f0d437e37ccc1fccb858b2c6554427f3f269518d4e7f849df3c43ec"
+    },
+    "execute_async_javascript": {
+        "name": "execute_async_javascript",
+        "doc": "Executes asynchronous JavaScript code with possible arguments.\n\n        Similar to `Execute Javascript` except that scripts executed with\n        this keyword must explicitly signal they are finished by invoking the\n        provided callback. This callback is always injected into the executed\n        function as the last argument.\n\n        Scripts must complete within the script timeout or this keyword will\n        fail. See the `Timeout` section for more information.\n\n        Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_async_script|\n        arguments] as part of ``code`` argument. See `Execute Javascript` for\n        more details.\n\n        Examples:\n        | `Execute Async JavaScript` | var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 2000); |\n        | `Execute Async JavaScript` | ${CURDIR}/async_js_to_execute.js |\n        | ${result} = | `Execute Async JavaScript`                      |\n        | ...         | var callback = arguments[arguments.length - 1]; |\n        | ...         | function answer(){callback(\"text\");};           |\n        | ...         | window.setTimeout(answer, 2000);                |\n        | `Should Be Equal` | ${result} | text |\n        ",
+        "sha256": "a67bddb89758620a690da6f26a06985d8a546d32da40a6509296e93dc1f68c51"
+    },
+    "execute_javascript": {
+        "name": "execute_javascript",
+        "doc": "Executes the given JavaScript code with possible arguments.\n\n        ``code`` may be divided into multiple cells in the test data and\n        ``code`` may contain multiple lines of code and arguments. In that case,\n        the JavaScript code parts are concatenated together without adding\n        spaces and optional arguments are separated from ``code``.\n\n        If ``code`` is a path to an existing file, the JavaScript\n        to execute will be read from that file. Forward slashes work as\n        a path separator on all operating systems.\n\n        The JavaScript executes in the context of the currently selected\n        frame or window as the body of an anonymous function. Use ``window``\n        to refer to the window of your application and ``document`` to refer\n        to the document object of the current frame or window, e.g.\n        ``document.getElementById('example')``.\n\n        This keyword returns whatever the executed JavaScript code returns.\n        Return values are converted to the appropriate Python types.\n\n        Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript\n        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|\n        arguments] as part of ``code`` argument. The JavaScript code and\n        arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` markers\n        and must be used exactly with this format. If the Javascript code is\n        first, then the `JAVASCRIPT` marker is optional. The order of\n        `JAVASCRIPT` and `ARGUMENTS` markers can be swapped, but if `ARGUMENTS`\n        is the first marker, then `JAVASCRIPT` marker is mandatory. It is only\n        allowed to use `JAVASCRIPT` and `ARGUMENTS` markers only one time in the\n        ``code`` argument.\n\n        Examples:\n        | `Execute JavaScript` | window.myFunc('arg1', 'arg2') |\n        | `Execute JavaScript` | ${CURDIR}/js_to_execute.js    |\n        | `Execute JavaScript` | alert(arguments[0]); | ARGUMENTS | 123 |\n        | `Execute JavaScript` | ARGUMENTS | 123 | JAVASCRIPT | alert(arguments[0]); |\n        ",
+        "sha256": "5037e85a542b11eebcf4a3fd0b9eae560f17cd117b7fdfc9c7148c9091b44cc4"
+    },
+    "register_keyword_to_run_on_failure": {
+        "name": "register_keyword_to_run_on_failure",
+        "doc": "Sets the keyword to execute, when a SeleniumLibrary keyword fails.\n\n        ``keyword`` is the name of a keyword that will be executed if a\n        SeleniumLibrary keyword fails. It is possible to use any available\n        keyword, including user keywords or keywords from other libraries,\n        but the keyword must not take any arguments.\n\n        The initial keyword to use is set when `importing` the library, and\n        the keyword that is used by default is `Capture Page Screenshot`.\n        Taking a screenshot when something failed is a very useful\n        feature, but notice that it can slow down the execution.\n\n        It is possible to use string ``NOTHING`` or ``NONE``,\n        case-insensitively, as well as Python ``None`` to disable this\n        feature altogether.\n\n        This keyword returns the name of the previously registered\n        failure keyword or Python ``None`` if this functionality was\n        previously disabled. The return value can be always used to\n        restore the original value later.\n\n        Example:\n        | `Register Keyword To Run On Failure`  | Log Source |\n        | ${previous kw}= | `Register Keyword To Run On Failure`  | NONE |\n        | `Register Keyword To Run On Failure`  | ${previous kw} |\n\n        Changes in SeleniumLibrary 3.0:\n        - Possible to use string ``NONE`` or Python ``None`` to disable the\n          functionality.\n        - Return Python ``None`` when the functionality was disabled earlier.\n          In previous versions special value ``No Keyword`` was returned and\n          it could not be used to restore the original state.\n        ",
+        "sha256": "9eaadf25a89adfb670897301330147203808d9cec135d82015215fe7a14c7313"
+    },
+    "capture_element_screenshot": {
+        "name": "capture_element_screenshot",
+        "doc": "Captures a screenshot from the element identified by ``locator`` and embeds it into log file.\n\n        See `Capture Page Screenshot` for details about ``filename`` argument.\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        An absolute path to the created element screenshot is returned.\n\n        Support for capturing the screenshot from an element has limited support\n        among browser vendors. Please check the browser vendor driver documentation\n        does the browser support capturing a screenshot from an element.\n\n        New in SeleniumLibrary 3.3. Support for EMBED is new in SeleniumLibrary 4.2.\n\n        Examples:\n        | `Capture Element Screenshot` | id:image_id |                                |\n        | `Capture Element Screenshot` | id:image_id | ${OUTPUTDIR}/id_image_id-1.png |\n        | `Capture Element Screenshot` | id:image_id | EMBED                          |\n        ",
+        "sha256": "a5dabc5a6525bca9796834b47e1fff61557439b12dd78240701233af0b95c73f"
+    },
+    "capture_page_screenshot": {
+        "name": "capture_page_screenshot",
+        "doc": "Takes a screenshot of the current page and embeds it into a log file.\n\n        ``filename`` argument specifies the name of the file to write the\n        screenshot into. The directory where screenshots are saved can be\n        set when `importing` the library or by using the `Set Screenshot\n        Directory` keyword. If the directory is not configured, screenshots\n        are saved to the same directory where Robot Framework's log file is\n        written.\n\n        If ``filename`` equals to EMBED (case insensitive), then screenshot\n        is embedded as Base64 image to the log.html. In this case file is not\n        created in the filesystem.\n\n        Starting from SeleniumLibrary 1.8, if ``filename`` contains marker\n        ``{index}``, it will be automatically replaced with an unique running\n        index, preventing files to be overwritten. Indices start from 1,\n        and how they are represented can be customized using Python's\n        [https://docs.python.org/3/library/string.html#format-string-syntax|\n        format string syntax].\n\n        An absolute path to the created screenshot file is returned or if\n        ``filename``  equals to EMBED, word `EMBED` is returned.\n\n        Support for EMBED is new in SeleniumLibrary 4.2\n\n        Examples:\n        | `Capture Page Screenshot` |                                        |\n        | `File Should Exist`       | ${OUTPUTDIR}/selenium-screenshot-1.png |\n        | ${path} =                 | `Capture Page Screenshot`              |\n        | `File Should Exist`       | ${OUTPUTDIR}/selenium-screenshot-2.png |\n        | `File Should Exist`       | ${path}                                |\n        | `Capture Page Screenshot` | custom_name.png                        |\n        | `File Should Exist`       | ${OUTPUTDIR}/custom_name.png           |\n        | `Capture Page Screenshot` | custom_with_index_{index}.png          |\n        | `File Should Exist`       | ${OUTPUTDIR}/custom_with_index_1.png   |\n        | `Capture Page Screenshot` | formatted_index_{index:03}.png         |\n        | `File Should Exist`       | ${OUTPUTDIR}/formatted_index_001.png   |\n        | `Capture Page Screenshot` | EMBED                                  |\n        | `File Should Not Exist`   | EMBED                                  |\n        ",
+        "sha256": "271132ea5ad25ba3e6182db7560e7eaf512df0bae8f437f756419b9611a4bebe"
+    },
+    "set_screenshot_directory": {
+        "name": "set_screenshot_directory",
+        "doc": "Sets the directory for captured screenshots.\n\n        ``path`` argument specifies the absolute path to a directory where\n        the screenshots should be written to. If the directory does not\n        exist, it will be created. The directory can also be set when\n        `importing` the library. If it is not configured anywhere,\n        screenshots are saved to the same directory where Robot Framework's\n        log file is written.\n\n        If ``path`` equals to EMBED (case insensitive) and\n        `Capture Page Screenshot` or `capture Element Screenshot` keywords\n        filename argument is not changed from the default value, then\n        the page or element screenshot is embedded as Base64 image to\n        the log.html.\n\n        The previous value is returned and can be used to restore\n        the original value later if needed.\n\n        Returning the previous value is new in SeleniumLibrary 3.0.\n        The persist argument was removed in SeleniumLibrary 3.2 and\n        EMBED is new in SeleniumLibrary 4.2.\n        ",
+        "sha256": "c8241dd4f1113b3db620de1f45f2390c227b081400b04e0178561dde2c38748e"
+    },
+    "get_list_items": {
+        "name": "get_list_items",
+        "doc": "Returns all labels or values of selection list ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Returns visible labels by default, but values can be returned by\n        setting the ``values`` argument to a true value (see `Boolean\n        arguments`).\n\n        Example:\n        | ${labels} = | `Get List Items` | mylist              |             |\n        | ${values} = | `Get List Items` | css:#example select | values=True |\n\n        Support to return values is new in SeleniumLibrary 3.0.\n        ",
+        "sha256": "60f7293239f288f08276b8fa63d98a6be52ff42a0627b9b0da14ba6dab51bd94"
+    },
+    "get_selected_list_label": {
+        "name": "get_selected_list_label",
+        "doc": "Returns the label of selected option from selection list ``locator``.\n\n        If there are multiple selected options, the label of the first option\n        is returned.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "f9281509d3c4ac39f4b98d9d9d4f0f2dd6b579c37204b33ec7d47b6bef999672"
+    },
+    "get_selected_list_labels": {
+        "name": "get_selected_list_labels",
+        "doc": "Returns labels of selected options from selection list ``locator``.\n\n        Starting from SeleniumLibrary 3.0, returns an empty list if there\n        are no selections. In earlier versions, this caused an error.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "e3bf2c1db04dbb52c99c7397065da52699bb4b7bdc5ceaeb45d525e8176acb48"
+    },
+    "get_selected_list_value": {
+        "name": "get_selected_list_value",
+        "doc": "Returns the value of selected option from selection list ``locator``.\n\n        If there are multiple selected options, the value of the first option\n        is returned.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "2b935dd4627ca62d92a311569036b2978032aa67e542f5b7ef91a514f01f323d"
+    },
+    "get_selected_list_values": {
+        "name": "get_selected_list_values",
+        "doc": "Returns values of selected options from selection list ``locator``.\n\n        Starting from SeleniumLibrary 3.0, returns an empty list if there\n        are no selections. In earlier versions, this caused an error.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "83b79c56056a6d51529e36a093ba14ec0b805a96bdb9e6870214eb4de987bea6"
+    },
+    "list_selection_should_be": {
+        "name": "list_selection_should_be",
+        "doc": "Verifies selection list ``locator`` has ``expected`` options selected.\n\n        It is possible to give expected options both as visible labels and\n        as values. Starting from SeleniumLibrary 3.0, mixing labels and\n        values is not possible. Order of the selected options is not\n        validated.\n\n        If no expected options are given, validates that the list has\n        no selections. A more explicit alternative is using `List Should\n        Have No Selections`.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        Examples:\n        | `List Selection Should Be` | gender    | Female          |        |\n        | `List Selection Should Be` | interests | Test Automation | Python |\n        ",
+        "sha256": "1d70ccc8a2dc868e265fc29e9cbc2317799eb12d0dd3f21d61fa4ffea7a7e4c2"
+    },
+    "list_should_have_no_selections": {
+        "name": "list_should_have_no_selections",
+        "doc": "Verifies selection list ``locator`` has no options selected.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "429fc50c47319d8267bc5c2306a7d1d191a124d457a6f6655bb4ff5d64d71def"
+    },
+    "page_should_contain_list": {
+        "name": "page_should_contain_list",
+        "doc": "Verifies selection list ``locator`` is found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "9ad2d87bd51bee3365d5ca32153adae2ea4b137f916f07fc39416a54aa117bf6"
+    },
+    "page_should_not_contain_list": {
+        "name": "page_should_not_contain_list",
+        "doc": "Verifies selection list ``locator`` is not found from current page.\n\n        See `Page Should Contain Element` for an explanation about ``message``\n        and ``loglevel`` arguments.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "2f2e58b399f73b2ab4dc795368b0b18b9a63c37e2764de722d897039d6e7881c"
+    },
+    "select_all_from_list": {
+        "name": "select_all_from_list",
+        "doc": "Selects all options from multi-selection list ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "7113bdf3faec639e3bdb3b1beb09c526dec522a0181ae11fd94398fdfb3f6fd2"
+    },
+    "select_from_list_by_index": {
+        "name": "select_from_list_by_index",
+        "doc": "Selects options from selection list ``locator`` by ``indexes``.\n\n        Indexes of list options start from 0.\n\n        If more than one option is given for a single-selection list,\n        the last value will be selected. With multi-selection lists all\n        specified options are selected, but possible old selections are\n        not cleared.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "220f77e512662cfff307efa29f5b46dba2e0d1b04760707cface96f63ff87e7c"
+    },
+    "select_from_list_by_label": {
+        "name": "select_from_list_by_label",
+        "doc": "Selects options from selection list ``locator`` by ``labels``.\n\n        If more than one option is given for a single-selection list,\n        the last value will be selected. With multi-selection lists all\n        specified options are selected, but possible old selections are\n        not cleared.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "12c2af99cb8c78b6edd06ee17d902a575d1a2a4932d21bb67b040233a5a80318"
+    },
+    "select_from_list_by_value": {
+        "name": "select_from_list_by_value",
+        "doc": "Selects options from selection list ``locator`` by ``values``.\n\n        If more than one option is given for a single-selection list,\n        the last value will be selected. With multi-selection lists all\n        specified options are selected, but possible old selections are\n        not cleared.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "9989cd962aeddb746a6ac8c632023bb9fbbe1ae832ae618635fb1c072049d7ab"
+    },
+    "unselect_all_from_list": {
+        "name": "unselect_all_from_list",
+        "doc": "Unselects all options from multi-selection list ``locator``.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n\n        New in SeleniumLibrary 3.0.\n        ",
+        "sha256": "e273c674b217707452b897e66ccfa2ff12ef2279198364b4f95350b0cc557c4c"
+    },
+    "unselect_from_list_by_index": {
+        "name": "unselect_from_list_by_index",
+        "doc": "Unselects options from selection list ``locator`` by ``indexes``.\n\n        Indexes of list options start from 0. This keyword works only with\n        multi-selection lists.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "5aac4cc2fa0bec90621d29b2eac7064d18510c447b7357d8eb5948d2cd459cef"
+    },
+    "unselect_from_list_by_label": {
+        "name": "unselect_from_list_by_label",
+        "doc": "Unselects options from selection list ``locator`` by ``labels``.\n\n        This keyword works only with multi-selection lists.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "3dfe87450d9a1a8cad3f8cad3e159b8bd4c3e25f25f91dd747aeb23403b18ab5"
+    },
+    "unselect_from_list_by_value": {
+        "name": "unselect_from_list_by_value",
+        "doc": "Unselects options from selection list ``locator`` by ``values``.\n\n        This keyword works only with multi-selection lists.\n\n        See the `Locating elements` section for details about the locator\n        syntax.\n        ",
+        "sha256": "7ee06a01319ea95e02d4ba34cfbc0d845cf5dbaf58244d93338760609a67ec02"
+    },
+    "get_table_cell": {
+        "name": "get_table_cell",
+        "doc": "Returns contents of a table cell.\n\n        The table is located using the ``locator`` argument and its cell\n        found using ``row`` and ``column``. See the `Locating elements`\n        section for details about the locator syntax.\n\n        Both row and column indexes start from 1, and header and footer\n        rows are included in the count. It is possible to refer to rows\n        and columns from the end by using negative indexes so that -1\n        is the last row/column, -2 is the second last, and so on.\n\n        All ``<th>`` and ``<td>`` elements anywhere in the table are\n        considered to be cells.\n\n        See `Page Should Contain` for an explanation about the ``loglevel``\n        argument.\n        ",
+        "sha256": "616f2d925fbd431f1cdde9427ff865b4f402806b2f15b99dfd033a96e0d0a42e"
+    },
+    "table_cell_should_contain": {
+        "name": "table_cell_should_contain",
+        "doc": "Verifies table cell contains text ``expected``.\n\n        See `Get Table Cell` that this keyword uses internally for\n        an explanation about accepted arguments.\n        ",
+        "sha256": "628c09aa35b649beda7c500e914fa906cf91f9eb30afad19973809784ee1f8d6"
+    },
+    "table_column_should_contain": {
+        "name": "table_column_should_contain",
+        "doc": "Verifies table column contains text ``expected``.\n\n        The table is located using the ``locator`` argument and its column\n        found using ``column``. See the `Locating elements` section for\n        details about the locator syntax.\n\n        Column indexes start from 1. It is possible to refer to columns\n        from the end by using negative indexes so that -1 is the last column,\n        -2 is the second last, and so on.\n\n        If a table contains cells that span multiple columns, those merged\n        cells count as a single column.\n\n        See `Page Should Contain Element` for an explanation about the\n        ``loglevel`` argument.\n        ",
+        "sha256": "e0f898ce00b22cd66e2f4c5ab1cdcbea733f294d53bc210ec33667dfcd1963de"
+    },
+    "table_footer_should_contain": {
+        "name": "table_footer_should_contain",
+        "doc": "Verifies table footer contains text ``expected``.\n\n        Any ``<td>`` element inside ``<tfoot>`` element is considered to\n        be part of the footer.\n\n        The table is located using the ``locator`` argument. See the\n        `Locating elements` section for details about the locator syntax.\n\n        See `Page Should Contain Element` for an explanation about the\n        ``loglevel`` argument.\n        ",
+        "sha256": "454fb3be070acb378460038572ed4268de8b18b96b3aaa903d3a1f0093147691"
+    },
+    "table_header_should_contain": {
+        "name": "table_header_should_contain",
+        "doc": "Verifies table header contains text ``expected``.\n\n        Any ``<th>`` element anywhere in the table is considered to be\n        part of the header.\n\n        The table is located using the ``locator`` argument. See the\n        `Locating elements` section for details about the locator syntax.\n\n        See `Page Should Contain Element` for an explanation about the\n        ``loglevel`` argument.\n        ",
+        "sha256": "66208e9741c9d18d1c09645bfcb9b54b4ffe2c104e5402c86f2cf54feb02de79"
+    },
+    "table_row_should_contain": {
+        "name": "table_row_should_contain",
+        "doc": "Verifies that table row contains text ``expected``.\n\n        The table is located using the ``locator`` argument and its column\n        found using ``column``. See the `Locating elements` section for\n        details about the locator syntax.\n\n        Row indexes start from 1. It is possible to refer to rows\n        from the end by using negative indexes so that -1 is the last row,\n        -2 is the second last, and so on.\n\n        If a table contains cells that span multiple rows, a match\n        only occurs for the uppermost row of those merged cells.\n\n        See `Page Should Contain Element` for an explanation about the\n        ``loglevel`` argument.\n        ",
+        "sha256": "2ad4f79443748abaa86e768fb0994f32a2d1386c435688727093fb0c1034d23f"
+    },
+    "table_should_contain": {
+        "name": "table_should_contain",
+        "doc": "Verifies table contains text ``expected``.\n\n        The table is located using the ``locator`` argument. See the\n        `Locating elements` section for details about the locator syntax.\n\n        See `Page Should Contain Element` for an explanation about the\n        ``loglevel`` argument.\n        ",
+        "sha256": "ea4dc362f588ab33332b985ea6ff059499de1e4c25bdbfceb6e6517cd36b24fc"
+    },
+    "wait_for_condition": {
+        "name": "wait_for_condition",
+        "doc": "Waits until ``condition`` is true or ``timeout`` expires.\n\n        The condition can be arbitrary JavaScript expression but it\n        must return a value to be evaluated. See `Execute JavaScript` for\n        information about accessing content on pages.\n\n        Fails if the timeout expires before the condition becomes true. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        ``error`` can be used to override the default error message.\n\n        Examples:\n        | `Wait For Condition` | return document.title == \"New Title\" |\n        | `Wait For Condition` | return jQuery.active == 0            |\n        | `Wait For Condition` | style = document.querySelector('h1').style; return style.background == \"red\" && style.color == \"white\" |\n        ",
+        "sha256": "4998ab3cee46a578df2b064d390401d2ec0268454607ef194db5c0d3d73c81db"
+    },
+    "wait_until_element_contains": {
+        "name": "wait_until_element_contains",
+        "doc": "Waits until the element ``locator`` contains ``text``.\n\n        Fails if ``timeout`` expires before the text appears. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n        ",
+        "sha256": "982c68220bb622a3d985c04b39ea3bc11b20437e73bcf8e38d51ed7e2032852c"
+    },
+    "wait_until_element_does_not_contain": {
+        "name": "wait_until_element_does_not_contain",
+        "doc": "Waits until the element ``locator`` does not contain ``text``.\n\n        Fails if ``timeout`` expires before the text disappears. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n        ",
+        "sha256": "a2b8bc5ee7de21f06e79317935026beddee2105ae645c22b322446dd5a8be0ad"
+    },
+    "wait_until_element_is_enabled": {
+        "name": "wait_until_element_is_enabled",
+        "doc": "Waits until the element ``locator`` is enabled.\n\n        Element is considered enabled if it is not disabled nor read-only.\n\n        Fails if ``timeout`` expires before the element is enabled. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n\n        Considering read-only elements to be disabled is a new feature\n        in SeleniumLibrary 3.0.\n        ",
+        "sha256": "6202e0635b377e2e7d5eaa091eb6a582b64bc49f9d5edf6ddeb7754723015543"
+    },
+    "wait_until_element_is_not_visible": {
+        "name": "wait_until_element_is_not_visible",
+        "doc": "Waits until the element ``locator`` is not visible.\n\n        Fails if ``timeout`` expires before the element is not visible. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n        ",
+        "sha256": "e112e160d739b0cd0f8730703738cc0692e1c0d57e42308b6d50206db23e6d52"
+    },
+    "wait_until_element_is_visible": {
+        "name": "wait_until_element_is_visible",
+        "doc": "Waits until the element ``locator`` is visible.\n\n        Fails if ``timeout`` expires before the element is visible. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n        ",
+        "sha256": "90878c583a727db5da943e7f532efa4e73c59a525a0107233fd59740bb9dd116"
+    },
+    "wait_until_location_contains": {
+        "name": "wait_until_location_contains",
+        "doc": "Waits until the current URL contains ``expected``.\n\n        The ``expected`` argument contains the expected value in url.\n\n        Fails if ``timeout`` expires before the location contains. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        New in SeleniumLibrary 4.0\n        ",
+        "sha256": "33b91c79fe956c37284bccdb56d318e679ec774ca1565db5e2140250b6b46fb5"
+    },
+    "wait_until_location_does_not_contain": {
+        "name": "wait_until_location_does_not_contain",
+        "doc": "Waits until the current URL does not contains ``location``.\n\n        The ``location`` argument contains value not expected in url.\n\n        Fails if ``timeout`` expires before the location not contains. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        New in SeleniumLibrary 4.3\n        ",
+        "sha256": "5ea0b9da22370c90d509d3e4a8aad47b69652b2bd0ce5b29a9264508d4bea432"
+    },
+    "wait_until_location_is": {
+        "name": "wait_until_location_is",
+        "doc": "Waits until the current URL is ``expected``.\n\n        The ``expected`` argument is the expected value in url.\n\n        Fails if ``timeout`` expires before the location is. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        New in SeleniumLibrary 4.0\n        ",
+        "sha256": "2a0604e9e096908cda4caef1486d56310d6f10d0d974804c96a32a0492eb1f82"
+    },
+    "wait_until_location_is_not": {
+        "name": "wait_until_location_is_not",
+        "doc": "Waits until the current URL is not ``location``.\n\n        The ``location`` argument is the unexpected value in url.\n\n        Fails if ``timeout`` expires before the location is not. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        The ``message`` argument can be used to override the default error\n        message.\n\n        New in SeleniumLibrary 4.3\n        ",
+        "sha256": "96f19cceb6f263cde977b3dfd4b90d06691a1533ebef77c9c5ef1f0e0925e228"
+    },
+    "wait_until_page_contains": {
+        "name": "wait_until_page_contains",
+        "doc": "Waits until ``text`` appears on the current page.\n\n        Fails if ``timeout`` expires before the text appears. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        ``error`` can be used to override the default error message.\n        ",
+        "sha256": "2e6b9f7e424ed5ba676c82ce9b6ae964050a5fb7b47baa35a3f94125107d9e57"
+    },
+    "wait_until_page_contains_element": {
+        "name": "wait_until_page_contains_element",
+        "doc": "Waits until the element ``locator`` appears on the current page.\n\n        Fails if ``timeout`` expires before the element appears. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n\n        The ``limit`` argument can used to define how many elements the\n        page should contain. When ``limit`` is `None` (default) page can\n        contain one or more elements. When limit is a number, page must\n        contain same number of elements.\n\n        ``limit`` is new in SeleniumLibrary 4.4\n        ",
+        "sha256": "712da49e8aff630cb2843522331935693ce334aea9ccb2aacb6c015af9c921b5"
+    },
+    "wait_until_page_does_not_contain": {
+        "name": "wait_until_page_does_not_contain",
+        "doc": "Waits until ``text`` disappears from the current page.\n\n        Fails if ``timeout`` expires before the text disappears. See\n        the `Timeouts` section for more information about using timeouts\n        and their default value.\n\n        ``error`` can be used to override the default error message.\n        ",
+        "sha256": "96c2f8840c677afdb9f207107bf3f7bbdfb9d1b56e3ce887cf34a88e3e273974"
+    },
+    "wait_until_page_does_not_contain_element": {
+        "name": "wait_until_page_does_not_contain_element",
+        "doc": "Waits until the element ``locator`` disappears from the current page.\n\n        Fails if ``timeout`` expires before the element disappears. See\n        the `Timeouts` section for more information about using timeouts and\n        their default value and the `Locating elements` section for details\n        about the locator syntax.\n\n        ``error`` can be used to override the default error message.\n\n        The ``limit`` argument can used to define how many elements the\n        page should not contain. When ``limit`` is `None` (default) page can`t\n        contain any elements. When limit is a number, page must not\n        contain same number of elements.\n\n        ``limit`` is new in SeleniumLibrary 4.4\n        ",
+        "sha256": "081d0393a8d8f100d9db65f81170222f4a6678fcc2703a3e123c907ef5ade430"
+    },
+    "close_window": {
+        "name": "close_window",
+        "doc": "Closes currently opened and selected browser window/tab. ",
+        "sha256": "8d00f3bcf62126a5fcc61ca14d62631ad918c2993ee9e8f2641cb57595b591bb"
+    },
+    "get_locations": {
+        "name": "get_locations",
+        "doc": "Returns and logs URLs of all windows of the selected browser.\n\n        *Browser Scope:*\n\n        The ``browser`` argument specifies the browser that shall return\n        its windows information.\n\n        - ``browser`` can be ``index_or_alias`` like in `Switch Browser`.\n\n        - If ``browser`` is ``CURRENT`` (default, case-insensitive)\n          the currently active browser is selected.\n\n        - If ``browser`` is ``ALL`` (case-insensitive)\n          the window information of all windows of all opened browsers are returned.",
+        "sha256": "3e73811fa673371891cffa16aa99f24fa6dbc87ff826d0d84be6d54fc937163c"
+    },
+    "get_window_handles": {
+        "name": "get_window_handles",
+        "doc": "Returns all child window handles of the selected browser as a list.\n\n        Can be used as a list of windows to exclude with `Select Window`.\n\n        How to select the ``browser`` scope of this keyword, see `Get Locations`.\n\n        Prior to SeleniumLibrary 3.0, this keyword was named `List Windows`.\n        ",
+        "sha256": "b051b51a36766e2a3c748a2ecbb76ed6516a20cec807a38d29a96f95c5ea7efa"
+    },
+    "get_window_identifiers": {
+        "name": "get_window_identifiers",
+        "doc": "Returns and logs id attributes of all windows of the selected browser.\n\n        How to select the ``browser`` scope of this keyword, see `Get Locations`.",
+        "sha256": "9342df3471d9923e299c60511d11006762b1797802153c97ac0451adcdd5e0bf"
+    },
+    "get_window_names": {
+        "name": "get_window_names",
+        "doc": "Returns and logs names of all windows of the selected browser.\n\n        How to select the ``browser`` scope of this keyword, see `Get Locations`.",
+        "sha256": "557778bcbb2b4be2e575416f5422c8077397f2e7d7614e3b064fe3f222bf3225"
+    },
+    "get_window_position": {
+        "name": "get_window_position",
+        "doc": "Returns current window position.\n\n        The position is relative to the top left corner of the screen. Returned\n        values are integers. See also `Set Window Position`.\n\n        Example:\n        | ${x} | ${y}= | `Get Window Position` |\n        ",
+        "sha256": "c9f1ab8ee31517bc91a6ae9f3dd3782c695f0c3c64adf1639fc3e34ea85e7d9c"
+    },
+    "get_window_size": {
+        "name": "get_window_size",
+        "doc": "Returns current window width and height as integers.\n\n        See also `Set Window Size`.\n\n        If ``inner`` parameter is set to True, keyword returns\n        HTML DOM window.innerWidth and window.innerHeight properties.\n        See `Boolean arguments` for more details on how to set boolean\n        arguments. The ``inner`` is new in SeleniumLibrary 4.0.\n\n        Example:\n        | ${width} | ${height}= | `Get Window Size` |      |\n        | ${width} | ${height}= | `Get Window Size` | True |\n        ",
+        "sha256": "d9fc8a6bc4dd38749c761722027b783dfd74ff3c69d16ad3e4ceceb162f2ed64"
+    },
+    "get_window_titles": {
+        "name": "get_window_titles",
+        "doc": "Returns and logs titles of all windows of the selected browser.\n\n        How to select the ``browser`` scope of this keyword, see `Get Locations`.",
+        "sha256": "7b2a62a9e808f584ec9674faae954855135aec5ac168ec0b929b11ac73f7fcec"
+    },
+    "maximize_browser_window": {
+        "name": "maximize_browser_window",
+        "doc": "Maximizes current browser window.",
+        "sha256": "de016b8b98dc0a25f624060424c8ae449cc680990baf8789da09181b2643d77b"
+    },
+    "minimize_browser_window": {
+        "name": "minimize_browser_window",
+        "doc": "Minimizes current browser window.",
+        "sha256": "6a99ddaa41cde69ae82c33df6d43976d9ad76a358be5d4e35f065895e94e95db"
+    },
+    "set_window_position": {
+        "name": "set_window_position",
+        "doc": "Sets window position using ``x`` and ``y`` coordinates.\n\n        The position is relative to the top left corner of the screen,\n        but some browsers exclude possible task bar set by the operating\n        system from the calculation. The actual position may thus be\n        different with different browsers.\n\n        Values can be given using strings containing numbers or by using\n        actual numbers. See also `Get Window Position`.\n\n        Example:\n        | `Set Window Position` | 100 | 200 |\n        ",
+        "sha256": "d9c3d6dc138cd350941a1660e5601dbc4441ee6c0a7df08902c76dd15953017c"
+    },
+    "set_window_size": {
+        "name": "set_window_size",
+        "doc": "Sets current windows size to given ``width`` and ``height``.\n\n        Values can be given using strings containing numbers or by using\n        actual numbers. See also `Get Window Size`.\n\n        Browsers have a limit on their minimum size. Trying to set them\n        smaller will cause the actual size to be bigger than the requested\n        size.\n\n        If ``inner`` parameter is set to True, keyword sets the necessary\n        window width and height to have the desired HTML DOM _window.innerWidth_\n        and _window.innerHeight_. See `Boolean arguments` for more details on how to set boolean\n        arguments.\n\n        The ``inner`` argument is new since SeleniumLibrary 4.0.\n\n        This ``inner`` argument does not support Frames. If a frame is selected,\n        switch to default before running this.\n\n        Example:\n        | `Set Window Size` | 800 | 600 |      |\n        | `Set Window Size` | 800 | 600 | True |\n        ",
+        "sha256": "31b5febddcb935b20320728accc28a892b8a0956301646827aa8c7c74e1cdfec"
+    },
+    "switch_window": {
+        "name": "switch_window",
+        "doc": "Switches to browser window matching ``locator``.\n\n        If the window is found, all subsequent commands use the selected\n        window, until this keyword is used again. If the window is not\n        found, this keyword fails. The previous windows handle is returned\n        and can be used to switch back to it later.\n\n        Notice that alerts should be handled with\n        `Handle Alert` or other alert related keywords.\n\n        The ``locator`` can be specified using different strategies somewhat\n        similarly as when `locating elements` on pages.\n\n        - By default, the ``locator`` is matched against window handle, name,\n          title, and URL. Matching is done in that order and the first\n          matching window is selected.\n\n        - The ``locator`` can specify an explicit strategy by using the format\n          ``strategy:value`` (recommended) or ``strategy=value``. Supported\n          strategies are ``name``, ``title``, and ``url``. These matches windows\n          using their name, title, or URL, respectively. Additionally, ``default``\n          can be used to explicitly use the default strategy explained above.\n\n        - If the ``locator`` is ``NEW`` (case-insensitive), the latest\n          opened window is selected. It is an error if this is the same\n          as the current window.\n\n        - If the ``locator`` is ``MAIN`` (default, case-insensitive),\n          the main window is selected.\n\n        - If the ``locator`` is ``CURRENT`` (case-insensitive), nothing is\n          done. This effectively just returns the current window handle.\n\n        - If the ``locator`` is not a string, it is expected to be a list\n          of window handles _to exclude_. Such a list of excluded windows\n          can be got from `Get Window Handles` before doing an action that\n          opens a new window.\n\n        The ``timeout`` is used to specify how long keyword will poll to select\n        the new window. The ``timeout`` is new in SeleniumLibrary 3.2.\n\n        Example:\n        | `Click Link`      | popup1      |      | # Open new window |\n        | `Switch Window`   | example     |      | # Select window using default strategy |\n        | `Title Should Be` | Pop-up 1    |      |\n        | `Click Button`    | popup2      |      | # Open another window |\n        | ${handle} = | `Switch Window`   | NEW  | # Select latest opened window |\n        | `Title Should Be` | Pop-up 2    |      |\n        | `Switch Window`   | ${handle}   |      | # Select window using handle |\n        | `Title Should Be` | Pop-up 1    |      |\n        | `Switch Window`   | MAIN        |      | # Select the main window |\n        | `Title Should Be` | Main        |      |\n        | ${excludes} = | `Get Window Handles` | | # Get list of current windows |\n        | `Click Link`      | popup3      |      | # Open one more window |\n        | `Switch Window`   | ${excludes} |      | # Select window using excludes |\n        | `Title Should Be` | Pop-up 3    |      |\n\n        The ``browser`` argument allows with ``index_or_alias`` to implicitly switch to\n        a specific browser when switching to a window. See `Switch Browser`\n\n        - If the ``browser`` is ``CURRENT`` (case-insensitive), no other browser is\n          selected.\n\n        *NOTE:*\n\n        - The ``strategy:value`` syntax is only supported by SeleniumLibrary\n          3.0 and newer.\n        - Prior to SeleniumLibrary 3.0 matching windows by name, title\n          and URL was case-insensitive.\n        - Earlier versions supported aliases ``None``, ``null`` and the\n          empty string for selecting the main window, and alias ``self``\n          for selecting the current window. Support for these aliases was\n          removed in SeleniumLibrary 3.2.\n        ",
+        "sha256": "2ae583a5179810f31a4f7ae665918443d1f068c53e255c552b51bd1f5205c608"
+    },
+    "__init__": {
+        "name": "__init__",
+        "doc": "1 SeleniumLibrary is a web testing library for Robot Framework.\n\nThis document explains how to use keywords provided by SeleniumLibrary.\nFor information about installation, support, and more, please visit the\n[https://github.com/robotframework/SeleniumLibrary|project pages].\nFor more information about Robot Framework, see http://robotframework.org.\n\nSeleniumLibrary uses the Selenium WebDriver modules internally to\ncontrol a web browser. See http://seleniumhq.org for more information\nabout Selenium in general and SeleniumLibrary README.rst\n[https://github.com/robotframework/SeleniumLibrary#browser-drivers|Browser drivers chapter]\nfor more details about WebDriver binary installation.\n\n%TOC%\n\n= Locating elements =\n\nAll keywords in SeleniumLibrary that need to interact with an element\non a web page take an argument typically named ``locator`` that specifies\nhow to find the element. Most often the locator is given as a string\nusing the locator syntax described below, but `using WebElements` is\npossible too.\n\n== Locator syntax ==\n\nSeleniumLibrary supports finding elements based on different strategies\nsuch as the element id, XPath expressions, or CSS selectors. The strategy\ncan either be explicitly specified with a prefix or the strategy can be\nimplicit.\n\n=== Default locator strategy ===\n\nBy default, locators are considered to use the keyword specific default\nlocator strategy. All keywords support finding elements based on ``id``\nand ``name`` attributes, but some keywords support additional attributes\nor other values that make sense in their context. For example, `Click\nLink` supports the ``href`` attribute and the link text and addition\nto the normal ``id`` and ``name``.\n\nExamples:\n\n| `Click Element` | example | # Match based on ``id`` or ``name``.            |\n| `Click Link`    | example | # Match also based on link text and ``href``.   |\n| `Click Button`  | example | # Match based on ``id``, ``name`` or ``value``. |\n\nIf a locator accidentally starts with a prefix recognized as `explicit\nlocator strategy` or `implicit XPath strategy`, it is possible to use\nthe explicit ``default`` prefix to enable the default strategy.\n\nExamples:\n\n| `Click Element` | name:foo         | # Find element with name ``foo``.               |\n| `Click Element` | default:name:foo | # Use default strategy with value ``name:foo``. |\n| `Click Element` | //foo            | # Find element using XPath ``//foo``.           |\n| `Click Element` | default: //foo   | # Use default strategy with value ``//foo``.    |\n\n=== Explicit locator strategy ===\n\nThe explicit locator strategy is specified with a prefix using either\nsyntax ``strategy:value`` or ``strategy=value``. The former syntax\nis preferred because the latter is identical to Robot Framework's\n[http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#named-argument-syntax|\nnamed argument syntax] and that can cause problems. Spaces around\nthe separator are ignored, so ``id:foo``, ``id: foo`` and ``id : foo``\nare all equivalent.\n\nLocator strategies that are supported by default are listed in the table\nbelow. In addition to them, it is possible to register `custom locators`.\n\n| = Strategy = |          = Match based on =         |         = Example =            |\n| id           | Element ``id``.                     | ``id:example``                 |\n| name         | ``name`` attribute.                 | ``name:example``               |\n| identifier   | Either ``id`` or ``name``.          | ``identifier:example``         |\n| class        | Element ``class``.                  | ``class:example``              |\n| tag          | Tag name.                           | ``tag:div``                    |\n| xpath        | XPath expression.                   | ``xpath://div[@id=\"example\"]`` |\n| css          | CSS selector.                       | ``css:div#example``            |\n| dom          | DOM expression.                     | ``dom:document.images[5]``     |\n| link         | Exact text a link has.              | ``link:The example``           |\n| partial link | Partial link text.                  | ``partial link:he ex``         |\n| sizzle       | Sizzle selector deprecated.         | ``sizzle:div.example``         |\n| data         | Element ``data-*`` attribute        | ``data:id:my_id``              |\n| jquery       | jQuery expression.                  | ``jquery:div.example``         |\n| default      | Keyword specific default behavior.  | ``default:example``            |\n\nSee the `Default locator strategy` section below for more information\nabout how the default strategy works. Using the explicit ``default``\nprefix is only necessary if the locator value itself accidentally\nmatches some of the explicit strategies.\n\nDifferent locator strategies have different pros and cons. Using ids,\neither explicitly like ``id:foo`` or by using the `default locator\nstrategy` simply like ``foo``, is recommended when possible, because\nthe syntax is simple and locating elements by id is fast for browsers.\nIf an element does not have an id or the id is not stable, other\nsolutions need to be used. If an element has a unique tag name or class,\nusing ``tag``, ``class`` or ``css`` strategy like ``tag:h1``,\n``class:example`` or ``css:h1.example`` is often an easy solution. In\nmore complex cases using XPath expressions is typically the best\napproach. They are very powerful but a downside is that they can also\nget complex.\n\nExamples:\n\n| `Click Element` | id:foo                      | # Element with id 'foo'. |\n| `Click Element` | css:div#foo h1              | # h1 element under div with id 'foo'. |\n| `Click Element` | xpath: //div[@id=\"foo\"]//h1 | # Same as the above using XPath, not CSS. |\n| `Click Element` | xpath: //*[contains(text(), \"example\")] | # Element containing text 'example'. |\n\n*NOTE:*\n\n- The ``strategy:value`` syntax is only supported by SeleniumLibrary 3.0\n  and newer.\n- Using the ``sizzle`` strategy or its alias ``jquery`` requires that\n  the system under test contains the jQuery library.\n- Prior to SeleniumLibrary 3.0, table related keywords only supported\n  ``xpath``, ``css`` and ``sizzle/jquery`` strategies.\n- ``data`` strategy is conveniance locator that will construct xpath from the parameters.\n  If you have element like `<div data-automation=\"automation-id-2\">`, you locate the element via\n  ``data:automation:automation-id-2``. This feature was added in SeleniumLibrary 5.2.0\n\n=== Implicit XPath strategy ===\n\nIf the locator starts with ``//``  or multiple opening parenthesis in front\nof the ``//``, the locator is considered to be an XPath expression. In other\nwords, using ``//div`` is equivalent to using explicit ``xpath://div`` and\n``((//div))`` is equivalent to using explicit ``xpath:((//div))``\n\nExamples:\n\n| `Click Element` | //div[@id=\"foo\"]//h1 |\n| `Click Element` | (//div)[2]           |\n\nThe support for the ``(//`` prefix is new in SeleniumLibrary 3.0.\nSupporting multiple opening parenthesis is new in SeleniumLibrary 5.0.\n\n=== Chaining locators ===\n\nIt is possible chain multiple locators together as single locator. Each chained locator must start with locator\nstrategy. Chained locators must be separated with single space, two greater than characters and followed with\nspace. It is also possible mix different locator strategies, example css or xpath. Also a list can also be\nused to specify multiple locators. This is useful, is some part of locator would match as the locator separator\nbut it should not. Or if there is need to existing WebElement as locator.\n\nAlthough all locators support chaining, some locator strategies do not abey the chaining. This is because\nsome locator strategies use JavaScript to find elements and JavaScript is executed for the whole browser context\nand not for the element found be the previous locator. Chaining is supported by locator strategies which\nare based on Selenium API, like `xpath` or `css`, but example chaining is not supported by `sizzle` or `jquery\n\nExamples:\n| `Click Element` | css:.bar >> xpath://a | # To find a link which is present after an element with class \"bar\" |\n\nList examples:\n| ${locator_list} =             | `Create List`   | css:div#div_id            | xpath://*[text(), \" >> \"] |\n| `Page Should Contain Element` | ${locator_list} |                           |                           |\n| ${element} =                  | Get WebElement  | xpath://*[text(), \" >> \"] |                           |\n| ${locator_list} =             | `Create List`   | css:div#div_id            | ${element}                |\n| `Page Should Contain Element` | ${locator_list} |                           |                           |\n\nChaining locators in new in SeleniumLibrary 5.0\n\n== Using WebElements ==\n\nIn addition to specifying a locator as a string, it is possible to use\nSelenium's WebElement objects. This requires first getting a WebElement,\nfor example, by using the `Get WebElement` keyword.\n\n| ${elem} =       | `Get WebElement` | id:example |\n| `Click Element` | ${elem}          |            |\n\n== Custom locators ==\n\nIf more complex lookups are required than what is provided through the\ndefault locators, custom lookup strategies can be created. Using custom\nlocators is a two part process. First, create a keyword that returns\na WebElement that should be acted on:\n\n| Custom Locator Strategy | [Arguments] | ${browser} | ${locator} | ${tag} | ${constraints} |\n|   | ${element}= | Execute Javascript | return window.document.getElementById('${locator}'); |\n|   | [Return] | ${element} |\n\nThis keyword is a reimplementation of the basic functionality of the\n``id`` locator where ``${browser}`` is a reference to a WebDriver\ninstance and ``${locator}`` is the name of the locator strategy. To use\nthis locator, it must first be registered by using the\n`Add Location Strategy` keyword:\n\n| `Add Location Strategy` | custom | Custom Locator Strategy |\n\nThe first argument of `Add Location Strategy` specifies the name of\nthe strategy and it must be unique. After registering the strategy,\nthe usage is the same as with other locators:\n\n| `Click Element` | custom:example |\n\nSee the `Add Location Strategy` keyword for more details.\n\n= Browser and Window =\n\nThere is different conceptual meaning when SeleniumLibrary talks\nabout windows or browsers. This chapter explains those differences.\n\n== Browser ==\n\nWhen `Open Browser` or `Create WebDriver` keyword is called, it\nwill create a new Selenium WebDriver instance by using the\n[https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver]\nAPI. In SeleniumLibrary terms, a new browser is created. It is\npossible to start multiple independent browsers (Selenium Webdriver\ninstances) at the same time, by calling `Open Browser` or\n`Create WebDriver` multiple times. These browsers are usually\nindependent of each other and do not share data like cookies,\nsessions or profiles. Typically when the browser starts, it\ncreates a single window which is shown to the user.\n\n== Window ==\n\nWindows are the part of a browser that loads the web site and presents\nit to the user. All content of the site is the content of the window.\nWindows are children of a browser. In SeleniumLibrary browser is a\nsynonym for WebDriver instance. One browser may have multiple\nwindows. Windows can appear as tabs, as separate windows or pop-ups with\ndifferent position and size. Windows belonging to the same browser\ntypically share the sessions detail, like cookies. If there is a\nneed to separate sessions detail, example login with two different\nusers, two browsers (Selenium WebDriver instances) must be created.\nNew windows can be opened example by the application under test or\nby example `Execute Javascript` keyword:\n\n| `Execute Javascript`    window.open()    # Opens a new window with location about:blank\n\nThe example below opens multiple browsers and windows,\nto demonstrate how the different keywords can be used to interact\nwith browsers, and windows attached to these browsers.\n\nStructure:\n| BrowserA\n|            Window 1  (location=https://robotframework.org/)\n|            Window 2  (location=https://robocon.io/)\n|            Window 3  (location=https://github.com/robotframework/)\n|\n| BrowserB\n|            Window 1  (location=https://github.com/)\n\nExample:\n| `Open Browser`       | https://robotframework.org         | ${BROWSER}       | alias=BrowserA   | # BrowserA with first window is opened.                                       |\n| `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA second window is opened.                                        |\n| `Switch Window`      | locator=NEW                        |                  |                  | # Switched to second window in BrowserA                                       |\n| `Go To`              | https://robocon.io                 |                  |                  | # Second window navigates to robocon site.                                    |\n| `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA third window is opened.                                         |\n| ${handle}            | `Switch Window`                    | locator=NEW      |                  | # Switched to third window in BrowserA                                        |\n| `Go To`              | https://github.com/robotframework/ |                  |                  | # Third windows goes to robot framework github site.                          |\n| `Open Browser`       | https://github.com                 | ${BROWSER}       | alias=BrowserB   | # BrowserB with first windows is opened.                                      |\n| ${location}          | `Get Location`                     |                  |                  | # ${location} is: https://www.github.com                                      |\n| `Switch Window`      | ${handle}                          | browser=BrowserA |                  | # BrowserA second windows is selected.                                        |\n| ${location}          | `Get Location`                     |                  |                  | # ${location} = https://robocon.io/                                           |\n| @{locations 1}       | `Get Locations`                    |                  |                  | # By default, lists locations under the currectly active browser (BrowserA).   |\n| @{locations 2}       | `Get Locations`                    |  browser=ALL     |                  | # By using browser=ALL argument keyword list all locations from all browsers. |\n\nThe above example, @{locations 1} contains the following items:\nhttps://robotframework.org/, https://robocon.io/ and\nhttps://github.com/robotframework/'. The @{locations 2}\ncontains the following items: https://robotframework.org/,\nhttps://robocon.io/, https://github.com/robotframework/'\nand 'https://github.com/.\n\n= Timeouts, waits, and delays =\n\nThis section discusses different ways how to wait for elements to\nappear on web pages and to slow down execution speed otherwise.\nIt also explains the `time format` that can be used when setting various\ntimeouts, waits, and delays.\n\n== Timeout ==\n\nSeleniumLibrary contains various keywords that have an optional\n``timeout`` argument that specifies how long these keywords should\nwait for certain events or actions. These keywords include, for example,\n``Wait ...`` keywords and keywords related to alerts. Additionally\n`Execute Async Javascript`. Although it does not have ``timeout``,\nargument, uses a timeout to define how long asynchronous JavaScript\ncan run.\n\nThe default timeout these keywords use can be set globally either by\nusing the `Set Selenium Timeout` keyword or with the ``timeout`` argument\nwhen `importing` the library. If no default timeout is set globally, the\ndefault is 5 seconds. If None is specified for the timeout argument in the\nkeywords, the default is used. See `time format` below for supported\ntimeout syntax.\n\n== Implicit wait ==\n\nImplicit wait specifies the maximum time how long Selenium waits when\nsearching for elements. It can be set by using the `Set Selenium Implicit\nWait` keyword or with the ``implicit_wait`` argument when `importing`\nthe library. See [https://www.seleniumhq.org/docs/04_webdriver_advanced.jsp|\nSelenium documentation] for more information about this functionality.\n\nSee `time format` below for supported syntax.\n\n== Page load ==\nPage load timeout is the amount of time to wait for page load to complete\nuntil a timeout exception is raised.\n\nThe default page load timeout can be set globally\nwhen `importing` the library with the ``page_load_timeout`` argument\nor by using the `Set Selenium Page Load Timeout` keyword.\n\nSee `time format` below for supported timeout syntax.\n\nSupport for page load is new in SeleniumLibrary 6.1\n\n== Selenium speed ==\n\nSelenium execution speed can be slowed down globally by using `Set\nSelenium speed` keyword. This functionality is designed to be used for\ndemonstrating or debugging purposes. Using it to make sure that elements\nappear on a page is not a good idea. The above-explained timeouts\nand waits should be used instead.\n\nSee `time format` below for supported syntax.\n\n== Time format ==\n\nAll timeouts and waits can be given as numbers considered seconds\n(e.g. ``0.5`` or ``42``) or in Robot Framework's time syntax\n(e.g. ``1.5 seconds`` or ``1 min 30 s``). For more information about\nthe time syntax see the\n[http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].\n\n= Run-on-failure functionality =\n\nSeleniumLibrary has a handy feature that it can automatically execute\na keyword if any of its own keywords fails. By default, it uses the\n`Capture Page Screenshot` keyword, but this can be changed either by\nusing the `Register Keyword To Run On Failure` keyword or with the\n``run_on_failure`` argument when `importing` the library. It is\npossible to use any keyword from any imported library or resource file.\n\nThe run-on-failure functionality can be disabled by using a special value\n``NOTHING`` or anything considered false (see `Boolean arguments`)\nsuch as ``NONE``.\n\n= Boolean arguments =\n\nStarting from 5.0 SeleniumLibrary relies on Robot Framework to perform the\nboolean conversion based on keyword arguments [https://docs.python.org/3/library/typing.html|type hint].\nMore details in Robot Framework\n[http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#supported-conversions|user guide]\n\nPlease note SeleniumLibrary 3 and 4 did have own custom methods to covert\narguments to boolean values.\n\n= EventFiringWebDriver =\n\nThe SeleniumLibrary offers support for\n[https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].\nSee the Selenium and SeleniumLibrary\n[https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#EventFiringWebDriver|EventFiringWebDriver support]\ndocumentation for further details.\n\nEventFiringWebDriver is new in SeleniumLibrary 4.0\n\n= Thread support =\n\nSeleniumLibrary is not thread-safe. This is mainly due because the underlying\n[https://github.com/SeleniumHQ/selenium/wiki/Frequently-Asked-Questions#q-is-webdriver-thread-safe|\nSelenium tool is not thread-safe] within one browser/driver instance.\nBecause of the limitation in the Selenium side, the keywords or the\nAPI provided by the SeleniumLibrary is not thread-safe.\n\n= Plugins =\n\nSeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal\nfunctionality without creating a new library or hacking the source code. See\n[https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#Plugins|plugin API]\ndocumentation for further details.\n\nPlugin API is new SeleniumLibrary 4.0",
+        "sha256": "3d660b78fb0d75d9f2f8265fa6f29967ae30b712f545661d64de0f05f2c1b913"
+    },
+    "__intro__": {
+        "name": "__intro__",
+        "doc": "2 SeleniumLibrary is a web testing library for Robot Framework.\n\n    This document explains how to use keywords provided by SeleniumLibrary.\n    For information about installation, support, and more, please visit the\n    [https://github.com/robotframework/SeleniumLibrary|project pages].\n    For more information about Robot Framework, see http://robotframework.org.\n\n    SeleniumLibrary uses the Selenium WebDriver modules internally to\n    control a web browser. See http://seleniumhq.org for more information\n    about Selenium in general and SeleniumLibrary README.rst\n    [https://github.com/robotframework/SeleniumLibrary#browser-drivers|Browser drivers chapter]\n    for more details about WebDriver binary installation.\n\n    %TOC%\n\n    = Locating elements =\n\n    All keywords in SeleniumLibrary that need to interact with an element\n    on a web page take an argument typically named ``locator`` that specifies\n    how to find the element. Most often the locator is given as a string\n    using the locator syntax described below, but `using WebElements` is\n    possible too.\n\n    == Locator syntax ==\n\n    SeleniumLibrary supports finding elements based on different strategies\n    such as the element id, XPath expressions, or CSS selectors. The strategy\n    can either be explicitly specified with a prefix or the strategy can be\n    implicit.\n\n    === Default locator strategy ===\n\n    By default, locators are considered to use the keyword specific default\n    locator strategy. All keywords support finding elements based on ``id``\n    and ``name`` attributes, but some keywords support additional attributes\n    or other values that make sense in their context. For example, `Click\n    Link` supports the ``href`` attribute and the link text and addition\n    to the normal ``id`` and ``name``.\n\n    Examples:\n\n    | `Click Element` | example | # Match based on ``id`` or ``name``.            |\n    | `Click Link`    | example | # Match also based on link text and ``href``.   |\n    | `Click Button`  | example | # Match based on ``id``, ``name`` or ``value``. |\n\n    If a locator accidentally starts with a prefix recognized as `explicit\n    locator strategy` or `implicit XPath strategy`, it is possible to use\n    the explicit ``default`` prefix to enable the default strategy.\n\n    Examples:\n\n    | `Click Element` | name:foo         | # Find element with name ``foo``.               |\n    | `Click Element` | default:name:foo | # Use default strategy with value ``name:foo``. |\n    | `Click Element` | //foo            | # Find element using XPath ``//foo``.           |\n    | `Click Element` | default: //foo   | # Use default strategy with value ``//foo``.    |\n\n    === Explicit locator strategy ===\n\n    The explicit locator strategy is specified with a prefix using either\n    syntax ``strategy:value`` or ``strategy=value``. The former syntax\n    is preferred because the latter is identical to Robot Framework's\n    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#named-argument-syntax|\n    named argument syntax] and that can cause problems. Spaces around\n    the separator are ignored, so ``id:foo``, ``id: foo`` and ``id : foo``\n    are all equivalent.\n\n    Locator strategies that are supported by default are listed in the table\n    below. In addition to them, it is possible to register `custom locators`.\n\n    | = Strategy = |          = Match based on =         |         = Example =            |\n    | id           | Element ``id``.                     | ``id:example``                 |\n    | name         | ``name`` attribute.                 | ``name:example``               |\n    | identifier   | Either ``id`` or ``name``.          | ``identifier:example``         |\n    | class        | Element ``class``.                  | ``class:example``              |\n    | tag          | Tag name.                           | ``tag:div``                    |\n    | xpath        | XPath expression.                   | ``xpath://div[@id=\"example\"]`` |\n    | css          | CSS selector.                       | ``css:div#example``            |\n    | dom          | DOM expression.                     | ``dom:document.images[5]``     |\n    | link         | Exact text a link has.              | ``link:The example``           |\n    | partial link | Partial link text.                  | ``partial link:he ex``         |\n    | sizzle       | Sizzle selector deprecated.         | ``sizzle:div.example``         |\n    | data         | Element ``data-*`` attribute        | ``data:id:my_id``              |\n    | jquery       | jQuery expression.                  | ``jquery:div.example``         |\n    | default      | Keyword specific default behavior.  | ``default:example``            |\n\n    See the `Default locator strategy` section below for more information\n    about how the default strategy works. Using the explicit ``default``\n    prefix is only necessary if the locator value itself accidentally\n    matches some of the explicit strategies.\n\n    Different locator strategies have different pros and cons. Using ids,\n    either explicitly like ``id:foo`` or by using the `default locator\n    strategy` simply like ``foo``, is recommended when possible, because\n    the syntax is simple and locating elements by id is fast for browsers.\n    If an element does not have an id or the id is not stable, other\n    solutions need to be used. If an element has a unique tag name or class,\n    using ``tag``, ``class`` or ``css`` strategy like ``tag:h1``,\n    ``class:example`` or ``css:h1.example`` is often an easy solution. In\n    more complex cases using XPath expressions is typically the best\n    approach. They are very powerful but a downside is that they can also\n    get complex.\n\n    Examples:\n\n    | `Click Element` | id:foo                      | # Element with id 'foo'. |\n    | `Click Element` | css:div#foo h1              | # h1 element under div with id 'foo'. |\n    | `Click Element` | xpath: //div[@id=\"foo\"]//h1 | # Same as the above using XPath, not CSS. |\n    | `Click Element` | xpath: //*[contains(text(), \"example\")] | # Element containing text 'example'. |\n\n    *NOTE:*\n\n    - The ``strategy:value`` syntax is only supported by SeleniumLibrary 3.0\n      and newer.\n    - Using the ``sizzle`` strategy or its alias ``jquery`` requires that\n      the system under test contains the jQuery library.\n    - Prior to SeleniumLibrary 3.0, table related keywords only supported\n      ``xpath``, ``css`` and ``sizzle/jquery`` strategies.\n    - ``data`` strategy is conveniance locator that will construct xpath from the parameters.\n      If you have element like `<div data-automation=\"automation-id-2\">`, you locate the element via\n      ``data:automation:automation-id-2``. This feature was added in SeleniumLibrary 5.2.0\n\n    === Implicit XPath strategy ===\n\n    If the locator starts with ``//``  or multiple opening parenthesis in front\n    of the ``//``, the locator is considered to be an XPath expression. In other\n    words, using ``//div`` is equivalent to using explicit ``xpath://div`` and\n    ``((//div))`` is equivalent to using explicit ``xpath:((//div))``\n\n    Examples:\n\n    | `Click Element` | //div[@id=\"foo\"]//h1 |\n    | `Click Element` | (//div)[2]           |\n\n    The support for the ``(//`` prefix is new in SeleniumLibrary 3.0.\n    Supporting multiple opening parenthesis is new in SeleniumLibrary 5.0.\n\n    === Chaining locators ===\n\n    It is possible chain multiple locators together as single locator. Each chained locator must start with locator\n    strategy. Chained locators must be separated with single space, two greater than characters and followed with\n    space. It is also possible mix different locator strategies, example css or xpath. Also a list can also be\n    used to specify multiple locators. This is useful, is some part of locator would match as the locator separator\n    but it should not. Or if there is need to existing WebElement as locator.\n\n    Although all locators support chaining, some locator strategies do not abey the chaining. This is because\n    some locator strategies use JavaScript to find elements and JavaScript is executed for the whole browser context\n    and not for the element found be the previous locator. Chaining is supported by locator strategies which\n    are based on Selenium API, like `xpath` or `css`, but example chaining is not supported by `sizzle` or `jquery\n\n    Examples:\n    | `Click Element` | css:.bar >> xpath://a | # To find a link which is present after an element with class \"bar\" |\n\n    List examples:\n    | ${locator_list} =             | `Create List`   | css:div#div_id            | xpath://*[text(), \" >> \"] |\n    | `Page Should Contain Element` | ${locator_list} |                           |                           |\n    | ${element} =                  | Get WebElement  | xpath://*[text(), \" >> \"] |                           |\n    | ${locator_list} =             | `Create List`   | css:div#div_id            | ${element}                |\n    | `Page Should Contain Element` | ${locator_list} |                           |                           |\n\n    Chaining locators in new in SeleniumLibrary 5.0\n\n    == Using WebElements ==\n\n    In addition to specifying a locator as a string, it is possible to use\n    Selenium's WebElement objects. This requires first getting a WebElement,\n    for example, by using the `Get WebElement` keyword.\n\n    | ${elem} =       | `Get WebElement` | id:example |\n    | `Click Element` | ${elem}          |            |\n\n    == Custom locators ==\n\n    If more complex lookups are required than what is provided through the\n    default locators, custom lookup strategies can be created. Using custom\n    locators is a two part process. First, create a keyword that returns\n    a WebElement that should be acted on:\n\n    | Custom Locator Strategy | [Arguments] | ${browser} | ${locator} | ${tag} | ${constraints} |\n    |   | ${element}= | Execute Javascript | return window.document.getElementById('${locator}'); |\n    |   | [Return] | ${element} |\n\n    This keyword is a reimplementation of the basic functionality of the\n    ``id`` locator where ``${browser}`` is a reference to a WebDriver\n    instance and ``${locator}`` is the name of the locator strategy. To use\n    this locator, it must first be registered by using the\n    `Add Location Strategy` keyword:\n\n    | `Add Location Strategy` | custom | Custom Locator Strategy |\n\n    The first argument of `Add Location Strategy` specifies the name of\n    the strategy and it must be unique. After registering the strategy,\n    the usage is the same as with other locators:\n\n    | `Click Element` | custom:example |\n\n    See the `Add Location Strategy` keyword for more details.\n\n    = Browser and Window =\n\n    There is different conceptual meaning when SeleniumLibrary talks\n    about windows or browsers. This chapter explains those differences.\n\n    == Browser ==\n\n    When `Open Browser` or `Create WebDriver` keyword is called, it\n    will create a new Selenium WebDriver instance by using the\n    [https://www.seleniumhq.org/docs/03_webdriver.jsp|Selenium WebDriver]\n    API. In SeleniumLibrary terms, a new browser is created. It is\n    possible to start multiple independent browsers (Selenium Webdriver\n    instances) at the same time, by calling `Open Browser` or\n    `Create WebDriver` multiple times. These browsers are usually\n    independent of each other and do not share data like cookies,\n    sessions or profiles. Typically when the browser starts, it\n    creates a single window which is shown to the user.\n\n    == Window ==\n\n    Windows are the part of a browser that loads the web site and presents\n    it to the user. All content of the site is the content of the window.\n    Windows are children of a browser. In SeleniumLibrary browser is a\n    synonym for WebDriver instance. One browser may have multiple\n    windows. Windows can appear as tabs, as separate windows or pop-ups with\n    different position and size. Windows belonging to the same browser\n    typically share the sessions detail, like cookies. If there is a\n    need to separate sessions detail, example login with two different\n    users, two browsers (Selenium WebDriver instances) must be created.\n    New windows can be opened example by the application under test or\n    by example `Execute Javascript` keyword:\n\n    | `Execute Javascript`    window.open()    # Opens a new window with location about:blank\n\n    The example below opens multiple browsers and windows,\n    to demonstrate how the different keywords can be used to interact\n    with browsers, and windows attached to these browsers.\n\n    Structure:\n    | BrowserA\n    |            Window 1  (location=https://robotframework.org/)\n    |            Window 2  (location=https://robocon.io/)\n    |            Window 3  (location=https://github.com/robotframework/)\n    |\n    | BrowserB\n    |            Window 1  (location=https://github.com/)\n\n    Example:\n    | `Open Browser`       | https://robotframework.org         | ${BROWSER}       | alias=BrowserA   | # BrowserA with first window is opened.                                       |\n    | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA second window is opened.                                        |\n    | `Switch Window`      | locator=NEW                        |                  |                  | # Switched to second window in BrowserA                                       |\n    | `Go To`              | https://robocon.io                 |                  |                  | # Second window navigates to robocon site.                                    |\n    | `Execute Javascript` | window.open()                      |                  |                  | # In BrowserA third window is opened.                                         |\n    | ${handle}            | `Switch Window`                    | locator=NEW      |                  | # Switched to third window in BrowserA                                        |\n    | `Go To`              | https://github.com/robotframework/ |                  |                  | # Third windows goes to robot framework github site.                          |\n    | `Open Browser`       | https://github.com                 | ${BROWSER}       | alias=BrowserB   | # BrowserB with first windows is opened.                                      |\n    | ${location}          | `Get Location`                     |                  |                  | # ${location} is: https://www.github.com                                      |\n    | `Switch Window`      | ${handle}                          | browser=BrowserA |                  | # BrowserA second windows is selected.                                        |\n    | ${location}          | `Get Location`                     |                  |                  | # ${location} = https://robocon.io/                                           |\n    | @{locations 1}       | `Get Locations`                    |                  |                  | # By default, lists locations under the currectly active browser (BrowserA).   |\n    | @{locations 2}       | `Get Locations`                    |  browser=ALL     |                  | # By using browser=ALL argument keyword list all locations from all browsers. |\n\n    The above example, @{locations 1} contains the following items:\n    https://robotframework.org/, https://robocon.io/ and\n    https://github.com/robotframework/'. The @{locations 2}\n    contains the following items: https://robotframework.org/,\n    https://robocon.io/, https://github.com/robotframework/'\n    and 'https://github.com/.\n\n    = Timeouts, waits, and delays =\n\n    This section discusses different ways how to wait for elements to\n    appear on web pages and to slow down execution speed otherwise.\n    It also explains the `time format` that can be used when setting various\n    timeouts, waits, and delays.\n\n    == Timeout ==\n\n    SeleniumLibrary contains various keywords that have an optional\n    ``timeout`` argument that specifies how long these keywords should\n    wait for certain events or actions. These keywords include, for example,\n    ``Wait ...`` keywords and keywords related to alerts. Additionally\n    `Execute Async Javascript`. Although it does not have ``timeout``,\n    argument, uses a timeout to define how long asynchronous JavaScript\n    can run.\n\n    The default timeout these keywords use can be set globally either by\n    using the `Set Selenium Timeout` keyword or with the ``timeout`` argument\n    when `importing` the library. If no default timeout is set globally, the\n    default is 5 seconds. If None is specified for the timeout argument in the\n    keywords, the default is used. See `time format` below for supported\n    timeout syntax.\n\n    == Implicit wait ==\n\n    Implicit wait specifies the maximum time how long Selenium waits when\n    searching for elements. It can be set by using the `Set Selenium Implicit\n    Wait` keyword or with the ``implicit_wait`` argument when `importing`\n    the library. See [https://www.seleniumhq.org/docs/04_webdriver_advanced.jsp|\n    Selenium documentation] for more information about this functionality.\n\n    See `time format` below for supported syntax.\n\n    == Page load ==\n    Page load timeout is the amount of time to wait for page load to complete\n    until a timeout exception is raised.\n\n    The default page load timeout can be set globally\n    when `importing` the library with the ``page_load_timeout`` argument\n    or by using the `Set Selenium Page Load Timeout` keyword.\n\n    See `time format` below for supported timeout syntax.\n\n    Support for page load is new in SeleniumLibrary 6.1\n\n    == Selenium speed ==\n\n    Selenium execution speed can be slowed down globally by using `Set\n    Selenium speed` keyword. This functionality is designed to be used for\n    demonstrating or debugging purposes. Using it to make sure that elements\n    appear on a page is not a good idea. The above-explained timeouts\n    and waits should be used instead.\n\n    See `time format` below for supported syntax.\n\n    == Time format ==\n\n    All timeouts and waits can be given as numbers considered seconds\n    (e.g. ``0.5`` or ``42``) or in Robot Framework's time syntax\n    (e.g. ``1.5 seconds`` or ``1 min 30 s``). For more information about\n    the time syntax see the\n    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-format|Robot Framework User Guide].\n\n    = Run-on-failure functionality =\n\n    SeleniumLibrary has a handy feature that it can automatically execute\n    a keyword if any of its own keywords fails. By default, it uses the\n    `Capture Page Screenshot` keyword, but this can be changed either by\n    using the `Register Keyword To Run On Failure` keyword or with the\n    ``run_on_failure`` argument when `importing` the library. It is\n    possible to use any keyword from any imported library or resource file.\n\n    The run-on-failure functionality can be disabled by using a special value\n    ``NOTHING`` or anything considered false (see `Boolean arguments`)\n    such as ``NONE``.\n\n    = Boolean arguments =\n\n    Starting from 5.0 SeleniumLibrary relies on Robot Framework to perform the\n    boolean conversion based on keyword arguments [https://docs.python.org/3/library/typing.html|type hint].\n    More details in Robot Framework\n    [http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#supported-conversions|user guide]\n\n    Please note SeleniumLibrary 3 and 4 did have own custom methods to covert\n    arguments to boolean values.\n\n    = EventFiringWebDriver =\n\n    The SeleniumLibrary offers support for\n    [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].\n    See the Selenium and SeleniumLibrary\n    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#EventFiringWebDriver|EventFiringWebDriver support]\n    documentation for further details.\n\n    EventFiringWebDriver is new in SeleniumLibrary 4.0\n\n    = Thread support =\n\n    SeleniumLibrary is not thread-safe. This is mainly due because the underlying\n    [https://github.com/SeleniumHQ/selenium/wiki/Frequently-Asked-Questions#q-is-webdriver-thread-safe|\n    Selenium tool is not thread-safe] within one browser/driver instance.\n    Because of the limitation in the Selenium side, the keywords or the\n    API provided by the SeleniumLibrary is not thread-safe.\n\n    = Plugins =\n\n    SeleniumLibrary offers plugins as a way to modify and add library keywords and modify some of the internal\n    functionality without creating a new library or hacking the source code. See\n    [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#Plugins|plugin API]\n    documentation for further details.\n\n    Plugin API is new SeleniumLibrary 4.0\n    ",
+        "sha256": "59c13272c5a498ee00aa6f3e5e2d1f9cec5c355267e1b03f88c604f15dab6c4e"
+    }
+}
