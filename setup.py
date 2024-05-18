@@ -45,6 +45,7 @@ setup(
     install_requires = REQUIREMENTS,
     package_dir      = {'': 'src'},
     packages         = find_packages('src'),
+    entry_points     = {"console_scripts": ["selib=SeleniumLibrary.entry.__main__:cli"]},
     package_data     ={
         'SeleniumLibrary':
             ['*.pyi']
