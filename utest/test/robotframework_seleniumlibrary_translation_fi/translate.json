@@ -10,7 +10,7 @@
         "sha256": "75343dfda0a68c40607e961ead1e104553ba074110f33627131125e8c11ecef0"
     },
     "handle_alert": {
-        "name": "hallinnoi_Hälytys",
+        "name": "hallinnoi_hälytys",
         "doc": "Hallinnoi hälytyksen uusi dokkari\n\nToinen rivi",
         "sha256": "7620b9059b37d2cb1d5823256d0f71d32d3f66af153d6be8ff5100219d4270d6"
     },
