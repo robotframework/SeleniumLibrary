@@ -43,8 +43,8 @@ def get_version():
     python_version = (
         f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
     )
-    #print(f"Used Python is: {sys.executable}\nVersion: {python_version}")
-    #print(f'Robot Framework version: "{get_rf_version()}"')
+    # print(f"Used Python is: {sys.executable}\nVersion: {python_version}")
+    # print(f'Robot Framework version: "{get_rf_version()}"')
 
     return (
         f"\nUsed Python is: {sys.executable}\n\tVersion: {python_version}\n"

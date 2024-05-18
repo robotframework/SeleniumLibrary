@@ -5,7 +5,10 @@ import sys
 from approvaltests import verify_all
 
 from SeleniumLibrary.entry.get_versions import get_version
-from SeleniumLibrary.entry.translation import compare_translatoin, get_library_translaton
+from SeleniumLibrary.entry.translation import (
+    compare_translatoin,
+    get_library_translaton,
+)
 
 
 def test_version():
@@ -17,8 +20,8 @@ def test_version():
     assert "Used Python is: " in lines[1], lines[1]
     assert python_version in lines[2], lines[2]
     assert 'Robot Framework version: "' in lines[3], lines[3]
-    assert 'Installed SeleniumLibrary version is: ' in lines[4], lines[4]
-    assert 'Installed selenium version is: ' in lines[5], lines[5]
+    assert "Installed SeleniumLibrary version is: " in lines[4], lines[4]
+    assert "Installed selenium version is: " in lines[5], lines[5]
 
 
 def test_get_translation():
@@ -27,6 +30,7 @@ def test_get_translation():
         assert item["name"], item["name"]
         assert item["doc"], item["doc"]
         assert item["sha256"], item["sha256"]
+
 
 def test_compare_translation(tmp_path: Path):
     translation = tmp_path / "translation.json"
