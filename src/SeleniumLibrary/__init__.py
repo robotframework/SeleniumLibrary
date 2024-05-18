@@ -18,6 +18,7 @@ from datetime import timedelta
 import importlib
 from inspect import getdoc, isclass
 from pathlib import Path
+import pkgutil
 from typing import Optional, List, Union
 
 from robot.api import logger
