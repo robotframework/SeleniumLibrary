@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="generator" content="Docutils 0.20.1: https://docutils.sourceforge.io/" />
+<meta name="generator" content="Docutils 0.21.2: https://docutils.sourceforge.io/" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>SeleniumLibrary</title>
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -13,7 +13,7 @@
 <h1 class="title">SeleniumLibrary</h1>
 
 <nav class="contents" id="contents" role="doc-toc">
-<p class="topic-title">Contents</p>
+<p class="topic-title"><a class="reference internal" href="#top">Contents</a></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#introduction" id="toc-entry-1">Introduction</a></p></li>
 <li><p><a class="reference internal" href="#keyword-documentation" id="toc-entry-2">Keyword Documentation</a></p></li>
@@ -22,8 +22,6 @@
 <li><p><a class="reference internal" href="#usage" id="toc-entry-5">Usage</a></p></li>
 <li><p><a class="reference internal" href="#extending-seleniumlibrary" id="toc-entry-6">Extending SeleniumLibrary</a></p></li>
 <li><p><a class="reference internal" href="#community" id="toc-entry-7">Community</a></p></li>
-<li><p><a class="reference internal" href="#versions" id="toc-entry-8">Versions</a></p></li>
-<li><p><a class="reference internal" href="#history" id="toc-entry-9">History</a></p></li>
 </ul>
 </nav>
 <section id="introduction">
@@ -31,17 +29,25 @@
 <p><a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> is a web testing library for <a class="reference external" href="https://robotframework.org">Robot Framework</a> that
 utilizes the <a class="reference external" href="https://www.seleniumhq.org/">Selenium</a> tool internally. The project is hosted on <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a>
 and downloads can be found from <a class="reference external" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">PyPI</a>.</p>
-<p>SeleniumLibrary works with Selenium 3 and 4. It supports Python 3.6 or
+<p>SeleniumLibrary currently works with Selenium 4. It supports Python 3.8 or
 newer. In addition to the normal <a class="reference external" href="https://python.org">Python</a> interpreter, it works also
 with <a class="reference external" href="https://pypy.org">PyPy</a>.</p>
-<p>SeleniumLibrary is based on the <a class="reference external" href="https://github.com/robotframework/OldSeleniumLibrary">old SeleniumLibrary</a> that was forked to
-<a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> and then later renamed back to SeleniumLibrary.
-See the <a class="reference internal" href="#versions">Versions</a> and <a class="reference internal" href="#history">History</a> sections below for more information about
-different versions and the overall project history.</p>
-<a class="reference external image-reference" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary"><img alt="https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version" src="https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version" /></a>
-<a class="reference external image-reference" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary"><img alt="https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg" /></a>
-<a class="reference external image-reference" href="https://www.apache.org/licenses/LICENSE-2.0"><img alt="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml"><img alt="https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml/badge.svg?branch=master" src="https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml/badge.svg?branch=master" /></a>
+<p>SeleniumLibrary is based on the &quot;old SeleniumLibrary&quot; that was forked to
+Selenium2Library and then later renamed back to SeleniumLibrary.
+See the <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary/blob/master/VERSIONS.rst">VERSIONS.rst</a> for more information about different versions and the
+overall project history.</p>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">
+<img alt="https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version" src="https://img.shields.io/pypi/v/robotframework-seleniumlibrary.svg?label=version" />
+</a>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/robotframework-seleniumlibrary">
+<img alt="https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/dm/robotframework-seleniumlibrary.svg" />
+</a>
+<a class="reference external image-reference" href="https://www.apache.org/licenses/LICENSE-2.0">
+<img alt="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" src="https://img.shields.io/pypi/l/robotframework-seleniumlibrary.svg" />
+</a>
+<a class="reference external image-reference" href="https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml">
+<img alt="https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml/badge.svg?branch=master" src="https://github.com/robotframework/SeleniumLibrary/actions/workflows/CI.yml/badge.svg?branch=master" />
+</a>
 </section>
 <section id="keyword-documentation">
 <h2><a class="toc-backref" href="#toc-entry-2" role="doc-backlink">Keyword Documentation</a></h2>
@@ -56,18 +62,8 @@ about the library in general.</p>
 versions, but you still need to install <a class="reference internal" href="#browser-drivers">browser drivers</a> separately.
 The <span class="docutils literal"><span class="pre">--upgrade</span></span> option can be omitted when installing the library for the
 first time.</p>
-<p>Those migrating from <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> can install SeleniumLibrary so that
-it is exposed also as Selenium2Library:</p>
-<pre class="literal-block">pip install --upgrade robotframework-selenium2library</pre>
-<p>The above command installs the normal SeleniumLibrary as well as a new
-Selenium2Library version that is just a thin wrapper to SeleniumLibrary.
-That allows importing Selenium2Library in tests while migrating to
-SeleniumLibrary.</p>
-<p>To install the last legacy <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> version, use this command instead:</p>
-<pre class="literal-block">pip install robotframework-selenium2library==1.8.0</pre>
-<p>With recent versions of <span class="docutils literal">pip</span> it is possible to install directly from the
-<a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a> repository. To install latest source from the master branch, use
-this command:</p>
+<p>It is possible to install directly from the <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a> repository. To install
+latest source from the master branch, use this command:</p>
 <pre class="literal-block">pip install git+https://github.com/robotframework/SeleniumLibrary.git</pre>
 <p>Please note that installation will take some time, because <span class="docutils literal">pip</span> will
 clone the <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a> project to a temporary directory and then
@@ -175,7 +171,6 @@ available methods and for examples how the library can be extended.</p>
 <p>If the provided documentation is not enough, there are various community channels
 available:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://groups.google.com/group/robotframework-users">robotframework-users</a> mailing list</p></li>
 <li><p><span class="docutils literal">#seleniumlibrary</span> and <span class="docutils literal"><span class="pre">#seleniumlibrary-dev</span></span> channels in
 Robot Framework <a class="reference external" href="https://robotframework-slack-invite.herokuapp.com">Slack community</a></p></li>
 <li><p><a class="reference external" href="https://forum.robotframework.org/">Robot Framework forum</a> has channel for SeleniumLibrary.</p></li>
@@ -183,116 +178,6 @@ Robot Framework <a class="reference external" href="https://robotframework-slack
 requests</p></li>
 <li><p><a class="reference external" href="https://robotframework.org/#community">Other community channels</a> including paid support</p></li>
 </ul>
-</section>
-<section id="versions">
-<h2><a class="toc-backref" href="#toc-entry-8" role="doc-backlink">Versions</a></h2>
-<p>SeleniumLibrary has over the years lived under SeleniumLibrary and
-Selenium2Library names and different library versions have supported
-different Selenium and Python versions. This is summarized in the table
-below and the <a class="reference internal" href="#history">History</a> section afterwards explains the project history
-a bit more.</p>
-<table>
-<thead>
-<tr><th class="head"><p>Project</p></th>
-<th class="head"><p>Selenium Version</p></th>
-<th class="head"><p>Python Version</p></th>
-<th class="head"><p>Comment</p></th>
-</tr>
-</thead>
-<tbody>
-<tr><td><p>SeleniumLibrary 2.9.2 and earlier</p></td>
-<td><p>Selenium 1 and 2</p></td>
-<td><p>Python 2.5-2.7</p></td>
-<td><p>The original SeleniumLibrary using Selenium RC API.</p></td>
-</tr>
-<tr><td><p>Selenium2Library 1.8.0 and earlier</p></td>
-<td><p>Selenium 2 and 3</p></td>
-<td><p>Python 2.6-2.7</p></td>
-<td><p>Fork of SeleniumLibrary using Selenium WebDriver API.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 3.0 and 3.1</p></td>
-<td><p>Selenium 2 and 3</p></td>
-<td><p>Python 2.7 and 3.3+</p></td>
-<td><p>Selenium2Library renamed and with Python 3 support and new architecture.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 3.2</p></td>
-<td><p>Selenium 3</p></td>
-<td><p>Python 2.7 and 3.4+</p></td>
-<td><p>Drops Selenium 2 support.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 4.0</p></td>
-<td><p>Selenium 3</p></td>
-<td><p>Python 2.7 and 3.4+</p></td>
-<td><p>Plugin API and support for event friging webdriver.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 4.1</p></td>
-<td><p>Selenium 3</p></td>
-<td><p>Python 2.7 and 3.5+</p></td>
-<td><p>Drops Python 3.4 support.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 4.2</p></td>
-<td><p>Selenium 3</p></td>
-<td><p>Python 2.7 and 3.5+</p></td>
-<td><p>Supports only Selenium 3.141.0 or newer.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 4.4</p></td>
-<td><p>Selenium 3 and 4</p></td>
-<td><p>Python 2.7 and 3.6+</p></td>
-<td><p>New PythonLibCore and dropped Python 3.5 support.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 5.0</p></td>
-<td><p>Selenium 3 and 4</p></td>
-<td><p>Python 3.6+</p></td>
-<td><p>Python 2 and Jython support is dropped.</p></td>
-</tr>
-<tr><td><p>SeleniumLibrary 5.1</p></td>
-<td><p>Selenium 3 and 4</p></td>
-<td><p>Python 3.6+</p></td>
-<td><p>Robot Framework 3.1 support is dropped.</p></td>
-</tr>
-<tr><td><p>Selenium2Library 3.0</p></td>
-<td><p>Depends on SeleniumLibrary</p></td>
-<td><p>Depends on SeleniumLibrary</p></td>
-<td><p>Thin wrapper for SeleniumLibrary 3.0 to ease transition.</p></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="history">
-<h2><a class="toc-backref" href="#toc-entry-9" role="doc-backlink">History</a></h2>
-<p>SeleniumLibrary originally used the Selenium Remote Controller (RC) API.
-When Selenium 2 was introduced with the new but backwards incompatible
-WebDriver API, SeleniumLibrary kept using Selenium RC and separate
-Selenium2Library using WebDriver was forked. These projects contained
-mostly the same keywords and in most cases Selenium2Library was a drop-in
-replacement for SeleniumLibrary.</p>
-<p>Over the years development of the old SeleniumLibrary stopped and also
-the Selenium RC API it used was deprecated. Selenium2Library was developed
-further and replaced the old library as the de facto web testing library
-for Robot Framework.</p>
-<p>When Selenium 3 was released in 2016, it was otherwise backwards compatible
-with Selenium 2, but the deprecated Selenium RC API was removed. This had two
-important effects:</p>
-<ul class="simple">
-<li><p>The old SeleniumLibrary could not anymore be used with new Selenium versions.
-This project was pretty much dead.</p></li>
-<li><p>Selenium2Library was badly named as it supported Selenium 3 just fine.
-This project needed a new name.</p></li>
-</ul>
-<p>At the same time when Selenium 3 was released, Selenium2Library was going
-through larger architecture changes in order to ease future maintenance and
-to make adding Python 3 support easier. With all these big internal and
-external changes, it made sense to rename Selenium2Library back to
-SeleniumLibrary. This decision basically meant following changes:</p>
-<ul class="simple">
-<li><p>Create separate repository for the <a class="reference external" href="https://github.com/robotframework/OldSeleniumLibrary">old SeleniumLibrary</a> to preserve
-its history since Selenium2Library was forked.</p></li>
-<li><p>Rename Selenium2Library project and the library itself to <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">SeleniumLibrary</a>.</p></li>
-<li><p>Add new <a class="reference external" href="https://github.com/robotframework/Selenium2Library">Selenium2Library</a> project to ease transitioning from Selenium2Library
-to SeleniumLibrary.</p></li>
-</ul>
-<p>Going forward, all new development will happen in the new SeleniumLibrary
-project.</p>
 </section>
 </main>
 </body>
