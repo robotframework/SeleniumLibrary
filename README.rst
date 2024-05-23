@@ -10,8 +10,8 @@ SeleniumLibrary_ is a web testing library for `Robot Framework`_ that
 utilizes the Selenium_ tool internally. The project is hosted on GitHub_
 and downloads can be found from PyPI_.
 
-SeleniumLibrary currently works with Selenium 4. It supports Python 3.8 or
-newer. In addition to the normal Python_ interpreter, it works also
+SeleniumLibrary currently works with Selenium 4. It supports Python 3.8 through 3.11.
+In addition to the normal Python_ interpreter, it works also
 with PyPy_.
 
 SeleniumLibrary is based on the "old SeleniumLibrary" that was forked to
