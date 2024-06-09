@@ -12,8 +12,8 @@ ${event_firing_or_none}     ${NONE}
 Open Browser To Start Page
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 1:31 DEBUG  Wrapping driver to event_firing_webdriver.
-    ...    LOG 1:33 INFO  Got driver also from SeleniumLibrary.
+    ...    LOG 1:30 DEBUG  Wrapping driver to event_firing_webdriver.
+    ...    LOG 1:32 INFO  Got driver also from SeleniumLibrary.
     Open Browser    ${FRONT_PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
 
 Event Firing Webdriver Go To (WebDriver)
