@@ -13,13 +13,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import json
 from pathlib import Path
 from typing import Optional
 import click
 
 from .get_versions import get_version
-from .translation import compare_translatoin, get_library_translaton
+from .translation import compare_translation, get_library_translation
 
 
 CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
@@ -32,10 +33,9 @@ def cli():
     """Robot Framework SeleniumLibrary command line tool.
 
     Possible commands are:
+
     translation
-
-
-    translation will generate detaul tranlsation json file from library keywords.
+       will generate template translation json file from library keywords.
 
     See each command argument help for more details what (optional) arguments that command supports.
     """
@@ -49,7 +49,7 @@ def cli():
     required=True,
 )
 @click.option(
-    "--plugings",
+    "--plugin",
     help="Same as plugins argument in the library import.",
     default=None,
     type=str,
@@ -63,31 +63,31 @@ def cli():
 )
 def translation(
     filename: Path,
-    plugings: Optional[str] = None,
+    plugins: Optional[str] = None,
     compare: bool = False,
 ):
     """Default translation file from library keywords.
 
     This will help users to create their own translation as Python plugins. Command
-    will populate json file with english language. To create proper translation
+    will populate json file with English language. To create proper translation
     file, users needs to translate the keyword name and doc arguments values in
     json file.
 
     The filename argument will tell where the default json file is saved.
 
-    The --pluging argument is same as plugins argument in the library import.
-    If you use plugins, it is also get default translation json file also witht
-    the plugin keyword included in the library.
+    The --plugin argument will add plugin keywords in addition to the library keywords
+    into the default translation json file. It is used the same as plugins argument in
+    the library import.
 
     If the --compare flag is set, then command does not generate template
-    translation file. Then it compares sha256 sums from the filenane
-    to ones read from the library documenentation. It will print out a list
-    of keywords which documentation sha256 does not match. This will ease
-    translation projects to identify keywords which documentation needs updating.
+    translation file. Instead it compares sha256 sums from the filename
+    to the one read from the library documentation. It will print out a list
+    of keywords for which the documentation sha256 does not match. This will ease
+    translating projects to identify keywords which needs updating.
     """
-    translation = get_library_translaton(plugings)
+    lib_translation = get_library_translation(plugins)
     if compare:
-        if table := compare_translatoin(filename, translation):
+        if table := compare_translation(filename, lib_translation):
             print(
                 "Found differences between translation and library, see below for details."
             )
