@@ -583,7 +583,7 @@ class SeleniumLibrary(DynamicCore):
     generated json file contains `sha256` key, which contains the sha256 sum of the library documentation.
     The sha256 sum is used by `rfselib translation --compare /path/to/translation.json` command, which compares
     the translation to the library and prints outs a table which tells if there are changes needed for
-    translation file.
+    the translation file.
 
     Example project for translation can be found from
     [https://github.com/MarketSquare/robotframework-seleniumlibrary-translation-fi | robotframework-seleniumlibrary-translation-fi]
