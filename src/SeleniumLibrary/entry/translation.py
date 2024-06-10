@@ -24,7 +24,7 @@ KEYWORD_NAME = "Keyword name"
 DOC_CHANGED = "Documentation update needed"
 NO_LIB_KEYWORD = "Keyword not found from library"
 MISSING_TRANSLATION = "Keyword is missing translation"
-MISSING_CHECKSUM = "Keyword tranlsaton is missing checksum"
+MISSING_CHECKSUM = "Keyword translation is missing checksum"
 MAX_REASON_LEN = max(
     len(DOC_CHANGED),
     len(NO_LIB_KEYWORD),
@@ -33,10 +33,10 @@ MAX_REASON_LEN = max(
 )
 
 
-def get_library_translaton(plugings: Optional[str] = None) -> dict:
+def get_library_translation(plugins: Optional[str] = None) -> dict:
     from SeleniumLibrary import SeleniumLibrary
 
-    selib = SeleniumLibrary(plugins=plugings)
+    selib = SeleniumLibrary(plugins=plugins)
     translation = {}
     for function in selib.attributes.values():
         translation[function.__name__] = {
@@ -57,18 +57,18 @@ def get_library_translaton(plugings: Optional[str] = None) -> dict:
     return translation
 
 
-def _max_kw_name_lenght(project_tanslation: dict) -> int:
+def _max_kw_name_length(project_translation: dict) -> int:
     max_lenght = 0
-    for keyword_data in project_tanslation.values():
+    for keyword_data in project_translation.values():
         if (current_kw_length := len(keyword_data["name"])) > max_lenght:
             max_lenght = current_kw_length
     return max_lenght
 
 
-def _get_heading(max_kw_lenght: int) -> List[str]:
+def _get_heading(max_kw_length: int) -> List[str]:
     heading = f"| {KEYWORD_NAME} "
     next_line = f"| {'-' * len(KEYWORD_NAME)}"
-    if (padding := max_kw_lenght - len(KEYWORD_NAME)) > 0:
+    if (padding := max_kw_length - len(KEYWORD_NAME)) > 0:
         heading = f"{heading}{' ' * padding}"
         next_line = f"{next_line}{'-' * padding}"
     reason = "Reason"
@@ -89,34 +89,34 @@ def _table_doc_updated(lib_kw: str, max_name_lenght: int, reason: str) -> str:
     return f"{line}|"
 
 
-def compare_translatoin(filename: Path, library_translation: dict):
+def compare_translation(filename: Path, library_translation: dict):
     with filename.open("r") as file:
         project_translation = json.load(file)
-    max_kw_lenght = _max_kw_name_lenght(library_translation)
+    max_kw_length = _max_kw_name_length(library_translation)
     table_body = []
     for lib_kw, lib_kw_data in library_translation.items():
         project_kw_data = project_translation.get(lib_kw)
         if not project_kw_data:
             table_body.append(
-                _table_doc_updated(lib_kw, max_kw_lenght, MISSING_TRANSLATION)
+                _table_doc_updated(lib_kw, max_kw_length, MISSING_TRANSLATION)
             )
             continue
         sha256_value = project_kw_data.get("sha256")
         if not sha256_value:
             table_body.append(
-                _table_doc_updated(lib_kw, max_kw_lenght, MISSING_CHECKSUM)
+                _table_doc_updated(lib_kw, max_kw_length, MISSING_CHECKSUM)
             )
             continue
         if project_kw_data["sha256"] != lib_kw_data["sha256"]:
-            table_body.append(_table_doc_updated(lib_kw, max_kw_lenght, DOC_CHANGED))
+            table_body.append(_table_doc_updated(lib_kw, max_kw_length, DOC_CHANGED))
     for project_kw in project_translation:
         if project_kw not in library_translation:
             table_body.append(
-                _table_doc_updated(project_kw, max_kw_lenght, NO_LIB_KEYWORD)
+                _table_doc_updated(project_kw, max_kw_length, NO_LIB_KEYWORD)
             )
     if not table_body:
         return []
 
-    table = _get_heading(max_kw_lenght)
+    table = _get_heading(max_kw_length)
     table.extend(table_body)
     return table

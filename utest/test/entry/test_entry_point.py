@@ -6,8 +6,8 @@ from approvaltests import verify_all
 
 from SeleniumLibrary.entry.get_versions import get_version
 from SeleniumLibrary.entry.translation import (
-    compare_translatoin,
-    get_library_translaton,
+    compare_translation,
+    get_library_translation,
 )
 
 
@@ -25,7 +25,7 @@ def test_version():
 
 
 def test_get_translation():
-    data = get_library_translaton()
+    data = get_library_translation()
     for item in data.values():
         assert item["name"], item["name"]
         assert item["doc"], item["doc"]
@@ -34,19 +34,19 @@ def test_get_translation():
 
 def test_compare_translation(tmp_path: Path):
     translation = tmp_path / "translation.json"
-    data = get_library_translaton()
+    data = get_library_translation()
     with translation.open("w") as file:
         json.dump(data, file, indent=4)
-    table = compare_translatoin(translation, data)
+    table = compare_translation(translation, data)
     verify_all("No changes", table)
 
 
 def test_compare_translation_changes(tmp_path: Path):
     translation = tmp_path / "translation.json"
-    data = get_library_translaton()
+    data = get_library_translation()
     data.pop("handle_alert", None)
     data["alert_should_be_present"]["sha256"] = "foo"
     with translation.open("w") as file:
         json.dump(data, file, indent=4)
-    table = compare_translatoin(translation, get_library_translaton())
+    table = compare_translation(translation, get_library_translation())
     verify_all("Changes", table)

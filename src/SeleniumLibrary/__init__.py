@@ -550,16 +550,16 @@ class SeleniumLibrary(DynamicCore):
 
     = Language =
 
-    SeleniumLibrary offers possibility to translte keyword names and documentation to new language. If language
+    SeleniumLibrary offers the possibility to translate keyword names and documentation to new language. If language
     is defined, SeleniumLibrary will search from
     [https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path | module search path]
-    Python packages starting with `robotframework_seleniumlibrary_translation` by using
-    [https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/ | Python pluging API]. Library
+    for Python packages starting with `robotframework-seleniumlibrary-translation` by using the
+    [https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/ | Python pluging API]. The Library
     is using naming convention to find Python plugins.
 
-    The package must implement single API call, ``get_language`` without any arguments. Method must return a
+    The package must implement a single API call, ``get_language`` without any arguments. The method must return a
     dictionary containing two keys: ``language`` and ``path``. The language key value defines which language
-    the package contains. Also value should match (case insentive) the library ``language`` import parameter.
+    the package contains. Also the value should match (case insensitive) the library ``language`` import parameter.
     The path parameter value should be full path to the translation file.
 
     == Translation file ==
@@ -568,8 +568,8 @@ class SeleniumLibrary(DynamicCore):
     format. The keys of json are the methods names, not the keyword names, which implements keywords. Value of
     key is json object which contains two keys: ``name`` and ``doc``. The ``name`` key contains the keyword
     translated name and `doc` contains translated documentation. Providing doc and name are optional, example
-    translation json file can only provide translations to keyword names or only to documentatin. But it is
-    always recomended to provide translation to both name and doc. Special key ``__intro__`` is for class level
+    translation json file can only provide translations to keyword names or only to documentation. But it is
+    always recommended to provide translation to both name and doc. Special key ``__intro__`` is for class level
     documentation and ``__init__`` is for init level documentation. These special values ``name`` can not be
     translated, instead ``name`` should be kept the same.
 
@@ -580,9 +580,10 @@ class SeleniumLibrary(DynamicCore):
     languages, it only provides easy way to create full list keywords and their documentation in correct
     format. It is also possible to add keywords from library plugins by providing `--plugings` arguments
     to command. Example: `rfselib translation --plugings myplugin.SomePlugin /path/to/translation.json` The
-    genered json file contains `sha256` key, which constains the sha256 sum of the library documentation,
-    the sha256 sum is used by `rfselib translation --compare /path/to/translation.json` command, which compares
-    transation to to library and prints outs a table which tell if there are changes needed for translation file.
+    generated json file contains `sha256` key, which contains the sha256 sum of the library documentation.
+    The sha256 sum is used by `rfselib translation --compare /path/to/translation.json` command, which compares
+    the translation to the library and prints outs a table which tells if there are changes needed for
+    the translation file.
 
     Example project for translation can be found from
     [https://github.com/MarketSquare/robotframework-seleniumlibrary-translation-fi | robotframework-seleniumlibrary-translation-fi]

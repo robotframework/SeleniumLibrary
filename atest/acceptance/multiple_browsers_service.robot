@@ -9,8 +9,8 @@ Documentation     Creating test which would work on all browser is not possible.
 *** Test Cases ***
 Chrome Browser With Chrome Service As String
     [Documentation]
-    ...    LOG 2:2 DEBUG STARTS: Started executable:
-    ...    LOG 2:3 DEBUG GLOB:    POST*/session*
+    ...    LOG 2:3 DEBUG STARTS: Started executable:
+    ...    LOG 2:4 DEBUG GLOB:    POST*/session*
     ${driver_path}=  Get Driver Path    Chrome
     Open Browser    ${FRONT PAGE}    Chrome    remote_url=${REMOTE_URL}
     ...    service=executable_path='${driver_path}'
@@ -24,8 +24,8 @@ Chrome Browser With Chrome Service As String With service_args As List
 
 Firefox Browser With Firefox Service As String
     [Documentation]
-    ...    LOG 2:2 DEBUG STARTS: Started executable:
-    ...    LOG 2:3 DEBUG GLOB:    POST*/session*
+    ...    LOG 2:3 DEBUG STARTS: Started executable:
+    ...    LOG 2:4 DEBUG GLOB:    POST*/session*
     ${driver_path}=  Get Driver Path    Firefox
     Open Browser    ${FRONT PAGE}    Firefox    remote_url=${REMOTE_URL}
     ...    service=executable_path='${driver_path}'
