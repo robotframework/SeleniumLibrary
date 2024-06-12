@@ -49,7 +49,7 @@ def cli():
     required=True,
 )
 @click.option(
-    "--plugin",
+    "--plugins",
     help="Same as plugins argument in the library import.",
     default=None,
     type=str,
@@ -97,7 +97,7 @@ def translation(
             print("Translation is valid, no updated needed.")
     else:
         with filename.open("w") as file:
-            json.dump(translation, file, indent=4)
+            json.dump(lib_translation, file, indent=4)
         print(f"Translation file created in {filename.absolute()}")
 
 
