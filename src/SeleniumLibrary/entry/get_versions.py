@@ -45,7 +45,7 @@ def get_version():
     )
     return (
         f"\nUsed Python is: {sys.executable}\n\tVersion: {python_version}\n"
-        f'Robot Framework version: "{get_rf_version()}\n"'
+        f'Robot Framework version: "{get_rf_version()}"\n'
         f"Installed SeleniumLibrary version is: {get_library_version()}\n"
         f"Installed selenium version is: {__version__}\n"
     )
