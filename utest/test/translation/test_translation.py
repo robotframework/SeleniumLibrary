@@ -8,7 +8,6 @@ from SeleniumLibrary import SeleniumLibrary
 
 @pytest.fixture()
 def sl() -> SeleniumLibrary:
-    d = Path(__file__).parent.parent.absolute()
     sys.path.append(str(Path(__file__).parent.parent.absolute()))
     return SeleniumLibrary(language="FI")
 
