@@ -517,8 +517,8 @@ translated, instead ``name`` should be kept the same.
 Template translation file, with English language can be created by running:
 `rfselib translation /path/to/translation.json` command. Command does not provide translations to other
 languages, it only provides easy way to create full list keywords and their documentation in correct
-format. It is also possible to add keywords from library plugins by providing `--plugings` arguments
-to command. Example: `rfselib translation --plugings myplugin.SomePlugin /path/to/translation.json` The
+format. It is also possible to add keywords from library plugins by providing `--plugins` arguments
+to command. Example: `rfselib translation --plugins myplugin.SomePlugin /path/to/translation.json` The
 generated json file contains `sha256` key, which contains the sha256 sum of the library documentation.
 The sha256 sum is used by `rfselib translation --compare /path/to/translation.json` command, which compares
 the translation to the library and prints outs a table which tells if there are changes needed for

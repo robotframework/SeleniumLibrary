@@ -75,7 +75,7 @@ def translation(
 
     The filename argument will tell where the default json file is saved.
 
-    The --plugin argument will add plugin keywords in addition to the library keywords
+    The --plugins argument will add plugin keywords in addition to the library keywords
     into the default translation json file. It is used the same as plugins argument in
     the library import.
 
