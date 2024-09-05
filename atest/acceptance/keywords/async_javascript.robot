@@ -88,6 +88,7 @@ Should Timeout If Script Does Not Invoke Callback With Long Timeout
     ...    var callback = arguments[arguments.length - 1]; window.setTimeout(callback, 1500);
 
 Should Detect Page Loads While Waiting On An Async Script And Return An Error
+    [Tags]  Triage
     Set Selenium Timeout    0.5 seconds
     ${status}    ${error}    Run Keyword And Ignore Error    Execute Async Javascript
     ...    window.location = 'javascript/dynamic';
