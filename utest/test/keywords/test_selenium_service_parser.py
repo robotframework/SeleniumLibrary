@@ -1,4 +1,5 @@
 import os
+import sys
 import unittest
 
 import pytest
@@ -53,8 +54,24 @@ def test_parse_service_string(service, reporter):
     verify_all("Selenium service string to dict", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
+# @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
+# @unittest.skipIf(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
+@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
 def test_parse_service_string_errors(service, reporter):
+    results = []
+    results.append(error_formatter(service._parse, "attribute=arg1", True))
+    results.append(error_formatter(service._parse, "attribute='arg1", True))
+    results.append(error_formatter(service._parse, "attribute=['arg1'", True))
+    results.append(error_formatter(service._parse, "attribute=['arg1';'arg2']", True))
+    results.append(error_formatter(service._parse, "attribute['arg1']", True))
+    results.append(error_formatter(service._parse, "attribute=['arg1'] attribute=['arg2']", True))
+    verify_all("Selenium service string errors", results, reporter=reporter)
+
+
+@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="Errors change with Python 3.12")
+def test_parse_service_string_errors_py3_12(service, reporter):
     results = []
     results.append(error_formatter(service._parse, "attribute=arg1", True))
     results.append(error_formatter(service._parse, "attribute='arg1", True))

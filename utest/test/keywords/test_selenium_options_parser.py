@@ -1,4 +1,5 @@
 import os
+import sys
 import unittest
 
 import pytest
@@ -102,8 +103,22 @@ def test_parse_arguemnts(options, reporter):
     verify_all("Parse arguments from complex object", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
 def test_parse_options_string_errors(options, reporter):
+    results = []
+    results.append(error_formatter(options._parse, 'method("arg1)', True))
+    results.append(error_formatter(options._parse, 'method(arg1")', True))
+    results.append(error_formatter(options._parse, "method(arg1)", True))
+    results.append(error_formatter(options._parse, "attribute=arg1", True))
+    results.append(error_formatter(options._parse, "attribute=webdriver", True))
+    results.append(error_formatter(options._parse, 'method(argument="value")', True))
+    verify_all("Selenium options string errors", results, reporter=reporter)
+
+
+@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="Errors change with Python 3.12")
+def test_parse_options_string_errors_py3_12(options, reporter):
     results = []
     results.append(error_formatter(options._parse, 'method("arg1)', True))
     results.append(error_formatter(options._parse, 'method(arg1")', True))
@@ -202,8 +217,6 @@ def output_dir():
     curr_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
     return output_dir
-
-from selenium.webdriver.chrome.service import Service as ChromeService
 
 
 def test_create_chrome_with_options(creator):
