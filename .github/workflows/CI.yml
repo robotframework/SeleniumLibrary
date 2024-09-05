@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.8, 3.12]  # 3.12, pypy-3.9
-        rf-version: [5.0.1, 6.1.1, 7.0]
+        rf-version: [6.1.1, 7.0.1]
         selenium-version: [4.20.0, 4.21.0]
         browser: [firefox, chrome, headlesschrome]  #edge
 
