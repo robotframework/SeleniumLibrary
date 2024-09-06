@@ -17,6 +17,7 @@ Programming Language :: Python :: 3.8
 Programming Language :: Python :: 3.9
 Programming Language :: Python :: 3.10
 Programming Language :: Python :: 3.11
+Programming Language :: Python :: 3.12
 Programming Language :: Python :: 3 :: Only
 Topic :: Software Development :: Testing
 Framework :: Robot Framework
@@ -41,7 +42,7 @@ setup(
     keywords         = 'robotframework testing testautomation selenium webdriver web',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    python_requires  = '>=3.8, <3.12',
+    python_requires  = '>=3.8, <=3.12',
     install_requires = REQUIREMENTS,
     package_dir      = {'': 'src'},
     packages         = find_packages('src'),

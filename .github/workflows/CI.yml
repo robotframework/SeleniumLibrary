@@ -9,9 +9,9 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.8, 3.11]  # 3.12, pypy-3.9
-        rf-version: [5.0.1, 6.1.1, 7.0]
-        selenium-version: [4.20.0, 4.21.0]
+        python-version: [3.8, 3.12]  # pypy-3.9
+        rf-version: [6.1.1, 7.0.1]
+        selenium-version: [4.21.0, 4.22.0, 4.23.1, 4.24.0]
         browser: [firefox, chrome, headlesschrome]  #edge
 
     steps:
@@ -60,11 +60,7 @@ jobs:
         pip install -U --pre robotframework==${{ matrix.rf-version }}
     - name: Install drivers via selenium-manager
       run: |
-        if [[ ${{ matrix.selenium-version }} == '4.20.0' || ${{ matrix.selenium-version }} == '4.21.0' ]]; then
-          SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm._get_binary())}")')
-        else
-          SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm.get_binary())}")')
-        fi 
+        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm._get_binary())}")')
         echo "$SELENIUM_MANAGER_EXE"
         echo "WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')" >> "$GITHUB_ENV"
         echo "$WEBDRIVERPATH"
