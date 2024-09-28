@@ -9,7 +9,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.8, 3.13.0rc2]  # pypy-3.9
+        python-version: [3.8, 3.13.0-rc.2]  # pypy-3.9
         rf-version: [6.1.1, 7.1]
         selenium-version: [4.23.1, 4.24.0, 4.25.0]
         browser: [firefox, chrome, headlesschrome]  #edge
