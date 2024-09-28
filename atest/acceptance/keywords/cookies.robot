@@ -114,12 +114,15 @@ Test Get Cookie Keyword Logging
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2024-09-15 *:22:33
+    ...    expiry=2025-09-01 *:25:00
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     far_future
 
 *** Keywords ***
 Add Cookies
+    # To update time each September (as Chrome limits cookies to one year expiry date) use
+    #    import datetime
+    #    print (datetime.datetime.strptime("2025-09-01 12:25:00", "%Y-%m-%d %I:%M:%S").timestamp())
     Delete All Cookies
     Add Cookie    test       seleniumlibrary
     ${now} =    Get Current Date
@@ -127,4 +130,4 @@ Add Cookies
     ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
     Set Suite Variable    ${tomorrow_thistime_datetime}
     Add Cookie    another    value   expiry=${tomorrow_thistime}
-    Add Cookie    far_future    timemachine    expiry=1726399353    # 2024-09-15 11:22:33
+    Add Cookie    far_future    timemachine    expiry=1756700700    # 2025-09-01 12:25:00
