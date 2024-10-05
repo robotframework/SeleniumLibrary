@@ -264,7 +264,7 @@ class WaitingKeywords(LibraryComponent):
         timeout: Optional[timedelta] = None,
         error: Optional[str] = None,
     ):
-        """Waits until the any of the element locators in ``locators`` appears on the current page.
+        """Waits until any of the element locators in ``locators`` appears on the current page.
 
         Fails if ``timeout`` expires before the element appears. See
         the `Timeouts` section for more information about using timeouts and
