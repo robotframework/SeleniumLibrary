@@ -923,7 +923,6 @@ return !element.dispatchEvent(evt);
         using the selenium send_keys method. Although one is not recommended
         over the other if `Press Key` does not work we recommend trying
         `Press Keys`.
-        send_
         """
         if key.startswith("\\") and len(key) > 1:
             key = self._map_ascii_key_code_to_key(int(key[1:]))
