@@ -9,9 +9,9 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.8, 3.12]  # pypy-3.9
-        rf-version: [6.1.1, 7.0.1]
-        selenium-version: [4.21.0, 4.22.0, 4.23.1, 4.24.0]
+        python-version: [3.8, 3.13.0]  # pypy-3.9
+        rf-version: [6.1.1, 7.1.1]
+        selenium-version: [4.24.0, 4.25.0, 4.26.1]
         browser: [firefox, chrome, headlesschrome]  #edge
 
     steps:
@@ -87,7 +87,7 @@ jobs:
     #     sudo chmod u+x ./selenium-server-standalone.jar
     #     xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v3
       if: failure()
       with:
         name: SeleniumLibrary Test results
