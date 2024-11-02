@@ -283,6 +283,13 @@ def test_find_with_data(finder):
     finder.find("data:id:my_id", tag="div", required=False)
     verify(driver).find_elements(By.XPATH, '//*[@data-id="my_id"]')
 
+def test_find_with_data_multiple_colons(finder):
+    driver = _get_driver(finder)
+    elements = _make_mock_elements("div", "a", "span", "a")
+    when(driver).find_elements(By.XPATH, '//*[@data-automation-id="foo:bar"]').thenReturn(elements)
+    result = finder.find("data:automation-id:foo:bar", first_only=False)
+    assert result == elements
+
 
 def test_find_with_invalid_data(finder):
     with pytest.raises(
@@ -296,6 +303,12 @@ def test_find_with_invalid_data(finder):
         match=r"^Provided selector \(\) is malformed\. Correct format: name:value\.",
     ):
         finder.find("data:", tag="div", required=False)
+
+    with pytest.raises(
+        ValueError,
+        match=r"^Provided selector \(:value\) is malformed\. Correct format: name:value\.",
+    ):
+        finder.find("data::value", tag="div", required=False)
 
 
 def test_find_with_locator_with_apos(finder):
