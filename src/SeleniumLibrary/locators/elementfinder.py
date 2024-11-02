@@ -223,7 +223,7 @@ class ElementFinder(ContextAware):
 
     def _find_by_data_locator(self, criteria, tag, constraints, parent):
         try:
-            name, value = criteria.split(":", 2)
+            name, value = criteria.split(":", 1)
             if "" in [name, value]:
                 raise ValueError
         except ValueError:
