@@ -18,6 +18,7 @@ Programming Language :: Python :: 3.9
 Programming Language :: Python :: 3.10
 Programming Language :: Python :: 3.11
 Programming Language :: Python :: 3.12
+Programming Language :: Python :: 3.13
 Programming Language :: Python :: 3 :: Only
 Topic :: Software Development :: Testing
 Framework :: Robot Framework
@@ -35,14 +36,14 @@ setup(
     version          = VERSION,
     description      = 'Web testing library for Robot Framework',
     long_description = DESCRIPTION,
-    author           = 'Ed Manlove, Yuri Verweij, Lisa Crispin',
+    author           = 'Ed Manlove, Yuri Verweij',
     author_email     = 'emanlove@verizon.net',
     url              = 'https://github.com/robotframework/SeleniumLibrary',
     license          = 'Apache License 2.0',
     keywords         = 'robotframework testing testautomation selenium webdriver web',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    python_requires  = '>=3.8, <3.13',
+    python_requires  = '>=3.8, <3.14',
     install_requires = REQUIREMENTS,
     package_dir      = {'': 'src'},
     packages         = find_packages('src'),
