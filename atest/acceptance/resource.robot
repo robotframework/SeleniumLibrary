@@ -24,7 +24,7 @@ Open Browser To Start Page Without Testing Default Options
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    alias=${alias}
     ${orig speed} =    Set Selenium Speed    ${SPEED}
     ${orig timeout} =    Set Selenium Timeout    10 seconds
-    [Return]    ${orig speed}    5 seconds
+    RETURN    ${orig speed}    5 seconds
 
 Cannot Be Executed In IE
     [Documentation]    Cannot Be Executed In IE
