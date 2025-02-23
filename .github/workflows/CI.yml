@@ -87,8 +87,9 @@ jobs:
     #     sudo chmod u+x ./selenium-server-standalone.jar
     #     xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: SeleniumLibrary Test results
         path: atest/zip_results
+        overwrite: true
