@@ -251,7 +251,7 @@ def process_output(browser):
     print("Verifying results...")
     options = []
     output = os.path.join(RESULTS_DIR, "output.xml")
-    robotstatuschecker.process_output(output, verbose=False)
+    robotstatuschecker.process_output(output)
     options.extend([opt.format(browser=browser) for opt in REBOT_OPTIONS])
     try:
         rebot_cli(options + [output])

@@ -238,7 +238,7 @@ class SeleniumLibrary(DynamicCore):
 
     | Custom Locator Strategy | [Arguments] | ${browser} | ${locator} | ${tag} | ${constraints} |
     |   | ${element}= | Execute Javascript | return window.document.getElementById('${locator}'); |
-    |   | [Return] | ${element} |
+    |   | RETURN | ${element} |
 
     This keyword is a reimplementation of the basic functionality of the
     ``id`` locator where ``${browser}`` is a reference to a WebDriver
