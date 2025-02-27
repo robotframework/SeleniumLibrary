@@ -55,7 +55,7 @@ from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
 
-__version__ = "6.7.0"
+__version__ = "6.7.1"
 
 
 class SeleniumLibrary(DynamicCore):
