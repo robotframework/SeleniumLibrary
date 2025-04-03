@@ -126,7 +126,7 @@ class ScreenshotKeywords(LibraryComponent):
     def _capture_page_screen_to_log(self):
         screenshot_as_base64 = self.driver.get_screenshot_as_base64()
         self._embed_to_log_as_base64(screenshot_as_base64, 800)
-        return EMBED
+        return screenshot_as_base64
 
     @keyword
     def capture_element_screenshot(
