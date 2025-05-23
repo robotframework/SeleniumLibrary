@@ -44,8 +44,7 @@ The recommended installation method is using pip_::
     pip install --upgrade robotframework-seleniumlibrary
 
 Running this command installs also the latest Selenium and Robot Framework
-versions, but you still need to install `browser drivers`_ separately.
-The ``--upgrade`` option can be omitted when installing the library for the
+versions. The ``--upgrade`` option can be omitted when installing the library for the
 first time.
 
 It is possible to install directly from the GitHub_ repository. To install
@@ -64,39 +63,11 @@ using ``pip`` see `its own documentation <pip_>`__.
 Browser drivers
 ---------------
 
-After installing the library, you still need to install browser and
-operating system specific browser drivers for all those browsers you
-want to use in tests. These are the exact same drivers you need to use with
-Selenium also when not using SeleniumLibrary. More information about
-drivers can be found from `Selenium documentation`__.
+Browsers and drivers are installed and managed automatically by `Selenium Manager`__.
+For more information, see the `Selenium documentation`__.
 
-The general approach to install a browser driver is downloading a right
-driver, such as ``chromedriver`` for Chrome, and placing it into
-a directory that is in PATH__. Drivers for different browsers
-can be found via Selenium documentation or by using your favorite
-search engine with a search term like ``selenium chrome browser driver``.
-New browser driver versions are released to support features in
-new browsers, fix bug, or otherwise, and you need to keep an eye on them
-to know when to update drivers you use.
-
-Alternatively, you can use a tool called WebdriverManager__ which can
-find the latest version or when required, any version of appropriate
-webdrivers for you and then download and link/copy it into right
-location. Tool can run on all major operating systems and supports
-downloading of Chrome, Firefox, Opera & Edge webdrivers.
-
-Here's an example:
-
-.. code:: bash
-
-      pip install webdrivermanager
-      webdrivermanager firefox chrome --linkpath /usr/local/bin
-
-
-
+__ https://www.selenium.dev/documentation/selenium_manager
 __ https://seleniumhq.github.io/selenium/docs/api/py/index.html#drivers
-__ https://en.wikipedia.org/wiki/PATH_(variable)
-__ https://github.com/omenia/webdrivermanager
 
 Usage
 -----
