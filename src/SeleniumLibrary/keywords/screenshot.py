@@ -27,6 +27,8 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
 EMBED = "EMBED"
+BASE64 = "BASE64"
+EMBEDDED_OPTIONS = [EMBED, BASE64]
 DEFAULT_FILENAME_PDF = "selenium-page-{index}.pdf"
 
 
@@ -111,8 +113,9 @@ class ScreenshotKeywords(LibraryComponent):
         if not self.drivers.current:
             self.info("Cannot capture screenshot because no browser is open.")
             return
-        if self._decide_embedded(filename):
-            return self._capture_page_screen_to_log()
+        is_embedded, method = self._decide_embedded(filename)
+        if is_embedded:
+            return self._capture_page_screen_to_log(method)
         return self._capture_page_screenshot_to_file(filename)
 
     def _capture_page_screenshot_to_file(self, filename):
@@ -123,9 +126,11 @@ class ScreenshotKeywords(LibraryComponent):
         self._embed_to_log_as_file(path, 800)
         return path
 
-    def _capture_page_screen_to_log(self):
+    def _capture_page_screen_to_log(self, return_val):
         screenshot_as_base64 = self.driver.get_screenshot_as_base64()
-        self._embed_to_log_as_base64(screenshot_as_base64, 800)
+        base64_str = self._embed_to_log_as_base64(screenshot_as_base64, 800)
+        if return_val == BASE64:
+            return_val base64_str
         return EMBED
 
     @keyword
@@ -159,8 +164,9 @@ class ScreenshotKeywords(LibraryComponent):
             )
             return
         element = self.find_element(locator, required=True)
-        if self._decide_embedded(filename):
-            return self._capture_element_screen_to_log(element)
+        is_embedded, method = self._decide_embedded(filename)
+        if is_embedded:
+            return self._capture_element_screen_to_log(element, method)
         return self._capture_element_screenshot_to_file(element, filename)
 
     def _capture_element_screenshot_to_file(self, element, filename):
@@ -171,8 +177,10 @@ class ScreenshotKeywords(LibraryComponent):
         self._embed_to_log_as_file(path, 400)
         return path
 
-    def _capture_element_screen_to_log(self, element):
-        self._embed_to_log_as_base64(element.screenshot_as_base64, 400)
+    def _capture_element_screen_to_log(self, element, return_val):
+        base64_str = self._embed_to_log_as_base64(element.screenshot_as_base64, 400)
+        if return_val == BASE64:
+            return base64_str
         return EMBED
 
     @property
@@ -184,20 +192,20 @@ class ScreenshotKeywords(LibraryComponent):
         self.ctx.screenshot_root_directory = value
 
     def _decide_embedded(self, filename):
-        filename = filename.lower()
+        filename = filename.upper()
         if (
             filename == DEFAULT_FILENAME_PAGE
-            and self._screenshot_root_directory == EMBED
+            and self._screenshot_root_directory in EMBEDDED_OPTIONS
         ):
-            return True
+            return True, self._screenshot_root_directory
         if (
             filename == DEFAULT_FILENAME_ELEMENT
-            and self._screenshot_root_directory == EMBED
+            and self._screenshot_root_directory in EMBEDDED_OPTIONS
         ):
-            return True
-        if filename == EMBED.lower():
-            return True
-        return False
+            return True, self._screenshot_root_directory
+        if filename in EMBEDDED_OPTIONS:
+            return True, self._screenshot_root_directory
+        return False, None
 
     def _get_screenshot_path(self, filename):
         if self._screenshot_root_directory != EMBED:
