@@ -130,7 +130,7 @@ class ScreenshotKeywords(LibraryComponent):
         screenshot_as_base64 = self.driver.get_screenshot_as_base64()
         base64_str = self._embed_to_log_as_base64(screenshot_as_base64, 800)
         if return_val == BASE64:
-            return_val base64_str
+            return base64_str
         return EMBED
 
     @keyword
@@ -194,12 +194,12 @@ class ScreenshotKeywords(LibraryComponent):
     def _decide_embedded(self, filename):
         filename = filename.upper()
         if (
-            filename == DEFAULT_FILENAME_PAGE
+            filename == DEFAULT_FILENAME_PAGE.upper()
             and self._screenshot_root_directory in EMBEDDED_OPTIONS
         ):
             return True, self._screenshot_root_directory
         if (
-            filename == DEFAULT_FILENAME_ELEMENT
+            filename == DEFAULT_FILENAME_ELEMENT.upper()
             and self._screenshot_root_directory in EMBEDDED_OPTIONS
         ):
             return True, self._screenshot_root_directory
