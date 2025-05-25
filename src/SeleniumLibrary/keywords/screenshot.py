@@ -61,6 +61,8 @@ class ScreenshotKeywords(LibraryComponent):
             path = None
         elif path.upper() == EMBED:
             path = EMBED
+        elif path.upper() == BASE64:
+            path = BASE64
         else:
             path = os.path.abspath(path)
             self._create_directory(path)
