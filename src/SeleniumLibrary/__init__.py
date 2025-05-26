@@ -50,7 +50,7 @@ from SeleniumLibrary.keywords import (
     WebDriverCache,
     WindowKeywords,
 )
-from SeleniumLibrary.keywords.screenshot import EMBED
+from SeleniumLibrary.keywords.screenshot import EMBED, BASE64
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
@@ -614,8 +614,8 @@ class SeleniumLibrary(DynamicCore):
         - ``run_on_failure``:
           Default action for the `run-on-failure functionality`.
         - ``screenshot_root_directory``:
-          Path to folder where possible screenshots are created or EMBED.
-          See `Set Screenshot Directory` keyword for further details about EMBED.
+          Path to folder where possible screenshots are created or EMBED or BASE64.
+          See `Set Screenshot Directory` keyword for further details about EMBED and BASE64.
           If not given, the directory where the log file is written is used.
         - ``plugins``:
           Allows extending the SeleniumLibrary with external Python classes.
@@ -846,6 +846,8 @@ class SeleniumLibrary(DynamicCore):
         if is_string(screenshot_root_directory):
             if screenshot_root_directory.upper() == EMBED:
                 self.screenshot_root_directory = EMBED
+            if screenshot_root_directory.upper() == BASE64:
+                self.screenshot_root_directory = BASE64
 
     @staticmethod
     def _get_translation(language: Union[str, None]) -> Union[Path, None]:
