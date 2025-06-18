@@ -67,7 +67,7 @@ Run on Failure Returns Previous Value
     Should Be Equal    ${old}    Log Title
 
 Run On Failure also fails
-    [Documentation]    LOG 2.1 WARN Keyword 'Failure During Run On failure' could not be run on failure: Expected error.
+    [Documentation]    LOG 2.1.2 WARN Keyword 'Failure During Run On failure' could not be run on failure: Expected error.
     Register Keyword to Run on Failure    Failure During Run On failure
     Run Keyword And Expect Error
     ...    ${FAILURE MESSAGE}
