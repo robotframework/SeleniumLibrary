@@ -96,6 +96,6 @@ jobs:
     - uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: SeleniumLibrary Test results
+        name: sl_$${{ matrix.python-version }}_$${{ matrix.rf-version }}_$${{ matrix.selenium-version }}_$${{ matrix.browser }}
         path: atest/zip_results
         overwrite: true
