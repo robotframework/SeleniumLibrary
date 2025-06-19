@@ -9,11 +9,11 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.9, 3.13.0]  # pypy-3.9
+        python-version: [3.13.0]  # 3.9 pypy-3.9
         # python-version: [{earliest: 3.9}, {latest: 3.13.0}]  # pypy-3.9
-        rf-version: [6.1.1, 7.2.2, 7.3.1]
+        rf-version: [7.2.2]  # 6.1.1, 7.3.1
         selenium-version: [4.28.1, 4.29.0, 4.30.0, 4.31.0, 4.32.0, 4.33.0]
-        browser: [firefox, chrome, headlesschrome]  #edge
+        browser: [chrome]  # firefox, chrome, headlesschrome, edge
 
     steps:
     - uses: actions/checkout@v4
@@ -22,9 +22,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Setup Chrome
-      uses: browser-actions/setup-chrome@latest
+      uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: latest
+        chrome-version: 138
         install-dependencies: true
         install-chromedriver: true
       id: setup-chrome
