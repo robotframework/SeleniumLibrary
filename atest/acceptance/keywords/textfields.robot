@@ -1,5 +1,5 @@
 *** Settings ***
-Test Setup        Go To Page "forms/prefilled_email_form.html"
+Test Setup        Text Fields Test Suite Setup
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
 
@@ -75,3 +75,8 @@ Press Key
 
 Attempt Clear Element Text On Non-Editable Field
     Run Keyword And Expect Error    *    Clear Element Text    can_send_email
+
+*** Keywords ***
+Text Fields Test Suite Setup
+  Go To Page "forms/prefilled_email_form.html"
+  Set Selenium Speed  0.1secs
