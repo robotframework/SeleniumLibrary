@@ -43,6 +43,7 @@ Handle Alert returns message
 
 Handle Alert with custom timeout
     Click Button    Slow alert
+    Sleep  0.1s
     Handle Alert    timeout=1s
     Click Button    Slow alert
     Run Keyword And Expect Error
