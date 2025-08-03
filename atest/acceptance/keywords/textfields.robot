@@ -1,5 +1,6 @@
 *** Settings ***
-Test Setup        Text Fields Test Suite Setup
+Suite Setup       Open Browser To Start Page Disabling Chrome Leaked Password Detection
+Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
 
@@ -77,6 +78,8 @@ Attempt Clear Element Text On Non-Editable Field
     Run Keyword And Expect Error    *    Clear Element Text    can_send_email
 
 *** Keywords ***
-Text Fields Test Suite Setup
-  Go To Page "forms/prefilled_email_form.html"
-  Set Selenium Speed  0.1secs
+
+Open Browser To Start Page Disabling Chrome Leaked Password Detection
+    [Arguments]    ${alias}=${None}
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    options=add_experimental_option("prefs", {"profile.password_manager_leak_detection": False})    alias=${alias}
