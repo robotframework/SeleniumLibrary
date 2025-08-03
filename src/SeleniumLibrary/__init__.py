@@ -24,7 +24,6 @@ from typing import Optional, List, Union
 from robot.api import logger
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
-from robot.utils import is_string
 from robot.utils.importer import Importer
 
 from robotlibcore import DynamicCore
@@ -843,7 +842,7 @@ class SeleniumLibrary(DynamicCore):
 
     def _resolve_screenshot_root_directory(self):
         screenshot_root_directory = self.screenshot_root_directory
-        if is_string(screenshot_root_directory):
+        if isinstance(screenshot_root_directory, str):
             if screenshot_root_directory.upper() == EMBED:
                 self.screenshot_root_directory = EMBED
             if screenshot_root_directory.upper() == BASE64:
