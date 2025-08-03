@@ -24,7 +24,7 @@ jobs:
     - name: Setup Chrome
       uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: 137
+        chrome-version: 138
         install-dependencies: true
         install-chromedriver: true
       id: setup-chrome
