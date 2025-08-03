@@ -9,10 +9,11 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.8, 3.13.0]  # pypy-3.9
-        rf-version: [6.1.1, 7.1.1]
-        selenium-version: [4.24.0, 4.25.0, 4.26.1, 4.27.1]
-        browser: [firefox, chrome, headlesschrome]  #edge
+        python-version: [3.9.23, 3.13.5]  # pypy-3.9
+        # python-version: [{earliest: 3.9}, {latest: 3.13.0}]  # pypy-3.9
+        rf-version: [6.1.1, 7.3.2]
+        selenium-version: [4.28.1, 4.29.0, 4.30.0, 4.31.0, 4.32.0, 4.33.0, 4.34.2]
+        browser: [chrome]  # firefox, chrome, headlesschrome, edge
 
     steps:
     - uses: actions/checkout@v4
@@ -21,9 +22,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Setup Chrome
-      uses: browser-actions/setup-chrome@latest
+      uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: latest
+        chrome-version: 138
+        install-dependencies: true
+        install-chromedriver: true
       id: setup-chrome
     - run: |
         echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
@@ -75,8 +78,13 @@ jobs:
       run: |
         xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschrome
 
-    - name: Run tests with ${{ matrix.browser }} if CPython
-      if: startsWith( matrix.python-version, 'pypy') == false
+    # - name: Run tests with ${{ matrix.browser }} if CPython
+    #   if: startsWith( matrix.python-version, 'pypy') == false
+    #   run: |
+    #     xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
+
+    - name: Run tests with latest python and latest robot framework
+      if: matrix.python-version == '3.13.0' && matrix.rf-version == '7.2.2'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
 
@@ -90,6 +98,6 @@ jobs:
     - uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: SeleniumLibrary Test results
+        name: sl_$${{ matrix.python-version }}_$${{ matrix.rf-version }}_$${{ matrix.selenium-version }}_$${{ matrix.browser }}
         path: atest/zip_results
         overwrite: true

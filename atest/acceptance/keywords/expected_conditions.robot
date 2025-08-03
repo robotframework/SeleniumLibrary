@@ -10,7 +10,7 @@ Wait For Expected Conditions One Argument
     Title Should Be    Delayed
 
 Wait For Expected Condition Times out within set timeout
-    [Documentation]  FAIL REGEXP: TimeoutException: Message: Expected Condition not met within set timeout of 0.3*
+    [Documentation]  FAIL STARTS: TimeoutException: Message: Expected Condition not met within set timeout of 0.3
     Title Should Be    Original
     Click Element    link=delayed change title
     Wait For Expected Condition   title_is  Delayed  timeout=0.3
