@@ -21,7 +21,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import plural_or_not, is_string
+from SeleniumLibrary.utils import plural_or_not
 
 
 class WindowKeywords(LibraryComponent):
@@ -117,7 +117,7 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            if not is_string(browser) or not browser.upper() == "CURRENT":
+            if not isinstance(browser, str) or not browser.upper() == "CURRENT":
                 self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
