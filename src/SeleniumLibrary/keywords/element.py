@@ -329,33 +329,50 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_text_should_be(
-        self,
-        locator: Union[WebElement, str],
-        expected: Union[None, str],
-        message: Optional[str] = None,
-        ignore_case: bool = False,
+            self,
+            locator: Union[WebElement, str],
+            expected: Union[None, str],
+            message: Optional[str] = None,
+            ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` contains exact the text ``expected``.
 
-        See the `Locating elements` section for details about the locator
-        syntax.
+            If it fails, the element will be highlighted.
 
-        The ``message`` argument can be used to override the default error
-        message.
+            See the `Locating elements` section for details about the locator
+            syntax.
 
-        The ``ignore_case`` argument can be set to True to compare case
-        insensitive, default is False.
+            The ``message`` argument can be used to override the default error
+            message.
 
-        ``ignore_case`` argument is new in SeleniumLibrary 3.1.
+            The ``ignore_case`` argument can be set to True to compare case
+            insensitive, default is False.
 
-        Use `Element Should Contain` if a substring match is desired.
+            ``ignore_case`` argument is new in SeleniumLibrary 3.1.
+
+            Use `Element Should Contain` if a substring match is desired.
         """
+
         self.info(f"Verifying element '{locator}' contains exact text '{expected}'.")
-        text = before_text = self.find_element(locator).text
+        element = self.find_element(locator)
+        text = before_text = element.text
+
         if ignore_case:
             text = text.lower()
             expected = expected.lower()
+
         if text != expected:
+            # 🔹 Highlight element before failing
+            try:
+                self.driver.execute_script(
+                    "arguments[0].style.outline='4px solid red';"
+                    "arguments[0].style.backgroundColor='yellow';"
+                    "arguments[0].scrollIntoView({behavior:'smooth', block:'center'});",
+                    element,
+                )
+            except Exception as e:
+                self.warn(f"Highlighting failed: {e}")
+
             if message is None:
                 message = (
                     f"The text of element '{locator}' should have been '{expected}' "
