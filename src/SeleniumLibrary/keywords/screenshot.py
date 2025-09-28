@@ -26,6 +26,7 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
+DEFAULT_FILENAME_FULLPAGE = "selenium-fullpage-screenshot-{index}.png"
 EMBED = "EMBED"
 BASE64 = "BASE64"
 EMBEDDED_OPTIONS = [EMBED, BASE64]
@@ -199,6 +200,101 @@ class ScreenshotKeywords(LibraryComponent):
             return base64_str
         return EMBED
 
+    @keyword
+    def capture_fullpage_screenshot(self, filename: str = DEFAULT_FILENAME_FULLPAGE) -> str:
+        """Takes a screenshot of the entire page, including parts not visible in viewport.
+
+        This keyword is useful when you need to capture a long page that requires
+        scrolling. It works by temporarily resizing the browser window to show
+        the full page height, taking the screenshot, then restoring the original size.
+
+        ``filename`` argument specifies where to save the screenshot file.
+        The directory can be set with `Set Screenshot Directory` keyword or
+        when importing the library. If not configured, screenshots go to the
+        same directory as Robot Framework's log file.
+
+        If ``filename`` is EMBED (case insensitive), the screenshot gets embedded
+        as Base64 image in log.html without creating a file. If it's BASE64,
+        the base64 string is returned and also embedded in the log.
+
+        The ``{index}`` marker in filename gets replaced with a unique number
+        to prevent overwriting files. You can customize the format like
+        ``{index:03}`` for zero-padded numbers.
+
+        Returns the absolute path to the screenshot file, or EMBED/BASE64 string
+        if those options are used.
+
+        Examples:
+        | `Capture Fullpage Screenshot` |                                        |
+        | `File Should Exist`           | ${OUTPUTDIR}/selenium-fullpage-screenshot-1.png |
+        | ${path} =                     | `Capture Fullpage Screenshot`          |
+        | `Capture Fullpage Screenshot` | custom_fullpage.png                    |
+        | `Capture Fullpage Screenshot` | custom_{index}.png                     |
+        | `Capture Fullpage Screenshot` | EMBED                                  |
+        """
+        if not self.drivers.current:
+            self.info("Cannot capture fullpage screenshot because no browser is open.")
+            return
+        is_embedded, method = self._decide_embedded(filename)
+        if is_embedded:
+            return self._capture_fullpage_screen_to_log(method)
+        return self._capture_fullpage_screenshot_to_file(filename)
+
+    def _capture_fullpage_screenshot_to_file(self, filename):
+        """Save fullpage screenshot to file."""
+        # Remember current window size so we can restore it later
+        original_size = self.driver.get_window_size()
+        
+        try:
+            # Get the actual page height - this covers all the content
+            full_height = self.driver.execute_script("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);")
+            
+            # Resize window to show the full page
+            self.driver.set_window_size(original_size['width'], full_height)
+            
+            # Give the page a moment to render after resize
+            import time
+            time.sleep(0.5)
+            
+            # Now take the screenshot
+            path = self._get_screenshot_path(filename)
+            self._create_directory(path)
+            if not self.driver.save_screenshot(path):
+                raise RuntimeError(f"Failed to save fullpage screenshot '{path}'.")
+            self._embed_to_log_as_file(path, 800)
+            return path
+            
+        finally:
+            # Put the window back to its original size
+            self.driver.set_window_size(original_size['width'], original_size['height'])
+
+    def _capture_fullpage_screen_to_log(self, return_val):
+        """Get fullpage screenshot as base64 or embed it."""
+        # Remember current window size so we can restore it later
+        original_size = self.driver.get_window_size()
+        
+        try:
+            # Get the actual page height - this covers all the content
+            full_height = self.driver.execute_script("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);")
+            
+            # Resize window to show the full page
+            self.driver.set_window_size(original_size['width'], full_height)
+            
+            # Give the page a moment to render after resize
+            import time
+            time.sleep(0.5)
+            
+            # Take the screenshot as base64
+            screenshot_as_base64 = self.driver.get_screenshot_as_base64()
+            base64_str = self._embed_to_log_as_base64(screenshot_as_base64, 800)
+            if return_val == BASE64:
+                return base64_str
+            return EMBED
+            
+        finally:
+            # Put the window back to its original size
+            self.driver.set_window_size(original_size['width'], original_size['height'])
+
     @property
     def _screenshot_root_directory(self):
         return self.ctx.screenshot_root_directory
@@ -216,6 +312,11 @@ class ScreenshotKeywords(LibraryComponent):
             return True, self._screenshot_root_directory
         if (
             filename == DEFAULT_FILENAME_ELEMENT.upper()
+            and self._screenshot_root_directory in EMBEDDED_OPTIONS
+        ):
+            return True, self._screenshot_root_directory
+        if (
+            filename == DEFAULT_FILENAME_FULLPAGE.upper()
             and self._screenshot_root_directory in EMBEDDED_OPTIONS
         ):
             return True, self._screenshot_root_directory

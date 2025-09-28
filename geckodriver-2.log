@@ -1,0 +1,15 @@
+1759037270133	geckodriver	INFO	Listening on 127.0.0.1:64737
+1759037270154	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" "/Users/param/.cache/se ... s" "localhost" "-foreground" "-no-remote" "-profile" "/var/folders/hx/hht4dtpj1rj1by5lsf08xy3r0000gn/T/rust_mozprofileqhYd11"
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1759037272570	Marionette	INFO	Marionette enabled
+1759037273295	Marionette	INFO	Listening on port 64745
+Read port: 64745
+WebDriver BiDi listening on ws://127.0.0.1:64738
+1759037273982	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1759037281511	Marionette	INFO	Stopped listening on port 64745
+console.error: "Failed to fetch https://spocs.getpocket.com/user:" "NetworkError when attempting to fetch resource."
+console.error: (new TypeError("NetworkError when attempting to fetch resource.", ""))
+console.error: (new Error("OHTTP was configured for https://ads.mozilla.org/v1/delete_user but we couldn't fetch a valid config", "moz-src:///browser/modules/ContextId.sys.mjs", 234))
+console.warn: TopSitesFeed: Failed to fetch data from MARS server: NetworkError when attempting to fetch resource.
+JavaScript error: resource://gre/modules/ObliviousHTTP.sys.mjs, line 105: NS_ERROR_XPC_CANT_CONVERT_PRIMITIVE_TO_ARRAY: Cannot convert primitive JavaScript value into an array arg 2 [nsIObliviousHttpService.newChannel]

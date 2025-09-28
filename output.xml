@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.12.7 on darwin)" generated="2025-09-28T01:27:49.153010" rpa="false" schemaversion="5">
+<suite id="s1" name="Test Fullpage" source="/Users/param/Desktop/github-issue-manager/workspaces/SeleniumLibrary/test_fullpage.robot">
+<test id="s1-t1" name="Test Fullpage Screenshot" line="7">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-09-28T01:27:49.890019" level="INFO">Opening browser 'firefox' to base url 'https://www.google.com'.</msg>
+<arg>https://www.google.com</arg>
+<arg>firefox</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-09-28T01:27:49.889509" elapsed="10.422142"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-09-28T01:28:00.315981" elapsed="0.006554"/>
+</kw>
+<kw name="Capture Fullpage Screenshot" owner="SeleniumLibrary">
+<msg time="2025-09-28T01:28:01.490284" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="test-fullpage.png"&gt;&lt;img src="test-fullpage.png" width="800px"&gt;&lt;/a&gt;</msg>
+<arg>test-fullpage.png</arg>
+<doc>Takes a full-page screenshot of the current page and embeds it into a log file.</doc>
+<status status="PASS" start="2025-09-28T01:28:00.322979" elapsed="1.174495"/>
+</kw>
+<kw name="File Should Exist" owner="OperatingSystem">
+<msg time="2025-09-28T01:28:01.498594" level="INFO" html="true">File '&lt;a href="file:///Users/param/Desktop/github-issue-manager/workspaces/SeleniumLibrary/test-fullpage.png"&gt;/Users/param/Desktop/github-issue-manager/workspaces/SeleniumLibrary/test-fullpage.png&lt;/a&gt;' exists.</msg>
+<arg>test-fullpage.png</arg>
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<status status="PASS" start="2025-09-28T01:28:01.497874" elapsed="0.000921"/>
+</kw>
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-09-28T01:28:01.499159" elapsed="1.963654"/>
+</kw>
+<status status="PASS" start="2025-09-28T01:27:49.886058" elapsed="13.577185"/>
+</test>
+<doc>Simple test for fullpage screenshot</doc>
+<status status="PASS" start="2025-09-28T01:27:49.155301" elapsed="14.324682"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Test Fullpage" id="s1" pass="1" fail="0" skip="0">Test Fullpage</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
