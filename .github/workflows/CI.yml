@@ -9,7 +9,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.9.23, 3.13.5]  # pypy-3.9
+        python-version: [3.9.23, 3.13.5, 3.14.0-rc.3]  # pypy-3.9
         # python-version: [{earliest: 3.9}, {latest: 3.13.0}]  # pypy-3.9
         rf-version: [6.1.1, 7.3.2]
         selenium-version: [4.28.1, 4.29.0, 4.30.0, 4.31.0, 4.32.0, 4.33.0, 4.34.2]
