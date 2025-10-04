@@ -59,8 +59,7 @@ about the library in general.</p>
 <p>The recommended installation method is using <a class="reference external" href="http://pip-installer.org">pip</a>:</p>
 <pre class="literal-block">pip install --upgrade robotframework-seleniumlibrary</pre>
 <p>Running this command installs also the latest Selenium and Robot Framework
-versions, but you still need to install <a class="reference internal" href="#browser-drivers">browser drivers</a> separately.
-The <span class="docutils literal"><span class="pre">--upgrade</span></span> option can be omitted when installing the library for the
+versions. The <span class="docutils literal"><span class="pre">--upgrade</span></span> option can be omitted when installing the library for the
 first time.</p>
 <p>It is possible to install directly from the <a class="reference external" href="https://github.com/robotframework/SeleniumLibrary">GitHub</a> repository. To install
 latest source from the master branch, use this command:</p>
@@ -74,27 +73,8 @@ using <span class="docutils literal">pip</span> see <a class="reference external
 </section>
 <section id="browser-drivers">
 <h2><a class="toc-backref" href="#toc-entry-4" role="doc-backlink">Browser drivers</a></h2>
-<p>After installing the library, you still need to install browser and
-operating system specific browser drivers for all those browsers you
-want to use in tests. These are the exact same drivers you need to use with
-Selenium also when not using SeleniumLibrary. More information about
-drivers can be found from <a class="reference external" href="https://seleniumhq.github.io/selenium/docs/api/py/index.html#drivers">Selenium documentation</a>.</p>
-<p>The general approach to install a browser driver is downloading a right
-driver, such as <span class="docutils literal">chromedriver</span> for Chrome, and placing it into
-a directory that is in <a class="reference external" href="https://en.wikipedia.org/wiki/PATH_(variable)">PATH</a>. Drivers for different browsers
-can be found via Selenium documentation or by using your favorite
-search engine with a search term like <span class="docutils literal">selenium chrome browser driver</span>.
-New browser driver versions are released to support features in
-new browsers, fix bug, or otherwise, and you need to keep an eye on them
-to know when to update drivers you use.</p>
-<p>Alternatively, you can use a tool called <a class="reference external" href="https://github.com/omenia/webdrivermanager">WebdriverManager</a> which can
-find the latest version or when required, any version of appropriate
-webdrivers for you and then download and link/copy it into right
-location. Tool can run on all major operating systems and supports
-downloading of Chrome, Firefox, Opera &amp; Edge webdrivers.</p>
-<p>Here's an example:</p>
-<pre class="code bash literal-block"><code>pip<span class="whitespace"> </span>install<span class="whitespace"> </span>webdrivermanager<span class="whitespace">
-</span>webdrivermanager<span class="whitespace"> </span>firefox<span class="whitespace"> </span>chrome<span class="whitespace"> </span>--linkpath<span class="whitespace"> </span>/usr/local/bin</code></pre>
+<p>Browsers and drivers are installed and managed automatically by <a class="reference external" href="https://www.selenium.dev/documentation/selenium_manager">Selenium Manager</a>.
+For more information, see the <a class="reference external" href="https://seleniumhq.github.io/selenium/docs/api/py/index.html#drivers">Selenium documentation</a>.</p>
 </section>
 <section id="usage">
 <h2><a class="toc-backref" href="#toc-entry-5" role="doc-backlink">Usage</a></h2>
