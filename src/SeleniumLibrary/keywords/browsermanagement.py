@@ -216,7 +216,7 @@ class BrowserManagementKeywords(LibraryComponent):
         if service_log_path:
             self.warn("service_log_path is being deprecated. Please use service to configure log_output or equivalent service attribute.")
         if executable_path:
-            self.warn("exexcutable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation.")
+            self.warn("executable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation.")
         return self._make_new_browser(
             url,
             browser,
