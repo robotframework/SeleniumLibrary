@@ -1275,3 +1275,35 @@ return !element.dispatchEvent(evt);
 
     def _selenium_keys_has_attr(self, key):
         return hasattr(Keys, key)
+
+    @keyword('Drag And Drop To Frame')
+    def drag_and_drop_to_frame(
+            self, locator: Union[WebElement, str], target: Union[WebElement, str], frame: Union[WebElement, str],
+    ):
+        """
+        Drags the element identified by ``locator`` from default content and drops it onto the ``target`` element
+        inside a specified iframe.
+
+        The ``locator`` argument is the locator of the dragged element (in default content)
+        and the ``target`` is the locator of the target (inside the iframe)
+        and the ``frame`` is the locator of the iframe containing the target
+
+        See the `Locating elements` section for details about the locator syntax.
+
+        This keyword is designed for cross-frame drag-and-drop scenarios where the standard `Drag And Drop` keyword fails
+        because it cannot switch contexts mid-action.
+
+        Example:
+        | Drag And Drop To Frame | css:div#element | css:div.target | id:my-iframe |
+
+        Note: This assumes the source is in the default content and the target is inside the iframe.
+        """
+        element = self.find_element(locator)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
+        action.click_and_hold(element).perform()
+        frame_element = self.find_element(frame)
+        self.driver.switch_to.frame(frame_element)
+        target_element = self.find_element(target)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
+        action.move_to_element(target_element).release().perform()
+        self.driver.switch_to.default_content()
