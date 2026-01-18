@@ -35,7 +35,6 @@ jobs:
       with:
         chrome-version: latest
         install-dependencies: true
-        install-chromedriver: true
       id: setup-chrome
     - run: |
         echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
