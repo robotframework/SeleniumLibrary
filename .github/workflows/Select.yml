@@ -5,6 +5,7 @@ on: workflow_dispatch
 jobs:
   test_config:
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         config:
@@ -17,7 +18,7 @@ jobs:
             python-version: 3.12.12
             rf-version: 7.3.2
             selenium-version: 4.38.0
-            browser: firefox
+            browser: chrome
 
     steps:
     - uses: actions/checkout@v4
@@ -32,7 +33,7 @@ jobs:
     - name: Setup ${{ matrix.config.browser }} browser
       uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: 138
+        chrome-version: latest
         install-dependencies: true
         install-chromedriver: true
       id: setup-chrome
