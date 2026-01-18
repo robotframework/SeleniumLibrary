@@ -62,12 +62,6 @@ jobs:
     - name: Install RF ${{ matrix.config.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.config.rf-version }}
-    - name: Install drivers via selenium-manager
-      run: |
-        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm._get_binary())}")')
-        echo "$SELENIUM_MANAGER_EXE"
-        echo "WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')" >> "$GITHUB_ENV"
-        echo "$WEBDRIVERPATH"
 
     - name: Run tests under specified config
       run: |
