@@ -85,6 +85,14 @@ Execute Javascript from File With ARGUMENTS Marker
     ...    123
     Alert Should Be Present    123    timeout=10 s
 
+Execute Javascript with dictionary object
+    &{ARGS}=            Create Dictionary     key=value    number=${1}    boolean=${TRUE}
+    ${returned}    Execute JavaScript      return arguments[0]    ARGUMENTS    ${ARGS}
+    Should Be True    type($returned) == dict
+    Should Be Equal    ${returned}[key]    value
+    Should Be Equal    ${returned}[number]    ${1}
+    Should Be Equal    ${returned}[boolean]    ${TRUE}
+
 Open Context Menu
     [Tags]    Known Issue Safari
     Go To Page "javascript/context_menu.html"
@@ -98,7 +106,7 @@ Drag and Drop
     Element Text Should Be    id=droppable    Dropped!
 
 Drag and Drop by Offset
-    [Tags]    Known Issue Firefox    Known Issue Internet Explorer    Known Issue Safari
+    [Tags]    Known Issue Internet Explorer    Known Issue Safari
     [Setup]    Go To Page "javascript/drag_and_drop.html"
     Element Text Should Be    id=droppable    Drop here
     Drag and Drop by Offset    id=draggable    ${1}    ${1}

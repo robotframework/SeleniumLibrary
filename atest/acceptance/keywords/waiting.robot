@@ -12,7 +12,7 @@ Wait For Condition
     ...    Wait For Condition    return window.document.title == "Invalid"    ${0.1}
 
 Wait For Condition Comlext Wait
-    [Tags]    Known Issue Firefox
+    [Tags]
     Wait For Condition    style = document.querySelector('#content').style; return style.background == 'red' && style.color == 'white'
 
 Wait For Condition requires `return`
@@ -90,7 +90,7 @@ Wait Until Page Does Not Contain Element Limit Negative Limit
 
 Wait Until Page Does Not Contain Element Limit As Zero
     Wait Until Page Does Not Contain Element    not_present    0.1 seconds    limit=0
-    
+
 Wait Until Element Is Enabled
     Run Keyword And Expect Error
     ...    Element 'id=disabled' was not enabled in 2 milliseconds.

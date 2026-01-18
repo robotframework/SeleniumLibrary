@@ -60,6 +60,92 @@ Get Element Attribute
     ${class}=    Get Element Attribute    ${second_div}    class
     Should Be Equal    ${class}    Second Class
 
+# About DOM Attributes and Properties
+# -----------------------------------
+# When implementing the new `Get DOM Attirbute` and `Get Property` keywords (#1822), several
+# questions were raised. Fundamentally what is the difference between a DOM attribute and
+# a Property. As [1] explains "Attributes are defined by HTML. Properties are defined by the
+# DOM (Document Object Model)."
+#
+# Below are some references which talk to some descriptions and oddities of DOM attributes
+# and properties.
+#
+# References:
+#    [1] HTML attributes and DOM properties:
+#      https://angular.io/guide/binding-syntax#html-attribute-vs-dom-property
+#    [2] W3C HTML Specification - Section 13.1.2.3 Attributes:
+#      https://html.spec.whatwg.org/multipage/syntax.html#attributes-2
+#    [3] JavaScript.Info - Attributes and properties:
+#      https://javascript.info/dom-attributes-and-properties
+#    [4] "Which CSS properties are inherited?" - StackOverflow
+#      https://stackoverflow.com/questions/5612302/which-css-properties-are-inherited
+#    [5] MDN Web Docs: Attribute
+#      https://developer.mozilla.org/en-US/docs/Glossary/Attribute
+#    [6] MDN Web Docs: HTML attribute reference
+#      https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes
+
+Get DOM Attribute
+    # Test get DOM attribute
+    ${id}=    Get DOM Attribute    link:Link with id    id
+    Should Be Equal    ${id}    some_id
+    # Test custom attribute
+    ${existing_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-id
+    Should Be Equal    ${existing_custom_attr}    my_id
+    ${doesnotexist_custom_attr}=   Get DOM Attribute    id:emptyDiv  data-doesnotexist
+    Should Be Equal    ${doesnotexist_custom_attr}    ${None}
+    # Get non existing DOM Attribute
+    ${class}=    Get DOM Attribute    link:Link with id    class
+    Should Be Equal    ${class}    ${NONE}
+
+More DOM Attributes
+    [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
+    # Test get empty boolean attribute
+    ${disabled}=    Get DOM Attribute    css:input[name="disabled_input"]    disabled
+    Should Be Equal    ${disabled}    true
+    # Test boolean attribute whose value is a string
+    ${disabled}=    Get DOM Attribute    css:input[name="disabled_password"]    disabled
+    Should Be Equal    ${disabled}    true
+    # Test empty string as the value for the attribute
+    ${empty_value}=    Get DOM Attribute    css:input[name="disabled_password"]    value
+    Should Be Equal    ${empty_value}    ${EMPTY}
+    # Test non-existing attribute
+    ${disabled}=    Get DOM Attribute    css:input[name="enabled_password"]    disabled
+    Should Be Equal    ${disabled}    ${NONE}
+
+Get Property
+    [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
+    ${tagName_prop}=   Get Property  css:input[name="readonly_empty"]    tagName
+    Should Be Equal    ${tagName_prop}    INPUT
+    # Get a boolean property
+    ${isConnected}=   Get Property  css:input[name="readonly_empty"]     isConnected
+    Should Be Equal    ${isConnected}    ${True}
+    # Test property which returns webelement
+    ${children_prop}=    Get Property    id:table1    children
+    Length Should Be    ${children_prop}    ${1}
+    ${isWebElement}=  Evaluate  isinstance($children_prop[0], selenium.webdriver.remote.webelement.WebElement)  modules=selenium
+    Should Be Equal    ${isWebElement}    ${True}
+    # ToDo: need to test own versus inherited property
+    # ToDo: Test enumerated property
+
+Get "Attribute" That Is Both An DOM Attribute and Property
+    [Setup]    Go To Page "forms/enabled_disabled_fields_form.html"
+    ${value_property}=    Get Property  css:input[name="readonly_empty"]   value
+    ${value_attribute}=    Get DOM Attribute  css:input[name="readonly_empty"]   value
+    Should Be Equal    ${value_property}    ${value_attribute}
+
+Modify "Attribute" That Is Both An DOM Attribute and Property
+    [Setup]    Go To Page "forms/prefilled_email_form.html"
+    ${initial_value_property}=    Get Property  css:input[name="email"]   value
+    ${initial_value_attribute}=    Get DOM Attribute  css:input[name="email"]   value
+    Should Be Equal    ${initial_value_property}    ${initial_value_attribute}
+    Should Be Equal    ${initial_value_attribute}    Prefilled Email
+    Input Text    css:input[name="email"]    robot@robotframework.org
+    ${changed_value_property}=    Get Property  css:input[name="email"]   value
+    ${changed_value_attribute}=    Get DOM Attribute  css:input[name="email"]   value
+    Should Not Be Equal    ${changed_value_property}    ${changed_value_attribute}
+    Should Be Equal    ${changed_value_attribute}    Prefilled Email
+    Should Be Equal    ${changed_value_property}    robot@robotframework.org
+
 Get Element Attribute Value Should Be Should Be Succesfull
     Element Attribute Value Should Be  link=Absolute external link  href  http://www.google.com/
     Element Attribute Value Should Be  link=Absolute external link  nothere  ${None}
@@ -70,7 +156,7 @@ Get Element Attribute And Element Attribute Value Should Be Should have same res
     Element Attribute Value Should Be  css=#second_div  class  ${attribute_value}
 
 Get Element Attribute Value Should Be Should Be Succesfull with non-ascii characters
-    Element Attribute Value Should Be  link=Link with Unicode äöüÄÖÜß  href  http://localhost:7000/html/index.html
+    Element Attribute Value Should Be  link=Link with Unicode äöüÄÖÜß  href  ${FRONT_PAGE}index.html
 
 Get Element Attribute Value Should Be Should Be Succesfull error and error messages
     Run Keyword And Expect Error
@@ -83,8 +169,8 @@ Get Element Attribute Value Should Be Should Be Succesfull error and error messa
     ...    Element with locator 'id=non_existing' not found.
     ...    Element Attribute Value Should Be  id=non_existing  href  http://non_existing.com
     Run Keyword And Expect Error
-    ...    Element 'link=Target opens in new window' attribute should have value 'http://localhost:7000/html/indéx.html' (str) but its value was 'http://localhost:7000/html/index.html' (str).
-    ...    Element Attribute Value Should Be  link=Target opens in new window  href  http://localhost:7000/html/indéx.html
+    ...    Element 'link=Target opens in new window' attribute should have value '${FRONT_PAGE}indéx.html' (str) but its value was '${FRONT_PAGE}index.html' (str).
+    ...    Element Attribute Value Should Be  link=Target opens in new window  href  ${FRONT_PAGE}indéx.html
 
 Get Horizontal Position
     ${pos}=    Get Horizontal Position    link=Link

@@ -1,4 +1,5 @@
-*** Setting ***
+*** Settings ***
+Suite Setup       Open Browser To Start Page Disabling Chrome Leaked Password Detection
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
 Force Tags        Known Issue Internet Explorer
@@ -32,13 +33,15 @@ Input Password Should Not Log Password String
     ...    LOG 1:1  INFO          Typing password into text field 'password_field'.
     ...    LOG 1:2  DEBUG STARTS: POST http
     ...    LOG 1:3  DEBUG STARTS: http
-    ...    LOG 1:4  DEBUG         Finished Request
-    ...    LOG 1:5  DEBUG STARTS: POST http
-    ...    LOG 1:6  DEBUG STARTS: http
-    ...    LOG 1:7  DEBUG         Finished Request
-    ...    LOG 1:8  INFO          Temporally setting log level to: NONE
-    ...    LOG 1:9  INFO          Log level changed from NONE to DEBUG.
-    ...    LOG 1:10 NONE
+    ...    LOG 1:4  DEBUG STARTS: Remote response
+    ...    LOG 1:5  DEBUG         Finished Request
+    ...    LOG 1:6  DEBUG STARTS: POST http
+    ...    LOG 1:7  DEBUG STARTS: http
+    ...    LOG 1:8  DEBUG STARTS: Remote response
+    ...    LOG 1:9  DEBUG         Finished Request
+    ...    LOG 1:10  INFO         Temporally setting log level to: NONE
+    ...    LOG 1:11  ANY         Log level changed from NONE to DEBUG.
+    ...    LOG 1:12 NONE
     ...    LOG 2:1  INFO          Typing text 'username' into text field 'username_field'.
     Input Password    password_field    password
     Input Text        username_field    username
@@ -73,3 +76,10 @@ Press Key
 
 Attempt Clear Element Text On Non-Editable Field
     Run Keyword And Expect Error    *    Clear Element Text    can_send_email
+
+*** Keywords ***
+
+Open Browser To Start Page Disabling Chrome Leaked Password Detection
+    [Arguments]    ${alias}=${None}
+    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+    ...    options=add_experimental_option("prefs", {"profile.password_manager_leak_detection": False})    alias=${alias}

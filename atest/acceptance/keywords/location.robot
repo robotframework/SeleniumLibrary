@@ -6,7 +6,7 @@ Resource          ../resource.robot
 *** Test Cases ***
 Location Should Be
     [Tags]    NoGrid
-    [Documentation]    LOG 1:4 Current location is '${FRONT PAGE}'.
+    [Documentation]    LOG 1:5 Current location is '${FRONT PAGE}'.
     Location Should Be    ${FRONT PAGE}
     Location Should Be    ${FRONT PAGE}  message=taco
     Location Should Be    ${FRONT PAGE}  message=None
@@ -22,7 +22,7 @@ Location Should Be
 
 Location Should Contain
     [Tags]    NoGrid
-    [Documentation]    LOG 1:4 Current location contains 'html'.
+    [Documentation]    LOG 1:5 Current location contains 'html'.
     Location Should Contain    html
     Location Should Contain    html  message=foobar
     Location Should Contain    html  message=None
@@ -44,12 +44,13 @@ Wait Until Location Contains At The End
 Wait Until Location Contains In The Middle
     [Setup]    Go To Page "javascript/wait_location.html"
     Click Element   button
-    Wait Until Location Contains     7000
+    Wait Until Location Contains     ${PORT}
 
 Wait Until Location Contains As Number
     [Setup]    Go To Page "javascript/wait_location.html"
     Click Element   button
-    Wait Until Location Contains     ${7000}
+    ${number}    Convert To Integer    ${PORT}
+    Wait Until Location Contains     ${number}
 
 Wait Until Location Contains Fails
     [Setup]    Go To Page "javascript/wait_location.html"
@@ -70,7 +71,7 @@ Wait Until Location Contains Fails With Timeout
 Wait Until Location Is
     [Setup]    Go To Page "javascript/wait_location.html"
     Click Element   button
-    Wait Until Location Is     http://localhost:7000/html/
+    Wait Until Location Is     ${FRONT_PAGE}
 
 Wait Until Location Is Fails
     [Setup]    Go To Page "javascript/wait_location.html"
@@ -91,14 +92,14 @@ Wait Until Location Is Fails With Timeout
 Wait Until Location Is Not
     [Setup]    Go To Page "javascript/wait_location.html"
     Click Element   button
-    Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html
+    Wait Until Location Is Not     ${FRONT_PAGE}javascript/wait_location.html
 
 Wait Until Location Is Not Fail
     [Setup]    Go To Page "javascript/wait_location.html"
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Run Keyword And Expect Error
-    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 2 seconds.
-    ...     Wait Until Location Is Not  http://localhost:7000/html/javascript/wait_location.html
+    ...     Location is '${FRONT_PAGE}javascript/wait_location.html' in 2 seconds.
+    ...     Wait Until Location Is Not  ${FRONT_PAGE}javascript/wait_location.html
     Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Is Not Fails With Timeout
@@ -106,16 +107,17 @@ Wait Until Location Is Not Fails With Timeout
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Click Element   button
     Run Keyword And Expect Error
-    ...     Location is 'http://localhost:7000/html/javascript/wait_location.html' in 1 second.
-    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html   timeout=1 s
+    ...     Location is '${FRONT_PAGE}javascript/wait_location.html' in 750 milliseconds.
+    ...     Wait Until Location Is Not     ${FRONT_PAGE}javascript/wait_location.html   timeout=750ms
     Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Is Not Fails With Message
     [Setup]    Go To Page "javascript/wait_location.html"
+    Sleep  1s    # Make sure you don't check too soon
     ${orig_timeout}=    Set Selenium Timeout    2 s
     Run Keyword And Expect Error
     ...     my_message
-    ...     Wait Until Location Is Not     http://localhost:7000/html/javascript/wait_location.html  message=my_message
+    ...     Wait Until Location Is Not     ${FRONT_PAGE}javascript/wait_location.html  message=my_message
     Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Does Not Contain
@@ -142,9 +144,10 @@ Wait Until Location Does Not Contain Fail In The Middle
 Wait Until Location Does Not Contain Fail As Number
     [Setup]    Go To Page "javascript/wait_location.html"
     ${orig_timeout}=    Set Selenium Timeout    2 s
+    ${number}    Convert To Integer    ${PORT}
     run keyword and expect error
-    ...    Location did contain '${7000}' in 2 seconds.
-    ...    Wait Until Location Does Not Contain   ${7000}
+    ...    Location did contain '${number}' in 2 seconds.
+    ...    Wait Until Location Does Not Contain   ${number}
     Set Selenium Timeout    ${orig_timeout}
 
 Wait Until Location Does Not Contain Fail At The End

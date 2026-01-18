@@ -37,3 +37,7 @@ class NoOpenBrowser(SeleniumLibraryException):
 
 class PluginError(SeleniumLibraryException):
     pass
+
+
+class UnkownExpectedCondition(SeleniumLibraryException):
+    pass

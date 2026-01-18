@@ -78,6 +78,6 @@ Submit Button Should Be Focused
 
 Set Focus To Element
     [Setup]    Go To Page "mouse/index.html"
-    Set Focus To Element    el_for_focus
+    Set Focus To Element    id:el_for_focus
     Textfield Value Should Be    el_for_focus    focus el_for_focus
     Element Should Be Focused    el_for_focus

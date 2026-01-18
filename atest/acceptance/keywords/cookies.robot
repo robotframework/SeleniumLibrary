@@ -1,9 +1,10 @@
-*** Setting ***
+*** Settings ***
 Documentation     Tests cookies
 Suite Setup       Go To Page "cookies.html"
 Suite Teardown    Delete All Cookies
 Test Setup        Add Cookies
 Resource          ../resource.robot
+Library           DateTime
 
 *** Test Cases ***
 Get Cookies
@@ -13,7 +14,7 @@ Get Cookies
 
 Get Cookies As Dict
     ${cookies}=    Get Cookies        as_dict=True
-    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value
+    ${expected_cookies}=    Create Dictionary   test=seleniumlibrary    another=value    far_future=timemachine
     Dictionaries Should Be Equal  ${expected_cookies}   ${cookies}
 
 App Sees Cookie Set By Selenium
@@ -35,21 +36,22 @@ Add Cookie When Secure Is False
     Should Be Equal    ${cookie.secure}       ${False}
 
 Add Cookie When Expiry Is Epoch
-    Add Cookie    Cookie1    value1    expiry=1822137695
+    Add Cookie    Cookie1    value1    expiry=1761755100
     ${cookie} =    Get Cookie    Cookie1
-    ${expiry} =    Convert Date    ${1822137695}    exclude_millis=True
+    ${expiry} =    Convert Date    ${1761755100}    exclude_millis=True
     Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
-    Add Cookie    Cookie12    value12    expiry=2027-09-28 16:21:35
+    Add Cookie    Cookie12    value12    expiry=2025-10-29 12:25:00
     ${cookie} =    Get Cookie    Cookie12
-    Should Be Equal As Strings    ${cookie.expiry}    2027-09-28 16:21:35
+    Should Be Equal As Strings    ${cookie.expiry}    2025-10-29 12:25:00
 
 Delete Cookie
     [Tags]    Known Issue Safari
     Delete Cookie    test
-    ${cookies} =    Get Cookies
-    Should Be Equal    ${cookies}    another=value
+    ${cookies} =    Get Cookies  as_dict=True
+    ${expected_cookies}  Create Dictionary  far_future=timemachine  another=value
+    Dictionaries Should Be Equal    ${cookies}    ${expected_cookies}
 
 Non-existent Cookie
     Run Keyword And Expect Error
@@ -71,12 +73,12 @@ Get Cookies As Dict When There Are None
 
 Test Get Cookie Object Expiry
     ${cookie} =    Get Cookie      another
-    Should Be Equal As Integers    ${cookie.expiry.year}           2027
-    Should Be Equal As Integers    ${cookie.expiry.month}          09
-    Should Be Equal As Integers    ${cookie.expiry.day}            28
-    Should Be Equal As Integers    ${cookie.expiry.hour}           16
-    Should Be Equal As Integers    ${cookie.expiry.minute}         21
-    Should Be Equal As Integers    ${cookie.expiry.second}         35
+    Should Be Equal As Integers    ${cookie.expiry.year}           ${tomorrow_thistime_datetime.year}
+    Should Be Equal As Integers    ${cookie.expiry.month}          ${tomorrow_thistime_datetime.month}
+    Should Be Equal As Integers    ${cookie.expiry.day}            ${tomorrow_thistime_datetime.day}
+    Should Be Equal As Integers    ${cookie.expiry.hour}           ${tomorrow_thistime_datetime.hour}
+    Should Be Equal As Integers    ${cookie.expiry.minute}         ${tomorrow_thistime_datetime.minute}
+    Should Be Equal As Integers    ${cookie.expiry.second}         ${tomorrow_thistime_datetime.second}
     Should Be Equal As Integers    ${cookie.expiry.microsecond}    0
 
 Test Get Cookie Object Domain
@@ -104,19 +106,28 @@ Test Get Cookie Object Value
     Should Be Equal    ${cookie.value}        value
 
 Test Get Cookie Keyword Logging
-    [Tags]    NoGrid
+    [Tags]    NoGrid    Known Issue Firefox
     [Documentation]
-    ...    LOG 1:4 ${cookie} = name=another
-    ...    value=value
+    ...    LOG 1:5 GLOB: ${cookie} = name=far_future
+    ...    value=timemachine
     ...    path=/
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2027-09-28 16:21:35
-    ${cookie} =    Get Cookie     another
+    ...    expiry=2025-09-01 *:25:00
+    ...    extra={'sameSite': 'Lax'}
+    ${cookie} =    Get Cookie     far_future
 
-*** Keyword ***
+*** Keywords ***
 Add Cookies
+    # To update time each September (as Chrome limits cookies to one year expiry date) use
+    #    import datetime
+    #    print (datetime.datetime.strptime("2025-09-01 12:25:00", "%Y-%m-%d %I:%M:%S").timestamp())
     Delete All Cookies
     Add Cookie    test       seleniumlibrary
-    Add Cookie    another    value   expiry=2027-09-28 16:21:35
+    ${now} =    Get Current Date
+    ${tomorrow_thistime} =    Add Time To Date    ${now}    1 day
+    ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
+    Set Suite Variable    ${tomorrow_thistime_datetime}
+    Add Cookie    another    value   expiry=${tomorrow_thistime}
+    Add Cookie    far_future    timemachine    expiry=1756700700    # 2025-09-01 12:25:00

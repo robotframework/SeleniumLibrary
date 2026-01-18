@@ -5,7 +5,8 @@
         setTimeout('doLocation()', 1000)
     }
     function doLocation() {
-        self.location = 'http://localhost:7000/html/'
+        var base_url = window.location.origin;
+        self.location = `${base_url}/html/`
     }
 </script>
 <head>

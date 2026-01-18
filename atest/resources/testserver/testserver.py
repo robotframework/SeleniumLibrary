@@ -1,6 +1,7 @@
 # Initially based on:
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/336012
 
+import argparse
 import os
 import sys
 
@@ -40,11 +41,14 @@ def start_server(path, port=7000):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or sys.argv[1] not in ["start", "stop"]:
-        print("usage: %s start|stop" % sys.argv[0])
-        sys.exit(1)
-    if sys.argv[1] == "start":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", choices=["start", "stop"])
+    parser.add_argument("--port", default=7000, type=int)
+    args = parser.parse_args()
+    port = args.port
+    command = args.command
+    if command == "start":
         path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        start_server(path)
+        start_server(path, port)
     else:
-        stop_server()
+        stop_server(port)

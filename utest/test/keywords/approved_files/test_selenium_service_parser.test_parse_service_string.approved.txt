@@ -1,0 +1,8 @@
+Selenium service string to dict
+
+0) {'attribute': 'arg1'}
+1) {'attribute': True}
+2) {'attribute': 'arg4'}
+3) {'attribute': 'C:\\path\to\\profile'}
+4) {'attribute': 'C:\\path\\to\\profile'}
+5) {'attribute': None}

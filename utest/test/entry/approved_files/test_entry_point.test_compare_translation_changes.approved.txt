@@ -1,0 +1,6 @@
+Changes
+
+0) | Keyword name                             | Reason                                  |
+1) | ---------------------------------------- | --------------------------------------- |
+2) | alert_should_be_present                  | Documentation update needed             |
+3) | handle_alert                             | Keyword is missing translation          |

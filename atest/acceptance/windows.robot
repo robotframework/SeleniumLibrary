@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Documentation     These tests must open own browser because windows opened by
 ...               earlier tests would otherwise be visible to Get Window XXX keywords
 ...               even if those windows were closed.
@@ -88,25 +88,56 @@ Set Inner Window Size using strings
     Should Be Equal    ${height}    ${600}
 
 Get and Set Inner Window Size with Frames
+    [Documentation]    This seems to be fine in the CI but almost always fails locally without the sleep
     Go To Page "frames/frameset.html"
     Select Frame            left
+    Sleep    500ms
     Run Keyword And Expect Error
     ...    Keyword failed setting correct window size.
     ...    Set Window Size         ${400}    ${300}    ${True}
 
 Get and Set Window Position
-    [Tags]  Known Issue Chrome    Known Issue Safari
+    [Documentation]    Headed chrome sometimes has off-by-one errors in this test, depending on the
+    ...    desktop environment. Headless browsers are mostly fine.
+    [Tags]    Known Issue Safari    Known Issue Firefox
     Set Window Position    ${300}    ${200}
     ${x}    ${y}=    Get Window Position
     Should Be Equal    ${x}    ${300}
     Should Be Equal    ${y}    ${200}
 
 Set Window Position using strings
-    [Tags]  Known Issue Chrome    Known Issue Safari
+    [Documentation]    Again, headless browsers and virtual displays work fine but the x coordinate is sometimes
+    ...    off by one and y coordinate is often broken with headed chrome, depending on desktop environment.
+    [Tags]    Known Issue Safari    Known Issue Firefox
     Set Window Position    200    100
     ${x}    ${y}=    Get Window Position
     Should Be Equal    ${x}    ${200}
     Should Be Equal    ${y}    ${100}
+
+Test Minimize and Maximize Will Actually Move and Resize Window
+    [Tags]  Triage
+    Set Window Position    300    200
+    Set Window Size    400    300
+    ${isHidden}=    Execute Javascript   return document.hidden;
+    Should Not Be True  ${isHidden}
+
+    Minimize Browser Window
+
+    ${isHidden}=    Execute Javascript   return document.hidden;
+    Should Be True  ${isHidden}
+
+    Maximize Browser Window
+
+    ${isHidden}=    Execute Javascript   return document.hidden;
+    Should Not Be True  ${isHidden}
+
+    ${x}    ${y}=    Get Window Position
+    ${width}    ${height}=    Get Window Size
+    # Windows: Can't test for zero in multi-monitor setups
+    Should Not Be Equal    ${x}    ${300}
+    Should Not Be Equal    ${y}    ${200}
+    Should Be True   ${width} > 400
+    Should Be True   ${height} > 300
 
 Select Window By Title After Close Window
     [Tags]    Known Issue Internet Explorer    Known Issue Safari
@@ -169,7 +200,7 @@ Select Popup Window With Delay By Excluded List
     @{excluded_handle_list}=    Get Window Handles
     Click Button     id:MyButton
     Switch Window    ${excluded_handle_list}    timeout=5
-    Title Should Be    Original
+    Wait Until Keyword Succeeds    5s    200ms    Title Should Be    Original
     Close Window
     Switch Window    main
     Title Should Be    Click link to show a popup window
@@ -190,7 +221,7 @@ Select Window With Delay By Special Locator
     [Tags]    Known Issue Internet Explorer
     Click Button     id:MyButton
     Switch Window    new    timeout=5
-    Title Should Be    Original
+    Wait Until Keyword Succeeds    5s    200ms    Title Should Be    Original
     Close Window
     Switch Window    main
     Title Should Be    Click link to show a popup window

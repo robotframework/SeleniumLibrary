@@ -1,0 +1,8 @@
+Selenium service string errors
+
+0) attribute=arg1 Unable to parse service: "attribute=arg1"
+1) attribute='arg1 Unable to parse service: "attribute='arg1"
+2) attribute=['arg1' ('EOF in multi-line statement', (2, 0))
+3) attribute=['arg1';'arg2'] ('EOF in multi-line statement', (2, 0))
+4) attribute['arg1'] Unable to parse service: "attribute['arg1']"
+5) attribute=['arg1'] attribute=['arg2'] Unable to parse service: "attribute=['arg1'] attribute=['arg2']"

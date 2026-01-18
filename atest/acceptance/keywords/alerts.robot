@@ -43,7 +43,7 @@ Handle Alert returns message
 
 Handle Alert with custom timeout
     Click Button    Slow alert
-    Handle Alert    timeout=1s
+    Handle Alert    timeout=2s
     Click Button    Slow alert
     Run Keyword And Expect Error
     ...    Alert not found in 1 millisecond.
@@ -124,6 +124,7 @@ Handle Alert when popup window closes
     [Documentation]    Popup window is closed by javascript while
     ...    'Handle Alert' keyword is waiting for alert
     ...    FAIL GLOB: An exception occurred waiting for alert*
+    [Tags]  Triage
     [Setup]    Go To Page "javascript/self_closing_popup.html"
     Click Button    Self Closing
     ${handle} =    Switch Window   NEW

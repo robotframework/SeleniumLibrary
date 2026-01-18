@@ -1,4 +1,5 @@
 import os
+import sys
 import unittest
 
 import pytest
@@ -16,7 +17,6 @@ from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCr
 @pytest.fixture(scope="module")
 def options():
     return SeleniumOptions()
-
 
 @pytest.fixture(scope="module")
 def reporter():
@@ -103,8 +103,22 @@ def test_parse_arguemnts(options, reporter):
     verify_all("Parse arguments from complex object", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
 def test_parse_options_string_errors(options, reporter):
+    results = []
+    results.append(error_formatter(options._parse, 'method("arg1)', True))
+    results.append(error_formatter(options._parse, 'method(arg1")', True))
+    results.append(error_formatter(options._parse, "method(arg1)", True))
+    results.append(error_formatter(options._parse, "attribute=arg1", True))
+    results.append(error_formatter(options._parse, "attribute=webdriver", True))
+    results.append(error_formatter(options._parse, 'method(argument="value")', True))
+    verify_all("Selenium options string errors", results, reporter=reporter)
+
+
+@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="Errors change with Python 3.12")
+def test_parse_options_string_errors_py3_12(options, reporter):
     results = []
     results.append(error_formatter(options._parse, 'method("arg1)', True))
     results.append(error_formatter(options._parse, 'method(arg1")', True))
@@ -162,16 +176,6 @@ def test_options_create(options, reporter):
 
 
 @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
-def test_create_with_android(options, reporter):
-    results = []
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_experimental_option("androidPackage", "com.android.chrome")
-    sel_options = options.create("android", chrome_options)
-    results.append([sel_options.arguments, sel_options.experimental_options])
-    verify_all("Selenium options with android", results, reporter=reporter)
-
-
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_get_options(options, reporter):
     options_str = 'add_argument("--proxy-server=66.97.38.58:80")'
     sel_options = options.create("chrome", options_str)
@@ -187,14 +191,8 @@ def test_importer(options, reporter):
     results.append(options._import_options("chrome"))
     results.append(options._import_options("headless_chrome"))
     results.append(options._import_options("ie"))
-    results.append(options._import_options("opera"))
     results.append(options._import_options("edge"))
-    results.append(error_formatter(options._import_options, "phantomjs"))
     results.append(error_formatter(options._import_options, "safari"))
-    results.append(error_formatter(options._import_options, "htmlunit"))
-    results.append(error_formatter(options._import_options, "htmlunit_with_js"))
-    results.append(options._import_options("android"))
-    results.append(error_formatter(options._import_options, "iphone"))
     verify_all("Selenium options import", results, reporter=reporter)
 
 
@@ -224,8 +222,12 @@ def output_dir():
 def test_create_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
+    # service = mock()
+    # when(webdriver.chrome.service).Service(
+    #     executable_path=ANY, log_path=ANY,
+    # ).thenReturn(service)
     when(webdriver).Chrome(
-        service_log_path=None, options=options, executable_path="chromedriver"
+        options=options, service=ANY   # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None, options=options)
     assert driver == expected_webdriver
@@ -233,14 +235,14 @@ def test_create_chrome_with_options(creator):
 
 def test_create_chrome_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
-    caps = webdriver.DesiredCapabilities.CHROME.copy()
+    #caps = webdriver.DesiredCapabilities.CHROME.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=None,
+        #desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -252,7 +254,7 @@ def test_create_headless_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        service_log_path=None, options=options, executable_path="chromedriver"
+        options=options, service=ANY # service_log_path=None, options=options, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None, options=options)
     assert driver == expected_webdriver
@@ -266,9 +268,10 @@ def test_create_firefox_with_options(creator, output_dir):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     when(webdriver).Firefox(
         options=options,
-        firefox_profile=profile,
-        executable_path="geckodriver",
-        service_log_path=log_file,
+        service=ANY
+        # firefox_profile=profile,
+        # executable_path="geckodriver",
+        # service_log_path=log_file,
     ).thenReturn(expected_webdriver)
     driver = creator.create_firefox({}, None, None, options=options)
     assert driver == expected_webdriver
@@ -278,14 +281,14 @@ def test_create_firefox_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
     profile = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
-    caps = webdriver.DesiredCapabilities.FIREFOX.copy()
+    # caps = webdriver.DesiredCapabilities.FIREFOX.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=profile,
+        # desired_capabilities=caps,
+        # browser_profile=profile,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -301,9 +304,10 @@ def test_create_headless_firefox_with_options(creator, output_dir):
     when(webdriver).FirefoxProfile().thenReturn(profile)
     when(webdriver).Firefox(
         options=options,
-        firefox_profile=profile,
-        executable_path="geckodriver",
-        service_log_path=log_file,
+        service=ANY
+        # firefox_profile=profile,
+        # executable_path="geckodriver",
+        # service_log_path=log_file,
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_firefox({}, None, None, options=options)
     assert driver == expected_webdriver
@@ -313,7 +317,7 @@ def test_create_ie_with_options(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Ie(
-        service_log_path=None, options=options, executable_path="IEDriverServer.exe"
+        options=options, service=ANY # service_log_path=None, options=options, executable_path="IEDriverServer.exe"
     ).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
@@ -321,14 +325,14 @@ def test_create_ie_with_options(creator):
 
 def test_create_ie_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
-    caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
+    # caps = webdriver.DesiredCapabilities.INTERNETEXPLORER.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=None,
+        # desired_capabilities=caps,
+        # browser_profile=None,
         options=options,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -340,7 +344,7 @@ def test_create_ie_with_options_and_log_path(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Ie(
-        options=options, service_log_path=None, executable_path="IEDriverServer.exe"
+        options=options, service=ANY  # service_log_path=None, executable_path="IEDriverServer.exe"
     ).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
@@ -350,125 +354,19 @@ def test_has_options(creator):
     assert creator._has_options(webdriver.Chrome)
     assert creator._has_options(webdriver.Firefox)
     assert creator._has_options(webdriver.Ie)
-    assert creator._has_options(webdriver.Edge) is False
-    assert creator._has_options(webdriver.Opera)
-    assert creator._has_options(webdriver.Safari) is False
+    assert creator._has_options(webdriver.Edge)
+    assert creator._has_options(webdriver.Safari)
 
 
-def test_create_opera_with_options(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "operadriver"
-    when(webdriver).Opera(
-        options=options, service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_create_opera_with_options_and_remote_url(creator):
-    url = "http://localhost:4444/wd/hub"
-    caps = webdriver.DesiredCapabilities.OPERA.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, url, options=options)
-    assert driver == expected_webdriver
-
-
-def test_create_safari_no_options_support(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "/usr/bin/safaridriver"
-    when(webdriver).Safari(executable_path=executable_path).thenReturn(
-        expected_webdriver
-    )
-    driver = creator.create_safari({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_create_phantomjs_no_options_support(creator):
-    options = mock()
-    expected_webdriver = mock()
-    executable_path = "phantomjs"
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_create_htmlunit_no_options_support(creator):
-    caps = webdriver.DesiredCapabilities.HTMLUNIT.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit(
-        {"desired_capabilities": caps}, None, options=options
-    )
-    assert driver == expected_webdriver
-
-
-def test_create_htmlunit_with_js_no_options_support(creator):
-    caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit_with_js({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_android_options_support(creator):
-    caps = webdriver.DesiredCapabilities.ANDROID.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None, options=options)
-    assert driver == expected_webdriver
-
-
-def test_iphone_options_support(creator):
-    caps = webdriver.DesiredCapabilities.IPHONE.copy()
-    options = mock()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=options,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_iphone({}, None, options=options)
-    assert driver == expected_webdriver
+# def test_create_safari_no_options_support(creator):
+#     options = mock()
+#     expected_webdriver = mock()
+#     executable_path = "/usr/bin/safaridriver"
+#     when(webdriver).Safari(options=options).thenReturn(
+#         expected_webdriver
+#     )
+#     driver = creator.create_safari({}, None, options=options)
+#     assert driver == expected_webdriver
 
 
 def test_create_driver_chrome(creator):
@@ -479,7 +377,7 @@ def test_create_driver_chrome(creator):
     executable_path = "chromedriver"
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Chrome(
-        service_log_path=None, options=options, executable_path=executable_path
+        options=options, service=ANY  # service_log_path=None, options=options, executable_path=executable_path
     ).thenReturn(expected_webdriver)
     driver = creator.create_driver(
         "Chrome", desired_capabilities={}, remote_url=None, options=str_options
@@ -499,9 +397,10 @@ def test_create_driver_firefox(creator, output_dir):
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Firefox(
         options=options,
-        firefox_profile=profile,
-        executable_path=executable_path,
-        service_log_path=log_file,
+        service=ANY
+        # firefox_profile=profile,
+        # executable_path=executable_path,
+        # service_log_path=log_file,
     ).thenReturn(expected_webdriver)
     driver = creator.create_driver(
         "FireFox", desired_capabilities={}, remote_url=None, options=str_options

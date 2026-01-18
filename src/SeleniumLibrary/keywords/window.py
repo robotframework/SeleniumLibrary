@@ -21,7 +21,7 @@ from selenium.common.exceptions import NoSuchWindowException
 
 from SeleniumLibrary.base import keyword, LibraryComponent
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import plural_or_not, is_string
+from SeleniumLibrary.utils import plural_or_not
 
 
 class WindowKeywords(LibraryComponent):
@@ -117,7 +117,7 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            if not is_string(browser) or not browser.upper() == "CURRENT":
+            if not isinstance(browser, str) or not browser.upper() == "CURRENT":
                 self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
@@ -185,6 +185,11 @@ class WindowKeywords(LibraryComponent):
     def maximize_browser_window(self):
         """Maximizes current browser window."""
         self.driver.maximize_window()
+
+    @keyword
+    def minimize_browser_window(self):
+        """Minimizes current browser window."""
+        self.driver.minimize_window()
 
     @keyword
     def get_window_size(self, inner: bool = False) -> Tuple[float, float]:

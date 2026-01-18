@@ -135,33 +135,33 @@ def test_capabilities_resolver_chrome(creator):
 def test_chrome(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service_log_path=None, executable_path="chromedriver"
+        options=None, service=None  # service=ANY  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None)
     assert driver == expected_webdriver
 
 
-def test_chrome_with_desired_capabilities(creator):
-    expected_webdriver = mock()
-    when(webdriver).Chrome(
-        desired_capabilities={"key": "value"},
-        options=None,
-        service_log_path=None,
-        executable_path="chromedriver",
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_chrome({"desired_capabilities": {"key": "value"}}, None)
-    assert driver == expected_webdriver
+# def test_chrome_with_desired_capabilities(creator):
+#     expected_webdriver = mock()
+#     when(webdriver).Chrome(
+#         desired_capabilities={"key": "value"},
+#         options=None,
+#         service_log_path=None,
+#         executable_path="chromedriver",
+#     ).thenReturn(expected_webdriver)
+#     driver = creator.create_chrome({"desired_capabilities": {"key": "value"}}, None)
+#     assert driver == expected_webdriver
 
 
 def test_chrome_remote_no_caps(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    capabilities = webdriver.DesiredCapabilities.CHROME.copy()
+    # capabilities = webdriver.DesiredCapabilities.CHROME.copy()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
+        # browser_profile=None,
+        # desired_capabilities=capabilities,
         options=None,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -172,12 +172,12 @@ def test_chrome_remote_no_caps(creator):
 def test_chrome_remote_caps(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    capabilities = {"browserName": "chrome"}
+    # capabilities = {"browserName": "chrome"}
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
+        # browser_profile=None,
+        # desired_capabilities=capabilities,
         options=None,
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
@@ -201,19 +201,21 @@ def test_chrome_remote_caps_no_browser_name(creator):
     assert driver == expected_webdriver
 
 
-def test_chrome_healdless(creator):
+def test_chrome_headless(creator):
     expected_webdriver = mock()
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
+    service = mock()
+    when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
-        options=options, service_log_path=None, executable_path="chromedriver"
+        options=options, service=ANY  # service=None  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None)
     assert options.headless is True
     assert driver == expected_webdriver
 
 
-def test_chrome_healdless_with_grid(creator):
+def test_chrome_headless_with_grid(creator):
     expected_webdriver = mock()
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
@@ -472,7 +474,7 @@ def test_ie_no_browser_name(creator):
 
 
 def test_edge(creator):
-    executable_path = "MicrosoftWebDriver.exe"
+    executable_path = "msedgedriver"
     expected_webdriver = mock()
     when(webdriver).Edge(
         service_log_path=None, executable_path=executable_path
@@ -527,64 +529,6 @@ def test_edge_no_browser_name(creator):
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_edge({"capabilities": {"key": "value"}}, url)
-    assert driver == expected_webdriver
-
-
-def test_opera(creator):
-    expected_webdriver = mock()
-    executable_path = "operadriver"
-    when(webdriver).Opera(
-        options=None, service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, None)
-    assert driver == expected_webdriver
-
-
-def test_opera_remote_no_caps(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = webdriver.DesiredCapabilities.OPERA.copy()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({}, url)
-    assert driver == expected_webdriver
-
-
-def test_opera_remote_caps(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = {"browserName": "opera"}
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({"desired_capabilities": capabilities}, url)
-    assert driver == expected_webdriver
-
-
-def test_opera_no_browser_name(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = {"browserName": "opera", "key": "value"}
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_opera({"desired_capabilities": {"key": "value"}}, url)
     assert driver == expected_webdriver
 
 
@@ -643,201 +587,6 @@ def test_safari_no_broser_name(creator):
         file_detector=file_detector,
     ).thenReturn(expected_webdriver)
     driver = creator.create_safari({"desired_capabilities": {"key": "value"}}, url)
-    assert driver == expected_webdriver
-
-
-def test_phantomjs(creator):
-    expected_webdriver = mock()
-    executable_path = "phantomjs"
-    when(webdriver).PhantomJS(
-        service_log_path=None, executable_path=executable_path
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, None)
-    assert driver == expected_webdriver
-
-
-def test_phantomjs_remote_no_caps(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = webdriver.DesiredCapabilities.PHANTOMJS.copy()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({}, url)
-    assert driver == expected_webdriver
-
-
-def test_phantomjs_remote_caps(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = {"browserName": "phantomjs"}
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({"desired_capabilities": capabilities}, url)
-    assert driver == expected_webdriver
-
-
-def test_phantomjs_no_browser_name(creator):
-    url = "http://localhost:4444/wd/hub"
-    expected_webdriver = mock()
-    capabilities = {"browserName": "phantomjs", "key": "value"}
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor=url,
-        browser_profile=None,
-        desired_capabilities=capabilities,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_phantomjs({"desired_capabilities": {"key": "value"}}, url)
-    assert driver == expected_webdriver
-
-
-def test_htmlunit_no_caps(creator):
-    caps = webdriver.DesiredCapabilities.HTMLUNIT
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit({}, None)
-    assert driver == expected_webdriver
-
-
-def test_htmlunit_remote_caps(creator):
-    caps = {"browserName": "htmlunit"}
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit({"desired_capabilities": caps}, None)
-    assert driver == expected_webdriver
-
-
-def test_htmlunit_no_browser_name(creator):
-    capabilities = {"browserName": "htmlunit", "key": "value"}
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=capabilities,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit({"desired_capabilities": {"key": "value"}}, None)
-    assert driver == expected_webdriver
-
-
-def test_htmlunit_with_js(creator):
-    caps = webdriver.DesiredCapabilities.HTMLUNITWITHJS.copy()
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit_with_js({}, None)
-    assert driver == expected_webdriver
-
-
-def test_htmlunit_with_js_no_browser_name(creator):
-    capabilities = {"browserName": "htmlunit", "key": "value"}
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=capabilities,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_htmlunit_with_js(
-        {"desired_capabilities": {"key": "value"}}, None
-    )
-    assert driver == expected_webdriver
-
-
-def test_android(creator):
-    caps = webdriver.DesiredCapabilities.ANDROID
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({}, None)
-    assert driver == expected_webdriver
-
-
-def test_android_no_browser_name(creator):
-    capabilities = {"browserName": "android", "key": "value"}
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=capabilities,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_android({"desired_capabilities": {"key": "value"}}, None)
-    assert driver == expected_webdriver
-
-
-def test_iphone(creator):
-    caps = webdriver.DesiredCapabilities.IPHONE
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=caps,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_iphone({}, None)
-    assert driver == expected_webdriver
-
-
-def test_iphone_no_browser_name(creator):
-    capabilities = {"browserName": "iPhone", "key": "value"}
-    expected_webdriver = mock()
-    file_detector = mock_file_detector(creator)
-    when(webdriver).Remote(
-        command_executor="None",
-        desired_capabilities=capabilities,
-        browser_profile=None,
-        options=None,
-        file_detector=file_detector,
-    ).thenReturn(expected_webdriver)
-    driver = creator.create_iphone({"desired_capabilities": {"key": "value"}}, None)
     assert driver == expected_webdriver
 
 

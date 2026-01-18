@@ -15,13 +15,15 @@
 # limitations under the License.
 from collections import namedtuple
 from datetime import timedelta
+import importlib
 from inspect import getdoc, isclass
-from typing import Optional, List
+from pathlib import Path
+import pkgutil
+from typing import Optional, List, Union
 
 from robot.api import logger
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
-from robot.utils import is_string
 from robot.utils.importer import Importer
 
 from robotlibcore import DynamicCore
@@ -35,6 +37,7 @@ from SeleniumLibrary.keywords import (
     BrowserManagementKeywords,
     CookieKeywords,
     ElementKeywords,
+    ExpectedConditionKeywords,
     FormElementKeywords,
     FrameKeywords,
     JavaScriptKeywords,
@@ -46,12 +49,12 @@ from SeleniumLibrary.keywords import (
     WebDriverCache,
     WindowKeywords,
 )
-from SeleniumLibrary.keywords.screenshot import EMBED
+from SeleniumLibrary.keywords.screenshot import EMBED, BASE64
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout
+from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
 
-__version__ = "5.2.0.dev1"
+__version__ = "6.8.0"
 
 
 class SeleniumLibrary(DynamicCore):
@@ -234,7 +237,7 @@ class SeleniumLibrary(DynamicCore):
 
     | Custom Locator Strategy | [Arguments] | ${browser} | ${locator} | ${tag} | ${constraints} |
     |   | ${element}= | Execute Javascript | return window.document.getElementById('${locator}'); |
-    |   | [Return] | ${element} |
+    |   | RETURN | ${element} |
 
     This keyword is a reimplementation of the basic functionality of the
     ``id`` locator where ``${browser}`` is a reference to a WebDriver
@@ -321,6 +324,115 @@ class SeleniumLibrary(DynamicCore):
     https://robocon.io/, https://github.com/robotframework/'
     and 'https://github.com/.
 
+    = Browser and Driver options and service class =
+
+    This section talks about how to configure either the browser or
+    the driver using the options and service arguments of the `Open
+    Browser` keyword.
+
+    == Configuring the browser using the Selenium Options ==
+
+    As noted within the keyword documentation for `Open Browser`, its
+    ``options`` argument accepts Selenium options in two different
+    formats: as a string and as Python object which is an instance of
+    the Selenium options class.
+
+    === Options string format ===
+
+    The string format allows defining Selenium options methods
+    or attributes and their arguments in Robot Framework test data.
+    The method and attributes names are case and space sensitive and
+    must match to the Selenium options methods and attributes names.
+    When defining a method, it must be defined in a similar way as in
+    python: method name, opening parenthesis, zero to many arguments
+    and closing parenthesis. If there is a need to define multiple
+    arguments for a single method, arguments must be separated with
+    comma, just like in Python. Example: `add_argument("--headless")`
+    or `add_experimental_option("key", "value")`. Attributes are
+    defined in a similar way as in Python: attribute name, equal sign,
+    and attribute value. Example, `headless=True`. Multiple methods
+    and attributes must be separated by a semicolon. Example:
+    `add_argument("--headless");add_argument("--start-maximized")`.
+
+    Arguments allow defining Python data types and arguments are
+    evaluated by using Python
+    [https://docs.python.org/3/library/ast.html#ast.literal_eval|ast.literal_eval].
+    Strings must be quoted with single or double quotes, example "value"
+    or 'value'. It is also possible to define other Python builtin
+    data types, example `True` or `None`, by not using quotes
+    around the arguments.
+
+    The string format is space friendly. Usually, spaces do not alter
+    the defining methods or attributes. There are two exceptions.
+    In some Robot Framework test data formats, two or more spaces are
+    considered as cell separator and instead of defining a single
+    argument, two or more arguments may be defined. Spaces in string
+    arguments are not removed and are left as is. Example
+    `add_argument ( "--headless" )` is same as
+    `add_argument("--headless")`. But `add_argument(" --headless ")` is
+    not same same as `add_argument ( "--headless" )`, because
+    spaces inside of quotes are not removed. Please note that if
+    options string contains backslash, example a Windows OS path,
+    the backslash needs escaping both in Robot Framework data and
+    in Python side. This means single backslash must be writen using
+    four backslash characters. Example, Windows path:
+    "C:\\path\\to\\profile" must be written as
+    "C:\\\\\\\\path\\\\\\to\\\\\\\\profile". Another way to write
+    backslash is use Python
+    [https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals|raw strings]
+    and example write: r"C:\\\\path\\\\to\\\\profile".
+
+    === Selenium Options as Python class ===
+
+    As last format, ``options`` argument also supports receiving
+    the Selenium options as Python class instance. In this case, the
+    instance is used as-is and the SeleniumLibrary will not convert
+    the instance to other formats.
+    For example, if the following code return value is saved to
+    `${options}` variable in the Robot Framework data:
+    | options = webdriver.ChromeOptions()
+    | options.add_argument('--disable-dev-shm-usage')
+    | return options
+
+    Then the `${options}` variable can be used as an argument to
+    ``options``.
+
+    Example the ``options`` argument can be used to launch Chomium-based
+    applications which utilize the
+    [https://bitbucket.org/chromiumembedded/cef/wiki/UsingChromeDriver|Chromium Embedded Framework]
+    . To launch Chromium-based application, use ``options`` to define
+    `binary_location` attribute and use `add_argument` method to define
+    `remote-debugging-port` port for the application. Once the browser
+    is opened, the test can interact with the embedded web-content of
+    the system under test.
+
+    == Configuring the driver using the Service class ==
+
+    With the ``service`` argument, one can setup and configure the driver. For example
+    one can set the driver location and/port or specify the command line arguments. There
+    are several browser specific attributes related to logging as well. For the various
+    Service Class attributes refer to
+    [https://www.selenium.dev/documentation/webdriver/drivers/service/|the Selenium documentation]
+    . Currently the ``service`` argument only accepts Selenium service in the string format.
+
+    === Service string format ===
+
+    The string format allows for defining Selenium service attributes
+    and their values in the `Open Browser` keyword. The attributes names
+    are case and space sensitive and must match to the Selenium attributes
+    names. Attributes are defined in a similar way as in Python: attribute
+    name, equal sign, and attribute value. Example, `port=1234`. Multiple
+    attributes must be separated by a semicolon. Example:
+    `executable_path='/path/to/driver';port=1234`. Don't have duplicate
+    attributes, like `service_args=['--append-log', '--readable-timestamp'];
+    service_args=['--log-level=DEBUG']` as the second will override the first.
+    Instead combine them as in
+    `service_args=['--append-log', '--readable-timestamp', '--log-level=DEBUG']`
+
+    Arguments allow defining Python data types and arguments are
+    evaluated by using Python. Strings must be quoted with single
+    or double quotes, example "value" or 'value'
+
     = Timeouts, waits, and delays =
 
     This section discusses different ways how to wait for elements to
@@ -340,7 +452,9 @@ class SeleniumLibrary(DynamicCore):
 
     The default timeout these keywords use can be set globally either by
     using the `Set Selenium Timeout` keyword or with the ``timeout`` argument
-    when `importing` the library. See `time format` below for supported
+    when `importing` the library. If no default timeout is set globally, the
+    default is 5 seconds. If None is specified for the timeout argument in the
+    keywords, the default is used. See `time format` below for supported
     timeout syntax.
 
     == Implicit wait ==
@@ -352,6 +466,18 @@ class SeleniumLibrary(DynamicCore):
     Selenium documentation] for more information about this functionality.
 
     See `time format` below for supported syntax.
+
+    == Page load ==
+    Page load timeout is the amount of time to wait for page load to complete
+    until a timeout exception is raised.
+
+    The default page load timeout can be set globally
+    when `importing` the library with the ``page_load_timeout`` argument
+    or by using the `Set Selenium Page Load Timeout` keyword.
+
+    See `time format` below for supported timeout syntax.
+
+    Support for page load is new in SeleniumLibrary 6.1
 
     == Selenium speed ==
 
@@ -420,6 +546,47 @@ class SeleniumLibrary(DynamicCore):
     documentation for further details.
 
     Plugin API is new SeleniumLibrary 4.0
+
+    = Language =
+
+    SeleniumLibrary offers the possibility to translate keyword names and documentation to new language. If language
+    is defined, SeleniumLibrary will search from
+    [https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#module-search-path | module search path]
+    for Python packages starting with `robotframework-seleniumlibrary-translation` by using the
+    [https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/ | Python pluging API]. The Library
+    is using naming convention to find Python plugins.
+
+    The package must implement a single API call, ``get_language`` without any arguments. The method must return a
+    dictionary containing two keys: ``language`` and ``path``. The language key value defines which language
+    the package contains. Also the value should match (case insensitive) the library ``language`` import parameter.
+    The path parameter value should be full path to the translation file.
+
+    == Translation file ==
+
+    The file name or extension is not important, but data must be in [https://www.json.org/json-en.html | json]
+    format. The keys of json are the methods names, not the keyword names, which implements keywords. Value of
+    key is json object which contains two keys: ``name`` and ``doc``. The ``name`` key contains the keyword
+    translated name and `doc` contains translated documentation. Providing doc and name are optional, example
+    translation json file can only provide translations to keyword names or only to documentation. But it is
+    always recommended to provide translation to both name and doc. Special key ``__intro__`` is for class level
+    documentation and ``__init__`` is for init level documentation. These special values ``name`` can not be
+    translated, instead ``name`` should be kept the same.
+
+    == Generating template translation file ==
+
+    Template translation file, with English language can be created by running:
+    `rfselib translation /path/to/translation.json` command. Command does not provide translations to other
+    languages, it only provides easy way to create full list keywords and their documentation in correct
+    format. It is also possible to add keywords from library plugins by providing `--plugins` arguments
+    to command. Example: `rfselib translation --plugins myplugin.SomePlugin /path/to/translation.json` The
+    generated json file contains `sha256` key, which contains the sha256 sum of the library documentation.
+    The sha256 sum is used by `rfselib translation --compare /path/to/translation.json` command, which compares
+    the translation to the library and prints outs a table which tells if there are changes needed for
+    the translation file.
+
+    Example project for translation can be found from
+    [https://github.com/MarketSquare/robotframework-seleniumlibrary-translation-fi | robotframework-seleniumlibrary-translation-fi]
+    repository.
     """
 
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
@@ -433,6 +600,9 @@ class SeleniumLibrary(DynamicCore):
         screenshot_root_directory: Optional[str] = None,
         plugins: Optional[str] = None,
         event_firing_webdriver: Optional[str] = None,
+        page_load_timeout=timedelta(minutes=5),
+        action_chain_delay=timedelta(seconds=0.25),
+        language: Optional[str] = None,
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -443,17 +613,25 @@ class SeleniumLibrary(DynamicCore):
         - ``run_on_failure``:
           Default action for the `run-on-failure functionality`.
         - ``screenshot_root_directory``:
-          Path to folder where possible screenshots are created or EMBED.
-          See `Set Screenshot Directory` keyword for further details about EMBED.
+          Path to folder where possible screenshots are created or EMBED or BASE64.
+          See `Set Screenshot Directory` keyword for further details about EMBED and BASE64.
           If not given, the directory where the log file is written is used.
         - ``plugins``:
           Allows extending the SeleniumLibrary with external Python classes.
         - ``event_firing_webdriver``:
           Class for wrapping Selenium with
           [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
+        - ``page_load_timeout``:
+          Default value to wait for page load to complete until a timeout exception is raised.
+        - ``action_chain_delay``:
+          Default value for `ActionChains` delay to wait in between actions.
+        - ``language``:
+          Defines language which is used to translate keyword names and documentation.
         """
         self.timeout = _convert_timeout(timeout)
         self.implicit_wait = _convert_timeout(implicit_wait)
+        self.action_chain_delay = _convert_delay(action_chain_delay)
+        self.page_load_timeout = _convert_timeout(page_load_timeout)
         self.speed = 0.0
         self.run_on_failure_keyword = RunOnFailureKeywords.resolve_keyword(
             run_on_failure
@@ -468,6 +646,7 @@ class SeleniumLibrary(DynamicCore):
             BrowserManagementKeywords(self),
             CookieKeywords(self),
             ElementKeywords(self),
+            ExpectedConditionKeywords(self),
             FormElementKeywords(self),
             FrameKeywords(self),
             JavaScriptKeywords(self),
@@ -489,7 +668,8 @@ class SeleniumLibrary(DynamicCore):
             self._plugins = plugin_libs
             libraries = libraries + plugin_libs
         self._drivers = WebDriverCache()
-        DynamicCore.__init__(self, libraries)
+        translation_file = self._get_translation(language)
+        DynamicCore.__init__(self, libraries, translation_file)
 
     def run_keyword(self, name: str, args: tuple, kwargs: dict):
         try:
@@ -662,6 +842,35 @@ class SeleniumLibrary(DynamicCore):
 
     def _resolve_screenshot_root_directory(self):
         screenshot_root_directory = self.screenshot_root_directory
-        if is_string(screenshot_root_directory):
+        if isinstance(screenshot_root_directory, str):
             if screenshot_root_directory.upper() == EMBED:
                 self.screenshot_root_directory = EMBED
+            if screenshot_root_directory.upper() == BASE64:
+                self.screenshot_root_directory = BASE64
+
+    @staticmethod
+    def _get_translation(language: Union[str, None]) -> Union[Path, None]:
+        if not language:
+            return None
+        discovered_plugins = {
+            name: importlib.import_module(name)
+            for _, name, _ in pkgutil.iter_modules()
+            if name.startswith("robotframework_seleniumlibrary_translation")
+        }
+        lang = language.lower()
+        for plugin in discovered_plugins.values():
+            try:
+                data = plugin.get_language()
+            except AttributeError:
+                continue
+            if (
+                isinstance(data, dict)
+                and data.get("language", "").lower() == lang
+                and data.get("path")
+            ):
+                return Path(data.get("path")).absolute()
+            if isinstance(data, list):
+                for item in data:
+                    if item.get("language", "").lower() == lang and item.get("path"):
+                        return Path(item.get("path")).absolute()
+        return None

@@ -8,8 +8,8 @@ Force Tags        Known Issue Internet Explorer
 Capture page screenshot to default location
     [Tags]    NoGrid
     [Documentation]
-    ...    LOG 1:4 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
-    ...    LOG 7:4 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-2.png"><img src="selenium-screenshot-2.png" width="800px"></a>
+    ...    LOG 1:5 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-1.png"><img src="selenium-screenshot-1.png" width="800px"></a>
+    ...    LOG 7:5 </td></tr><tr><td colspan="3"><a href="selenium-screenshot-2.png"><img src="selenium-screenshot-2.png" width="800px"></a>
     [Setup]    Remove Files    ${OUTPUTDIR}/selenium-screenshot-*.png
     ${file} =    Capture Page Screenshot
     ${count} =    Count Files In Directory    ${OUTPUTDIR}    selenium-screenshot-*.png

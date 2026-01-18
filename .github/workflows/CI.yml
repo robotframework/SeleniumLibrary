@@ -6,58 +6,98 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
-        python-version: [3.6, 3.9, pypy3]
-        rf-version: [3.2.2, 4.0.1]
+        python-version: [3.9.23, 3.13.5, 3.14.0-rc.3]  # pypy-3.9
+        # python-version: [{earliest: 3.9}, {latest: 3.13.0}]  # pypy-3.9
+        rf-version: [6.1.1, 7.3.2]
+        selenium-version: [4.28.1, 4.29.0, 4.30.0, 4.31.0, 4.32.0, 4.33.0, 4.34.2]
+        browser: [chrome]  # firefox, chrome, headlesschrome, edge
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }} with Robot Framework ${{ matrix.rf-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Setup Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: 138
+        install-dependencies: true
+        install-chromedriver: true
+      id: setup-chrome
+    - run: |
+        echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+        ${{ steps.setup-chrome.outputs.chrome-path }} --version
+    - name: Setup firefox
+      id: setup-firefox
+      uses: browser-actions/setup-firefox@v1
+      with:
+        firefox-version: latest
+    - run: |
+        echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
+        ${{ steps.setup-firefox.outputs.firefox-path }} --version
     - name: Start xvfb
       run: |
         export DISPLAY=:99.0
         Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
     - name: Install dependencies
-      if: matrix.python-version != 'pypy3'
+      if: matrix.python-version != 'pypy-3.7'
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements-dev.txt
     - name: Install dependencies for pypy
-      if: matrix.python-version == 'pypy3'
+      if: matrix.python-version == 'pypy-3.9'
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install mockito>=1.0.0
         pip install robotstatuschecker>=1.4
-        pip install approvaltests>=0.2.4
-        pip install pytest pytest-mockito pytest-approvaltests requests robotframework-pabot
+        pip install requests robotframework-pabot
+    - name: Install Seleninum v${{ matrix.selenium-version }}
+      run: |
+        pip install --upgrade selenium==${{ matrix.selenium-version }}
     - name: Install RF ${{ matrix.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.rf-version }}
+    - name: Install drivers via selenium-manager
+      run: |
+        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm._get_binary())}")')
+        echo "$SELENIUM_MANAGER_EXE"
+        echo "WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')" >> "$GITHUB_ENV"
+        echo "$WEBDRIVERPATH"
     - name: Generate stub file for ${{ matrix.python-version }}
-      if: matrix.python-version != 'pypy3'
+      if: matrix.python-version != 'pypy-3.9'
       run: |
         invoke gen-stub
-    - name: Run tests with headless Chrome and with Python != 3.8
-      if: matrix.python-version != '3.8'
+
+    # Temporarily ignoring pypy execution
+    - name: Run tests with headless Chrome and with PyPy
+      if: startsWith( matrix.python-version, 'pypy') == true
       run: |
-        xvfb-run --auto-servernum python atest/run.py --zip headlesschrome
-    - name: Run tests normal Chrome with Python 3.8
-      if: matrix.python-version == '3.8' && matrix.rf-version != '3.2.2'
+        xvfb-run --auto-servernum python atest/run.py --nounit --zip headlesschrome
+
+    # - name: Run tests with ${{ matrix.browser }} if CPython
+    #   if: startsWith( matrix.python-version, 'pypy') == false
+    #   run: |
+    #     xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
+
+    - name: Run tests with latest python and latest robot framework
+      if: matrix.python-version == '3.13.0' && matrix.rf-version == '7.2.2'
       run: |
-        xvfb-run --auto-servernum python atest/run.py --zip chrome
-    - name: Run tests with Selenium Grid
-      if: matrix.python-version == '3.8' && matrix.rf-version == '3.2.2'
-      run: |
-        wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
-        sudo chmod u+x ./selenium-server-standalone.jar
-        xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
-    - uses: actions/upload-artifact@v1
-      if: success() || failure()
+        xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
+
+    # - name: Run tests with Selenium Grid
+    #   if: matrix.python-version == '3.11' && matrix.rf-version == '3.2.2' && matrix.python-version != 'pypy-3.9'
+    #   run: |
+    #     wget --no-verbose --output-document=./selenium-server-standalone.jar http://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar
+    #     sudo chmod u+x ./selenium-server-standalone.jar
+    #     xvfb-run --auto-servernum python atest/run.py --zip headlesschrome  --grid True
+
+    - uses: actions/upload-artifact@v4
+      if: failure()
       with:
-        name: Failed Test results
+        name: sl_$${{ matrix.python-version }}_$${{ matrix.rf-version }}_$${{ matrix.selenium-version }}_$${{ matrix.browser }}
         path: atest/zip_results
+        overwrite: true

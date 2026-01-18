@@ -56,8 +56,21 @@ class FireFoxProfileParsingTests(unittest.TestCase):
 
     def _parse_result(self, result):
         to_str = ""
-        if "key1" in result.default_preferences:
-            to_str = f"{to_str} key1 {result.default_preferences['key1']}"
-        if "key2" in result.default_preferences:
-            to_str = f"{to_str} key2 {result.default_preferences['key2']}"
+        result_attr = self._get_preferences_attribute(result)
+        if "key1" in result_attr:
+            to_str = f"{to_str} key1 {result_attr['key1']}"
+        if "key2" in result_attr:
+            to_str = f"{to_str} key2 {result_attr['key2']}"
         self.results.append(to_str)
+
+    def _get_preferences_attribute(self, result):
+        # -- temporary fix to transition selenium to v4.17.2 from v4.16.0 and prior
+        # from inspect import signature
+        # sig = signature(result)
+        if hasattr(result,'default_preferences'):
+            return result.default_preferences
+        elif hasattr(result,'_desired_preferences'):
+            return result._desired_preferences
+        else:
+            return None
+        # --

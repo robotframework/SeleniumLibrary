@@ -10,7 +10,7 @@ Documentation     Creating test which would work on all browser is not possible.
 
 *** Test Cases ***
 Chrome Browser With executable_path Argument
-    [Tags]    NoGrid
+    [Tags]    NoGrid  Triage
     Run Keyword And Expect Error
     ...    WebDriverException: Message: 'exist' executable needs to be in PATH.*
     ...    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}

@@ -1,4 +1,4 @@
-*** Setting ***
+*** Settings ***
 Documentation     These tests must open own browser because windows opened by
 ...               earlier tests would otherwise be visible to Get Window XXX keywords
 ...               even if those windows were closed.
