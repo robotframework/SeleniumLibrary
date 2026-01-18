@@ -70,7 +70,7 @@ jobs:
 
     - name: Run tests under specified config
       run: |
-        xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
+        xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.config.browser }}
 
     - uses: actions/upload-artifact@v4
       if: failure()
