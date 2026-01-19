@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-from typing import Optional, Union
+from typing import Optional, Union, List
 from base64 import b64decode
 
 from robot.utils import get_link_path
@@ -146,7 +146,7 @@ class ScreenshotKeywords(LibraryComponent):
     @keyword
     def capture_element_screenshot(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         filename: str = DEFAULT_FILENAME_ELEMENT,
     ) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.

@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Union
+from typing import Union, List
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
@@ -25,7 +25,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def get_table_cell(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         row: int,
         column: int,
         loglevel: str = "TRACE",
@@ -89,7 +89,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_cell_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         row: int,
         column: int,
         expected: str,
@@ -112,7 +112,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_column_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         column: int,
         expected: str,
         loglevel: str = "TRACE",
@@ -143,7 +143,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_footer_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         expected: str,
         loglevel: str = "TRACE",
     ):
@@ -168,7 +168,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_header_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         expected: str,
         loglevel: str = "TRACE",
     ):
@@ -193,7 +193,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_row_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         row: int,
         expected: str,
         loglevel: str = "TRACE",
@@ -224,7 +224,7 @@ class TableElementKeywords(LibraryComponent):
     @keyword
     def table_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Union[WebElement, str, List[Union[WebElement,str]]],
         expected: str,
         loglevel: str = "TRACE",
     ):
