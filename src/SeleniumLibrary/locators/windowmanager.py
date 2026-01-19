@@ -21,7 +21,6 @@ from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import WindowNotFound
-from SeleniumLibrary.utils import is_string
 
 
 WindowInfo = namedtuple("WindowInfo", "handle, id, name, title, url")
@@ -38,7 +37,7 @@ class WindowManager(ContextAware):
         }
 
     def get_window_handles(self, browser):
-        if is_string(browser) and browser == "ALL":
+        if isinstance(browser, str) and browser == "ALL":
             handles = []
             current_index = self.drivers.current_index
             for index, driver in enumerate(self.drivers, 1):
@@ -46,7 +45,7 @@ class WindowManager(ContextAware):
                 handles.extend(self.driver.window_handles)
             self.drivers.switch(current_index)
             return handles
-        elif is_string(browser) and browser == "CURRENT":
+        elif isinstance(browser, str) and browser == "CURRENT":
             return self.driver.window_handles
         else:
             current_index = self.drivers.current_index
@@ -60,14 +59,14 @@ class WindowManager(ContextAware):
             current_index = self.drivers.current_index
         except AttributeError:
             current_index = None
-        if is_string(browser) and browser.upper() == "ALL":
+        if isinstance(browser, str) and browser.upper() == "ALL":
             infos = []
             for index, driver in enumerate(self.drivers, 1):
                 self.drivers.switch(index)
                 infos.extend(self._get_window_infos())
             self.drivers.switch(current_index)
             return infos
-        elif is_string(browser) and browser.upper() == "CURRENT":
+        elif isinstance(browser, str) and browser.upper() == "CURRENT":
             return self._get_window_infos()
         else:
             self.drivers.switch(browser)
@@ -100,7 +99,7 @@ class WindowManager(ContextAware):
                 time.sleep(0.1)
 
     def _select(self, locator):
-        if not is_string(locator):
+        if not isinstance(locator, str):
             self._select_by_excludes(locator)
         elif locator.upper() == "CURRENT":
             pass

@@ -17,7 +17,7 @@ import os
 from datetime import timedelta
 from typing import Any
 
-from robot.utils import is_string, timestr_to_secs
+from robot.utils import timestr_to_secs
 from robot.utils import is_truthy, is_falsy  # noqa
 
 # Need only for unit tests and can be removed when Approval tests fixes:
@@ -26,7 +26,7 @@ WINDOWS = os.name == "nt"
 
 
 def is_noney(item):
-    return item is None or is_string(item) and item.upper() == "NONE"
+    return item is None or isinstance(item, str) and item.upper() == "NONE"
 
 def _convert_delay(delay):
     if isinstance(delay, timedelta):

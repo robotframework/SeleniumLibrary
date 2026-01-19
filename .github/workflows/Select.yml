@@ -1,0 +1,79 @@
+name: Selected Test Configuration Matrix
+
+on: [push, pull_request]
+
+jobs:
+  test_config:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        config:
+          - description: latest
+            python-version: 3.13.10
+            rf-version: 7.4.1
+            selenium-version:  4.39.0
+            browser: chrome
+          - description: previous
+            python-version: 3.12.12
+            rf-version: 7.3.2
+            selenium-version: 4.38.0
+            browser: chrome
+          - description: older_rf_version
+            python-version: 3.11.14
+            rf-version: 6.1.1
+            selenium-version: 4.37.0
+            browser: chrome
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configuration Description
+      run: |
+        echo "${{ matrix.config.description }} configuration"
+        echo "Testing with RF v${{ matrix.config.rf-version }}, Selenium v${{ matrix.config.selenium-version}}, Python v${{ matrix.config.python-version }} under ${{ matrix.config.browser }}"
+    - name: Set up Python ${{ matrix.config.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.config.python-version }}
+    - name: Setup ${{ matrix.config.browser }} browser
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: latest
+        install-dependencies: true
+      id: setup-chrome
+    - run: |
+        echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
+        ${{ steps.setup-chrome.outputs.chrome-path }} --version
+    - name: Setup firefox
+      id: setup-firefox
+      uses: browser-actions/setup-firefox@v1
+      with:
+        firefox-version: latest
+    - run: |
+        echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
+        ${{ steps.setup-firefox.outputs.firefox-path }} --version
+    - name: Start xvfb
+      run: |
+        export DISPLAY=:99.0
+        Xvfb -ac :99 -screen 0 1280x1024x16 > /dev/null 2>&1 &
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+    - name: Install Seleninum v${{ matrix.config.selenium-version }}
+      run: |
+        pip install --upgrade selenium==${{ matrix.config.selenium-version }}
+    - name: Install RF ${{ matrix.config.rf-version }}
+      run: |
+        pip install -U --pre robotframework==${{ matrix.config.rf-version }}
+
+    - name: Run tests under specified config
+      run: |
+        xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.config.browser }}
+
+    - uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: sl_$${{ matrix.config.python-version }}_$${{ matrix.config.rf-version }}_$${{ matrix.config.selenium-version }}_$${{ matrix.config.browser }}
+        path: atest/zip_results
+        overwrite: true

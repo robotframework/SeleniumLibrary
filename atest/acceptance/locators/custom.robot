@@ -55,4 +55,4 @@ Teardown Custom Locator
 Custom Locator Strategy
     [Arguments]    ${browser}    ${locator}    ${tag}    ${constraints}
     ${element}=    Execute Javascript    return window.document.getElementById('${locator}') || [];
-    [Return]    ${element}
+    RETURN    ${element}

@@ -20,7 +20,6 @@ from .librarylistener import LibraryListener  # noqa
 from .types import (
     is_falsy,
     is_noney,
-    is_string,
     is_truthy,
     WINDOWS,
     _convert_timeout,

@@ -24,7 +24,6 @@ from typing import Optional, List, Union
 from robot.api import logger
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
-from robot.utils import is_string
 from robot.utils.importer import Importer
 
 from robotlibcore import DynamicCore
@@ -50,12 +49,12 @@ from SeleniumLibrary.keywords import (
     WebDriverCache,
     WindowKeywords,
 )
-from SeleniumLibrary.keywords.screenshot import EMBED
+from SeleniumLibrary.keywords.screenshot import EMBED, BASE64
 from SeleniumLibrary.locators import ElementFinder
 from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
 
 
-__version__ = "6.6.1"
+__version__ = "6.8.0"
 
 
 class SeleniumLibrary(DynamicCore):
@@ -238,7 +237,7 @@ class SeleniumLibrary(DynamicCore):
 
     | Custom Locator Strategy | [Arguments] | ${browser} | ${locator} | ${tag} | ${constraints} |
     |   | ${element}= | Execute Javascript | return window.document.getElementById('${locator}'); |
-    |   | [Return] | ${element} |
+    |   | RETURN | ${element} |
 
     This keyword is a reimplementation of the basic functionality of the
     ``id`` locator where ``${browser}`` is a reference to a WebDriver
@@ -614,8 +613,8 @@ class SeleniumLibrary(DynamicCore):
         - ``run_on_failure``:
           Default action for the `run-on-failure functionality`.
         - ``screenshot_root_directory``:
-          Path to folder where possible screenshots are created or EMBED.
-          See `Set Screenshot Directory` keyword for further details about EMBED.
+          Path to folder where possible screenshots are created or EMBED or BASE64.
+          See `Set Screenshot Directory` keyword for further details about EMBED and BASE64.
           If not given, the directory where the log file is written is used.
         - ``plugins``:
           Allows extending the SeleniumLibrary with external Python classes.
@@ -843,9 +842,11 @@ class SeleniumLibrary(DynamicCore):
 
     def _resolve_screenshot_root_directory(self):
         screenshot_root_directory = self.screenshot_root_directory
-        if is_string(screenshot_root_directory):
+        if isinstance(screenshot_root_directory, str):
             if screenshot_root_directory.upper() == EMBED:
                 self.screenshot_root_directory = EMBED
+            if screenshot_root_directory.upper() == BASE64:
+                self.screenshot_root_directory = BASE64
 
     @staticmethod
     def _get_translation(language: Union[str, None]) -> Union[Path, None]:

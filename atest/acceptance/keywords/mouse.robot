@@ -8,6 +8,7 @@ Resource          ../resource.robot
 Mouse Over
     [Tags]    Known Issue Safari
     Mouse Over    el_for_mouseover
+    Sleep  0.1secs
     Textfield Value Should Be    el_for_mouseover    mouseover el_for_mouseover
     Run Keyword And Expect Error
     ...    Element with locator 'not_there' not found.
@@ -16,6 +17,7 @@ Mouse Over
 Mouse Over Error
     [Tags]    Known Issue Safari
     Mouse Over    el_for_mouseover
+    Sleep  0.1secs
     Textfield Value Should Be    el_for_mouseover    mouseover el_for_mouseover
     Run Keyword And Expect Error
     ...    Element with locator '鱼在天空中飞翔' not found.
