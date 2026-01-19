@@ -16,7 +16,7 @@ jobs:
         browser: [chrome]  # firefox, chrome, headlesschrome, edge
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python ${{ matrix.python-version }} with Robot Framework ${{ matrix.rf-version }}
       uses: actions/setup-python@v5
       with:
