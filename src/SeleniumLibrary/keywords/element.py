@@ -29,7 +29,7 @@ from SeleniumLibrary.utils.types import type_converter
 
 class ElementKeywords(LibraryComponent):
     @keyword(name="Get WebElement")
-    def get_webelement(self, locator: Union[WebElement, str]) -> WebElement:
+    def get_webelement(self, locator: Union[WebElement, str, List[Union[WebElement,str]]]) -> WebElement:
         """Returns the first WebElement matching the given ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -38,7 +38,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator)
 
     @keyword(name="Get WebElements")
-    def get_webelements(self, locator: Union[WebElement, str]) -> List[WebElement]:
+    def get_webelements(self, locator: Union[WebElement, str, List[Union[WebElement,str]]]) -> List[WebElement]:
         """Returns a list of WebElement objects matching the ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -582,7 +582,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_button(
-        self, locator: Union[WebElement, str], modifier: Union[bool, str, List[Union[WebElement,str]]] = False
+        self, locator: Union[WebElement, str, List[Union[WebElement,str]]], modifier: Union[bool, str] = False
     ):
         """Clicks the button identified by ``locator``.
 
@@ -606,7 +606,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_image(
-        self, locator: Union[WebElement, str], modifier: Union[bool, str, List[Union[WebElement,str]]] = False
+        self, locator: Union[WebElement, str, List[Union[WebElement,str]]], modifier: Union[bool, str] = False
     ):
         """Clicks an image identified by ``locator``.
 
