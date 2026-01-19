@@ -3,7 +3,7 @@
 invoke >= 2.2.0 
 mockito >= 1.4.0 
 robotstatuschecker >= 3.0.1 
-approvaltests == 8.4.1
+approvaltests == 16.3.0
 empty_files >= 0.0.9
 pytest >= 7.4.0 
 pytest-mockito >= 0.0.4
