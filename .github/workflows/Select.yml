@@ -1,6 +1,6 @@
-name: Select Configurations
+name: Selected Test Configuration Matrix
 
-on: workflow_dispatch
+on: [push, pull_request]
 
 jobs:
   test_config:
@@ -18,6 +18,11 @@ jobs:
             python-version: 3.12.12
             rf-version: 7.3.2
             selenium-version: 4.38.0
+            browser: chrome
+          - description: older_rf_version
+            python-version: 3.11.14
+            rf-version: 6.1.1
+            selenium-version: 4.37.0
             browser: chrome
 
     steps:
