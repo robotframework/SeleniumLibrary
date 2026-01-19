@@ -1,10 +1,11 @@
-name: Select Configurations
+name: Selected Test Configuration Matrix
 
-on: workflow_dispatch
+on: [push, pull_request]
 
 jobs:
   test_config:
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         config:
@@ -17,7 +18,12 @@ jobs:
             python-version: 3.12.12
             rf-version: 7.3.2
             selenium-version: 4.38.0
-            browser: firefox
+            browser: chrome
+          - description: older_rf_version
+            python-version: 3.11.14
+            rf-version: 6.1.1
+            selenium-version: 4.37.0
+            browser: chrome
 
     steps:
     - uses: actions/checkout@v4
@@ -32,9 +38,8 @@ jobs:
     - name: Setup ${{ matrix.config.browser }} browser
       uses: browser-actions/setup-chrome@v1
       with:
-        chrome-version: 138
+        chrome-version: latest
         install-dependencies: true
-        install-chromedriver: true
       id: setup-chrome
     - run: |
         echo Installed chromium version: ${{ steps.setup-chrome.outputs.chrome-version }}
@@ -61,12 +66,6 @@ jobs:
     - name: Install RF ${{ matrix.config.rf-version }}
       run: |
         pip install -U --pre robotframework==${{ matrix.config.rf-version }}
-    - name: Install drivers via selenium-manager
-      run: |
-        SELENIUM_MANAGER_EXE=$(python -c 'from selenium.webdriver.common.selenium_manager import SeleniumManager; sm=SeleniumManager(); print(f"{str(sm._get_binary())}")')
-        echo "$SELENIUM_MANAGER_EXE"
-        echo "WEBDRIVERPATH=$($SELENIUM_MANAGER_EXE --browser chrome --debug | awk '/INFO[[:space:]]Driver path:/ {print $NF;exit}')" >> "$GITHUB_ENV"
-        echo "$WEBDRIVERPATH"
 
     - name: Run tests under specified config
       run: |

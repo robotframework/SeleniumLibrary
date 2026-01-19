@@ -36,15 +36,21 @@ Add Cookie When Secure Is False
     Should Be Equal    ${cookie.secure}       ${False}
 
 Add Cookie When Expiry Is Epoch
-    Add Cookie    Cookie1    value1    expiry=1761755100
+    # To convert epoch to formatted string
+    #    from time import strftime, localtime
+    #    strftime('%Y-%m-%d %H:%M:%S', localtime(1793247900))
+    # To update time each September (as Chrome limits cookies to one year expiry date) use
+    #    import datetime
+    #    print (datetime.datetime.strptime("2027-10-29 12:25:00", "%Y-%m-%d %I:%M:%S").timestamp())
+    Add Cookie    Cookie1    value1    expiry=1793247900
     ${cookie} =    Get Cookie    Cookie1
-    ${expiry} =    Convert Date    ${1761755100}    exclude_millis=True
+    ${expiry} =    Convert Date    ${1793247900}    exclude_millis=True
     Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
-    Add Cookie    Cookie12    value12    expiry=2025-10-29 12:25:00
+    Add Cookie    Cookie12    value12    expiry=2026-10-29 12:25:00
     ${cookie} =    Get Cookie    Cookie12
-    Should Be Equal As Strings    ${cookie.expiry}    2025-10-29 12:25:00
+    Should Be Equal As Strings    ${cookie.expiry}    2026-10-29 12:25:00
 
 Delete Cookie
     [Tags]    Known Issue Safari
@@ -114,7 +120,7 @@ Test Get Cookie Keyword Logging
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2025-09-01 *:25:00
+    ...    expiry=2026-09-01 *:25:00
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     far_future
 
@@ -122,7 +128,7 @@ Test Get Cookie Keyword Logging
 Add Cookies
     # To update time each September (as Chrome limits cookies to one year expiry date) use
     #    import datetime
-    #    print (datetime.datetime.strptime("2025-09-01 12:25:00", "%Y-%m-%d %I:%M:%S").timestamp())
+    #    print (datetime.datetime.strptime("2027-09-01 12:25:00", "%Y-%m-%d %I:%M:%S").timestamp())
     Delete All Cookies
     Add Cookie    test       seleniumlibrary
     ${now} =    Get Current Date
@@ -130,4 +136,4 @@ Add Cookies
     ${tomorrow_thistime_datetime} =    Convert Date    ${tomorrow_thistime}    datetime
     Set Suite Variable    ${tomorrow_thistime_datetime}
     Add Cookie    another    value   expiry=${tomorrow_thistime}
-    Add Cookie    far_future    timemachine    expiry=1756700700    # 2025-09-01 12:25:00
+    Add Cookie    far_future    timemachine    expiry=1788236700    # 2026-09-01 12:25:00
