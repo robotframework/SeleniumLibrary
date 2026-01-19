@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom Mouse-Based Cross-Frame Drag Test (Fixed with Overlay)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f0f0f0; position: relative; }
+        #source {
+            width: 150px; height: 150px; background: lightblue;
+            text-align: center; line-height: 150px; font-size: 20px;
+            cursor: pointer; user-select: none; position: absolute; top: 50px; left: 50px;
+            z-index: 10;
+        }
+        #iframe-container { position: relative; display: inline-block; margin-top: 250px; }
+        iframe { width: 800px; height: 500px; border: 3px solid #333; background: white; }
+        #overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent; z-index: 20; display: none; cursor: default;
+        }
+        #target {
+            width: 400px; height: 300px; background: lightgreen;
+            margin: 100px auto; text-align: center; line-height: 300px; font-size: 28px;
+            border: 4px dashed #000;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Click & hold blue box (outside), drag ANYWHERE (including into green area inside iframe), release → drops!</h2>
+
+    <!-- Source outside iframe -->
+    <div id="source">Drag Me!<br>(outside iframe)</div>
+
+    <!-- Iframe wrapper with overlay -->
+    <div id="iframe-container">
+        <iframe id="previewFrame" srcdoc="
+            <html>
+            <head>
+                <style>
+                    body { margin: 0; background: #fff; }
+                    #target { width: 400px; height: 300px; background: lightgreen; margin: 100px auto; text-align: center; line-height: 300px; font-size: 28px; border: 4px dashed #000; }
+                </style>
+                <script>
+                    window.addEventListener('message', function(e) {
+                        if (e.data.action === 'drop') {
+                            const target = document.getElementById('target');
+                            const droppedBox = document.createElement('div');
+                            droppedBox.innerHTML = 'Dropped Successfully!<br><br>Box from outside!';
+                            droppedBox.style.cssText = 'width: 150px; height: 150px; background: lightblue; margin: 20px auto; line-height: 150px; font-size: 20px; text-align: center;';
+                            target.innerHTML = '';
+                            target.appendChild(droppedBox);
+                        }
+                    });
+                </script>
+            </head>
+            <body>
+                <div id='target'>Drop Here<br>(inside iframe)</div>
+            </body>
+            </html>
+        "></iframe>
+        <div id="overlay"></div>
+    </div>
+
+    <script>
+        let dragging = false;
+        const source = document.getElementById('source');
+        const overlay = document.getElementById('overlay');
+        const iframe = document.getElementById('previewFrame');
+
+        // Start drag: show overlay to capture events over iframe
+        source.addEventListener('mousedown', (e) => {
+            dragging = true;
+            overlay.style.display = 'block';
+            e.preventDefault();
+        });
+
+        // End drag: hide overlay, hide source, send drop to iframe
+        const endDrag = () => {
+            if (dragging) {
+                dragging = false;
+                overlay.style.display = 'none';
+                source.style.display = 'none';
+
+                iframe.contentWindow.postMessage({
+                    action: 'drop'
+                }, '*');
+            }
+        };
+
+        // Mouseup anywhere in parent (including overlay)
+        document.addEventListener('mouseup', endDrag);
+    </script>
+
+</body>
+</html>
