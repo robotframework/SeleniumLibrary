@@ -44,7 +44,7 @@ Add Cookie When Expiry Is Epoch
     #    print (datetime.datetime.strptime("2027-10-29 12:25:00", "%Y-%m-%d %I:%M:%S").timestamp())
     Add Cookie    Cookie1    value1    expiry=1793247900
     ${cookie} =    Get Cookie    Cookie1
-    ${expiry} =    Convert Date    ${1761755100}    exclude_millis=True
+    ${expiry} =    Convert Date    ${1793247900}    exclude_millis=True
     Should Be Equal As Strings    ${cookie.expiry}    ${expiry}
 
 Add Cookie When Expiry Is Human Readable Data&Time
@@ -120,7 +120,7 @@ Test Get Cookie Keyword Logging
     ...    domain=localhost
     ...    secure=False
     ...    httpOnly=False
-    ...    expiry=2025-09-01 *:25:00
+    ...    expiry=2026-09-01 *:25:00
     ...    extra={'sameSite': 'Lax'}
     ${cookie} =    Get Cookie     far_future
 
