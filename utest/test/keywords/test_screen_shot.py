@@ -7,6 +7,7 @@ from SeleniumLibrary import ScreenshotKeywords, SeleniumLibrary
 
 SCREENSHOT_FILE_NAME = "selenium-screenshot-{index}.png"
 ELEMENT_FILE_NAME = "selenium-element-screenshot-{index}.png"
+FULLPAGE_FILE_NAME = "selenium-fullpage-screenshot-{index}.png"
 EMBED = "EMBED"
 BASE64 = "BASE64"
 
@@ -102,3 +103,26 @@ def test_sl_set_screenshot_directory():
     cur_dir = dirname(abspath(__file__))
     sl.set_screenshot_directory(cur_dir)
     assert sl.screenshot_root_directory == cur_dir
+
+
+def test_fullpage_defaults(screen_shot):
+    assert screen_shot._decide_embedded(FULLPAGE_FILE_NAME) == (False, None)
+
+
+def test_fullpage_screen_shotdir_embeded(screen_shot):
+    screen_shot.ctx.screenshot_root_directory = EMBED
+    assert screen_shot._decide_embedded(FULLPAGE_FILE_NAME) == (True, EMBED)
+    assert screen_shot._decide_embedded(FULLPAGE_FILE_NAME.upper()) == (True, EMBED)
+
+
+def test_fullpage_screen_shotdir_return_base64(screen_shot):
+    screen_shot.ctx.screenshot_root_directory = BASE64
+    assert screen_shot._decide_embedded(FULLPAGE_FILE_NAME) == (True, BASE64)
+    assert screen_shot._decide_embedded(FULLPAGE_FILE_NAME.upper()) == (True, BASE64)
+
+
+def test_fullpage_file_name_embeded(screen_shot):
+    screen_shot.ctx.screenshot_root_directory = EMBED
+    assert screen_shot._decide_embedded(EMBED) == (True, EMBED)
+    screen_shot.ctx.screenshot_root_directory = BASE64
+    assert screen_shot._decide_embedded(BASE64) == (True, BASE64)
