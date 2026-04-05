@@ -15,15 +15,18 @@
 # limitations under the License.
 import os
 from datetime import timedelta
-from typing import Any
+from typing import Any, TypeAlias
 
 from robot.utils import timestr_to_secs
 from robot.utils import is_truthy, is_falsy  # noqa
+from selenium.webdriver.remote.webelement import WebElement
+
 
 # Need only for unit tests and can be removed when Approval tests fixes:
 # https://github.com/approvals/ApprovalTests.Python/issues/41
 WINDOWS = os.name == "nt"
 
+Locator: TypeAlias = WebElement | str | list['Locator']
 
 def is_noney(item):
     return item is None or isinstance(item, str) and item.upper() == "NONE"

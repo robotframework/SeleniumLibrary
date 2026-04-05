@@ -23,6 +23,7 @@ from selenium.webdriver.common.print_page_options import PrintOptions, Orientati
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
+from SeleniumLibrary.utils.types import Locator
 
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
@@ -146,7 +147,7 @@ class ScreenshotKeywords(LibraryComponent):
     @keyword
     def capture_element_screenshot(
         self,
-        locator: Union[WebElement, str, List[Union[WebElement,str]]],
+        locator: Locator,
         filename: str = DEFAULT_FILENAME_ELEMENT,
     ) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
