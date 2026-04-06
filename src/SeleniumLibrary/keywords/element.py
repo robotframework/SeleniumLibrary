@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from collections import namedtuple
 from typing import List, Optional, Tuple, Union
 
@@ -930,7 +931,7 @@ return !element.dispatchEvent(evt);
         element.send_keys(key)
 
     @keyword
-    def press_keys(self, locator: Union[WebElement, None, str, List[Union[WebElement,str]]] = None, *keys: str):
+    def press_keys(self, locator: Locator | None = None, *keys: str):
         """Simulates the user pressing key(s) to an element or on the active browser.
 
         If ``locator`` evaluates as false, see `Boolean arguments` for more

@@ -15,10 +15,9 @@
 # limitations under the License.
 
 import os
-from typing import Optional, Union, List
+from typing import Optional
 
 from robot.libraries.BuiltIn import BuiltIn
-from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
@@ -27,7 +26,7 @@ from SeleniumLibrary.utils.types import Locator
 
 class FormElementKeywords(LibraryComponent):
     @keyword
-    def submit_form(self, locator: Union[WebElement, None, str, List[Union[WebElement,str]]] = None):
+    def submit_form(self, locator: Locator | None = None):
         """Submits a form identified by ``locator``.
 
         If ``locator`` is not given, first form on the page is submitted.
