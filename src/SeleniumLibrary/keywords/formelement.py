@@ -22,6 +22,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
+from SeleniumLibrary.utils.types import Locator
 
 
 class FormElementKeywords(LibraryComponent):
