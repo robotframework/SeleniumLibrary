@@ -208,14 +208,14 @@ class SeleniumLibrary(DynamicCore):
     are based on Selenium API, like `xpath` or `css`, but example chaining is not supported by `sizzle` or `jquery
 
     Examples:
-    | `Click Element` | css:.bar >> xpath://a | # To find a link which is present after an element with class "bar" |
+    | `Click Element` | css:.bar >> xpath: //a | # To find a link which is present after an element with class "bar" |
 
     List examples:
-    | ${locator_list} =             | `Create List`   | css:div#div_id            | xpath://*[text(), " >> "] |
-    | `Page Should Contain Element` | ${locator_list} |                           |                           |
-    | ${element} =                  | Get WebElement  | xpath://*[text(), " >> "] |                           |
-    | ${locator_list} =             | `Create List`   | css:div#div_id            | ${element}                |
-    | `Page Should Contain Element` | ${locator_list} |                           |                           |
+    | ${locator_list} =             | `Create List`   | css:div#div_id             | xpath: //*[text(), " >> "] |
+    | `Page Should Contain Element` | ${locator_list} |                            |                            |
+    | ${element} =                  | Get WebElement  | xpath: //*[text(), " >> "] |                            |
+    | ${locator_list} =             | `Create List`   | css:div#div_id             | ${element }                |
+    | `Page Should Contain Element` | ${locator_list} |                            |                            |
 
     Chaining locators in new in SeleniumLibrary 5.0
 
