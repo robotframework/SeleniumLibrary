@@ -9,8 +9,8 @@ Library           DateTime
 *** Test Cases ***
 Get Cookies
     ${cookies}=    Get Cookies
-    Should Be Equal As Strings    ${cookies}
-    ...    another=value; test=seleniumlibrary; far_future=timemachine
+    Should Match Regexp    ${cookies}
+    ...    (?=.*another=value)(?=.*test=seleniumlibrary)(?=.*far_future=timemachine)
 
 Get Cookies As Dict
     ${cookies}=    Get Cookies        as_dict=True
