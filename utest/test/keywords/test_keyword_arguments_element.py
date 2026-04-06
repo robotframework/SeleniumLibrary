@@ -29,6 +29,27 @@ def test_element_text_should_be(element):
         element.element_text_should_be(locator, "not text", "foobar")
     assert "foobar" in str(error.value)
 
+    webelement.text = "text "
+    when(element).find_element(locator).thenReturn(webelement)
+    with pytest.raises(AssertionError) as error:
+        element.element_text_should_be(locator, "text", strip_spaces=False)
+    assert "should have been" in str(error.value)
+
+    with pytest.raises(AssertionError) as error:
+        element.element_text_should_be(locator, "text", strip_spaces="LEADING")
+    assert "should have been" in str(error.value)
+
+    webelement.text = " text"
+    when(element).find_element(locator).thenReturn(webelement)
+    with pytest.raises(AssertionError) as error:
+        element.element_text_should_be(locator, "text", strip_spaces="TRAILING")
+    assert "should have been" in str(error.value)
+
+    webelement.text = "testing  is cool"
+    when(element).find_element(locator).thenReturn(webelement)
+    with pytest.raises(AssertionError) as error:
+        element.element_text_should_be(locator, "testing is cool", collapse_spaces=False)
+    assert "should have been" in str(error.value)
 
 
 def test_action_chain_delay_in_elements(element):
@@ -42,6 +63,3 @@ def test_action_chain_delay_in_elements(element):
     when(chain_mock).move_to_element(matchers.ANY).thenReturn(mock())
     when(SUT).ActionChains(matchers.ANY, duration=expected_delay_in_ms).thenReturn(chain_mock)
     element.scroll_element_into_view(locator)
-
-
-
