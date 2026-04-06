@@ -16,10 +16,9 @@
 
 import time
 from datetime import timedelta
-from typing import Optional, Union, List
+from typing import Optional
 
 from selenium.common.exceptions import StaleElementReferenceException
-from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound

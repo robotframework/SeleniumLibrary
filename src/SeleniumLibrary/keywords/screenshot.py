@@ -13,12 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import os
-from typing import Optional, Union, List
+from typing import Optional, Union
 from base64 import b64decode
 
 from robot.utils import get_link_path
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.print_page_options import PrintOptions, Orientation
 
 from SeleniumLibrary.base import LibraryComponent, keyword
