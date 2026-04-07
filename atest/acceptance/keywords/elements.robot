@@ -220,7 +220,7 @@ Cover Elements should throw exception when locator is invalid
     Run Keyword And Expect Error  No element with locator '//img?@src="inexistent"?' found.
     ...  Cover Element  //img[@src="inexistent"]
 
-Get CSS Property Value
+Get CSS Property Value Returns Correct Values For Common Properties
     [Setup]            Go To Page "cssproperties.html"
     ${display}=        Get CSS Property Value    id:styled-div    display
     Should Be Equal    ${display}       block
@@ -247,3 +247,8 @@ Get CSS Property Value Using WebElement
     ${element}=        Get WebElement    id:styled-div
     ${display}=        Get CSS Property Value    ${element}    display
     Should Be Equal    ${display}    block
+
+Get CSS Property Value With Non Existing Property
+    [Setup]            Go To Page "cssproperties.html"
+    ${value}=          Get CSS Property Value    id:styled-div    non-existent-property
+    Should Be Empty    ${value}
