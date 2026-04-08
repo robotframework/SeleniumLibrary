@@ -214,7 +214,7 @@ class SeleniumLibrary(DynamicCore):
     | ${locator_list} =             | `Create List`   | css:div#div_id             | xpath: //*[text(), " >> "] |
     | `Page Should Contain Element` | ${locator_list} |                            |                            |
     | ${element} =                  | Get WebElement  | xpath: //*[text(), " >> "] |                            |
-    | ${locator_list} =             | `Create List`   | css:div#div_id             | ${element }                |
+    | ${locator_list} =             | `Create List`   | css:div#div_id             | ${element}                 |
     | `Page Should Contain Element` | ${locator_list} |                            |                            |
 
     Chaining locators in new in SeleniumLibrary 5.0
