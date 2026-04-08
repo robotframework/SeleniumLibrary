@@ -1,5 +1,5 @@
 import pytest
-from mockito import when, mock, verify, verifyNoMoreInteractions, ANY
+from mockito import when, mock, verify, ensureNoUnverifiedInteractions, ANY
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.service import Service
@@ -21,8 +21,8 @@ def test_set_selenium_timeout_only_affects_open_browsers():
     verify(second_browser).set_script_timeout(10.0)
     ctx._drivers.active_drivers = []
     bm.set_selenium_timeout("20 seconds")
-    verifyNoMoreInteractions(first_browser)
-    verifyNoMoreInteractions(second_browser)
+    ensureNoUnverifiedInteractions(first_browser)
+    ensureNoUnverifiedInteractions(second_browser)
 
 
 def test_action_chain_delay_default():
