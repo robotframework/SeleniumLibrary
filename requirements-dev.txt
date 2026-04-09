@@ -1,25 +1,30 @@
+# Last reviewed: 2026-04-09
+# Dev and build tools are pinned exactly (==) to ensure a fully
+# reproducible development environment. Update deliberately and review
+# changelogs before bumping versions.
+
 # Requirements needed for SeleniumLibrary development but not by end users.
 # Creating releases has its own requirements listed in requirements-build.txt.
-invoke >= 2.2.0 
-mockito >= 1.4.0 
-robotstatuschecker >= 3.0.1 
-approvaltests == 8.4.1
-empty_files >= 0.0.9
-pytest >= 7.4.0 
-pytest-mockito >= 0.0.4
-pytest-approvaltests >= 0.2.4
-requests >= 2.31.0
-robotframework-pabot >= 2.16.0 
-black >= 20.8b1
-flake8 >= 6.1.0 
+invoke == 2.2.0
+mockito == 1.4.0
+robotstatuschecker == 4.1.1
+approvaltests == 17.4.3
+empty_files == 0.0.9
+pytest == 9.0.3
+pytest-mockito == 0.0.4
+pytest-approvaltests == 0.2.4
+requests == 2.33.1
+robotframework-pabot == 5.2.2
+black == 26.3.1
+flake8 == 6.1.0
 
 # Requirements needed when generating releases. See BUILD.rst for details.
-rellu >= 0.7
-twine >= 4.0.2 
-wheel >= 0.41.1 
-docutils >= 0.20.1 
-pygments
-beautifulsoup4 >= 4.12.2 
+rellu == 0.7
+twine == 6.2.0
+wheel == 0.46.3
+docutils == 0.20.1
+pygments == 2.20.0
+beautifulsoup4 == 4.12.2
 
 # Include normal dependencies from requirements.txt. Makes it possible to use
 # requirements-dev.txt as a single requirement file in PyCharm and other IDEs.
