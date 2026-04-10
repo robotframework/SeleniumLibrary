@@ -1279,7 +1279,7 @@ return !element.dispatchEvent(evt);
 
     @keyword("Get CSS Property Value")
     def get_css_property_value(
-            self, locator: Union[WebElement, str], css_property: str
+            self, locator: Locator, css_property: str
     ) -> str:
         """Returns the computed value of ``css_property`` from the element ``locator``.
 
