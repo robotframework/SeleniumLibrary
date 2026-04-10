@@ -219,3 +219,36 @@ Cover Element can cover just one element
 Cover Elements should throw exception when locator is invalid
     Run Keyword And Expect Error  No element with locator '//img?@src="inexistent"?' found.
     ...  Cover Element  //img[@src="inexistent"]
+
+Get CSS Property Value Returns Correct Values For Common Properties
+    [Setup]            Go To Page "cssproperties.html"
+    ${display}=        Get CSS Property Value    id:styled-div    display
+    Should Be Equal    ${display}       block
+    ${font_size}=      Get CSS Property Value    id:styled-div    font-size
+    Should Be Equal    ${font_size}     16px
+    ${margin_top}=     Get CSS Property Value    id:styled-div    margin-top
+    Should Be Equal    ${margin_top}    10px
+    ${text_align}=     Get CSS Property Value    id:styled-div    text-align
+    Should Be Equal    ${text_align}    center
+
+Get CSS Property Value With Missing Element
+    [Setup]            Go To Page "cssproperties.html"
+    Run Keyword And Expect Error
+    ...    Element with locator 'id:non-existent' not found.
+    ...    Get CSS Property Value    id:non-existent    color
+
+Get CSS Property Value Returns Background Color
+    [Setup]            Go To Page "cssproperties.html"
+    ${color}=          Get CSS Property Value    id:styled-div    background-color
+    Should Match Regexp    ${color}    ^rgba?\(.+\)$
+
+Get CSS Property Value Using WebElement
+    [Setup]            Go To Page "cssproperties.html"
+    ${element}=        Get WebElement    id:styled-div
+    ${display}=        Get CSS Property Value    ${element}    display
+    Should Be Equal    ${display}    block
+
+Get CSS Property Value With Non Existing Property
+    [Setup]            Go To Page "cssproperties.html"
+    ${value}=          Get CSS Property Value    id:styled-div    non-existent-property
+    Should Be Empty    ${value}

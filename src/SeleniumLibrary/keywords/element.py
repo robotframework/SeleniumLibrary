@@ -1276,3 +1276,21 @@ return !element.dispatchEvent(evt);
 
     def _selenium_keys_has_attr(self, key):
         return hasattr(Keys, key)
+
+    @keyword("Get CSS Property Value")
+    def get_css_property_value(
+            self, locator: Locator, css_property: str
+    ) -> str:
+        """Returns the computed value of ``css_property`` from the element ``locator``.
+
+        See the `Locating elements` section for details about the locator syntax.
+
+        The value returned is the browser-computed CSS value of the property.
+        For example, colors are often returned in ``rgba(...)`` format and sizes
+        are typically returned in pixels.
+
+        Example:
+        | ${color}= | `Get CSS Property Value` | css:button.submit | background-color |
+        | ${size}=  | `Get CSS Property Value` | id:username       | font-size        |
+        """
+        return self.find_element(locator).value_of_css_property(css_property)
