@@ -13,16 +13,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import os
 from typing import Optional, Union
 from base64 import b64decode
 
 from robot.utils import get_link_path
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.print_page_options import PrintOptions, Orientation
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
+from SeleniumLibrary.utils.types import Locator
 
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
 DEFAULT_FILENAME_ELEMENT = "selenium-element-screenshot-{index}.png"
@@ -146,7 +147,7 @@ class ScreenshotKeywords(LibraryComponent):
     @keyword
     def capture_element_screenshot(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         filename: str = DEFAULT_FILENAME_ELEMENT,
     ) -> str:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.

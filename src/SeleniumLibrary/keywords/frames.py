@@ -13,16 +13,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Union
-
-from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
+from SeleniumLibrary.utils.types import Locator
 
 
 class FrameKeywords(LibraryComponent):
     @keyword
-    def select_frame(self, locator: Union[WebElement, str]):
+    def select_frame(self, locator: Locator):
         """Sets frame identified by ``locator`` as the current frame.
 
         See the `Locating elements` section for details about the locator
@@ -82,7 +80,7 @@ class FrameKeywords(LibraryComponent):
 
     @keyword
     def frame_should_contain(
-        self, locator: Union[WebElement, str], text: str, loglevel: str = "TRACE"
+        self, locator: Locator, text: str, loglevel: str = "TRACE"
     ):
         """Verifies that frame identified by ``locator`` contains ``text``.
 
@@ -99,7 +97,7 @@ class FrameKeywords(LibraryComponent):
             )
         self.info(f"Frame '{locator}' contains text '{text}'.")
 
-    def _frame_contains(self, locator: Union[WebElement, str], text: str):
+    def _frame_contains(self, locator: Locator, text: str):
         element = self.find_element(locator)
         self.driver.switch_to.frame(element)
         self.info(f"Searching for text from frame '{locator}'.")

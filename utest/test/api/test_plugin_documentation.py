@@ -2,9 +2,11 @@ import os
 import unittest
 
 from approvaltests.approvals import verify
+from approvaltests.reporters.first_working_reporter import FirstWorkingReporter
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
+from approvaltests.reporters.python_native_reporter import PythonNativeReporter
 from robot.utils import WINDOWS
 
 from SeleniumLibrary import SeleniumLibrary
@@ -24,7 +26,9 @@ class PluginDocumentation(unittest.TestCase):
         )
         factory = GenericDiffReporterFactory()
         factory.load(reporter_json)
-        self.reporter = factory.get_first_working()
+        self.reporter = FirstWorkingReporter(
+            factory.get_first_working(), PythonNativeReporter()
+        )
 
     @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_many_plugins(self):

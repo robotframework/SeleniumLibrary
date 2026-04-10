@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from collections import namedtuple
 from typing import List, Optional, Tuple, Union
 
@@ -24,12 +25,12 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils.types import type_converter
+from SeleniumLibrary.utils.types import type_converter, Locator
 
 
 class ElementKeywords(LibraryComponent):
     @keyword(name="Get WebElement")
-    def get_webelement(self, locator: Union[WebElement, str]) -> WebElement:
+    def get_webelement(self, locator: Locator) -> WebElement:
         """Returns the first WebElement matching the given ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -38,7 +39,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator)
 
     @keyword(name="Get WebElements")
-    def get_webelements(self, locator: Union[WebElement, str]) -> List[WebElement]:
+    def get_webelements(self, locator: Locator) -> List[WebElement]:
         """Returns a list of WebElement objects matching the ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -53,7 +54,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def element_should_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
@@ -91,7 +92,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def element_should_not_contain(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
@@ -149,7 +150,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def page_should_contain_element(
         self,
-        locator: Union[WebElement, str, List[Union[WebElement,str]]],
+        locator: Locator,
         message: Optional[str] = None,
         loglevel: str = "TRACE",
         limit: Optional[int] = None,
@@ -209,7 +210,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def page_should_not_contain_element(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         message: Optional[str] = None,
         loglevel: str = "TRACE",
     ):
@@ -224,7 +225,7 @@ class ElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, message=message, loglevel=loglevel)
 
     @keyword
-    def assign_id_to_element(self, locator: Union[WebElement, str], id: str):
+    def assign_id_to_element(self, locator: Locator, id: str):
         """Assigns a temporary ``id`` to the element specified by ``locator``.
 
         This is mainly useful if the locator is complicated and/or slow XPath
@@ -243,7 +244,7 @@ class ElementKeywords(LibraryComponent):
         self.driver.execute_script(f"arguments[0].id = '{id}';", element)
 
     @keyword
-    def element_should_be_disabled(self, locator: Union[WebElement, str]):
+    def element_should_be_disabled(self, locator: Locator):
         """Verifies that element identified by ``locator`` is disabled.
 
         This keyword considers also elements that are read-only to be
@@ -256,7 +257,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(f"Element '{locator}' is enabled.")
 
     @keyword
-    def element_should_be_enabled(self, locator: Union[WebElement, str]):
+    def element_should_be_enabled(self, locator: Locator):
         """Verifies that element identified by ``locator`` is enabled.
 
         This keyword considers also elements that are read-only to be
@@ -269,7 +270,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(f"Element '{locator}' is disabled.")
 
     @keyword
-    def element_should_be_focused(self, locator: Union[WebElement, str]):
+    def element_should_be_focused(self, locator: Locator):
         """Verifies that element identified by ``locator`` is focused.
 
         See the `Locating elements` section for details about the locator
@@ -287,7 +288,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_be_visible(
-        self, locator: Union[WebElement, str], message: Optional[str] = None
+        self, locator: Locator, message: Optional[str] = None
     ):
         """Verifies that the element identified by ``locator`` is visible.
 
@@ -310,7 +311,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_not_be_visible(
-        self, locator: Union[WebElement, str], message: Optional[str] = None
+        self, locator: Locator, message: Optional[str] = None
     ):
         """Verifies that the element identified by ``locator`` is NOT visible.
 
@@ -330,7 +331,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def element_text_should_be(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
@@ -366,7 +367,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def element_text_should_not_be(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         not_expected: Union[None, str],
         message: Optional[str] = None,
         ignore_case: bool = False,
@@ -399,7 +400,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_element_attribute(
-        self, locator: Union[WebElement, str], attribute: str
+        self, locator: Locator, attribute: str
     ) -> str:
         """Returns the value of ``attribute`` from the element ``locator``.
 
@@ -417,7 +418,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_dom_attribute(
-        self, locator: Union[WebElement, str], attribute: str
+        self, locator: Locator, attribute: str
     ) -> str:
         """Returns the value of ``attribute`` from the element ``locator``. `Get DOM Attribute` keyword
         only returns attributes declared within the element's HTML markup.  If the requested attribute
@@ -434,7 +435,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_property(
-        self, locator: Union[WebElement, str], property: str
+        self, locator: Locator, property: str
     ) -> str:
         """Returns the value of ``property`` from the element ``locator``.
 
@@ -450,7 +451,7 @@ class ElementKeywords(LibraryComponent):
     @keyword
     def element_attribute_value_should_be(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         attribute: str,
         expected: Union[None, str],
         message: Optional[str] = None,
@@ -479,7 +480,7 @@ class ElementKeywords(LibraryComponent):
         )
 
     @keyword
-    def get_horizontal_position(self, locator: Union[WebElement, str]) -> int:
+    def get_horizontal_position(self, locator: Locator) -> int:
         """Returns the horizontal position of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -493,7 +494,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).location["x"]
 
     @keyword
-    def get_element_size(self, locator: Union[WebElement, str]) -> Tuple[int, int]:
+    def get_element_size(self, locator: Locator) -> Tuple[int, int]:
         """Returns width and height of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -508,7 +509,7 @@ class ElementKeywords(LibraryComponent):
         return element.size["width"], element.size["height"]
 
     @keyword
-    def cover_element(self, locator: Union[WebElement, str]):
+    def cover_element(self, locator: Locator):
         """Will cover elements identified by ``locator`` with a blue div without breaking page layout.
 
         See the `Locating elements` section for details about the locator
@@ -540,7 +541,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self.driver.execute_script(script, element)
 
     @keyword
-    def get_value(self, locator: Union[WebElement, str]) -> str:
+    def get_value(self, locator: Locator) -> str:
         """Returns the value attribute of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -549,7 +550,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.get_element_attribute(locator, "value")
 
     @keyword
-    def get_text(self, locator: Union[WebElement, str]) -> str:
+    def get_text(self, locator: Locator) -> str:
         """Returns the text value of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -558,7 +559,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).text
 
     @keyword
-    def clear_element_text(self, locator: Union[WebElement, str]):
+    def clear_element_text(self, locator: Locator):
         """Clears the value of the text-input-element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -567,7 +568,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.find_element(locator).clear()
 
     @keyword
-    def get_vertical_position(self, locator: Union[WebElement, str]) -> int:
+    def get_vertical_position(self, locator: Locator) -> int:
         """Returns the vertical position of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -582,7 +583,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_button(
-        self, locator: Union[WebElement, str], modifier: Union[bool, str] = False
+        self, locator: Locator, modifier: Union[bool, str] = False
     ):
         """Clicks the button identified by ``locator``.
 
@@ -606,7 +607,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_image(
-        self, locator: Union[WebElement, str], modifier: Union[bool, str] = False
+        self, locator: Locator, modifier: Union[bool, str] = False
     ):
         """Clicks an image identified by ``locator``.
 
@@ -631,7 +632,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_link(
-        self, locator: Union[WebElement, str], modifier: Union[bool, str] = False
+        self, locator: Locator, modifier: Union[bool, str] = False
     ):
         """Clicks a link identified by ``locator``.
 
@@ -653,7 +654,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     @keyword
     def click_element(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         modifier: Union[bool, str] = False,
         action_chain: bool = False,
     ):
@@ -694,7 +695,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self.info(f"Clicking element '{locator}'.")
             self.find_element(locator).click()
 
-    def _click_with_action_chain(self, locator: Union[WebElement, str]):
+    def _click_with_action_chain(self, locator: Locator):
         self.info(f"Clicking '{locator}' using an action chain.")
         action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         element = self.find_element(locator)
@@ -720,7 +721,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_element_at_coordinates(
-        self, locator: Union[WebElement, str], xoffset: int, yoffset: int
+        self, locator: Locator, xoffset: int, yoffset: int
     ):
         """Click the element ``locator`` at ``xoffset/yoffset``.
 
@@ -741,7 +742,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def double_click_element(self, locator: Union[WebElement, str]):
+    def double_click_element(self, locator: Locator):
         """Double clicks the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -753,7 +754,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.double_click(element).perform()
 
     @keyword
-    def set_focus_to_element(self, locator: Union[WebElement, str]):
+    def set_focus_to_element(self, locator: Locator):
         """Sets the focus to the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -765,7 +766,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         self.driver.execute_script("arguments[0].focus();", element)
 
     @keyword
-    def scroll_element_into_view(self, locator: Union[WebElement, str]):
+    def scroll_element_into_view(self, locator: Locator):
         """Scrolls the element identified by ``locator`` into view.
 
         See the `Locating elements` section for details about the locator
@@ -778,7 +779,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def drag_and_drop(
-        self, locator: Union[WebElement, str], target: Union[WebElement, str]
+        self, locator: Locator, target: Locator
     ):
         """Drags the element identified by ``locator`` into the ``target`` element.
 
@@ -796,7 +797,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def drag_and_drop_by_offset(
-        self, locator: Union[WebElement, str], xoffset: int, yoffset: int
+        self, locator: Locator, xoffset: int, yoffset: int
     ):
         """Drags the element identified with ``locator`` by ``xoffset/yoffset``.
 
@@ -815,7 +816,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def mouse_down(self, locator: Union[WebElement, str]):
+    def mouse_down(self, locator: Locator):
         """Simulates pressing the left mouse button on the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -832,7 +833,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.click_and_hold(element).perform()
 
     @keyword
-    def mouse_out(self, locator: Union[WebElement, str]):
+    def mouse_out(self, locator: Locator):
         """Simulates moving the mouse away from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -849,7 +850,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.perform()
 
     @keyword
-    def mouse_over(self, locator: Union[WebElement, str]):
+    def mouse_over(self, locator: Locator):
         """Simulates hovering the mouse over the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -861,7 +862,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.move_to_element(element).perform()
 
     @keyword
-    def mouse_up(self, locator: Union[WebElement, str]):
+    def mouse_up(self, locator: Locator):
         """Simulates releasing the left mouse button on the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -872,14 +873,14 @@ newDiv.parentNode.style.overflow = 'hidden';
         ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(element).perform()
 
     @keyword
-    def open_context_menu(self, locator: Union[WebElement, str]):
+    def open_context_menu(self, locator: Locator):
         """Opens the context menu on the element identified by ``locator``."""
         element = self.find_element(locator)
         action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
         action.context_click(element).perform()
 
     @keyword
-    def simulate_event(self, locator: Union[WebElement, str], event: str):
+    def simulate_event(self, locator: Locator, event: str):
         """Simulates ``event`` on the element identified by ``locator``.
 
         This keyword is useful if element has ``OnEvent`` handler that
@@ -904,7 +905,7 @@ return !element.dispatchEvent(evt);
         self.driver.execute_script(script, element, event)
 
     @keyword
-    def press_key(self, locator: Union[WebElement, str], key: str):
+    def press_key(self, locator: Locator, key: str):
         """Simulates user pressing key on element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -930,7 +931,7 @@ return !element.dispatchEvent(evt);
         element.send_keys(key)
 
     @keyword
-    def press_keys(self, locator: Union[WebElement, None, str] = None, *keys: str):
+    def press_keys(self, locator: Locator | None = None, *keys: str):
         """Simulates the user pressing key(s) to an element or on the active browser.
 
         If ``locator`` evaluates as false, see `Boolean arguments` for more
@@ -1033,7 +1034,7 @@ return !element.dispatchEvent(evt);
         return [link.get_attribute("id") for link in links]
 
     @keyword
-    def mouse_down_on_link(self, locator: Union[WebElement, str]):
+    def mouse_down_on_link(self, locator: Locator):
         """Simulates a mouse down event on a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -1047,7 +1048,7 @@ return !element.dispatchEvent(evt);
     @keyword
     def page_should_contain_link(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         message: Optional[str] = None,
         loglevel: str = "TRACE",
     ):
@@ -1065,7 +1066,7 @@ return !element.dispatchEvent(evt);
     @keyword
     def page_should_not_contain_link(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         message: Optional[str] = None,
         loglevel: str = "TRACE",
     ):
@@ -1081,7 +1082,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_not_contains(locator, "link", message, loglevel)
 
     @keyword
-    def mouse_down_on_image(self, locator: Union[WebElement, str]):
+    def mouse_down_on_image(self, locator: Locator):
         """Simulates a mouse down event on an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -1095,7 +1096,7 @@ return !element.dispatchEvent(evt);
     @keyword
     def page_should_contain_image(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         message: Optional[str] = None,
         loglevel: str = "TRACE",
     ):
@@ -1113,7 +1114,7 @@ return !element.dispatchEvent(evt);
     @keyword
     def page_should_not_contain_image(
         self,
-        locator: Union[WebElement, str],
+        locator: Locator,
         message: Optional[str] = None,
         loglevel: str = "TRACE",
     ):
@@ -1129,7 +1130,7 @@ return !element.dispatchEvent(evt);
         self.assert_page_not_contains(locator, "image", message, loglevel)
 
     @keyword
-    def get_element_count(self, locator: Union[WebElement, str]) -> int:
+    def get_element_count(self, locator: Locator) -> int:
         """Returns the number of elements matching ``locator``.
 
         If you wish to assert the number of matching elements, use
