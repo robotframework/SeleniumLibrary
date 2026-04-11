@@ -1294,3 +1294,40 @@ return !element.dispatchEvent(evt);
         | ${size}=  | `Get CSS Property Value` | id:username       | font-size        |
         """
         return self.find_element(locator).value_of_css_property(css_property)
+
+    @keyword('Drag And Drop To Frame')
+    def drag_and_drop_to_frame(
+            self, locator: Locator, target: Locator, frame: Locator,
+    ) -> None:
+        """
+        Drags the element identified by ``locator`` from default content and drops it onto
+        the ``target`` element inside the specified iframe.
+
+        The ``locator`` argument is the locator of the dragged element in default content,
+        the ``target`` is the locator of the drop target inside the iframe, and the
+        ``frame`` is the locator of the iframe containing the target.
+
+        See the `Locating elements` section for details about the locator syntax.
+
+        This keyword is designed for cross-frame drag-and-drop scenarios where the standard
+        `Drag And Drop` keyword fails because it cannot switch contexts mid-action.
+
+        Example:
+        | Drag And Drop To Frame | css:div#draggable | css:div.drop-target | id:my-iframe |
+
+        Note: This assumes the source is in the default content and the target is inside
+        the iframe.
+        """
+        source_element = self.find_element(locator)
+        action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
+        action.click_and_hold(source_element).perform()
+
+        try:
+            frame_element = self.find_element(frame)
+            self.driver.switch_to.frame(frame_element)
+            target_element = self.find_element(target)
+
+            action = ActionChains(self.driver, duration=self.ctx.action_chain_delay)
+            action.move_to_element(target_element).release().perform()
+        finally:
+            self.driver.switch_to.default_content()
