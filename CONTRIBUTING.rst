@@ -118,21 +118,10 @@ needed in internal code. When docstrings are added, they should follow
 `PEP-257`_. See `Documentation`_ section below for more details about
 documentation syntax, generating docs, etc.
 
-The code should be formatted with `Black`_ and errors found by `flake8`_
-should be fixed. Black and flake8 can be run by using
-command::
+The code should be formatted and linted with `Ruff`_. Ruff can be run by
+using command::
 
     inv lint
-
-By default flake8 ignores line length error E501, but it does not ignore
-warning W503. In practice Black formats list access like this::
-
-    list[1 : 2]
-
-But flake8 will display an warning about it. This should be manually
-fixed to look like::
-
-    list[1:2]
 
 Documentation
 -------------
@@ -245,5 +234,4 @@ the same code as your changes. In that case you should
 .. _utest/README.rst: https://github.com/robotframework/SeleniumLibrary/blob/master/utest/README.rst
 .. _sync your fork: https://help.github.com/articles/syncing-a-fork/
 .. _resolve conflicts: https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line
-.. _Black: https://github.com/psf/black
-.. _flake8: https://github.com/PyCQA/flake8
+.. _Ruff: https://github.com/astral-sh/ruff

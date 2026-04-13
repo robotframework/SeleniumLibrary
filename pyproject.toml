@@ -1,20 +1,14 @@
-[tool.black]
-target-version = ['py36']
-exclude = '''
-/(
-  | \.git
-  | \.venv
-  | _build
-  | dist
-  | generated
-  | src/SeleniumLibrary/__init__\.pyi
-)/
-'''
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+extend-exclude = ["_build", "generated", "src/SeleniumLibrary/__init__.pyi"]
 
-[tool.isort]
-profile = "black"
-src_paths="."
-skip_glob = ["src/SeleniumLibrary/__init__.pyi"]
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
 
 
 [tool.pytest.ini_options]

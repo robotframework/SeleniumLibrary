@@ -187,9 +187,9 @@ def init_labels(ctx, username=None, password=None):
 
 @task
 def lint(ctx):
-    """Runs black and flake8 for project Python code."""
-    ctx.run("black --config pyproject.toml tasks.py src/ utest/ atest/")
-    ctx.run("flake8 --config .flake8 tasks.py src/ utest/ atest/")
+    """Runs Ruff format check and linter for project Python code."""
+    ctx.run(f"{sys.executable} -m ruff format --check tasks.py src/ utest/ atest/")
+    ctx.run(f"{sys.executable} -m ruff check tasks.py src/ utest/ atest/")
 
 
 @task
@@ -207,7 +207,7 @@ def atest(ctx, suite=None):
 
     Args:
         suite: Select which suite to run.
-    
+
     Example:
         inv utest --suite keywords/test_browsermanagement.py
         inv utest --suite keywords/test_selenium_options_parser.py::test_create_chrome_with_options
