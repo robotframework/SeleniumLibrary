@@ -220,7 +220,7 @@ class FormElementKeywords(LibraryComponent):
         The keyword does not check ``file_path`` is the file or folder
         available on the machine where tests are executed. If the ``file_path``
         points at a file and when using Selenium Grid, Selenium will
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.command.html?highlight=upload#selenium.webdriver.remote.command.Command.UPLOAD_FILE|magically],
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_remote/selenium.webdriver.remote.command.html#selenium.webdriver.remote.command.Command.UPLOAD_FILE|magically],
         transfer the file from the machine where the tests are executed
         to the Selenium Grid node where the browser is running.
         Then Selenium will send the file path, from the nodes file

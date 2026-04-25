@@ -289,7 +289,7 @@ class BrowserManagementKeywords(LibraryComponent):
         The initialized WebDriver can be configured either with a Python
         dictionary ``kwargs`` or by using keyword arguments ``**init_kwargs``.
         These arguments are passed directly to WebDriver without any
-        processing. See [https://seleniumhq.github.io/selenium/docs/api/py/api.html|
+        processing. See [https://www.selenium.dev/selenium/docs/api/py/api.html|
         Selenium API documentation] for details about the supported arguments.
 
         Examples:

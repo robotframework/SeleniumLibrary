@@ -664,12 +664,12 @@ newDiv.parentNode.style.overflow = 'hidden';
         syntax.
 
         The ``modifier`` argument can be used to pass
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys|Selenium Keys]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#module-selenium.webdriver.common.keys|Selenium Keys]
         when clicking the element. The `+` can be used as a separator
         for different Selenium Keys. The `CTRL` is internally translated to
         the `CONTROL` key. The ``modifier`` is space and case insensitive, example
         "alt" and " aLt " are supported formats to
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
         . If ``modifier`` does not match to Selenium Keys, keyword fails.
 
         If ``action_chain`` argument is true, see `Boolean arguments` for more
@@ -943,7 +943,7 @@ return !element.dispatchEvent(evt);
 
         ``keys`` arguments can contain one or many strings, but it can not
         be empty. ``keys`` can also be a combination of
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html|Selenium Keys]
         and strings or a single Selenium Key. If Selenium Key is combined
         with strings, Selenium key and strings must be separated by the
         `+` character, like in `CONTROL+c`. Selenium Keys
@@ -961,9 +961,9 @@ return !element.dispatchEvent(evt);
         `+` character, example `E+N+D`.
 
         `CTRL` is alias for
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]
         and ESC is alias for
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]
 
         New in SeleniumLibrary 3.3
 
