@@ -249,6 +249,7 @@ class WaitingKeywords(LibraryComponent):
                 timeout,
                 error,
             )
+            return
         self._wait_until(
             lambda: len(self.find_elements(locator)) == limit,
             f'Page should have contained "{limit}" {locator} element(s) within <TIMEOUT>.',
@@ -287,6 +288,7 @@ class WaitingKeywords(LibraryComponent):
                 timeout,
                 error,
             )
+            return
         self._wait_until(
             lambda: len(self.find_elements(locator)) != limit,
             f'Page should have not contained "{limit}" {locator} element(s) within <TIMEOUT>.',
