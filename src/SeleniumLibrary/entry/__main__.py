@@ -16,12 +16,11 @@
 
 import json
 from pathlib import Path
-from typing import Optional
+
 import click
 
 from .get_versions import get_version
 from .translation import compare_translation, get_library_translation
-
 
 CONTEXT_SETTINGS = {"help_option_names": ["-h", "--help"]}
 VERSION = get_version()
@@ -39,7 +38,6 @@ def cli():
 
     See each command argument help for more details what (optional) arguments that command supports.
     """
-    pass
 
 
 @cli.command()
@@ -63,7 +61,7 @@ def cli():
 )
 def translation(
     filename: Path,
-    plugins: Optional[str] = None,
+    plugins: str | None = None,
     compare: bool = False,
 ):
     """Default translation file from library keywords.
@@ -88,17 +86,17 @@ def translation(
     lib_translation = get_library_translation(plugins)
     if compare:
         if table := compare_translation(filename, lib_translation):
-            print(
+            click.echo(
                 "Found differences between translation and library, see below for details."
             )
             for line in table:
-                print(line)
+                click.echo(line)
         else:
-            print("Translation is valid, no updated needed.")
+            click.echo("Translation is valid, no updated needed.")
     else:
         with filename.open("w") as file:
             json.dump(lib_translation, file, indent=4)
-        print(f"Translation file created in {filename.absolute()}")
+        click.echo(f"Translation file created in {filename.absolute()}")
 
 
 if __name__ == "__main__":

@@ -25,13 +25,13 @@ class KeywordArgumentsElementTest(unittest.TestCase):
             "firefox", None, None, False, None, None, None, None
         ).thenReturn(browser)
         alias = self.brorser.open_browser(url)
-        self.assertEqual(alias, None)
+        assert alias == None
 
         when(self.brorser)._make_driver(
             "firefox", None, None, remote_url, None, None, None, None
         ).thenReturn(browser)
         alias = self.brorser.open_browser(url, alias="None", remote_url=remote_url)
-        self.assertEqual(alias, None)
+        assert alias == None
 
     def test_same_alias(self):
         url = "https://github.com/robotframework"

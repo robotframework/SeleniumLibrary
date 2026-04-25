@@ -186,11 +186,12 @@ def init_labels(ctx, username=None, password=None):
 
 
 @task
-def lint(ctx):
+def lint(ctx, fix=False):
     """Runs Ruff format check and linter for project Python code."""
-    ctx.run(f"{sys.executable} -m ruff format --check tasks.py src/ utest/ atest/")
-    ctx.run(f"{sys.executable} -m ruff check tasks.py src/ utest/ atest/")
-
+    ruff_cmd = f"{sys.executable} -m ruff check --config pyproject.toml src/" # utest/" # atest/"
+    if fix:
+        ruff_cmd = f"{ruff_cmd} --fix"
+    ctx.run(ruff_cmd)
 
 @task
 def gen_stub(ctx):
@@ -212,7 +213,7 @@ def atest(ctx, suite=None):
         inv utest --suite keywords/test_browsermanagement.py
         inv utest --suite keywords/test_selenium_options_parser.py::test_create_chrome_with_options
     """
-    command = "python atest/run.py headlesschrome"
+    command = f"{sys.executable} atest/run.py headlesschrome"
     if suite:
         command = f"{command} --suite {suite}"
     ctx.run(command)

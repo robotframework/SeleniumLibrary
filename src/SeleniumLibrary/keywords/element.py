@@ -14,18 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from collections import namedtuple
-from typing import List, Optional, Tuple, Union
+from typing import NamedTuple
 
-from SeleniumLibrary.utils import is_noney
-from robot.utils import plural_or_not, is_truthy
+from robot.utils import is_truthy, plural_or_not
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils.types import type_converter, Locator
+from SeleniumLibrary.utils import is_noney
+from SeleniumLibrary.utils.types import Locator, type_converter
 
 
 class ElementKeywords(LibraryComponent):
@@ -39,7 +38,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator)
 
     @keyword(name="Get WebElements")
-    def get_webelements(self, locator: Locator) -> List[WebElement]:
+    def get_webelements(self, locator: Locator) -> list[WebElement]:
         """Returns a list of WebElement objects matching the ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -55,8 +54,8 @@ class ElementKeywords(LibraryComponent):
     def element_should_contain(
         self,
         locator: Locator,
-        expected: Union[None, str],
-        message: Optional[str] = None,
+        expected: None | str,
+        message: str | None = None,
         ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` contains text ``expected``.
@@ -93,8 +92,8 @@ class ElementKeywords(LibraryComponent):
     def element_should_not_contain(
         self,
         locator: Locator,
-        expected: Union[None, str],
-        message: Optional[str] = None,
+        expected: None | str,
+        message: str | None = None,
         ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` does not contain text ``expected``.
@@ -151,9 +150,9 @@ class ElementKeywords(LibraryComponent):
     def page_should_contain_element(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
-        limit: Optional[int] = None,
+        limit: int | None = None,
     ):
         """Verifies that element ``locator`` is found on the current page.
 
@@ -186,14 +185,14 @@ class ElementKeywords(LibraryComponent):
         count = len(self.find_elements(locator))
         if count == limit:
             self.info(f"Current page contains {count} element(s).")
-        else:
-            if message is None:
-                message = (
-                    f'Page should have contained "{limit}" element(s), '
-                    f'but it did contain "{count}" element(s).'
-                )
-            self.ctx.log_source(loglevel)
-            raise AssertionError(message)
+            return None
+        if message is None:
+            message = (
+                f'Page should have contained "{limit}" element(s), '
+                f'but it did contain "{count}" element(s).'
+            )
+        self.ctx.log_source(loglevel)
+        raise AssertionError(message)
 
     @keyword
     def page_should_not_contain(self, text: str, loglevel: str = "TRACE"):
@@ -211,7 +210,7 @@ class ElementKeywords(LibraryComponent):
     def page_should_not_contain_element(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies that element ``locator`` is not found on the current page.
@@ -225,7 +224,7 @@ class ElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, message=message, loglevel=loglevel)
 
     @keyword
-    def assign_id_to_element(self, locator: Locator, id: str):
+    def assign_id_to_element(self, locator: Locator, id: str): # noqa: A002
         """Assigns a temporary ``id`` to the element specified by ``locator``.
 
         This is mainly useful if the locator is complicated and/or slow XPath
@@ -288,7 +287,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_be_visible(
-        self, locator: Locator, message: Optional[str] = None
+        self, locator: Locator, message: str | None = None
     ):
         """Verifies that the element identified by ``locator`` is visible.
 
@@ -311,7 +310,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def element_should_not_be_visible(
-        self, locator: Locator, message: Optional[str] = None
+        self, locator: Locator, message: str | None = None
     ):
         """Verifies that the element identified by ``locator`` is NOT visible.
 
@@ -332,8 +331,8 @@ class ElementKeywords(LibraryComponent):
     def element_text_should_be(
         self,
         locator: Locator,
-        expected: Union[None, str],
-        message: Optional[str] = None,
+        expected: None | str,
+        message: str | None = None,
         ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` contains exact the text ``expected``.
@@ -368,8 +367,8 @@ class ElementKeywords(LibraryComponent):
     def element_text_should_not_be(
         self,
         locator: Locator,
-        not_expected: Union[None, str],
-        message: Optional[str] = None,
+        not_expected: None | str,
+        message: str | None = None,
         ignore_case: bool = False,
     ):
         """Verifies that element ``locator`` does not contain exact the text ``not_expected``.
@@ -435,7 +434,7 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_property(
-        self, locator: Locator, property: str
+        self, locator: Locator, property: str  # noqa: A002
     ) -> str:
         """Returns the value of ``property`` from the element ``locator``.
 
@@ -453,8 +452,8 @@ class ElementKeywords(LibraryComponent):
         self,
         locator: Locator,
         attribute: str,
-        expected: Union[None, str],
-        message: Optional[str] = None,
+        expected: None | str,
+        message: str | None = None,
     ):
         """Verifies element identified by ``locator`` contains expected attribute value.
 
@@ -494,7 +493,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).location["x"]
 
     @keyword
-    def get_element_size(self, locator: Locator) -> Tuple[int, int]:
+    def get_element_size(self, locator: Locator) -> tuple[int, int]:
         """Returns width and height of the element identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -583,7 +582,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_button(
-        self, locator: Locator, modifier: Union[bool, str] = False
+        self, locator: Locator, modifier: bool | str = False
     ):
         """Clicks the button identified by ``locator``.
 
@@ -607,7 +606,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_image(
-        self, locator: Locator, modifier: Union[bool, str] = False
+        self, locator: Locator, modifier: bool | str = False
     ):
         """Clicks an image identified by ``locator``.
 
@@ -632,7 +631,7 @@ newDiv.parentNode.style.overflow = 'hidden';
 
     @keyword
     def click_link(
-        self, locator: Locator, modifier: Union[bool, str] = False
+        self, locator: Locator, modifier: bool | str = False
     ):
         """Clicks a link identified by ``locator``.
 
@@ -655,7 +654,7 @@ newDiv.parentNode.style.overflow = 'hidden';
     def click_element(
         self,
         locator: Locator,
-        modifier: Union[bool, str] = False,
+        modifier: bool | str = False,
         action_chain: bool = False,
     ):
         """Click the element identified by ``locator``.
@@ -1025,7 +1024,7 @@ return !element.dispatchEvent(evt);
                 actions.key_up(key.converted)
 
     @keyword
-    def get_all_links(self) -> List[str]:
+    def get_all_links(self) -> list[str]:
         """Returns a list containing ids of all links found in current page.
 
         If a link has no id, an empty string will be in the list instead.
@@ -1049,7 +1048,7 @@ return !element.dispatchEvent(evt);
     def page_should_contain_link(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies link identified by ``locator`` is found from current page.
@@ -1067,7 +1066,7 @@ return !element.dispatchEvent(evt);
     def page_should_not_contain_link(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies link identified by ``locator`` is not found from current page.
@@ -1097,7 +1096,7 @@ return !element.dispatchEvent(evt);
     def page_should_contain_image(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies image identified by ``locator`` is found from current page.
@@ -1115,7 +1114,7 @@ return !element.dispatchEvent(evt);
     def page_should_not_contain_image(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies image identified by ``locator`` is not found from current page.
@@ -1172,7 +1171,7 @@ return !element.dispatchEvent(evt);
         self.element_finder.unregister(strategy_name)
 
     def _map_ascii_key_code_to_key(self, key_code):
-        map = {
+        key_map = {
             0: Keys.NULL,
             8: Keys.BACK_SPACE,
             9: Keys.TAB,
@@ -1191,7 +1190,7 @@ return !element.dispatchEvent(evt);
             61: Keys.EQUALS,
             127: Keys.DELETE,
         }
-        key = map.get(key_code)
+        key = key_map.get(key_code)
         if key is None:
             key = chr(key_code)
         return key
@@ -1199,10 +1198,10 @@ return !element.dispatchEvent(evt);
     def _map_named_key_code_to_special_key(self, key_name):
         try:
             return getattr(Keys, key_name)
-        except AttributeError:
+        except AttributeError as original_exception:
             message = f"Unknown key named '{key_name}'."
             self.debug(message)
-            raise ValueError(message)
+            raise ValueError(message) from original_exception
 
     def _page_contains(self, text):
         self.driver.switch_to.default_content()
@@ -1225,12 +1224,11 @@ return !element.dispatchEvent(evt);
         modifiers = modifier.split("+")
         keys = []
         for item in modifiers:
-            item = item.strip()
-            item = self._parse_aliases(item)
-            if hasattr(Keys, item):
-                keys.append(getattr(Keys, item))
+            modifier = self._parse_aliases(item.strip())
+            if hasattr(Keys, modifier):
+                keys.append(getattr(Keys, modifier))
             else:
-                raise ValueError(f"'{item}' modifier does not match to Selenium Keys")
+                raise ValueError(f"'{modifier}' modifier does not match to Selenium Keys")
         return keys
 
     def _parse_keys(self, *keys):
@@ -1263,15 +1261,19 @@ return !element.dispatchEvent(evt);
             list_keys.append(one_key)
         return list_keys
 
+    class KeysRecord(NamedTuple):
+        converted: object
+        original: str
+        special: bool
+
     def _convert_special_keys(self, keys):
-        KeysRecord = namedtuple("KeysRecord", "converted, original special")
         converted_keys = []
         for key in keys:
-            key = self._parse_aliases(key)
-            if self._selenium_keys_has_attr(key):
-                converted_keys.append(KeysRecord(getattr(Keys, key), key, True))
+            resolved_key = self._parse_aliases(key)
+            if self._selenium_keys_has_attr(resolved_key):
+                converted_keys.append(self.KeysRecord(getattr(Keys, resolved_key), resolved_key, True))
             else:
-                converted_keys.append(KeysRecord(key, key, False))
+                converted_keys.append(self.KeysRecord(resolved_key, resolved_key, False))
         return converted_keys
 
     def _selenium_keys_has_attr(self, key):

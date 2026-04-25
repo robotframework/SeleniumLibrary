@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Any, Optional, List
+from typing import Any
 
 from selenium.webdriver.remote.webelement import WebElement
 
@@ -56,7 +56,7 @@ class ContextAware:
     def find_element(
         self,
         locator: str,
-        tag: Optional[str] = None,
+        tag: str | None = None,
         required: bool = True,
         parent: WebElement = None,
     ) -> WebElement:
@@ -82,8 +82,8 @@ class ContextAware:
         return self.element_finder.find(locator, tag, True, required, parent)
 
     def find_elements(
-        self, locator: str, tag: Optional[str] = None, parent: WebElement = None
-    ) -> List[WebElement]:
+        self, locator: str, tag: str | None = None, parent: WebElement = None
+    ) -> list[WebElement]:
         """Find all elements matching `locator`.
 
         :param locator: Locator to use when searching the element.
@@ -103,7 +103,7 @@ class ContextAware:
         locator = f"xpath://*[contains(., {escape_xpath_value(text)})]"
         return self.find_element(locator, required=False) is not None
 
-    def is_element_enabled(self, locator: str, tag: Optional[str] = None) -> bool:
+    def is_element_enabled(self, locator: str, tag: str | None = None) -> bool:
         element = self.find_element(locator, tag)
         return element.is_enabled() and element.get_attribute("readonly") is None
 
