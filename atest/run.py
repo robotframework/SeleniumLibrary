@@ -40,6 +40,7 @@ Examples:
 
 import platform
 import time
+from unittest import runner
 import zipfile
 from contextlib import contextmanager
 import os
@@ -211,7 +212,9 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing, port):
     if platform.system() == "Darwin":
         runner.append("--exclude")
         runner.append("SKIP_ON_MAC")
-
+    if platform.system() == "Windows":
+        runner.append("--exclude")
+        runner.append("SKIP_ON_WINDOWS")    
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options

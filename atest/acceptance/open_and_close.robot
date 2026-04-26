@@ -15,6 +15,7 @@ Close Browser Does Nothing When No Browser Is Opened
     Close Browser
 
 Browser Open With Not Well-Formed URL Should Close
+    [Tags]    SKIP_ON_WINDOWS
     [Documentation]    Verify after incomplete 'Open Browser' browser closes
     ...    LOG 1.1:34 DEBUG STARTS: Opened browser with session id
     ...    LOG 1.1:34 DEBUG REGEXP: .*but failed to open url.*

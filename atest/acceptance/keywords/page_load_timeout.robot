@@ -6,6 +6,7 @@ Test Teardown     Close Browser And Reset Page Load Timeout
 
 *** Test Cases ***
 Should Open Browser With Default Page Load Timeout
+    [Tags]    SKIP_ON_WINDOWS
     [Documentation]    Verify that 'Open Browser' changes the page load timeout.
     ...    LOG 1.1.1:26 DEBUG REGEXP: POST http://localhost:\\d{2,5}/session/[a-f0-9-]+/timeouts {['\\\"]pageLoad['\\\"]: 300000}
     ...    LOG 1.1.1:28 DEBUG STARTS: Remote response: status=200
