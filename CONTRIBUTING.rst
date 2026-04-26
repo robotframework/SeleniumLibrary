@@ -125,12 +125,12 @@ Development commands
 
 Use `invoke`_ tasks for common local checks and test runs::
 
-    inv format --check    # Check formatting with Ruff
-    inv format            # Format source files with Ruff
-    inv lint              # Run Ruff lint checks
-    inv lint --fix        # Apply safe Ruff lint fixes
-    inv utest             # Run unit tests
-    inv atest             # Run acceptance tests (headlesschrome)
+    inv formatter --check    # Check formatting with Ruff
+    inv formatter            # Format source files with Ruff
+    inv lint                 # Run Ruff lint checks
+    inv lint --fix           # Apply safe Ruff lint fixes
+    inv utest                # Run unit tests
+    inv atest                # Run acceptance tests (headlesschrome)
 
 Run these before opening a pull request so local results are close to CI.
 Use the project virtual environment and pinned dependencies from

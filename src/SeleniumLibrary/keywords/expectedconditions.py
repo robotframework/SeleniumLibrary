@@ -11,8 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import string
-
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -23,7 +21,7 @@ from SeleniumLibrary.errors import UnkownExpectedCondition
 class ExpectedConditionKeywords(LibraryComponent):
     @keyword
     def wait_for_expected_condition(
-        self, condition: string, *args, timeout: float | None = 10
+        self, condition: str, *args, timeout: float | None = 10
     ):
         """Waits until ``condition`` is true or ``timeout`` expires.
 
@@ -64,5 +62,5 @@ class ExpectedConditionKeywords(LibraryComponent):
             message=f"Expected Condition not met within set timeout of {timeout}s",
         )
 
-    def _parse_condition(self, condition: string):
+    def _parse_condition(self, condition: str):
         return condition.replace(" ", "_").lower()

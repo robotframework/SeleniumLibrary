@@ -71,7 +71,9 @@ class ScreenshotKeywords(LibraryComponent):
         return previous
 
     @keyword
-    def capture_page_screenshot(self, filename: str = DEFAULT_FILENAME_PAGE) -> str:
+    def capture_page_screenshot(
+        self, filename: str = DEFAULT_FILENAME_PAGE
+    ) -> str | None:
         """Takes a screenshot of the current page and embeds it into a log file.
 
         ``filename`` argument specifies the name of the file to write the
@@ -148,7 +150,7 @@ class ScreenshotKeywords(LibraryComponent):
         self,
         locator: Locator,
         filename: str = DEFAULT_FILENAME_ELEMENT,
-    ) -> str:
+    ) -> str | None:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 
         See `Capture Page Screenshot` for details about ``filename`` argument.

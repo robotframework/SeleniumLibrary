@@ -40,7 +40,6 @@ Examples:
 
 import platform
 import time
-from unittest import runner
 import zipfile
 from contextlib import contextmanager
 import os

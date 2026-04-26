@@ -466,8 +466,6 @@ class WebDriverCache(ConnectionCache):
 
 
 class SeleniumService:
-    """ """
-
     def create(self, browser, service):
         if not service:
             return None

@@ -63,8 +63,6 @@ class RunOnFailureKeywords(LibraryComponent):
     def resolve_keyword(name):
         if name is None:
             return None
-        if (
-            isinstance(name, str) and name.upper() == "NOTHING"
-        ) or name.upper() == "NONE":
+        if isinstance(name, str) and name.upper() in ("NOTHING", "NONE"):
             return None
         return name
