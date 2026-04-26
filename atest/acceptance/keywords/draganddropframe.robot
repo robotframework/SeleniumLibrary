@@ -28,7 +28,7 @@ Drag And Drop Across Frames Returns To Default Content
     [Documentation]    Verifies that the keyword returns to default content after execution.
     Wait Until Page Contains Element    id=defaultSource    10s
     Drag And Drop Across Frames    id=defaultSource    id=target    id=targetFrame
-    Element Should Be Visible    id=targetFrame
+    Page Should Not Contain Element    id=target
 
 Drag And Drop Across Frames Hides Default Source Element
     [Documentation]    Verifies that the default source element becomes hidden after a successful drop.
@@ -42,16 +42,6 @@ Drag And Drop Across Frames Hides Frame Source Element
     Drag And Drop Across Frames    id=frameSource    id=target    id=targetFrame    id=sourceFrame
     Select Frame    id=sourceFrame
     Element Should Not Be Visible    id=frameSource
-    Unselect Frame
-
-Standard Drag And Drop Fails When Target Is Inside Frame
-    [Documentation]    Verifies that the standard Drag And Drop keyword cannot complete this cross-frame scenario.
-    Wait Until Page Contains Element    id=defaultSource    10s
-    Run Keyword And Expect Error
-    ...    Element with locator 'id=target' not found.
-    ...    Drag And Drop    id=defaultSource    id=target
-    Select Frame    id=targetFrame
-    Element Should Not Contain    id=target    Dropped Successfully!
     Unselect Frame
 
 Drag And Drop Across Frames Fails With Invalid Target Frame

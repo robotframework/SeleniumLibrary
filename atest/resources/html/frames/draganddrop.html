@@ -62,14 +62,12 @@
 </div>
 
 <div id="dragGhost"></div>
-<div id="status">Not dropped</div>
 
 <script>
     const sourceFrame = document.getElementById("sourceFrame");
     const targetFrame = document.getElementById("targetFrame");
     const defaultSource = document.getElementById("defaultSource");
     const dragGhost = document.getElementById("dragGhost");
-    const status = document.getElementById("status");
 
     let dragging = false;
     let activeSource = null;
@@ -248,7 +246,6 @@
         const target = targetFrame.contentDocument.getElementById("target");
         target.innerText = "Dropped Successfully!";
 
-        status.innerText = "Dropped Successfully!";
         resetDrag();
     }
 
