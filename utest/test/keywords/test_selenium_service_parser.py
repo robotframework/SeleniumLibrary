@@ -32,7 +32,6 @@ def teardown_function():
     unstub()
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_service_string(service, reporter):
     results = []
     results.append(service._parse('attribute="arg1"'))
@@ -53,9 +52,6 @@ def test_parse_service_string(service, reporter):
     verify_all("Selenium service string to dict", results, reporter=reporter)
 
 
-# @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
-# @unittest.skipIf(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 @pytest.mark.skipif(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
 def test_parse_service_string_errors(service, reporter):
     results = []
@@ -68,7 +64,6 @@ def test_parse_service_string_errors(service, reporter):
     verify_all("Selenium service string errors", results, reporter=reporter)
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 @pytest.mark.skipif(sys.version_info < (3, 12), reason="Errors change with Python 3.12")
 def test_parse_service_string_errors_py3_12(service, reporter):
     results = []
@@ -81,7 +76,6 @@ def test_parse_service_string_errors_py3_12(service, reporter):
     verify_all("Selenium service string errors", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_split_service(service, reporter):
     results = []
     results.append(service._split("attribute='arg1'", ';'))
@@ -91,7 +85,6 @@ def test_split_service(service, reporter):
     verify_all("Selenium service string splitting", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_split_attribute(service, reporter):
     results = []
     results.append(service._split("attribute='arg1'", '='))
@@ -100,7 +93,6 @@ def test_split_attribute(service, reporter):
     verify_all("Selenium service attribute string splitting", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_service_create(service, reporter):
     results = []
     service_str = "service_args=['--log-level=DEBUG']"
@@ -118,7 +110,6 @@ def test_service_create(service, reporter):
     verify_all("Selenium service", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_importer(service, reporter):
     results = []
     results.append(service._import_service("firefox"))

@@ -33,7 +33,6 @@ def teardown_function():
     unstub()
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_options_string(options, reporter):
     results = []
     results.append(options._parse('method("arg1")'))
@@ -72,7 +71,6 @@ def test_parse_options_string(options, reporter):
     verify_all("Selenium options string to dict", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_index_of_separator(options, reporter):
     results = []
     results.append(options._get_arument_index('method({"key": "value"})'))
@@ -82,7 +80,6 @@ def test_index_of_separator(options, reporter):
     verify_all("Get argument index", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_complex_object(options, reporter):
     results = []
     results.append(options._parse_to_tokens('method({"key": "value"})'))
@@ -92,7 +89,6 @@ def test_parse_complex_object(options, reporter):
     verify_all("Parse complex Python object", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_arguemnts(options, reporter):
     results = []
     results.append(options._parse_arguments(("arg1",), True))
@@ -103,7 +99,6 @@ def test_parse_arguemnts(options, reporter):
     verify_all("Parse arguments from complex object", results, reporter=reporter)
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 @pytest.mark.skipif(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
 def test_parse_options_string_errors(options, reporter):
     results = []
@@ -116,7 +111,6 @@ def test_parse_options_string_errors(options, reporter):
     verify_all("Selenium options string errors", results, reporter=reporter)
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 @pytest.mark.skipif(sys.version_info < (3, 12), reason="Errors change with Python 3.12")
 def test_parse_options_string_errors_py3_12(options, reporter):
     results = []
@@ -129,7 +123,6 @@ def test_parse_options_string_errors_py3_12(options, reporter):
     verify_all("Selenium options string errors", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_split_options(options, reporter):
     results = []
     results.append(options._split('method("arg1");method("arg2")'))
@@ -143,7 +136,6 @@ def test_split_options(options, reporter):
     verify_all("Selenium options string splitting", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_options_create(options, reporter):
     results = []
     options_str = 'add_argument("--disable-dev-shm-usage")'
@@ -175,7 +167,6 @@ def test_options_create(options, reporter):
     verify_all("Selenium options", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_get_options(options, reporter):
     options_str = 'add_argument("--proxy-server=66.97.38.58:80")'
     sel_options = options.create("chrome", options_str)
@@ -183,7 +174,6 @@ def test_get_options(options, reporter):
     verify_all("Selenium options with string.", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_importer(options, reporter):
     results = []
     results.append(options._import_options("firefox"))

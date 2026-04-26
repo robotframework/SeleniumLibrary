@@ -24,7 +24,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         factory.load(reporter_json)
         self.reporter = factory.get_first_working()
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_keys(self):
         results = []
         results.append(self.element_keywords._parse_keys("A", "B", "C"))
@@ -41,7 +40,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_keys("IS", "ALT", "HERE"))
         verify_all("index", results, reporter=self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_parse_keys_aliases(self):
         results = []
         results.append(self.element_keywords._parse_aliases("CTRL"))
@@ -51,7 +49,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._parse_aliases("END"))
         verify_all("Alias testing", results, reporter=self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_separate_key(self):
         results = []
         results.append(self.element_keywords._separate_key("BB"))
@@ -65,7 +62,6 @@ class ElementKeywordsPessKeys(unittest.TestCase):
         results.append(self.element_keywords._separate_key("+++"))
         verify_all("Separate key", results, reporter=self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_convert_key(self):
         results = []
         results.append(self.element_keywords._convert_special_keys(["B"]))

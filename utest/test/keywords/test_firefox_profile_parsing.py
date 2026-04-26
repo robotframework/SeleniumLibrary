@@ -27,7 +27,6 @@ class FireFoxProfileParsingTests(unittest.TestCase):
     def setUp(self):
         self.results = []
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_single_method(self):
         self._parse_result(
             self.creator._get_ff_profile('set_preference("key1", "arg1")')

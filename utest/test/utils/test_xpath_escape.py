@@ -21,7 +21,6 @@ def reporter():
     return factory.get_first_working()
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_string(reporter):
     results = []
     results.append(escape_xpath_value("tidii"))

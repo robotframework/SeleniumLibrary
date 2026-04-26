@@ -21,7 +21,6 @@ def reporter():
     return factory.get_first_working()
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_normal_file_path(reporter):
     results = []
     results.append(_format_path("/foo/file.log", 1))
