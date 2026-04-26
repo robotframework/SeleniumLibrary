@@ -24,7 +24,11 @@ jobs:
             rf-version: 6.1.1
             selenium-version: 4.37.0
             browser: chrome
-
+          - description: latest
+            python-version: 3.13.10
+            rf-version: 7.4.1
+            selenium-version: 4.39.0
+            browser: firefox
     steps:
     - uses: actions/checkout@v4
     - name: Configuration Description
