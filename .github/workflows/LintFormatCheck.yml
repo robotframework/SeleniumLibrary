@@ -21,7 +21,7 @@ jobs:
 
     - name: Ruff format check
       run: |
-        python -m ruff format --check src/ utest/
+        python -m ruff format --check --diff src/ utest/ atest/
 
     - name: Ruff lint
       run: |
