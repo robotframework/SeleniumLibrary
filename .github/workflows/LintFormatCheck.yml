@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: "3.13"
 
@@ -20,9 +20,22 @@ jobs:
         pip install -r requirements-dev.txt
 
     - name: Ruff format check
+      id: format
+      continue-on-error: true
       run: |
-        python -m ruff format --check --diff src/ utest/ atest/
+        python -m invoke format --check
 
     - name: Ruff lint
+      id: lint
+      continue-on-error: true
       run: |
         python -m invoke lint
+
+    - name: Fail if any Ruff step failed
+      if: always()
+      run: |
+        echo "format outcome: ${{ steps.format.outcome }}"
+        echo "lint outcome:   ${{ steps.lint.outcome }}"
+        if [ "${{ steps.format.outcome }}" != "success" ] || [ "${{ steps.lint.outcome }}" != "success" ]; then
+          exit 1
+        fi

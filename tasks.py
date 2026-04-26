@@ -187,11 +187,28 @@ def init_labels(ctx, username=None, password=None):
 
 @task
 def lint(ctx, fix=False):
-    """Runs Ruff format check and linter for project Python code."""
-    ruff_cmd = f"{sys.executable} -m ruff check --config pyproject.toml src/ utest/" # atest/"
+    """Run Ruff lint checkse.
+
+    Args:
+        fix: Apply safe fixes when True. Defaults to False.
+    """
+    cmd = f"{sys.executable} -m ruff check --config pyproject.toml src/ utest/" # atest/"
     if fix:
-        ruff_cmd = f"{ruff_cmd} --fix"
-    ctx.run(ruff_cmd)
+        cmd = f"{cmd} --fix"
+    ctx.run(cmd)
+
+@task
+def format(ctx, check=False):    
+    """Run Ruff formatter.
+
+    Args:
+        check: When True, only check formatting and show diff.
+               When False, apply formatting changes.
+    """
+    cmd = f"{sys.executable} -m ruff format --config pyproject.toml src/ utest/ atest/"
+    if check:
+        cmd = f"{cmd} --check --diff"
+    ctx.run(cmd)
 
 @task
 def gen_stub(ctx):
