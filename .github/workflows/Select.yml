@@ -78,6 +78,6 @@ jobs:
     - uses: actions/upload-artifact@v4
       if: failure()
       with:
-        name: sl_$${{ matrix.config.python-version }}_$${{ matrix.config.rf-version }}_$${{ matrix.config.selenium-version }}_$${{ matrix.config.browser }}
+        name: sl_${{ matrix.config.python-version }}_${{ matrix.config.rf-version }}_${{ matrix.config.selenium-version }}_${{ matrix.config.browser }}
         path: atest/zip_results
         overwrite: true
