@@ -84,7 +84,7 @@ jobs:
     #     xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
 
     - name: Run tests with latest python and latest robot framework
-      if: matrix.python-version == '3.14.4' && matrix.rf-version == '7.4.2'
+      if: matrix.python-version == '3.14.4' && matrix.rf-version == '7.4.1'
       run: |
         xvfb-run --auto-servernum python atest/run.py --zip ${{ matrix.browser }}
 
