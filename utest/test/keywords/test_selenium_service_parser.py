@@ -7,11 +7,10 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from mockito import mock, when, unstub, ANY
+from mockito import unstub
 from robot.utils import WINDOWS
-from selenium import webdriver
 
-from SeleniumLibrary.keywords.webdrivertools import SeleniumService, WebDriverCreator
+from SeleniumLibrary.keywords.webdrivertools import SeleniumService
 
 
 @pytest.fixture(scope="module")
@@ -138,4 +137,4 @@ def error_formatter(method, arg, full=False):
     except Exception as error:
         if full:
             return f"{arg} {error}"
-        return "{} {}".format(arg, error.__str__()[:15])
+        return f"{arg} {error.__str__()[:15]}"

@@ -1,7 +1,8 @@
-from collections import namedtuple
 import os
 import unittest
+from typing import NamedTuple
 
+import pytest
 from robot.errors import DataError
 
 from SeleniumLibrary import SeleniumLibrary
@@ -13,7 +14,10 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def setUpClass(cls):
         cls.sl = SeleniumLibrary()
         cls.root_dir = os.path.dirname(os.path.abspath(__file__))
-        Plugin = namedtuple("Plugin", "plugin, args, kw_args")
+        class Plugin(NamedTuple):
+            plugin: str
+            args: list
+            kw_args: dict
         lib = Plugin(
             plugin=os.path.join(cls.root_dir, "my_lib.py"), args=[], kw_args={}
         )
@@ -36,7 +40,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         plugin = "path.to.MyLibrary,path.to.OtherLibrary"
         plugins = self.sl._string_to_modules(plugin)
         assert len(plugins) == 2
-        assert plugins[0].module == plugin.split(",")[0]
+        assert plugins[0].module == plugin.split(",", maxsplit=1)[0]
         assert plugins[0].args == []
         assert plugins[1].module == plugin.split(",")[1]
         assert plugins[1].args == []
@@ -66,7 +70,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
         parsed_plugin = parsed_plugins[0]
         assert len(parsed_plugins) == 1
         assert parsed_plugin.module == plugin
-        assert parsed_plugin.args == [arg for arg in plugin_args.split(";")]
+        assert parsed_plugin.args == plugin_args.split(";")
         assert parsed_plugin.kw_args == {}
 
     def test_parse_plugin_with_kw_args(self):
@@ -81,16 +85,16 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
 
     def test_plugin_does_not_exist(self):
         not_here = os.path.join(self.root_dir, "not_here.py")
-        with self.assertRaises(DataError):
+        with pytest.raises(DataError):
             SeleniumLibrary(plugins=not_here)
 
-        with self.assertRaises(DataError):
+        with pytest.raises(DataError):
             SeleniumLibrary(plugins="SeleniumLibrary.NotHere")
 
     def test_plugin_wrong_import_with_path(self):
         my_lib = os.path.join(self.root_dir, "my_lib.py")
         wrong_name = os.path.join(self.root_dir, "my_lib_wrong_name.py")
-        with self.assertRaises(DataError):
+        with pytest.raises(DataError):
             SeleniumLibrary(plugins=f"{my_lib}, {wrong_name}")
 
     def test_sl_with_kw_args_plugin(self):
@@ -108,7 +112,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
 
     def test_no_library_component_inherit(self):
         no_inherit = os.path.join(self.root_dir, "my_lib_not_inherit.py")
-        with self.assertRaises(PluginError):
+        with pytest.raises(PluginError):
             SeleniumLibrary(plugins=no_inherit)
 
     def test_plugin_as_last_in_init(self):

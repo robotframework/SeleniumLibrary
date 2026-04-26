@@ -1,11 +1,9 @@
 import pytest
-from mockito import when, mock, verify, verifyNoUnwantedInteractions, ANY
+from mockito import ANY, mock, verify, verifyNoUnwantedInteractions, when
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.service import Service
 
-from SeleniumLibrary.keywords import BrowserManagementKeywords
 from SeleniumLibrary import SeleniumLibrary
+from SeleniumLibrary.keywords import BrowserManagementKeywords
 
 
 def test_set_selenium_timeout_only_affects_open_browsers():
@@ -27,16 +25,16 @@ def test_set_selenium_timeout_only_affects_open_browsers():
 
 def test_action_chain_delay_default():
     sl = SeleniumLibrary()
-    assert sl.action_chain_delay == 250, f"Delay should have 250"
+    assert sl.action_chain_delay == 250, "Delay should have 250"
 
 
 def test_set_action_chain_delay_default():
     sl = SeleniumLibrary()
     sl.set_action_chain_delay("3.0")
-    assert sl.action_chain_delay == 3000, f"Delay should have 3000"
+    assert sl.action_chain_delay == 3000, "Delay should have 3000"
 
     sl.set_action_chain_delay("258 milliseconds")
-    assert sl.action_chain_delay == 258, f"Delay should have 258"
+    assert sl.action_chain_delay == 258, "Delay should have 258"
 
 
 def test_get_action_chain_delay_default():
@@ -59,10 +57,10 @@ def test_set_selenium_implicit_wait():
 
 
 def test_selenium_implicit_wait_error():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"Invalid time string 'False'\."):
         SeleniumLibrary(implicit_wait="False")
     sl = SeleniumLibrary(implicit_wait="3")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"Invalid time string '1 vuosi'\."):
         sl.set_selenium_implicit_wait("1 vuosi")
 
 
@@ -106,23 +104,20 @@ def test_get_selenium_page_load_timeout():
 def test_bad_browser_name():
     ctx = mock()
     bm = BrowserManagementKeywords(ctx)
-    try:
+    with pytest.raises(ValueError, match=r"fireox is not a supported browser\."):
         bm._make_driver("fireox")
-        raise ValueError("Exception not raised")
-    except ValueError as e:
-        assert str(e) == "fireox is not a supported browser."
 
 
 def test_create_webdriver():
     ctx = mock()
     ctx.event_firing_webdriver = None
     bm = BrowserManagementKeywords(ctx)
-    FakeWebDriver = mock()
+    fake_webdriver = mock()
     driver = mock()
-    when(FakeWebDriver).__call__(some_arg=1).thenReturn(driver)
-    when(FakeWebDriver).__call__(some_arg=2).thenReturn(driver)
+    when(fake_webdriver).__call__(some_arg=1).thenReturn(driver)
+    when(fake_webdriver).__call__(some_arg=2).thenReturn(driver)
     when(ctx).register_driver(driver, "fake1").thenReturn(0)
-    webdriver.FakeWebDriver = FakeWebDriver
+    webdriver.FakeWebDriver = fake_webdriver
     try:
         index = bm.create_webdriver("FakeWebDriver", "fake1", some_arg=1)
         verify(ctx).register_driver(driver, "fake1")
@@ -220,7 +215,7 @@ def test_create_webdriver_speed():
     # E
     # E           Chrome(options=None, service=<selenium.webdriver.chrome.service.Service object at 0x000001A7EE7E8730>)
     #which does seem closer ..
-    
+
     #Tried:
     # service = Service(executable_path="chromedriver", log_path=None)
     # when(webdriver).Chrome(

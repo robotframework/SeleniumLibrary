@@ -1,11 +1,10 @@
 import os
 
 import pytest
-from mockito import mock, unstub, when, ANY
+from mockito import ANY, mock, unstub, when
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
-
 
 LOG_DIR = "/log/dir"
 
@@ -247,5 +246,4 @@ def mock_file_detector(creator):
 def get_geckodriver_log():
     # return os.path.join(LOG_DIR, "geckodriver-1.log")
     # print(f"{os.getcwd()}")
-    cwd = os.getcwd()
-    return cwd
+    return os.getcwd()

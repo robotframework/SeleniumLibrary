@@ -2,8 +2,9 @@ import os
 import unittest
 
 from SeleniumLibrary import SeleniumLibrary
-from .my_lib import my_lib
-from .my_lib_args import my_lib_args
+
+from .my_lib import MyLib
+from .my_lib_args import MyLibArgs
 
 
 class PluginKeywordTags(unittest.TestCase):
@@ -20,12 +21,12 @@ class PluginKeywordTags(unittest.TestCase):
 
     def test_store_plugin_keywords(self):
         sl = SeleniumLibrary()
-        sl._store_plugin_keywords(my_lib("0"))
+        sl._store_plugin_keywords(MyLib("0"))
         assert sl._plugin_keywords == ["bar", "foo"]
 
     def test_store_plugin_keywords_with_args(self):
         sl = SeleniumLibrary()
-        sl._store_plugin_keywords(my_lib_args("000", "111", "222"))
+        sl._store_plugin_keywords(MyLibArgs("000", "111", "222"))
         assert sl._plugin_keywords == ["add_cookie", "bar_2", "foo_1"]
 
     def test_tags_in_plugin(self):

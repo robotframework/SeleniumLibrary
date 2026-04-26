@@ -812,7 +812,7 @@ class SeleniumLibrary(DynamicCore):
         listener_module = self._string_to_modules(event_firing_webdriver)
         listener_count = len(listener_module)
         if listener_count > 1:
-            message = f"Is is possible import only one listener but there was {listener_count} listeners."
+            message = f"It is possible to import only one listener but there were {listener_count} listeners."
             raise ValueError(message)
         listener_module = listener_module[0]
         importer = Importer("test library")

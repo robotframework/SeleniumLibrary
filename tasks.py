@@ -188,7 +188,7 @@ def init_labels(ctx, username=None, password=None):
 @task
 def lint(ctx, fix=False):
     """Runs Ruff format check and linter for project Python code."""
-    ruff_cmd = f"{sys.executable} -m ruff check --config pyproject.toml src/" # utest/" # atest/"
+    ruff_cmd = f"{sys.executable} -m ruff check --config pyproject.toml src/ utest/" # atest/"
     if fix:
         ruff_cmd = f"{ruff_cmd} --fix"
     ctx.run(ruff_cmd)

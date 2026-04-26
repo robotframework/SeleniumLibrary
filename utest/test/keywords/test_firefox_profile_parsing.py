@@ -69,8 +69,7 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         # sig = signature(result)
         if hasattr(result,'default_preferences'):
             return result.default_preferences
-        elif hasattr(result,'_desired_preferences'):
+        if hasattr(result,'_desired_preferences'):
             return result._desired_preferences
-        else:
-            return None
+        return None
         # --

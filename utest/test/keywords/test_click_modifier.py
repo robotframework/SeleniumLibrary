@@ -40,24 +40,19 @@ def test_parsing_multiple_modifiers(element):
 
 
 def test_invalid_modifier(element):
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="'FOO' modifier "):
         element.parse_modifier("FOO")
-    assert "'FOO' modifier " in str(error.value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="'FOO' modifier "):
         element.parse_modifier("FOO+CTRL")
-    assert "'FOO' modifier " in str(error.value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="'FOO' modifier "):
         element.parse_modifier("CTRL+FOO")
-    assert "'FOO' modifier " in str(error.value)
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="'CTRLFOO' modifier "):
         element.parse_modifier("CTRLFOO")
-    assert "'CTRLFOO' modifier " in str(error.value)
 
 
 def test_invalid_key_separator(element):
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="'CTRL-CTRL' modifier "):
         element.parse_modifier("CTRL-CTRL")
-    assert "'CTRL-CTRL' modifier " in str(error.value)

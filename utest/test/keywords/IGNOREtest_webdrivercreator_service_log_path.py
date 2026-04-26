@@ -1,25 +1,25 @@
 import os
-from collections import namedtuple
+from typing import NamedTuple
 
 import pytest
-
-from mockito import mock, when, unstub, ANY
+from mockito import ANY, mock, unstub, when
 from selenium import webdriver
-from selenium.webdriver import chrome
-#from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome import service as chromeservice
 
+#from selenium.webdriver.chrome.service import Service as ChromeService
 from SeleniumLibrary.keywords import WebDriverCreator
 from SeleniumLibrary.utils import WINDOWS
 
 
 @pytest.fixture(scope="module")
+class Creator(NamedTuple):
+    creator: WebDriverCreator
+    output_dir: str
+
 def creator():
     curr_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
     creator = WebDriverCreator(output_dir)
-    Creator = namedtuple("Creator", "creator, output_dir")
     return Creator(creator, output_dir)
 
 
@@ -95,7 +95,7 @@ def test_create_headlesschrome_with_service_log_path_real_path(creator):
 
 
 def test_create_firefox_with_service_log_path_none(creator):
-    log_file = os.path.join(creator.output_dir, "geckodriver-1.log")
+    # log_file = os.path.join(creator.output_dir, "geckodriver-1.log")
     expected_webdriver = mock()
     options = mock()
     when(webdriver).FirefoxOptions().thenReturn(options)
@@ -169,7 +169,7 @@ def test_create_ie_with_service_log_path_real_path(creator):
 
 
 def test_create_edge_with_service_log_path_real_path(creator):
-    executable_path = "msedgedriver"
+    # executable_path = "msedgedriver"
     log_file = os.path.join(creator.output_dir, "edge-1.log")
     expected_webdriver = mock()
     when(webdriver).Edge(

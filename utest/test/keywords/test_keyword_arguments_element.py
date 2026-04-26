@@ -1,10 +1,11 @@
 import pytest
-from mockito import mock, unstub, when, matchers
-from SeleniumLibrary.keywords import ElementKeywords
+from mockito import matchers, mock, unstub, when
+
 import SeleniumLibrary.keywords.element as SUT
+from SeleniumLibrary.keywords import ElementKeywords
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def element():
     ctx = mock()
     ctx._browser = mock()

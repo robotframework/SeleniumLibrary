@@ -1,5 +1,7 @@
 import unittest
 
+import pytest
+
 from SeleniumLibrary import SeleniumLibrary
 
 
@@ -15,9 +17,9 @@ class KeywordsMethodsTests(unittest.TestCase):
         assert self.selib.attributes["page_should_contain_image"]
 
     def test_kw_with_methods_name_do_not_have_kw_name(self):
-        with self.assertRaises(KeyError):
+        with pytest.raises(KeyError):
             self.selib.keywords["Add Cookie"]
-        with self.assertRaises(KeyError):
+        with pytest.raises(KeyError):
             self.selib.keywords["Page Should Contain Image"]
 
     def test_kw_with_decorated_name(self):

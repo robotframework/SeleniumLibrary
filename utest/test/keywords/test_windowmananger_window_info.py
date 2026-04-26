@@ -1,9 +1,9 @@
 import unittest
 
-from mockito import mock, when, unstub
+from mockito import mock, unstub, when
+from selenium.common.exceptions import WebDriverException
 
 from SeleniumLibrary.locators.windowmanager import WindowManager
-from selenium.common.exceptions import WebDriverException
 
 SCRIPT = "return [ window.id, window.name ];"
 HANDLE = "17c3dc18-0443-478b-aec6-ed7e2a5da7e1"
@@ -43,10 +43,10 @@ class GetCurrentWindowInfoTest(unittest.TestCase):
     def test_window_id_is_bool(self):
         self.mock_window_info(True, "", "", "")
         info = self.manager._get_current_window_info()
-        assert info[1] == True
+        assert info[1]
         self.mock_window_info(False, "", "", "")
         info = self.manager._get_current_window_info()
-        assert info[1] == False
+        assert not info[1]
 
     def test_window_id_is_web_element(self):
         elem = mock()

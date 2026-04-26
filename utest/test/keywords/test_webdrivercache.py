@@ -1,6 +1,7 @@
 import unittest
 
-from mockito import mock, verify, when, unstub
+import pytest
+from mockito import mock, unstub, verify, when
 from robot.utils.connectioncache import NoConnection
 from selenium.common.exceptions import TimeoutException, WebDriverException
 
@@ -13,10 +14,9 @@ class WebDriverCacheTests(unittest.TestCase):
 
     def test_no_current_message(self):
         cache = WebDriverCache()
-        try:
-            self.assertRaises(RuntimeError, cache.current.anyMember())
-        except RuntimeError as e:
-            assert str(e) == "No current browser"
+        with pytest.raises(RuntimeError) as e:
+            cache.current.anyMember()
+        assert str(e.value) == "No current browser"
 
     def test_browsers_property(self):
         cache = WebDriverCache()
@@ -105,10 +105,10 @@ class WebDriverCacheTests(unittest.TestCase):
         assert index == 3
 
         index = cache.get_index(None)
-        assert index == None
+        assert index is None
 
         index = cache.get_index("None")
-        assert index == None
+        assert index is None
 
     def test_resolve_alias_or_index_with_none(self):
         cache = WebDriverCache()
@@ -123,7 +123,7 @@ class WebDriverCacheTests(unittest.TestCase):
         assert index == 1
 
         index = cache.get_index(None)
-        assert index == None
+        assert index is None
 
     def test_resolve_alias_or_index_error(self):
         cache = WebDriverCache()
@@ -132,13 +132,13 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock())
 
         index = cache.get_index("bar")
-        assert index == None
+        assert index is None
 
         index = cache.get_index(12)
-        assert index == None
+        assert index is None
 
         index = cache.get_index(-1)
-        assert index == None
+        assert index is None
 
     def test_close_and_same_alias(self):
         cache = WebDriverCache()
@@ -147,20 +147,20 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(mock(), "bar")
         cache.close()
         index = cache.get_index("bar")
-        assert index == None
+        assert index is None
 
     def test_same_alias_new_browser(self):
         cache = WebDriverCache()
         cache.close()
         index = cache.get_index("bar")
-        assert index == None
+        assert index is None
 
     def test_close_all_cache_first_quite_fails(self):
         cache = WebDriverCache()
         driver = mock()
         when(driver).quit().thenRaise(TimeoutException("timeout."))
         cache.register(driver, "bar")
-        with self.assertRaises(TimeoutException):
+        with pytest.raises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
 
@@ -173,7 +173,7 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(driver0, "bar0")
         cache.register(driver1, "bar1")
         cache.register(driver2, "bar2")
-        with self.assertRaises(TimeoutException):
+        with pytest.raises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
 
@@ -186,7 +186,7 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(driver0, "bar0")
         cache.register(driver1, "bar1")
         cache.register(driver2, "bar2")
-        with self.assertRaises(TimeoutException):
+        with pytest.raises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
 
@@ -199,7 +199,7 @@ class WebDriverCacheTests(unittest.TestCase):
         cache.register(driver0, "bar0")
         cache.register(driver1, "bar1")
         cache.register(driver2, "bar2")
-        with self.assertRaises(TimeoutException):
+        with pytest.raises(TimeoutException):
             cache.close_all()
         self.verify_cache(cache)
 
@@ -217,7 +217,7 @@ class WebDriverCacheTests(unittest.TestCase):
         driver = mock()
         when(driver).quit().thenRaise(TimeoutException("timeout."))
         cache.register(driver, "bar")
-        with self.assertRaises(TimeoutException):
+        with pytest.raises(TimeoutException):
             cache.close()
         assert isinstance(cache.current, NoConnection)
         assert driver in cache._closed

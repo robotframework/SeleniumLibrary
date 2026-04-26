@@ -1,6 +1,7 @@
 import unittest
 import uuid
 
+import pytest
 from mockito import mock
 
 from SeleniumLibrary.errors import WindowNotFound
@@ -10,9 +11,9 @@ from SeleniumLibrary.locators import WindowManager
 class WindowManagerTests(unittest.TestCase):
     def test_select_with_invalid_prefix(self):
         manager = WindowManagerWithMockBrowser()
-        with self.assertRaises(WindowNotFound) as context:
+        with pytest.raises(WindowNotFound) as context:
             manager.select("something=test1")
-        assert str(context.exception) == "No window matching handle, name, title or URL 'something=test1' found."
+        assert str(context.value) == "No window matching handle, name, title or URL 'something=test1' found."
 
     def test_select_by_title(self):
         manager = WindowManagerWithMockBrowser(
@@ -46,9 +47,9 @@ class WindowManagerTests(unittest.TestCase):
             {"name": "win2", "title": "Title 2", "url": "http://localhost/page2.html"},
             {"name": "win3", "title": "Title 3", "url": "http://localhost/page3.html"},
         )
-        with self.assertRaises(WindowNotFound) as context:
+        with pytest.raises(WindowNotFound) as context:
             manager.select("title=Title -1")
-        assert str(context.exception) == "Unable to locate window with title 'Title -1'."
+        assert str(context.value) == "Unable to locate window with title 'Title -1'."
 
     def test_select_by_name(self):
         manager = WindowManagerWithMockBrowser(
@@ -65,9 +66,9 @@ class WindowManagerTests(unittest.TestCase):
             {"name": "win2", "title": "Title 2", "url": "http://localhost/page2.html"},
             {"name": "win3", "title": "Title 3", "url": "http://localhost/page3.html"},
         )
-        with self.assertRaises(WindowNotFound) as context:
+        with pytest.raises(WindowNotFound) as context:
             manager.select("name=win-1")
-        assert str(context.exception) == "Unable to locate window with name 'win-1'."
+        assert str(context.value) == "Unable to locate window with name 'win-1'."
 
     def test_select_by_url(self):
         manager = WindowManagerWithMockBrowser(
@@ -101,9 +102,9 @@ class WindowManagerTests(unittest.TestCase):
             {"name": "win2", "title": "Title 2", "url": "http://localhost/page2.html"},
             {"name": "win3", "title": "Title 3", "url": "http://localhost/page3.html"},
         )
-        with self.assertRaises(WindowNotFound) as context:
+        with pytest.raises(WindowNotFound) as context:
             manager.select("url=http://localhost/page-1.html")
-        assert str(context.exception) == "Unable to locate window with URL 'http://localhost/page-1.html'."
+        assert str(context.value) == "Unable to locate window with URL 'http://localhost/page-1.html'."
 
     def test_select_main_window(self):
         manager = WindowManagerWithMockBrowser(
@@ -142,9 +143,9 @@ class WindowManagerTests(unittest.TestCase):
             {"name": "win2", "title": "Title 2", "url": "http://localhost/page2.html"},
             {"name": "win3", "title": "Title 3", "url": "http://localhost/page3.html"},
         )
-        with self.assertRaises(WindowNotFound) as context:
+        with pytest.raises(WindowNotFound) as context:
             manager.select("foobar")
-        assert str(context.exception) == "No window matching handle, name, title or URL 'foobar' found."
+        assert str(context.value) == "No window matching handle, name, title or URL 'foobar' found."
 
     def test_prefix_is_case_sensitive(self):
         manager = WindowManagerWithMockBrowser(
@@ -154,9 +155,9 @@ class WindowManagerTests(unittest.TestCase):
         )
         manager.select("name=win2")
         assert manager.driver.current_window.name == "win2"
-        with self.assertRaises(WindowNotFound) as context:
+        with pytest.raises(WindowNotFound) as context:
             manager.select("nAmE=win2")
-        assert str(context.exception) == "No window matching handle, name, title or URL 'nAmE=win2' found."
+        assert str(context.value) == "No window matching handle, name, title or URL 'nAmE=win2' found."
 
     def test_get_window_infos(self):
         manager = WindowManagerWithMockBrowser(
@@ -211,6 +212,7 @@ class WindowManagerWithMockBrowser(WindowManager):
             handle_ = driver.session_id
             if handle_ in driver.window_handles:
                 return window_infos[handle_][:2]
+            return None
 
         driver.execute_script = execute_script
         return driver
