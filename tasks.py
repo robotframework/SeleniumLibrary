@@ -109,7 +109,7 @@ def project_docs(ctx):
         "docs/index.html",
     ]
     publish_cmdline(writer_name="html5", argv=args)
-    print(Path(args[-1]).absolute())  # noqa : T201
+    print(Path(args[-1]).absolute())  # noqa: T201
 
 
 @task
@@ -132,13 +132,13 @@ def set_version(ctx, version):
     """
     version = Version(version, VERSION_PATH, VERSION_PATTERN)
     version.write()
-    print(version)  # noqa : T201
+    print(version)  # noqa: T201
 
 
 @task
 def print_version(ctx):
     """Print the current project version."""
-    print(Version(path=VERSION_PATH))  # noqa : T201
+    print(Version(path=VERSION_PATH))  # noqa: T201
 
 
 @task

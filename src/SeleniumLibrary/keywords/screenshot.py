@@ -266,7 +266,7 @@ class ScreenshotKeywords(LibraryComponent):
         )
 
     @keyword
-    def print_page_as_pdf(  # noqa : PLR0912 C901
+    def print_page_as_pdf(  # noqa: PLR0912 C901
         self,
         filename: str = DEFAULT_FILENAME_PDF,
         background: bool | None = None,
