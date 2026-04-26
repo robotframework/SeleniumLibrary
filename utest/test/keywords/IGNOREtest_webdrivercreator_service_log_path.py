@@ -12,12 +12,11 @@ from SeleniumLibrary.utils import WINDOWS
 
 
 @pytest.fixture(scope="module")
-class Creator(NamedTuple):
-    creator: WebDriverCreator
-    output_dir: str
-
-
 def creator():
+    class Creator(NamedTuple):
+        creator: WebDriverCreator
+        output_dir: str
+
     curr_dir = os.path.dirname(os.path.abspath(__file__))
     output_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
     creator = WebDriverCreator(output_dir)
