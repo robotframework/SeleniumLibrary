@@ -523,7 +523,7 @@ class SeleniumLibrary(DynamicCore):
     = EventFiringWebDriver =
 
     The SeleniumLibrary offers support for
-    [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
+    [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
     See the Selenium and SeleniumLibrary
     [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#EventFiringWebDriver|EventFiringWebDriver support]
     documentation for further details.
@@ -620,7 +620,7 @@ class SeleniumLibrary(DynamicCore):
           Allows extending the SeleniumLibrary with external Python classes.
         - ``event_firing_webdriver``:
           Class for wrapping Selenium with
-          [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
+          [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver]
         - ``page_load_timeout``:
           Default value to wait for page load to complete until a timeout exception is raised.
         - ``action_chain_delay``:

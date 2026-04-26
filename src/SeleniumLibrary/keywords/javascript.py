@@ -52,7 +52,7 @@ class JavaScriptKeywords(LibraryComponent):
         Return values are converted to the appropriate Python types.
 
         Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_script|
         arguments] as part of ``code`` argument. The JavaScript code and
         arguments must be separated with `JAVASCRIPT` and `ARGUMENTS` markers
         and must be used exactly with this format. If the Javascript code is
@@ -85,7 +85,7 @@ class JavaScriptKeywords(LibraryComponent):
         fail. See the `Timeout` section for more information.
 
         Starting from SeleniumLibrary 3.2 it is possible to provide JavaScript
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_async_script|
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_remote/selenium.webdriver.remote.webdriver.html#selenium.webdriver.remote.webdriver.WebDriver.execute_async_script|
         arguments] as part of ``code`` argument. See `Execute Javascript` for
         more details.
 

@@ -133,7 +133,7 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``ff_profile_dir`` is the path to the Firefox profile
         directory if you wish to overwrite the default profile Selenium
         uses. The ``ff_profile_dir`` can also be an instance of the
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html|selenium.webdriver.FirefoxProfile]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_firefox/selenium.webdriver.firefox.firefox_profile.html#module-selenium.webdriver.firefox.firefox_profile|selenium.webdriver.firefox.firefox_profile]
         . As a third option, it is possible to use `FirefoxProfile` methods
         and attributes to define the profile using methods and attributes
         in the same way as with ``options`` argument. Example: It is possible
@@ -149,9 +149,9 @@ class BrowserManagementKeywords(LibraryComponent):
         Optional ``options`` argument allows defining browser specific
         Selenium options. Example for Chrome, the ``options`` argument
         allows defining the following
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|methods and attributes]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|methods and attributes]
         and for Firefox these
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_firefox/selenium.webdriver.firefox.options.html?highlight=firefox#selenium.webdriver.firefox.options.Options|methods and attributes]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_firefox/selenium.webdriver.firefox.options.html#selenium.webdriver.firefox.options.Options|methods and attributes]
         are available. Selenium options are also supported, when ``remote_url``
         argument is used.
 
@@ -163,7 +163,7 @@ class BrowserManagementKeywords(LibraryComponent):
         methods or attributes.
 
         Example when using
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_chrome/selenium.webdriver.chrome.options.html#selenium.webdriver.chrome.options.Options|Chrome options]
         method:
         | `Open Browser` | http://example.com | Chrome | options=add_argument("--disable-popup-blocking"); add_argument("--ignore-certificate-errors") | # Sting format.                    |
         | `Open Browser` | None               | Chrome | options=binary_location="/path/to/binary";add_argument("remote-debugging-port=port")          | # Start Chomium-based application. |
@@ -289,7 +289,7 @@ class BrowserManagementKeywords(LibraryComponent):
         The initialized WebDriver can be configured either with a Python
         dictionary ``kwargs`` or by using keyword arguments ``**init_kwargs``.
         These arguments are passed directly to WebDriver without any
-        processing. See [https://seleniumhq.github.io/selenium/docs/api/py/api.html|
+        processing. See [https://www.selenium.dev/selenium/docs/api/py/api.html|
         Selenium API documentation] for details about the supported arguments.
 
         Examples:
