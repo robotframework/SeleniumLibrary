@@ -463,7 +463,7 @@ arguments to boolean values.
 = EventFiringWebDriver =
 
 The SeleniumLibrary offers support for
-[https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
+[https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_support/selenium.webdriver.support.event_firing_webdriver.html#module-selenium.webdriver.support.event_firing_webdriver|EventFiringWebDriver].
 See the Selenium and SeleniumLibrary
 [https://github.com/robotframework/SeleniumLibrary/blob/master/docs/extending/extending.rst#EventFiringWebDriver|EventFiringWebDriver support]
 documentation for further details.
