@@ -196,6 +196,7 @@ class WaitingKeywords(LibraryComponent):
             timeout,
             error,
         )
+        self.info(f"Text '{text}' appeared on the page.")
 
     @keyword
     def wait_until_page_does_not_contain(
