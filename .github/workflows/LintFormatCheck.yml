@@ -23,7 +23,7 @@ jobs:
       id: format
       continue-on-error: true
       run: |
-        python -m invoke format --check
+        python -m invoke formatter --check
 
     - name: Ruff lint
       id: lint
