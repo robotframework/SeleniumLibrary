@@ -214,7 +214,7 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing, port):
         runner.append("SKIP_ON_MAC")
     if platform.system() == "Windows":
         runner.append("--exclude")
-        runner.append("SKIP_ON_WINDOWS")    
+        runner.append("SKIP_ON_WINDOWS")
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
