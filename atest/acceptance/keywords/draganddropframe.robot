@@ -1,47 +1,87 @@
 *** Settings ***
-Documentation    Tests for the custom Drag And Drop To Frame keyword
+Documentation    Tests for the custom Drag And Drop Across Frames keyword
 ...              in cross-frame drag-and-drop scenarios.
 Resource         ../resource.robot
 Test Setup       Go To Page "frames/draganddrop.html"
-Force Tags       draganddrop
 
 *** Test Cases ***
-Drag And Drop To Frame Works With Local HTML
-    [Documentation]    Verifies successful cross-frame drag-and-drop from default content to a target inside an iframe.
-    Wait Until Page Contains Element    id=source    timeout=10s
-    Drag And Drop To Frame    id=source    id=target    id=previewFrame
-    Select Frame    id=previewFrame
+Drag And Drop Across Frames Works From Default Content
+    [Documentation]    Verifies drag-and-drop from default content to a target inside an iframe.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Drag And Drop Across Frames    id=defaultSource    id=target    id=targetFrame
+    Select Frame    id=targetFrame
     Element Should Contain    id=target    Dropped Successfully!
     Unselect Frame
 
-Drag And Drop To Frame Returns To Default Content
-    [Documentation]    Verifies that the keyword returns to default content after execution.
-    Wait Until Page Contains Element    id=source    timeout=10s
-    Drag And Drop To Frame    id=source    id=target    id=previewFrame
-    Element Should Be Visible    id=previewFrame
+Drag And Drop Across Frames Works From Source Frame
+    [Documentation]    Verifies drag-and-drop from a source iframe to a target iframe.
+    Wait Until Page Contains Element    id=sourceFrame    10s
+    Select Frame    id=sourceFrame
+    Wait Until Page Contains Element    id=frameSource    10s
+    Unselect Frame
+    Drag And Drop Across Frames    id=frameSource    id=target    id=targetFrame    id=sourceFrame
+    Select Frame    id=targetFrame
+    Element Should Contain    id=target    Dropped Successfully!
+    Unselect Frame
 
-Drag And Drop To Frame Hides Source Element
-    [Documentation]    Verifies that the source element becomes hidden after a successful drop.
-    Wait Until Page Contains Element    id=source    timeout=10s
-    Drag And Drop To Frame    id=source    id=target    id=previewFrame
-    Element Should Not Be Visible    id=source
+Drag And Drop Across Frames Returns To Default Content
+    [Documentation]    Verifies that the keyword returns to default content after execution.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Drag And Drop Across Frames    id=defaultSource    id=target    id=targetFrame
+    Element Should Be Visible    id=targetFrame
+
+Drag And Drop Across Frames Hides Default Source Element
+    [Documentation]    Verifies that the default source element becomes hidden after a successful drop.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Drag And Drop Across Frames    id=defaultSource    id=target    id=targetFrame
+    Element Should Not Be Visible    id=defaultSource
+
+Drag And Drop Across Frames Hides Frame Source Element
+    [Documentation]    Verifies that the frame source element becomes hidden after a successful drop.
+    Wait Until Page Contains Element    id=sourceFrame    10s
+    Drag And Drop Across Frames    id=frameSource    id=target    id=targetFrame    id=sourceFrame
+    Select Frame    id=sourceFrame
+    Element Should Not Be Visible    id=frameSource
+    Unselect Frame
 
 Standard Drag And Drop Fails When Target Is Inside Frame
     [Documentation]    Verifies that the standard Drag And Drop keyword cannot complete this cross-frame scenario.
-    Wait Until Page Contains Element    id=source    timeout=10s
-    Run Keyword And Expect Error    *    Drag And Drop    id=source    id=target
-    Select Frame    id=previewFrame
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Run Keyword And Expect Error
+    ...    Element with locator 'id=target' not found.
+    ...    Drag And Drop    id=defaultSource    id=target
+    Select Frame    id=targetFrame
     Element Should Not Contain    id=target    Dropped Successfully!
     Unselect Frame
 
-Drag And Drop To Frame Fails With Invalid Frame
-    [Documentation]    Verifies that the keyword fails when the frame locator is invalid.
-    Wait Until Page Contains Element    id=source    timeout=10s
-    Run Keyword And Expect Error    *    Drag And Drop To Frame
-    ...    id=source    id=target    id=missingFrame
+Drag And Drop Across Frames Fails With Invalid Target Frame
+    [Documentation]    Verifies that the keyword fails when the target frame locator is invalid.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Run Keyword And Expect Error
+    ...    Element with locator 'id=missingFrame' not found.
+    ...    Drag And Drop Across Frames
+    ...    id=defaultSource    id=target    id=missingFrame
 
-Drag And Drop To Frame Fails With Invalid Target
-    [Documentation]    Verifies that the keyword fails when the target element is not found inside the iframe.
-    Wait Until Page Contains Element    id=source    timeout=10s
-    Run Keyword And Expect Error    *    Drag And Drop To Frame
-    ...    id=source    id=missingTarget    id=previewFrame
+Drag And Drop Across Frames Fails With Invalid Target
+    [Documentation]    Verifies that the keyword fails when the target element is not found inside the target iframe.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Run Keyword And Expect Error
+    ...    Element with locator 'id=missingTarget' not found.
+    ...    Drag And Drop Across Frames
+    ...    id=defaultSource    id=missingTarget    id=targetFrame
+
+Drag And Drop Across Frames Fails With Invalid Source Frame
+    [Documentation]    Verifies that the keyword fails when the source frame locator is invalid.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Run Keyword And Expect Error
+    ...    Element with locator 'id=missingSourceFrame' not found.
+    ...    Drag And Drop Across Frames
+    ...    id=frameSource    id=target    id=targetFrame    id=missingSourceFrame
+
+Drag And Drop Across Frames Fails With Invalid Source
+    [Documentation]    Verifies that the keyword fails when the source element is not found.
+    Wait Until Page Contains Element    id=defaultSource    10s
+    Run Keyword And Expect Error
+    ...    Element with locator 'id=missingSource' not found.
+    ...    Drag And Drop Across Frames
+    ...    id=missingSource    id=target    id=targetFrame
