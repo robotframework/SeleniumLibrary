@@ -30,17 +30,17 @@ jobs:
             selenium-version: 4.39.0
             browser: firefox
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Configuration Description
       run: |
         echo "${{ matrix.config.description }} configuration"
         echo "Testing with RF v${{ matrix.config.rf-version }}, Selenium v${{ matrix.config.selenium-version}}, Python v${{ matrix.config.python-version }} under ${{ matrix.config.browser }}"
     - name: Set up Python ${{ matrix.config.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.config.python-version }}
     - name: Setup ${{ matrix.config.browser }} browser
-      uses: browser-actions/setup-chrome@v1
+      uses: browser-actions/setup-chrome@v2
       with:
         chrome-version: latest
         install-dependencies: true
