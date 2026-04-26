@@ -11,4 +11,7 @@ class UtilsPackageTests(unittest.TestCase):
         assert escape_xpath_value('test "1"') == "'test \"1\"'"
 
     def test_escape_xpath_value_with_quote_and_apos(self):
-        assert escape_xpath_value("test \"1\" and '2'") == "concat('test \"1\" and ', \"'\", '2', \"'\", '')"
+        assert (
+            escape_xpath_value("test \"1\" and '2'")
+            == "concat('test \"1\" and ', \"'\", '2', \"'\", '')"
+        )

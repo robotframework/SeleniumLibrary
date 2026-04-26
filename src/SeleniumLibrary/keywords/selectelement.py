@@ -23,9 +23,7 @@ from SeleniumLibrary.utils.types import Locator
 
 class SelectElementKeywords(LibraryComponent):
     @keyword
-    def get_list_items(
-        self, locator: Locator, values: bool = False
-    ) -> list[str]:
+    def get_list_items(self, locator: Locator, values: bool = False) -> list[str]:
         """Returns all labels or values of selection list ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -133,7 +131,9 @@ class SelectElementKeywords(LibraryComponent):
             )
 
     def _format_selection(self, labels, values):
-        return " | ".join(f"{label} ({value})" for label, value in zip(labels, values, strict=True))
+        return " | ".join(
+            f"{label} ({value})" for label, value in zip(labels, values, strict=True)
+        )
 
     @keyword
     def list_should_have_no_selections(self, locator: Locator):
@@ -290,9 +290,7 @@ class SelectElementKeywords(LibraryComponent):
         select.deselect_all()
 
     @keyword
-    def unselect_from_list_by_index(
-        self, locator: Locator, *indexes: str
-    ):
+    def unselect_from_list_by_index(self, locator: Locator, *indexes: str):
         """Unselects options from selection list ``locator`` by ``indexes``.
 
         Indexes of list options start from 0. This keyword works only with
@@ -317,9 +315,7 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_by_index(int(index))
 
     @keyword
-    def unselect_from_list_by_value(
-        self, locator: Locator, *values: str
-    ):
+    def unselect_from_list_by_value(self, locator: Locator, *values: str):
         """Unselects options from selection list ``locator`` by ``values``.
 
         This keyword works only with multi-selection lists.
@@ -342,9 +338,7 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_by_value(value)
 
     @keyword
-    def unselect_from_list_by_label(
-        self, locator: Locator, *labels: str
-    ):
+    def unselect_from_list_by_label(self, locator: Locator, *labels: str):
         """Unselects options from selection list ``locator`` by ``labels``.
 
         This keyword works only with multi-selection lists.

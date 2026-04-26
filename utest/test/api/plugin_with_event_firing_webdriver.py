@@ -2,7 +2,6 @@ from SeleniumLibrary.base import LibraryComponent, keyword
 
 
 class PluginWithEventFiringWebdriver(LibraryComponent):
-
     """This is example for PluginWithEventFiringWebdriver plugin documentation.
 
     It may contains many chapters and there might be many words
@@ -32,5 +31,6 @@ class PluginWithEventFiringWebdriver(LibraryComponent):
     @keyword
     def tidii(self):
         self.info("foo")
+
 
 plugin_with_event_firing_webdriver = PluginWithEventFiringWebdriver

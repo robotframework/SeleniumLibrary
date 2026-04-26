@@ -22,4 +22,5 @@ class MyLibArgs(LibraryComponent):
         self.info(foo)
         self.info(bar)
 
+
 my_lib_args = MyLibArgs

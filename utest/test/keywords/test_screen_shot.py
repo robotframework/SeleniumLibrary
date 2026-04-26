@@ -10,6 +10,7 @@ ELEMENT_FILE_NAME = "selenium-element-screenshot-{index}.png"
 EMBED = "EMBED"
 BASE64 = "BASE64"
 
+
 @pytest.fixture(scope="module")
 def screen_shot():
     ctx = mock()

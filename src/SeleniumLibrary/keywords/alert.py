@@ -146,6 +146,10 @@ class AlertKeywords(LibraryComponent):
         try:
             return wait.until(EC.alert_is_present())
         except TimeoutException as original_exception:
-            raise AssertionError(f"Alert not found in {secs_to_timestr(timeout)}.") from original_exception
+            raise AssertionError(
+                f"Alert not found in {secs_to_timestr(timeout)}."
+            ) from original_exception
         except WebDriverException as err:
-            raise AssertionError(f"An exception occurred waiting for alert: {err}") from err
+            raise AssertionError(
+                f"An exception occurred waiting for alert: {err}"
+            ) from err

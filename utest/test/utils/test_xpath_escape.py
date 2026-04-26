@@ -5,7 +5,6 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from robot.utils import WINDOWS
 
 from SeleniumLibrary.utils import escape_xpath_value
 

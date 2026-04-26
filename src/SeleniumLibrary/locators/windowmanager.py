@@ -199,7 +199,9 @@ class WindowManager(ContextAware):
 
     def _get_current_window_info(self):
         try:
-            window_id, name = self.driver.execute_script("return [ window.id, window.name ];")
+            window_id, name = self.driver.execute_script(
+                "return [ window.id, window.name ];"
+            )
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.

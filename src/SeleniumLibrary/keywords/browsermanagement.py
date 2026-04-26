@@ -217,11 +217,17 @@ class BrowserManagementKeywords(LibraryComponent):
                 self.go_to(url)
             return index
         if desired_capabilities:
-            self.warn("desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation.")
+            self.warn(
+                "desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation."
+            )
         if service_log_path:
-            self.warn("service_log_path is being deprecated. Please use service to configure log_output or equivalent service attribute.")
+            self.warn(
+                "service_log_path is being deprecated. Please use service to configure log_output or equivalent service attribute."
+            )
         if executable_path:
-            self.warn("executable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation.")
+            self.warn(
+                "executable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation."
+            )
         return self._make_new_browser(
             url,
             browser,
@@ -280,7 +286,11 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def create_webdriver(
-        self, driver_name: str, alias: str | None = None, kwargs: dict | None = None, **init_kwargs
+        self,
+        driver_name: str,
+        alias: str | None = None,
+        kwargs: dict | None = None,
+        **init_kwargs,
     ) -> str:
         """Creates an instance of Selenium WebDriver.
 
@@ -320,7 +330,9 @@ class BrowserManagementKeywords(LibraryComponent):
         try:
             creation_func = getattr(webdriver, driver_name)
         except AttributeError as original_exception:
-            raise RuntimeError(f"'{driver_name}' is not a valid WebDriver name.") from original_exception
+            raise RuntimeError(
+                f"'{driver_name}' is not a valid WebDriver name."
+            ) from original_exception
         self.info(f"Creating an instance of the {driver_name} WebDriver.")
         driver = creation_func(**init_kwargs)
         self.debug(
@@ -659,8 +671,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_action_chain_delay(self):
-        """Gets the currently stored value for chain_delay_value in timestr format.
-        """
+        """Gets the currently stored value for chain_delay_value in timestr format."""
         return timestr_to_secs(f"{self.ctx.action_chain_delay} milliseconds")
 
     @keyword

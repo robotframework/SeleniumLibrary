@@ -14,10 +14,12 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def setUpClass(cls):
         cls.sl = SeleniumLibrary()
         cls.root_dir = os.path.dirname(os.path.abspath(__file__))
+
         class Plugin(NamedTuple):
             plugin: str
             args: list
             kw_args: dict
+
         lib = Plugin(
             plugin=os.path.join(cls.root_dir, "my_lib.py"), args=[], kw_args={}
         )

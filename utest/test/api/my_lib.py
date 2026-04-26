@@ -21,4 +21,5 @@ class MyLib(LibraryComponent):
     def bar(self, arg):
         self.info(arg)
 
+
 my_lib = MyLib

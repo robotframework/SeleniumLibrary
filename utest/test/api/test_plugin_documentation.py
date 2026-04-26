@@ -7,7 +7,6 @@ from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
 from approvaltests.reporters.python_native_reporter import PythonNativeReporter
-from robot.utils import WINDOWS
 
 from SeleniumLibrary import SeleniumLibrary
 

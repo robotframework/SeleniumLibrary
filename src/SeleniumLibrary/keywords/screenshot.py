@@ -264,22 +264,23 @@ class ScreenshotKeywords(LibraryComponent):
         )
 
     @keyword
-    def print_page_as_pdf(self,  # noqa: C901, PLR0912
-                            filename: str = DEFAULT_FILENAME_PDF,
-                            background: bool | None  = None,
-                            margin_bottom: float | None = None,
-                            margin_left: float | None = None,
-                            margin_right: float | None = None,
-                            margin_top: float | None = None,
-                            orientation: Orientation | None = None,
-                            page_height: float | None = None,
-                            page_ranges: list | None  = None,
-                            page_width: float | None = None,
-                            scale: float | None = None,
-                            shrink_to_fit: bool | None  = None,
-                            # path_to_file=None,
-                         ):
-        """ Print the current page as a PDF
+    def print_page_as_pdf(  # noqa : PLR0912 C901
+        self,
+        filename: str = DEFAULT_FILENAME_PDF,
+        background: bool | None = None,
+        margin_bottom: float | None = None,
+        margin_left: float | None = None,
+        margin_right: float | None = None,
+        margin_top: float | None = None,
+        orientation: Orientation | None = None,
+        page_height: float | None = None,
+        page_ranges: list | None = None,
+        page_width: float | None = None,
+        scale: float | None = None,
+        shrink_to_fit: bool | None = None,
+        # path_to_file=None,
+    ):
+        """Print the current page as a PDF
 
         ``page_ranges`` defaults to `['-']` or "all" pages. ``page_ranges`` takes a list of
         strings indicating the ranges.
@@ -303,11 +304,11 @@ class ScreenshotKeywords(LibraryComponent):
         """
 
         if page_ranges is None:
-            page_ranges = ['-']
+            page_ranges = ["-"]
 
         print_options = PrintOptions()
         if background is not None:
-            print_options.background =  background
+            print_options.background = background
         if margin_bottom is not None:
             print_options.margin_bottom = margin_bottom
         if margin_left is not None:
@@ -345,7 +346,7 @@ class ScreenshotKeywords(LibraryComponent):
 
     def _save_pdf_to_file(self, pdfbase64, path):
         pdfdata = b64decode(pdfbase64)
-        with open(path, mode='wb') as pdf:
+        with open(path, mode="wb") as pdf:
             pdf.write(pdfdata)
 
     def _get_pdf_path(self, filename):

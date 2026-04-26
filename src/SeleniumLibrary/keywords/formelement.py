@@ -238,9 +238,7 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(
-        self, locator: Locator, password: str, clear: bool = True
-    ):
+    def input_password(self, locator: Locator, password: str, clear: bool = True):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -268,9 +266,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
-    def input_text(
-        self, locator: Locator, text: str, clear: bool = True
-    ):
+    def input_text(self, locator: Locator, text: str, clear: bool = True):
         """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
@@ -489,8 +485,7 @@ class FormElementKeywords(LibraryComponent):
             return self.find_element(xpath)
         except ElementNotFound as original_exception:
             raise ElementNotFound(
-                f"No radio button with name '{group_name}' "
-                f"and value '{value}' found."
+                f"No radio button with name '{group_name}' and value '{value}' found."
             ) from original_exception
 
     def _get_value_from_radio_buttons(self, elements):

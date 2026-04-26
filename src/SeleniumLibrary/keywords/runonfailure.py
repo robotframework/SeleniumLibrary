@@ -64,9 +64,7 @@ class RunOnFailureKeywords(LibraryComponent):
         if name is None:
             return None
         if (
-            (isinstance(name, str)
-            and name.upper() == "NOTHING")
-            or name.upper() == "NONE"
-        ):
+            isinstance(name, str) and name.upper() == "NOTHING"
+        ) or name.upper() == "NONE":
             return None
         return name

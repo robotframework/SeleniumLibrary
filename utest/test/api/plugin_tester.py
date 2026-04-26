@@ -14,4 +14,5 @@ class PluginTester(LibraryComponent):
     def bar(self, arg):
         self.info(arg)
 
+
 plugin_tester = PluginTester

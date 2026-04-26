@@ -22,7 +22,9 @@ from SeleniumLibrary.errors import UnkownExpectedCondition
 
 class ExpectedConditionKeywords(LibraryComponent):
     @keyword
-    def wait_for_expected_condition(self, condition: string, *args, timeout: float | None=10):
+    def wait_for_expected_condition(
+        self, condition: string, *args, timeout: float | None = 10
+    ):
         """Waits until ``condition`` is true or ``timeout`` expires.
 
         The condition must be one of selenium's expected condition which
@@ -54,8 +56,13 @@ class ExpectedConditionKeywords(LibraryComponent):
         try:
             condition_func = getattr(EC, condition)
         except AttributeError as original_exception:
-            raise UnkownExpectedCondition(f"{condition} is an unknown expected condition") from original_exception
-        return wait.until(condition_func(*args), message=f"Expected Condition not met within set timeout of {timeout}s")
+            raise UnkownExpectedCondition(
+                f"{condition} is an unknown expected condition"
+            ) from original_exception
+        return wait.until(
+            condition_func(*args),
+            message=f"Expected Condition not met within set timeout of {timeout}s",
+        )
 
     def _parse_condition(self, condition: string):
-        return condition.replace(' ','_').lower()
+        return condition.replace(" ", "_").lower()

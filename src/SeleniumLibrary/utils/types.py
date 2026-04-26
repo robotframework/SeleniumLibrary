@@ -24,16 +24,18 @@ from selenium.webdriver.remote.webelement import WebElement
 # https://github.com/approvals/ApprovalTests.Python/issues/41
 WINDOWS = os.name == "nt"
 
-Locator: TypeAlias = WebElement | str | list['Locator']
+Locator: TypeAlias = WebElement | str | list["Locator"]
+
 
 def is_noney(item):
     return item is None or (isinstance(item, str) and item.upper() == "NONE")
 
+
 def _convert_delay(delay):
     if isinstance(delay, timedelta):
         return delay.microseconds // 1000
-    x =  timestr_to_secs(delay)
-    return int( x * 1000)
+    x = timestr_to_secs(delay)
+    return int(x * 1000)
 
 
 def _convert_timeout(timeout):

@@ -42,6 +42,7 @@ def test_get_action_chain_delay_default():
     sl.set_action_chain_delay("300 milliseconds")
     assert sl.get_action_chain_delay() == 0.3
 
+
 def test_selenium_implicit_wait_default():
     sl = SeleniumLibrary()
     assert sl.implicit_wait == 0.0, "Wait should have 0.0"
@@ -75,7 +76,9 @@ def test_selenium_implicit_wait_get():
 
 def test_selenium_page_load_timeout_with_default():
     sl = SeleniumLibrary()
-    assert sl.page_load_timeout == 300.0, "Default page load timeout should be 5 minutes"
+    assert sl.page_load_timeout == 300.0, (
+        "Default page load timeout should be 5 minutes"
+    )
 
 
 def test_set_selenium_page_load_timeout():
@@ -137,7 +140,8 @@ def test_open_browser_speed():
     browser = mock()
     executable_path = "chromedriver"
     when(webdriver).Chrome(
-        options=None,  service=ANY,
+        options=None,
+        service=ANY,
     ).thenReturn(browser)
     bm = BrowserManagementKeywords(ctx)
     when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
@@ -152,17 +156,17 @@ def test_create_webdriver_speed():
     ctx.speed = 0.0
     browser = mock()
     executable_path = "chromedriver"
-    #Original code:
+    # Original code:
     # when(webdriver).Chrome(
     #     options=None, service_log_path=None, executable_path=executable_path
     # ).thenReturn(browser)
 
-    #Tried:
+    # Tried:
     # service = ChromeService(executable_path="chromedriver", log_path=None)
     # when(webdriver).Chrome(
     #     options=None, service=Service,
     # ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
     # E       mockito.invocation.InvocationError:
     # E       Called but not expected:
     # E
@@ -172,11 +176,11 @@ def test_create_webdriver_speed():
     # E
     # E           Chrome(options=None, service=<class 'selenium.webdriver.chrome.service.Service'>)
 
-    #Tried:
+    # Tried:
     # when(webdriver).Chrome(
     #     options=None, service=None,
     # ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
     # E       mockito.invocation.InvocationError:
     # E       Called but not expected:
     # E
@@ -186,7 +190,7 @@ def test_create_webdriver_speed():
     # E
     # E           Chrome(options=None, service=None)
 
-    #Tried:
+    # Tried:
     # service = mock()
     # when(webdriver.chrome.service).Service(
     #     executable_path="chromedriver", log_path=None,
@@ -194,10 +198,10 @@ def test_create_webdriver_speed():
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
     # ...
 
-    #Tried:
+    # Tried:
     # service = ChromeService(executable_path="chromedriver", log_path=None)
     # when(webdriver.chrome.service).Service(
     #     executable_path="chromedriver", log_path=None,
@@ -205,7 +209,7 @@ def test_create_webdriver_speed():
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
     # E       mockito.invocation.InvocationError:
     # E       Called but not expected:
     # E
@@ -214,16 +218,16 @@ def test_create_webdriver_speed():
     # E       Stubbed invocations are:
     # E
     # E           Chrome(options=None, service=<selenium.webdriver.chrome.service.Service object at 0x000001A7EE7E8730>)
-    #which does seem closer ..
+    # which does seem closer ..
 
-    #Tried:
+    # Tried:
     # service = Service(executable_path="chromedriver", log_path=None)
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
 
-    #Tried:
+    # Tried:
     # service = mock()
     # ## when(Service).__init__(
     # when(Chrome).Service(
@@ -232,36 +236,37 @@ def test_create_webdriver_speed():
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
 
-    #Tried:
+    # Tried:
     when(webdriver).Chrome(
-        options=None, service=ANY,
+        options=None,
+        service=ANY,
     ).thenReturn(browser)
-    #Results in ..
+    # Results in ..
     # .. passed ?? Is this truely correct?
 
-    #Also tried:
+    # Also tried:
     # service_log_path = None
     # service = ChromeService(executable_path=executable_path, log_path=service_log_path)
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
 
-    #Also tried:
+    # Also tried:
     # service = ChromeService()
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
 
-    #Also tried:
+    # Also tried:
     # service = mock(ChromeService)
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)
 
-    #Also tried:
-    #service = mock(Service)
+    # Also tried:
+    # service = mock(Service)
     # when(webdriver).Chrome(
     #     options=None, service=service,
     # ).thenReturn(browser)

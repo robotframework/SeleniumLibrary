@@ -5,7 +5,6 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from robot.utils import WINDOWS
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
@@ -66,9 +65,9 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         # -- temporary fix to transition selenium to v4.17.2 from v4.16.0 and prior
         # from inspect import signature
         # sig = signature(result)
-        if hasattr(result,'default_preferences'):
+        if hasattr(result, "default_preferences"):
             return result.default_preferences
-        if hasattr(result,'_desired_preferences'):
+        if hasattr(result, "_desired_preferences"):
             return result._desired_preferences
         return None
         # --

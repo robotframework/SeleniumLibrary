@@ -1,6 +1,5 @@
 import os
 import sys
-import unittest
 
 import pytest
 from approvaltests.approvals import verify_all
@@ -8,7 +7,6 @@ from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
 from mockito import unstub
-from robot.utils import WINDOWS
 
 from SeleniumLibrary.keywords.webdrivertools import SeleniumService
 
@@ -16,6 +14,7 @@ from SeleniumLibrary.keywords.webdrivertools import SeleniumService
 @pytest.fixture(scope="module")
 def service():
     return SeleniumService()
+
 
 @pytest.fixture(scope="module")
 def reporter():
@@ -37,16 +36,14 @@ def test_parse_service_string(service, reporter):
     results.append(service._parse('attribute="arg1"'))
     # results.append(service._parse("  attribute = True  "))    # need to resolve issues with spaces in service string.
     results.append(service._parse('attribute="arg1";attribute=True'))
-    results.append(service._parse('attribute=["arg1","arg2","arg3"] ; attribute=True ; attribute="arg4"'))
     results.append(
         service._parse(
-            'attribute="C:\\\\path\\to\\\\profile"'
+            'attribute=["arg1","arg2","arg3"] ; attribute=True ; attribute="arg4"'
         )
     )
+    results.append(service._parse('attribute="C:\\\\path\\to\\\\profile"'))
     results.append(
-        service._parse(
-            r'attribute="arg1"; attribute="C:\\path\\to\\profile"'
-        )
+        service._parse(r'attribute="arg1"; attribute="C:\\path\\to\\profile"')
     )
     results.append(service._parse("attribute=None"))
     verify_all("Selenium service string to dict", results, reporter=reporter)
@@ -60,7 +57,9 @@ def test_parse_service_string_errors(service, reporter):
     results.append(error_formatter(service._parse, "attribute=['arg1'", True))
     results.append(error_formatter(service._parse, "attribute=['arg1';'arg2']", True))
     results.append(error_formatter(service._parse, "attribute['arg1']", True))
-    results.append(error_formatter(service._parse, "attribute=['arg1'] attribute=['arg2']", True))
+    results.append(
+        error_formatter(service._parse, "attribute=['arg1'] attribute=['arg2']", True)
+    )
     verify_all("Selenium service string errors", results, reporter=reporter)
 
 
@@ -72,25 +71,29 @@ def test_parse_service_string_errors_py3_12(service, reporter):
     results.append(error_formatter(service._parse, "attribute=['arg1'", True))
     results.append(error_formatter(service._parse, "attribute=['arg1';'arg2']", True))
     results.append(error_formatter(service._parse, "attribute['arg1']", True))
-    results.append(error_formatter(service._parse, "attribute=['arg1'] attribute=['arg2']", True))
+    results.append(
+        error_formatter(service._parse, "attribute=['arg1'] attribute=['arg2']", True)
+    )
     verify_all("Selenium service string errors", results, reporter=reporter)
 
 
 def test_split_service(service, reporter):
     results = []
-    results.append(service._split("attribute='arg1'", ';'))
-    results.append(service._split("attribute='arg1';attribute='arg2'", ';'))
-    results.append(service._split("attribute=['arg1','arg2'];attribute='arg3'", ';'))
-    results.append(service._split(" attribute = 'arg1' ; attribute = 'arg2' ", ';'))
+    results.append(service._split("attribute='arg1'", ";"))
+    results.append(service._split("attribute='arg1';attribute='arg2'", ";"))
+    results.append(service._split("attribute=['arg1','arg2'];attribute='arg3'", ";"))
+    results.append(service._split(" attribute = 'arg1' ; attribute = 'arg2' ", ";"))
     verify_all("Selenium service string splitting", results, reporter=reporter)
 
 
 def test_split_attribute(service, reporter):
     results = []
-    results.append(service._split("attribute='arg1'", '='))
-    results.append(service._split("attribute=['arg1','arg2']", '='))
-    results.append(service._split(" attribute = [ 'arg1' , 'arg2' ]", '='))
-    verify_all("Selenium service attribute string splitting", results, reporter=reporter)
+    results.append(service._split("attribute='arg1'", "="))
+    results.append(service._split("attribute=['arg1','arg2']", "="))
+    results.append(service._split(" attribute = [ 'arg1' , 'arg2' ]", "="))
+    verify_all(
+        "Selenium service attribute string splitting", results, reporter=reporter
+    )
 
 
 def test_service_create(service, reporter):

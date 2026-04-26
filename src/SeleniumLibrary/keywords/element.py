@@ -224,7 +224,7 @@ class ElementKeywords(LibraryComponent):
         self.assert_page_not_contains(locator, message=message, loglevel=loglevel)
 
     @keyword
-    def assign_id_to_element(self, locator: Locator, id: str): # noqa: A002
+    def assign_id_to_element(self, locator: Locator, id: str):  # noqa: A002
         """Assigns a temporary ``id`` to the element specified by ``locator``.
 
         This is mainly useful if the locator is complicated and/or slow XPath
@@ -286,9 +286,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(f"Element '{locator}' does not have focus.")
 
     @keyword
-    def element_should_be_visible(
-        self, locator: Locator, message: str | None = None
-    ):
+    def element_should_be_visible(self, locator: Locator, message: str | None = None):
         """Verifies that the element identified by ``locator`` is visible.
 
         Herein, visible means that the element is logically visible, not
@@ -398,9 +396,7 @@ class ElementKeywords(LibraryComponent):
             raise AssertionError(message)
 
     @keyword
-    def get_element_attribute(
-        self, locator: Locator, attribute: str
-    ) -> str:
+    def get_element_attribute(self, locator: Locator, attribute: str) -> str:
         """Returns the value of ``attribute`` from the element ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -416,9 +412,7 @@ class ElementKeywords(LibraryComponent):
         return self.find_element(locator).get_attribute(attribute)
 
     @keyword
-    def get_dom_attribute(
-        self, locator: Locator, attribute: str
-    ) -> str:
+    def get_dom_attribute(self, locator: Locator, attribute: str) -> str:
         """Returns the value of ``attribute`` from the element ``locator``. `Get DOM Attribute` keyword
         only returns attributes declared within the element's HTML markup.  If the requested attribute
         is not there, the keyword returns ${None}.
@@ -434,7 +428,9 @@ class ElementKeywords(LibraryComponent):
 
     @keyword
     def get_property(
-        self, locator: Locator, property: str  # noqa: A002
+        self,
+        locator: Locator,
+        property: str,  # noqa: A002
     ) -> str:
         """Returns the value of ``property`` from the element ``locator``.
 
@@ -581,9 +577,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         return self.find_element(locator).location["y"]
 
     @keyword
-    def click_button(
-        self, locator: Locator, modifier: bool | str = False
-    ):
+    def click_button(self, locator: Locator, modifier: bool | str = False):
         """Clicks the button identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -605,9 +599,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["button", "input"], modifier)
 
     @keyword
-    def click_image(
-        self, locator: Locator, modifier: bool | str = False
-    ):
+    def click_image(self, locator: Locator, modifier: bool | str = False):
         """Clicks an image identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -630,9 +622,7 @@ newDiv.parentNode.style.overflow = 'hidden';
             self._click_with_modifier(locator, ["image", "input"], modifier)
 
     @keyword
-    def click_link(
-        self, locator: Locator, modifier: bool | str = False
-    ):
+    def click_link(self, locator: Locator, modifier: bool | str = False):
         """Clicks a link identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -774,12 +764,12 @@ newDiv.parentNode.style.overflow = 'hidden';
         New in SeleniumLibrary 3.2.0
         """
         element = self.find_element(locator)
-        ActionChains(self.driver, duration=self.ctx.action_chain_delay).move_to_element(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).move_to_element(
+            element
+        ).perform()
 
     @keyword
-    def drag_and_drop(
-        self, locator: Locator, target: Locator
-    ):
+    def drag_and_drop(self, locator: Locator, target: Locator):
         """Drags the element identified by ``locator`` into the ``target`` element.
 
         The ``locator`` argument is the locator of the dragged element
@@ -795,9 +785,7 @@ newDiv.parentNode.style.overflow = 'hidden';
         action.drag_and_drop(element, target).perform()
 
     @keyword
-    def drag_and_drop_by_offset(
-        self, locator: Locator, xoffset: int, yoffset: int
-    ):
+    def drag_and_drop_by_offset(self, locator: Locator, xoffset: int, yoffset: int):
         """Drags the element identified with ``locator`` by ``xoffset/yoffset``.
 
         See the `Locating elements` section for details about the locator
@@ -869,7 +857,9 @@ newDiv.parentNode.style.overflow = 'hidden';
         """
         self.info(f"Simulating Mouse Up on element '{locator}'.")
         element = self.find_element(locator)
-        ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(element).perform()
+        ActionChains(self.driver, duration=self.ctx.action_chain_delay).release(
+            element
+        ).perform()
 
     @keyword
     def open_context_menu(self, locator: Locator):
@@ -988,7 +978,9 @@ return !element.dispatchEvent(evt);
         if not is_noney(locator):
             self.info(f"Sending key(s) {keys} to {locator} element.")
             element = self.find_element(locator)
-            ActionChains(self.driver, duration=self.ctx.action_chain_delay).click(element).perform()
+            ActionChains(self.driver, duration=self.ctx.action_chain_delay).click(
+                element
+            ).perform()
         else:
             self.info(f"Sending key(s) {keys} to page.")
             element = None
@@ -1228,7 +1220,9 @@ return !element.dispatchEvent(evt);
             if hasattr(Keys, modifier):
                 keys.append(getattr(Keys, modifier))
             else:
-                raise ValueError(f"'{modifier}' modifier does not match to Selenium Keys")
+                raise ValueError(
+                    f"'{modifier}' modifier does not match to Selenium Keys"
+                )
         return keys
 
     def _parse_keys(self, *keys):
@@ -1271,18 +1265,20 @@ return !element.dispatchEvent(evt);
         for key in keys:
             resolved_key = self._parse_aliases(key)
             if self._selenium_keys_has_attr(resolved_key):
-                converted_keys.append(self.KeysRecord(getattr(Keys, resolved_key), resolved_key, True))
+                converted_keys.append(
+                    self.KeysRecord(getattr(Keys, resolved_key), resolved_key, True)
+                )
             else:
-                converted_keys.append(self.KeysRecord(resolved_key, resolved_key, False))
+                converted_keys.append(
+                    self.KeysRecord(resolved_key, resolved_key, False)
+                )
         return converted_keys
 
     def _selenium_keys_has_attr(self, key):
         return hasattr(Keys, key)
 
     @keyword("Get CSS Property Value")
-    def get_css_property_value(
-            self, locator: Locator, css_property: str
-    ) -> str:
+    def get_css_property_value(self, locator: Locator, css_property: str) -> str:
         """Returns the computed value of ``css_property`` from the element ``locator``.
 
         See the `Locating elements` section for details about the locator syntax.

@@ -9,4 +9,5 @@ class MyLibNotInherit:
     def bar(self, arg):
         self.info(arg)
 
+
 my_lib_not_inherit = MyLibNotInherit
