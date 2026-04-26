@@ -1314,6 +1314,8 @@ return !element.dispatchEvent(evt);
         argument is the locator of the iframe containing the source. If
         ``source_frame`` is not provided, the source element is located in the default content.
 
+        After this keyword runs, the browser context is always reset to default content.
+
         See the `Locating elements` section for details about the locator syntax.
 
         Examples:
