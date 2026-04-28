@@ -36,7 +36,7 @@ jobs:
       with:
         python-version: ${{ matrix.config.python-version }}
     - name: Setup ${{ matrix.config.browser }} browser
-      uses: browser-actions/setup-chrome@v1
+      uses: browser-actions/setup-chrome@v2
       with:
         chrome-version: latest
         install-dependencies: true
