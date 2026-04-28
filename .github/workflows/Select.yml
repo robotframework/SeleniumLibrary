@@ -32,7 +32,7 @@ jobs:
         echo "${{ matrix.config.description }} configuration"
         echo "Testing with RF v${{ matrix.config.rf-version }}, Selenium v${{ matrix.config.selenium-version}}, Python v${{ matrix.config.python-version }} under ${{ matrix.config.browser }}"
     - name: Set up Python ${{ matrix.config.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.config.python-version }}
     - name: Setup ${{ matrix.config.browser }} browser
