@@ -1294,3 +1294,60 @@ return !element.dispatchEvent(evt);
         | ${size}=  | `Get CSS Property Value` | id:username       | font-size        |
         """
         return self.find_element(locator).value_of_css_property(css_property)
+
+    from typing import Optional
+
+    @keyword("Drag And Drop Across Frames")
+    def drag_and_drop_across_frames(
+            self,
+            locator: Locator,
+            target: Locator,
+            target_frame: Locator,
+            source_frame: Optional[Locator] = None,
+    ) -> None:
+        """
+        Drags an element and drops it onto a target element across frame boundaries.
+
+        The ``locator`` argument is the locator of the element to drag. The ``target``
+        argument is the locator of the drop target. The ``target_frame`` argument is
+        the locator of the iframe containing the target. The optional ``source_frame``
+        argument is the locator of the iframe containing the source. If
+        ``source_frame`` is not provided, the source element is located in the default content.
+
+        After this keyword runs, the browser context is always reset to default content.
+
+        See the `Locating elements` section for details about the locator syntax.
+
+        Examples:
+        | Drag And Drop Across Frames | id:source | id:target | id:target-frame |
+        | Drag And Drop Across Frames | id:source | id:target | id:target-frame | id:source-frame |
+        """
+        released = False
+
+        try:
+            if source_frame is not None:
+                source_frame_element = self.find_element(source_frame)
+                self.driver.switch_to.frame(source_frame_element)
+
+            source_element = self.find_element(locator)
+            ActionChains(
+                self.driver, duration=self.ctx.action_chain_delay
+            ).click_and_hold(source_element).perform()
+
+            self.driver.switch_to.default_content()
+
+            target_frame_element = self.find_element(target_frame)
+            self.driver.switch_to.frame(target_frame_element)
+
+            target_element = self.find_element(target)
+            ActionChains(
+                self.driver, duration=self.ctx.action_chain_delay
+            ).move_to_element(target_element).release().perform()
+            released = True
+
+        finally:
+            if not released:
+                ActionChains(
+                    self.driver, duration=self.ctx.action_chain_delay
+                ).release().perform()
+            self.driver.switch_to.default_content()
