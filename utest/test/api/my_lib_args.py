@@ -1,7 +1,7 @@
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
-class my_lib_args(LibraryComponent):
+class MyLibArgs(LibraryComponent):
     def __init__(self, ctx, arg1, arg2, *args, **kwargs):
         LibraryComponent.__init__(self, ctx)
         self.arg1 = arg1
@@ -21,3 +21,6 @@ class my_lib_args(LibraryComponent):
     def add_cookie(self, foo, bar):
         self.info(foo)
         self.info(bar)
+
+
+my_lib_args = MyLibArgs

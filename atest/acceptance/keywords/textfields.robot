@@ -81,5 +81,10 @@ Attempt Clear Element Text On Non-Editable Field
 
 Open Browser To Start Page Disabling Chrome Leaked Password Detection
     [Arguments]    ${alias}=${None}
-    Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    options=add_experimental_option("prefs", {"profile.password_manager_leak_detection": False})    alias=${alias}
+    ${browser}=    Evaluate    "${BROWSER}".replace(" ", "").lower()
+    IF    "${browser}" in ["chrome", "googlechrome", "gc", "headlesschrome"]
+        Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
+        ...    options=add_experimental_option("prefs", {"profile.password_manager_leak_detection": False})    alias=${alias}
+    ELSE
+        Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}    alias=${alias}
+    END

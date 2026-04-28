@@ -5,7 +5,6 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from robot.utils import WINDOWS
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
@@ -27,7 +26,6 @@ class FireFoxProfileParsingTests(unittest.TestCase):
     def setUp(self):
         self.results = []
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_single_method(self):
         self._parse_result(
             self.creator._get_ff_profile('set_preference("key1", "arg1")')
@@ -67,10 +65,9 @@ class FireFoxProfileParsingTests(unittest.TestCase):
         # -- temporary fix to transition selenium to v4.17.2 from v4.16.0 and prior
         # from inspect import signature
         # sig = signature(result)
-        if hasattr(result,'default_preferences'):
+        if hasattr(result, "default_preferences"):
             return result.default_preferences
-        elif hasattr(result,'_desired_preferences'):
+        if hasattr(result, "_desired_preferences"):
             return result._desired_preferences
-        else:
-            return None
+        return None
         # --

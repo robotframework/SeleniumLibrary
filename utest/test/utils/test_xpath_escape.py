@@ -5,7 +5,6 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from robot.utils import WINDOWS
 
 from SeleniumLibrary.utils import escape_xpath_value
 
@@ -21,7 +20,6 @@ def reporter():
     return factory.get_first_working()
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_string(reporter):
     results = []
     results.append(escape_xpath_value("tidii"))

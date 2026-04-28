@@ -20,7 +20,6 @@ def teardown_module():
 
 def test_wait_for_condition(waiting):
     condition = 'return document.getElementById("intro")'
-    error = "did not become true"
     with pytest.raises(AssertionError) as error:
         waiting.wait_for_condition(condition)
     assert "did not become true" in str(error.value)

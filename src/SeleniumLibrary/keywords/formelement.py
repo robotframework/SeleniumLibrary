@@ -15,7 +15,6 @@
 # limitations under the License.
 
 import os
-from typing import Optional
 
 from robot.libraries.BuiltIn import BuiltIn
 
@@ -70,7 +69,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_checkbox(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies checkbox ``locator`` is found from the current page.
@@ -87,7 +86,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_checkbox(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies checkbox ``locator`` is not found from the current page.
@@ -132,7 +131,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_radio_button(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies radio button ``locator`` is found from current page.
@@ -150,7 +149,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_radio_button(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies radio button ``locator`` is not found from current page.
@@ -239,9 +238,7 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(
-        self, locator: Locator, password: str, clear: bool = True
-    ):
+    def input_password(self, locator: Locator, password: str, clear: bool = True):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -269,9 +266,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
-    def input_text(
-        self, locator: Locator, text: str, clear: bool = True
-    ):
+    def input_text(self, locator: Locator, text: str, clear: bool = True):
         """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
@@ -300,7 +295,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_textfield(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies text field ``locator`` is found from current page.
@@ -317,7 +312,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_textfield(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies text field ``locator`` is not found from current page.
@@ -335,7 +330,7 @@ class FormElementKeywords(LibraryComponent):
         self,
         locator: Locator,
         expected: str,
-        message: Optional[str] = None,
+        message: str | None = None,
     ):
         """Verifies text field ``locator`` contains text ``expected``.
 
@@ -359,7 +354,7 @@ class FormElementKeywords(LibraryComponent):
         self,
         locator: Locator,
         expected: str,
-        message: Optional[str] = None,
+        message: str | None = None,
     ):
         """Verifies text field ``locator`` has exactly text ``expected``.
 
@@ -383,7 +378,7 @@ class FormElementKeywords(LibraryComponent):
         self,
         locator: Locator,
         expected: str,
-        message: Optional[str] = None,
+        message: str | None = None,
     ):
         """Verifies text area ``locator`` contains text ``expected``.
 
@@ -407,7 +402,7 @@ class FormElementKeywords(LibraryComponent):
         self,
         locator: Locator,
         expected: str,
-        message: Optional[str] = None,
+        message: str | None = None,
     ):
         """Verifies text area ``locator`` has exactly text ``expected``.
 
@@ -430,7 +425,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_contain_button(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies button ``locator`` is found from current page.
@@ -451,7 +446,7 @@ class FormElementKeywords(LibraryComponent):
     def page_should_not_contain_button(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies button ``locator`` is not found from current page.
@@ -488,11 +483,10 @@ class FormElementKeywords(LibraryComponent):
         self.debug(f"Radio group locator: {xpath}")
         try:
             return self.find_element(xpath)
-        except ElementNotFound:
+        except ElementNotFound as original_exception:
             raise ElementNotFound(
-                f"No radio button with name '{group_name}' "
-                f"and value '{value}' found."
-            )
+                f"No radio button with name '{group_name}' and value '{value}' found."
+            ) from original_exception
 
     def _get_value_from_radio_buttons(self, elements):
         for element in elements:

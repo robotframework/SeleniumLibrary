@@ -13,9 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import List, Optional, Union
 
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import Select
 
 from SeleniumLibrary.base import LibraryComponent, keyword
@@ -25,9 +23,7 @@ from SeleniumLibrary.utils.types import Locator
 
 class SelectElementKeywords(LibraryComponent):
     @keyword
-    def get_list_items(
-        self, locator: Locator, values: bool = False
-    ) -> List[str]:
+    def get_list_items(self, locator: Locator, values: bool = False) -> list[str]:
         """Returns all labels or values of selection list ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -46,8 +42,7 @@ class SelectElementKeywords(LibraryComponent):
         options = self._get_options(locator)
         if is_truthy(values):
             return self._get_values(options)
-        else:
-            return self._get_labels(options)
+        return self._get_labels(options)
 
     @keyword
     def get_selected_list_label(self, locator: Locator) -> str:
@@ -63,7 +58,7 @@ class SelectElementKeywords(LibraryComponent):
         return select.first_selected_option.text
 
     @keyword
-    def get_selected_list_labels(self, locator: Locator) -> List[str]:
+    def get_selected_list_labels(self, locator: Locator) -> list[str]:
         """Returns labels of selected options from selection list ``locator``.
 
         Starting from SeleniumLibrary 3.0, returns an empty list if there
@@ -89,7 +84,7 @@ class SelectElementKeywords(LibraryComponent):
         return select.first_selected_option.get_attribute("value")
 
     @keyword
-    def get_selected_list_values(self, locator: Locator) -> List[str]:
+    def get_selected_list_values(self, locator: Locator) -> list[str]:
         """Returns values of selected options from selection list ``locator``.
 
         Starting from SeleniumLibrary 3.0, returns an empty list if there
@@ -136,7 +131,9 @@ class SelectElementKeywords(LibraryComponent):
             )
 
     def _format_selection(self, labels, values):
-        return " | ".join(f"{label} ({value})" for label, value in zip(labels, values))
+        return " | ".join(
+            f"{label} ({value})" for label, value in zip(labels, values, strict=True)
+        )
 
     @keyword
     def list_should_have_no_selections(self, locator: Locator):
@@ -160,7 +157,7 @@ class SelectElementKeywords(LibraryComponent):
     def page_should_contain_list(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies selection list ``locator`` is found from current page.
@@ -177,7 +174,7 @@ class SelectElementKeywords(LibraryComponent):
     def page_should_not_contain_list(
         self,
         locator: Locator,
-        message: Optional[str] = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         """Verifies selection list ``locator`` is not found from current page.
@@ -293,9 +290,7 @@ class SelectElementKeywords(LibraryComponent):
         select.deselect_all()
 
     @keyword
-    def unselect_from_list_by_index(
-        self, locator: Locator, *indexes: str
-    ):
+    def unselect_from_list_by_index(self, locator: Locator, *indexes: str):
         """Unselects options from selection list ``locator`` by ``indexes``.
 
         Indexes of list options start from 0. This keyword works only with
@@ -320,9 +315,7 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_by_index(int(index))
 
     @keyword
-    def unselect_from_list_by_value(
-        self, locator: Locator, *values: str
-    ):
+    def unselect_from_list_by_value(self, locator: Locator, *values: str):
         """Unselects options from selection list ``locator`` by ``values``.
 
         This keyword works only with multi-selection lists.
@@ -345,9 +338,7 @@ class SelectElementKeywords(LibraryComponent):
             select.deselect_by_value(value)
 
     @keyword
-    def unselect_from_list_by_label(
-        self, locator: Locator, *labels: str
-    ):
+    def unselect_from_list_by_label(self, locator: Locator, *labels: str):
         """Unselects options from selection list ``locator`` by ``labels``.
 
         This keyword works only with multi-selection lists.

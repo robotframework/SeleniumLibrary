@@ -18,6 +18,7 @@
         return options.Options
 
 """
+
 from selenium import webdriver
 from selenium.webdriver.common import driver_finder
 import importlib
@@ -30,12 +31,12 @@ def get_driver_path(browser):
     options = importlib.import_module(f"selenium.webdriver.{browser}.options")
 
     args = inspect.signature(driver_finder.DriverFinder.__init__).parameters.keys()
-    if ('service' in args) and ('options' in args):
+    if ("service" in args) and ("options" in args):
         # Selenium V4.20.0 or greater
         finder = driver_finder.DriverFinder(service.Service(), options.Options())
         return finder.get_driver_path()
     else:
         # Selenium v4.19.0 and prior
         finder = driver_finder.DriverFinder()
-        func = getattr(finder, 'get_path')
+        func = getattr(finder, "get_path")
         return finder.get_path(service.Service(), options.Options())

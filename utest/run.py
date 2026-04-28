@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import argparse
+import logging
 import os
 import shutil
 import sys
 from os.path import join
 from pathlib import Path
 
-from pytest import main as py_main
-
+import pytest
 
 CURDIR = Path(__file__).parent
 SRC = join(CURDIR, os.pardir, "src")
@@ -38,9 +38,9 @@ def run_unit_tests(reporter, reporter_args, suite, verbose):
     if reporter_args:
         py_args.insert(1, f"--approvaltests-add-reporter-args={reporter_args}")
     try:
-        result = py_main(py_args)
+        result = pytest.main(py_args)
     except Exception as error:
-        print(f"Suppressed error: {error}")
+        logging.exception(f"Suppressed error: {error}")
         result = 254
     finally:
         sys.path.pop(0)

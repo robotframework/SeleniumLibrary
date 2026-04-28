@@ -15,11 +15,10 @@
 # limitations under the License.
 
 import os
-from typing import Optional, Union
 from base64 import b64decode
 
 from robot.utils import get_link_path
-from selenium.webdriver.common.print_page_options import PrintOptions, Orientation
+from selenium.webdriver.common.print_page_options import Orientation, PrintOptions
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils.path_formatter import _format_path
@@ -35,7 +34,7 @@ DEFAULT_FILENAME_PDF = "selenium-page-{index}.pdf"
 
 class ScreenshotKeywords(LibraryComponent):
     @keyword
-    def set_screenshot_directory(self, path: Union[None, str]) -> str:
+    def set_screenshot_directory(self, path: None | str) -> str:
         """Sets the directory for captured screenshots.
 
         ``path`` argument specifies the absolute path to a directory where
@@ -72,7 +71,9 @@ class ScreenshotKeywords(LibraryComponent):
         return previous
 
     @keyword
-    def capture_page_screenshot(self, filename: str = DEFAULT_FILENAME_PAGE) -> str:
+    def capture_page_screenshot(
+        self, filename: str = DEFAULT_FILENAME_PAGE
+    ) -> str | None:
         """Takes a screenshot of the current page and embeds it into a log file.
 
         ``filename`` argument specifies the name of the file to write the
@@ -123,7 +124,7 @@ class ScreenshotKeywords(LibraryComponent):
         """
         if not self.drivers.current:
             self.info("Cannot capture screenshot because no browser is open.")
-            return
+            return None
         is_embedded, method = self._decide_embedded(filename)
         if is_embedded:
             return self._capture_page_screen_to_log(method)
@@ -149,7 +150,7 @@ class ScreenshotKeywords(LibraryComponent):
         self,
         locator: Locator,
         filename: str = DEFAULT_FILENAME_ELEMENT,
-    ) -> str:
+    ) -> str | None:
         """Captures a screenshot from the element identified by ``locator`` and embeds it into log file.
 
         See `Capture Page Screenshot` for details about ``filename`` argument.
@@ -179,7 +180,7 @@ class ScreenshotKeywords(LibraryComponent):
             self.info(
                 "Cannot capture screenshot from element because no browser is open."
             )
-            return
+            return None
         element = self.find_element(locator, required=True)
         is_embedded, method = self._decide_embedded(filename)
         if is_embedded:
@@ -263,24 +264,25 @@ class ScreenshotKeywords(LibraryComponent):
             f'<a href="{src}"><img src="{src}" width="{width}px"></a>',
             html=True,
         )
-    
+
     @keyword
-    def print_page_as_pdf(self,
-                            filename: str = DEFAULT_FILENAME_PDF,
-                            background: Optional[bool]  = None,
-                            margin_bottom: Optional[float] = None,
-                            margin_left: Optional[float] = None,
-                            margin_right: Optional[float] = None,
-                            margin_top: Optional[float] = None,
-                            orientation: Optional[Orientation] = None,
-	                        page_height: Optional[float] = None,
-                            page_ranges: Optional[list]  = None,
-                            page_width: Optional[float] = None,
-                            scale: Optional[float] = None,
-	                        shrink_to_fit: Optional[bool]  = None,
-                            # path_to_file=None,
-                         ):
-        """ Print the current page as a PDF
+    def print_page_as_pdf(  # noqa: PLR0912 C901
+        self,
+        filename: str = DEFAULT_FILENAME_PDF,
+        background: bool | None = None,
+        margin_bottom: float | None = None,
+        margin_left: float | None = None,
+        margin_right: float | None = None,
+        margin_top: float | None = None,
+        orientation: Orientation | None = None,
+        page_height: float | None = None,
+        page_ranges: list | None = None,
+        page_width: float | None = None,
+        scale: float | None = None,
+        shrink_to_fit: bool | None = None,
+        # path_to_file=None,
+    ):
+        """Print the current page as a PDF
 
         ``page_ranges`` defaults to `['-']` or "all" pages. ``page_ranges`` takes a list of
         strings indicating the ranges.
@@ -304,11 +306,11 @@ class ScreenshotKeywords(LibraryComponent):
         """
 
         if page_ranges is None:
-            page_ranges = ['-']
+            page_ranges = ["-"]
 
         print_options = PrintOptions()
         if background is not None:
-            print_options.background =  background
+            print_options.background = background
         if margin_bottom is not None:
             print_options.margin_bottom = margin_bottom
         if margin_left is not None:
@@ -332,7 +334,7 @@ class ScreenshotKeywords(LibraryComponent):
 
         if not self.drivers.current:
             self.info("Cannot print page to pdf because no browser is open.")
-            return
+            return None
         return self._print_page_as_pdf_to_file(filename, print_options)
 
     def _print_page_as_pdf_to_file(self, filename, options):
@@ -340,13 +342,13 @@ class ScreenshotKeywords(LibraryComponent):
         self._create_directory(path)
         pdfdata = self.driver.print_page(options)
         if not pdfdata:
-            raise RuntimeError(f"Failed to print page.")
+            raise RuntimeError("Failed to print page.")
         self._save_pdf_to_file(pdfdata, path)
         return path
 
     def _save_pdf_to_file(self, pdfbase64, path):
         pdfdata = b64decode(pdfbase64)
-        with open(path, mode='wb') as pdf:
+        with open(path, mode="wb") as pdf:
             pdf.write(pdfdata)
 
     def _get_pdf_path(self, filename):

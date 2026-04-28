@@ -16,7 +16,6 @@
 
 import time
 from datetime import timedelta
-from typing import Optional
 
 from selenium.common.exceptions import StaleElementReferenceException
 
@@ -31,8 +30,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_for_condition(
         self,
         condition: str,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until ``condition`` is true or ``timeout`` expires.
 
@@ -66,8 +65,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_is(
         self,
         expected: str,
-        timeout: Optional[timedelta] = None,
-        message: Optional[str] = None,
+        timeout: timedelta | None = None,
+        message: str | None = None,
     ):
         """Waits until the current URL is ``expected``.
 
@@ -95,8 +94,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_is_not(
         self,
         location: str,
-        timeout: Optional[timedelta] = None,
-        message: Optional[str] = None,
+        timeout: timedelta | None = None,
+        message: str | None = None,
     ):
         """Waits until the current URL is not ``location``.
 
@@ -123,8 +122,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_contains(
         self,
         expected: str,
-        timeout: Optional[timedelta] = None,
-        message: Optional[str] = None,
+        timeout: timedelta | None = None,
+        message: str | None = None,
     ):
         """Waits until the current URL contains ``expected``.
 
@@ -151,8 +150,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_location_does_not_contain(
         self,
         location: str,
-        timeout: Optional[timedelta] = None,
-        message: Optional[str] = None,
+        timeout: timedelta | None = None,
+        message: str | None = None,
     ):
         """Waits until the current URL does not contains ``location``.
 
@@ -179,8 +178,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_contains(
         self,
         text: str,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until ``text`` appears on the current page.
 
@@ -201,8 +200,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_does_not_contain(
         self,
         text: str,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until ``text`` disappears from the current page.
 
@@ -223,9 +222,9 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_contains_element(
         self,
         locator: Locator,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
-        limit: Optional[int] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
+        limit: int | None = None,
     ):
         """Waits until the element ``locator`` appears on the current page.
 
@@ -244,12 +243,13 @@ class WaitingKeywords(LibraryComponent):
         ``limit`` is new in SeleniumLibrary 4.4
         """
         if limit is None:
-            return self._wait_until(
+            self._wait_until(
                 lambda: self.find_element(locator, required=False) is not None,
                 f"Element '{locator}' did not appear in <TIMEOUT>.",
                 timeout,
                 error,
             )
+            return
         self._wait_until(
             lambda: len(self.find_elements(locator)) == limit,
             f'Page should have contained "{limit}" {locator} element(s) within <TIMEOUT>.',
@@ -261,9 +261,9 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_page_does_not_contain_element(
         self,
         locator: Locator,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
-        limit: Optional[int] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
+        limit: int | None = None,
     ):
         """Waits until the element ``locator`` disappears from the current page.
 
@@ -282,12 +282,13 @@ class WaitingKeywords(LibraryComponent):
         ``limit`` is new in SeleniumLibrary 4.4
         """
         if limit is None:
-            return self._wait_until(
+            self._wait_until(
                 lambda: self.find_element(locator, required=False) is None,
                 f"Element '{locator}' did not disappear in <TIMEOUT>.",
                 timeout,
                 error,
             )
+            return
         self._wait_until(
             lambda: len(self.find_elements(locator)) != limit,
             f'Page should have not contained "{limit}" {locator} element(s) within <TIMEOUT>.',
@@ -299,8 +300,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_visible(
         self,
         locator: Locator,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until the element ``locator`` is visible.
 
@@ -322,8 +323,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_not_visible(
         self,
         locator: Locator,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until the element ``locator`` is not visible.
 
@@ -345,8 +346,8 @@ class WaitingKeywords(LibraryComponent):
     def wait_until_element_is_enabled(
         self,
         locator: Locator,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until the element ``locator`` is enabled.
 
@@ -374,8 +375,8 @@ class WaitingKeywords(LibraryComponent):
         self,
         locator: Locator,
         text: str,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until the element ``locator`` contains ``text``.
 
@@ -398,8 +399,8 @@ class WaitingKeywords(LibraryComponent):
         self,
         locator: Locator,
         text: str,
-        timeout: Optional[timedelta] = None,
-        error: Optional[str] = None,
+        timeout: timedelta | None = None,
+        error: str | None = None,
     ):
         """Waits until the element ``locator`` does not contain ``text``.
 

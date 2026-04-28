@@ -18,7 +18,6 @@ import hashlib
 import inspect
 import json
 from pathlib import Path
-from typing import List, Optional
 
 KEYWORD_NAME = "Keyword name"
 DOC_CHANGED = "Documentation update needed"
@@ -33,8 +32,8 @@ MAX_REASON_LEN = max(
 )
 
 
-def get_library_translation(plugins: Optional[str] = None) -> dict:
-    from SeleniumLibrary import SeleniumLibrary
+def get_library_translation(plugins: str | None = None) -> dict:
+    from SeleniumLibrary import SeleniumLibrary  # noqa: PLC0415
 
     selib = SeleniumLibrary(plugins=plugins)
     translation = {}
@@ -65,7 +64,7 @@ def _max_kw_name_length(project_translation: dict) -> int:
     return max_lenght
 
 
-def _get_heading(max_kw_length: int) -> List[str]:
+def _get_heading(max_kw_length: int) -> list[str]:
     heading = f"| {KEYWORD_NAME} "
     next_line = f"| {'-' * len(KEYWORD_NAME)}"
     if (padding := max_kw_length - len(KEYWORD_NAME)) > 0:

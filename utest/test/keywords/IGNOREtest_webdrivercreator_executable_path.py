@@ -1,11 +1,10 @@
 import os
 
 import pytest
-from mockito import mock, unstub, when, ANY
+from mockito import ANY, mock, unstub, when
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
-
 
 LOG_DIR = "/log/dir"
 
@@ -24,7 +23,8 @@ def teardown_function():
 def test_create_chrome_executable_path_set(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service=ANY,  # service_log_path=None, executable_path="/path/to/chromedriver"
+        options=None,
+        service=ANY,  # service_log_path=None, executable_path="/path/to/chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None, executable_path="/path/to/chromedriver")
     assert driver == expected_webdriver
@@ -33,7 +33,8 @@ def test_create_chrome_executable_path_set(creator):
 def test_create_chrome_executable_path_not_set(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service=ANY,  # service_log_path=None, executable_path="chromedriver"
+        options=None,
+        service=ANY,  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     when(creator)._get_executable_path(ANY).thenReturn("chromedriver")
     driver = creator.create_chrome({}, None, executable_path=None)
@@ -72,7 +73,8 @@ def test_create_heasless_chrome_executable_path_set(creator):
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
-        options=options, service = ANY  # service_log_path=None, executable_path="/path/to/chromedriver"
+        options=options,
+        service=ANY,  # service_log_path=None, executable_path="/path/to/chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome(
         {}, None, executable_path="/path/to/chromedriver"
@@ -92,7 +94,7 @@ def test_create_firefox_executable_path_set(creator):
     when(webdriver).Firefox(
         options=options,
         # firefox_profile=profile,
-        service = ANY,
+        service=ANY,
         # service_log_path=log_file,
         # executable_path=executable,
     ).thenReturn(expected_webdriver)
@@ -247,5 +249,4 @@ def mock_file_detector(creator):
 def get_geckodriver_log():
     # return os.path.join(LOG_DIR, "geckodriver-1.log")
     # print(f"{os.getcwd()}")
-    cwd = os.getcwd()
-    return cwd
+    return os.getcwd()

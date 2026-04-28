@@ -5,14 +5,12 @@ from approvaltests.approvals import verify, verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from robot.utils import WINDOWS
 
 from SeleniumLibrary.keywords import JavaScriptKeywords
 
 
 class JavaScriptKeywordsTest(unittest.TestCase):
     @classmethod
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def setUpClass(cls):
         cls.code_examples = [
             (),
@@ -40,13 +38,11 @@ class JavaScriptKeywordsTest(unittest.TestCase):
         factory.load(reporter_json)
         cls.reporter = factory.get_first_working()
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_get_javascript(self):
         code, args = self.js._get_javascript_to_execute(("code", "here"))
         result = f"{code} + {args}"
         verify(result, self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_get_javascript_no_code(self):
         code = ("ARGUMENTS", "arg1", "arg1")
         try:
@@ -55,21 +51,18 @@ class JavaScriptKeywordsTest(unittest.TestCase):
             result = str(error)
         verify(result, self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_separate_code_and_args(self):
         all_results = []
         for code in self.code_examples:
             all_results.append(self.js_reporter(code))
         verify_all("code and args", all_results, reporter=self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_indexing(self):
         all_results = []
         for code in self.code_examples:
             all_results.append(self.js._get_marker_index(code))
         verify_all("index", all_results, reporter=self.reporter)
 
-    @unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
     def test_check_marker_error(self):
         examples = [
             (),

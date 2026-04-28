@@ -18,7 +18,7 @@ import importlib
 import inspect
 import os
 import token
-import warnings
+from inspect import signature
 from io import StringIO
 from tokenize import generate_tokens
 
@@ -26,7 +26,6 @@ from robot.api import logger
 from robot.utils import ConnectionCache
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
-
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -40,22 +39,20 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 
 
 class WebDriverCreator:
-
-    browser_names = {
-        "googlechrome": "chrome",
-        "gc": "chrome",
-        "chrome": "chrome",
-        "headlesschrome": "headless_chrome",
-        "ff": "firefox",
-        "firefox": "firefox",
-        "headlessfirefox": "headless_firefox",
-        "ie": "ie",
-        "internetexplorer": "ie",
-        "edge": "edge",
-        "safari": "safari",
-    }
-
     def __init__(self, log_dir):
+        self.browser_names = {
+            "googlechrome": "chrome",
+            "gc": "chrome",
+            "chrome": "chrome",
+            "headlesschrome": "headless_chrome",
+            "ff": "firefox",
+            "firefox": "firefox",
+            "headlessfirefox": "headless_firefox",
+            "ie": "ie",
+            "internetexplorer": "ie",
+            "edge": "edge",
+            "safari": "safari",
+        }
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
         self.selenium_service = SeleniumService()
@@ -80,10 +77,7 @@ class WebDriverCreator:
         if service_log_path:
             logger.info(f"Browser driver log file created to: {service_log_path}")
             self._create_directory(service_log_path)
-        if (
-            creation_method == self.create_firefox
-            or creation_method == self.create_headless_firefox
-        ):
+        if creation_method in [self.create_firefox, self.create_headless_firefox]:
             return creation_method(
                 desired_capabilities,
                 remote_url,
@@ -137,12 +131,10 @@ class WebDriverCreator:
 
     def _get_log_method(self, service_cls, service_log_path):
         # -- temporary fix to transition selenium to v4.13 from v4.11 and prior
-        from inspect import signature
         sig = signature(service_cls)
-        if 'log_output' in str(sig):
-            return {'log_output': service_log_path}
-        else:
-            return {'log_path': service_log_path}
+        if "log_output" in str(sig):
+            return {"log_output": service_log_path}
+        return {"log_path": service_log_path}
         # --
 
     def create_chrome(
@@ -159,7 +151,9 @@ class WebDriverCreator:
                 options = webdriver.ChromeOptions()
             return self._remote(remote_url, options=options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.chrome.service.Service)
+            executable_path = self._get_executable_path(
+                webdriver.chrome.service.Service
+            )
         log_method = self._get_log_method(ChromeService, service_log_path)
         if not service:
             service = ChromeService(executable_path=executable_path, **log_method)
@@ -179,9 +173,14 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.ChromeOptions()
-        options.add_argument('--headless=new')
+        options.add_argument("--headless=new")
         return self.create_chrome(
-            desired_capabilities, remote_url, options, service_log_path, executable_path, service
+            desired_capabilities,
+            remote_url,
+            options,
+            service_log_path,
+            executable_path,
+            service,
         )
 
     def _get_executable_path(self, webdriver):
@@ -215,8 +214,12 @@ class WebDriverCreator:
         if remote_url:
             return self._remote(remote_url, options)
         if not executable_path:
-            executable_path = self._get_executable_path(webdriver.firefox.service.Service)
-        log_method = self._get_log_method(FirefoxService, service_log_path or self._geckodriver_log)
+            executable_path = self._get_executable_path(
+                webdriver.firefox.service.Service
+            )
+        log_method = self._get_log_method(
+            FirefoxService, service_log_path or self._geckodriver_log
+        )
         if service is None:
             service = FirefoxService(executable_path=executable_path, **log_method)
         return webdriver.Firefox(
@@ -263,7 +266,7 @@ class WebDriverCreator:
     ):
         if not options:
             options = webdriver.FirefoxOptions()
-        options.add_argument('-headless')
+        options.add_argument("-headless")
         return self.create_firefox(
             desired_capabilities,
             remote_url,
@@ -295,7 +298,7 @@ class WebDriverCreator:
         return webdriver.Ie(
             options=options,
             service=service,
-            #**desired_capabilities,
+            # **desired_capabilities,
         )
 
     def _has_options(self, web_driver):
@@ -323,7 +326,7 @@ class WebDriverCreator:
         return webdriver.Edge(
             options=options,
             service=service,
-            #**desired_capabilities,
+            # **desired_capabilities,
         )
 
     def create_safari(
@@ -461,10 +464,8 @@ class WebDriverCache(ConnectionCache):
         except ValueError:
             return None
 
-class SeleniumService:
-    """
 
-    """
+class SeleniumService:
     def create(self, browser, service):
         if not service:
             return None
@@ -478,10 +479,13 @@ class SeleniumService:
         service_parameters = inspect.signature(selenium_service).parameters
         for key in attrs:
             if key not in service_parameters:
-                service_module = '.'.join((selenium_service.__module__, selenium_service.__qualname__))
-                raise ValueError(f"{key} is not a member of {service_module} Service class")
-        selenium_service_inst = selenium_service(**attrs)
-        return selenium_service_inst
+                service_module = ".".join(
+                    (selenium_service.__module__, selenium_service.__qualname__)
+                )
+                raise ValueError(
+                    f"{key} is not a member of {service_module} Service class"
+                )
+        return selenium_service(**attrs)
 
     def _parse(self, service):
         """The service argument parses slightly different than the options argument. As of
@@ -489,12 +493,14 @@ class SeleniumService:
         instantiation. Thus each item is split instead parsed as done with options.
         """
         result = {}
-        for item in self._split(service,';'):
+        for item in self._split(service, ";"):
             try:
-                attr, val = self._split(item, '=')
-                result[attr]=ast.literal_eval(val)
-            except (ValueError, SyntaxError):
-                raise ValueError(f'Unable to parse service: "{item}"')
+                attr, val = self._split(item, "=")
+                result[attr] = ast.literal_eval(val)
+            except (ValueError, SyntaxError) as original_exception:
+                raise ValueError(
+                    f'Unable to parse service: "{item}"'
+                ) from original_exception
         return result
 
     def _import_service(self, browser):
@@ -514,6 +520,7 @@ class SeleniumService:
         split_string.append(service_or_attr[start_position:])
         return split_string
 
+
 class SeleniumOptions:
     def create(self, browser, options):
         if not options:
@@ -525,8 +532,10 @@ class SeleniumOptions:
         selenium_options = selenium_options()
         for option in options:
             for key in option:
-                if key == '' and option[key]==[]:
-                    logger.warn('Empty selenium option found and ignored. Suggested you review options passed to `Open Browser` keyword')
+                if key == "" and option[key] == []:
+                    logger.warn(
+                        "Empty selenium option found and ignored. Suggested you review options passed to `Open Browser` keyword"
+                    )
                     continue
                 attr = getattr(selenium_options, key)
                 if callable(attr):
@@ -575,8 +584,10 @@ class SeleniumOptions:
         for item in self._split(options):
             try:
                 result.append(self._parse_to_tokens(item))
-            except (ValueError, SyntaxError):
-                raise ValueError(f'Unable to parse option: "{item}"')
+            except (ValueError, SyntaxError) as original_exception:
+                raise ValueError(
+                    f'Unable to parse option: "{item}"'
+                ) from original_exception
         return result
 
     def _parse_to_tokens(self, item):

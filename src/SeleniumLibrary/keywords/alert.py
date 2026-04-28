@@ -14,13 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import timedelta
-from typing import Optional
 
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.utils import secs_to_timestr
 
 
@@ -32,7 +31,7 @@ class AlertKeywords(LibraryComponent):
 
     @keyword
     def input_text_into_alert(
-        self, text: str, action: str = ACCEPT, timeout: Optional[timedelta] = None
+        self, text: str, action: str = ACCEPT, timeout: timedelta | None = None
     ):
         """Types the given ``text`` into an input field in an alert.
 
@@ -53,7 +52,7 @@ class AlertKeywords(LibraryComponent):
         self,
         text: str = "",
         action: str = ACCEPT,
-        timeout: Optional[timedelta] = None,
+        timeout: timedelta | None = None,
     ):
         """Verifies that an alert is present and by default, accepts it.
 
@@ -72,12 +71,12 @@ class AlertKeywords(LibraryComponent):
         message = self.handle_alert(action, timeout)
         if text and text != message:
             raise AssertionError(
-                f"Alert message should have been '{text}' but it " f"was '{message}'."
+                f"Alert message should have been '{text}' but it was '{message}'."
             )
 
     @keyword
     def alert_should_not_be_present(
-        self, action: str = ACCEPT, timeout: Optional[timedelta] = None
+        self, action: str = ACCEPT, timeout: timedelta | None = None
     ):
         """Verifies that no alert is present.
 
@@ -101,7 +100,7 @@ class AlertKeywords(LibraryComponent):
         raise AssertionError(f"Alert with message '{text}' present.")
 
     @keyword
-    def handle_alert(self, action: str = ACCEPT, timeout: Optional[timedelta] = None):
+    def handle_alert(self, action: str = ACCEPT, timeout: timedelta | None = None):
         """Handles the current alert and returns its message.
 
         By default, the alert is accepted, but this can be controlled
@@ -146,7 +145,11 @@ class AlertKeywords(LibraryComponent):
         wait = WebDriverWait(self.driver, timeout)
         try:
             return wait.until(EC.alert_is_present())
-        except TimeoutException:
-            raise AssertionError(f"Alert not found in {secs_to_timestr(timeout)}.")
+        except TimeoutException as original_exception:
+            raise AssertionError(
+                f"Alert not found in {secs_to_timestr(timeout)}."
+            ) from original_exception
         except WebDriverException as err:
-            raise AssertionError(f"An exception occurred waiting for alert: {err}")
+            raise AssertionError(
+                f"An exception occurred waiting for alert: {err}"
+            ) from err
