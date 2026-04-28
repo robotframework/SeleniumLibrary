@@ -26,7 +26,7 @@ jobs:
             browser: chrome
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Configuration Description
       run: |
         echo "${{ matrix.config.description }} configuration"
