@@ -13,16 +13,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
 from datetime import timedelta
 from typing import Any, TypeAlias
 
 from robot.utils import is_falsy, is_truthy, timestr_to_secs  # noqa
 from selenium.webdriver.remote.webelement import WebElement
-
-# Need only for unit tests and can be removed when Approval tests fixes:
-# https://github.com/approvals/ApprovalTests.Python/issues/41
-WINDOWS = os.name == "nt"
 
 Locator: TypeAlias = WebElement | str | list["Locator"]
 
