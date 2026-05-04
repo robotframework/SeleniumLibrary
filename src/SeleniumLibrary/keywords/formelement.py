@@ -20,7 +20,7 @@ from robot.libraries.BuiltIn import BuiltIn
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import ElementNotFound
-from SeleniumLibrary.utils.types import Locator
+from SeleniumLibrary.utils.types import Locator, Secret
 
 
 class FormElementKeywords(LibraryComponent):
@@ -238,7 +238,7 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(self, locator: Locator, password: str, clear: bool = True):
+    def input_password(self, locator: Locator, password: str | Secret, clear: bool = True):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator

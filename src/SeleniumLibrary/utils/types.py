@@ -20,9 +20,27 @@ from typing import Any, TypeAlias
 from robot.utils import is_falsy, is_truthy, timestr_to_secs  # noqa
 from selenium.webdriver.remote.webelement import WebElement
 
-# Need only for unit tests and can be removed when Approval tests fixes:
-# https://github.com/approvals/ApprovalTests.Python/issues/41
-WINDOWS = os.name == "nt"
+try:
+    from robot.api.types import Secret
+except ImportError:
+    # Robot Framework < 7.4 does not have the Secret type.
+    # This shim lets users on older RF versions still import it without
+    # errors. It can be removed once RF 7.4+ is the minimum requirement.
+    class Secret:  # type: ignore[no-redef]
+        """Backport shim for ``robot.api.types.Secret`` (RF 7.4+).
+
+        Mirrors the public interface of the real class so that ``isinstance``
+        checks and ``.value`` access work uniformly across RF versions.
+        """
+
+        def __init__(self, value: str):
+            self.value = value
+
+        def __str__(self) -> str:
+            return "<secret>"
+
+        def __repr__(self) -> str:
+            return f"{type(self).__name__}(value=<secret>)"
 
 Locator: TypeAlias = WebElement | str | list["Locator"]
 
