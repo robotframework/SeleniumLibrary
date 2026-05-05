@@ -1,14 +1,14 @@
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
-class MyLib(LibraryComponent):
+class my_lib(LibraryComponent):  # noqa: N801 - prefer RF syntax for test libraries
     """Some dummy documentation.
 
-    = MyLib Heading 1 =
+    = my_lib Heading 1 =
 
     This is heading 1 documentation.
 
-    == MyLib Heading 2 ==
+    == my_lib Heading 2 ==
 
      This is heading 2 documentation.
     """
@@ -20,6 +20,3 @@ class MyLib(LibraryComponent):
     @keyword
     def bar(self, arg):
         self.info(arg)
-
-
-my_lib = MyLib

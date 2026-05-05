@@ -21,7 +21,6 @@ from .types import (  # noqa
     is_falsy,
     is_noney,
     is_truthy,
-    WINDOWS,
     _convert_timeout,
     _convert_delay,
 )

@@ -653,12 +653,12 @@ newDiv.parentNode.style.overflow = 'hidden';
         syntax.
 
         The ``modifier`` argument can be used to pass
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys|Selenium Keys]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#module-selenium.webdriver.common.keys|Selenium Keys]
         when clicking the element. The `+` can be used as a separator
         for different Selenium Keys. The `CTRL` is internally translated to
         the `CONTROL` key. The ``modifier`` is space and case insensitive, example
         "alt" and " aLt " are supported formats to
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ALT|ALT key]
         . If ``modifier`` does not match to Selenium Keys, keyword fails.
 
         If ``action_chain`` argument is true, see `Boolean arguments` for more
@@ -932,7 +932,7 @@ return !element.dispatchEvent(evt);
 
         ``keys`` arguments can contain one or many strings, but it can not
         be empty. ``keys`` can also be a combination of
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html|Selenium Keys]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html|Selenium Keys]
         and strings or a single Selenium Key. If Selenium Key is combined
         with strings, Selenium key and strings must be separated by the
         `+` character, like in `CONTROL+c`. Selenium Keys
@@ -950,9 +950,9 @@ return !element.dispatchEvent(evt);
         `+` character, example `E+N+D`.
 
         `CTRL` is alias for
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.CONTROL|Selenium CONTROL]
         and ESC is alias for
-        [https://seleniumhq.github.io/selenium/docs/api/py/webdriver/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]
+        [https://www.selenium.dev/selenium/docs/api/py/selenium_webdriver_common/selenium.webdriver.common.keys.html#selenium.webdriver.common.keys.Keys.ESCAPE|Selenium ESCAPE]
 
         New in SeleniumLibrary 3.3
 
@@ -1292,3 +1292,59 @@ return !element.dispatchEvent(evt);
         | ${size}=  | `Get CSS Property Value` | id:username       | font-size        |
         """
         return self.find_element(locator).value_of_css_property(css_property)
+
+
+    @keyword("Drag And Drop Across Frames")
+    def drag_and_drop_across_frames(
+            self,
+            locator: Locator,
+            target: Locator,
+            target_frame: Locator,
+            source_frame: Locator | None = None,
+    ) -> None:
+        """
+        Drags an element and drops it onto a target element across frame boundaries.
+
+        The ``locator`` argument is the locator of the element to drag. The ``target``
+        argument is the locator of the drop target. The ``target_frame`` argument is
+        the locator of the iframe containing the target. The optional ``source_frame``
+        argument is the locator of the iframe containing the source. If
+        ``source_frame`` is not provided, the source element is located in the default content.
+
+        After this keyword runs, the browser context is always reset to default content.
+
+        See the `Locating elements` section for details about the locator syntax.
+
+        Examples:
+        | Drag And Drop Across Frames | id:source | id:target | id:target-frame |
+        | Drag And Drop Across Frames | id:source | id:target | id:target-frame | id:source-frame |
+        """
+        released = False
+
+        try:
+            if source_frame is not None:
+                source_frame_element = self.find_element(source_frame)
+                self.driver.switch_to.frame(source_frame_element)
+
+            source_element = self.find_element(locator)
+            ActionChains(
+                self.driver, duration=self.ctx.action_chain_delay
+            ).click_and_hold(source_element).perform()
+
+            self.driver.switch_to.default_content()
+
+            target_frame_element = self.find_element(target_frame)
+            self.driver.switch_to.frame(target_frame_element)
+
+            target_element = self.find_element(target)
+            ActionChains(
+                self.driver, duration=self.ctx.action_chain_delay
+            ).move_to_element(target_element).release().perform()
+            released = True
+
+        finally:
+            if not released:
+                ActionChains(
+                    self.driver, duration=self.ctx.action_chain_delay
+                ).release().perform()
+            self.driver.switch_to.default_content()

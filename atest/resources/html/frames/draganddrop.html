@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Drag And Drop Across Frames Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f0f0f0;
+        }
+
+        .frame-wrapper {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        iframe {
+            width: 500px;
+            height: 350px;
+            border: 3px solid #333;
+            background: white;
+        }
+
+        #defaultSource,
+        #dragGhost {
+            width: 150px;
+            height: 150px;
+            background: lightblue;
+            text-align: center;
+            line-height: 150px;
+            font-size: 20px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        #dragGhost {
+            position: fixed;
+            display: none;
+            z-index: 10000;
+            border: 2px solid #333;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Drag And Drop Across Frames Test Page</h2>
+
+<div id="defaultSource">Default Source</div>
+
+<div class="frame-wrapper">
+    <iframe id="sourceFrame"></iframe>
+    <iframe id="targetFrame"></iframe>
+</div>
+
+<div id="dragGhost"></div>
+
+<script>
+    const sourceFrame = document.getElementById("sourceFrame");
+    const targetFrame = document.getElementById("targetFrame");
+    const defaultSource = document.getElementById("defaultSource");
+    const dragGhost = document.getElementById("dragGhost");
+
+    let dragging = false;
+    let activeSource = null;
+
+    sourceFrame.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    margin: 40px;
+                    font-family: Arial, sans-serif;
+                    background: white;
+                }
+
+                #frameSource {
+                    width: 150px;
+                    height: 150px;
+                    background: lightblue;
+                    text-align: center;
+                    line-height: 150px;
+                    font-size: 20px;
+                    cursor: grab;
+                    user-select: none;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="frameSource">Frame Source</div>
+        </body>
+        </html>
+    `;
+
+    targetFrame.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    margin: 0;
+                    background: white;
+                    font-family: Arial, sans-serif;
+                }
+
+                #target {
+                    width: 350px;
+                    height: 220px;
+                    background: lightgreen;
+                    margin: 60px auto;
+                    text-align: center;
+                    line-height: 220px;
+                    font-size: 26px;
+                    border: 4px dashed black;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="target">Drop Here</div>
+        </body>
+        </html>
+    `;
+
+    window.onload = function () {
+        const sourceDoc = sourceFrame.contentDocument;
+        const targetDoc = targetFrame.contentDocument;
+
+        const frameSource = sourceDoc.getElementById("frameSource");
+
+        defaultSource.addEventListener("mousedown", function (event) {
+            startDrag("default", event.clientX, event.clientY);
+            event.preventDefault();
+        });
+
+        frameSource.addEventListener("mousedown", function (event) {
+            const sourceRect = sourceFrame.getBoundingClientRect();
+
+            startDrag(
+                "frame",
+                sourceRect.left + event.clientX,
+                sourceRect.top + event.clientY
+            );
+
+            event.preventDefault();
+        });
+
+        document.addEventListener("mousemove", function (event) {
+            if (!dragging) return;
+            moveGhost(event.clientX, event.clientY);
+        });
+
+        document.addEventListener("mouseup", function (event) {
+            if (!dragging) return;
+            finishDrag(event.clientX, event.clientY);
+        });
+
+        sourceDoc.addEventListener("mousemove", function (event) {
+            if (!dragging) return;
+
+            const rect = sourceFrame.getBoundingClientRect();
+            moveGhost(rect.left + event.clientX, rect.top + event.clientY);
+        });
+
+        sourceDoc.addEventListener("mouseup", function (event) {
+            if (!dragging) return;
+
+            const rect = sourceFrame.getBoundingClientRect();
+            finishDrag(rect.left + event.clientX, rect.top + event.clientY);
+        });
+
+        targetDoc.addEventListener("mousemove", function (event) {
+            if (!dragging) return;
+
+            const rect = targetFrame.getBoundingClientRect();
+            moveGhost(rect.left + event.clientX, rect.top + event.clientY);
+        });
+
+        targetDoc.addEventListener("mouseup", function (event) {
+            if (!dragging) return;
+
+            const rect = targetFrame.getBoundingClientRect();
+            finishDrag(rect.left + event.clientX, rect.top + event.clientY);
+        });
+    };
+
+    function startDrag(source, x, y) {
+        dragging = true;
+        activeSource = source;
+
+        dragGhost.innerText = source === "default" ? "Default Source" : "Frame Source";
+        dragGhost.style.display = "block";
+
+        moveGhost(x, y);
+    }
+
+    function moveGhost(x, y) {
+        dragGhost.style.left = (x - 75) + "px";
+        dragGhost.style.top = (y - 75) + "px";
+    }
+
+    function finishDrag(x, y) {
+        if (isInsideTarget(x, y)) {
+            completeDrop();
+        } else {
+            resetDrag();
+        }
+    }
+
+    function isInsideTarget(x, y) {
+        const target = targetFrame.contentDocument.getElementById("target");
+        const frameRect = targetFrame.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+
+        const globalLeft = frameRect.left + targetRect.left;
+        const globalTop = frameRect.top + targetRect.top;
+        const globalRight = globalLeft + targetRect.width;
+        const globalBottom = globalTop + targetRect.height;
+
+        return (
+            x >= globalLeft &&
+            x <= globalRight &&
+            y >= globalTop &&
+            y <= globalBottom
+        );
+    }
+
+    function completeDrop() {
+        if (activeSource === "default") {
+            defaultSource.style.display = "none";
+        }
+
+        if (activeSource === "frame") {
+            const frameSource = sourceFrame.contentDocument.getElementById("frameSource");
+            frameSource.style.display = "none";
+        }
+
+        const target = targetFrame.contentDocument.getElementById("target");
+        target.innerText = "Dropped Successfully!";
+
+        resetDrag();
+    }
+
+    function resetDrag() {
+        dragging = false;
+        activeSource = null;
+        dragGhost.style.display = "none";
+    }
+</script>
+
+</body>
+</html>

@@ -21,6 +21,7 @@ import token
 from inspect import signature
 from io import StringIO
 from tokenize import generate_tokens
+from typing import ClassVar
 
 from robot.api import logger
 from robot.utils import ConnectionCache
@@ -39,20 +40,21 @@ from SeleniumLibrary.utils.path_formatter import _format_path
 
 
 class WebDriverCreator:
+    browser_names: ClassVar[dict] = {
+        "googlechrome": "chrome",
+        "gc": "chrome",
+        "chrome": "chrome",
+        "headlesschrome": "headless_chrome",
+        "ff": "firefox",
+        "firefox": "firefox",
+        "headlessfirefox": "headless_firefox",
+        "ie": "ie",
+        "internetexplorer": "ie",
+        "edge": "edge",
+        "safari": "safari",
+    }
+
     def __init__(self, log_dir):
-        self.browser_names = {
-            "googlechrome": "chrome",
-            "gc": "chrome",
-            "chrome": "chrome",
-            "headlesschrome": "headless_chrome",
-            "ff": "firefox",
-            "firefox": "firefox",
-            "headlessfirefox": "headless_firefox",
-            "ie": "ie",
-            "internetexplorer": "ie",
-            "edge": "edge",
-            "safari": "safari",
-        }
         self.log_dir = log_dir
         self.selenium_options = SeleniumOptions()
         self.selenium_service = SeleniumService()

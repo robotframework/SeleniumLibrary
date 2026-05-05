@@ -38,6 +38,7 @@ def cli():
 
     See each command argument help for more details what (optional) arguments that command supports.
     """
+    pass
 
 
 @cli.command()
