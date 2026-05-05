@@ -28,7 +28,7 @@ class ExtendingSeleniumLibrary(unittest.TestCase):
     def test_no_libraries(self):
         for item in [None, "None", ""]:
             sl = SeleniumLibrary(plugins=item)
-            assert len(sl.get_keyword_names()) == 183
+            assert len(sl.get_keyword_names()) == 184
 
     def test_parse_library(self):
         plugin = "path.to.MyLibrary"
