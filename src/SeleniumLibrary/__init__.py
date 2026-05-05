@@ -13,19 +13,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from collections import namedtuple
-from datetime import timedelta
 import importlib
+import pkgutil
+from datetime import timedelta
 from inspect import getdoc, isclass
 from pathlib import Path
-import pkgutil
-from typing import Optional, List, Union
+from typing import NamedTuple
 
 from robot.api import logger
 from robot.errors import DataError
 from robot.libraries.BuiltIn import BuiltIn
 from robot.utils.importer import Importer
-
 from robotlibcore import DynamicCore
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -49,10 +47,14 @@ from SeleniumLibrary.keywords import (
     WebDriverCache,
     WindowKeywords,
 )
-from SeleniumLibrary.keywords.screenshot import EMBED, BASE64
+from SeleniumLibrary.keywords.screenshot import BASE64, EMBED
 from SeleniumLibrary.locators import ElementFinder
-from SeleniumLibrary.utils import LibraryListener, is_truthy, _convert_timeout, _convert_delay
-
+from SeleniumLibrary.utils import (
+    LibraryListener,
+    _convert_delay,
+    _convert_timeout,
+    is_truthy,
+)
 
 __version__ = "6.8.0"
 
@@ -597,12 +599,12 @@ class SeleniumLibrary(DynamicCore):
         timeout=timedelta(seconds=5),
         implicit_wait=timedelta(seconds=0),
         run_on_failure="Capture Page Screenshot",
-        screenshot_root_directory: Optional[str] = None,
-        plugins: Optional[str] = None,
-        event_firing_webdriver: Optional[str] = None,
+        screenshot_root_directory: str | None = None,
+        plugins: str | None = None,
+        event_firing_webdriver: str | None = None,
         page_load_timeout=timedelta(minutes=5),
         action_chain_delay=timedelta(seconds=0.25),
-        language: Optional[str] = None,
+        language: str | None = None,
     ):
         """SeleniumLibrary can be imported with several optional arguments.
 
@@ -689,10 +691,13 @@ class SeleniumLibrary(DynamicCore):
             return self._get_intro_documentation()
         return DynamicCore.get_keyword_documentation(self, name)
 
+    class Doc(NamedTuple):
+        doc: str
+        name: str
+
     def _parse_plugin_doc(self):
-        Doc = namedtuple("Doc", "doc, name")
         for plugin in self._plugins:
-            yield Doc(
+            yield self.Doc(
                 doc=getdoc(plugin) or "No plugin documentation found.",
                 name=plugin.__class__.__name__,
             )
@@ -751,7 +756,7 @@ class SeleniumLibrary(DynamicCore):
         return self._drivers.current
 
     def find_element(
-        self, locator: str, parent: Optional[WebElement] = None
+        self, locator: str, parent: WebElement | None = None
     ) -> WebElement:
         """Find element matching `locator`.
 
@@ -769,7 +774,7 @@ class SeleniumLibrary(DynamicCore):
 
     def find_elements(
         self, locator: str, parent: WebElement = None
-    ) -> List[WebElement]:
+    ) -> list[WebElement]:
         """Find all elements matching `locator`.
 
         :param locator: Locator to use when searching the element.
@@ -807,7 +812,7 @@ class SeleniumLibrary(DynamicCore):
         listener_module = self._string_to_modules(event_firing_webdriver)
         listener_count = len(listener_module)
         if listener_count > 1:
-            message = f"Is is possible import only one listener but there was {listener_count} listeners."
+            message = f"It is possible to import only one listener but there were {listener_count} listeners."
             raise ValueError(message)
         listener_module = listener_module[0]
         importer = Importer("test library")
@@ -817,12 +822,15 @@ class SeleniumLibrary(DynamicCore):
             raise DataError(message)
         return listener
 
+    class Module(NamedTuple):
+        module: str
+        args: list
+        kw_args: dict
+
     def _string_to_modules(self, modules):
-        Module = namedtuple("Module", "module, args, kw_args")
         parsed_modules = []
         for module in modules.split(","):
-            module = module.strip()
-            module_and_args = module.split(";")
+            module_and_args = module.strip().split(";")
             module_name = module_and_args.pop(0)
             kw_args = {}
             args = []
@@ -832,8 +840,9 @@ class SeleniumLibrary(DynamicCore):
                     kw_args[key] = value
                 else:
                     args.append(argument)
-            module = Module(module=module_name, args=args, kw_args=kw_args)
-            parsed_modules.append(module)
+            parsed_modules.append(
+                self.Module(module=module_name, args=args, kw_args=kw_args)
+            )
         return parsed_modules
 
     def _store_plugin_keywords(self, plugin):
@@ -849,7 +858,7 @@ class SeleniumLibrary(DynamicCore):
                 self.screenshot_root_directory = BASE64
 
     @staticmethod
-    def _get_translation(language: Union[str, None]) -> Union[Path, None]:
+    def _get_translation(language: str | None) -> Path | None:
         if not language:
             return None
         discovered_plugins = {

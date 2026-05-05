@@ -1,7 +1,7 @@
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
-class my_lib(LibraryComponent):
+class my_lib(LibraryComponent):  # noqa: N801 - prefer RF syntax for test libraries
     """Some dummy documentation.
 
     = my_lib Heading 1 =

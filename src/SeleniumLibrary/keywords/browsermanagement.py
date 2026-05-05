@@ -17,15 +17,20 @@
 import time
 import types
 from datetime import timedelta
-from typing import Optional, Union, Any, List
+from typing import Any
 
 from selenium import webdriver
 from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebDriver
 
-from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import timestr_to_secs, secs_to_timestr, _convert_timeout, _convert_delay
+from SeleniumLibrary.utils import (
+    _convert_delay,
+    _convert_timeout,
+    secs_to_timestr,
+    timestr_to_secs,
+)
 
 from .webdrivertools import WebDriverCreator
 
@@ -59,15 +64,15 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(
         self,
-        url: Optional[str] = None,
+        url: str | None = None,
         browser: str = "firefox",
-        alias: Optional[str] = None,
-        remote_url: Union[bool, str] = False,
-        desired_capabilities: Union[dict, None, str] = None,
-        ff_profile_dir: Union[FirefoxProfile, str, None] = None,
+        alias: str | None = None,
+        remote_url: bool | str = False,
+        desired_capabilities: dict | None | str = None,
+        ff_profile_dir: FirefoxProfile | str | None = None,
         options: Any = None,
-        service_log_path: Optional[str] = None,
-        executable_path: Optional[str] = None,
+        service_log_path: str | None = None,
+        executable_path: str | None = None,
         service: Any = None,
     ) -> str:
         """Opens a new browser instance to the optional ``url``.
@@ -212,11 +217,17 @@ class BrowserManagementKeywords(LibraryComponent):
                 self.go_to(url)
             return index
         if desired_capabilities:
-            self.warn("desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation.")
+            self.warn(
+                "desired_capabilities has been deprecated and removed. Please use options to configure browsers as per documentation."
+            )
         if service_log_path:
-            self.warn("service_log_path is being deprecated. Please use service to configure log_output or equivalent service attribute.")
+            self.warn(
+                "service_log_path is being deprecated. Please use service to configure log_output or equivalent service attribute."
+            )
         if executable_path:
-            self.warn("executable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation.")
+            self.warn(
+                "executable_path is being deprecated. Please use service to configure the driver's executable_path as per documentation."
+            )
         return self._make_new_browser(
             url,
             browser,
@@ -275,7 +286,11 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def create_webdriver(
-        self, driver_name: str, alias: Optional[str] = None, kwargs: Optional[dict] = None, **init_kwargs
+        self,
+        driver_name: str,
+        alias: str | None = None,
+        kwargs: dict | None = None,
+        **init_kwargs,
     ) -> str:
         """Creates an instance of Selenium WebDriver.
 
@@ -314,8 +329,10 @@ class BrowserManagementKeywords(LibraryComponent):
         driver_name = driver_name.strip()
         try:
             creation_func = getattr(webdriver, driver_name)
-        except AttributeError:
-            raise RuntimeError(f"'{driver_name}' is not a valid WebDriver name.")
+        except AttributeError as original_exception:
+            raise RuntimeError(
+                f"'{driver_name}' is not a valid WebDriver name."
+            ) from original_exception
         self.info(f"Creating an instance of the {driver_name} WebDriver.")
         driver = creation_func(**init_kwargs)
         self.debug(
@@ -359,16 +376,16 @@ class BrowserManagementKeywords(LibraryComponent):
         """
         try:
             self.drivers.switch(index_or_alias)
-        except RuntimeError:
+        except RuntimeError as original_exception:
             raise RuntimeError(
                 f"No browser with index or alias '{index_or_alias}' found."
-            )
+            ) from original_exception
         self.debug(
             f"Switched to browser with Selenium session id {self.driver.session_id}."
         )
 
     @keyword
-    def get_browser_ids(self) -> List[str]:
+    def get_browser_ids(self) -> list[str]:
         """Returns index of all active browser as list.
 
         Example:
@@ -385,7 +402,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.drivers.active_driver_ids
 
     @keyword
-    def get_browser_aliases(self) -> List[str]:
+    def get_browser_aliases(self) -> list[str]:
         """Returns aliases of all active browser that has an alias as NormalizedDict.
         The dictionary contains the aliases as keys and the index as value.
         This can be accessed as dictionary ``${aliases.key}`` or as list ``@{aliases}[0]``.
@@ -429,7 +446,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return self.driver.current_url
 
     @keyword
-    def location_should_be(self, url: str, message: Optional[str] = None):
+    def location_should_be(self, url: str, message: str | None = None):
         """Verifies that the current URL is exactly ``url``.
 
         The ``url`` argument contains the exact url that should exist in browser.
@@ -442,12 +459,12 @@ class BrowserManagementKeywords(LibraryComponent):
         actual = self.get_location()
         if actual != url:
             if message is None:
-                message = f"Location should have been '{url}' but " f"was '{actual}'."
+                message = f"Location should have been '{url}' but was '{actual}'."
             raise AssertionError(message)
         self.info(f"Current location is '{url}'.")
 
     @keyword
-    def location_should_contain(self, expected: str, message: Optional[str] = None):
+    def location_should_contain(self, expected: str, message: str | None = None):
         """Verifies that the current URL contains ``expected``.
 
         The ``expected`` argument contains the expected value in url.
@@ -494,7 +511,7 @@ class BrowserManagementKeywords(LibraryComponent):
         return title
 
     @keyword
-    def title_should_be(self, title: str, message: Optional[str] = None):
+    def title_should_be(self, title: str, message: str | None = None):
         """Verifies that the current page title equals ``title``.
 
         The ``message`` argument can be used to override the default error
@@ -654,8 +671,7 @@ class BrowserManagementKeywords(LibraryComponent):
 
     @keyword
     def get_action_chain_delay(self):
-        """Gets the currently stored value for chain_delay_value in timestr format.
-        """
+        """Gets the currently stored value for chain_delay_value in timestr format."""
         return timestr_to_secs(f"{self.ctx.action_chain_delay} milliseconds")
 
     @keyword

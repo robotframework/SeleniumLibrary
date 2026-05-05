@@ -8,7 +8,7 @@ Create Webdriver Creates Functioning WebDriver
     [Documentation]
     ...    LOG 1:1 INFO REGEXP: Creating an instance of the \\w+ WebDriver.
     ...    LOG 1:18 DEBUG REGEXP: Created \\w+ WebDriver instance with session id (\\w|-)+.
-    [Tags]    Known Issue Internet Explorer    Known Issue Safari
+    [Tags]    Known Issue Internet Explorer    Known Issue Safari    SKIP_ON_WINDOWS
     [Setup]    Set Driver Variables
     Create Webdriver    ${DRIVER_NAME}    kwargs=${KWARGS}
     Go To    ${FRONT_PAGE}

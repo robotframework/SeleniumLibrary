@@ -2,6 +2,7 @@
 Suite Teardown    Close All Browsers
 Library           ../resources/testlibs/get_driver_path.py
 Resource          resource.robot
+Test Tags         SKIP_ON_WINDOWS
 # Force Tags        Known Issue Firefox    Known Issue Safari    Known Issue Internet Explorer
 Documentation     Creating test which would work on all browser is not possible.
 ...    These tests are for Chrome only.
@@ -11,11 +12,13 @@ Chrome Browser With Chrome Service As String
     [Documentation]
     ...    LOG 2:3 DEBUG STARTS: Started executable:
     ...    LOG 2:4 DEBUG GLOB:    POST*/session*
+    [Tags]    Known Issue Firefox    Known Issue Safari    Known Issue Internet Explorer
     ${driver_path}=  Get Driver Path    Chrome
     Open Browser    ${FRONT PAGE}    Chrome    remote_url=${REMOTE_URL}
     ...    service=executable_path='${driver_path}'
  
 Chrome Browser With Chrome Service As String With service_args As List
+    [Tags]    Known Issue Firefox    Known Issue Safari    Known Issue Internet Explorer
     Open Browser    ${FRONT PAGE}    Chrome    remote_url=${REMOTE_URL}
     ...    service=service_args=['--append-log', '--readable-timestamp']; log_output='${OUTPUT_DIR}/chromedriverlog.txt'
     File Should Exist    ${OUTPUT_DIR}/chromedriverlog.txt
@@ -23,6 +26,7 @@ Chrome Browser With Chrome Service As String With service_args As List
     # ...    service=service_args=['--append-log', '--readable-timestamp']
 
 Firefox Browser With Firefox Service As String
+    [Tags]    Known Issue Chrome    Known Issue Safari    Known Issue Internet Explorer
     [Documentation]
     ...    LOG 2:3 DEBUG STARTS: Started executable:
     ...    LOG 2:4 DEBUG GLOB:    POST*/session*

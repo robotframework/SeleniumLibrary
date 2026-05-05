@@ -6,7 +6,6 @@ from mockito import mock, verify
 from SeleniumLibrary.keywords import CookieKeywords
 from SeleniumLibrary.keywords.cookie import CookieInformation
 
-
 ALL_ARGS = {
     "name": "foo",
     "value": "123",
@@ -20,24 +19,24 @@ ALL_ARGS = {
 pytestmark = pytest.mark.usefixtures("unstub")
 
 
-@pytest.fixture()
+@pytest.fixture
 def driver():
     return mock()
 
 
-@pytest.fixture()
+@pytest.fixture
 def ctx(driver):
     ctx = mock()
     ctx.driver = driver
     return ctx
 
 
-@pytest.fixture()
+@pytest.fixture
 def default_cookie():
     return {"name": "name", "value": "value"}
 
 
-@pytest.fixture()
+@pytest.fixture
 def cookie(ctx):
     return CookieKeywords(ctx)
 

@@ -16,14 +16,14 @@
 
 import os
 from datetime import timedelta
-from typing import Optional, Union
 
-from SeleniumLibrary.utils import is_noney
 from robot.api import logger
 from robot.libraries.BuiltIn import BuiltIn, RobotNotRunningError
 
-from .context import ContextAware
+from SeleniumLibrary.utils import is_noney
+
 from ..utils import _convert_timeout
+from .context import ContextAware
 
 
 class LibraryComponent(ContextAware):
@@ -46,8 +46,8 @@ class LibraryComponent(ContextAware):
     def assert_page_contains(
         self,
         locator: str,
-        tag: Optional[str] = None,
-        message: Optional[str] = None,
+        tag: str | None = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         tag_message = tag or "element"
@@ -63,8 +63,8 @@ class LibraryComponent(ContextAware):
     def assert_page_not_contains(
         self,
         locator: str,
-        tag: Optional[str] = None,
-        message: Optional[str] = None,
+        tag: str | None = None,
+        message: str | None = None,
         loglevel: str = "TRACE",
     ):
         tag_message = tag or "element"
@@ -75,7 +75,7 @@ class LibraryComponent(ContextAware):
             raise AssertionError(message)
         logger.info(f"Current page does not contain {tag_message} '{locator}'.")
 
-    def get_timeout(self, timeout: Union[str, int, timedelta, None] = None) -> float:
+    def get_timeout(self, timeout: str | int | timedelta | None = None) -> float:
         if timeout is None:
             return self.ctx.timeout
         return _convert_timeout(timeout)

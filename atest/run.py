@@ -181,7 +181,7 @@ def _grid_status(status=False, role="hub"):
 
 
 @contextmanager
-def http_server(interpreter, port:int):
+def http_server(interpreter, port: int):
     serverlog = open(os.path.join(RESULTS_DIR, "serverlog.txt"), "w")
     interpreter = "python" if not interpreter else interpreter
     process = subprocess.Popen(
@@ -211,11 +211,18 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing, port):
     if platform.system() == "Darwin":
         runner.append("--exclude")
         runner.append("SKIP_ON_MAC")
-
+    if platform.system() == "Windows":
+        runner.append("--exclude")
+        runner.append("SKIP_ON_WINDOWS")
     options.extend([opt.format(browser=browser) for opt in ROBOT_OPTIONS])
     if rf_options:
         options += rf_options
-    options += ["--exclude", f"known issue {browser.replace('headless', '')}", "--exclude", "triage"]
+    options += [
+        "--exclude",
+        f"known issue {browser.replace('headless', '')}",
+        "--exclude",
+        "triage",
+    ]
     command = runner
     if grid:
         command += [
@@ -259,7 +266,7 @@ def process_output(browser):
         return exit.code
 
 
-def create_zip(browser = None):
+def create_zip(browser=None):
     if os.path.exists(ZIP_DIR):
         shutil.rmtree(ZIP_DIR)
     os.mkdir(ZIP_DIR)

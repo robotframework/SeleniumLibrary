@@ -10,7 +10,7 @@ ${event_firing_or_none}     ${NONE}
 
 *** Test Cases ***
 Open Browser To Start Page
-    [Tags]    NoGrid
+    [Tags]    NoGrid    SKIP_ON_WINDOWS
     [Documentation]
     ...    LOG 1:30 DEBUG  Wrapping driver to event_firing_webdriver.
     ...    LOG 1:32 INFO  Got driver also from SeleniumLibrary.

@@ -4,10 +4,9 @@ from pathlib import Path
 import bs4
 from docutils.core import publish_cmdline
 from invoke import task
-from rellu import initialize_labels, ReleaseNotesGenerator, Version
+from rellu import ReleaseNotesGenerator, Version, initialize_labels
 from rellu.tasks import clean  # noqa
 from robot.libdoc import libdoc
-
 
 assert Path.cwd() == Path(__file__).parent
 
@@ -110,7 +109,7 @@ def project_docs(ctx):
         "docs/index.html",
     ]
     publish_cmdline(writer_name="html5", argv=args)
-    print(Path(args[-1]).absolute())
+    print(Path(args[-1]).absolute())  # noqa: T201
 
 
 @task
@@ -133,13 +132,13 @@ def set_version(ctx, version):
     """
     version = Version(version, VERSION_PATH, VERSION_PATTERN)
     version.write()
-    print(version)
+    print(version)  # noqa: T201
 
 
 @task
 def print_version(ctx):
     """Print the current project version."""
-    print(Version(path=VERSION_PATH))
+    print(Version(path=VERSION_PATH))  # noqa: T201
 
 
 @task
@@ -186,11 +185,29 @@ def init_labels(ctx, username=None, password=None):
 
 
 @task
-def lint(ctx):
-    """Runs black and flake8 for project Python code."""
-    ctx.run("black --config pyproject.toml tasks.py src/ utest/ atest/")
-    ctx.run("flake8 --config .flake8 tasks.py src/ utest/ atest/")
+def lint(ctx, fix=False):
+    """Run Ruff lint checks.
 
+    Args:
+        fix: Apply safe fixes when True. Defaults to False.
+    """
+    cmd = f"{sys.executable} -m ruff check --config pyproject.toml tasks.py src/ utest/" # atest/"
+    if fix:
+        cmd = f"{cmd} --fix"
+    ctx.run(cmd)
+
+@task
+def formatter(ctx, check=False):
+    """Run Ruff formatter.
+
+    Args:
+        check: When True, only check formatting and show diff.
+               When False, apply formatting changes.
+    """
+    cmd = f"{sys.executable} -m ruff format --config pyproject.toml src/ utest/ atest/"
+    if check:
+        cmd = f"{cmd} --check --diff"
+    ctx.run(cmd)
 
 @task
 def gen_stub(ctx):
@@ -207,12 +224,12 @@ def atest(ctx, suite=None):
 
     Args:
         suite: Select which suite to run.
-    
+
     Example:
         inv utest --suite keywords/test_browsermanagement.py
         inv utest --suite keywords/test_selenium_options_parser.py::test_create_chrome_with_options
     """
-    command = "python atest/run.py headlesschrome"
+    command = f"{sys.executable} atest/run.py headlesschrome"
     if suite:
         command = f"{command} --suite {suite}"
     ctx.run(command)

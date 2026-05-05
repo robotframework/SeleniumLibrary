@@ -15,8 +15,8 @@
 # limitations under the License.
 
 import abc
-from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
-from robot.api import logger
+
+import selenium
 
 
 class Event:
@@ -26,8 +26,4 @@ class Event:
 
 
 def selenium_major_version():
-    import selenium
-
-    selenium_version = selenium.__version__
-    (major, *sub_versions) = selenium_version.split(".")
-    return int(major)
+    return int(selenium.__version__.split(".", 1)[0])

@@ -8,6 +8,7 @@ Documentation     Creating test which would work on all browser is not possible.
 
 *** Test Cases ***
 Chrome Browser With Selenium Options As String
+    [Tags]    SKIP_ON_WINDOWS
     [Documentation]
     ...    LOG 1:13 DEBUG REGEXP: .*['\\\"]goog:chromeOptions['\\\"].*
     ...    LOG 1:13 DEBUG REGEXP: .*args['\\\"]: \\\[['\\\"]--disable-dev-shm-usage['\\\"].*
@@ -15,6 +16,7 @@ Chrome Browser With Selenium Options As String
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument("--disable-dev-shm-usage")
  
 Chrome Browser With Selenium Options As String With Attribute As True
+    [Tags]    SKIP_ON_WINDOWS
     [Documentation]
     ...    LOG 1:13 DEBUG REGEXP: .*['\\\"]goog:chromeOptions['\\\"].*
     ...    LOG 1:13 DEBUG REGEXP: .*args['\\\"]: \\\[['\\\"]--disable-dev-shm-usage['\\\"].*
@@ -23,7 +25,7 @@ Chrome Browser With Selenium Options As String With Attribute As True
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; add_argument ( "--headless=new" )
  
 Chrome Browser With Selenium Options With Complex Object
-    [Tags]    NoGrid
+    [Tags]    NoGrid    SKIP_ON_WINDOWS
     [Documentation]
     ...    LOG 1:13 DEBUG REGEXP: .*['\\\"]goog:chromeOptions['\\\"].*
     ...    LOG 1:13 DEBUG REGEXP: .*['\\\"]mobileEmulation['\\\"]: {['\\\"]deviceName['\\\"]: ['\\\"]Galaxy S5['\\\"].*
@@ -32,6 +34,7 @@ Chrome Browser With Selenium Options With Complex Object
     ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; add_experimental_option( "mobileEmulation" , { 'deviceName' : 'Galaxy S5'})
  
 Chrome Browser With Selenium Options Object
+    [Tags]    SKIP_ON_WINDOWS
     [Documentation]
     ...    LOG 2:13 DEBUG REGEXP: .*['\\\"]goog:chromeOptions['\\\"].*
     ...    LOG 2:13 DEBUG REGEXP: .*args['\\\"]: \\\[['\\\"]--disable-dev-shm-usage['\\\"].*
@@ -46,6 +49,7 @@ Chrome Browser With Selenium Options Invalid Method
 
 
 Chrome Browser With Selenium Options Argument With Semicolon
+    [Tags]    SKIP_ON_WINDOWS
     [Documentation]
     ...    LOG 1:13 DEBUG REGEXP: .*['\\\"]goog:chromeOptions['\\\"].*
     ...    LOG 1:13 DEBUG REGEXP: .*\\\[['\\\"]has;semicolon['\\\"].*

@@ -15,7 +15,7 @@ Mouse Over
     ...    Mouse Over    not_there
 
 Mouse Over Error
-    [Tags]    Known Issue Safari
+    [Tags]    Known Issue Safari  Known Issue Firefox
     Mouse Over    el_for_mouseover
     Sleep  0.1secs
     Textfield Value Should Be    el_for_mouseover    mouseover el_for_mouseover

@@ -10,9 +10,9 @@ jobs:
       matrix:
         config:
           - description: latest
-            python-version: 3.13.10
-            rf-version: 7.4.1
-            selenium-version:  4.39.0
+            python-version: 3.14.4
+            rf-version: 7.4.2
+            selenium-version:  4.43.0
             browser: chrome
           - description: previous
             python-version: 3.12.12
@@ -24,7 +24,11 @@ jobs:
             rf-version: 6.1.1
             selenium-version: 4.37.0
             browser: chrome
-
+          - description: latest
+            python-version: 3.14.4
+            rf-version: 7.4.1
+            selenium-version: 4.39.0
+            browser: firefox
     steps:
     - uses: actions/checkout@v6
     - name: Configuration Description
@@ -74,6 +78,42 @@ jobs:
     - uses: actions/upload-artifact@v7
       if: failure()
       with:
-        name: sl_$${{ matrix.config.python-version }}_$${{ matrix.config.rf-version }}_$${{ matrix.config.selenium-version }}_$${{ matrix.config.browser }}
+        name: sl_${{ matrix.config.python-version }}_${{ matrix.config.rf-version }}_${{ matrix.config.selenium-version }}_${{ matrix.config.browser }}
         path: atest/zip_results
         overwrite: true
+  ruff:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.14.4"
+
+    - name: Install dev dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-dev.txt
+
+    - name: Ruff format check
+      id: format
+      continue-on-error: true
+      run: |
+        python -m invoke formatter --check
+
+    - name: Ruff lint
+      id: lint
+      continue-on-error: true
+      run: |
+        python -m invoke lint
+
+    - name: Fail if any Ruff step failed
+      if: always()
+      run: |
+        echo "format outcome: ${{ steps.format.outcome }}"
+        echo "lint outcome:   ${{ steps.lint.outcome }}"
+        if [ "${{ steps.format.outcome }}" != "success" ] || [ "${{ steps.lint.outcome }}" != "success" ]; then
+          exit 1
+        fi

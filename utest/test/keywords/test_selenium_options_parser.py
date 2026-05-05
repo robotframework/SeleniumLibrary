@@ -1,14 +1,12 @@
 import os
 import sys
-import unittest
 
 import pytest
 from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from mockito import mock, when, unstub, ANY
-from robot.utils import WINDOWS
+from mockito import ANY, mock, unstub, when
 from selenium import webdriver
 
 from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCreator
@@ -17,6 +15,7 @@ from SeleniumLibrary.keywords.webdrivertools import SeleniumOptions, WebDriverCr
 @pytest.fixture(scope="module")
 def options():
     return SeleniumOptions()
+
 
 @pytest.fixture(scope="module")
 def reporter():
@@ -33,7 +32,6 @@ def teardown_function():
     unstub()
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_options_string(options, reporter):
     results = []
     results.append(options._parse('method("arg1")'))
@@ -72,7 +70,6 @@ def test_parse_options_string(options, reporter):
     verify_all("Selenium options string to dict", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_index_of_separator(options, reporter):
     results = []
     results.append(options._get_arument_index('method({"key": "value"})'))
@@ -82,7 +79,6 @@ def test_index_of_separator(options, reporter):
     verify_all("Get argument index", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_complex_object(options, reporter):
     results = []
     results.append(options._parse_to_tokens('method({"key": "value"})'))
@@ -92,7 +88,6 @@ def test_parse_complex_object(options, reporter):
     verify_all("Parse complex Python object", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_parse_arguemnts(options, reporter):
     results = []
     results.append(options._parse_arguments(("arg1",), True))
@@ -103,7 +98,6 @@ def test_parse_arguemnts(options, reporter):
     verify_all("Parse arguments from complex object", results, reporter=reporter)
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 @pytest.mark.skipif(sys.version_info > (3, 11), reason="Errors change with Python 3.12")
 def test_parse_options_string_errors(options, reporter):
     results = []
@@ -116,7 +110,6 @@ def test_parse_options_string_errors(options, reporter):
     verify_all("Selenium options string errors", results, reporter=reporter)
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 @pytest.mark.skipif(sys.version_info < (3, 12), reason="Errors change with Python 3.12")
 def test_parse_options_string_errors_py3_12(options, reporter):
     results = []
@@ -129,7 +122,6 @@ def test_parse_options_string_errors_py3_12(options, reporter):
     verify_all("Selenium options string errors", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_split_options(options, reporter):
     results = []
     results.append(options._split('method("arg1");method("arg2")'))
@@ -143,7 +135,6 @@ def test_split_options(options, reporter):
     verify_all("Selenium options string splitting", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_options_create(options, reporter):
     results = []
     options_str = 'add_argument("--disable-dev-shm-usage")'
@@ -175,7 +166,6 @@ def test_options_create(options, reporter):
     verify_all("Selenium options", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_get_options(options, reporter):
     options_str = 'add_argument("--proxy-server=66.97.38.58:80")'
     sel_options = options.create("chrome", options_str)
@@ -183,7 +173,6 @@ def test_get_options(options, reporter):
     verify_all("Selenium options with string.", results, reporter=reporter)
 
 
-@unittest.skipIf(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_importer(options, reporter):
     results = []
     results.append(options._import_options("firefox"))
@@ -202,7 +191,7 @@ def error_formatter(method, arg, full=False):
     except Exception as error:
         if full:
             return f"{arg} {error}"
-        return "{} {}".format(arg, error.__str__()[:15])
+        return f"{arg} {error.__str__()[:15]}"
 
 
 @pytest.fixture(scope="module")
@@ -215,8 +204,7 @@ def creator():
 @pytest.fixture(scope="module")
 def output_dir():
     curr_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
-    return output_dir
+    return os.path.abspath(os.path.join(curr_dir, "..", "..", "output_dir"))
 
 
 def test_create_chrome_with_options(creator):
@@ -227,7 +215,8 @@ def test_create_chrome_with_options(creator):
     #     executable_path=ANY, log_path=ANY,
     # ).thenReturn(service)
     when(webdriver).Chrome(
-        options=options, service=ANY   # service_log_path=None, executable_path="chromedriver"
+        options=options,
+        service=ANY,  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None, options=options)
     assert driver == expected_webdriver
@@ -235,13 +224,13 @@ def test_create_chrome_with_options(creator):
 
 def test_create_chrome_with_options_and_remote_url(creator):
     url = "http://localhost:4444/wd/hub"
-    #caps = webdriver.DesiredCapabilities.CHROME.copy()
+    # caps = webdriver.DesiredCapabilities.CHROME.copy()
     options = mock()
     expected_webdriver = mock()
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
-        #desired_capabilities=caps,
+        # desired_capabilities=caps,
         # browser_profile=None,
         options=options,
         file_detector=file_detector,
@@ -254,21 +243,22 @@ def test_create_headless_chrome_with_options(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=options, service=ANY # service_log_path=None, options=options, executable_path="chromedriver"
+        options=options,
+        service=ANY,  # service_log_path=None, options=options, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None, options=options)
     assert driver == expected_webdriver
 
 
 def test_create_firefox_with_options(creator, output_dir):
-    log_file = os.path.join(output_dir, "geckodriver-1.log")
+    # log_file = os.path.join(output_dir, "geckodriver-1.log")
     options = mock()
     profile = mock()
     expected_webdriver = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
     when(webdriver).Firefox(
         options=options,
-        service=ANY
+        service=ANY,
         # firefox_profile=profile,
         # executable_path="geckodriver",
         # service_log_path=log_file,
@@ -297,14 +287,14 @@ def test_create_firefox_with_options_and_remote_url(creator):
 
 
 def test_create_headless_firefox_with_options(creator, output_dir):
-    log_file = os.path.join(output_dir, "geckodriver-1.log")
+    # log_file = os.path.join(output_dir, "geckodriver-1.log")
     options = mock()
     profile = mock()
     expected_webdriver = mock()
     when(webdriver).FirefoxProfile().thenReturn(profile)
     when(webdriver).Firefox(
         options=options,
-        service=ANY
+        service=ANY,
         # firefox_profile=profile,
         # executable_path="geckodriver",
         # service_log_path=log_file,
@@ -317,7 +307,8 @@ def test_create_ie_with_options(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Ie(
-        options=options, service=ANY # service_log_path=None, options=options, executable_path="IEDriverServer.exe"
+        options=options,
+        service=ANY,  # service_log_path=None, options=options, executable_path="IEDriverServer.exe"
     ).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
@@ -344,7 +335,8 @@ def test_create_ie_with_options_and_log_path(creator):
     options = mock()
     expected_webdriver = mock()
     when(webdriver).Ie(
-        options=options, service=ANY  # service_log_path=None, executable_path="IEDriverServer.exe"
+        options=options,
+        service=ANY,  # service_log_path=None, executable_path="IEDriverServer.exe"
     ).thenReturn(expected_webdriver)
     driver = creator.create_ie({}, None, options=options)
     assert driver == expected_webdriver
@@ -377,7 +369,8 @@ def test_create_driver_chrome(creator):
     executable_path = "chromedriver"
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Chrome(
-        options=options, service=ANY  # service_log_path=None, options=options, executable_path=executable_path
+        options=options,
+        service=ANY,  # service_log_path=None, options=options, executable_path=executable_path
     ).thenReturn(expected_webdriver)
     driver = creator.create_driver(
         "Chrome", desired_capabilities={}, remote_url=None, options=str_options
@@ -386,7 +379,7 @@ def test_create_driver_chrome(creator):
 
 
 def test_create_driver_firefox(creator, output_dir):
-    log_file = os.path.join(output_dir, "geckodriver-1.log")
+    # log_file = os.path.join(output_dir, "geckodriver-1.log")
     str_options = "add_argument:--disable-dev-shm-usage"
     options = mock()
     profile = mock()
@@ -397,7 +390,7 @@ def test_create_driver_firefox(creator, output_dir):
     when(creator)._get_executable_path(ANY).thenReturn(executable_path)
     when(webdriver).Firefox(
         options=options,
-        service=ANY
+        service=ANY,
         # firefox_profile=profile,
         # executable_path=executable_path,
         # service_log_path=log_file,

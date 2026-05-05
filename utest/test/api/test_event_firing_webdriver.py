@@ -1,6 +1,7 @@
 import os
 import unittest
 
+import pytest
 from robot.errors import DataError
 from selenium.webdriver.support.events import AbstractEventListener
 
@@ -19,13 +20,18 @@ class EventFiringWebDriverSeleniumLibrary(unittest.TestCase):
 
     def test_no_event_firing_webdriver(self):
         sl = SeleniumLibrary()
-        self.assertIsNone(sl.event_firing_webdriver)
+        assert sl.event_firing_webdriver is None
 
     def test_import_event_firing_webdriver_error_module(self):
         listener = os.path.join(self.root_dir, "MyListenerWrongName.py")
-        with self.assertRaises(DataError):
+        with pytest.raises(
+            DataError, match=r"Importing test Selenium lister class '.*' failed."
+        ):
             SeleniumLibrary(event_firing_webdriver=listener)
 
     def test_too_many_event_firing_webdriver(self):
-        with self.assertRaises(ValueError):
+        with pytest.raises(
+            ValueError,
+            match=r"It is possible to import only one listener but there were 2 listeners.",
+        ):
             SeleniumLibrary(event_firing_webdriver=f"{self.listener},{self.listener}")

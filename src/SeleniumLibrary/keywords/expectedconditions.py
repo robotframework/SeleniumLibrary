@@ -11,17 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import string
-from typing import Optional
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.errors import UnkownExpectedCondition
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+
 
 class ExpectedConditionKeywords(LibraryComponent):
     @keyword
-    def wait_for_expected_condition(self, condition: string, *args, timeout: Optional[float]=10):
+    def wait_for_expected_condition(
+        self, condition: str, *args, timeout: float | None = 10
+    ):
         """Waits until ``condition`` is true or ``timeout`` expires.
 
         The condition must be one of selenium's expected condition which
@@ -51,13 +52,15 @@ class ExpectedConditionKeywords(LibraryComponent):
         condition = self._parse_condition(condition)
         wait = WebDriverWait(self.driver, timeout, 0.1)
         try:
-            c = getattr(EC, condition)
-        except:
-            # ToDo: provide hints as to what is avaialbel or find closet match
-            raise UnkownExpectedCondition(f"{condition} is an unknown expected condition")
-        result = wait.until(c(*args), message="Expected Condition not met within set timeout of " + str(timeout))
-        return result
+            condition_func = getattr(EC, condition)
+        except AttributeError as original_exception:
+            raise UnkownExpectedCondition(
+                f"{condition} is an unknown expected condition"
+            ) from original_exception
+        return wait.until(
+            condition_func(*args),
+            message=f"Expected Condition not met within set timeout of {timeout}s",
+        )
 
-    def _parse_condition(self, condition: string):
-        parsed = condition.replace(' ','_').lower()
-        return parsed
+    def _parse_condition(self, condition: str):
+        return condition.replace(" ", "_").lower()
