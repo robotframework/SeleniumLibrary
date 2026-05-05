@@ -5,7 +5,6 @@ from approvaltests.approvals import verify_all
 from approvaltests.reporters.generic_diff_reporter_factory import (
     GenericDiffReporterFactory,
 )
-from robot.utils import WINDOWS
 
 from SeleniumLibrary.utils.path_formatter import _format_path
 
@@ -21,7 +20,6 @@ def reporter():
     return factory.get_first_working()
 
 
-@pytest.mark.skipif(WINDOWS, reason="ApprovalTest do not support different line feeds")
 def test_normal_file_path(reporter):
     results = []
     results.append(_format_path("/foo/file.log", 1))

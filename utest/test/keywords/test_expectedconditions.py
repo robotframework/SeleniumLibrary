@@ -20,12 +20,13 @@ from SeleniumLibrary.keywords import ExpectedConditionKeywords
 #    Element\ To\ Be\ Clickable
 #    Element${SPACE}To${SPACE}Be${SPACE}Clickable
 
-class ExpectedConditionKeywords(unittest.TestCase):
+
+class TestExpectedConditionKeywords(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.ec_keywords = ExpectedConditionKeywords(None)
 
-    def WorkInProgresstest_parse_condition(self):
+    def workinprogresstest_parse_condition(self):
         results = []
         results.append(self.ec_keywords._parse_condition("Element To Be Clickable"))
         results.append(self.ec_keywords._parse_condition("eLEment TO be ClIcKable"))

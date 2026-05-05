@@ -14,10 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .scope_event import ScopeStart, ScopeEnd
+from .scope_event import ScopeEnd, ScopeStart
 
-
-__all__ = ["on", "dispatch", "register_event"]
+__all__ = ["dispatch", "on", "register_event"]
 
 _registered_events = [ScopeStart, ScopeEnd]
 _events = []

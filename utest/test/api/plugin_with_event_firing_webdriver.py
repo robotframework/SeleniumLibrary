@@ -1,9 +1,8 @@
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
-class plugin_with_event_firing_webdriver(LibraryComponent):
-
-    """This is example for plugin_with_event_firing_webdriver plugin documentation.
+class PluginWithEventFiringWebdriver(LibraryComponent):
+    """This is example for PluginWithEventFiringWebdriver plugin documentation.
 
     It may contains many chapters and there might be many words
     in the documentation. This is really boring example but let
@@ -11,11 +10,11 @@ class plugin_with_event_firing_webdriver(LibraryComponent):
 
     There might be reference to keywords, like `Open Browser`
 
-    == plugin_with_event_firing_webdriver Heading 2 part 1 ==
+    == PluginWithEventFiringWebdriver Heading 2 part 1 ==
 
     This is chapter in heading 2.
 
-    == plugin_with_event_firing_webdriver Heading 2 part 2==
+    == PluginWithEventFiringWebdriver Heading 2 part 2==
 
     This is another chapter in heading 2
     """
@@ -32,3 +31,6 @@ class plugin_with_event_firing_webdriver(LibraryComponent):
     @keyword
     def tidii(self):
         self.info("foo")
+
+
+plugin_with_event_firing_webdriver = PluginWithEventFiringWebdriver

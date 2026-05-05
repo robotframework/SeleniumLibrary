@@ -13,30 +13,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
 from datetime import timedelta
 from typing import Any, TypeAlias
 
-from robot.utils import timestr_to_secs
-from robot.utils import is_truthy, is_falsy  # noqa
+from robot.utils import is_falsy, is_truthy, timestr_to_secs  # noqa
 from selenium.webdriver.remote.webelement import WebElement
 
+Locator: TypeAlias = WebElement | str | list["Locator"]
 
-# Need only for unit tests and can be removed when Approval tests fixes:
-# https://github.com/approvals/ApprovalTests.Python/issues/41
-WINDOWS = os.name == "nt"
-
-Locator: TypeAlias = WebElement | str | list['Locator']
 
 def is_noney(item):
-    return item is None or isinstance(item, str) and item.upper() == "NONE"
+    return item is None or (isinstance(item, str) and item.upper() == "NONE")
+
 
 def _convert_delay(delay):
     if isinstance(delay, timedelta):
         return delay.microseconds // 1000
-    else:
-        x =  timestr_to_secs(delay)
-        return int( x * 1000)
+    x = timestr_to_secs(delay)
+    return int(x * 1000)
 
 
 def _convert_timeout(timeout):

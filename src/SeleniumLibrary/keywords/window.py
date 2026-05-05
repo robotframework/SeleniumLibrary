@@ -14,14 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import time
-from typing import Optional, List, Tuple, Union
 
-from SeleniumLibrary.utils import is_truthy, is_falsy, timestr_to_secs
 from selenium.common.exceptions import NoSuchWindowException
 
-from SeleniumLibrary.base import keyword, LibraryComponent
+from SeleniumLibrary.base import LibraryComponent, keyword
 from SeleniumLibrary.locators import WindowManager
-from SeleniumLibrary.utils import plural_or_not
+from SeleniumLibrary.utils import is_falsy, is_truthy, plural_or_not, timestr_to_secs
 
 
 class WindowKeywords(LibraryComponent):
@@ -32,8 +30,8 @@ class WindowKeywords(LibraryComponent):
     @keyword
     def switch_window(
         self,
-        locator: Union[list, str] = "MAIN",
-        timeout: Optional[str] = None,
+        locator: list | str = "MAIN",
+        timeout: str | None = None,
         browser: str = "CURRENT",
     ):
         """Switches to browser window matching ``locator``.
@@ -117,17 +115,17 @@ class WindowKeywords(LibraryComponent):
         except NoSuchWindowException:
             pass
         finally:
-            if not isinstance(browser, str) or not browser.upper() == "CURRENT":
+            if not isinstance(browser, str) or browser.upper() != "CURRENT":
                 self.drivers.switch(browser)
             self._window_manager.select(locator, timeout)
 
     @keyword
     def close_window(self):
-        """Closes currently opened and selected browser window/tab. """
+        """Closes currently opened and selected browser window/tab."""
         self.driver.close()
 
     @keyword
-    def get_window_handles(self, browser: str = "CURRENT") -> List[str]:
+    def get_window_handles(self, browser: str = "CURRENT") -> list[str]:
         """Returns all child window handles of the selected browser as a list.
 
         Can be used as a list of windows to exclude with `Select Window`.
@@ -139,7 +137,7 @@ class WindowKeywords(LibraryComponent):
         return self._window_manager.get_window_handles(browser)
 
     @keyword
-    def get_window_identifiers(self, browser: str = "CURRENT") -> List:
+    def get_window_identifiers(self, browser: str = "CURRENT") -> list:
         """Returns and logs id attributes of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -147,7 +145,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(ids)
 
     @keyword
-    def get_window_names(self, browser: str = "CURRENT") -> List[str]:
+    def get_window_names(self, browser: str = "CURRENT") -> list[str]:
         """Returns and logs names of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -155,7 +153,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(names)
 
     @keyword
-    def get_window_titles(self, browser: str = "CURRENT") -> List[str]:
+    def get_window_titles(self, browser: str = "CURRENT") -> list[str]:
         """Returns and logs titles of all windows of the selected browser.
 
         How to select the ``browser`` scope of this keyword, see `Get Locations`."""
@@ -163,7 +161,7 @@ class WindowKeywords(LibraryComponent):
         return self._log_list(titles)
 
     @keyword
-    def get_locations(self, browser: str = "CURRENT") -> List[str]:
+    def get_locations(self, browser: str = "CURRENT") -> list[str]:
         """Returns and logs URLs of all windows of the selected browser.
 
         *Browser Scope:*
@@ -192,7 +190,7 @@ class WindowKeywords(LibraryComponent):
         self.driver.minimize_window()
 
     @keyword
-    def get_window_size(self, inner: bool = False) -> Tuple[float, float]:
+    def get_window_size(self, inner: bool = False) -> tuple[float, float]:
         """Returns current window width and height as integers.
 
         See also `Set Window Size`.
@@ -239,7 +237,8 @@ class WindowKeywords(LibraryComponent):
         | `Set Window Size` | 800 | 600 | True |
         """
         if is_falsy(inner):
-            return self.driver.set_window_size(width, height)
+            self.driver.set_window_size(width, height)
+            return
         self.driver.set_window_size(width, height)
         inner_width = int(self.driver.execute_script("return window.innerWidth;"))
         inner_height = int(self.driver.execute_script("return window.innerHeight;"))
@@ -258,7 +257,7 @@ class WindowKeywords(LibraryComponent):
             raise AssertionError("Keyword failed setting correct window size.")
 
     @keyword
-    def get_window_position(self) -> Tuple[int, int]:
+    def get_window_position(self) -> tuple[int, int]:
         """Returns current window position.
 
         The position is relative to the top left corner of the screen. Returned

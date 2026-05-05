@@ -42,7 +42,7 @@ setup(
     keywords         = 'robotframework testing testautomation selenium webdriver web',
     platforms        = 'any',
     classifiers      = CLASSIFIERS,
-    python_requires  = '>=3.8',
+    python_requires  = '>=3.10',
     install_requires = REQUIREMENTS,
     package_dir      = {'': 'src'},
     packages         = find_packages('src'),

@@ -1,7 +1,7 @@
 from SeleniumLibrary.base import LibraryComponent, keyword
 
 
-class my_lib_args(LibraryComponent):
+class my_lib_args(LibraryComponent):  # noqa: N801 - prefer RF syntax for test libraries
     def __init__(self, ctx, arg1, arg2, *args, **kwargs):
         LibraryComponent.__init__(self, ctx)
         self.arg1 = arg1

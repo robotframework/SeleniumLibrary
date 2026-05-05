@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from mockito import mock, verify, when, unstub, ANY
+from mockito import ANY, mock, unstub, verify, when
 from selenium import webdriver
 
 from SeleniumLibrary.keywords import WebDriverCreator
@@ -36,9 +36,8 @@ def test_get_creator_method(creator):
     method = creator._get_creator_method("firefox")
     assert method
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=r"foobar is not a supported browser\."):
         creator._get_creator_method("foobar")
-    assert "foobar is not a supported browser." in str(error.value)
 
 
 def test_parse_capabilities(creator):
@@ -135,7 +134,8 @@ def test_capabilities_resolver_chrome(creator):
 def test_chrome(creator):
     expected_webdriver = mock()
     when(webdriver).Chrome(
-        options=None, service=None  # service=ANY  # service_log_path=None, executable_path="chromedriver"
+        options=None,
+        service=None,  # service=ANY  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_chrome({}, None)
     assert driver == expected_webdriver
@@ -172,7 +172,7 @@ def test_chrome_remote_no_caps(creator):
 def test_chrome_remote_caps(creator):
     url = "http://localhost:4444/wd/hub"
     expected_webdriver = mock()
-    # capabilities = {"browserName": "chrome"}
+    capabilities = {"browserName": "chrome"}
     file_detector = mock_file_detector(creator)
     when(webdriver).Remote(
         command_executor=url,
@@ -205,10 +205,10 @@ def test_chrome_headless(creator):
     expected_webdriver = mock()
     options = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
-    service = mock()
     when(webdriver).ChromeOptions().thenReturn(options)
     when(webdriver).Chrome(
-        options=options, service=ANY  # service=None  # service_log_path=None, executable_path="chromedriver"
+        options=options,
+        service=ANY,  # service=None  # service_log_path=None, executable_path="chromedriver"
     ).thenReturn(expected_webdriver)
     driver = creator.create_headless_chrome({}, None)
     assert options.headless is True
@@ -265,7 +265,7 @@ def test_get_ff_profile_no_path(creator):
     assert profile == profile_mock
 
 
-def test_get_ff_profile_instance_FirefoxProfile(creator):
+def test_get_ff_profile_instance_FirefoxProfile(creator):  # noqa: N802
     input_profile = webdriver.FirefoxProfile()
     profile = creator._get_ff_profile(input_profile)
     assert profile == input_profile

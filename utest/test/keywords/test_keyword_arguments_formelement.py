@@ -3,11 +3,10 @@ from mockito import mock, unstub, when
 
 from SeleniumLibrary.keywords import FormElementKeywords
 
-
 FALSES = ["False", False, "", None, "NONE"]
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def form():
     ctx = mock()
     ctx.driver = mock()
@@ -21,7 +20,7 @@ def teardown_function():
 def test_submit_form_false(form):
     element = mock()
     when(form).find_element("tag:form", tag="form").thenReturn(element)
-    for false in FALSES:
+    for _false in FALSES:
         form.submit_form()
     form.submit_form()
 

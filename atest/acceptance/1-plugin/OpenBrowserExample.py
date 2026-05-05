@@ -121,7 +121,12 @@ class NewWebDriverCreator(WebDriverCreator):
         )
 
     def create_seleniumwire(
-        self, desired_capabilities, remote_url, options=None, service_log_path=None, service=None,
+        self,
+        desired_capabilities,
+        remote_url,
+        options=None,
+        service_log_path=None,
+        service=None,
     ):
         logger.info(self.extra_dictionary)
         return webdriver.Chrome()

@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from typing import Union, Optional
 
 from robot.libraries.DateTime import convert_date
 from robot.utils import DotDict
@@ -45,7 +44,7 @@ class CookieInformation:
         self.extra = extra
 
     def __str__(self):
-        items = "name value path domain secure httpOnly expiry".split()
+        items = ["name", "value", "path", "domain", "secure", "httpOnly", "expiry"]
         string = "\n".join(f"{item}={getattr(self, item)}" for item in items)
         if self.extra:
             string = f"{string}\nextra={self.extra}\n"
@@ -67,7 +66,7 @@ class CookieKeywords(LibraryComponent):
         self.driver.delete_cookie(name)
 
     @keyword
-    def get_cookies(self, as_dict: bool = False) -> Union[str, dict]:
+    def get_cookies(self, as_dict: bool = False) -> str | dict:
         """Returns all cookies of the current page.
 
         If ``as_dict`` argument evaluates as false, see `Boolean arguments`
@@ -87,11 +86,10 @@ class CookieKeywords(LibraryComponent):
             for cookie in self.driver.get_cookies():
                 pairs.append(f"{cookie['name']}={cookie['value']}")
             return "; ".join(pairs)
-        else:
-            pairs = DotDict()
-            for cookie in self.driver.get_cookies():
-                pairs[cookie["name"]] = cookie["value"]
-            return pairs
+        pairs = DotDict()
+        for cookie in self.driver.get_cookies():
+            pairs[cookie["name"]] = cookie["value"]
+        return pairs
 
     @keyword
     def get_cookie(self, name: str) -> CookieInformation:
@@ -144,10 +142,10 @@ class CookieKeywords(LibraryComponent):
         self,
         name: str,
         value: str,
-        path: Optional[str] = None,
-        domain: Optional[str] = None,
-        secure: Optional[bool] = None,
-        expiry: Optional[str] = None,
+        path: str | None = None,
+        domain: str | None = None,
+        secure: bool | None = None,
+        expiry: str | None = None,
     ):
         """Adds a cookie to your current session.
 

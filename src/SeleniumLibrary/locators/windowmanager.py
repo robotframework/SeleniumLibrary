@@ -15,7 +15,7 @@
 # limitations under the License.
 
 import time
-from collections import namedtuple
+from typing import NamedTuple
 
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 
@@ -23,7 +23,12 @@ from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import WindowNotFound
 
 
-WindowInfo = namedtuple("WindowInfo", "handle, id, name, title, url")
+class WindowInfo(NamedTuple):
+    handle: str
+    id: object
+    name: str
+    title: str
+    url: str
 
 
 class WindowManager(ContextAware):
@@ -40,19 +45,18 @@ class WindowManager(ContextAware):
         if isinstance(browser, str) and browser == "ALL":
             handles = []
             current_index = self.drivers.current_index
-            for index, driver in enumerate(self.drivers, 1):
+            for index, _driver in enumerate(self.drivers, 1):
                 self.drivers.switch(index)
                 handles.extend(self.driver.window_handles)
             self.drivers.switch(current_index)
             return handles
-        elif isinstance(browser, str) and browser == "CURRENT":
+        if isinstance(browser, str) and browser == "CURRENT":
             return self.driver.window_handles
-        else:
-            current_index = self.drivers.current_index
-            self.drivers.switch(browser)
-            handles = self.driver.window_handles
-            self.drivers.switch(current_index)
-            return handles
+        current_index = self.drivers.current_index
+        self.drivers.switch(browser)
+        handles = self.driver.window_handles
+        self.drivers.switch(current_index)
+        return handles
 
     def get_window_infos(self, browser="CURRENT"):
         try:
@@ -61,18 +65,17 @@ class WindowManager(ContextAware):
             current_index = None
         if isinstance(browser, str) and browser.upper() == "ALL":
             infos = []
-            for index, driver in enumerate(self.drivers, 1):
+            for index, _driver in enumerate(self.drivers, 1):
                 self.drivers.switch(index)
                 infos.extend(self._get_window_infos())
             self.drivers.switch(current_index)
             return infos
-        elif isinstance(browser, str) and browser.upper() == "CURRENT":
+        if isinstance(browser, str) and browser.upper() == "CURRENT":
             return self._get_window_infos()
-        else:
-            self.drivers.switch(browser)
-            infos = self._get_window_infos()
-            self.drivers.switch(current_index)
-            return infos
+        self.drivers.switch(browser)
+        infos = self._get_window_infos()
+        self.drivers.switch(current_index)
+        return infos
 
     def _get_window_infos(self):
         infos = []
@@ -196,14 +199,16 @@ class WindowManager(ContextAware):
 
     def _get_current_window_info(self):
         try:
-            id, name = self.driver.execute_script("return [ window.id, window.name ];")
+            window_id, name = self.driver.execute_script(
+                "return [ window.id, window.name ];"
+            )
         except WebDriverException:
             # The webdriver implementation doesn't support Javascript so we
             # can't get window id or name this way.
-            id = name = None
+            window_id = name = None
         return WindowInfo(
             self.driver.current_window_handle,
-            id if id is not None else "undefined",
+            window_id if window_id is not None else "undefined",
             name or "undefined",
             self.driver.title or "undefined",
             self.driver.current_url or "undefined",

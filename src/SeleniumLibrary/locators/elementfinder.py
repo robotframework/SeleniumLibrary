@@ -14,13 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
-from typing import Union
 
 from robot.api import logger
 from robot.utils import NormalizedDict
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.event_firing_webdriver import EventFiringWebElement
-from selenium.webdriver.common.by import By
 
 from SeleniumLibrary.base import ContextAware
 from SeleniumLibrary.errors import ElementNotFound
@@ -78,7 +77,7 @@ class ElementFinder(ContextAware):
 
     def find(
         self,
-        locator: Union[str, list],
+        locator: str | list,
         tag=None,
         first_only=True,
         required=True,
@@ -92,7 +91,7 @@ class ElementFinder(ContextAware):
             )
         return self._find(locators[-1], tag, first_only, required, element)
 
-    def _split_locator(self, locator: Union[str, list]) -> list:
+    def _split_locator(self, locator: str | list) -> list:
         if isinstance(locator, list):
             return locator
         if not isinstance(locator, str):
@@ -226,10 +225,10 @@ class ElementFinder(ContextAware):
             name, value = criteria.split(":", 1)
             if "" in [name, value]:
                 raise ValueError
-        except ValueError:
+        except ValueError as original_exception:
             raise ValueError(
                 f"Provided selector ({criteria}) is malformed. Correct format: name:value."
-            )
+            ) from original_exception
 
         local_criteria = f'//*[@data-{name}="{value}"]'
         return self._find_by_xpath(local_criteria, tag, constraints, parent)
@@ -257,20 +256,18 @@ class ElementFinder(ContextAware):
         return self._normalize(parent.find_elements(By.XPATH, xpath))
 
     def _get_xpath_constraints(self, constraints):
-        xpath_constraints = [
+        return [
             self._get_xpath_constraint(name, value)
             for name, value in constraints.items()
         ]
-        return xpath_constraints
 
     def _get_xpath_constraint(self, name, value):
         if isinstance(value, list):
             value = "' or . = '".join(value)
             return f"@{name}[. = '{value}']"
-        else:
-            return f"@{name}='{value}'"
+        return f"@{name}='{value}'"
 
-    def _get_tag_and_constraints(self, tag):
+    def _get_tag_and_constraints(self, tag):  # noqa: C901
         if tag is None:
             return None, {}
         tag = tag.lower()
@@ -331,7 +328,7 @@ class ElementFinder(ContextAware):
         return min(locator.find("="), locator.find(":"))
 
     def _element_matches(self, element, tag, constraints):
-        if not element.tag_name.lower() == tag:
+        if element.tag_name.lower() != tag:
             return False
         for name in constraints:
             if isinstance(constraints[name], list):

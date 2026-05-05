@@ -3,14 +3,15 @@ from pathlib import Path
 import pytest
 from approvaltests import verify_all
 from approvaltests.reporters import GenericDiffReporterFactory
-from mockito import any, mock, verify, when, unstub
+from mockito import any as mockito_any
+from mockito import mock, unstub, verify, when
 from selenium.webdriver.common.by import By
 
 from SeleniumLibrary.errors import ElementNotFound
 from SeleniumLibrary.locators.elementfinder import ElementFinder
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture
 def finder():
     ctx = mock()
     ctx.driver = mock()
@@ -105,7 +106,7 @@ def _verify_parse_locator(locator, prefix, criteria, finder=None):
 
 
 def test_parent_is_not_webelement(finder):
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"^Parent must be Selenium WebElement"):
         finder.find("//div", parent="//button")
 
 
@@ -155,9 +156,8 @@ def test_find_by_dom__parent_is_webelement(finder):
     when(finder)._disallow_webelement_parent(webelement).thenRaise(
         ValueError("This method does not allow webelement as parent")
     )
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="not allow webelement as parent"):
         finder.find("dom=value", parent=webelement)
-    assert "not allow webelement as parent" in str(error.value)
 
 
 def test_find_by_sizzle_parent_is_webelement(finder):
@@ -167,9 +167,8 @@ def test_find_by_sizzle_parent_is_webelement(finder):
     when(finder)._disallow_webelement_parent(webelement).thenRaise(
         ValueError("This method does not allow webelement as parent")
     )
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="not allow webelement as parent"):
         finder.find("sizzle=div.class", parent=webelement)
-    assert "not allow webelement as parent" in str(error.value)
 
 
 def test_find_by_link_text_parent_is_webelement(finder):
@@ -224,9 +223,8 @@ def test_find_sc_locator_parent_is_webelement(finder):
     when(finder)._disallow_webelement_parent(webelement).thenRaise(
         ValueError("This method does not allow webelement as parent")
     )
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match="not allow webelement as parent"):
         finder.find("scLocator=div", parent=webelement)
-    assert "not allow webelement as parent" in str(error.value)
 
 
 def test_find_by_default_parent_is_webelement(finder):
@@ -250,13 +248,13 @@ def test_non_existing_prefix(finder):
 def test_find_with_no_tag(finder):
     driver = _get_driver(finder)
     finder.find("test1", required=False)
-    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or " "@name='test1')]")
+    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_explicit_default_strategy(finder):
     driver = _get_driver(finder)
     finder.find("default=test1", required=False)
-    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or " "@name='test1')]")
+    verify(driver).find_elements(By.XPATH, "//*[(@id='test1' or @name='test1')]")
 
 
 def test_find_with_explicit_default_strategy_and_equals(finder):
@@ -283,10 +281,13 @@ def test_find_with_data(finder):
     finder.find("data:id:my_id", tag="div", required=False)
     verify(driver).find_elements(By.XPATH, '//*[@data-id="my_id"]')
 
+
 def test_find_with_data_multiple_colons(finder):
     driver = _get_driver(finder)
     elements = _make_mock_elements("div", "a", "span", "a")
-    when(driver).find_elements(By.XPATH, '//*[@data-automation-id="foo:bar"]').thenReturn(elements)
+    when(driver).find_elements(
+        By.XPATH, '//*[@data-automation-id="foo:bar"]'
+    ).thenReturn(elements)
     result = finder.find("data:automation-id:foo:bar", first_only=False)
     assert result == elements
 
@@ -655,7 +656,7 @@ def test_find_returns_bad_values(finder):
     for bad_value in (None, {"": None}):
         for locator_strategy in locator_strategies:
             when_find_func = getattr(when(driver), func_name)
-            when_find_func(locator_strategy, any()).thenReturn(bad_value)
+            when_find_func(locator_strategy, mockito_any()).thenReturn(bad_value)
         for locator in (
             "identifier=it",
             "id=it",

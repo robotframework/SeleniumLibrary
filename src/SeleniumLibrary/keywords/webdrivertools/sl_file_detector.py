@@ -33,12 +33,11 @@ class SelLibLocalFileDetector(FileDetector):
             sl = self._get_sl()
         except Exception:
             sl = None
-        if sl and sl._running_keyword == "choose_file":
-            return True
-        return False
+        return bool(sl and sl._running_keyword == "choose_file")
 
     def _get_sl(self):
         libraries = BuiltIn().get_library_instance(all=True)
         for library in libraries:
             if isinstance(libraries[library], SeleniumLibrary.SeleniumLibrary):
                 return libraries[library]
+        return None

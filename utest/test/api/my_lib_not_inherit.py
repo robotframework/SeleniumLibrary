@@ -1,7 +1,7 @@
 from SeleniumLibrary.base import keyword
 
 
-class my_lib_not_inherit:
+class my_lib_not_inherit:  # noqa: N801 - prefer RF syntax for test libraries
     def __init__(self, ctx):
         self.ctx = ctx
 
