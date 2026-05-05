@@ -528,18 +528,18 @@ Example project for translation can be found from
 [https://github.com/MarketSquare/robotframework-seleniumlibrary-translation-fi | robotframework-seleniumlibrary-translation-fi]
 repository.
 
-= Plugin: MyLib =
+= Plugin: my_lib =
 
 Some dummy documentation.
 
-= MyLib Heading 1 =
+= my_lib Heading 1 =
 
 This is heading 1 documentation.
 
-== MyLib Heading 2 ==
+== my_lib Heading 2 ==
 
  This is heading 2 documentation.
 
-= Plugin: MyLibArgs =
+= Plugin: my_lib_args =
 
 No plugin documentation found.
