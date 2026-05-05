@@ -42,6 +42,7 @@ ignore = [
   "DTZ006",  # No timezone specified
   "PTH",  # Use Path instead of os.path -> maybe soon
   "N818",  # exception naming convention
+  "PIE790",  #  Unnecessary placeholder (pass or ...)
 ]
 
 [tool.ruff.format]
