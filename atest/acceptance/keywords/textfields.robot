@@ -2,7 +2,6 @@
 Suite Setup       Open Browser To Start Page Disabling Chrome Leaked Password Detection
 Test Setup        Go To Page "forms/prefilled_email_form.html"
 Resource          ../resource.robot
-Library           ../../resources/testlibs/secret_helper.py
 Force Tags        Known Issue Internet Explorer
 
 *** Test Cases ***
@@ -81,7 +80,6 @@ Attempt Clear Element Text On Non-Editable Field
 Input Password Accepts Secret Type
     [Tags]    require-rf-7.4
     [Setup]    Go To Page "forms/login.html"
-    Skip If No Secret
     Set Environment Variable    TEST_PASSWORD    s3cret-pass
     VAR    ${pw: Secret}    %{TEST_PASSWORD}
     Input Text        username_field    my_username
@@ -92,7 +90,6 @@ Input Password Accepts Secret Type
 Input Text Accepts Secret Type
     [Tags]    require-rf-7.4
     [Setup]    Go To Page "forms/login.html"
-    Skip If No Secret
     Set Environment Variable    TEST_USERNAME    my_username
     VAR    ${user: Secret}    %{TEST_USERNAME}
     Input Text    username_field    ${user}
@@ -111,8 +108,7 @@ Input Password Does Not Log Secret Value
     [Tags]    require-rf-7.4    NoGrid
     [Setup]    Go To Page "forms/login.html"
     [Documentation]
-    ...    LOG 2:1  INFO    Typing password into text field 'password_field'.
-    Skip If No Secret
+    ...    LOG 4:1  INFO    Typing password into text field 'password_field'.
     Set Environment Variable    TEST_PASSWORD    must-not-leak
     VAR    ${pw: Secret}    %{TEST_PASSWORD}
     Input Password    password_field    ${pw}
