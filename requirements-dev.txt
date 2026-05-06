@@ -21,7 +21,7 @@ ruff == 0.15.12
 rellu == 0.7
 twine == 6.2.0
 wheel == 0.46.3
-docutils == 0.20.1
+docutils == 0.22.4
 pygments == 2.20.0
 beautifulsoup4 == 4.12.2
 
