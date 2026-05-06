@@ -22,14 +22,14 @@ from selenium.webdriver.remote.webelement import WebElement
 try:
     from robot.api.types import Secret
 except ImportError:
-    # Robot Framework < 7.4 does not have the Secret type.
-    # This shim lets users on older RF versions still import it without
-    # errors. It can be removed once RF 7.4+ is the minimum requirement.
+    # Secret was introduced in Robot Framework 7.4. On older versions we
+    # provide a minimal stand-in so that the type hint ``str | Secret`` and
+    # ``isinstance`` checks work without requiring an upgrade.
     class Secret:  # type: ignore[no-redef]
-        """Backport shim for ``robot.api.types.Secret`` (RF 7.4+).
+        """Stand-in for ``robot.api.types.Secret`` on Robot Framework < 7.4.
 
-        Mirrors the public interface of the real class so that ``isinstance``
-        checks and ``.value`` access work uniformly across RF versions.
+        Exposes the same ``.value`` attribute and masked string representation
+        as the real class, so keyword code can treat both identically.
         """
 
         def __init__(self, value: str):
@@ -40,6 +40,7 @@ except ImportError:
 
         def __repr__(self) -> str:
             return f"{type(self).__name__}(value=<secret>)"
+
 
 Locator: TypeAlias = WebElement | str | list["Locator"]
 

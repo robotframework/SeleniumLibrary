@@ -238,7 +238,9 @@ class FormElementKeywords(LibraryComponent):
             self.ctx._running_keyword = None
 
     @keyword
-    def input_password(self, locator: Locator, password: str | Secret, clear: bool = True):
+    def input_password(
+        self, locator: Locator, password: str | Secret, clear: bool = True
+    ):
         """Types the given password into the text field identified by ``locator``.
 
         See the `Locating elements` section for details about the locator
@@ -266,7 +268,7 @@ class FormElementKeywords(LibraryComponent):
         self._input_text_into_text_field(locator, password, clear, disable_log=True)
 
     @keyword
-    def input_text(self, locator: Locator, text: str, clear: bool = True):
+    def input_text(self, locator: Locator, text: str | Secret, clear: bool = True):
         """Types the given ``text`` into the text field identified by ``locator``.
 
         When ``clear`` is true, the input element is cleared before
@@ -502,7 +504,7 @@ class FormElementKeywords(LibraryComponent):
             self.info("Temporally setting log level to: NONE")
             previous_level = BuiltIn().set_log_level("NONE")
         try:
-            element.send_keys(text)
+            element.send_keys(text.value if isinstance(text, Secret) else text)
         finally:
             if disable_log:
                 BuiltIn().set_log_level(previous_level)
