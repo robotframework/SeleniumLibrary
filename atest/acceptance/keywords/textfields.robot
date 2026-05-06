@@ -108,7 +108,7 @@ Input Password Does Not Log Secret Value
     [Tags]    require-rf-7.4    NoGrid
     [Setup]    Go To Page "forms/login.html"
     [Documentation]
-    ...    LOG 4:1  INFO    Typing password into text field 'password_field'.
+    ...    LOG 3:1  INFO    Typing password into text field 'password_field'.
     Set Environment Variable    TEST_PASSWORD    must-not-leak
     VAR    ${pw: Secret}    %{TEST_PASSWORD}
     Input Password    password_field    ${pw}
