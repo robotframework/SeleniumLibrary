@@ -77,6 +77,42 @@ Press Key
 Attempt Clear Element Text On Non-Editable Field
     Run Keyword And Expect Error    *    Clear Element Text    can_send_email
 
+Input Password Accepts Secret Type
+    [Tags]    require-rf-7.4
+    [Setup]    Go To Page "forms/login.html"
+    Set Environment Variable    TEST_PASSWORD    s3cret-pass
+    VAR    ${pw: Secret}    %{TEST_PASSWORD}
+    Input Text        username_field    my_username
+    Input Password    password_field    ${pw}
+    ${value}=    Get Value    password_field
+    Should Be Equal    ${value}    s3cret-pass
+
+Input Text Accepts Secret Type
+    [Tags]    require-rf-7.4
+    [Setup]    Go To Page "forms/login.html"
+    Set Environment Variable    TEST_USERNAME    my_username
+    VAR    ${user: Secret}    %{TEST_USERNAME}
+    Input Text    username_field    ${user}
+    ${value}=    Get Value    username_field
+    Should Be Equal    ${value}    my_username
+
+Input Password With Plain String Still Works
+    [Setup]    Go To Page "forms/login.html"
+    [Documentation]    Backwards compatibility — plain str must still be accepted.
+    Input Text        username_field    my_username
+    Input Password    password_field    plain-pass
+    ${value}=    Get Value    password_field
+    Should Be Equal    ${value}    plain-pass
+
+Input Password Does Not Log Secret Value
+    [Tags]    require-rf-7.4    NoGrid
+    [Setup]    Go To Page "forms/login.html"
+    [Documentation]
+    ...    LOG 3:1  INFO    Typing password into text field 'password_field'.
+    Set Environment Variable    TEST_PASSWORD    must-not-leak
+    VAR    ${pw: Secret}    %{TEST_PASSWORD}
+    Input Password    password_field    ${pw}
+
 *** Keywords ***
 
 Open Browser To Start Page Disabling Chrome Leaked Password Detection

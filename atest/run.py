@@ -50,6 +50,7 @@ import shutil
 import subprocess
 import tempfile
 
+from packaging.version import Version
 from robot import rebot_cli
 from robot import __version__ as robot_version
 from selenium import __version__ as selenium_version
@@ -223,6 +224,8 @@ def execute_tests(interpreter, browser, rf_options, grid, event_firing, port):
         "--exclude",
         "triage",
     ]
+    if Version(robot_version) < Version("7.4"):
+        options.extend(["--exclude", "require-rf-7.4"])
     command = runner
     if grid:
         command += [
