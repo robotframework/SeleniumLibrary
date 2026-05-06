@@ -258,8 +258,15 @@ class FormElementKeywords(LibraryComponent):
         | Input Password | password_field | ${PASSWORD} |
 
         Please notice that Robot Framework logs all arguments using
-        the TRACE level and tests must not be executed using level below
-        DEBUG if the password should not be logged in any format.
+        the TRACE level. When not using the ``Secret`` type, tests must
+        not be executed using level below DEBUG if the password should
+        not be logged in any format.``
+
+        This keyword supports Robot Framework 7.4
+        [https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#secret-variables|Secret]
+        variable type. When a ``Secret`` is passed, the value is protected
+        from Robot Framework logs and Selenium internal logging is also
+        suppressed during typing.
 
         The `clear` argument is new in SeleniumLibrary 4.0. Hiding password
         logging from Selenium logs is new in SeleniumLibrary 4.2.
@@ -275,6 +282,12 @@ class FormElementKeywords(LibraryComponent):
         the text is typed into the element. When false, the previous text
         is not cleared from the element. Use `Input Password` if you
         do not want the given ``text`` to be logged.
+
+        This keyword supports Robot Framework 7.4
+        [https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#secret-variables|Secret]
+        variable type. When a ``Secret`` is passed, the value is masked in
+        Robot Framework logs. Note that unlike `Input Password`, Selenium's
+        internal logs are not suppressed during typing.
 
         If [https://github.com/SeleniumHQ/selenium/wiki/Grid2|Selenium Grid]
         is used and the ``text`` argument points to a file in the file system,
