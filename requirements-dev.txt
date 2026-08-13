@@ -6,7 +6,7 @@
 # Requirements needed for SeleniumLibrary development but not by end users.
 # Creating releases has its own requirements listed in requirements-build.txt.
 invoke == 2.2.0
-mockito == 1.4.0
+mockito == 2.0.4
 robotstatuschecker == 4.1.1
 approvaltests == 17.4.3
 empty_files == 0.0.9
