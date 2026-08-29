@@ -30,7 +30,7 @@ jobs:
             selenium-version: 4.39.0
             browser: firefox
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: Configuration Description
       run: |
         echo "${{ matrix.config.description }} configuration"
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Set up Python
       uses: actions/setup-python@v6
