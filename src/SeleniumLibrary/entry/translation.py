@@ -45,7 +45,7 @@ def get_library_translation(plugins: str | None = None) -> dict:
         }
     translation["__init__"] = {
         "name": "__init__",
-        "doc": inspect.getdoc(selib),
+        "doc": inspect.getdoc(selib.__init__),
         "sha256": hashlib.sha256(inspect.getdoc(selib).encode("utf-16")).hexdigest(),  # type: ignore
     }
     translation["__intro__"] = {
