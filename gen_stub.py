@@ -15,7 +15,7 @@
 import sys
 from datetime import timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Union, get_args, get_origin
 
 from robotlibcore import KeywordBuilder  # type: ignore
 
@@ -40,12 +40,46 @@ def get_method_name_for_keyword(keyword_name: str) -> str:
     return keyword_name
 
 
-def get_type_string_from_type(argument_type: type) -> str:
-    if hasattr(argument_type, "__name__"):
-        return argument_type.__name__
-    else:
-        arg_type_str = str(argument_type.__repr__()).lstrip("typing.")
-        return arg_type_str.replace("NoneType", "None")
+def _format_type_name(tp: Any) -> str:
+    """Return a short, pyi-compatible name for a plain (non-generic) type."""
+    name = getattr(tp, "__name__", None)
+    if name is not None:
+        return name
+    # Fallback for typing constructs that lack __name__ (e.g. typing.List[int]).
+    origin = get_origin(tp)
+    if origin is not None and getattr(origin, "__name__", None):
+        return origin.__name__
+    return repr(tp)
+
+
+def _is_union_origin(origin: Any) -> bool:
+    """True for typing.Union / typing.Optional / PEP 604 types.UnionType."""
+    if origin is Union:
+        return True
+    # PEP 604 unions (X | Y) have origin types.UnionType (Py>=3.10).
+    union_type = getattr(sys.modules.get("types"), "UnionType", None)
+    return union_type is not None and origin is union_type
+
+
+def get_type_string_from_type(argument_type: Any) -> str:
+    """Render a Robot keyword argument type as a valid PEP 484 annotation.
+
+    The previous implementation returned the bare string ``"Union"`` for any
+    typing.Union / typing.Optional / PEP 604 union (because each of those
+    exposes ``__name__ == "Union"``), which produced invalid annotations like
+    ``locator: Union`` and ``Optional[Optional]`` in the generated ``.pyi``.
+    """
+    origin = get_origin(argument_type)
+    if _is_union_origin(origin):
+        args = [a for a in get_args(argument_type) if a is not type(None)]
+        if not args:
+            return "Any"
+        if len(args) == 1:
+            return get_type_string_from_type(args[0])
+        return "Union[" + ", ".join(get_type_string_from_type(a) for a in args) + "]"
+    if argument_type is type(None):
+        return "None"
+    return _format_type_name(argument_type)
 
 
 def get_type_sting_from_argument(argument_string: str, argument_types: dict) -> str:
@@ -70,6 +104,21 @@ def get_function_list_from_keywords(keywords):
     return functions
 
 
+def _type_already_includes_none(type_str: str) -> bool:
+    """True when a rendered annotation already accepts ``None``."""
+    if type_str in ("None", "Any"):
+        return True
+    # PEP 604 form, e.g. "str | None" / "list[int] | None".
+    if " | None" in type_str or type_str.endswith(" | None"):
+        return True
+    # typing.Union / typing.Optional form.
+    if type_str.startswith("Optional["):
+        return True
+    if type_str.startswith("Union[") and "None" in type_str:
+        return True
+    return False
+
+
 def keyword_line(keyword_arguments, keyword_types, method_name):
     arguments_list = list()
     for argument in keyword_arguments:
@@ -78,7 +127,11 @@ def keyword_line(keyword_arguments, keyword_types, method_name):
             default_value = argument[1]
             arg_type_str = get_type_sting_from_argument(arg_str, keyword_types)
             if arg_type_str:
-                if default_value is None:
+                is_optional = (
+                    default_value is None
+                    and not _type_already_includes_none(arg_type_str)
+                )
+                if is_optional:
                     arg_type_str = f"Optional[{arg_type_str}]"
                 if arg_type_str == "str" or arg_type_str == "Union[list, str]":
                     default_value = f"'{default_value}'"
@@ -109,8 +162,11 @@ from datetime import timedelta
 from typing import Any, Optional, Union
 
 import selenium
+from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
+
+from SeleniumLibrary.utils.types import Secret
 
 class SeleniumLibrary:
 """
@@ -128,7 +184,7 @@ pyi_boilerplate_append = """
     @property
     def driver(self) -> WebDriver: ...
     def find_element(self, locator: str, parent: Optional[WebElement] = None): ...
-    def find_elements(self, locator: str, parent: WebElement = None): ...
+    def find_elements(self, locator: str, parent: Optional[WebElement] = None): ...
     def _parse_plugins(self, plugins: Any): ...
     def _parse_plugin_doc(self): ...
     def _get_intro_documentation(self): ...
