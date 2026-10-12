@@ -491,6 +491,19 @@ class SeleniumLibrary(DynamicCore):
 
     See `time format` below for supported syntax.
 
+    == Action chain delay ==
+
+    Actions that are built using Selenium's ActionChains, such as mouse
+    movements used by the drag and drop keywords, use a small delay when
+    moving the pointer. The default delay is 250 milliseconds, but it can be
+    changed with the `Set Action Chain Delay` keyword or with the
+    ``action_chain_delay`` argument when `importing` the library. The current
+    value can be read with the `Get Action Chain Delay` keyword.
+
+    See `time format` below for supported syntax.
+
+    Support for action chain delay is new in SeleniumLibrary 6.1
+
     == Time format ==
 
     All timeouts and waits can be given as numbers considered seconds
