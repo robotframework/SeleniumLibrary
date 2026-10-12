@@ -4,6 +4,7 @@ from selenium import webdriver
 
 from SeleniumLibrary import SeleniumLibrary
 from SeleniumLibrary.keywords import BrowserManagementKeywords
+from SeleniumLibrary.utils.types import Secret
 
 
 def test_set_selenium_timeout_only_affects_open_browsers():
@@ -147,6 +148,19 @@ def test_open_browser_speed():
     when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn(executable_path)
     bm.open_browser("http://robotframework.org/", "chrome")
     assert browser._speed == 5.0
+
+
+def test_open_browser_with_secret_url():
+    ctx = mock()
+    ctx._drivers = mock()
+    ctx.event_firing_webdriver = None
+    ctx.speed = 0.0
+    browser = mock()
+    when(webdriver).Chrome(options=None, service=ANY).thenReturn(browser)
+    bm = BrowserManagementKeywords(ctx)
+    when(bm._webdriver_creator)._get_executable_path(ANY).thenReturn("chromedriver")
+    bm.open_browser(Secret("http://robotframework.org/"), "chrome")
+    verify(browser).get("http://robotframework.org/")
 
 
 def test_create_webdriver_speed():

@@ -31,6 +31,7 @@ from SeleniumLibrary.utils import (
     secs_to_timestr,
     timestr_to_secs,
 )
+from SeleniumLibrary.utils.types import Secret
 
 from .webdrivertools import WebDriverCreator
 
@@ -64,7 +65,7 @@ class BrowserManagementKeywords(LibraryComponent):
     @keyword
     def open_browser(
         self,
-        url: str | None = None,
+        url: str | Secret | None = None,
         browser: str = "firefox",
         alias: str | None = None,
         remote_url: bool | str = False,
@@ -96,7 +97,10 @@ class BrowserManagementKeywords(LibraryComponent):
         project documentation] for more details.
 
         After opening the browser, it is possible to use optional
-        ``url`` to navigate the browser to the desired address.
+        ``url`` to navigate the browser to the desired address. The ``url``
+        can also be a
+        [https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#secret-variables|Secret]
+        value, in which case the value is not shown in the logs.
 
         Examples:
         | `Open Browser` | http://example.com | Chrome  |                                         |
@@ -214,7 +218,7 @@ class BrowserManagementKeywords(LibraryComponent):
             self.info(f"Using existing browser from index {index}.")
             self.switch_browser(alias)
             if url:
-                self.go_to(url)
+                self.go_to(url.value if isinstance(url, Secret) else url)
             return index
         if desired_capabilities:
             self.warn(
@@ -273,9 +277,10 @@ class BrowserManagementKeywords(LibraryComponent):
         )
         driver = self._wrap_event_firing_webdriver(driver)
         index = self.ctx.register_driver(driver, alias)
-        if url:
+        url_value = url.value if isinstance(url, Secret) else url
+        if url_value:
             try:
-                driver.get(url)
+                driver.get(url_value)
             except Exception:
                 self.debug(
                     f"Opened browser with session id {driver.session_id} but failed to open url '{url}'."
