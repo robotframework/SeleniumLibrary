@@ -31,7 +31,7 @@ Chrome Browser With Selenium Options With Complex Object
     ...    LOG 1:13 DEBUG REGEXP: .*['\\\"]mobileEmulation['\\\"]: {['\\\"]deviceName['\\\"]: ['\\\"]Galaxy S5['\\\"].*
     ...    LOG 1:13 DEBUG REGEXP: .*args['\\\"]: \\\[['\\\"]--disable-dev-shm-usage['\\\"].*
     Open Browser    ${FRONT PAGE}    ${BROWSER}    remote_url=${REMOTE_URL}
-    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; add_experimental_option( "mobileEmulation" , { 'deviceName' : 'Galaxy S5'})
+    ...    desired_capabilities=${DESIRED_CAPABILITIES}    options=add_argument ( "--disable-dev-shm-usage" ) ; add_experimental_option( "mobileEmulation" , { 'deviceName' : 'Samsung Galaxy A55'})
  
 Chrome Browser With Selenium Options Object
     [Tags]    SKIP_ON_WINDOWS
