@@ -81,6 +81,7 @@ jobs:
         name: sl_${{ matrix.config.python-version }}_${{ matrix.config.rf-version }}_${{ matrix.config.selenium-version }}_${{ matrix.config.browser }}
         path: atest/zip_results
         overwrite: true
+        archive: false
   ruff:
     runs-on: ubuntu-latest
 
