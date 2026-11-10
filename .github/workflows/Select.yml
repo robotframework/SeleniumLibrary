@@ -10,24 +10,24 @@ jobs:
       matrix:
         config:
           - description: latest
-            python-version: 3.14.4
-            rf-version: 7.4.2
-            selenium-version:  4.44.0
+            python-version: 3.15.2
+            rf-version: 7.5.1
+            selenium-version:  4.52.0
             browser: chrome
           - description: previous
-            python-version: 3.12.12
-            rf-version: 7.3.2
-            selenium-version: 4.40.0
+            python-version: 3.14.10
+            rf-version: 7.4.2
+            selenium-version: 4.48.0
             browser: chrome
           - description: older_rf_version
-            python-version: 3.11.14
+            python-version: 3.11.18
             rf-version: 6.1.1
-            selenium-version: 4.37.0
+            selenium-version: 4.44.0
             browser: chrome
           - description: latest_firefox
-            python-version: 3.14.4
-            rf-version: 7.4.1
-            selenium-version: 4.39.0
+            python-version: 3.15.2
+            rf-version: 7.5.1
+            selenium-version: 4.52.0
             browser: firefox
     steps:
     - uses: actions/checkout@v6
@@ -81,6 +81,7 @@ jobs:
         name: sl_${{ matrix.config.python-version }}_${{ matrix.config.rf-version }}_${{ matrix.config.selenium-version }}_${{ matrix.config.browser }}
         path: atest/zip_results
         overwrite: true
+        archive: false
   ruff:
     runs-on: ubuntu-latest
 
@@ -90,7 +91,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
-        python-version: "3.14.4"
+        python-version: "3.14.10"
 
     - name: Install dev dependencies
       run: |
