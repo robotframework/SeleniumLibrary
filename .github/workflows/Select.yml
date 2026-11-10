@@ -15,12 +15,12 @@ jobs:
             selenium-version:  4.52.0
             browser: chrome
           - description: previous
-            python-version: 3.12.12
+            python-version: 3.12.16
             rf-version: 7.4.2
             selenium-version: 4.48.0
             browser: chrome
           - description: older_rf_version
-            python-version: 3.11.14
+            python-version: 3.11.18
             rf-version: 6.1.1
             selenium-version: 4.44.0
             browser: chrome
