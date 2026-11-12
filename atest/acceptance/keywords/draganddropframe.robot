@@ -2,7 +2,8 @@
 Documentation    Tests for the custom Drag And Drop Across Frames keyword
 ...              in cross-frame drag-and-drop scenarios.
 Resource         ../resource.robot
-Test Setup       Go To Page "frames/draganddrop.html"
+Test Setup       Prepare Drag And Drop Page
+Test Teardown    Restore Window Size
 
 *** Test Cases ***
 Drag And Drop Across Frames Works From Default Content
@@ -79,3 +80,14 @@ Drag And Drop Across Frames Fails With Invalid Source
     ...    Element with locator 'id=missingSource' not found.
     ...    Drag And Drop Across Frames
     ...    id=missingSource    id=target    id=targetFrame
+
+*** Keywords ***
+Prepare Drag And Drop Page
+    ${width}    ${height}=    Get Window Size
+    Set Test Variable    ${ORIGINAL_WINDOW_WIDTH}    ${width}
+    Set Test Variable    ${ORIGINAL_WINDOW_HEIGHT}    ${height}
+    Set Window Size    1440    1000
+    Go To Page "frames/draganddrop.html"
+
+Restore Window Size
+    Set Window Size    ${ORIGINAL_WINDOW_WIDTH}    ${ORIGINAL_WINDOW_HEIGHT}
