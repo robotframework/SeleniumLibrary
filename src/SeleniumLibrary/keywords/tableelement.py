@@ -148,8 +148,8 @@ class TableElementKeywords(LibraryComponent):
     ):
         """Verifies table footer contains text ``expected``.
 
-        Any ``<td>`` element inside ``<tfoot>`` element is considered to
-        be part of the footer.
+        Any ``<td>`` or ``<th>`` element inside ``<tfoot>`` element is
+        considered to be part of the footer.
 
         The table is located using the ``locator`` argument. See the
         `Locating elements` section for details about the locator syntax.
@@ -249,7 +249,9 @@ class TableElementKeywords(LibraryComponent):
         return self._find(table_locator, "xpath:.//th", content)
 
     def _find_by_footer(self, table_locator, content):
-        return self._find(table_locator, "xpath:.//tfoot//td", content)
+        return self._find(
+            table_locator, "xpath:.//tfoot//*[self::td or self::th]", content
+        )
 
     def _find_by_row(self, table_locator, row, content):
         position = self._index_to_position(row)

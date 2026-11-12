@@ -18,3 +18,24 @@ Should Give Error Message When Content Not Found In Table Footer But Is Other Ta
     Run Keyword And Expect Error
     ...    Table 'tableWithSingleHeader' footer did not contain text 'SimpleWithHeadAndFoot_CF1'.
     ...    Table Footer Should Contain    tableWithSingleHeader    SimpleWithHeadAndFoot_CF1
+
+Should Find Text In Footer Header Cell
+    Table Footer Should Contain    footer-with-header-cell    Total
+
+Should Find Text In Footer Data Cell
+    Table Footer Should Contain    footer-with-header-cell    100 USD
+
+Should Not Find Header Text Outside Footer
+    Run Keyword And Expect Error
+    ...    Table 'footer-with-header-cell' footer did not contain text 'Amount'.
+    ...    Table Footer Should Contain    footer-with-header-cell    Amount
+
+Should Not Find Body Header Text Outside Footer
+    Run Keyword And Expect Error
+    ...    Table 'footer-with-header-cell' footer did not contain text 'Books'.
+    ...    Table Footer Should Contain    footer-with-header-cell    Books
+
+Should Not Find Footer Header Text In Another Table
+    Run Keyword And Expect Error
+    ...    Table 'withHeadAndFoot' footer did not contain text 'Total'.
+    ...    Table Footer Should Contain    withHeadAndFoot    Total
