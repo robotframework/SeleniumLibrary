@@ -16,9 +16,24 @@
 
 
 def _format_path(file_path, index):
-    return file_path.format_map(_SafeFormatter(index=index))
+    return _format_path_with_index(file_path, index)[0]
+
+
+def _format_path_with_index(file_path, index):
+    formatter = _SafeFormatter(index=index)
+    formatted = file_path.format_map(formatter)
+    return formatted, formatter.index_used
 
 
 class _SafeFormatter(dict):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.index_used = False
+
+    def __getitem__(self, key):
+        if key == "index":
+            self.index_used = True
+        return super().__getitem__(key)
+
     def __missing__(self, key):
         return f"{{{key}}}"
