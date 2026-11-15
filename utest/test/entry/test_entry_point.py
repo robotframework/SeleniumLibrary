@@ -1,9 +1,12 @@
+import hashlib
+import inspect
 import json
 import sys
 from pathlib import Path
 
 from approvaltests import verify_all
 
+from SeleniumLibrary import SeleniumLibrary
 from SeleniumLibrary.entry.get_versions import get_version
 from SeleniumLibrary.entry.translation import (
     compare_translation,
@@ -30,6 +33,27 @@ def test_get_translation():
         assert item["name"], item["name"]
         assert item["doc"], item["doc"]
         assert item["sha256"], item["sha256"]
+
+
+def test_translation_init_documents_import_arguments():
+    data = get_library_translation()
+    init_doc = data["__init__"]["doc"]
+    assert init_doc == inspect.getdoc(SeleniumLibrary.__init__)
+    assert init_doc != data["__intro__"]["doc"]
+    assert (
+        data["__init__"]["sha256"]
+        == hashlib.sha256(init_doc.encode("utf-16")).hexdigest()
+    )
+
+
+def test_translation_intro_is_class_documentation():
+    data = get_library_translation()
+    intro_doc = data["__intro__"]["doc"]
+    assert intro_doc == SeleniumLibrary.__doc__
+    assert (
+        data["__intro__"]["sha256"]
+        == hashlib.sha256(intro_doc.encode("utf-16")).hexdigest()
+    )
 
 
 def test_compare_translation(tmp_path: Path):
