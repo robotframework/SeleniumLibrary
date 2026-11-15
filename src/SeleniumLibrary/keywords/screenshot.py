@@ -231,14 +231,17 @@ class ScreenshotKeywords(LibraryComponent):
         else:
             directory = self.log_dir
         filename = filename.replace("/", os.sep)
-        index = 0
+
+        formatted = _format_path(filename, 1)
+        if formatted == _format_path(filename, 2):
+            return os.path.join(directory, formatted)
+
+        index = 1
         while True:
-            index += 1
-            formatted = _format_path(filename, index)
-            path = os.path.join(directory, formatted)
-            # filename didn't contain {index} or unique path was found
-            if formatted == filename or not os.path.exists(path):
+            path = os.path.join(directory, _format_path(filename, index))
+            if not os.path.exists(path):
                 return path
+            index += 1
 
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)
