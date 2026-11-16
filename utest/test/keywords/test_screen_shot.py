@@ -103,3 +103,16 @@ def test_sl_set_screenshot_directory():
     cur_dir = dirname(abspath(__file__))
     sl.set_screenshot_directory(cur_dir)
     assert sl.screenshot_root_directory == cur_dir
+
+
+def test_screenshot_path_with_nested_index_preserves_existing_file(tmp_path):
+    existing = tmp_path / "shot-{other}.png"
+    existing.write_bytes(b"existing screenshot")
+    keywords = ScreenshotKeywords(
+        SeleniumLibrary(screenshot_root_directory=str(tmp_path))
+    )
+
+    path = keywords._get_screenshot_path("shot-{other:>{index}}.png")
+
+    assert path == str(tmp_path / "shot- {other}.png")
+    assert existing.read_bytes() == b"existing screenshot"

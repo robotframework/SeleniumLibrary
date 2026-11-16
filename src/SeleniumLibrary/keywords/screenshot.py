@@ -21,7 +21,7 @@ from robot.utils import get_link_path
 from selenium.webdriver.common.print_page_options import Orientation, PrintOptions
 
 from SeleniumLibrary.base import LibraryComponent, keyword
-from SeleniumLibrary.utils.path_formatter import _format_path
+from SeleniumLibrary.utils.path_formatter import _format_path, _format_path_with_index
 from SeleniumLibrary.utils.types import Locator
 
 DEFAULT_FILENAME_PAGE = "selenium-screenshot-{index}.png"
@@ -231,14 +231,15 @@ class ScreenshotKeywords(LibraryComponent):
         else:
             directory = self.log_dir
         filename = filename.replace("/", os.sep)
-        index = 0
+
+        index = 1
+        formatted, index_used = _format_path_with_index(filename, index)
         while True:
+            path = os.path.join(directory, formatted)
+            if not index_used or not os.path.exists(path):
+                return path
             index += 1
             formatted = _format_path(filename, index)
-            path = os.path.join(directory, formatted)
-            # filename didn't contain {index} or unique path was found
-            if formatted == filename or not os.path.exists(path):
-                return path
 
     def _create_directory(self, path):
         target_dir = os.path.dirname(path)

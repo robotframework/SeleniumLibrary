@@ -74,11 +74,39 @@ Capture page screenshot with index formatting
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/format-000002-name.png
 
 Capture page screenshot with escaped braces
+    [Timeout]    15 seconds
+    [Setup]    Remove Files    ${OUTPUTDIR}/screenshot-and-index/brackets-{index}-name.png
     ${file} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/brackets-{{index}}-name.png
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/brackets-{index}-name.png
+    ${file} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/brackets-{{index}}-name.png
     Should Be Equal    ${file}    ${OUTPUTDIR}${/}screenshot-and-index${/}brackets-{index}-name.png
     ${file} =    Capture Page Screenshot    ${OUTPUTDIR}/screenshot-and-index/brackets-{{index-name.png
     File Should Exist    ${OUTPUTDIR}/screenshot-and-index/brackets-{index-name.png
+
+Capture element screenshot with escaped braces
+    [Timeout]    15 seconds
+    [Setup]    Remove Files    ${OUTPUTDIR}/screenshot-and-index/element-{index}.png
+    ${filename} =    Set Variable    ${OUTPUTDIR}/screenshot-and-index/element-{{index}}.png
+    ${expected} =    Normalize Path    ${OUTPUTDIR}/screenshot-and-index/element-{index}.png
+    ${first} =    Capture Element Screenshot    tag:body    ${filename}
+    File Should Exist    ${expected}
+    ${second} =    Capture Element Screenshot    tag:body    ${filename}
+    Should Be Equal    ${first}    ${expected}
+    Should Be Equal    ${second}    ${expected}
+    File Should Exist    ${second}
+
+Capture page screenshot with escaped braces and unique index
+    [Timeout]    15 seconds
+    [Setup]    Remove Files    ${OUTPUTDIR}/screenshot-and-index/mixed-*.png
+    ${filename} =    Set Variable    ${OUTPUTDIR}/screenshot-and-index/mixed-{{index}}-{index:03}.png
+    ${first} =    Capture Page Screenshot    ${filename}
+    ${second} =    Capture Page Screenshot    ${filename}
+    ${expected_first} =    Normalize Path    ${OUTPUTDIR}/screenshot-and-index/mixed-{index}-001.png
+    ${expected_second} =    Normalize Path    ${OUTPUTDIR}/screenshot-and-index/mixed-{index}-002.png
+    Should Be Equal    ${first}    ${expected_first}
+    Should Be Equal    ${second}    ${expected_second}
+    File Should Exist    ${first}
+    File Should Exist    ${second}
 
 Capture page screenshot computed name is unique
     [Setup]    Run Keywords
